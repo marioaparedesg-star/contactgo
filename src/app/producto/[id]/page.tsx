@@ -53,7 +53,7 @@ export default function ProductoPage() {
       return
     }
     addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined })
-    router.push('/checkout')
+    router.push("/sugeridos")
   }
 
   if (loading) return (
