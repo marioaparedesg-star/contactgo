@@ -5,7 +5,7 @@ import type { CartItem, Product } from '@/types'
 
 interface CartStore {
   items: CartItem[]
-  addItem: (product: Product, opts?: { cantidad?: number; sph?: number | null; cyl?: number | null; axis?: number | null; add_power?: string | null }) => void
+  addItem: (product: Product, opts?: { cantidad?: number; sph?: number | null; cyl?: number | null; axis?: number | null; add_power?: string | null; color?: string | null }) => void
   removeItem: (productId: string, sph?: number | null) => void
   updateQty: (productId: string, cantidad: number, sph?: number | null) => void
   updateItem: (index: number, cantidad: number) => void
@@ -22,21 +22,21 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       addItem: (product, opts = {}) => {
-        const { cantidad = 1, sph, cyl, axis, add_power } = opts
+        const { cantidad = 1, sph, cyl, axis, add_power, color } = opts
         set(state => {
           const existing = state.items.find(
-            i => i.product.id === product.id && i.sph === sph
+            i => i.product.id === product.id && i.sph === sph && i.color === color
           )
           if (existing) {
             return {
               items: state.items.map(i =>
-                i.product.id === product.id && i.sph === sph
+                i.product.id === product.id && i.sph === sph && i.color === color
                   ? { ...i, cantidad: i.cantidad + cantidad }
                   : i
               )
             }
           }
-          return { items: [...state.items, { product, cantidad, sph, cyl, axis, add_power }] }
+          return { items: [...state.items, { product, cantidad, sph, cyl, axis, add_power, color }] }
         })
       },
 

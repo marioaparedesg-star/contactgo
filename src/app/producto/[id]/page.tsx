@@ -16,6 +16,13 @@ const TIPO_LABELS: Record<string, string> = {
   color: 'Color', solucion: 'Solución', gota: 'Gotas',
 }
 
+
+const COLOR_CSS: Record<string, string> = {
+  'Gris': '#9CA3AF', 'Miel': '#B45309', 'Verde': '#16A34A', 'Azul': '#2563EB',
+  'Avellana': '#92400E', 'Lila': '#9333EA', 'Negro': '#111827', 'Cafe': '#78350F',
+  'Marron': '#6B3F2A', 'Turquesa': '#0891B2', 'Violeta': '#7C3AED', 'Rosa': '#EC4899',
+}
+
 const ALL_SPH = [-0.25,-0.5,-0.75,-1,-1.25,-1.5,-1.75,-2,-2.25,-2.5,-2.75,-3,-3.25,-3.5,-3.75,-4,-4.25,-4.5,-4.75,-5,-5.25,-5.5,-5.75,-6,-6.5,-7,-7.5,-8,-8.5,-9,-9.5,-10,-10.5,-11,-11.5,-12,-12.5,-13,-13.5,-14,-14.5,-15,-15.5,-16,-16.5,-17,-17.5,-18,-18.5,-19,-19.5,-20,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.25,3.5,3.75,4,4.25,4.5,4.75,5,5.25,5.5,5.75,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12]
 const ALL_CYL = [-6,-5.75,-5.5,-5.25,-5,-4.75,-4.5,-4.25,-4,-3.75,-3.5,-3.25,-3,-2.75,-2.5,-2.25,-2,-1.75,-1.5,-1.25,-1,-0.75,-0.5,-0.25]
 
@@ -27,6 +34,7 @@ export default function ProductoPage() {
   const [selectedSph, setSelectedSph] = useState<number | null>(null)
   const [selectedCyl, setSelectedCyl] = useState<number | null>(null)
   const [selectedAdd, setSelectedAdd] = useState<string | null>(null)
+  const [selectedColor, setSelectedColor] = useState<string | null>(null)
   const [selectedAxis, setSelectedAxis] = useState<number | null>(null)
   const [qty, setQty] = useState(1)
   const addItem = useCartStore(s => s.addItem)
@@ -60,6 +68,7 @@ export default function ProductoPage() {
   const sphs: number[] = product.sph_disponibles ?? []
   const cyls: number[] = product.cyl_disponibles ?? []
   const adds: string[] = product.add_disponibles ?? []
+  const colores: string[] = product.colores_disponibles ?? []
   const axes: number[] = (product as any).axis_disponibles ?? []
 
   const sphRange = sphs.length > 0 ? ALL_SPH.filter(v => { const neg = sphs.filter((x:number) => x < 0); const pos = sphs.filter((x:number) => x > 0); if (v < 0) return neg.length > 0 && v >= Math.min(...neg); if (v > 0) return pos.length > 0 && v <= Math.max(...pos); return false }) : []
@@ -139,6 +148,24 @@ export default function ProductoPage() {
                   <option value="">-- Selecciona adicion --</option>
                   {adds.sort().map(a => <option key={a} value={a}>{a}</option>)}
                 </select>
+              </div>
+            )}
+
+            {colores.length > 0 && (
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Color <span className="text-red-500">*</span>
+                  {selectedColor && <span className="ml-2 font-normal text-primary-600">— {selectedColor}</span>}
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {colores.map(c => (
+                    <button key={c} onClick={() => setSelectedColor(c)}
+                      title={c}
+                      className={"w-9 h-9 rounded-full border-2 transition-all " + (selectedColor === c ? 'border-primary-600 scale-110 shadow-md' : 'border-gray-200 hover:border-gray-400')}
+                      style={{ backgroundColor: COLOR_CSS[c] ?? '#CBD5E1' }}
+                    />
+                  ))}
+                </div>
               </div>
             )}
 

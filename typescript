@@ -3456,4 +3456,239 @@ export default function SugeridosPage() {
 [7mPYEOF[27m[K
 [7mpython3 /tmp/sugeridos_new.py[27m[K
 [7mgrep "http://" src/app/sugeridos/page.tsx[27m[K
-[7mgit add -A && git commit -m "Combos automaticos inteligentes en sugeridos" && gi[7mt[7m push[27m[K[22A[27mb[27ma[27ms[27me[27m"[27m>[1B[57P[12CIr al pago <ArrowRight className="w-5 h-5" />[K[1B[19P[10C</button>[42C[K[1B[60P[10C<button onClick={() => router.push(\'/catalogo\')}[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mg[27m-[27mw[27mh[27mi[27mt[27me[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m6[27m0[27m0[27m [27mf[27mo[27mn[27mt-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mp[27my[27m-[27m3[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27m2[27mx[27ml[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mg[27ma[27mp[27m-[27m2[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-5[27m0[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m [27mt[27me[27mx[27mt[27m-[27ms[27mm[27m"[27m>[1B[54P[12C<X className="w-4 h-4" /> Seguir comprando[K[1B[19P[10C</button>[42C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m)[1B[27m}[1B[27m'[27m'[27m'[2B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m_[27mn[27me[27mw[27m.[27mp[27my[1B[27mg[27mr[27me[27mp[27m [27m"[27mh[27mt[27mt[27mp[27m:[27m/[27m/[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[27mC[27mo[27mm[27mb[27mo[27ms[27m [27ma[27mu[27mt[27mo[27mm[27ma[27mt[27mi[27mc[27mo[27ms[27m [27mi[27mn[27mt[27me[27ml[27mi[27mg[27me[27mn[27mt[27me[27ms[27m [27me[27mn[27m [27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m"[27m [27m&[27m&[27m [27mg[27mit[27m [27mp[27mu[27ms[27m
+[7mgit add -A && git commit -m "Combos automaticos inteligentes en sugeridos" && gi[7mt[7m push[27m[K[22A[27mb[27ma[27ms[27me[27m"[27m>[1B[57P[12CIr al pago <ArrowRight className="w-5 h-5" />[K[1B[19P[10C</button>[42C[K[1B[60P[10C<button onClick={() => router.push(\'/catalogo\')}[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mg[27m-[27mw[27mh[27mi[27mt[27me[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m6[27m0[27m0[27m [27mf[27mo[27mn[27mt-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mp[27my[27m-[27m3[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27m2[27mx[27ml[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mg[27ma[27mp[27m-[27m2[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-5[27m0[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m [27mt[27me[27mx[27mt[27m-[27ms[27mm[27m"[27m>[1B[54P[12C<X className="w-4 h-4" /> Seguir comprando[K[1B[19P[10C</button>[42C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m)[1B[27m}[1B[27m'[27m'[27m'[2B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m_[27mn[27me[27mw[27m.[27mp[27my[1B[27mg[27mr[27me[27mp[27m [27m"[27mh[27mt[27mt[27mp[27m:[27m/[27m/[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[27mC[27mo[27mm[27mb[27mo[27ms[27m [27ma[27mu[27mt[27mo[27mm[27ma[27mt[27mi[27mc[27mo[27ms[27m [27mi[27mn[27mt[27me[27ml[27mi[27mg[27me[27mn[27mt[27me[27ms[27m [27me[27mn[27m [27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m"[27m [27m&[27m&[27m [27mg[27mit[27m [27mp[27mu[27ms[27mh[?2004l
+OK
+[main abfdf550] Combos automaticos inteligentes en sugeridos
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 324 insertions(+), 37 deletions(-)
+Enumerating objects: 13, done.
+Counting objects:   7% (1/13)Counting objects:  15% (2/13)Counting objects:  23% (3/13)Counting objects:  30% (4/13)Counting objects:  38% (5/13)Counting objects:  46% (6/13)Counting objects:  53% (7/13)Counting objects:  61% (8/13)Counting objects:  69% (9/13)Counting objects:  76% (10/13)Counting objects:  84% (11/13)Counting objects:  92% (12/13)Counting objects: 100% (13/13)Counting objects: 100% (13/13), done.
+Delta compression using up to 12 threads
+Compressing objects:  16% (1/6)Compressing objects:  33% (2/6)Compressing objects:  50% (3/6)Compressing objects:  66% (4/6)Compressing objects:  83% (5/6)Compressing objects: 100% (6/6)Compressing objects: 100% (6/6), done.
+Writing objects:  14% (1/7)Writing objects:  28% (2/7)Writing objects:  42% (3/7)Writing objects:  57% (4/7)Writing objects:  71% (5/7)Writing objects:  85% (6/7)Writing objects: 100% (7/7)Writing objects: 100% (7/7), 4.09 KiB | 1.02 MiB/s, done.
+Total 7 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/5)[Kremote: Resolving deltas:  20% (1/5)[Kremote: Resolving deltas:  40% (2/5)[Kremote: Resolving deltas:  60% (3/5)[Kremote: Resolving deltas:  80% (4/5)[Kremote: Resolving deltas: 100% (5/5)[Kremote: Resolving deltas: 100% (5/5), completed with 5 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   18d57c9b..abfdf550  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "color\|selectedColor[7m\[7m|sph_disponibles" src/app/producto/\[id\]/page.tsx | head -15[27m[K[A[11D[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mc[27mo[27ml[27mo[27mr[27m\[27m|[27ms[27me[27ml[27me[27mc[27mt[27me[27md[27mC[27mo[27ml[27mo[27mr\[27m|[27ms[27mp[27mh[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m1[27m5[?2004l
+16:  color: 'Color', solucion: 'Solución', gota: 'Gotas',
+40:  const needsSph = product && ['esferico','torico','multifocal','color'].includes(product.tipo ?? '')
+41:    && (product.sph_disponibles?.length ?? 0) > 0
+60:  const sphs: number[] = product.sph_disponibles ?? []
+72:        <button onClick={() => router.back()} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
+165:            <button onClick={handleBuyNow} disabled={product.stock === 0} className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors text-lg disabled:opacity-50">
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "colores\|color_dispo[7mn[7mibles\|colors" src/types/index.ts 2>/dev/null || cat src/types/index.ts | head [7m-[7m60[27m[K[A[A[48C[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mc[27mo[27ml[27mo[27mr[27me[27ms[27m\[27m|[27mc[27mo[27ml[27mo[27mr[27m_[27md[27mi[27ms[27mp[27mon[27mi[27mb[27ml[27me[27ms[27m\[27m|[27mc[27mo[27ml[27mo[27mr[27ms[27m"[27m [27ms[27mr[27mc[27m/[27mt[27my[27mp[27me[27ms[27m/[27mi[27mn[27md[27me[27mx[27m.[27mt[27ms[27m [27m2[27m>[27m/[27md[27me[27mv[27m/[27mn[27mu[27ml[27ml[27m [27m|[27m|[27m [27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27mt[27my[27mp[27me[27ms[27m/[27mi[27mn[27md[27me[27mx[27m.[27mt[27ms[27m [27m|[27m [27mh[27me[27ma[27md[27m -[27m6[27m0[?2004l
+export type Role = 'customer' | 'admin'
+
+export interface Profile {
+  id: string
+  nombre: string | null
+  telefono: string | null
+  email: string | null
+  role: Role
+  created_at: string
+}
+
+export interface Category {
+  id: number
+  nombre: string
+  slug: string
+  descripcion: string | null
+}
+
+export interface Product {
+  id: string
+  nombre: string
+  descripcion: string | null
+  marca: string | null
+  precio: number
+  costo: number
+  stock: number
+  categoria_id: number | null
+  tipo: 'esferico' | 'torico' | 'multifocal' | 'color' | 'solucion' | 'gota' | null
+  imagen_url: string | null
+  activo: boolean
+  sph_disponibles: number[]
+  cyl_disponibles: number[]
+  add_disponibles: string[]
+  categories?: Category
+}
+
+export interface Address {
+  id: string
+  user_id: string
+  nombre: string
+  direccion: string
+  ciudad: string
+  provincia: string | null
+  telefono: string | null
+  principal: boolean
+}
+
+export interface Prescription {
+  id: string
+  user_id: string
+  od_sph: number | null
+  od_cyl: number | null
+  od_axis: number | null
+  oi_sph: number | null
+  oi_cyl: number | null
+  oi_axis: number | null
+  add_power: number | null
+  imagen_url: string | null
+  notas: string | null
+  fecha: string
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 << 'EOF'[27m
+[7mcode = open('src/types/index.ts').read()[27m[K
+[7mcode = code.replace([27m[K
+[7m    '  sph_disponibles: number[]\n  cyl_disponibles: number[]\n  add_disponibles[7m:[7m string[]',[27m[K
+[7m    '  sph_disponibles: number[]\n  cyl_disponibles: number[]\n  add_disponibles[7m:[7m string[]\n  colores_disponibles: string[]'[27m[K
+[7m)[27m[K
+[7mopen('src/types/index.ts', 'w').write(code)[27m[K
+[7mprint('OK' if 'colores_disponibles' in code else 'FAILED')[27m[K
+[7mEOF[27m[K[10A[48C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m<[27m<[27m [27m'[27mE[27mO[27mF[27m'[1B[27mc[27mo[27md[27me[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27mt[27my[27mp[27me[27ms[27m/[27mi[27mn[27md[27me[27mx[27m.[27mt[27ms[27m'[27m)[27m.[27mr[27me[27ma[27md[27m([27m)[1B[27mc[27mo[27md[27me[27m [27m=[27m [27mc[27mo[27md[27me[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([1B[27m [27m [27m [27m [27m'[27m [27m [27ms[27mp[27mh[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms[27m:[27m [27mn[27mu[27mm[27mb[27me[27mr[27m[[27m][27m\[27mn[27m [27m [27mc[27my[27ml[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms[27m:[27m [27mn[27mu[27mm[27mb[27me[27mr[27m[[27m][27m\[27mn[27m [27m [27ma[27md[27md[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms:[27m [27ms[27mt[27mr[27mi[27mn[27mg[27m[[27m][27m'[27m,[1B[27m [27m [27m [27m [27m'[27m [27m [27ms[27mp[27mh[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms[27m:[27m [27mn[27mu[27mm[27mb[27me[27mr[27m[[27m][27m\[27mn[27m [27m [27mc[27my[27ml[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms[27m:[27m [27mn[27mu[27mm[27mb[27me[27mr[27m[[27m][27m\[27mn[27m [27m [27ma[27md[27md[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms:[27m [27ms[27mt[27mr[27mi[27mn[27mg[27m[[27m][27m\[27mn[27m [27m [27mc[27mo[27ml[27mo[27mr[27me[27ms[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms[27m:[27m [27ms[27mt[27mr[27mi[27mn[27mg[27m[[27m][27m'[1B[27m)[1B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27mt[27my[27mp[27me[27ms[27m/[27mi[27mn[27md[27me[27mx[27m.[27mt[27ms[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m [27mi[27mf[27m [27m'[27mc[27mo[27ml[27mo[27mr[27me[27ms[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms[27m'[27m [27mi[27mn[27m [27mc[27mo[27md[27me[27m [27me[27ml[27ms[27me[27m [27m'[27mF[27mA[27mI[27mL[27mE[27mD[27m'[27m)[1B[27mE[27mO[27mF[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/lib/cart-store.ts[27m[25D[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ml[27mi[27mb[27m/[27mc[27ma[27mr[27mt[27m-[27ms[27mt[27mo[27mr[27me[27m.[27mt[27ms[?2004l
+'use client'
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import type { CartItem, Product } from '@/types'
+
+interface CartStore {
+  items: CartItem[]
+  addItem: (product: Product, opts?: { cantidad?: number; sph?: number | null; cyl?: number | null; axis?: number | null; add_power?: string | null }) => void
+  removeItem: (productId: string, sph?: number | null) => void
+  updateQty: (productId: string, cantidad: number, sph?: number | null) => void
+  updateItem: (index: number, cantidad: number) => void
+  removeByIndex: (index: number) => void
+  clearCart: () => void
+  total: () => number
+  subtotal: () => number
+  itemCount: () => number
+}
+
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+
+      addItem: (product, opts = {}) => {
+        const { cantidad = 1, sph, cyl, axis, add_power } = opts
+        set(state => {
+          const existing = state.items.find(
+            i => i.product.id === product.id && i.sph === sph
+          )
+          if (existing) {
+            return {
+              items: state.items.map(i =>
+                i.product.id === product.id && i.sph === sph
+                  ? { ...i, cantidad: i.cantidad + cantidad }
+                  : i
+              )
+            }
+          }
+          return { items: [...state.items, { product, cantidad, sph, cyl, axis, add_power }] }
+        })
+      },
+
+      removeItem: (productId, sph) => {
+        set(state => ({
+          items: state.items.filter(
+            i => !(i.product.id === productId && i.sph === sph)
+          )
+        }))
+      },
+
+      updateQty: (productId, cantidad, sph) => {
+        if (cantidad <= 0) { get().removeItem(productId, sph); return }
+        set(state => ({
+          items: state.items.map(i =>
+            i.product.id === productId && i.sph === sph
+              ? { ...i, cantidad }
+              : i
+          )
+        }))
+      },
+
+      updateItem: (index, cantidad) => {
+        const items = [...get().items]
+        if (items[index]) { items[index] = { ...items[index], cantidad }; set({ items }) }
+      },
+      removeByIndex: (index) => {
+        const items = get().items.filter((_, i) => i !== index)
+        set({ items })
+      },
+      clearCart: () => set({ items: [] }),
+
+      subtotal: () => get().items.reduce((s, i) => s + i.product.precio * i.cantidad, 0),
+
+      total: () => {
+        const sub = get().subtotal()
+        return sub > 0 ? sub + 200 : 0  // +RD$200 envío
+      },
+
+      itemCount: () => get().items.reduce((s, i) => s + i.cantidad, 0),
+    }),
+    { name: 'contactgo-cart' }
+  )
+)
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m        'add_power'  # find CartItem[27m[K
+[7m    )[27m[K
+[7m# Buscar CartItem y agregar color[27m[K
+[7mif 'export interface CartItem' in code2:[27m[K
+[7m    code2 = code2.replace([27m[K
+[7m        'export interface CartItem {',[27m[K
+[7m        'export interface CartItem {'[27m[K
+[7m    )[27m[K
+[7m    # Agregar campo color si no existe[27m[K
+[7m    if 'color?' not in code2:[27m[K
+[7m        code2 = code2.replace([27m[K
+[7m            '  add_power?: string | null\n}',[27m[K
+[7m            '  add_power?: string | null\n  color?: string | null\n}'[27m[K
+[7m        )[27m[K
+[7m        open('src/types/index.ts', 'w').write(code2)[27m[K
+[7m        print('types CartItem OK')[27m[K
+[7m    else:[27m[K
+[7m        print('types CartItem already has color')[27m[K
+[7melse:[27m[K
+[7m    print('CartItem not found in types')[27m[K
+[7mPYEOF[27m[K
+[7mpython3 /tmp/color_update.py[27m[K
+[7mgrep -n "CartItem" src/types/index.ts[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m'[27ma[27md[27md[27m_[27mp[27mo[27mw[27me[27mr[27m'[27m [27m [27m#[27m [27mf[27mi[27mn[27md[27m [27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[1B[27m [27m [27m [27m [27m)[1B[27m#[27m [27mB[27mu[27ms[27mc[27ma[27mr[27m [27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[27m [27my[27m [27ma[27mg[27mr[27me[27mg[27ma[27mr[27m [27mc[27mo[27ml[27mo[27mr[1B[27mi[27mf[27m [27m'[27me[27mx[27mp[27mo[27mr[27mt[27m [27mi[27mn[27mt[27me[27mr[27mf[27ma[27mc[27me[27m [27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[27m'[27m [27mi[27mn[27m [27mc[27mo[27md[27me[27m2[27m:[1B[27m [27m [27m [27m [27mc[27mo[27md[27me[27m2[27m [27m=[27m [27mc[27mo[27md[27me[27m2[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([1B[27m [27m [27m [27m [27m [27m [27m [27m [27m'[27me[27mx[27mp[27mo[27mr[27mt[27m [27mi[27mn[27mt[27me[27mr[27mf[27ma[27mc[27me[27m [27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[27m [27m{[27m'[27m,[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m'[27me[27mx[27mp[27mo[27mr[27mt[27m [27mi[27mn[27mt[27me[27mr[27mf[27ma[27mc[27me[27m [27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[27m [27m{[27m'[1B[27m [27m [27m [27m [27m)[1B[27m [27m [27m [27m [27m#[27m [27mA[27mg[27mr[27me[27mg[27ma[27mr[27m [27mc[27ma[27mm[27mp[27mo[27m [27mc[27mo[27ml[27mo[27mr[27m [27ms[27mi[27m [27mn[27mo[27m [27me[27mx[27mi[27ms[27mt[27me[1B[27m [27m [27m [27m [27mi[27mf[27m [27m'[27mc[27mo[27ml[27mo[27mr[27m?[27m'[27m [27mn[27mo[27mt[27m [27mi[27mn[27m [27mc[27mo[27md[27me[27m2[27m:[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mc[27mo[27md[27me[27m2[27m [27m=[27m [27mc[27mo[27md[27me[27m2[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([1B[45P[12C'[2Cadd_power?: string | null\n}',[K[1B[69P[11C '  add_power?: string | null\n  color?: string | null\n}'[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m)[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27mt[27my[27mp[27me[27ms[27m/[27mi[27mn[27md[27me[27mx[27m.[27mt[27ms[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m2[27m)[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mt[27my[27mp[27me[27ms[27m [27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[27m [27mO[27mK[27m'[27m)[1B[27m [27m [27m [27m [27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mt[27my[27mp[27me[27ms[27m [27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[27m [27ma[27ml[27mr[27me[27ma[27md[27my[27m [27mh[27ma[27ms[27m [27mc[27mo[27ml[27mo[27mr[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[27m [27mn[27mo[27mt[27m [27mf[27mo[27mu[27mn[27md[27m [27mi[27mn[27m [27mt[27my[27mp[27me[27ms[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mc[27mo[27ml[27mo[27mr[27m_[27mu[27mp[27md[27ma[27mt[27me[27m.[27mp[27my[1B[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mC[27ma[27mr[27mt[27mI[27mt[27me[27mm[27m"[27m [27ms[27mr[27mc[27m/[27mt[27my[27mp[27me[27ms[27m/[27mi[27mn[27md[27me[27mx[27m.[27mt[27ms[?2004l
+cart-store OK
+types CartItem OK
+102:export interface CartItem {
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m                      className={"w-9 h-9 rounded-full border-2 transition-all "[7m [7m+ (selectedColor === c ? 'border-primary-600 scale-110 shadow-md' : 'border-gra[7my[7m-200 hover:border-gray-400')}[27m[K
+[7m                      style={{ backgroundColor: COLOR_CSS[c] ?? '#CBD5E1' }}[27m[K
+[7m                    />[27m[K
+[7m                  ))}[27m[K
+[7m                </div>[27m[K
+[7m              </div>[27m[K
+[7m            )}[27m[K
+[K
+[7m            <div className="flex items-center gap-3">[27m[K
+[7m              <p className="text-sm font-semibold text-gray-700">Cantidad</p>"""[27m [K
+[K
+[7mif old_qty in code:[27m[K
+[7m    code = code.replace(old_qty, new_color_qty)[27m[K
+[7m    print('JSX OK')[27m[K
+[7melse:[27m[K
+[7m    print('JSX NOT FOUND')[27m[K
+[K
+[7mopen('src/app/producto/[id]/page.tsx', 'w').write(code)[27m[K
+[7mPYEOF[27m[K
+[7mpython3 /tmp/color_selector.py[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m{[27m"[27mw[27m-[27m9[27m [27mh[27m-[27m9[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27m2[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27ma[27ml[27ml[27m [27m" [27m+[27m [27m([27ms[27me[27ml[27me[27mc[27mt[27me[27md[27mC[27mo[27ml[27mo[27mr[27m [27m=[27m=[27m=[27m [27mc[27m [27m?[27m [27m'[27mb[27mo[27mr[27md[27me[27mr[27m-[27mp[27mr[27mi[27mm[27ma[27mr[27my[27m-[27m6[27m0[27m0[27m [27ms[27mc[27ma[27ml[27me[27m-[27m1[27m1[27m0[27m [27ms[27mh[27ma[27md[27mo[27mw[27m-[27mm[27md[27m'[27m [27m:[27m [27m'[27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27may[27m-[27m2[27m0[27m0[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m4[27m0[27m0[27m'[27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27ms[27mt[27my[27ml[27me[27m=[27m{[27m{[27m [27mb[27ma[27mc[27mk[27mg[27mr[27mo[27mu[27mn[27md[27mC[27mo[27ml[27mo[27mr[27m:[27m [27mC[27mO[27mL[27mO[27mR[27m_[27mC[27mS[27mS[27m[[27mc[27m][27m [27m?[27m?[27m [27m'[27m#[27mC[27mB[27mD[27m5[27mE[27m1[27m'[27m [27m}[27m}[1B[22P[20C/>[36C[K[1B[21P[18C))}[38C[K[1B[22P[16C</div>[36C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[2B[53P[12C<div className="flex items-center gap-3">[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mp[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27ms[27mm[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m7[27m0[27m0[27m"[27m>[27mC[27ma[27mn[27mt[27mi[27md[27ma[27md[27m<[27m/[27mp[27m>[27m"[27m"[27m" [2B[27mi[27mf[27m [27mo[27ml[27md[27m_[27mq[27mt[27my[27m [27mi[27mn[27m [27mc[27mo[27md[27me[27m:[1B[27m [27m [27m [27m [27mc[27mo[27md[27me[27m [27m=[27m [27mc[27mo[27md[27me[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m_[27mq[27mt[27my[27m,[27m [27mn[27me[27mw[27m_[27mc[27mo[27ml[27mo[27mr[27m_[27mq[27mt[27my[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mJ[27mS[27mX[27m [27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mJ[27mS[27mX[27m [27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m'[27m)[2B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp

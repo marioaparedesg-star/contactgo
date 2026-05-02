@@ -31,6 +31,7 @@ export interface Product {
   sph_disponibles: number[]
   cyl_disponibles: number[]
   add_disponibles: string[]
+  colores_disponibles: string[]
   categories?: Category
 }
 
@@ -105,6 +106,7 @@ export interface CartItem {
   cyl?: number | null
   axis?: number | null
   add_power?: string | null
+  color?: string | null
 }
 
 // Análisis de receta
