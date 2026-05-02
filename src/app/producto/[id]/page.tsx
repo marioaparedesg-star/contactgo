@@ -27,6 +27,7 @@ export default function ProductoPage() {
   const [selectedSph, setSelectedSph] = useState<number | null>(null)
   const [selectedCyl, setSelectedCyl] = useState<number | null>(null)
   const [selectedAdd, setSelectedAdd] = useState<string | null>(null)
+  const [selectedAxis, setSelectedAxis] = useState<number | null>(null)
   const [qty, setQty] = useState(1)
   const addItem = useCartStore(s => s.addItem)
 
@@ -42,14 +43,14 @@ export default function ProductoPage() {
   const handleAdd = () => {
     if (!product) return
     if (needsSph && selectedSph === null) { toast.error('Selecciona una graduacion'); return }
-    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined })
+    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined, axis: selectedAxis ?? undefined })
     toast.success('Agregado al carrito')
   }
 
   const handleBuyNow = () => {
     if (!product) return
     if (needsSph && selectedSph === null) { toast.error('Selecciona una graduacion'); return }
-    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined })
+    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined, axis: selectedAxis ?? undefined })
     router.push('/sugeridos')
   }
 
@@ -59,6 +60,7 @@ export default function ProductoPage() {
   const sphs: number[] = product.sph_disponibles ?? []
   const cyls: number[] = product.cyl_disponibles ?? []
   const adds: string[] = product.add_disponibles ?? []
+  const axes: number[] = (product as any).axis_disponibles ?? []
 
   const sphRange = sphs.length > 0 ? ALL_SPH.filter(v => { const neg = sphs.filter((x:number) => x < 0); const pos = sphs.filter((x:number) => x > 0); if (v < 0) return neg.length > 0 && v >= Math.min(...neg); if (v > 0) return pos.length > 0 && v <= Math.max(...pos); return false }) : []
   const cylRange = cyls.length > 0 ? ALL_CYL.filter(v => v >= Math.min(...cyls) && v <= Math.max(...cyls)) : []
@@ -114,6 +116,17 @@ export default function ProductoPage() {
                     const ok = cyls.includes(c)
                     return <option key={c} value={c} disabled={!ok}>{c}{ok ? '' : ' (no disponible)'}</option>
                   })}
+                </select>
+              </div>
+            )}
+
+            {axes.length > 0 && (
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Eje (AXIS)</label>
+                <select value={selectedAxis ?? ''} onChange={e => setSelectedAxis(e.target.value === '' ? null : parseInt(e.target.value))}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
+                  <option value="">-- Selecciona el eje --</option>
+                  {axes.map(a => <option key={a} value={a}>{a}</option>)}
                 </select>
               </div>
             )}

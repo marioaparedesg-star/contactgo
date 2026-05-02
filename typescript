@@ -2340,4 +2340,213 @@ To https://github.com/marioaparedesg-star/contactgo.git
 [7mopen('src/app/admin/productos/page.tsx', 'w').write('\n'.join(lines))[27m[K
 [7mPYEOF[27m[K
 [7mpython3 /tmp/fix99.py[27m[K
-[7mgit add -A && git commit -m "Fix toast syntax error" && git push[27m[K[13A[13D[27mc[27ma[27mt[27m [27m>[27m [27m/[27mt[27mm[27mp[27m/[27mf[27mi[27mx[27m9[27m9[27m.[27mp[27my[27m [27m<[27m<[27m [27m'[27mP[27mY[27mE[27mO[27mF'[1B[27mc[27mo[27md[27me[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m)[27m.[27mr[27me[27ma[27md[27m([27m)[1B[27m#[27m [27mF[27mi[27mn[27md[27m [27ma[27mn[27md[27m [27mr[27me[27mp[27ml[27ma[27mc[27me[27m [27mt[27mh[27me[27m [27mp[27mr[27mo[27mb[27ml[27me[27mm[27ma[27mt[27mi[27mc[27m [27ml[27mi[27mn[27me[1B[27ml[27mi[27mn[27me[27ms[27m [27m=[27m [27mc[27mo[27md[27me[27m.[27ms[27mp[27ml[27mi[27mt[27m([27m'[27m\[27mn[27m'[27m)[1B[27mf[27mo[27mr[27m [27mi[27m,[27m [27ml[27mi[27mn[27me[27m [27mi[27mn[27m [27me[27mn[27mu[27mm[27me[27mr[27ma[27mt[27me[27m([27ml[27mi[27mn[27me[27ms[27m)[27m:[1B[27m [27m [27m [27m [27mi[27mf[27m [27m'[27mI[27mm[27mp[27mo[27mr[27mt[27ma[27md[27mo[27m'[27m [27mi[27mn[27m [27ml[27mi[27mn[27me[27m [27ma[27mn[27md[27m [27m'[27mt[27mo[27ma[27ms[27mt[27m.[27ms[27mu[27mc[27mc[27me[27ms[27ms[27m'[27m [27mi[27mn[27m [27ml[27mi[27mn[27me[27m:[1B[27m [27m [27m [27m [27m [27m [27m [27m [27ml[27mi[27mn[27me[27ms[27m[[27mi[27m][27m [27m=[27m [27m"[27m [27m [27m [27m [27mt[27mo[27ma[27ms[27mt[27m.[27ms[27mu[27mc[27mc[27me[27ms[27ms[27m([27m'[27mI[27mm[27mp[27mo[27mr[27mt[27ma[27md[27mo[27m:[27m [27m'[27m [27m+[27m [27mc[27mr[27me[27ma[27mt[27me[27md[27m [27m+[27m [27m'[27m [27mc[27mr[27me[27ma[27md[27mo[27ms[27m,[27m [27m'[27m [27m+[27m [27mup[27md[27ma[27mt[27me[27md[27m [27m+[27m [27m'[27m [27ma[27mc[27mt[27mu[27ma[27ml[27mi[27mz[27ma[27md[27mo[27ms[27m'[27m [27m+[27m [27m([27me[27mr[27mr[27mo[27mr[27ms[27m [27m>[27m [27m0[27m [27m?[27m [27m'[27m,[27m [27m'[27m [27m+[27m [27me[27mr[27mr[27mo[27mr[27ms[27m [27m+[27m [27m'[27m [27me[27mr[27mr[27mo[27mr[27me[27ms[27m'[27m [27m:[27m [27m'[27m'[27m)[27m)[27m"[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mF[27mi[27mx[27me[27md[27m [27ml[27mi[27mn[27me[27m'[27m,[27m [27mi[27m+[27m1[27m)[1B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27m'[27m\[27mn[27m'[27m.[27mj[27mo[27mi[27mn[27m([27ml[27mi[27mn[27me[27ms[27m)[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mf[27mi[27mx[27m9[27m9[27m.[27mp[27my[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[
+[7mgit add -A && git commit -m "Fix toast syntax error" && git push[27m[K[13A[13D[27mc[27ma[27mt[27m [27m>[27m [27m/[27mt[27mm[27mp[27m/[27mf[27mi[27mx[27m9[27m9[27m.[27mp[27my[27m [27m<[27m<[27m [27m'[27mP[27mY[27mE[27mO[27mF'[1B[27mc[27mo[27md[27me[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m)[27m.[27mr[27me[27ma[27md[27m([27m)[1B[27m#[27m [27mF[27mi[27mn[27md[27m [27ma[27mn[27md[27m [27mr[27me[27mp[27ml[27ma[27mc[27me[27m [27mt[27mh[27me[27m [27mp[27mr[27mo[27mb[27ml[27me[27mm[27ma[27mt[27mi[27mc[27m [27ml[27mi[27mn[27me[1B[27ml[27mi[27mn[27me[27ms[27m [27m=[27m [27mc[27mo[27md[27me[27m.[27ms[27mp[27ml[27mi[27mt[27m([27m'[27m\[27mn[27m'[27m)[1B[27mf[27mo[27mr[27m [27mi[27m,[27m [27ml[27mi[27mn[27me[27m [27mi[27mn[27m [27me[27mn[27mu[27mm[27me[27mr[27ma[27mt[27me[27m([27ml[27mi[27mn[27me[27ms[27m)[27m:[1B[27m [27m [27m [27m [27mi[27mf[27m [27m'[27mI[27mm[27mp[27mo[27mr[27mt[27ma[27md[27mo[27m'[27m [27mi[27mn[27m [27ml[27mi[27mn[27me[27m [27ma[27mn[27md[27m [27m'[27mt[27mo[27ma[27ms[27mt[27m.[27ms[27mu[27mc[27mc[27me[27ms[27ms[27m'[27m [27mi[27mn[27m [27ml[27mi[27mn[27me[27m:[1B[27m [27m [27m [27m [27m [27m [27m [27m [27ml[27mi[27mn[27me[27ms[27m[[27mi[27m][27m [27m=[27m [27m"[27m [27m [27m [27m [27mt[27mo[27ma[27ms[27mt[27m.[27ms[27mu[27mc[27mc[27me[27ms[27ms[27m([27m'[27mI[27mm[27mp[27mo[27mr[27mt[27ma[27md[27mo[27m:[27m [27m'[27m [27m+[27m [27mc[27mr[27me[27ma[27mt[27me[27md[27m [27m+[27m [27m'[27m [27mc[27mr[27me[27ma[27md[27mo[27ms[27m,[27m [27m'[27m [27m+[27m [27mup[27md[27ma[27mt[27me[27md[27m [27m+[27m [27m'[27m [27ma[27mc[27mt[27mu[27ma[27ml[27mi[27mz[27ma[27md[27mo[27ms[27m'[27m [27m+[27m [27m([27me[27mr[27mr[27mo[27mr[27ms[27m [27m>[27m [27m0[27m [27m?[27m [27m'[27m,[27m [27m'[27m [27m+[27m [27me[27mr[27mr[27mo[27mr[27ms[27m [27m+[27m [27m'[27m [27me[27mr[27mr[27mo[27mr[27me[27ms[27m'[27m [27m:[27m [27m'[27m'[27m)[27m)[27m"[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mF[27mi[27mx[27me[27md[27m [27ml[27mi[27mn[27me[27m'[27m,[27m [27mi[27m+[27m1[27m)[1B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27m'[27m\[27mn[27m'[27m.[27mj[27mo[27mi[27mn[27m([27ml[27mi[27mn[27me[27ms[27m)[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mf[27mi[27mx[27m9[27m9[27m.[27mp[27my[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[27mF[27mi[27mx[27m [27mt[27mo[27ma[27ms[27mt[27m [27ms[27my[27mn[27mt[27ma[27mx[27m [27me[27mr[27mr[27mo[27mr[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+Fixed line 99
+[main d507fbf0] Fix toast syntax error
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 41 insertions(+), 2 deletions(-)
+Enumerating objects: 15, done.
+Counting objects:   6% (1/15)Counting objects:  13% (2/15)Counting objects:  20% (3/15)Counting objects:  26% (4/15)Counting objects:  33% (5/15)Counting objects:  40% (6/15)Counting objects:  46% (7/15)Counting objects:  53% (8/15)Counting objects:  60% (9/15)Counting objects:  66% (10/15)Counting objects:  73% (11/15)Counting objects:  80% (12/15)Counting objects:  86% (13/15)Counting objects:  93% (14/15)Counting objects: 100% (15/15)Counting objects: 100% (15/15), done.
+Delta compression using up to 12 threads
+Compressing objects:  14% (1/7)Compressing objects:  28% (2/7)Compressing objects:  42% (3/7)Compressing objects:  57% (4/7)Compressing objects:  71% (5/7)Compressing objects:  85% (6/7)Compressing objects: 100% (7/7)Compressing objects: 100% (7/7), done.
+Writing objects:  12% (1/8)Writing objects:  25% (2/8)Writing objects:  37% (3/8)Writing objects:  50% (4/8)Writing objects:  62% (5/8)Writing objects:  75% (6/8)Writing objects:  87% (7/8)Writing objects: 100% (8/8)Writing objects: 100% (8/8), 2.05 KiB | 701.00 KiB/s, done.
+Total 8 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/6)[Kremote: Resolving deltas:  16% (1/6)[Kremote: Resolving deltas:  33% (2/6)[Kremote: Resolving deltas:  50% (3/6)[Kremote: Resolving deltas:  66% (4/6)[Kremote: Resolving deltas:  83% (5/6)[Kremote: Resolving deltas: 100% (6/6)[Kremote: Resolving deltas: 100% (6/6), completed with 6 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   62acaa8a..d507fbf0  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/producto/\[id\]/p[7ma[7mge.tsx[27m[K[A[44C[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mpa[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+'use client'
+import { useEffect, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { ShoppingCart, ArrowLeft, Eye, AlertCircle } from 'lucide-react'
+import Navbar from '@/components/ui/Navbar'
+import Footer from '@/components/ui/Footer'
+import WhatsAppButton from '@/components/ui/WhatsAppButton'
+import { createClient } from '@/lib/supabase'
+import { useCartStore } from '@/lib/cart-store'
+import type { Product } from '@/types'
+import toast from 'react-hot-toast'
+
+const TIPO_LABELS: Record<string, string> = {
+  esferico: 'Esférico', torico: 'Tórico', multifocal: 'Multifocal',
+  color: 'Color', solucion: 'Solución', gota: 'Gotas',
+}
+
+const ALL_SPH = [-0.25,-0.5,-0.75,-1,-1.25,-1.5,-1.75,-2,-2.25,-2.5,-2.75,-3,-3.25,-3.5,-3.75,-4,-4.25,-4.5,-4.75,-5,-5.25,-5.5,-5.75,-6,-6.5,-7,-7.5,-8,-8.5,-9,-9.5,-10,-10.5,-11,-11.5,-12,-12.5,-13,-13.5,-14,-14.5,-15,-15.5,-16,-16.5,-17,-17.5,-18,-18.5,-19,-19.5,-20,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.25,3.5,3.75,4,4.25,4.5,4.75,5,5.25,5.5,5.75,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12]
+const ALL_CYL = [-6,-5.75,-5.5,-5.25,-5,-4.75,-4.5,-4.25,-4,-3.75,-3.5,-3.25,-3,-2.75,-2.5,-2.25,-2,-1.75,-1.5,-1.25,-1,-0.75,-0.5,-0.25]
+
+export default function ProductoPage() {
+  const { id } = useParams() as { id: string }
+  const router = useRouter()
+  const [product, setProduct] = useState<Product | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [selectedSph, setSelectedSph] = useState<number | null>(null)
+  const [selectedCyl, setSelectedCyl] = useState<number | null>(null)
+  const [selectedAdd, setSelectedAdd] = useState<string | null>(null)
+  const [qty, setQty] = useState(1)
+  const addItem = useCartStore(s => s.addItem)
+
+  useEffect(() => {
+    const sb = createClient()
+    sb.from('products').select('*, categories(*)').eq('id', id).single()
+      .then(({ data }) => { setProduct(data); setLoading(false) })
+  }, [id])
+
+  const needsSph = product && ['esferico','torico','multifocal','color'].includes(product.tipo ?? '')
+    && (product.sph_disponibles?.length ?? 0) > 0
+
+  const handleAdd = () => {
+    if (!product) return
+    if (needsSph && selectedSph === null) { toast.error('Selecciona una graduacion'); return }
+    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined })
+    toast.success('Agregado al carrito')
+  }
+
+  const handleBuyNow = () => {
+    if (!product) return
+    if (needsSph && selectedSph === null) { toast.error('Selecciona una graduacion'); return }
+    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined })
+    router.push('/sugeridos')
+  }
+
+  if (loading) return (<><Navbar /><div className="flex items-center justify-center h-96"><div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" /></div></>)
+  if (!product) return (<><Navbar /><div className="max-w-2xl mx-auto px-4 py-20 text-center"><p className="text-gray-500">Producto no encontrado.</p><button onClick={() => router.back()} className="mt-4 btn-primary">Volver</button></div></>)
+
+  const sphs: number[] = product.sph_disponibles ?? []
+  const cyls: number[] = product.cyl_disponibles ?? []
+  const adds: string[] = product.add_disponibles ?? []
+
+  const sphRange = sphs.length > 0 ? ALL_SPH.filter(v => { const neg = sphs.filter((x:number) => x < 0); const pos = sphs.filter((x:number) => x > 0); if (v < 0) return neg.length > 0 && v >= Math.min(...neg); if (v > 0) return pos.length > 0 && v <= Math.max(...pos); return false }) : []
+  const cylRange = cyls.length > 0 ? ALL_CYL.filter(v => v >= Math.min(...cyls) && v <= Math.max(...cyls)) : []
+
+  return (
+    <>
+      <Navbar />
+      <main className="max-w-6xl mx-auto px-4 py-8 pb-24">
+        <button onClick={() => router.back()} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
+          <ArrowLeft className="w-4 h-4" /> Volver
+        </button>
+        <div className="grid md:grid-cols-2 gap-10">
+          <div className="card overflow-hidden aspect-square flex items-center justify-center bg-gray-50">
+            {product.imagen_url ? (
+              <Image src={product.imagen_url} alt={product.nombre} width={400} height={400} className="object-contain p-8" />
+            ) : (
+              <Eye className="w-24 h-24 text-gray-200" />
+            )}
+          </div>
+          <div className="flex flex-col gap-5">
+            <div>
+              <p className="text-sm font-semibold text-primary-600 mb-1">{product.marca}</p>
+              {product.tipo && <span className="badge bg-primary-100 text-primary-700 mb-3 inline-block">{TIPO_LABELS[product.tipo]}</span>}
+              <h1 className="font-display text-2xl md:text-3xl font-bold text-gray-900 leading-tight">{product.nombre}</h1>
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
+              <p className="text-sm text-gray-400 mt-0.5">{product.stock > 0 ? product.stock <= 5 ? `Solo ${product.stock} en stock` : 'En stock' : 'Sin stock'}</p>
+            </div>
+            {product.descripcion && <p className="text-gray-600 text-sm leading-relaxed">{product.descripcion}</p>}
+
+            {needsSph && sphRange.length > 0 && (
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Graduacion (SPH) <span className="text-red-500">*</span></label>
+                <select value={selectedSph ?? ''} onChange={e => setSelectedSph(e.target.value === '' ? null : parseFloat(e.target.value))}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
+                  <option value="">-- Selecciona tu graduacion --</option>
+                  {sphRange.map(s => {
+                    const ok = sphs.includes(s)
+                    return <option key={s} value={s} disabled={!ok}>{s > 0 ? '+' + s : s}{ok ? '' : ' (no disponible)'}</option>
+                  })}
+                </select>
+              </div>
+            )}
+
+            {cylRange.length > 0 && (
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Cilindro (CYL)</label>
+                <select value={selectedCyl ?? ''} onChange={e => setSelectedCyl(e.target.value === '' ? null : parseFloat(e.target.value))}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
+                  <option value="">-- Selecciona cilindro --</option>
+                  {cylRange.map(c => {
+                    const ok = cyls.includes(c)
+                    return <option key={c} value={c} disabled={!ok}>{c}{ok ? '' : ' (no disponible)'}</option>
+                  })}
+                </select>
+              </div>
+            )}
+
+            {adds.length > 0 && (
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Adicion (ADD)</label>
+                <select value={selectedAdd ?? ''} onChange={e => setSelectedAdd(e.target.value === '' ? null : e.target.value)}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
+                  <option value="">-- Selecciona adicion --</option>
+                  {adds.sort().map(a => <option key={a} value={a}>{a}</option>)}
+                </select>
+              </div>
+            )}
+
+            <div className="flex items-center gap-3">
+              <p className="text-sm font-semibold text-gray-700">Cantidad</p>
+              <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">-</button>
+                <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
+                <button onClick={() => setQty(q => Math.min(product.stock, q + 1))} className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">+</button>
+              </div>
+            </div>
+
+            {['esferico','torico','multifocal'].includes(product.tipo ?? '') && (
+              <div className="flex gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>Esta recomendacion es orientativa. Consulta siempre con un profesional de la salud visual antes de comprar lentes de contacto.</span>
+              </div>
+            )}
+
+            <button onClick={handleAdd} disabled={product.stock === 0} className="btn-primary flex items-center justify-center gap-2 py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed">
+              <ShoppingCart className="w-5 h-5" />
+              {product.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
+            </button>
+            <button onClick={handleBuyNow} disabled={product.stock === 0} className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors text-lg disabled:opacity-50">
+              Comprar ahora
+            </button>
+          </div>
+        </div>
+      </main>
+      <Footer />
+      <WhatsAppButton />
+    </>
+  )
+}
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004hc >....                        
+[7m">Eje (AXIS)</label>[27m[K
+[7m                <select value={selectedAxis ?? ''} onChange={e => setSelectedAxi[7ms[7m(e.target.value === '' ? null : parseInt(e.target.value))}[27m[K
+[7m                  className="w-full border border-gray-200 rounded-xl px-4 py-3 [7mt[7mext-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-wh[7mi[7mte">[27m[K
+[7m                  <option value="">-- Selecciona el eje --</option>[27m[K
+[7m                  {axes.map(a => <option key={a} value={a}>{a}</option>)}[27m[K
+[7m                </select>[27m[K
+[7m              </div>[27m[K
+[7m            )}[27m[K
+[K
+[7m            {adds.length > 0 && ("""[27m[K
+[K
+[7mif old in c:[27m[K
+[7m    c = c.replace(old, new)[27m[K
+[7m    f = open('src/app/producto/[id]/page.tsx', 'w')[27m[K
+[7m    f.write(c)[27m[K
+[7m    f.close()[27m[K
+[7m    print('OK')[27m[K
+[7melse:[27m[K
+[7m    print('NOT FOUND')[27m[K
+[7mEOF[27m[K[22A[27m"[27m>[27mE[27mj[27me[27m [27m([27mA[27mX[27mI[27mS[27m)[27m<[27m/[27ml[27ma[27mb[27me[27ml[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27me[27ml[27me[27mc[27mt[27m [27mv[27ma[27ml[27mu[27me[27m=[27m{[27ms[27me[27ml[27me[27mc[27mt[27me[27md[27mA[27mx[27mi[27ms[27m [27m?[27m?[27m [27m'[27m'[27m}[27m [27mo[27mn[27mC[27mh[27ma[27mn[27mg[27me[27m=[27m{[27me[27m [27m=[27m>[27m [27ms[27me[27mt[27mS[27me[27ml[27me[27mc[27mt[27me[27md[27mA[27mx[27mis[27m([27me[27m.[27mt[27ma[27mr[27mg[27me[27mt[27m.[27mv[27ma[27ml[27mu[27me[27m [27m=[27m=[27m=[27m [27m'[27m'[27m [27m?[27m [27mn[27mu[27ml[27ml[27m [27m:[27m [27mp[27ma[27mr[27ms[27me[27mI[27mn[27mt[27m([27me[27m.[27mt[27ma[27mr[27mg[27me[27mt[27m.[27mv[27ma[27ml[27mu[27me[27m)[27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mp[27mx[27m-[27m4[27m [27mp[27my[27m-[27m3[27m t[27me[27mx[27mt[27m-[27ms[27mm[27m [27mf[27mo[27mn[27mt[27m-[27mm[27me[27md[27mi[27mu[27mm[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mo[27mu[27mt[27ml[27mi[27mn[27me[27m-[27mn[27mo[27mn[27me[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mr[27mi[27mn[27mg[27m-[27m2[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mr[27mi[27mn[27mg[27m-[27mp[27mr[27mi[27mm[27ma[27mr[27my[27m-[27m5[27m0[27m0[27m [27mb[27mg[27m-[27mw[27mhi[27mt[27me[27m"[27m>[1B[67P[13C     <option value="">-- Selecciona el eje --</option>[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27ma[27mx[27me[27ms[27m.[27mm[27ma[27mp[27m([27ma[27m [27m=[27m>[27m [27m<[27mo[27mp[27mt[27mi[27mo[27mn[27m [27mk[27me[27my[27m=[27m{[27ma[27m}[27m [27mv[27ma[27ml[27mu[27me[27m=[27m{[27ma[27m}[27m>[27m{[27ma[27m}[27m<[27m/[27mo[27mp[27mt[27mi[27mo[27mn[27m>[27m)[27m}[1B[25P[16C</select>[30C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[2B[36P[12C{adds.length > 0 && ("""[8C[K[2B[27mi[27mf[27m [27mo[27ml[27md[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m,[27m [27mn[27me[27mw[27m)[1B[27m [27m [27m [27m [27mf[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[
