@@ -3229,4 +3229,231 @@ OK
 [7mPYEOF[27m[K
 [7mpython3 /tmp/inject_products.py[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mo[27mn[27mC[27ml[27mi[27mc[27mk[27m=[27m{[27m([27m)[27m [27m=[27m>[27m [27mr[27mo[27mu[27mt[27me[27mr[27m.[27mp[27mu[27ms[27mh[27m([27m'[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m'[27m [27m+[27m [27mp[27m.[27mi[27md[27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mf[27ml[27me[27mx[27m-[27m1[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m6[27m0[27m0 [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m5[27m0[27m [27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mp[27my[27m-[27m2[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m"[27m>[1B[33P[26CVer más[14C[K[1B[33P[24C</button>[14C[K[1B[28P[22C</div>[24C[K[1B[26P[20C</div>[28C[K[1B[24P[18C</div>[32C[K[1B[19P[16C))}[42C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[1B[16P[10C</div>[48C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27mm[27ma[27mi[27mn[27m>[27m"[27m"[27m"[2B[27mi[27mf[27m [27mo[27ml[27md[27m [27mi[27mn[27m [27mc[27mo[27md[27me[27m:[1B[27m [27m [27m [27m [27mc[27mo[27md[27me[27m [27m=[27m [27mc[27mo[27md[27me[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m,[27m [27mn[27me[27mw[27m)[1B[27m [27m [27m [27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mi[27mn[27mj[27me[27mc[27mt[27m_[27mp[27mr[27mo[27md[27mu[27mc[27mt[27ms[27m.[27mp[27my[?2004l
 OK
-[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetiend
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 -c "[27m
+[7mimport re[27m[K
+[7mf=open('src/app/receta/page.tsx','r')[27m[K
+[7mc=f.read()[27m[K
+[7mf.close()[27m[K
+[7mc=re.sub(r'\[([^\]]+)\]\(http[^)]+\)',lambda m: m.group(1),c)[27m[K
+[7mf=open('src/app/receta/page.tsx','w')[27m[K
+[7mf.write(c)[27m[K
+[7mf.close()[27m[K
+[7mprint('links:',c.count('http'))[27m[K
+[7m"[27m[K
+[7mgit add -A && git commit -m "Receta: productos recomendados post-diagnostico" &&[7m [7mgit push[27m[K[12A[42C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m-[27mc[27m [27m"[1B[27mi[27mm[27mp[27mo[27mr[27mt[27m [27mr[27me[1B[27mf[27m=[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m'[27mr[27m'[27m)[1B[27mc[27m=[27mf[27m.[27mr[27me[27ma[27md[27m([27m)[1B[27mf[27m.[27mc[27ml[27mo[27ms[27me[27m([27m)[1B[27mc[27m=[27mr[27me[27m.[27ms[27mu[27mb[27m([27mr[27m'[27m\[27m[[27m([27m[[27m^[27m\[27m][27m][27m+[27m)[27m\[27m][27m\[27m([27mh[27mt[27mt[27mp[27m[[27m^[27m)[27m][27m+[27m\[27m)[27m'[27m,[27ml[27ma[27mm[27mb[27md[27ma[27m [27mm[27m:[27m [27mm[27m.[27mg[27mr[27mo[27mu[27mp[27m([27m1[27m)[27m,[27mc[27m)[1B[27mf[27m=[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m'[27mw[27m'[27m)[1B[27mf[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27mf[27m.[27mc[27ml[27mo[27ms[27me[27m([27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27ml[27mi[27mn[27mk[27ms[27m:[27m'[27m,[27mc[27m.[27mc[27mo[27mu[27mn[27mt[27m([27m'[27mh[27mt[27mt[27mp[27m'[27m)[27m)[1B[27m"[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[27mR[27me[27mc[27me[27mt[27ma[27m:[27m [27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m [27mr[27me[27mc[27mo[27mm[27me[27mn[27md[27ma[27md[27mo[27ms[27m [27mp[27mo[27ms[27mt[27m-[27md[27mi[27ma[27mg[27mn[27mo[27ms[27mt[27mi[27mc[27mo[27m"[27m [27m&[27m& [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+links: 0
+[main 18d57c9b] Receta: productos recomendados post-diagnostico
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 530 insertions(+), 5 deletions(-)
+Enumerating objects: 13, done.
+Counting objects:   7% (1/13)Counting objects:  15% (2/13)Counting objects:  23% (3/13)Counting objects:  30% (4/13)Counting objects:  38% (5/13)Counting objects:  46% (6/13)Counting objects:  53% (7/13)Counting objects:  61% (8/13)Counting objects:  69% (9/13)Counting objects:  76% (10/13)Counting objects:  84% (11/13)Counting objects:  92% (12/13)Counting objects: 100% (13/13)Counting objects: 100% (13/13), done.
+Delta compression using up to 12 threads
+Compressing objects:  16% (1/6)Compressing objects:  33% (2/6)Compressing objects:  50% (3/6)Compressing objects:  66% (4/6)Compressing objects:  83% (5/6)Compressing objects: 100% (6/6)Compressing objects: 100% (6/6), done.
+Writing objects:  14% (1/7)Writing objects:  28% (2/7)Writing objects:  42% (3/7)Writing objects:  57% (4/7)Writing objects:  71% (5/7)Writing objects:  85% (6/7)Writing objects: 100% (7/7)Writing objects: 100% (7/7), 9.68 KiB | 2.42 MiB/s, done.
+Total 7 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/5)[Kremote: Resolving deltas:  20% (1/5)[Kremote: Resolving deltas:  40% (2/5)[Kremote: Resolving deltas:  60% (3/5)[Kremote: Resolving deltas:  80% (4/5)[Kremote: Resolving deltas: 100% (5/5)[Kremote: Resolving deltas: 100% (5/5), completed with 5 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   c038ec10..18d57c9b  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/sugeridos/page.ts[7mx[27m[K[A[50C[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27msx[?2004l
+'use client'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase'
+import { useCartStore } from '@/lib/cart-store'
+import { ShoppingCart, ArrowRight, X } from 'lucide-react'
+
+export default function SugeridosPage() {
+  const router = useRouter()
+  const { items, addItem } = useCartStore()
+  const [sugeridos, setSugeridos] = useState([])
+  const [agregados, setAgregados] = useState([])
+
+  useEffect(() => {
+    if (items.length === 0) { router.push('/catalogo'); return }
+    const sb = createClient()
+    const tipos = [...new Set(items.map(i => i.product.tipo).filter(Boolean))]
+    const ids = items.map(i => i.product.id)
+    sb.from('products')
+      .select('*')
+      .in('tipo', tipos)
+      .not('id', 'in', '(' + ids.join(',') + ')')
+      .eq('activo', true)
+      .gt('stock', 0)
+      .limit(3)
+      .then(({ data }) => setSugeridos(data || []))
+  }, [])
+
+  const agregar = (p) => {
+    addItem(p, { cantidad: 1 })
+    setAgregados(a => [...a, p.id])
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 pb-24">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ShoppingCart className="w-8 h-8 text-green-600" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900">Producto agregado</h1>
+          <p className="text-gray-500 mt-1">Los clientes que compraron esto tambien llevaron:</p>
+        </div>
+
+        {sugeridos.length > 0 && (
+          <div className="space-y-3 mb-8">
+            {sugeridos.map((p) => (
+              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
+                <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
+                  {p.imagen_url ? <img src={p.imagen_url} alt={p.nombre} className="w-full h-full object-cover rounded-xl" /> :
+                    <span className="text-2xl">👁</span>}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 text-sm truncate">{p.nombre}</p>
+                  <p className="text-xs text-gray-400">{p.marca} · {p.tipo}</p>
+                  <p className="text-primary-600 font-bold mt-0.5">RD${p.precio?.toLocaleString()}</p>
+                </div>
+                {agregados.includes(p.id) ? (
+                  <span className="text-green-600 text-sm font-semibold bg-green-50 px-3 py-1.5 rounded-xl">Agregado</span>
+                ) : (
+                  <button onClick={() => agregar(p)}
+                    className="bg-primary-600 text-white text-sm font-semibold px-3 py-1.5 rounded-xl hover:bg-primary-700 transition-colors shrink-0">
+                    Agregar
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="space-y-3">
+          <button onClick={() => router.push('/checkout')}
+            className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors text-lg">
+            Continuar al pago <ArrowRight className="w-5 h-5" />
+          </button>
+          <button onClick={() => router.push('/catalogo')}
+            className="w-full bg-white border border-gray-200 text-gray-600 font-semibold py-3 rounded-2xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
+            <X className="w-4 h-4" /> Seguir comprando
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/sugeridos/page.ts[7mx[27m[K[A[50C[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27msx[?2004l
+'use client'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase'
+import { useCartStore } from '@/lib/cart-store'
+import { ShoppingCart, ArrowRight, X } from 'lucide-react'
+
+export default function SugeridosPage() {
+  const router = useRouter()
+  const { items, addItem } = useCartStore()
+  const [sugeridos, setSugeridos] = useState([])
+  const [agregados, setAgregados] = useState([])
+
+  useEffect(() => {
+    if (items.length === 0) { router.push('/catalogo'); return }
+    const sb = createClient()
+    const tipos = [...new Set(items.map(i => i.product.tipo).filter(Boolean))]
+    const ids = items.map(i => i.product.id)
+    sb.from('products')
+      .select('*')
+      .in('tipo', tipos)
+      .not('id', 'in', '(' + ids.join(',') + ')')
+      .eq('activo', true)
+      .gt('stock', 0)
+      .limit(3)
+      .then(({ data }) => setSugeridos(data || []))
+  }, [])
+
+  const agregar = (p) => {
+    addItem(p, { cantidad: 1 })
+    setAgregados(a => [...a, p.id])
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 pb-24">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ShoppingCart className="w-8 h-8 text-green-600" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900">Producto agregado</h1>
+          <p className="text-gray-500 mt-1">Los clientes que compraron esto tambien llevaron:</p>
+        </div>
+
+        {sugeridos.length > 0 && (
+          <div className="space-y-3 mb-8">
+            {sugeridos.map((p) => (
+              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
+                <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
+                  {p.imagen_url ? <img src={p.imagen_url} alt={p.nombre} className="w-full h-full object-cover rounded-xl" /> :
+                    <span className="text-2xl">👁</span>}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 text-sm truncate">{p.nombre}</p>
+                  <p className="text-xs text-gray-400">{p.marca} · {p.tipo}</p>
+                  <p className="text-primary-600 font-bold mt-0.5">RD${p.precio?.toLocaleString()}</p>
+                </div>
+                {agregados.includes(p.id) ? (
+                  <span className="text-green-600 text-sm font-semibold bg-green-50 px-3 py-1.5 rounded-xl">Agregado</span>
+                ) : (
+                  <button onClick={() => agregar(p)}
+                    className="bg-primary-600 text-white text-sm font-semibold px-3 py-1.5 rounded-xl hover:bg-primary-700 transition-colors shrink-0">
+                    Agregar
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="space-y-3">
+          <button onClick={() => router.push('/checkout')}
+            className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors text-lg">
+            Continuar al pago <ArrowRight className="w-5 h-5" />
+          </button>
+          <button onClick={() => router.push('/catalogo')}
+            className="w-full bg-white border border-gray-200 text-gray-600 font-semibold py-3 rounded-2xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
+            <X className="w-4 h-4" /> Seguir comprando
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7mbase">[27m[K
+[7m            Ir al pago <ArrowRight className="w-5 h-5" />[27m[K
+[7m          </button>[27m[K
+[7m          <button onClick={() => router.push(\'/catalogo\')}[27m[K
+[7m            className="w-full bg-white border border-gray-200 text-gray-600 font[7m-[7msemibold py-3 rounded-2xl flex items-center justify-center gap-2 hover:bg-gray-[7m5[7m0 transition-colors text-sm">[27m[K
+[7m            <X className="w-4 h-4" /> Seguir comprando[27m[K
+[7m          </button>[27m[K
+[7m        </div>[27m[K
+[7m      </div>[27m[K
+[7m    </div>[27m[K
+[7m  )[27m[K
+[7m}[27m[K
+[7m'''[27m[K
+[K
+[7mopen('src/app/sugeridos/page.tsx', 'w').write(code)[27m[K
+[7mprint('OK')[27m[K
+[7mPYEOF[27m[K
+[7mpython3 /tmp/sugeridos_new.py[27m[K
+[7mgrep "http://" src/app/sugeridos/page.tsx[27m[K
+[7mgit add -A && git commit -m "Combos automaticos inteligentes en sugeridos" && gi[7mt[7m push[27m[K[22A[27mb[27ma[27ms[27me[27m"[27m>[1B[57P[12CIr al pago <ArrowRight className="w-5 h-5" />[K[1B[19P[10C</button>[42C[K[1B[60P[10C<button onClick={() => router.push(\'/catalogo\')}[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mg[27m-[27mw[27mh[27mi[27mt[27me[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m6[27m0[27m0[27m [27mf[27mo[27mn[27mt-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mp[27my[27m-[27m3[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27m2[27mx[27ml[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mg[27ma[27mp[27m-[27m2[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-5[27m0[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m [27mt[27me[27mx[27mt[27m-[27ms[27mm[27m"[27m>[1B[54P[12C<X className="w-4 h-4" /> Seguir comprando[K[1B[19P[10C</button>[42C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m)[1B[27m}[1B[27m'[27m'[27m'[2B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m_[27mn[27me[27mw[27m.[27mp[27my[1B[27mg[27mr[27me[27mp[27m [27m"[27mh[27mt[27mt[27mp[27m:[27m/[27m/[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[27mC[27mo[27mm[27mb[27mo[27ms[27m [27ma[27mu[27mt[27mo[27mm[27ma[27mt[27mi[27mc[27mo[27ms[27m [27mi[27mn[27mt[27me[27ml[27mi[27mg[27me[27mn[27mt[27me[27ms[27m [27me[27mn[27m [27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m"[27m [27m&[27m&[27m [27mg[27mit[27m [27mp[27mu[27ms[27m
