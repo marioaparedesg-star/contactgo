@@ -51,6 +51,12 @@ export default function CheckoutPage() {
             if (perfil.telefono) setValue('telefono', perfil.telefono)
           }
         })
+        sb.from('addresses').select('*').eq('user_id', user.id).eq('principal', true).single().then(({ data: addr }) => {
+          if (addr) {
+            setValue('direccion', addr.direccion)
+            if (addr.ciudad) setValue('ciudad', addr.ciudad)
+          }
+        })
       }
     })
   }, [items, router])
@@ -106,7 +112,7 @@ export default function CheckoutPage() {
 
     clearCart()
     setLoading(false)
-    router.push(`/cuenta/pedidos?nuevo=${order.id}`)
+    router.push(order.id)
     toast.success('¡Pedido confirmado! 🎉')
   }
 
