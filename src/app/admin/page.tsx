@@ -1,15 +1,14 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import AdminNav from '@/components/admin/AdminNav'
-import { ShoppingBag, Users, Package, TrendingUp, Clock, CheckCircle, Truck, AlertCircle } from 'lucide-react'
+import { ShoppingBag, Clock, DollarSign, Users, AlertTriangle } from 'lucide-react'
 
 export const revalidate = 0
 
 async function getStats() {
   const sb = createServerSupabaseClient()
-  const today = new Date().toISOString().split('T')[0]
-  const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
-
+  const now = new Date()
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
   const [
     { count: totalOrders },
     { count: pendingOrders },
@@ -23,11 +22,8 @@ async function getStats() {
     sb.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'customer'),
     sb.from('products').select('*', { count: 'exact', head: true }).lte('stock', 5).gt('stock', 0),
   ])
-
   const monthRevenue = (monthOrders ?? []).reduce((s: number, o: any) => s + (o.total ?? 0), 0)
-
-  return { totalOrders: totalOrders ?? 0, pendingOrders: pendingOrders ?? 0,
-           monthRevenue, totalClients: totalClients ?? 0, lowStock: lowStock ?? 0 }
+  return { totalOrders: totalOrders ?? 0, pendingOrders: pendingOrders ?? 0, monthRevenue, totalClients: totalClients ?? 0, lowStock: lowStock ?? 0 }
 }
 
 async function getRecentOrders() {
@@ -39,98 +35,108 @@ async function getRecentOrders() {
   return data ?? []
 }
 
-const ESTADO_BADGE: Record<string, { label: string; cls: string; icon: any }> = {
-  pendiente:   { label: 'Pendiente',   cls: 'bg-amber-100 text-amber-700',   icon: Clock },
-  confirmado:  { label: 'Confirmado',  cls: 'bg-blue-100 text-blue-700',     icon: CheckCircle },
-  preparando:  { label: 'Preparando',  cls: 'bg-purple-100 text-purple-700', icon: Package },
-  enviado:     { label: 'Enviado',     cls: 'bg-indigo-100 text-indigo-700', icon: Truck },
-  entregado:   { label: 'Entregado',   cls: 'bg-green-100 text-green-700',   icon: CheckCircle },
-  cancelado:   { label: 'Cancelado',   cls: 'bg-red-100 text-red-700',       icon: AlertCircle },
-}
-
 export default async function AdminDashboard() {
   const sb = createServerSupabaseClient()
   const { data: { user } } = await sb.auth.getUser()
   if (!user) redirect('/admin/login')
 
-  const { data: profile } = await sb.from('profiles').select('role')const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()eq('id', user.id).single()
+  const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/')
 
   const [stats, orders] = await Promise.all([getStats(), getRecentOrders()])
+
+  const ESTADO_BADGE: Record<string, string> = {
+    pendiente: 'bg-yellow-50 text-yellow-700',
+    procesando: 'bg-blue-50 text-blue-700',
+    enviado: 'bg-purple-50 text-purple-700',
+    entregado: 'bg-green-50 text-green-700',
+    cancelado: 'bg-red-50 text-red-700',
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
       <main className="flex-1 p-6 md:p-8 overflow-auto">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h1 className="font-display text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-500 text-sm mt-1">Resumen de ContactGo</p>
-          </div>
-
-          {/* KPIs */}
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-            {[
-              { label: 'Pedidos totales', value: stats.totalOrders, icon: ShoppingBag, color: 'blue' },
-              { label: 'Pendientes',      value: stats.pendingOrders, icon: Clock,      color: 'amber' },
-              { label: 'Ventas del mes',  value: `RD$${stats.monthRevenue.toLocaleString()}`, icon: TrendingUp, color: 'green' },
-              { label: 'Clientes',        value: stats.totalClients, icon: Users,       color: 'purple' },
-              { label: 'Stock bajo',      value: stats.lowStock,     icon: AlertCircle, color: 'red' },
-            ].map(({ label, value, icon: Icon, color }) => (
-              <div key={label} className="card p-4">
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3
-                  bg-${color}-100`}>
-                  <Icon className={`w-5 h-5 text-${color}-600`} />
-                </div>
-                <p className="text-2xl font-bold text-gray-900">{value}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-500">Resumen general de ContactGo</p>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center">
+                <ShoppingBag className="w-4 h-4 text-blue-600" />
               </div>
-            ))}
+              <span className="text-sm text-gray-500">Total pedidos</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{stats.totalOrders}</p>
           </div>
-
-          {/* Pedidos recientes */}
-          <div className="card overflow-hidden">
-            <div className="p-5 border-b border-gray-100 flex justify-between items-center">
-              <h2 className="font-semibold text-gray-900">Pedidos recientes</h2>
-              <a href="/admin/pedidos" className="text-sm text-primary-600 font-medium hover:text-primary-700">
-                Ver todos →
-              </a>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-yellow-50 rounded-xl flex items-center justify-center">
+                <Clock className="w-4 h-4 text-yellow-600" />
+              </div>
+              <span className="text-sm text-gray-500">Pendientes</span>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50">
-                  <tr>
-                    {['ID','Cliente','Total','Pago','Estado','Fecha'].map(h => (
-                      <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
-                    ))}
+            <p className="text-2xl font-bold text-gray-900">{stats.pendingOrders}</p>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-green-50 rounded-xl flex items-center justify-center">
+                <DollarSign className="w-4 h-4 text-green-600" />
+              </div>
+              <span className="text-sm text-gray-500">Ingresos mes</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">RD${stats.monthRevenue.toLocaleString()}</p>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-purple-50 rounded-xl flex items-center justify-center">
+                <Users className="w-4 h-4 text-purple-600" />
+              </div>
+              <span className="text-sm text-gray-500">Clientes</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{stats.totalClients}</p>
+          </div>
+        </div>
+        {stats.lowStock > 0 && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 mb-6 flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-yellow-600 shrink-0" />
+            <p className="text-yellow-800 text-sm font-medium">{stats.lowStock} producto(s) con stock bajo (1-5 unidades)</p>
+            <a href="/admin/inventario" className="ml-auto text-sm text-yellow-700 font-semibold underline">Ver inventario</a>
+          </div>
+        )}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h2 className="font-semibold text-gray-900">Pedidos recientes</h2>
+            <a href="/admin/pedidos" className="text-sm text-primary-600 font-medium hover:text-primary-700">Ver todos</a>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  {['ID','Cliente','Total','Método','Estado','Fecha'].map(h => (
+                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {orders.map((o: any) => (
+                  <tr key={o.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-3 font-mono text-xs text-gray-400">{o.id.slice(0,8)}…</td>
+                    <td className="px-4 py-3 font-medium text-gray-900">{o.profiles?.nombre ?? o.cliente_nombre ?? '—'}</td>
+                    <td className="px-4 py-3 font-semibold">RD${(o.total ?? 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-gray-500 capitalize">{(o.metodo_pago ?? '—').replace('_', ' ')}</td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${ESTADO_BADGE[o.estado] ?? ESTADO_BADGE.pendiente}`}>
+                        {o.estado}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-gray-400 text-xs">{new Date(o.fecha).toLocaleDateString('es-DO')}</td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {orders.map((o: any) => {
-                    const b = ESTADO_BADGE[o.estado] ?? ESTADO_BADGE.pendiente
-                    const BIcon = b.icon
-                    return (
-                      <tr key={o.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-4 py-3 font-mono text-xs text-gray-400">{o.id.slice(0,8)}…</td>
-                        <td className="px-4 py-3 font-medium text-gray-900">
-                          {o.profiles?.nombre ?? o.cliente_nombre ?? '—'}
-                        </td>
-                        <td className="px-4 py-3 font-semibold">RD${(o.total ?? 0).toLocaleString()}</td>
-                        <td className="px-4 py-3 text-gray-500 capitalize">{(o.metodo_pago ?? '—').replace('_', ' ')}</td>
-                        <td className="px-4 py-3">
-                          <span className={`badge ${b.cls} flex items-center gap-1 w-fit`}>
-                            <BIcon className="w-3 h-3" /> {b.label}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-gray-400 text-xs">
-                          {new Date(o.fecha).toLocaleDateString('es-DO')}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </main>
