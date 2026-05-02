@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import AdminNav from '@/components/admin/AdminNav'
 import { ShoppingBag, Users, Package, TrendingUp, Clock, CheckCircle, Truck, AlertCircle } from 'lucide-react'
