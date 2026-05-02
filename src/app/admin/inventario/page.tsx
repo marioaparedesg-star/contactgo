@@ -18,9 +18,9 @@ export default async function InventarioPage() {
   const stockOk = (productos ?? []).filter((p: any) => p.stock > 5).length
 
   return (
-    <>
+    <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
-      <main className="ml-64 p-8 min-h-screen">
+      <main className="flex-1 p-8 overflow-auto"> className="ml-64 p-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Inventario</h1>
           <p className="text-gray-500">{productos?.length ?? 0} productos en total</p>

@@ -15,9 +15,9 @@ export default async function ClientesPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <>
+    <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
-      <main className="ml-64 p-8 min-h-screen">
+      <main className="flex-1 p-8 overflow-auto"> className="ml-64 p-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Clientes</h1>
