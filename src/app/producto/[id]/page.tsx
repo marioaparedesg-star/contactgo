@@ -46,6 +46,16 @@ export default function ProductoPage() {
     toast.success('Agregado al carrito ✓')
   }
 
+  const handleBuyNow = () => {
+    if (!product) return
+    if (needsSph && selectedSph === null) {
+      toast.error('Selecciona una graduacion')
+      return
+    }
+    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined })
+    router.push('/checkout')
+  }
+
   if (loading) return (
     <>
       <Navbar />
@@ -200,6 +210,10 @@ export default function ProductoPage() {
                          disabled:opacity-50 disabled:cursor-not-allowed">
               <ShoppingCart className="w-5 h-5" />
               {product.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
+            </button>
+            <button onClick={handleBuyNow} disabled={product.stock === 0}
+              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors text-lg disabled:opacity-50">
+              Comprar ahora
             </button>
           </div>
         </div>
