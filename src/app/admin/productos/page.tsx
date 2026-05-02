@@ -193,6 +193,15 @@ export default function AdminProductos() {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Descripción</label>
+                <div>
+                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Imagen</label>
+                {form.imagen_url && <img src={form.imagen_url} alt="preview" className="w-20 h-20 object-cover rounded-lg mb-2" />}
+                <input type="file" accept="image/*" onChange={e => { if (e.target.files && e.target.files[0]) uploadImage(e.target.files[0]) }}
+                  className="input text-sm" />
+                {uploading && <p className="text-xs text-primary-500 mt-1">Subiendo...</p>}
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Descripcion</label>
                 <textarea rows={2} value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} className="input resize-none" />
               </div>
             </div>
