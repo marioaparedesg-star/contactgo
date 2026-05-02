@@ -4,7 +4,6 @@ import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import ProductCard from '@/components/shop/ProductCard'
 import type { Product } from '@/types'
-import { Search } from 'lucide-react'
 
 export const revalidate = 30
 
@@ -14,8 +13,8 @@ interface Props {
 
 const TIPOS = [
   { value: '', label: 'Todos' },
-  { value: 'esferico', label: 'Esféricos' },
-  { value: 'torico', label: 'Tóricos' },
+  { value: 'esferico', label: 'Esfericos' },
+  { value: 'torico', label: 'Toricos' },
   { value: 'multifocal', label: 'Multifocales' },
   { value: 'color', label: 'Color' },
   { value: 'solucion', label: 'Soluciones' },
@@ -51,64 +50,62 @@ export default async function CatalogoPage({ searchParams }: Props) {
   return (
     <>
       <Navbar />
-      <main className="pb-20 max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold text-gray-900 mb-1">Catálogo</h1>
-          <p className="text-gray-500">{products.length} productos disponibles</p>
+      <main className="max-w-7xl mx-auto px-4 py-6 pb-24">
+        <div className="mb-4">
+          <h1 className="font-display text-2xl font-bold text-gray-900">Catalogo</h1>
+          <p className="text-gray-500 text-sm">{products.length} productos disponibles</p>
         </div>
-        <div className="flex flex-col lg:flex-row gap-8">
-          <aside className="w-full lg:w-64 shrink-0">
-            <div className="card p-5 sticky top-20 space-y-6">
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Buscar</label>
-                <form method="GET" action="/catalogo">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
-                    <input name="q" defaultValue={searchParams.q} placeholder="Nombre..." className="input !pl-9 text-sm" />
-                    {searchParams.tipo && <input type="hidden" name="tipo" value={searchParams.tipo} />}
-                  </div>
-                </form>
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Tipo</p>
-                <div className="space-y-1">
-                  {TIPOS.map(t => (
-                    <a key={t.value} href={t.value ? '/catalogo?tipo=' + t.value : '/catalogo'}
-                      className={'flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ' +
-                        (tipoActivo === t.value ? 'bg-primary-600 text-white font-semibold' : 'text-gray-600 hover:bg-gray-100')}>
-                      {t.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Marca</p>
-                <div className="space-y-1 max-h-48 overflow-y-auto">
-                  {marcas.map(m => (
-                    <a key={m} href={'/catalogo?' + (searchParams.tipo ? 'tipo=' + searchParams.tipo + '&' : '') + 'marca=' + m}
-                      className={'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors ' +
-                        (searchParams.marca === m ? 'bg-primary-100 text-primary-700 font-semibold' : 'text-gray-600 hover:bg-gray-100')}>
-                      {m}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </aside>
-          <div className="flex-1">
-            {products.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
-                {products.map(p => <ProductCard key={p.id} product={p} />)}
-              </div>
-            ) : (
-              <div className="card flex flex-col items-center justify-center py-20 text-center">
-                <Search className="w-12 h-12 text-gray-200 mb-4" />
-                <p className="text-gray-500 font-medium">No encontramos productos</p>
-                <a href="/catalogo" className="mt-4 text-sm text-primary-600 font-semibold">Ver todos</a>
-              </div>
-            )}
+
+        <form method="GET" action="/catalogo" className="mb-4">
+          <div className="relative">
+            <svg className="absolute left-3 top-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <input name="q" defaultValue={searchParams.q} placeholder="Buscar producto..." className="w-full border border-gray-200 rounded-2xl px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-sm" />
           </div>
+        </form>
+
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+          {TIPOS.map(t => (
+            <a key={t.value} href={t.value ? '/catalogo?tipo=' + t.value : '/catalogo'}
+              className={"shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors " +
+                (tipoActivo === t.value ? 'bg-primary-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-primary-300')}>
+              {t.label}
+            </a>
+          ))}
         </div>
+
+        {searchParams.marca && (
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-sm text-gray-500">Marca:</span>
+            <span className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-semibold">{searchParams.marca}</span>
+            <a href={'/catalogo' + (searchParams.tipo ? '?tipo=' + searchParams.tipo : '')} className="text-gray-400 hover:text-red-500 text-sm">x Limpiar</a>
+          </div>
+        )}
+
+        {products.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            {products.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <p className="text-gray-500 font-medium">No encontramos productos</p>
+            <a href="/catalogo" className="mt-4 text-sm text-primary-600 font-semibold">Ver todos</a>
+          </div>
+        )}
+
+        {marcas.length > 0 && (
+          <div className="mt-8">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Filtrar por marca</p>
+            <div className="flex flex-wrap gap-2">
+              {marcas.map(m => (
+                <a key={m} href={'/catalogo?' + (searchParams.tipo ? 'tipo=' + searchParams.tipo + '&' : '') + 'marca=' + m}
+                  className={"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors " +
+                    (searchParams.marca === m ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')}>
+                  {m}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
       <Footer />
       <WhatsAppButton />
