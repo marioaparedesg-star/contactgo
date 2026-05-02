@@ -121,7 +121,7 @@ export default function CheckoutPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="pb-20 max-w-5xl mx-auto px-4 py-8">
         <h1 className="font-display text-2xl font-bold text-gray-900 mb-8">Finalizar pedido</h1>
 
         <form onSubmit={handleSubmit(data => payMethod !== 'paypal' && createOrder(data))}

@@ -14,7 +14,7 @@ export default function CartPage() {
   if (items.length === 0) return (
     <>
       <Navbar />
-      <main className="max-w-2xl mx-auto px-4 py-20 text-center">
+      <main className="pb-20 max-w-2xl mx-auto px-4 py-20 text-center">
         <ShoppingBag className="w-16 h-16 text-gray-200 mx-auto mb-4" />
         <h2 className="font-display text-2xl font-bold text-gray-900 mb-2">Tu carrito está vacío</h2>
         <p className="text-gray-500 mb-6">Explora nuestro catálogo y encuentra los lentes perfectos para ti.</p>
@@ -29,7 +29,7 @@ export default function CartPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="pb-20 max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-7">
           <h1 className="font-display text-2xl font-bold text-gray-900">
             Tu carrito ({items.reduce((s, i) => s + i.cantidad, 0)} items)

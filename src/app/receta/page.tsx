@@ -54,7 +54,7 @@ export default function RecetaPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-2xl mx-auto px-4 py-12">
+      <main className="pb-20 max-w-2xl mx-auto px-4 py-12">
         <div className="text-center mb-10">
           <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Eye className="w-8 h-8 text-primary-600" />

@@ -51,7 +51,7 @@ export default async function CatalogoPage({ searchParams }: Props) {
   return (
     <>
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="pb-20 max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold text-gray-900 mb-1">Catálogo</h1>
           <p className="text-gray-500">{products.length} productos disponibles</p>
