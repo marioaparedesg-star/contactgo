@@ -35,12 +35,24 @@ export default function CheckoutPage() {
 
   const sub = subtotal(); const tot = total()
 
-  const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema)
   })
 
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
+    const sb = createClient()
+    sb.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: perfil }) => {
+          if (perfil) {
+            if (perfil.nombre) setValue('nombre', perfil.nombre)
+            if (perfil.email) setValue('email', perfil.email)
+            if (perfil.telefono) setValue('telefono', perfil.telefono)
+          }
+        })
+      }
+    })
   }, [items, router])
 
   const createOrder = async (data: FormData, payRef?: string) => {
