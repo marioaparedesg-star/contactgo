@@ -96,7 +96,7 @@ export default function AdminProductos() {
       }
     }
     setImporting(false)
-    toast.success(`Importado: ${created} creados, ${updated} actualizados${errors > 0 ? \`, ${errors} errores\` : ''}`)
+    toast.success('Importado: ' + created + ' creados, ' + updated + ' actualizados' + (errors > 0 ? ', ' + errors + ' errores' : ''))
     load()
     if (fileRef.current) fileRef.current.value = ''
   }
