@@ -1,11 +1,15 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { analyzePrescription } from '@/lib/prescription'
-import { Eye, Search, AlertCircle, ChevronRight, CheckCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
+import Image from 'next/image'
+import { Eye, Search, AlertCircle, ChevronRight, CheckCircle, ShoppingCart } from 'lucide-react'
+import { useCartStore } from '@/lib/cart-store'
+import toast from 'react-hot-toast'
 
 const SPH_OPTS = [-12,-11.5,-11,-10.5,-10,-9.5,-9,-8.5,-8,-7.5,-7,-6.5,-6,-5.75,-5.5,-5.25,-5,
   -4.75,-4.5,-4.25,-4,-3.75,-3.5,-3.25,-3,-2.75,-2.5,-2.25,-2,-1.75,-1.5,-1.25,-1,-0.75,-0.5,
@@ -27,13 +31,16 @@ export default function RecetaPage() {
     od_sph: '', od_cyl: '', oi_sph: '', oi_cyl: '', add_power: ''
   })
   const [result, setResult] = useState<ReturnType<typeof analyzePrescription> | null>(null)
+  const [products, setProducts] = useState<any[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(false)
+  const addItem = useCartStore(s => s.addItem)
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
     setForm(f => ({ ...f, [k]: e.target.value }))
     setResult(null)
   }
 
-  const analyze = () => {
+  const analyze = async () => {
     const rx = {
       od_sph: form.od_sph ? parseFloat(form.od_sph) : null,
       od_cyl: form.od_cyl ? parseFloat(form.od_cyl) : null,
@@ -41,7 +48,23 @@ export default function RecetaPage() {
       oi_cyl: form.oi_cyl ? parseFloat(form.oi_cyl) : null,
       add_power: form.add_power ? parseFloat(form.add_power) : null,
     }
-    setResult(analyzePrescription(rx))
+    const analysis = analyzePrescription(rx)
+    setResult(analysis)
+    setLoadingProducts(true)
+    const sb = createClient()
+    const sph = rx.od_sph ?? rx.oi_sph ?? 0
+    let query = sb.from('products').select('*').eq('activo', true).gt('stock', 0).eq('tipo', analysis.recomendacion)
+    if (sph !== 0) {
+      query = query.contains('sph_disponibles', [sph])
+    }
+    const { data } = await query.limit(4)
+    if (!data || data.length === 0) {
+      const { data: fallback } = await sb.from('products').select('*').eq('activo', true).gt('stock', 0).eq('tipo', analysis.recomendacion).limit(4)
+      setProducts(fallback ?? [])
+    } else {
+      setProducts(data ?? [])
+    }
+    setLoadingProducts(false)
   }
 
   const info = result ? TIPO_INFO[result.recomendacion] : null
@@ -157,6 +180,54 @@ export default function RecetaPage() {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* PRODUCTOS RECOMENDADOS */}
+        {result && (
+          <div className="max-w-3xl mx-auto px-4 pb-24 mt-8">
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">
+              {loadingProducts ? 'Buscando lentes para tu receta...' : 'Lentes recomendados para ti'}
+            </h2>
+            {loadingProducts ? (
+              <div className="flex justify-center py-12">
+                <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : products.length === 0 ? (
+              <div className="text-center py-10 text-gray-400">
+                <Eye className="w-10 h-10 mx-auto mb-2 opacity-30" />
+                <p className="text-sm">No encontramos productos exactos. <button onClick={() => router.push('/catalogo')} className="text-primary-600 underline">Ver catálogo completo</button></p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-4">
+                {products.map((p: any) => (
+                  <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                    <div className="aspect-square bg-gray-50 flex items-center justify-center p-4">
+                      {p.imagen_url
+                        ? <Image src={p.imagen_url} alt={p.nombre} width={160} height={160} className="object-contain" />
+                        : <Eye className="w-12 h-12 text-gray-200" />}
+                    </div>
+                    <div className="p-3 flex flex-col flex-1 gap-2">
+                      <p className="text-xs text-primary-600 font-semibold">{p.marca}</p>
+                      <p className="text-sm font-semibold text-gray-900 leading-snug">{p.nombre}</p>
+                      <p className="text-lg font-bold text-gray-900 mt-auto">RD${p.precio.toLocaleString()}</p>
+                      <div className="flex gap-2 mt-1">
+                        <button
+                          onClick={() => { addItem(p, { cantidad: 1, sph: form.od_sph ? parseFloat(form.od_sph) : null }); toast.success('Agregado al carrito'); }}
+                          className="flex-1 bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold py-2 rounded-xl flex items-center justify-center gap-1 transition-colors">
+                          <ShoppingCart className="w-3.5 h-3.5" /> Agregar
+                        </button>
+                        <button
+                          onClick={() => router.push('/producto/' + p.id)}
+                          className="flex-1 border border-gray-200 text-gray-600 hover:bg-gray-50 text-xs font-semibold py-2 rounded-xl transition-colors">
+                          Ver más
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </main>

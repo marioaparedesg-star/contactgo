@@ -2775,4 +2775,458 @@ export default async function AdminDashboard() {
   const ESTADO_BADGE: Record<string, string> = {
     pendiente: 'bg-yellow-50 text-yellow-700',
     procesando: 'bg-blue-50 text-blue-700',
-[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m                      <p className="text-xs text-gray-400">{p.unidades} unidades[7m [7m· RD${p.total.toLocaleString()}</p>[27m[K
+[7m                    </div>[27m[K
+[7m                  </div>[27m[K
+[7m                ))}[27m[K
+[7m              </div>[27m[K
+[7m            </div>[27m[K
+[7m          </div>[27m[K
+[7m        </div>[27m[K
+[7m      </main>[27m[K
+[7m    </div>[27m[K
+[7m  )[27m[K
+[7m}[27m[K
+[7m'''[27m[K
+[K
+[7mwith open('src/app/admin/page.tsx', 'w') as f:[27m[K
+[7m    f.write(code)[27m[K
+[7mprint('OK')[27m[K
+[7mPYEOF[27m[K
+[7mpython3 /tmp/dashboard.py[27m[K
+[7mgrep "http://" src/app/admin/page.tsx[27m[K
+[7mgit add -A && git commit -m "Improved dashboard with today revenue and top produ[7mc[7mts" && git push[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mp[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m4[27m0[27m0[27m"[27m>[27m{[27mp[27m.[27mu[27mn[27mi[27md[27ma[27md[27me[27ms[27m}[27m [27mu[27mn[27mi[27md[27ma[27md[27me[27ms [27m·[27m [27mR[27mD[27m$[27m{[27mp[27m.[27mt[27mo[27mt[27ma[27ml[27m.[27mt[27mo[27mL[27mo[27mc[27ma[27ml[27me[27mS[27mt[27mr[27mi[27mn[27mg[27m([27m)[27m}[27m<[27m/[27mp[27m>[1B[26P[20C</div>[28C[K[1B[24P[18C</div>[32C[K[1B[19P[16C))}[42C[K[1B[20P[14C</div>[40C[K[1B[18P[12C</div>[44C[K[1B[16P[10C</div>[48C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27mm[27ma[27mi[27mn[27m>[1B[27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m)[1B[27m}[1B[27m'[27m'[27m'[2B[27mw[27mi[27mt[27mh[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m [27ma[27ms[27m [27mf[27m:[1B[27m [27m [27m [27m [27mf[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27md[27ma[27ms[27mh[27mb[27mo[27ma[27mr[27md[27m.[27mp[27my[1B[27mg[27mr[27me[27mp[27m [27m"[27mh[27mt[27mt[27mp[27m:[27m/[27m/[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[27mI[27mm[27mp[27mr[27mo[27mv[27me[27md[27m [27md[27ma[27ms[27mh[27mb[27mo[27ma[27mr[27md[27m [27mw[27mi[27mt[27mh[27m [27mt[27mo[27md[27ma[27my[27m [27mr[27me[27mv[27me[27mn[27mu[27me[27m [27ma[27mn[27md[27m [27mt[27mo[27mp[27m [27mp[27mr[27mo[27md[27muc[27mt[27ms[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+OK
+[main c038ec10] Improved dashboard with today revenue and top products
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 395 insertions(+), 81 deletions(-)
+Enumerating objects: 13, done.
+Counting objects:   7% (1/13)Counting objects:  15% (2/13)Counting objects:  23% (3/13)Counting objects:  30% (4/13)Counting objects:  38% (5/13)Counting objects:  46% (6/13)Counting objects:  53% (7/13)Counting objects:  61% (8/13)Counting objects:  69% (9/13)Counting objects:  76% (10/13)Counting objects:  84% (11/13)Counting objects:  92% (12/13)Counting objects: 100% (13/13)Counting objects: 100% (13/13), done.
+Delta compression using up to 12 threads
+Compressing objects:  14% (1/7)Compressing objects:  28% (2/7)Compressing objects:  42% (3/7)Compressing objects:  57% (4/7)Compressing objects:  71% (5/7)Compressing objects:  85% (6/7)Compressing objects: 100% (7/7)Compressing objects: 100% (7/7), done.
+Writing objects:  14% (1/7)Writing objects:  28% (2/7)Writing objects:  42% (3/7)Writing objects:  57% (4/7)Writing objects:  71% (5/7)Writing objects:  85% (6/7)Writing objects: 100% (7/7)Writing objects: 100% (7/7), 4.48 KiB | 1.49 MiB/s, done.
+Total 7 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/6)[Kremote: Resolving deltas:  16% (1/6)[Kremote: Resolving deltas:  33% (2/6)[Kremote: Resolving deltas:  50% (3/6)[Kremote: Resolving deltas:  66% (4/6)[Kremote: Resolving deltas:  83% (5/6)[Kremote: Resolving deltas: 100% (6/6)[Kremote: Resolving deltas: 100% (6/6), completed with 6 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   9fb3cc9d..c038ec10  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/admin/pedidos/pag[7me[7m.tsx | head -30[27m[K[A[35C[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27me[27md[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mge[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m3[27m0[?2004l
+'use client'
+import { useState, useEffect } from 'react'
+import AdminNav from '@/components/admin/AdminNav'
+import { createClient } from '@/lib/supabase'
+import type { Order } from '@/types'
+import { Search, Clock, CheckCircle, Truck, Package, AlertCircle, Phone } from 'lucide-react'
+import toast from 'react-hot-toast'
+
+const ESTADOS = ['pendiente','confirmado','preparando','enviado','entregado','cancelado'] as const
+
+const BADGE: Record<string, { cls: string; icon: any }> = {
+  pendiente:  { cls: 'bg-amber-100 text-amber-700',   icon: Clock },
+  confirmado: { cls: 'bg-blue-100 text-blue-700',     icon: CheckCircle },
+  preparando: { cls: 'bg-purple-100 text-purple-700', icon: Package },
+  enviado:    { cls: 'bg-indigo-100 text-indigo-700', icon: Truck },
+  entregado:  { cls: 'bg-green-100 text-green-700',   icon: CheckCircle },
+  cancelado:  { cls: 'bg-red-100 text-red-700',       icon: AlertCircle },
+}
+
+export default function AdminPedidos() {
+  const [orders, setOrders] = useState<Order[]>([])
+  const [search, setSearch] = useState('')
+  const [filter, setFilter] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [selected, setSelected] = useState<Order | null>(null)
+  const sb = createClient()
+
+  const load = async () => {
+    const { data } = await sb.from('orders')
+      .select('*, order_items(*, products(nombre))')
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "cambiar\|updateEstad[7mo[7m\|setEstado\|select.*estado" src/app/admin/pedidos/page.tsx | head -10[27m[K[A[20D[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mc[27ma[27mm[27mb[27mi[27ma[27mr[27m\[27m|[27mu[27mp[27md[27ma[27mt[27me[27mE[27ms[27mt[27ma[27mdo[27m\[27m|[27ms[27me[27mt[27mE[27ms[27mt[27ma[27md[27mo[27m\[27m|[27ms[27me[27ml[27me[27mc[27mt[27m.[27m*[27me[27ms[27mt[27ma[27md[27mo[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27me[27md[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m1[27m0[?2004l
+37:  const updateEstado = async (orderId: string, estado: string) => {
+115:                            onChange={e => updateEstado(o.id, e.target.value)}
+182:                <p><span className="text-gray-400">Estado:</span> <span className="capitalize">{selected.pago_estado}</span></p>
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mwc -l src/app/page.tsx[27m[22D[27mw[27mc[27m [27m-[27ml[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+     175 src/app/page.tsx
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/page.tsx[27m[20D[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+import Link from 'next/link'
+import { Eye, Truck, Shield, Clock, ChevronRight, Star } from 'lucide-react'
+import Navbar from '@/components/ui/Navbar'
+import Footer from '@/components/ui/Footer'
+import WhatsAppButton from '@/components/ui/WhatsAppButton'
+import { createServerSupabaseClient } from '@/lib/supabase'
+import ProductCard from '@/components/shop/ProductCard'
+import type { Product } from '@/types'
+
+export const revalidate = 60
+
+async function getFeaturedProducts(): Promise<Product[]> {
+  const sb = createServerSupabaseClient()
+  const { data } = await sb.from('products')
+    .select('*, categories(*)')
+    .eq('activo', true)
+    .gt('stock', 0)
+    .order('stock', { ascending: false })
+    .limit(8)
+  return data ?? []
+}
+
+export default async function HomePage() {
+  const featured = await getFeaturedProducts()
+
+  return (
+    <>
+      <Navbar />
+      <main>
+        {/* ── HERO ─────────────────────────────────────────────── */}
+        <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-teal-600 text-white">
+          <div className="max-w-7xl mx-auto px-4 py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <span className="inline-block bg-white/20 backdrop-blur rounded-full px-4 py-1 text-sm font-semibold mb-5">
+                🚚 Envío en 24–48h en todo el país
+              </span>
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
+                Lentes de contacto
+                <br />
+                <span className="text-primary-200">a tu puerta</span>
+              </h1>
+              <p className="text-lg text-primary-100 mb-8 leading-relaxed max-w-md">
+                Acuvue, Air Optix, FreshLook y más marcas premium. Entrega rápida en República Dominicana.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/catalogo" className="bg-white text-primary-700 font-bold px-7 py-3.5 rounded-xl
+                  hover:bg-primary-50 transition-colors shadow-lg shadow-primary-900/20">
+                  Ver catálogo →
+                </Link>
+                <Link href="/receta" className="border-2 border-white/40 text-white font-semibold px-7 py-3.5 rounded-xl
+                  hover:bg-white/10 transition-colors">
+                  Buscar por receta
+                </Link>
+              </div>
+            </div>
+            {/* Visual */}
+            <div className="hidden md:flex justify-center">
+              <div className="relative w-80 h-80">
+                {/* Decorative circles */}
+                <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse" />
+                <div className="absolute inset-8 rounded-full bg-white/10" />
+                <div className="absolute inset-16 rounded-full bg-white/20 flex items-center justify-center">
+                  <Eye className="w-24 h-24 text-white opacity-90" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── BENEFICIOS ────────────────────────────────────────── */}
+        <section className="bg-white border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { icon: Truck, title: 'Envío rápido', desc: '24–48h en todo RD' },
+              { icon: Shield, title: 'Productos originales', desc: '100% auténticos' },
+              { icon: Clock, title: 'Siempre disponible', desc: 'Atención por WhatsApp' },
+              { icon: Star, title: 'Clientes satisfechos', desc: 'Miles de pedidos' },
+            ].map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center shrink-0">
+                  <Icon className="w-5 h-5 text-primary-600" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">{title}</p>
+                  <p className="text-gray-500 text-xs mt-0.5">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── CATEGORÍAS ───────────────────────────────────────── */}
+        <section className="max-w-7xl mx-auto px-4 py-14">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-7">Compra por tipo</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {[
+              { label: 'Esféricos',    slug: 'esferico',   emoji: '👁️',  desc: 'Miopía e hipermetropía' },
+              { label: 'Tóricos',      slug: 'torico',     emoji: '🎯',  desc: 'Para astigmatismo' },
+              { label: 'Multifocales', slug: 'multifocal', emoji: '🔭',  desc: 'Para presbicia' },
+              { label: 'Color',        slug: 'color',      emoji: '🎨',  desc: 'Con y sin graduación' },
+              { label: 'Soluciones',   slug: 'solucion',   emoji: '💧',  desc: 'Limpieza y cuidado' },
+              { label: 'Gotas',        slug: 'gota',       emoji: '💊',  desc: 'Lubricación ocular' },
+            ].map(cat => (
+              <Link key={cat.slug} href={`/catalogo?tipo=${cat.slug}`}
+                className="card p-4 text-center hover:border-primary-200 hover:-translate-y-0.5 group">
+                <div className="text-3xl mb-2">{cat.emoji}</div>
+                <p className="font-semibold text-gray-900 text-sm">{cat.label}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{cat.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ── RECETA INTELIGENTE BANNER ─────────────────────────── */}
+        <section className="bg-gradient-to-r from-primary-50 to-teal-50 border-y border-primary-100">
+          <div className="max-w-7xl mx-auto px-4 py-12 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">🧠</span>
+                <span className="badge bg-primary-100 text-primary-700">Nuevo</span>
+              </div>
+              <h3 className="font-display text-2xl font-bold text-gray-900 mb-2">
+                Buscador inteligente de lentes
+              </h3>
+              <p className="text-gray-600 max-w-md">
+                Ingresa los datos de tu receta y te mostramos exactamente qué tipo de lentes necesitas.
+                Con filtro automático por graduación.
+              </p>
+            </div>
+            <Link href="/receta" className="btn-primary whitespace-nowrap flex items-center gap-2">
+              Buscar con mi receta <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+
+        {/* ── PRODUCTOS DESTACADOS ──────────────────────────────── */}
+        <section className="max-w-7xl mx-auto px-4 py-14">
+          <div className="flex items-center justify-between mb-7">
+            <h2 className="font-display text-2xl font-bold text-gray-900">Más populares</h2>
+            <Link href="/catalogo" className="text-sm font-semibold text-primary-600 hover:text-primary-700
+              flex items-center gap-1">
+              Ver todos <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+          {featured.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {featured.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+          ) : (
+            <div className="text-center py-16 text-gray-400">
+              <Eye className="w-12 h-12 mx-auto mb-3 opacity-30" />
+              <p>Cargando productos...</p>
+            </div>
+          )}
+        </section>
+
+        {/* ── MARCAS ───────────────────────────────────────────── */}
+        <section className="bg-gray-50 border-y border-gray-100 py-10">
+          <div className="max-w-7xl mx-auto px-4">
+            <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">
+              Marcas disponibles
+            </p>
+            <div className="flex flex-wrap justify-center gap-x-12 gap-y-4">
+              {['Acuvue', 'Air Optix', 'FreshLook', 'Bausch+Lomb', 'CooperVision', 'Opti-Free'].map(m => (
+                <span key={m} className="text-gray-500 font-semibold text-sm">{m}</span>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+      <WhatsAppButton />
+    </>
+  )
+}
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/receta/page.tsx |[7m [7mhead -50[27m[K[A[42C[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m| [27mh[27me[27ma[27md[27m [27m-[27m5[27m0[?2004l
+'use client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Navbar from '@/components/ui/Navbar'
+import Footer from '@/components/ui/Footer'
+import WhatsAppButton from '@/components/ui/WhatsAppButton'
+import { analyzePrescription } from '@/lib/prescription'
+import { Eye, Search, AlertCircle, ChevronRight, CheckCircle } from 'lucide-react'
+
+const SPH_OPTS = [-12,-11.5,-11,-10.5,-10,-9.5,-9,-8.5,-8,-7.5,-7,-6.5,-6,-5.75,-5.5,-5.25,-5,
+  -4.75,-4.5,-4.25,-4,-3.75,-3.5,-3.25,-3,-2.75,-2.5,-2.25,-2,-1.75,-1.5,-1.25,-1,-0.75,-0.5,
+  0,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.5,4,4.5,5,5.5,6,7,8]
+
+const CYL_OPTS = [0,-0.75,-1.25,-1.75,-2.25,-2.75,-3.25,-3.75,-4.25]
+
+const ADD_OPTS = ['', '+1.00 LOW', '+1.25 LOW', '+1.50 MID', '+1.75 MID', '+2.00 HIGH', '+2.50 HIGH']
+
+const TIPO_INFO = {
+  esferico:   { label: 'Lente Esférico',   emoji: '👁️',  color: 'blue',   query: 'esferico' },
+  torico:     { label: 'Lente Tórico',     emoji: '🎯',  color: 'purple', query: 'torico' },
+  multifocal: { label: 'Lente Multifocal', emoji: '🔭',  color: 'amber',  query: 'multifocal' },
+}
+
+export default function RecetaPage() {
+  const router = useRouter()
+  const [form, setForm] = useState({
+    od_sph: '', od_cyl: '', oi_sph: '', oi_cyl: '', add_power: ''
+  })
+  const [result, setResult] = useState<ReturnType<typeof analyzePrescription> | null>(null)
+
+  const set = (k: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setForm(f => ({ ...f, [k]: e.target.value }))
+    setResult(null)
+  }
+
+  const analyze = () => {
+    const rx = {
+      od_sph: form.od_sph ? parseFloat(form.od_sph) : null,
+      od_cyl: form.od_cyl ? parseFloat(form.od_cyl) : null,
+      oi_sph: form.oi_sph ? parseFloat(form.oi_sph) : null,
+      oi_cyl: form.oi_cyl ? parseFloat(form.oi_cyl) : null,
+      add_power: form.add_power ? parseFloat(form.add_power) : null,
+    }
+    setResult(analyzePrescription(rx))
+  }
+
+  const info = result ? TIPO_INFO[result.recomendacion] : null
+  const colorMap: Record<string, string> = {
+    blue: 'bg-blue-50 border-blue-200 text-blue-800',
+    purple: 'bg-purple-50 border-purple-200 text-purple-800',
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/lib/prescription.ts[27m[27D[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ml[27mi[27mb[27m/[27mp[27mr[27me[27ms[27mc[27mr[27mi[27mp[27mt[27mi[27mo[27mn[27m.[27mt[27ms[?2004l
+import type { Prescription, PrescriptionAnalysis } from '@/types'
+
+export function analyzePrescription(rx: Partial<Prescription>): PrescriptionAnalysis {
+  const condicion: string[] = []
+  const sph = rx.od_sph ?? rx.oi_sph ?? 0
+  const cyl = rx.od_cyl ?? rx.oi_cyl ?? 0
+  const add = rx.add_power ?? 0
+
+  // Miopía
+  if (sph < 0) condicion.push('Miopía')
+  // Hipermetropía
+  if (sph > 0) condicion.push('Hipermetropía')
+  // Astigmatismo
+  if (cyl !== 0) condicion.push('Astigmatismo')
+  // Presbicia / Visión lejana
+  if (add > 0) condicion.push('Presbicia')
+  // Sin graduación
+  if (sph === 0 && cyl === 0 && add === 0) condicion.push('Sin graduación')
+
+  // Determinar tipo de lente
+  let recomendacion: PrescriptionAnalysis['recomendacion'] = 'esferico'
+  let descripcion = ''
+
+  if (add > 0) {
+    recomendacion = 'multifocal'
+    descripcion = 'Tu receta indica presbicia. Los lentes multifocales te darán visión nítida a todas las distancias.'
+  } else if (cyl !== 0) {
+    recomendacion = 'torico'
+    descripcion = 'Tu receta tiene astigmatismo. Los lentes tóricos están diseñados específicamente para corregir esta condición.'
+  } else {
+    recomendacion = 'esferico'
+    descripcion = sph === 0
+      ? 'Tu receta es para uso cosmético o protección. Los lentes esféricos son ideales para ti.'
+      : sph < 0
+        ? 'Tu receta indica miopía. Los lentes esféricos corregirán tu visión de lejos.'
+        : 'Tu receta indica hipermetropía. Los lentes esféricos corregirán tu visión de cerca.'
+  }
+
+  return { condicion, recomendacion, descripcion }
+}
+
+export function formatSph(val: number): string {
+  return val > 0 ? `+${val.toFixed(2)}` : val.toFixed(2)
+}
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m    const sph = rx.od_sph ?? rx.oi_sph ?? 0[27m[K
+[7m    let query = sb.from('products').select('*').eq('activo', true).gt('stock', 0[7m)[7m.eq('tipo', analysis.recomendacion)[27m[K
+[7m    if (sph !== 0) {[27m[K
+[7m      query = query.contains('sph_disponibles', [sph])[27m[K
+[7m    }[27m[K
+[7m    const { data } = await query.limit(4)[27m[K
+[7m    if (!data || data.length === 0) {[27m[K
+[7m      const { data: fallback } = await sb.from('products').select('*').eq('activ[7mo[7m', true).gt('stock', 0).eq('tipo', analysis.recomendacion).limit(4)[27m[K
+[7m      setProducts(fallback ?? [])[27m[K
+[7m    } else {[27m[K
+[7m      setProducts(data ?? [])[27m[K
+[7m    }[27m[K
+[7m    setLoadingProducts(false)[27m[K
+[7m  }"""[27m[K
+[K
+[7mcode = code.replace(old_analyze, new_analyze)[27m[K
+[K
+[7mopen('src/app/receta/page.tsx', 'w').write(code)[27m[K
+[7mprint('OK' if 'loadingProducts' in code else 'FAILED')[27m[K
+[7mPYEOF[27m[K
+[7mpython3 /tmp/receta_upgrade.py[27m[K[22A[27m [27m [27m [27m [27mc[27mo[27mn[27ms[27mt[27m [27ms[27mp[27mh[27m [27m=[27m [27mr[27mx[27m.[27mo[27md[27m_[27ms[27mp[27mh[27m [27m?[27m?[27m [27mr[27mx[27m.[27mo[27mi[27m_[27ms[27mp[27mh[27m [27m?[27m?[27m [27m0[1B[27m [27m [27m [27m [27ml[27me[27mt[27m [27mq[27mu[27me[27mr[27my[27m [27m=[27m [27ms[27mb[27m.[27mf[27mr[27mo[27mm[27m([27m'[27mp[27mr[27mo[27md[27mu[27mc[27mt[27ms[27m'[27m)[27m.[27ms[27me[27ml[27me[27mc[27mt[27m([27m'[27m*[27m'[27m)[27m.[27me[27mq[27m([27m'[27ma[27mc[27mt[27mi[27mv[27mo[27m'[27m,[27m [27mt[27mr[27mu[27me[27m)[27m.[27mg[27mt[27m([27m'[27ms[27mt[27mo[27mc[27mk[27m'[27m,[27m [27m0)[27m.[27me[27mq[27m([27m'[27mt[27mi[27mp[27mo[27m'[27m,[27m [27ma[27mn[27ma[27ml[27my[27ms[27mi[27ms[27m.[27mr[27me[27mc[27mo[27mm[27me[27mn[27md[27ma[27mc[27mi[27mo[27mn[27m)[1B[27m [27m [27m [27m [27mi[27mf[27m [27m([27ms[27mp[27mh[27m [27m![27m=[27m=[27m [27m0[27m)[27m [27m{[1B[27m [27m [27m [27m [27m [27m [27mq[27mu[27me[27mr[27my[27m [27m=[27m [27mq[27mu[27me[27mr[27my[27m.[27mc[27mo[27mn[27mt[27ma[27mi[27mn[27ms[27m([27m'[27ms[27mp[27mh[27m_[27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27ms[27m'[27m,[27m [27m[[27ms[27mp[27mh[27m][27m)[1B[27m [27m [27m [27m [27m}[1B[27m [27m [27m [27m [27mc[27mo[27mn[27ms[27mt[27m [27m{[27m [27md[27ma[27mt[27ma[27m [27m}[27m [27m=[27m [27ma[27mw[27ma[27mi[27mt[27m [27mq[27mu[27me[27mr[27my[27m.[27ml[27mi[27mm[27mi[27mt[27m([27m4[27m)[1B[27m [27m [27m [27m [27mi[27mf[27m [27m([27m![27md[27ma[27mt[27ma[27m [27m|[27m|[27m [27md[27ma[27mt[27ma[27m.[27ml[27me[27mn[27mg[27mt[27mh[27m [27m=[27m=[27m=[27m [27m0[27m)[27m [27m{[1B[27m [27m [27m [27m [27m [27m [27mc[27mo[27mn[27ms[27mt[27m [27m{[27m [27md[27ma[27mt[27ma[27m:[27m [27mf[27ma[27ml[27ml[27mb[27ma[27mc[27mk[27m [27m}[27m [27m=[27m [27ma[27mw[27ma[27mi[27mt[27m [27ms[27mb[27m.[27mf[27mr[27mo[27mm[27m([27m'[27mp[27mr[27mo[27md[27mu[27mc[27mt[27ms[27m'[27m)[27m.[27ms[27me[27ml[27me[27mc[27mt[27m([27m'[27m*[27m'[27m)[27m.[27me[27mq[27m([27m'[27ma[27mc[27mt[27mi[27mvo[27m'[27m,[27m [27mt[27mr[27mu[27me[27m)[27m.[27mg[27mt[27m([27m'[27ms[27mt[27mo[27mc[27mk[27m'[27m,[27m [27m0[27m)[27m.[27me[27mq[27m([27m'[27mt[27mi[27mp[27mo[27m'[27m,[27m [27ma[27mn[27ma[27ml[27my[27ms[27mi[27ms[27m.[27mr[27me[27mc[27mo[27mm[27me[27mn[27md[27ma[27mc[27mi[27mo[27mn[27m)[27m.[27ml[27mi[27mm[27mi[27mt[27m([27m4[27m)[1B[27m [27m [27m [27m [27m [27m [27ms[27me[27mt[27mP[27mr[27mo[27md[27mu[27mc[27mt[27ms[27m([27mf[27ma[27ml[27ml[27mb[27ma[27mc[27mk[27m [27m?[27m?[27m [27m[[27m][27m)[1B[27m [27m [27m [27m [27m}[27m [27me[27ml[27ms[27me[27m [27m{[1B[27m [27m [27m [27m [27m [27m [27ms[27me[27mt[27mP[27mr[27mo[27md[27mu[27mc[27mt[27ms[27m([27md[27ma[27mt[27ma[27m [27m?[27m?[27m [27m[[27m][27m)[1B[27m [27m [27m [27m [27m}[1B[27m [27m [27m [27m [27ms[27me[27mt[27mL[27mo[27ma[27md[27mi[27mn[27mg[27mP[27mr[27mo[27md[27mu[27mc[27mt[27ms[27m([27mf[27ma[27ml[27ms[27me[27m)[1B[27m [27m [27m}[27m"[27m"[27m"[2B[27mc[27mo[27md[27me[27m [27m=[27m [27mc[27mo[27md[27me[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m_[27ma[27mn[27ma[27ml[27my[27mz[27me[27m,[27m [27mn[27me[27mw[27m_[27ma[27mn[27ma[27ml[27my[27mz[27me[27m)[2B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m [27mi[27mf[27m [27m'[27ml[27mo[27ma[27md[27mi[27mn[27mg[27mP[27mr[27mo[27md[27mu[27mc[27mt[27ms[27m'[27m [27mi[27mn[27m [27mc[27mo[27md[27me[27m [27me[27ml[27ms[27me[27m [27m'[27mF[27mA[27mI[27mL[27mE[27mD[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m_[27mu[27mp[27mg[27mr[27ma[27md[27me[27m.[27mp[27my[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "Ver todos los" src/a[7mp[7mp/receta/page.tsx | head -5[27m[K[A[23C[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mV[27me[27mr[27m [27mt[27mo[27md[27mo[27ms[27m [27ml[27mo[27ms[27m"[27m [27ms[27mr[27mc[27m/[27map[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m5[?2004l
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "router.push\|Ver cat[7má[7mlogo\|btn-primary\|ChevronRight" src/app/receta/page.tsx | head -10[27m[K[A[17D[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mr[27mo[27mu[27mt[27me[27mr[27m.[27mp[27mu[27ms[27mh[27m\[27m|[27mV[27me[27mr[27m [27mc[27ma[27mtá[27ml[27mo[27mg[27mo[27m\[27m|[27mb[27mt[27mn[27m-[27mp[27mr[27mi[27mm[27ma[27mr[27my[27m\[27m|[27mC[27mh[27me[27mv[27mr[27mo[27mn[27mR[27mi[27mg[27mh[27mt[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m1[27m0[?2004l
+10:import { Eye, Search, AlertCircle, ChevronRight, CheckCircle, ShoppingCart } from 'lucide-react'
+151:            className="btn-primary w-full flex items-center justify-center gap-2 py-3.5">
+176:                  onClick={() => router.push(`/catalogo?tipo=${info.query}`)}
+177:                  className="btn-primary flex items-center gap-2">
+179:                  Ver {info.label}s disponibles <ChevronRight className="w-4 h-4" />
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -n '170,185p' src/app/rec[7me[7mta/page.tsx[27m[K[A[39C[27ms[27me[27md[27m [27m-[27mn[27m [27m'[27m1[27m7[27m0[27m,[27m1[27m8[27m5[27mp[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mce[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+                <div className="flex gap-2 p-3 bg-white/50 rounded-xl text-xs mb-4">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 opacity-70" />
+                  <span>Esta recomendación es orientativa. Consulta siempre con un profesional de la salud visual antes de comprar.</span>
+                </div>
+
+                <button
+                  onClick={() => router.push(`/catalogo?tipo=${info.query}`)}
+                  className="btn-primary flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  Ver {info.label}s disponibles <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -n '165,190p' src/app/rec[7me[7mta/page.tsx[27m[K[A[39C[27ms[27me[27md[27m [27m-[27mn[27m [27m'[27m1[27m6[27m5[27m,[27m1[27m9[27m0[27mp[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mce[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+                  ))}
+                </div>
+                <h3 className="text-xl font-bold mb-1">Recomendación: {info.label}</h3>
+                <p className="text-sm opacity-80 mb-4">{result.descripcion}</p>
+
+                <div className="flex gap-2 p-3 bg-white/50 rounded-xl text-xs mb-4">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 opacity-70" />
+                  <span>Esta recomendación es orientativa. Consulta siempre con un profesional de la salud visual antes de comprar.</span>
+                </div>
+
+                <button
+                  onClick={() => router.push(`/catalogo?tipo=${info.query}`)}
+                  className="btn-primary flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  Ver {info.label}s disponibles <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+      <Footer />
+      <WhatsAppButton />
+    </>
+  )
+}
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m                          onClick={() => router.push('/producto/' + p.id)}[27m[K
+[7m                          className="flex-1 border border-gray-200 text-gray-600[7m [7mhover:bg-gray-50 text-xs font-semibold py-2 rounded-xl transition-colors">[27m[K
+[7m                          Ver más[27m[K
+[7m                        </button>[27m[K
+[7m                      </div>[27m[K
+[7m                    </div>[27m[K
+[7m                  </div>[27m[K
+[7m                ))}[27m[K
+[7m              </div>[27m[K
+[7m            )}[27m[K
+[7m          </div>[27m[K
+[7m        )}[27m[K
+[7m      </main>"""[27m[K
+[K
+[7mif old in code:[27m[K
+[7m    code = code.replace(old, new)[27m[K
+[7m    open('src/app/receta/page.tsx', 'w').write(code)[27m[K
+[7m    print('OK')[27m[K
+[7melse:[27m[K
+[7m    print('NOT FOUND')[27m[K
+[7mPYEOF[27m[K
+[7mpython3 /tmp/inject_products.py[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mo[27mn[27mC[27ml[27mi[27mc[27mk[27m=[27m{[27m([27m)[27m [27m=[27m>[27m [27mr[27mo[27mu[27mt[27me[27mr[27m.[27mp[27mu[27ms[27mh[27m([27m'[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m'[27m [27m+[27m [27mp[27m.[27mi[27md[27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mf[27ml[27me[27mx[27m-[27m1[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m6[27m0[27m0 [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m5[27m0[27m [27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mp[27my[27m-[27m2[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m"[27m>[1B[33P[26CVer más[14C[K[1B[33P[24C</button>[14C[K[1B[28P[22C</div>[24C[K[1B[26P[20C</div>[28C[K[1B[24P[18C</div>[32C[K[1B[19P[16C))}[42C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[1B[16P[10C</div>[48C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27mm[27ma[27mi[27mn[27m>[27m"[27m"[27m"[2B[27mi[27mf[27m [27mo[27ml[27md[27m [27mi[27mn[27m [27mc[27mo[27md[27me[27m:[1B[27m [27m [27m [27m [27mc[27mo[27md[27me[27m [27m=[27m [27mc[27mo[27md[27me[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m,[27m [27mn[27me[27mw[27m)[1B[27m [27m [27m [27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mr[27me[27mc[27me[27mt[27ma[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mi[27mn[27mj[27me[27mc[27mt[27m_[27mp[27mr[27mo[27md[27mu[27mc[27mt[27ms[27m.[27mp[27my[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetiend
