@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import NextImage from 'next/image'
 import { ShoppingCart, User, Menu, X, Eye } from 'lucide-react'
 import { useState } from 'react'
 import { useCartStore } from '@/lib/cart-store'
