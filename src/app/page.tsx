@@ -72,10 +72,10 @@ export default async function HomePage() {
         <section className="bg-white border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { icon: Truck, title: 'Envío rápido', desc: '24–48h en todo RD' },
-              { icon: Shield, title: 'Productos originales', desc: '100% auténticos' },
-              { icon: Clock, title: 'Siempre disponible', desc: 'Atención por WhatsApp' },
-              { icon: Star, title: 'Clientes satisfechos', desc: 'Miles de pedidos' },
+              { icon: Truck, title: 'Envío en 24–48h', desc: 'A todo el país' },
+              { icon: Shield, title: '100% Originales', desc: 'Productos auténticos certificados' },
+              { icon: Star, title: '+1,000 clientes', desc: 'Satisfechos en RD' },
+              { icon: Clock, title: 'Asesoría gratis', desc: 'Te ayudamos a elegir' },
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="flex items-start gap-3">
                 <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center shrink-0">

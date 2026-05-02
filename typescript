@@ -4038,4 +4038,84 @@ import Link from 'next/link'
 import { ShoppingCart, User, Menu, X, Eye } from 'lucide-react'
 import { useState } from 'react'
 import { useCartStore } from '@/lib/cart-store'
-[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 << 'EOF'[27m
+[7mf = open('src/components/ui/Navbar.tsx', 'r')[27m[K
+[7mc = f.read()[27m[K
+[7mf.close()[27m[K
+[K
+[7m# Add import after first line[27m[K
+[7mc = c.replace([27m[K
+[7m    "import Link from 'next/link'",[27m[K
+[7m    "import Link from 'next/link'\nimport NextImage from 'next/image'"[27m[K
+[7m)[27m[K
+[K
+[7m# Remove Eye if no longer used[27m[K
+[7m# Keep it in case it's used elsewhere in the file[27m[K
+[K
+[7mopen('src/components/ui/Navbar.tsx', 'w').write(c)[27m[K
+[7mprint('OK' if 'NextImage' in c else 'FAILED')[27m[K
+[7mEOF[27m[K[16A[48C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m<[27m<[27m [27m'[27mE[27mO[27mF[27m'[1B[27mf[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27mc[27mo[27mm[27mp[27mo[27mn[27me[27mn[27mt[27ms[27m/[27mu[27mi[27m/[27mN[27ma[27mv[27mb[27ma[27mr[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mr[27m'[27m)[1B[27mc[27m [27m=[27m [27mf[27m.[27mr[27me[27ma[27md[27m([27m)[1B[27mf[27m.[27mc[27ml[27mo[27ms[27me[27m([27m)[2B[27m#[27m [27mA[27md[27md[27m [27mi[27mm[27mp[27mo[27mr[27mt[27m [27ma[27mf[27mt[27me[27mr[27m [27mf[27mi[27mr[27ms[27mt[27m [27ml[27mi[27mn[27me[1B[27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([1B[27m [27m [27m [27m [27m"[27mi[27mm[27mp[27mo[27mr[27mt[27m [27mL[27mi[27mn[27mk[27m [27mf[27mr[27mo[27mm[27m [27m'[27mn[27me[27mx[27mt[27m/[27ml[27mi[27mn[27mk[27m'[27m"[27m,[1B[27m [27m [27m [27m [27m"[27mi[27mm[27mp[27mo[27mr[27mt[27m [27mL[27mi[27mn[27mk[27m [27mf[27mr[27mo[27mm[27m [27m'[27mn[27me[27mx[27mt[27m/[27ml[27mi[27mn[27mk[27m'[27m\[27mn[27mi[27mm[27mp[27mo[27mr[27mt[27m [27mN[27me[27mx[27mt[27mI[27mm[27ma[27mg[27me[27m [27mf[27mr[27mo[27mm[27m [27m'[27mn[27me[27mx[27mt[27m/[27mi[27mm[27ma[27mg[27me[27m'[27m"[1B[27m)[2B[27m#[27m [27mR[27me[27mm[27mo[27mv[27me[27m [27mE[27my[27me[27m [27mi[27mf[27m [27mn[27mo[27m [27ml[27mo[27mn[27mg[27me[27mr[27m [27mu[27ms[27me[27md[1B[27m#[27m [27mK[27me[27me[27mp[27m [27mi[27mt[27m [27mi[27mn[27m [27mc[27ma[27ms[27me[27m [27mi[27mt[27m'[27ms[27m [27mu[27ms[27me[27md[27m [27me[27ml[27ms[27me[27mw[27mh[27me[27mr[27me[27m [27mi[27mn[27m [27mt[27mh[27me[27m [27mf[27mi[27ml[27me[2B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27mc[27mo[27mm[27mp[27mo[27mn[27me[27mn[27mt[27ms[27m/[27mu[27mi[27m/[27mN[27ma[27mv[27mb[27ma[27mr[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m [27mi[27mf[27m [27m'[27mN[27me[27mx[27mt[27mI[27mm[27ma[27mg[27me[27m'[27m [27mi[27mn[27m [27mc[27m [27me[27ml[27ms[27me[27m [27m'[27mF[27mA[27mI[27mL[27mE[27mD[27m'[27m)[1B[27mE[27mO[27mF[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgit add -A && git commit -m "[7mA[7mdd NextImage import to Navbar" && git push[27m[K[A[8C[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"A[27md[27md[27m [27mN[27me[27mx[27mt[27mI[27mm[27ma[27mg[27me[27m [27mi[27mm[27mp[27mo[27mr[27mt[27m [27mt[27mo[27m [27mN[27ma[27mv[27mb[27ma[27mr[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+[main d499d2b5] Add NextImage import to Navbar
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 55 insertions(+), 1 deletion(-)
+Enumerating objects: 13, done.
+Counting objects:   7% (1/13)Counting objects:  15% (2/13)Counting objects:  23% (3/13)Counting objects:  30% (4/13)Counting objects:  38% (5/13)Counting objects:  46% (6/13)Counting objects:  53% (7/13)Counting objects:  61% (8/13)Counting objects:  69% (9/13)Counting objects:  76% (10/13)Counting objects:  84% (11/13)Counting objects:  92% (12/13)Counting objects: 100% (13/13)Counting objects: 100% (13/13), done.
+Delta compression using up to 12 threads
+Compressing objects:  14% (1/7)Compressing objects:  28% (2/7)Compressing objects:  42% (3/7)Compressing objects:  57% (4/7)Compressing objects:  71% (5/7)Compressing objects:  85% (6/7)Compressing objects: 100% (7/7)Compressing objects: 100% (7/7), done.
+Writing objects:  14% (1/7)Writing objects:  28% (2/7)Writing objects:  42% (3/7)Writing objects:  57% (4/7)Writing objects:  71% (5/7)Writing objects:  85% (6/7)Writing objects: 100% (7/7)Writing objects: 100% (7/7), 968 bytes | 968.00 KiB/s, done.
+Total 7 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/6)[Kremote: Resolving deltas:  16% (1/6)[Kremote: Resolving deltas:  33% (2/6)[Kremote: Resolving deltas:  50% (3/6)[Kremote: Resolving deltas:  66% (4/6)[Kremote: Resolving deltas:  83% (5/6)[Kremote: Resolving deltas: 100% (6/6)[Kremote: Resolving deltas: 100% (6/6), completed with 6 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   487fe47a..d499d2b5  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "beneficios\|Envío\|A[7mu[7mténticos\|WhatsApp\|confianza" src/app/page.tsx | head -10[27m[K[A[8D[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mb[27me[27mn[27me[27mf[27mi[27mc[27mi[27mo[27ms[27m\[27m|[27mE[27mn[27mv[27mí[27mo[27m\[27m|[27mAu[27mt[27mé[27mn[27mt[27mi[27mc[27mo[27ms[27m\[27m|[27mW[27mh[27ma[27mt[27ms[27mA[27mp[27mp[27m\[27m|[27mc[27mo[27mn[27mf[27mi[27ma[27mn[27mz[27ma[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m1[27m0[?2004l
+5:import WhatsAppButton from '@/components/ui/WhatsAppButton'
+36:                🚚 Envío en 24–48h en todo el país
+75:              { icon: Truck, title: 'Envío rápido', desc: '24–48h en todo RD' },
+77:              { icon: Clock, title: 'Siempre disponible', desc: 'Atención por WhatsApp' },
+173:      <WhatsAppButton />
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -n '70,85p' src/app/page.[7mt[7msx[27m[K[A[48C[27ms[27me[27md[27m [27m-[27mn[27m [27m'[27m7[27m0[27m,[27m8[27m5[27mp[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27ma[27mg[27me[27m.t[27ms[27mx[?2004l
+
+        {/* ── BENEFICIOS ────────────────────────────────────────── */}
+        <section className="bg-white border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { icon: Truck, title: 'Envío rápido', desc: '24–48h en todo RD' },
+              { icon: Shield, title: 'Productos originales', desc: '100% auténticos' },
+              { icon: Clock, title: 'Siempre disponible', desc: 'Atención por WhatsApp' },
+              { icon: Star, title: 'Clientes satisfechos', desc: 'Miles de pedidos' },
+            ].map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center shrink-0">
+                  <Icon className="w-5 h-5 text-primary-600" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">{title}</p>
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 << 'EOF'[27m
+[7mf = open('src/app/page.tsx', 'r')[27m[K
+[7mc = f.read()[27m[K
+[7mf.close()[27m[K
+[K
+[7mc = c.replace([27m[K
+[7m    "              { icon: Truck, title: 'Envío rápido', desc: '24–48h en todo R[7mD[7m' },\n              { icon: Shield, title: 'Productos originales', desc: '100% [7ma[7muténticos' },\n              { icon: Clock, title: 'Siempre disponible', desc: [7m'[7mAtención por WhatsApp' },\n              { icon: Star, title: 'Clientes satisfe[7mc[7mhos', desc: 'Miles de pedidos' },",[27m[K
+[7m    "              { icon: Truck, title: 'Envío en 24–48h', desc: 'A todo el paí[7ms[7m' },\n              { icon: Shield, title: '100% Originales', desc: 'Productos [7ma[7muténticos certificados' },\n              { icon: Star, title: '+1,000 clientes[7m'[7m, desc: 'Satisfechos en RD' },\n              { icon: Clock, title: 'Asesoría g[7mr[7matis', desc: 'Te ayudamos a elegir' },"[27m[K
+[7m)[27m[K
+[K
+[7mopen('src/app/page.tsx', 'w').write(c)[27m[K
+[7mprint('OK' if '+1,000' in c else 'FAILED')[27m[K
+[7mEOF[27m[K[20A[48C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m<[27m<[27m [27m'[27mE[27mO[27mF[27m'[1B[27mf[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mr[27m'[27m)[1B[27mc[27m [27m=[27m [27mf[27m.[27mr[27me[27ma[27md[27m([27m)[1B[27mf[27m.[27mc[27ml[27mo[27ms[27me[27m([27m)[2B[27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([1B[27m [27m [27m [27m [27m"[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m [27mi[27mc[27mo[27mn[27m:[27m [27mT[27mr[27mu[27mc[27mk[27m,[27m [27mt[27mi[27mt[27ml[27me[27m:[27m [27m'[27mE[27mn[27mv[27mí[27mo[27m [27mr[27má[27mp[27mi[27md[27mo[27m'[27m,[27m [27md[27me[27ms[27mc[27m:[27m [27m'[27m2[27m4[27m–[27m4[27m8[27mh[27m [27me[27mn[27m [27mt[27mo[27md[27mo[27m [27mRD[27m'[27m [27m}[27m,[27m\[27mn[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m [27mi[27mc[27mo[27mn[27m:[27m [27mS[27mh[27mi[27me[27ml[27md[27m,[27m [27mt[27mi[27mt[27ml[27me[27m:[27m [27m'[27mP[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m [27mo[27mr[27mi[27mg[27mi[27mn[27ma[27ml[27me[27ms[27m'[27m,[27m [27md[27me[27ms[27mc[27m:[27m [27m'[27m1[27m0[27m0[27m%[27m a[27mu[27mt[27mé[27mn[27mt[27mi[27mc[27mo[27ms[27m'[27m [27m}[27m,[27m\[27mn[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m [27mi[27mc[27mo[27mn[27m:[27m [27mC[27ml[27mo[27mc[27mk[27m,[27m [27mt[27mi[27mt[27ml[27me[27m:[27m [27m'[27mS[27mi[27me[27mm[27mp[27mr[27me[27m [27md[27mi[27ms[27mp[27mo[27mn[27mi[27mb[27ml[27me[27m'[27m,[27m [27md[27me[27ms[27mc[27m:[27m '[27mA[27mt[27me[27mn[27mc[27mi[27mó[27mn[27m [27mp[27mo[27mr[27m [27mW[27mh[27ma[27mt[27ms[27mA[27mp[27mp[27m'[27m [27m}[27m,[27m\[27mn[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m [27mi[27mc[27mo[27mn[27m:[27m [27mS[27mt[27ma[27mr[27m,[27m [27mt[27mi[27mt[27ml[27me[27m:[27m [27m'[27mC[27ml[27mi[27me[27mn[27mt[27me[27ms[27m [27ms[27ma[27mt[27mi[27ms[27mf[27mec[27mh[27mo[27ms[27m'[27m,[27m [27md[27me[27ms[27mc[27m:[27m [27m'[27mM[27mi[27ml[27me[27ms[27m [27md[27me[27m [27mp[27me[27md[27mi[27md[27mo[27ms[27m'[27m [27m}[27m,[27m"[27m,[1B[27m [27m [27m [27m [27m"[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m [27mi[27mc[27mo[27mn[27m:[27m [27mT[27mr[27mu[27mc[27mk[27m,[27m [27mt[27mi[27mt[27ml[27me[27m:[27m [27m'[27mE[27mn[27mv[27mí[27mo[27m [27me[27mn[27m [27m2[27m4[27m–[27m4[27m8[27mh[27m'[27m,[27m [27md[27me[27ms[27mc[27m:[27m [27m'[27mA[27m [27mt[27mo[27md[27mo[27m [27me[27ml[27m [27mp[27ma[27mís[27m'[27m [27m}[27m,[27m\[27mn[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m [27mi[27mc[27mo[27mn[27m:[27m [27mS[27mh[27mi[27me[27ml[27md[27m,[27m [27mt[27mi[27mt[27ml[27me[27m:[27m [27m'[27m1[27m0[27m0[27m%[27m [27mO[27mr[27mi[27mg[27mi[27mn[27ma[27ml[27me[27ms[27m'[27m,[27m [27md[27me[27ms[27mc[27m:[27m [27m'[27mP[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m a[27mu[27mt[27mé[27mn[27mt[27mi[27mc[27mo[27ms[27m [27mc[27me[27mr[27mt[27mi[27mf[27mi[27mc[27ma[27md[27mo[27ms[27m'[27m [27m}[27m,[27m\[27mn[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m [27mi[27mc[27mo[27mn[27m:[27m [27mS[27mt[27ma[27mr[27m,[27m [27mt[27mi[27mt[27ml[27me[27m:[27m [27m'[27m+[27m1[27m,[27m0[27m0[27m0[27m [27mc[27ml[27mi[27me[27mn[27mt[27me[27ms'[27m,[27m [27md[27me[27ms[27mc[27m:[27m [27m'[27mS[27ma[27mt[27mi[27ms[27mf[27me[27mc[27mh[27mo[27ms[27m [27me[27mn[27m [27mR[27mD[27m'[27m [27m}[27m,[27m\[27mn[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m [27mi[27mc[27mo[27mn[27m:[27m [27mC[27ml[27mo[27mc[27mk[27m,[27m [27mt[27mi[27mt[27ml[27me[27m:[27m [27m'[27mA[27ms[27me[27ms[27mo[27mr[27mí[27ma[27m [27mgr[27ma[27mt[27mi[27ms[27m'[27m,[27m [27md[27me[27ms[27mc[27m:[27m [27m'[27mT[27me[27m [27ma[27my[27mu[27md[27ma[27mm[27mo[27ms[27m [27ma[27m [27me[27ml[27me[27mg[27mi[27mr[27m'[27m [27m}[27m,[27m"[1B[27m)[2B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m [27mi[27mf[27m [27m'[27m+[27m1[27m,[27m0[27m0[27m0[27m'[27m [27mi[27mn[27m [27mc[27m [27me[27ml[27ms[27me[27m [27m'[27mF[27mA[27mI[27mL[27mE[27mD[27m'[27m)[1B[27mE[27mO[27mF[?2004l
+OK
+[1m[7m%[27m[1m[0m                                     
