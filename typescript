@@ -2549,4 +2549,230 @@ export default function ProductoPage() {
 [7m    print('OK')[27m[K
 [7melse:[27m[K
 [7m    print('NOT FOUND')[27m[K
-[7mEOF[27m[K[22A[27m"[27m>[27mE[27mj[27me[27m [27m([27mA[27mX[27mI[27mS[27m)[27m<[27m/[27ml[27ma[27mb[27me[27ml[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27me[27ml[27me[27mc[27mt[27m [27mv[27ma[27ml[27mu[27me[27m=[27m{[27ms[27me[27ml[27me[27mc[27mt[27me[27md[27mA[27mx[27mi[27ms[27m [27m?[27m?[27m [27m'[27m'[27m}[27m [27mo[27mn[27mC[27mh[27ma[27mn[27mg[27me[27m=[27m{[27me[27m [27m=[27m>[27m [27ms[27me[27mt[27mS[27me[27ml[27me[27mc[27mt[27me[27md[27mA[27mx[27mis[27m([27me[27m.[27mt[27ma[27mr[27mg[27me[27mt[27m.[27mv[27ma[27ml[27mu[27me[27m [27m=[27m=[27m=[27m [27m'[27m'[27m [27m?[27m [27mn[27mu[27ml[27ml[27m [27m:[27m [27mp[27ma[27mr[27ms[27me[27mI[27mn[27mt[27m([27me[27m.[27mt[27ma[27mr[27mg[27me[27mt[27m.[27mv[27ma[27ml[27mu[27me[27m)[27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mp[27mx[27m-[27m4[27m [27mp[27my[27m-[27m3[27m t[27me[27mx[27mt[27m-[27ms[27mm[27m [27mf[27mo[27mn[27mt[27m-[27mm[27me[27md[27mi[27mu[27mm[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mo[27mu[27mt[27ml[27mi[27mn[27me[27m-[27mn[27mo[27mn[27me[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mr[27mi[27mn[27mg[27m-[27m2[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mr[27mi[27mn[27mg[27m-[27mp[27mr[27mi[27mm[27ma[27mr[27my[27m-[27m5[27m0[27m0[27m [27mb[27mg[27m-[27mw[27mhi[27mt[27me[27m"[27m>[1B[67P[13C     <option value="">-- Selecciona el eje --</option>[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27ma[27mx[27me[27ms[27m.[27mm[27ma[27mp[27m([27ma[27m [27m=[27m>[27m [27m<[27mo[27mp[27mt[27mi[27mo[27mn[27m [27mk[27me[27my[27m=[27m{[27ma[27m}[27m [27mv[27ma[27ml[27mu[27me[27m=[27m{[27ma[27m}[27m>[27m{[27ma[27m}[27m<[27m/[27mo[27mp[27mt[27mi[27mo[27mn[27m>[27m)[27m}[1B[25P[16C</select>[30C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[2B[36P[12C{adds.length > 0 && ("""[8C[K[2B[27mi[27mf[27m [27mo[27ml[27md[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m,[27m [27mn[27me[27mw[27m)[1B[27m [27m [27m [27m [27mf[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[
+[7mEOF[27m[K[22A[27m"[27m>[27mE[27mj[27me[27m [27m([27mA[27mX[27mI[27mS[27m)[27m<[27m/[27ml[27ma[27mb[27me[27ml[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27me[27ml[27me[27mc[27mt[27m [27mv[27ma[27ml[27mu[27me[27m=[27m{[27ms[27me[27ml[27me[27mc[27mt[27me[27md[27mA[27mx[27mi[27ms[27m [27m?[27m?[27m [27m'[27m'[27m}[27m [27mo[27mn[27mC[27mh[27ma[27mn[27mg[27me[27m=[27m{[27me[27m [27m=[27m>[27m [27ms[27me[27mt[27mS[27me[27ml[27me[27mc[27mt[27me[27md[27mA[27mx[27mis[27m([27me[27m.[27mt[27ma[27mr[27mg[27me[27mt[27m.[27mv[27ma[27ml[27mu[27me[27m [27m=[27m=[27m=[27m [27m'[27m'[27m [27m?[27m [27mn[27mu[27ml[27ml[27m [27m:[27m [27mp[27ma[27mr[27ms[27me[27mI[27mn[27mt[27m([27me[27m.[27mt[27ma[27mr[27mg[27me[27mt[27m.[27mv[27ma[27ml[27mu[27me[27m)[27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mp[27mx[27m-[27m4[27m [27mp[27my[27m-[27m3[27m t[27me[27mx[27mt[27m-[27ms[27mm[27m [27mf[27mo[27mn[27mt[27m-[27mm[27me[27md[27mi[27mu[27mm[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mo[27mu[27mt[27ml[27mi[27mn[27me[27m-[27mn[27mo[27mn[27me[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mr[27mi[27mn[27mg[27m-[27m2[27m [27mf[27mo[27mc[27mu[27ms[27m:[27mr[27mi[27mn[27mg[27m-[27mp[27mr[27mi[27mm[27ma[27mr[27my[27m-[27m5[27m0[27m0[27m [27mb[27mg[27m-[27mw[27mhi[27mt[27me[27m"[27m>[1B[67P[13C     <option value="">-- Selecciona el eje --</option>[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27ma[27mx[27me[27ms[27m.[27mm[27ma[27mp[27m([27ma[27m [27m=[27m>[27m [27m<[27mo[27mp[27mt[27mi[27mo[27mn[27m [27mk[27me[27my[27m=[27m{[27ma[27m}[27m [27mv[27ma[27ml[27mu[27me[27m=[27m{[27ma[27m}[27m>[27m{[27ma[27m}[27m<[27m/[27mo[27mp[27mt[27mi[27mo[27mn[27m>[27m)[27m}[1B[25P[16C</select>[30C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[2B[36P[12C{adds.length > 0 && ("""[8C[K[2B[27mi[27mf[27m [27mo[27ml[27md[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m,[27m [27mn[27me[27mw[27m)[1B[27m [27m [27m [27m [27mf[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[27md[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[1B[27m [27m [27m [27m [27mf[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27m [27m [27m [27m [27mf[27m.[27mc[27ml[27mo[27ms[27me[27m([27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m'[27m)[1B[27mE[27mO[27mF[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgit add -A && git commit -m "[7mA[7mdd axis selector for toric lenses" && git push[27m[K[A[4C[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"A[27md[27md[27m [27ma[27mx[27mi[27ms[27m [27ms[27me[27ml[27me[27mc[27mt[27mo[27mr[27m [27mf[27mo[27mr[27m [27mt[27mo[27mr[27mi[27mc[27m [27ml[27me[27mn[27ms[27me[27ms[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+[main 9fb3cc9d] Add axis selector for toric lenses
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 225 insertions(+), 3 deletions(-)
+Enumerating objects: 15, done.
+Counting objects:   6% (1/15)Counting objects:  13% (2/15)Counting objects:  20% (3/15)Counting objects:  26% (4/15)Counting objects:  33% (5/15)Counting objects:  40% (6/15)Counting objects:  46% (7/15)Counting objects:  53% (8/15)Counting objects:  60% (9/15)Counting objects:  66% (10/15)Counting objects:  73% (11/15)Counting objects:  80% (12/15)Counting objects:  86% (13/15)Counting objects:  93% (14/15)Counting objects: 100% (15/15)Counting objects: 100% (15/15), done.
+Delta compression using up to 12 threads
+Compressing objects:  16% (1/6)Compressing objects:  33% (2/6)Compressing objects:  50% (3/6)Compressing objects:  66% (4/6)Compressing objects:  83% (5/6)Compressing objects: 100% (6/6)Compressing objects: 100% (6/6), done.
+Writing objects:  12% (1/8)Writing objects:  25% (2/8)Writing objects:  37% (3/8)Writing objects:  50% (4/8)Writing objects:  62% (5/8)Writing objects:  75% (6/8)Writing objects:  87% (7/8)Writing objects: 100% (8/8)Writing objects: 100% (8/8), 2.70 KiB | 923.00 KiB/s, done.
+Total 8 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/5)[Kremote: Resolving deltas:  20% (1/5)[Kremote: Resolving deltas:  40% (2/5)[Kremote: Resolving deltas:  60% (3/5)[Kremote: Resolving deltas:  80% (4/5)[Kremote: Resolving deltas: 100% (5/5)[Kremote: Resolving deltas: 100% (5/5), completed with 5 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   d507fbf0..9fb3cc9d  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/admin/page.tsx | [7mw[7mc -l[27m[K[A[46C[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m w[27mc[27m [27m-[27ml[?2004l
+     145
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/admin/page.tsx[27m[26D[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+import { createServerSupabaseClient } from '@/lib/supabase-server'
+import { redirect } from 'next/navigation'
+import AdminNav from '@/components/admin/AdminNav'
+import { ShoppingBag, Clock, DollarSign, Users, AlertTriangle } from 'lucide-react'
+
+export const revalidate = 0
+
+async function getStats() {
+  const sb = createServerSupabaseClient()
+  const now = new Date()
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+  const [
+    { count: totalOrders },
+    { count: pendingOrders },
+    { data: monthOrders },
+    { count: totalClients },
+    { count: lowStock },
+  ] = await Promise.all([
+    sb.from('orders').select('*', { count: 'exact', head: true }),
+    sb.from('orders').select('*', { count: 'exact', head: true }).eq('estado', 'pendiente'),
+    sb.from('orders').select('total').gte('fecha', monthStart),
+    sb.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'customer'),
+    sb.from('products').select('*', { count: 'exact', head: true }).lte('stock', 5).gt('stock', 0),
+  ])
+  const monthRevenue = (monthOrders ?? []).reduce((s: number, o: any) => s + (o.total ?? 0), 0)
+  return { totalOrders: totalOrders ?? 0, pendingOrders: pendingOrders ?? 0, monthRevenue, totalClients: totalClients ?? 0, lowStock: lowStock ?? 0 }
+}
+
+async function getRecentOrders() {
+  const sb = createServerSupabaseClient()
+  const { data } = await sb.from('orders')
+    .select('*')
+    .order('fecha', { ascending: false })
+    .limit(10)
+  return data ?? []
+}
+
+export default async function AdminDashboard() {
+  const sb = createServerSupabaseClient()
+  const { data: { user } } = await sb.auth.getUser()
+  if (!user) redirect('/admin/login')
+
+  const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()
+  if (profile?.role !== 'admin') redirect('/')
+
+  const [stats, orders] = await Promise.all([getStats(), getRecentOrders()])
+
+  const ESTADO_BADGE: Record<string, string> = {
+    pendiente: 'bg-yellow-50 text-yellow-700',
+    procesando: 'bg-blue-50 text-blue-700',
+    enviado: 'bg-purple-50 text-purple-700',
+    entregado: 'bg-green-50 text-green-700',
+    cancelado: 'bg-red-50 text-red-700',
+  }
+
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      <AdminNav />
+      <main className="flex-1 p-6 md:p-8 overflow-auto">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-500">Resumen general de ContactGo</p>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center">
+                <ShoppingBag className="w-4 h-4 text-blue-600" />
+              </div>
+              <span className="text-sm text-gray-500">Total pedidos</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{stats.totalOrders}</p>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-yellow-50 rounded-xl flex items-center justify-center">
+                <Clock className="w-4 h-4 text-yellow-600" />
+              </div>
+              <span className="text-sm text-gray-500">Pendientes</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{stats.pendingOrders}</p>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-green-50 rounded-xl flex items-center justify-center">
+                <DollarSign className="w-4 h-4 text-green-600" />
+              </div>
+              <span className="text-sm text-gray-500">Ingresos mes</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">RD${stats.monthRevenue.toLocaleString()}</p>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-purple-50 rounded-xl flex items-center justify-center">
+                <Users className="w-4 h-4 text-purple-600" />
+              </div>
+              <span className="text-sm text-gray-500">Clientes</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{stats.totalClients}</p>
+          </div>
+        </div>
+        {stats.lowStock > 0 && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 mb-6 flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-yellow-600 shrink-0" />
+            <p className="text-yellow-800 text-sm font-medium">{stats.lowStock} producto(s) con stock bajo (1-5 unidades)</p>
+            <a href="/admin/inventario" className="ml-auto text-sm text-yellow-700 font-semibold underline">Ver inventario</a>
+          </div>
+        )}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h2 className="font-semibold text-gray-900">Pedidos recientes</h2>
+            <a href="/admin/pedidos" className="text-sm text-primary-600 font-medium hover:text-primary-700">Ver todos</a>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  {['ID','Cliente','Total','Método','Estado','Fecha'].map(h => (
+                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {orders.map((o: any) => (
+                  <tr key={o.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-3 font-mono text-xs text-gray-400">{o.id.slice(0,8)}…</td>
+                    <td className="px-4 py-3 font-medium text-gray-900">{o.profiles?.nombre ?? o.cliente_nombre ?? '—'}</td>
+                    <td className="px-4 py-3 font-semibold">RD${(o.total ?? 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-gray-500 capitalize">{(o.metodo_pago ?? '—').replace('_', ' ')}</td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${ESTADO_BADGE[o.estado] ?? ESTADO_BADGE.pendiente}`}>
+                        {o.estado}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-gray-400 text-xs">{new Date(o.fecha).toLocaleDateString('es-DO')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+}
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -n '1,50p' src/app/admin/[7mp[7mage.tsx[27m[K[A[43C[27ms[27me[27md[27m [27m-[27mn[27m [27m'[27m1[27m,[27m5[27m0[27mp[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/p[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+import { createServerSupabaseClient } from '@/lib/supabase-server'
+import { redirect } from 'next/navigation'
+import AdminNav from '@/components/admin/AdminNav'
+import { ShoppingBag, Clock, DollarSign, Users, AlertTriangle } from 'lucide-react'
+
+export const revalidate = 0
+
+async function getStats() {
+  const sb = createServerSupabaseClient()
+  const now = new Date()
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+  const [
+    { count: totalOrders },
+    { count: pendingOrders },
+    { data: monthOrders },
+    { count: totalClients },
+    { count: lowStock },
+  ] = await Promise.all([
+    sb.from('orders').select('*', { count: 'exact', head: true }),
+    sb.from('orders').select('*', { count: 'exact', head: true }).eq('estado', 'pendiente'),
+    sb.from('orders').select('total').gte('fecha', monthStart),
+    sb.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'customer'),
+    sb.from('products').select('*', { count: 'exact', head: true }).lte('stock', 5).gt('stock', 0),
+  ])
+  const monthRevenue = (monthOrders ?? []).reduce((s: number, o: any) => s + (o.total ?? 0), 0)
+  return { totalOrders: totalOrders ?? 0, pendingOrders: pendingOrders ?? 0, monthRevenue, totalClients: totalClients ?? 0, lowStock: lowStock ?? 0 }
+}
+
+async function getRecentOrders() {
+  const sb = createServerSupabaseClient()
+  const { data } = await sb.from('orders')
+    .select('*')
+    .order('fecha', { ascending: false })
+    .limit(10)
+  return data ?? []
+}
+
+export default async function AdminDashboard() {
+  const sb = createServerSupabaseClient()
+  const { data: { user } } = await sb.auth.getUser()
+  if (!user) redirect('/admin/login')
+
+  const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()
+  if (profile?.role !== 'admin') redirect('/')
+
+  const [stats, orders] = await Promise.all([getStats(), getRecentOrders()])
+
+  const ESTADO_BADGE: Record<string, string> = {
+    pendiente: 'bg-yellow-50 text-yellow-700',
+    procesando: 'bg-blue-50 text-blue-700',
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h
