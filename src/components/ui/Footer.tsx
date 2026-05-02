@@ -73,8 +73,12 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-gray-800 px-4 py-5 text-center text-xs">
-        © {new Date().getFullYear()} ContactGo. Todos los derechos reservados.
+      <div className="border-t border-gray-800 px-4 py-5 text-center text-xs flex flex-col md:flex-row items-center justify-center gap-3">
+        <span>© {new Date().getFullYear()} ContactGo. Todos los derechos reservados.</span>
+        <span className="hidden md:inline text-gray-600">·</span>
+        <a href="/privacidad" className="text-gray-400 hover:text-white transition-colors">Política de Privacidad</a>
+        <span className="hidden md:inline text-gray-600">·</span>
+        <a href="/terminos" className="text-gray-400 hover:text-white transition-colors">Términos de Uso</a>
       </div>
     </footer>
   )
