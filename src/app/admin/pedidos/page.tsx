@@ -27,7 +27,7 @@ export default function AdminPedidos() {
 
   const load = async () => {
     const { data } = await sb.from('orders')
-      .select('*, profiles(nombre, email), order_items(*, products(nombre))')
+      .select('*, order_items(*, products(nombre))')
       .order('fecha', { ascending: false })
     setOrders((data as any) ?? []); setLoading(false)
   }
