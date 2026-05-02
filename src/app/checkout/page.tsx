@@ -28,8 +28,7 @@ const PAYPAL_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, subtotal, total, const msg = 'Nuevo pedido - ' + data.nombre + ' - RD$' + tot
-    window.open('https://wa.me/18294089097?text=' + msg, '_blank')clearCart } = useCartStore()
+  const { items, subtotal, total, clearCart } = useCartStore()
   const [payMethod, setPayMethod] = useState<'paypal'|'transferencia'|'contra_entrega'>('paypal')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
