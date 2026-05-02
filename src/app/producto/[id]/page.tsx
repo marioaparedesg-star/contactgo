@@ -16,7 +16,7 @@ const TIPO_LABELS: Record<string, string> = {
   color: 'Color', solucion: 'Solución', gota: 'Gotas',
 }
 
-const ALL_SPH = [-20,-19.5,-19,-18.5,-18,-17.5,-17,-16.5,-16,-15.5,-15,-14.5,-14,-13.5,-13,-12.5,-12,-11.5,-11,-10.5,-10,-9.5,-9,-8.5,-8,-7.5,-7,-6.5,-6,-5.75,-5.5,-5.25,-5,-4.75,-4.5,-4.25,-4,-3.75,-3.5,-3.25,-3,-2.75,-2.5,-2.25,-2,-1.75,-1.5,-1.25,-1,-0.75,-0.5,-0.25,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.25,3.5,3.75,4,4.25,4.5,4.75,5,5.25,5.5,5.75,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12]
+const ALL_SPH = [-0.25,-0.5,-0.75,-1,-1.25,-1.5,-1.75,-2,-2.25,-2.5,-2.75,-3,-3.25,-3.5,-3.75,-4,-4.25,-4.5,-4.75,-5,-5.25,-5.5,-5.75,-6,-6.5,-7,-7.5,-8,-8.5,-9,-9.5,-10,-10.5,-11,-11.5,-12,-12.5,-13,-13.5,-14,-14.5,-15,-15.5,-16,-16.5,-17,-17.5,-18,-18.5,-19,-19.5,-20,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.25,3.5,3.75,4,4.25,4.5,4.75,5,5.25,5.5,5.75,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12]
 const ALL_CYL = [-6,-5.75,-5.5,-5.25,-5,-4.75,-4.5,-4.25,-4,-3.75,-3.5,-3.25,-3,-2.75,-2.5,-2.25,-2,-1.75,-1.5,-1.25,-1,-0.75,-0.5,-0.25]
 
 export default function ProductoPage() {
@@ -60,7 +60,7 @@ export default function ProductoPage() {
   const cyls: number[] = product.cyl_disponibles ?? []
   const adds: string[] = product.add_disponibles ?? []
 
-  const sphRange = sphs.length > 0 ? ALL_SPH.filter(v => v >= Math.min(...sphs) && v <= Math.max(...sphs)) : []
+  const sphRange = sphs.length > 0 ? ALL_SPH.filter(v => { const neg = sphs.filter((x:number) => x < 0); const pos = sphs.filter((x:number) => x > 0); if (v < 0) return neg.length > 0 && v >= Math.min(...neg); if (v > 0) return pos.length > 0 && v <= Math.max(...pos); return false }) : []
   const cylRange = cyls.length > 0 ? ALL_CYL.filter(v => v >= Math.min(...cyls) && v <= Math.max(...cyls)) : []
 
   return (
