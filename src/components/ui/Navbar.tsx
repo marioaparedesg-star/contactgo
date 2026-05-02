@@ -21,11 +21,8 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-display font-bold text-xl text-primary-700">
-          <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-            <Eye className="w-5 h-5 text-white" />
-          </div>
-          ContactGo
+        <Link href="/" className="flex items-center">
+          <Image src="/logo.png" alt="ContactGo" width={140} height={50} className="h-10 w-auto object-contain" priority />
         </Link>
 
         {/* Nav desktop */}
