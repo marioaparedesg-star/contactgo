@@ -32,6 +32,7 @@ export default function CheckoutPage() {
   const [payMethod, setPayMethod] = useState<'paypal'|'transferencia'|'contra_entrega'>('paypal')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [direcciones, setDirecciones] = useState([])
 
   const sub = subtotal(); const tot = total()
 
@@ -51,10 +52,11 @@ export default function CheckoutPage() {
             if (perfil.telefono) setValue('telefono', perfil.telefono)
           }
         })
-        sb.from('addresses').select('*').eq('user_id', user.id).eq('principal', true).single().then(({ data: addr }) => {
-          if (addr) {
-            setValue('direccion', addr.direccion)
-            if (addr.ciudad) setValue('ciudad', addr.ciudad)
+        sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: addrs }) => {
+          if (addrs && addrs.length > 0) {
+            setDirecciones(addrs)
+            setValue('direccion', addrs[0].direccion)
+            if (addrs[0].ciudad) setValue('ciudad', addrs[0].ciudad)
           }
         })
       }
