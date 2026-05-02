@@ -9,18 +9,16 @@ export default async function InventarioPage() {
   const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/')
 
-  const { data: productos } = await sb.from('products')
-    .select('*')
-    .order('stock', { ascending: true })
+  const { data: productos } = await sb.from('products').select('*').order('stock', { ascending: true })
 
   const sinStock = (productos ?? []).filter((p: any) => p.stock === 0).length
   const stockBajo = (productos ?? []).filter((p: any) => p.stock > 0 && p.stock <= 5).length
   const stockOk = (productos ?? []).filter((p: any) => p.stock > 5).length
 
   return (
-    <>
+    <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
-      <main className="ml-64 p-8 min-h-screen">
+      <main className="flex-1 p-8 overflow-auto">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Inventario</h1>
           <p className="text-gray-500">{productos?.length ?? 0} productos en total</p>
@@ -61,12 +59,12 @@ export default async function InventarioPage() {
                   </td>
                   <td className="px-6 py-4 text-gray-900 font-medium">RD${p.precio?.toLocaleString()}</td>
                   <td className="px-6 py-4">
-                    <span className={`font-bold text-lg ${p.stock === 0 ? 'text-red-500' : p.stock <= 5 ? 'text-yellow-500' : 'text-green-600'}`}>
+                    <span className={"font-bold text-lg " + (p.stock === 0 ? 'text-red-500' : p.stock <= 5 ? 'text-yellow-500' : 'text-green-600')}>
                       {p.stock}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${p.activo ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                    <span className={"px-2 py-1 rounded-lg text-xs font-semibold " + (p.activo ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500')}>
                       {p.activo ? 'Activo' : 'Inactivo'}
                     </span>
                   </td>
@@ -76,6 +74,6 @@ export default async function InventarioPage() {
           </table>
         </div>
       </main>
-    </>
+    </div>
   )
 }

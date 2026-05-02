@@ -15,9 +15,9 @@ export default async function ClientesPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <>
+    <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
-      <main className="ml-64 p-8 min-h-screen">
+      <main className="flex-1 p-8 overflow-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Clientes</h1>
@@ -30,13 +30,13 @@ export default async function ClientesPage() {
               <tr>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Cliente</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Email</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Teléfono</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Telefono</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Registro</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {(clientes ?? []).length === 0 ? (
-                <tr><td colSpan={4} className="px-6 py-12 text-center text-gray-400">No hay clientes registrados aún</td></tr>
+                <tr><td colSpan={4} className="px-6 py-12 text-center text-gray-400">No hay clientes registrados</td></tr>
               ) : (clientes ?? []).map((c: any) => (
                 <tr key={c.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">
@@ -48,7 +48,7 @@ export default async function ClientesPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-gray-600">{c.email}</td>
-                  <td className="px-6 py-4 text-gray-600">{c.telefono ?? '—'}</td>
+                  <td className="px-6 py-4 text-gray-600">{c.telefono ?? '-'}</td>
                   <td className="px-6 py-4 text-gray-500 text-sm">{new Date(c.created_at).toLocaleDateString('es-DO')}</td>
                 </tr>
               ))}
@@ -56,6 +56,6 @@ export default async function ClientesPage() {
           </table>
         </div>
       </main>
-    </>
+    </div>
   )
 }
