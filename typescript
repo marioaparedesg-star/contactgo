@@ -1746,4 +1746,67 @@ Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
 remote: Resolving deltas:   0% (0/2)[Kremote: Resolving deltas:  50% (1/2)[Kremote: Resolving deltas: 100% (2/2)[Kremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[K
 To https://github.com/marioaparedesg-star/contactgo.git
    88e9d7b7..8443ae63  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcp /home/claude/page.tsx src/[7ma[7mpp/producto/\[id\]/page.tsx[27m[K
+[7mgit add -A && git commit -m "SPH CYL ADD dropdown selectors ordered" && git push[27m [K[3A[51C[27mc[27mp[27m [27m/[27mh[27mo[27mm[27me[27m/[27mc[27ml[27ma[27mu[27md[27me[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27ms[27mr[27mc[27m/a[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[27mS[27mP[27mH[27m [27mC[27mY[27mL[27m [27mA[27mD[27mD[27m [27md[27mr[27mo[27mp[27md[27mo[27mw[27mn[27m [27ms[27me[27ml[27me[27mc[27mt[27mo[27mr[27ms[27m [27mo[27mr[27md[27me[27mr[27me[27md[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh [K[?2004l
+cp: /home/claude/page.tsx: No such file or directory
+[main 21439652] SPH CYL ADD dropdown selectors ordered
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 36 insertions(+)
+Enumerating objects: 5, done.
+Counting objects:  20% (1/5)Counting objects:  40% (2/5)Counting objects:  60% (3/5)Counting objects:  80% (4/5)Counting objects: 100% (5/5)Counting objects: 100% (5/5), done.
+Delta compression using up to 12 threads
+Compressing objects:  33% (1/3)Compressing objects:  66% (2/3)Compressing objects: 100% (3/3)Compressing objects: 100% (3/3), done.
+Writing objects:  33% (1/3)Writing objects:  66% (2/3)Writing objects: 100% (3/3)Writing objects: 100% (3/3), 576 bytes | 576.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/2)[Kremote: Resolving deltas:  50% (1/2)[Kremote: Resolving deltas: 100% (2/2)[Kremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   8443ae63..21439652  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "select\|dropdown\|op[7mt[7mion" src/app/producto/\[id\]/page.tsx | head -10[27m[K[A[2C[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27ms[27me[27ml[27me[27mc[27mt[27m\[27m|[27md[27mr[27mo[27mp[27md[27mo[27mw[27mn[27m\[27m|[27mo[27mpt[27mi[27mo[27mn[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m1[27m0[?2004l
+24:  const [selectedSph, setSelectedSph] = useState<number | null>(null)
+25:  const [selectedCyl, setSelectedCyl] = useState<number | null>(null)
+26:  const [selectedAdd, setSelectedAdd] = useState<string | null>(null)
+32:    sb.from('products').select('*, categories(*)').eq('id', id).single()
+41:    if (needsSph && selectedSph === null) {
+45:    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined })
+51:    if (needsSph && selectedSph === null) {
+55:    addItem(product, { cantidad: qty, sph: selectedSph, cyl: selectedCyl, add_power: selectedAdd ?? undefined })
+141:                        ${selectedSph === s
+159:                        ${selectedCyl === c
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat /home/claude/page.tsx > s[7mr[7mc/app/producto/\[id\]/page.tsx[27m[K
+[7mgrep -n "select>" src/app/producto/\[id\]/page.tsx | head -5[27m[K[A[A[9D[27mc[27ma[27mt[27m [27m/[27mh[27mo[27mm[27me[27m/[27mc[27ml[27ma[27mu[27md[27me[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m>[27m [27msr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27ms[27me[27ml[27me[27mc[27mt[27m>[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m5[?2004l
+cat: /home/claude/page.tsx: No such file or directory
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m            <button onClick={handleAdd} disabled={product.stock === 0} className[7m=[7m"btn-primary flex items-center justify-center gap-2 py-4 text-base disabled:opa[7mc[7mity-50 disabled:cursor-not-allowed">[27m[K
+[7m              <ShoppingCart className="w-5 h-5" />[27m[K
+[7m              {product.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}[27m[K
+[7m            </button>[27m[K
+[7m            <button onClick={handleBuyNow} disabled={product.stock === 0} classN[7ma[7mme="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 rounded-[7m2[7mxl flex items-center justify-center gap-2 transition-colors text-lg disabled:op[7ma[7mcity-50">[27m[K
+[7m              Comprar ahora[27m[K
+[7m            </button>[27m[K
+[7m          </div>[27m[K
+[7m        </div>[27m[K
+[7m      </main>[27m[K
+[7m      <Footer />[27m[K
+[7m      <WhatsAppButton />[27m[K
+[7m    </>[27m[K
+[7m  )[27m[K
+[7m}[27m[K
+[7mENDOFFILE[27m[K
+[7mcp /tmp/newproducto.tsx src/app/producto/\[id\]/page.tsx[27m[K
+[7mgrep -n "<select" src/app/producto/\[id\]/page.tsx | head -5[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mb[27mu[27mt[27mt[27mo[27mn[27m [27mo[27mn[27mC[27ml[27mi[27mc[27mk[27m=[27m{[27mh[27ma[27mn[27md[27ml[27me[27mA[27md[27md[27m}[27m [27md[27mi[27ms[27ma[27mb[27ml[27me[27md[27m=[27m{[27mp[27mr[27mo[27md[27mu[27mc[27mt[27m.[27ms[27mt[27mo[27mc[27mk[27m [27m=[27m=[27m=[27m [27m0[27m}[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me=[27m"[27mb[27mt[27mn[27m-[27mp[27mr[27mi[27mm[27ma[27mr[27my[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mg[27ma[27mp[27m-[27m2[27m [27mp[27my[27m-[27m4[27m [27mt[27me[27mx[27mt[27m-[27mb[27ma[27ms[27me[27m [27md[27mi[27ms[27ma[27mb[27ml[27me[27md[27m:[27mo[27mp[27mac[27mi[27mt[27my[27m-[27m5[27m0[27m [27md[27mi[27ms[27ma[27mb[27ml[27me[27md[27m:[27mc[27mu[27mr[27ms[27mo[27mr[27m-[27mn[27mo[27mt[27m-[27ma[27ml[27ml[27mo[27mw[27me[27md[27m"[27m>[1B[50P[14C<ShoppingCart className="w-5 h-5" />[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27mp[27mr[27mo[27md[27mu[27mc[27mt[27m.[27ms[27mt[27mo[27mc[27mk[27m [27m=[27m=[27m=[27m [27m0[27m [27m?[27m [27m'[27mS[27mi[27mn[27m [27ms[27mt[27mo[27mc[27mk[27m'[27m [27m:[27m [27m'[27mA[27mg[27mr[27me[27mg[27ma[27mr[27m [27ma[27ml[27m [27mc[27ma[27mr[27mr[27mi[27mt[27mo[27m'[27m}[1B[21P[12C</button>[38C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mb[27mu[27mt[27mt[27mo[27mn[27m [27mo[27mn[27mC[27ml[27mi[27mc[27mk[27m=[27m{[27mh[27ma[27mn[27md[27ml[27me[27mB[27mu[27my[27mN[27mo[27mw[27m}[27m [27md[27mi[27ms[27ma[27mb[27ml[27me[27md[27m=[27m{[27mp[27mr[27mo[27md[27mu[27mc[27mt[27m.[27ms[27mt[27mo[27mc[27mk[27m [27m=[27m=[27m=[27m [27m0[27m}[27m [27mc[27ml[27ma[27ms[27ms[27mNa[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m9[27m0[27m0[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m8[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mw[27mh[27mi[27mt[27me[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mp[27my[27m-[27m4[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-2[27mx[27ml[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mg[27ma[27mp[27m-[27m2[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m [27mt[27me[27mx[27mt[27m-[27ml[27mg[27m [27md[27mi[27ms[27ma[27mb[27ml[27me[27md[27m:[27mo[27mpa[27mc[27mi[27mt[27my[27m-[27m5[27m0[27m"[27m>[1B[27P[14CComprar ahora[26C[K[1B[21P[12C</button>[38C[K[1B[16P[10C</div>[48C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27mm[27ma[27mi[27mn[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27mF[27mo[27mo[27mt[27me[27mr[27m [27m/[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27mW[27mh[27ma[27mt[27ms[27mA[27mp[27mp[27mB[27mu[27mt[27mt[27mo[27mn[27m [27m/[27m>[1B[27m [27m [27m [27m [27m<[27m/[27m>[1B[27m [27m [27m)[1B[27m}[1B[27mE[27mN[27mD[27mO[27mF[27mF[27mI[27mL[27mE[1B[27mc[27mp[27m [27m/[27mt[27mm[27mp[27m/[27mn[27me[27mw[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m.[27mt[27ms[27mx[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27m<[27ms[27me[27ml[27me[27mc[27mt[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m5[?2004l
+96:                <select value={selectedSph ?? ''} onChange={e => setSelectedSph(e.target.value === '' ? null : parseFloat(e.target.value))}
+110:                <select value={selectedCyl ?? ''} onChange={e => setSelectedCyl(e.target.value === '' ? null : parseFloat(e.target.value))}
+124:                <select value={selectedAdd ?? ''} onChange={e => setSelectedAdd(e.target.value === '' ? null : e.target.value)}
 [1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h
