@@ -222,4 +222,181 @@ const schema = z.object({
 [7mSCRIPT[27m[K
 [7mpython3 /tmp/writesugeridos.py[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m9[27m0[27m0[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m8[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mw[27mh[27mi[27mt[27me[27m [27mf[27mo[27mn[27mt[27m-[27mb[27mo[27ml[27md [27mp[27my[27m-[27m4[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27m2[27mx[27ml[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mg[27ma[27mp[27m-[27m2[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m [27mt[27me[27mx[27mt[27m-l[27mg[27m"[27m>[1B[64P[12CContinuar al pago <ArrowRight className="w-5 h-5" />[K[1B[19P[10C</button>[42C[K[1B[58P[10C<button onClick={() => router.push('/catalogo')}[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27mf[27mu[27ml[27ml[27m [27mb[27mg[27m-[27mw[27mh[27mi[27mt[27me[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m6[27m0[27m0[27m [27mf[27mo[27mn[27mt-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mp[27my[27m-[27m3[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27m2[27mx[27ml[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mg[27ma[27mp[27m-[27m2[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-5[27m0[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m"[27m>[1B[54P[12C<X className="w-4 h-4" /> Seguir comprando[K[1B[19P[10C</button>[42C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m)[1B[27m}[1B[27m"[27m"[27m"[2B[27mw[27mi[27mt[27mh[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m [27ma[27ms[27m [27mf[27m:[1B[27m [27m [27m [27m [27mf[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m"[27mO[27mK[27m"[27m)[1B[27mS[27mC[27mR[27mI[27mP[27mT[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mw[27mr[27mi[27mt[27me[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m.[27mp[27my[?2004l
 OK
-[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -i '' 's/router.push(.\/c[7mh[7meckout.)/router.push("\/sugeridos")/g' src/app/producto/\[id\]/page.tsx[27m[K
+[7mgrep "sugeridos\|checkout" src/app/producto/\[id\]/page.tsx[27m[K[A[A[8D[27ms[27me[27md[27m [27m-[27mi[27m [27m'[27m'[27m [27m'[27ms[27m/[27mr[27mo[27mu[27mt[27me[27mr[27m.[27mp[27mu[27ms[27mh[27m([27m.[27m\[27m/[27mch[27me[27mc[27mk[27mo[27mu[27mt[27m.[27m)[27m/[27mr[27mo[27mu[27mt[27me[27mr[27m.[27mp[27mu[27ms[27mh[27m([27m"[27m\[27m/[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m"[27m)[27m/[27mg[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mr[27me[27mp[27m [27m"[27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m\[27m|[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+    router.push("/sugeridos")
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgit add -A && git commit -m "[7mA[7mdd sugeridos page and buy now flow" && git push[27m[K[A[3C[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"A[27md[27md[27m [27ms[27mu[27mg[27me[27mr[27mi[27md[27mo[27ms[27m [27mp[27ma[27mg[27me[27m [27ma[27mn[27md[27m [27mb[27mu[27my[27m [27mn[27mo[27mw[27m [27mf[27ml[27mo[27mw[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+[main 82e91ec0] Add sugeridos page and buy now flow
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 3 files changed, 151 insertions(+), 2 deletions(-)
+ create mode 100644 src/app/sugeridos/page.tsx
+Enumerating objects: 17, done.
+Counting objects:   5% (1/17)Counting objects:  11% (2/17)Counting objects:  17% (3/17)Counting objects:  23% (4/17)Counting objects:  29% (5/17)Counting objects:  35% (6/17)Counting objects:  41% (7/17)Counting objects:  47% (8/17)Counting objects:  52% (9/17)Counting objects:  58% (10/17)Counting objects:  64% (11/17)Counting objects:  70% (12/17)Counting objects:  76% (13/17)Counting objects:  82% (14/17)Counting objects:  88% (15/17)Counting objects:  94% (16/17)Counting objects: 100% (17/17)Counting objects: 100% (17/17), done.
+Delta compression using up to 12 threads
+Compressing objects:  14% (1/7)Compressing objects:  28% (2/7)Compressing objects:  42% (3/7)Compressing objects:  57% (4/7)Compressing objects:  71% (5/7)Compressing objects:  85% (6/7)Compressing objects: 100% (7/7)Compressing objects: 100% (7/7), done.
+Writing objects:  10% (1/10)Writing objects:  20% (2/10)Writing objects:  30% (3/10)Writing objects:  40% (4/10)Writing objects:  50% (5/10)Writing objects:  60% (6/10)Writing objects:  70% (7/10)Writing objects:  80% (8/10)Writing objects:  90% (9/10)Writing objects: 100% (10/10)Writing objects: 100% (10/10), 3.63 KiB | 3.63 MiB/s, done.
+Total 10 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/5)[Kremote: Resolving deltas:  20% (1/5)[Kremote: Resolving deltas:  40% (2/5)[Kremote: Resolving deltas:  60% (3/5)[Kremote: Resolving deltas:  80% (4/5)[Kremote: Resolving deltas: 100% (5/5)[Kremote: Resolving deltas: 100% (5/5), completed with 5 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   c62a9d14..82e91ec0  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "Resumen\|items.map\|[7mi[7mtem.product\|cantidad" src/app/checkout/page.tsx | head -20[27m[K[A[9D[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mR[27me[27ms[27mu[27mm[27me[27mn[27m\[27m|[27mi[27mt[27me[27mm[27ms[27m.[27mm[27ma[27mp[27m\[27m|i[27mt[27me[27mm[27m.[27mp[27mr[27mo[27md[27mu[27mc[27mt[27m\[27m|[27mc[27ma[27mn[27mt[27mi[27md[27ma[27md[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m2[27m0[?2004l
+82:      items.map(i => ({
+87:        cantidad: i.cantidad,
+254:          {/* RIGHT - Resumen */}
+257:              <h3 className="font-semibold text-gray-900 mb-4">Resumen</h3>
+259:                {items.map((item, i) => (
+262:                      {item.product.nombre}
+264:                      {' '}×{item.cantidad}
+266:                    <span className="font-medium shrink-0">RD${(item.product.precio * item.cantidad).toLocaleString()}</span>
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -n '250,285p' src/app/che[7mc[7mkout/page.tsx[27m[K[A[37C[27ms[27me[27md[27m [27m-[27mn[27m [27m'[27m2[27m5[27m0[27m,[27m2[27m8[27m5[27mp[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27mec[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+              )}
+            </div>
+          </div>
+
+          {/* RIGHT - Resumen */}
+          <div className="lg:col-span-2">
+            <div className="card p-5 sticky top-20">
+              <h3 className="font-semibold text-gray-900 mb-4">Resumen</h3>
+              <div className="space-y-3 mb-4">
+                {items.map((item, i) => (
+                  <div key={i} className="flex justify-between text-sm gap-2">
+                    <span className="text-gray-600 flex-1 leading-snug">
+                      {item.product.nombre}
+                      {item.sph !== undefined && item.sph !== null ? ` (${item.sph > 0 ? '+' : ''}${item.sph})` : ''}
+                      {' '}×{item.cantidad}
+                    </span>
+                    <span className="font-medium shrink-0">RD${(item.product.precio * item.cantidad).toLocaleString()}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
+                <div className="flex justify-between text-gray-500">
+                  <span>Subtotal</span><span>RD${sub.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-gray-500">
+                  <span>Envío</span><span>RD$200</span>
+                </div>
+                <div className="flex justify-between font-bold text-base text-gray-900 pt-1">
+                  <span>Total</span><span>RD${tot.toLocaleString()}</span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 text-center mt-4">
+                🔒 Pago seguro · Entrega en 24–48h
+              </p>
+            </div>
+          </div>
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -n '255,270p' src/app/che[7mc[7mkout/page.tsx[27m[K[A[37C[27ms[27me[27md[27m [27m-[27mn[27m [27m'[27m2[27m5[27m5[27m,[27m2[27m7[27m0[27mp[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27mec[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+          <div className="lg:col-span-2">
+            <div className="card p-5 sticky top-20">
+              <h3 className="font-semibold text-gray-900 mb-4">Resumen</h3>
+              <div className="space-y-3 mb-4">
+                {items.map((item, i) => (
+                  <div key={i} className="flex justify-between text-sm gap-2">
+                    <span className="text-gray-600 flex-1 leading-snug">
+                      {item.product.nombre}
+                      {item.sph !== undefined && item.sph !== null ? ` (${item.sph > 0 ? '+' : ''}${item.sph})` : ''}
+                      {' '}×{item.cantidad}
+                    </span>
+                    <span className="font-medium shrink-0">RD${(item.product.precio * item.cantidad).toLocaleString()}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m                        className="w-7 h-7 flex items-center justify-center bg-g[7mr[7may-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 transition-colors">[7m+[7m</button>[27m[K
+[7m                      <button onClick={() => removeItem(i)}[27m[K
+[7m                        className="w-7 h-7 flex items-center justify-center bg-r[7me[7md-50 hover:bg-red-100 rounded-lg text-red-500 transition-colors ml-1">x</button[7m>[27m[K
+[7m                    </div>[27m[K
+[7m                  </div>[27m[K
+[7m                ))}[27m[K
+[7m              </div>"""[27m[K
+[K
+[7mif old in c:[27m[K
+[7m    c = c.replace(old, new)[27m[K
+[7m    with open('src/app/checkout/page.tsx', 'w') as f:[27m[K
+[7m        f.write(c)[27m[K
+[7m    print("OK")[27m[K
+[7melse:[27m[K
+[7m    print("NOT FOUND")[27m[K
+[7m    idx = c.find('items.map')[27m[K
+[7m    print(repr(c[idx-30:idx+100]))[27m[K
+[7mSCRIPT[27m[K
+[7mpython3 /tmp/fixresumen.py[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27m7[27m [27mh[27m-[27m7[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mb[27mg[27m-[27mgr[27ma[27my[27m-[27m1[27m0[27m0[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27ml[27mg[27m [27mf[27mo[27mn[27mt[27m-[27mb[27mo[27ml[27md[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m7[27m0[27m0[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m"[27m>+[27m<[27m/[27mb[27mu[27mt[27mt[27mo[27mn[27m>[1B[59P[21C <button onClick={() => removeItem(i)}[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27m7[27m [27mh[27m-[27m7[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mb[27mg[27m-[27mre[27md[27m-[27m5[27m0[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mr[27me[27md[27m-[27m1[27m0[27m0[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27ml[27mg[27m [27mt[27me[27mx[27mt[27m-[27mr[27me[27md[27m-[27m5[27m0[27m0[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m [27mm[27ml[27m-[27m1[27m"[27m>[27mx[27m<[27m/[27mb[27mu[27mt[27mt[27mo[27mn>[1B[26P[20C</div>[28C[K[1B[24P[18C</div>[32C[K[1B[19P[16C))}[42C[K[1B[23P[14C</div>"""[34C[K[2B[27mi[27mf[27m [27mo[27ml[27md[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m,[27m [27mn[27me[27mw[27m)[1B[27m [27m [27m [27m [27mw[27mi[27mt[27mh[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m [27ma[27ms[27m [27mf[27m:[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mf[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m"[27mO[27mK[27m"[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m"[27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m"[27m)[1B[27m [27m [27m [27m [27mi[27md[27mx[27m [27m=[27m [27mc[27m.[27mf[27mi[27mn[27md[27m([27m'[27mi[27mt[27me[27mm[27ms[27m.[27mm[27ma[27mp[27m'[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27mr[27me[27mp[27mr[27m([27mc[27m[[27mi[27md[27mx[27m-[27m3[27m0[27m:[27mi[27md[27mx[27m+[27m1[27m0[27m0[27m][27m)[27m)[1B[27mS[27mC[27mR[27mI[27mP[27mT[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mf[27mi[27mx[27mr[27me[27ms[27mu[27mm[27me[27mn[27m.[27mp[27my[?2004l
+NOT FOUND
+"('order_items').insert(\n      items.map(i => ({\n        order_id: order.id,\n        product_id: i.product.id,\n        nombre: i.pr"
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 -c "[27m
+[7mimport re[27m[K
+[7mf=open('src/app/checkout/page.tsx','r')[27m[K
+[7mc=f.read()[27m[K
+[7mf.close()[27m[K
+[7mc=re.sub(r'\[([^\]]+)\]\(http[^)]+\)',lambda m: m.group(1),c)[27m[K
+[7mf=open('src/app/checkout/page.tsx','w')[27m[K
+[7mf.write(c)[27m[K
+[7mf.close()[27m[K
+[7mprint('links:', c.count('http://'))[27m[K
+[7m"[27m[K[10A[50C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m-[27mc[27m [27m"[1B[27mi[27mm[27mp[27mo[27mr[27mt[27m [27mr[27me[1B[27mf[27m=[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m'[27mr[27m'[27m)[1B[27mc[27m=[27mf[27m.[27mr[27me[27ma[27md[27m([27m)[1B[27mf[27m.[27mc[27ml[27mo[27ms[27me[27m([27m)[1B[27mc[27m=[27mr[27me[27m.[27ms[27mu[27mb[27m([27mr[27m'[27m\[27m[[27m([27m[[27m^[27m\[27m][27m][27m+[27m)[27m\[27m][27m\[27m([27mh[27mt[27mt[27mp[27m[[27m^[27m)[27m][27m+[27m\[27m)[27m'[27m,[27ml[27ma[27mm[27mb[27md[27ma[27m [27mm[27m:[27m [27mm[27m.[27mg[27mr[27mo[27mu[27mp[27m([27m1[27m)[27m,[27mc[27m)[1B[27mf[27m=[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m'[27mw[27m'[27m)[1B[27mf[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27mf[27m.[27mc[27ml[27mo[27ms[27me[27m([27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27ml[27mi[27mn[27mk[27ms[27m:[27m'[27m,[27m [27mc[27m.[27mc[27mo[27mu[27mn[27mt[27m([27m'[27mh[27mt[27mt[27mp[27m:[27m/[27m/[27m'[27m)[27m)[1B[27m"[?2004l
+links: 0
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "export\|removeItem\|[7mu[7mpdateItem\|clearCart" src/lib/cart-store.ts[27m[K[A[7C[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27me[27mx[27mp[27mo[27mr[27mt[27m\[27m|[27mr[27me[27mm[27mo[27mv[27me[27mI[27mt[27me[27mm[27m\[27m|u[27mp[27md[27ma[27mt[27me[27mI[27mt[27me[27mm[27m\[27m|[27mc[27ml[27me[27ma[27mr[27mC[27ma[27mr[27mt[27m"[27m [27ms[27mr[27mc[27m/[27ml[27mi[27mb[27m/[27mc[27ma[27mr[27mt[27m-[27ms[27mt[27mo[27mr[27me[27m.[27mt[27ms[?2004l
+9:  removeItem: (productId: string, sph?: number | null) => void
+11:  clearCart: () => void
+17:export const useCartStore = create<CartStore>()(
+41:      removeItem: (productId, sph) => {
+50:        if (cantidad <= 0) { get().removeItem(productId, sph); return }
+60:      clearCart: () => set({ items: [] }),
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7mindex: number) => void\n  clearCart: () => void"[27m[K
+[7m)[27m[K
+[K
+[7m# Add updateItem implementation[27m[K
+[7mc = c.replace([27m[K
+[7m    "      clearCart: () => set({ items: [] }),",[27m[K
+[7m    """      updateItem: (index, cantidad) => {[27m[K
+[7m        const items = [...get().items][27m[K
+[7m        if (items[index]) { items[index] = { ...items[index], cantidad }; set({ [7mi[7mtems }) }[27m[K
+[7m      },[27m[K
+[7m      removeByIndex: (index) => {[27m[K
+[7m        const items = get().items.filter((_, i) => i !== index)[27m[K
+[7m        set({ items })[27m[K
+[7m      },[27m[K
+[7m      clearCart: () => set({ items: [] }),"""[27m[K
+[7m)[27m[K
+[K
+[7mwith open('src/lib/cart-store.ts', 'w') as f:[27m[K
+[7m    f.write(c)[27m[K
+[7mprint("OK")[27m[K
+[7mSCRIPT[27m[K
+[7mpython3 /tmp/fixcart.py[27m[K[22A[27mi[27mn[27md[27me[27mx[27m:[27m [27mn[27mu[27mm[27mb[27me[27mr[27m)[27m [27m=[27m>[27m [27mv[27mo[27mi[27md[27m\[27mn[27m [27m [27mc[27ml[27me[27ma[27mr[27mC[27ma[27mr[27mt[27m:[27m [27m([27m)[27m [27m=[27m>[27m [27mv[27mo[27mi[27md[27m"[1B[27m)[2B[27m#[27m [27mA[27md[27md[27m [27mu[27mp[27md[27ma[27mt[27me[27mI[27mt[27me[27mm[27m [27mi[27mm[27mp[27ml[27me[27mm[27me[27mn[27mt[27ma[27mt[27mi[27mo[27mn[1B[27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([1B[27m [27m [27m [27m [27m"[27m [27m [27m [27m [27m [27m [27mc[27ml[27me[27ma[27mr[27mC[27ma[27mr[27mt[27m:[27m [27m([27m)[27m [27m=[27m>[27m [27ms[27me[27mt[27m([27m{[27m [27mi[27mt[27me[27mm[27ms[27m:[27m [27m[[27m][27m [27m}[27m)[27m,[27m"[27m,[1B[27m [27m [27m [27m [27m"[27m"[27m"[27m [27m [27m [27m [27m [27m [27mu[27mp[27md[27ma[27mt[27me[27mI[27mt[27me[27mm[27m:[27m [27m([27mi[27mn[27md[27me[27mx[27m,[27m [27mc[27ma[27mn[27mt[27mi[27md[27ma[27md[27m)[27m [27m=[27m>[27m [27m{[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mc[27mo[27mn[27ms[27mt[27m [27mi[27mt[27me[27mm[27ms[27m [27m=[27m [27m[[27m.[27m.[27m.[27mg[27me[27mt[27m([27m)[27m.[27mi[27mt[27me[27mm[27ms[27m][1B[27m [27m [27m [27m [27m [27m [27m [27m [27mi[27mf[27m [27m([27mi[27mt[27me[27mm[27ms[27m[[27mi[27mn[27md[27me[27mx[27m][27m)[27m [27m{[27m [27mi[27mt[27me[27mm[27ms[27m[[27mi[27mn[27md[27me[27mx[27m][27m [27m=[27m [27m{[27m [27m.[27m.[27m.[27mi[27mt[27me[27mm[27ms[27m[[27mi[27mn[27md[27me[27mx[27m][27m,[27m [27mc[27ma[27mn[27mt[27mi[27md[27ma[27md[27m [27m}[27m;[27m [27ms[27me[27mt[27m([27m{[27m i[27mt[27me[27mm[27ms[27m [27m}[27m)[27m [27m}[1B[27m [27m [27m [27m [27m [27m [27m}[27m,[1B[27m [27m [27m [27m [27m [27m [27mr[27me[27mm[27mo[27mv[27me[27mB[27my[27mI[27mn[27md[27me[27mx[27m:[27m [27m([27mi[27mn[27md[27me[27mx[27m)[27m [27m=[27m>[27m [27m{[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mc[27mo[27mn[27ms[27mt[27m [27mi[27mt[27me[27mm[27ms[27m [27m=[27m [27mg[27me[27mt[27m([27m)[27m.[27mi[27mt[27me[27mm[27ms[27m.[27mf[27mi[27ml[27mt[27me[27mr[27m([27m([27m_[27m,[27m [27mi[27m)[27m [27m=[27m>[27m [27mi[27m [27m![27m=[27m=[27m [27mi[27mn[27md[27me[27mx[27m)[1B[27m [27m [27m [27m [27m [27m [27m [27m [27ms[27me[27mt[27m([27m{[27m [27mi[27mt[27me[27mm[27ms[27m [27m}[27m)[1B[27m [27m [27m [27m [27m [27m [27m}[27m,[1B[27m [27m [27m [27m [27m [27m [27mc[27ml[27me[27ma[27mr[27mC[27ma[27mr[27mt[27m:[27m [27m([27m)[27m [27m=[27m>[27m [27ms[27me[27mt[27m([27m{[27m [27mi[27mt[27me[27mm[27ms[27m:[27m [27m[[27m][27m [27m}[27m)[27m,[27m"[27m"[27m"[1B[27m)[2B[27mw[27mi[27mt[27mh[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ml[27mi[27mb[27m/[27mc[27ma[27mr[27mt[27m-[27ms[27mt[27mo[27mr[27me[27m.[27mt[27ms[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m [27ma[27ms[27m [27mf[27m:[1B[27m [27m [27m [27m [27mf[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m"[27mO[27mK[27m"[27m)[1B[27mS[27mC[27mR[27mI[27mP[27mT[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mf[27mi[27mx[27mc[27ma[27mr[27mt[27m.[27mp[27my[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7mn(item.product.stock, item.cantidad + 1))}[27m[K
+[7m                        className="w-7 h-7 flex items-center justify-center bg-g[7mr[7may-100 hover:bg-gray-200 rounded-lg font-bold transition-colors">+</button>[27m[K
+[7m                      <button type="button" onClick={() => removeByIndex(i)}[27m[K
+[7m                        className="w-7 h-7 flex items-center justify-center bg-r[7me[7md-50 hover:bg-red-100 rounded-lg text-red-400 transition-colors ml-1 font-bold"[7m>[7mx</button>[27m[K
+[7m                    </div>[27m[K
+[7m                  </div>[27m[K
+[7m                ))}[27m[K
+[7m              </div>"""[27m[K
+[K
+[7mif old in c:[27m[K
+[7m    c = c.replace(old, new)[27m[K
+[7m    with open('src/app/checkout/page.tsx', 'w') as f:[27m[K
+[7m        f.write(c)[27m[K
+[7m    print("OK")[27m[K
+[7melse:[27m[K
+[7m    print("NOT FOUND")[27m[K
+[7m    idx = c.find('items.map')[27m[K
+[7m    print(repr(c[idx-20:idx+150]))[27m[K
+[7mSCRIPT[27m[K
+[7mpython3 /tmp/fixresumen2.py[27m[K[22A[27mn[27m([27mi[27mt[27me[27mm[27m.[27mp[27mr[27mo[27md[27mu[27mc[27mt[27m.[27ms[27mt[27mo[27mc[27mk[27m,[27m [27mi[27mt[27me[27mm[27m.[27mc[27ma[27mn[27mt[27mi[27md[27ma[27md[27m [27m+[27m [27m1[27m)[27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27m7[27m [27mh[27m-[27m7[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mb[27mg[27m-[27mgr[27ma[27my[27m-[27m1[27m0[27m0[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27ml[27mg[27m [27mf[27mo[27mn[27mt[27m-[27mb[27mo[27ml[27md[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m"[27m>[27m+[27m<[27m/[27mb[27mu[27mt[27mt[27mo[27mn[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mb[27mu[27mt[27mt[27mo[27mn[27m [27mt[27my[27mp[27me[27m=[27m"[27mb[27mu[27mt[27mt[27mo[27mn[27m"[27m [27mo[27mn[27mC[27ml[27mi[27mc[27mk[27m=[27m{[27m([27m)[27m [27m=[27m>[27m [27mr[27me[27mm[27mo[27mv[27me[27mB[27my[27mI[27mn[27md[27me[27mx[27m([27mi[27m)[27m}[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mw[27m-[27m7[27m [27mh[27m-[27m7[27m [27mf[27ml[27me[27mx[27m [27mi[27mt[27me[27mm[27ms[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mc[27me[27mn[27mt[27me[27mr[27m [27mb[27mg[27m-[27mre[27md[27m-[27m5[27m0[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mr[27me[27md[27m-[27m1[27m0[27m0[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27ml[27mg[27m [27mt[27me[27mx[27mt[27m-[27mr[27me[27md[27m-[27m4[27m0[27m0[27m [27mt[27mr[27ma[27mn[27ms[27mi[27mt[27mi[27mo[27mn[27m-[27mc[27mo[27ml[27mo[27mr[27ms[27m [27mm[27ml[27m-[27m1[27m [27mf[27mo[27mn[27mt[27m-[27mb[27mo[27ml[27md[27m">[27mx[27m<[27m/[27mb[27mu[27mt[27mt[27mo[27mn[27m>[1B[26P[20C</div>[28C[K[1B[24P[18C</div>[32C[K[1B[19P[16C))}[42C[K[1B[23P[14C</div>"""[34C[K[2B[27mi[27mf[27m [27mo[27ml[27md[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27

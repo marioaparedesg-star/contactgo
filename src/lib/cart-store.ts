@@ -8,6 +8,8 @@ interface CartStore {
   addItem: (product: Product, opts?: { cantidad?: number; sph?: number | null; cyl?: number | null; axis?: number | null; add_power?: string | null }) => void
   removeItem: (productId: string, sph?: number | null) => void
   updateQty: (productId: string, cantidad: number, sph?: number | null) => void
+  updateItem: (index: number, cantidad: number) => void
+  removeByIndex: (index: number) => void
   clearCart: () => void
   total: () => number
   subtotal: () => number
@@ -57,6 +59,14 @@ export const useCartStore = create<CartStore>()(
         }))
       },
 
+      updateItem: (index, cantidad) => {
+        const items = [...get().items]
+        if (items[index]) { items[index] = { ...items[index], cantidad }; set({ items }) }
+      },
+      removeByIndex: (index) => {
+        const items = get().items.filter((_, i) => i !== index)
+        set({ items })
+      },
       clearCart: () => set({ items: [] }),
 
       subtotal: () => get().items.reduce((s, i) => s + i.product.precio * i.cantidad, 0),

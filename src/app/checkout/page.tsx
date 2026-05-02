@@ -28,7 +28,7 @@ const PAYPAL_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, subtotal, total, clearCart } = useCartStore()
+  const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
   const [payMethod, setPayMethod] = useState<'paypal'|'transferencia'|'contra_entrega'>('paypal')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -257,13 +257,21 @@ export default function CheckoutPage() {
               <h3 className="font-semibold text-gray-900 mb-4">Resumen</h3>
               <div className="space-y-3 mb-4">
                 {items.map((item, i) => (
-                  <div key={i} className="flex justify-between text-sm gap-2">
-                    <span className="text-gray-600 flex-1 leading-snug">
-                      {item.product.nombre}
-                      {item.sph !== undefined && item.sph !== null ? ` (${item.sph > 0 ? '+' : ''}${item.sph})` : ''}
-                      {' '}×{item.cantidad}
-                    </span>
-                    <span className="font-medium shrink-0">RD${(item.product.precio * item.cantidad).toLocaleString()}</span>
+                  <div key={i} className="flex items-start gap-2 text-sm border-b border-gray-50 pb-3 last:border-0 last:pb-0">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-gray-800 font-medium leading-snug">{item.product.nombre}</p>
+                      {item.sph !== undefined && item.sph !== null && <p className="text-xs text-gray-400">Grad: {item.sph > 0 ? '+' : ''}{item.sph}</p>}
+                      <p className="text-primary-600 font-bold mt-0.5">RD${(item.product.precio * item.cantidad).toLocaleString()}</p>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button type="button" onClick={() => updateItem(i, Math.max(1, item.cantidad - 1))}
+                        className="w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg font-bold transition-colors">-</button>
+                      <span className="w-6 text-center font-semibold">{item.cantidad}</span>
+                      <button type="button" onClick={() => updateItem(i, Math.min(item.product.stock, item.cantidad + 1))}
+                        className="w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg font-bold transition-colors">+</button>
+                      <button type="button" onClick={() => removeByIndex(i)}
+                        className="w-7 h-7 flex items-center justify-center bg-red-50 hover:bg-red-100 rounded-lg text-red-400 transition-colors ml-1 font-bold">x</button>
+                    </div>
                   </div>
                 ))}
               </div>
