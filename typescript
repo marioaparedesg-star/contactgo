@@ -1914,4 +1914,350 @@ export default async function InventarioPage() {
 [7m}[27m[K
 [7mENDFILE[27m[K
 [7mgrep "http://" src/app/admin/inventario/page.tsx[27m[K
-[7mgit add -A && git commit -m "Renovate admin inventario with SKU margin alerts" &[7m&[7m git push[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mt[27md[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mp[27mx[27m-[27m5[27m [27mp[27my[27m-[27m4[27m [27mt[27me[27mx[27mt[27m-[27mc[27me[27mn[27mt[27me[27mr[27m"[27m>[27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m{[27m"t[27me[27mx[27mt[27m-[27ml[27mg[27m [27mf[27mo[27mn[27mt[27m-[27mb[27mo[27ml[27md[27m [27m"[27m+[27m([27ms[27ms[27m=[27m=[27m=[27m'[27ms[27mi[27mn[27m'[27m?[27m'[27mt[27me[27mx[27mt[27m-[27mr[27me[27md[27m-[27m5[27m0[27m0[27m'[27m:[27ms[27ms[27m=[27m=[27m=[27m'[27mb[27ma[27mj[27mo[27m'[27m?[27m'[27mt[27me[27mx[27mt[27m-[27my[27me[27ml[27ml[27mo[27mw[27m-[27m5[27m0[27m0[27m'[27m:[27m'[27mt[27mex[27mt[27m-[27mg[27mr[27me[27me[27mn[27m-[27m6[27m0[27m0[27m'[27m)[27m}[27m>[27m{[27mp[27m.[27ms[27mt[27mo[27mc[27mk[27m}[27m<[27m/[27ms[27mp[27ma[27mn[27m>[27m<[27mp[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m4[27m0[27m0[27m"[27m>[27mm[27mi[27mn[27m:[27m{[27ms[27mt[27mo[27mc[27mk[27mMi[27mn[27m}[27m<[27m/[27mp[27m>[27m<[27m/[27mt[27md[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mt[27md[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mp[27mx[27m-[27m5[27m [27mp[27my[27m-[27m4[27m [27mt[27me[27mx[27mt[27m-[27mc[27me[27mn[27mt[27me[27mr[27m"[27m>[27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m{[27m"p[27mx[27m-[27m2[27m [27mp[27my[27m-[27m1[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mf[27mu[27ml[27ml[27m [27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27m"[27m+[27m([27mp[27m.[27ma[27mc[27mt[27mi[27mv[27mo[27m?[27m'[27mb[27mg[27m-[27mg[27mr[27me[27me[27mn[27m-[27m5[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27me[27me[27mn-[27m7[27m0[27m0[27m'[27m:[27m'[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m1[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m4[27m0[27m0[27m'[27m)[27m}[27m>[27m{[27mp[27m.[27ma[27mc[27mt[27mi[27mv[27mo[27m?[27m'[27mA[27mc[27mt[27mi[27mv[27mo[27m'[27m:[27m'[27mI[27mn[27ma[27mc[27mt[27mi[27mv[27mo[27m'[27m}[27m<[27m/[27ms[27mp[27ma[27mn[27m>[27m<[27m/[27mt[27md[27m>[1B[27P[22
+[7mgit add -A && git commit -m "Renovate admin inventario with SKU margin alerts" &[7m&[7m git push[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mt[27md[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mp[27mx[27m-[27m5[27m [27mp[27my[27m-[27m4[27m [27mt[27me[27mx[27mt[27m-[27mc[27me[27mn[27mt[27me[27mr[27m"[27m>[27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m{[27m"t[27me[27mx[27mt[27m-[27ml[27mg[27m [27mf[27mo[27mn[27mt[27m-[27mb[27mo[27ml[27md[27m [27m"[27m+[27m([27ms[27ms[27m=[27m=[27m=[27m'[27ms[27mi[27mn[27m'[27m?[27m'[27mt[27me[27mx[27mt[27m-[27mr[27me[27md[27m-[27m5[27m0[27m0[27m'[27m:[27ms[27ms[27m=[27m=[27m=[27m'[27mb[27ma[27mj[27mo[27m'[27m?[27m'[27mt[27me[27mx[27mt[27m-[27my[27me[27ml[27ml[27mo[27mw[27m-[27m5[27m0[27m0[27m'[27m:[27m'[27mt[27mex[27mt[27m-[27mg[27mr[27me[27me[27mn[27m-[27m6[27m0[27m0[27m'[27m)[27m}[27m>[27m{[27mp[27m.[27ms[27mt[27mo[27mc[27mk[27m}[27m<[27m/[27ms[27mp[27ma[27mn[27m>[27m<[27mp[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m4[27m0[27m0[27m"[27m>[27mm[27mi[27mn[27m:[27m{[27ms[27mt[27mo[27mc[27mk[27mMi[27mn[27m}[27m<[27m/[27mp[27m>[27m<[27m/[27mt[27md[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mt[27md[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mp[27mx[27m-[27m5[27m [27mp[27my[27m-[27m4[27m [27mt[27me[27mx[27mt[27m-[27mc[27me[27mn[27mt[27me[27mr[27m"[27m>[27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m{[27m"p[27mx[27m-[27m2[27m [27mp[27my[27m-[27m1[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mf[27mu[27ml[27ml[27m [27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27m"[27m+[27m([27mp[27m.[27ma[27mc[27mt[27mi[27mv[27mo[27m?[27m'[27mb[27mg[27m-[27mg[27mr[27me[27me[27mn[27m-[27m5[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27me[27me[27mn-[27m7[27m0[27m0[27m'[27m:[27m'[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m1[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m4[27m0[27m0[27m'[27m)[27m}[27m>[27m{[27mp[27m.[27ma[27mc[27mt[27mi[27mv[27mo[27m?[27m'[27mA[27mc[27mt[27mi[27mv[27mo[27m'[27m:[27m'[27mI[27mn[27ma[27mc[27mt[27mi[27mv[27mo[27m'[27m}[27m<[27m/[27ms[27mp[27ma[27mn[27m>[27m<[27m/[27mt[27md[27m>[1B[27P[22C</tr>[26C[K[1B[21P[20C)[38C[K[1B[21P[18C})}[38C[K[1B[24P[16C</tbody>[32C[K[1B[22P[14C</table>[36C[K[1B[18P[12C</div>[44C[K[1B[16P[10C</div>[48C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m [27m [27m<[27m/[27mm[27ma[27mi[27mn[27m>[1B[27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m)[1B[27m}[1B[27mE[27mN[27mD[27mF[27mI[27mL[27mE[1B[27mg[27mr[27me[27mp[27m [27m"[27mh[27mt[27mt[27mp[27m:[27m/[27m/[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mi[27mn[27mv[27me[27mn[27mt[27ma[27mr[27mi[27mo[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[1B[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"[27mR[27me[27mn[27mo[27mv[27ma[27mt[27me[27m [27ma[27md[27mm[27mi[27mn[27m [27mi[27mn[27mv[27me[27mn[27mt[27ma[27mr[27mi[27mo[27m [27mw[27mi[27mt[27mh[27m [27mS[27mK[27mU[27m [27mm[27ma[27mr[27mg[27mi[27mn[27m [27ma[27ml[27me[27mr[27mt[27ms[27m"[27m [27m&&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+[main 1f2a6780] Renovate admin inventario with SKU margin alerts
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 105 insertions(+), 58 deletions(-)
+Enumerating objects: 15, done.
+Counting objects:   6% (1/15)Counting objects:  13% (2/15)Counting objects:  20% (3/15)Counting objects:  26% (4/15)Counting objects:  33% (5/15)Counting objects:  40% (6/15)Counting objects:  46% (7/15)Counting objects:  53% (8/15)Counting objects:  60% (9/15)Counting objects:  66% (10/15)Counting objects:  73% (11/15)Counting objects:  80% (12/15)Counting objects:  86% (13/15)Counting objects:  93% (14/15)Counting objects: 100% (15/15)Counting objects: 100% (15/15), done.
+Delta compression using up to 12 threads
+Compressing objects:  14% (1/7)Compressing objects:  28% (2/7)Compressing objects:  42% (3/7)Compressing objects:  57% (4/7)Compressing objects:  71% (5/7)Compressing objects:  85% (6/7)Compressing objects: 100% (7/7)Compressing objects: 100% (7/7), done.
+Writing objects:  12% (1/8)Writing objects:  25% (2/8)Writing objects:  37% (3/8)Writing objects:  50% (4/8)Writing objects:  62% (5/8)Writing objects:  75% (6/8)Writing objects:  87% (7/8)Writing objects: 100% (8/8)Writing objects: 100% (8/8), 3.61 KiB | 1.20 MiB/s, done.
+Total 8 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/5)[Kremote: Resolving deltas:  20% (1/5)[Kremote: Resolving deltas:  40% (2/5)[Kremote: Resolving deltas:  60% (3/5)[Kremote: Resolving deltas:  80% (4/5)[Kremote: Resolving deltas: 100% (5/5)[Kremote: Resolving deltas: 100% (5/5), completed with 5 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   eac087ed..1f2a6780  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mwc -l src/app/admin/productos[7m/[7mpage.tsx[27m[K[A[42C[27mw[27mc[27m [27m-[27ml[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+     193 src/app/admin/productos/page.tsx
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/admin/productos/p[7ma[7mge.tsx[27m[K[A[44C[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m/[27mpa[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+'use client'
+import { useState, useEffect } from 'react'
+import AdminNav from '@/components/admin/AdminNav'
+import { createClient } from '@/lib/supabase'
+import type { Product } from '@/types'
+import { Plus, Edit, Trash2, Search, Eye, AlertTriangle } from 'lucide-react'
+import toast from 'react-hot-toast'
+
+const TIPOS = ['esferico','torico','multifocal','color','solucion','gota'] as const
+
+export default function AdminProductos() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [editing, setEditing] = useState<Product | null>(null)
+  const [form, setForm] = useState({ nombre:'', marca:'', precio:'', costo:'', stock:'', tipo:'esferico' as typeof TIPOS[number], descripcion:'' })
+
+  const sb = createClient()
+
+  const load = async () => {
+    const { data } = await sb.from('products').select('*, categories(*)').order('nombre')
+    setProducts(data ?? []); setLoading(false)
+  }
+
+  useEffect(() => { load() }, [])
+
+  const openEdit = (p: Product) => {
+    setEditing(p)
+    setForm({ nombre: p.nombre, marca: p.marca ?? '', precio: String(p.precio), costo: String(p.costo ?? 0), stock: String(p.stock), tipo: (p.tipo ?? 'esferico') as any, descripcion: p.descripcion ?? '' })
+    setShowForm(true)
+  }
+
+  const save = async () => {
+    const payload = { nombre: form.nombre, marca: form.marca, precio: parseFloat(form.precio), costo: parseFloat(form.costo), stock: parseInt(form.stock), tipo: form.tipo, descripcion: form.descripcion }
+    if (editing) {
+      const { error } = await sb.from('products').update(payload).eq('id', editing.id)
+      if (!error) { toast.success('Producto actualizado'); setShowForm(false); setEditing(null); load() }
+      else toast.error('Error al actualizar')
+    } else {
+      const { error } = await sb.from('products').insert([{ ...payload, activo: true }])
+      if (!error) { toast.success('Producto creado'); setShowForm(false); load() }
+      else toast.error('Error al crear')
+    }
+  }
+
+  const del = async (id: string) => {
+    if (!confirm('¿Eliminar producto?')) return
+    await sb.from('products').update({ activo: false }).eq('id', id)
+    toast.success('Producto desactivado'); load()
+  }
+
+  const filtered = products.filter(p =>
+    p.nombre.toLowerCase().includes(search.toLowerCase()) ||
+    (p.marca ?? '').toLowerCase().includes(search.toLowerCase())
+  )
+
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      <AdminNav />
+      <main className="flex-1 p-6 md:p-8 overflow-auto">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-7">
+            <div>
+              <h1 className="font-display text-2xl font-bold text-gray-900">Productos</h1>
+              <p className="text-gray-500 text-sm">{products.length} productos</p>
+            </div>
+            <button onClick={() => { setEditing(null); setForm({ nombre:'',marca:'',precio:'',costo:'',stock:'',tipo:'esferico',descripcion:'' }); setShowForm(true) }}
+              className="btn-primary flex items-center gap-2">
+              <Plus className="w-4 h-4" /> Nuevo producto
+            </button>
+          </div>
+
+          {/* Search */}
+          <div className="relative mb-5 max-w-sm">
+            <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+            <input value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="Buscar producto..." className="input !pl-9" />
+          </div>
+
+          {/* Table */}
+          <div className="card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {['Producto','Marca','Tipo','Precio','Costo','Stock','Estado','Acciones'].map(h => (
+                      <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {filtered.map(p => (
+                    <tr key={p.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <Eye className="w-4 h-4 text-gray-400" />
+                          </div>
+                          <span className="font-medium text-gray-900 text-xs leading-snug max-w-xs">{p.nombre}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-gray-500">{p.marca ?? '—'}</td>
+                      <td className="px-4 py-3">
+                        <span className="badge bg-primary-100 text-primary-700 capitalize">{p.tipo}</span>
+                      </td>
+                      <td className="px-4 py-3 font-semibold">RD${p.precio.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-gray-500">RD${(p.costo ?? 0).toLocaleString()}</td>
+                      <td className="px-4 py-3">
+                        <span className={`font-semibold ${p.stock <= 0 ? 'text-red-600' : p.stock <= 5 ? 'text-amber-600' : 'text-gray-900'}`}>
+                          {p.stock}
+                          {p.stock <= 5 && p.stock > 0 && <AlertTriangle className="w-3 h-3 inline ml-1" />}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`badge ${p.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                          {p.activo ? 'Activo' : 'Inactivo'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => openEdit(p)}
+                            className="p-1.5 hover:bg-blue-100 rounded-lg text-blue-600 transition-colors">
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => del(p.id)}
+                            className="p-1.5 hover:bg-red-100 rounded-lg text-red-400 transition-colors">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Modal */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl">
+            <h2 className="font-display text-lg font-bold text-gray-900 mb-5">
+              {editing ? 'Editar producto' : 'Nuevo producto'}
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Nombre</label>
+                <input value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} className="input" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Marca</label>
+                  <input value={form.marca} onChange={e => setForm(f => ({ ...f, marca: e.target.value }))} className="input" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Tipo</label>
+                  <select value={form.tipo} onChange={e => setForm(f => ({ ...f, tipo: e.target.value as any }))} className="input">
+                    {TIPOS.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Precio RD$</label>
+                  <input type="number" value={form.precio} onChange={e => setForm(f => ({ ...f, precio: e.target.value }))} className="input" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Costo RD$</label>
+                  <input type="number" value={form.costo} onChange={e => setForm(f => ({ ...f, costo: e.target.value }))} className="input" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Stock</label>
+                  <input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))} className="input" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Descripción</label>
+                <textarea rows={2} value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} className="input resize-none" />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6">
+              <button onClick={() => setShowForm(false)} className="btn-secondary flex-1">Cancelar</button>
+              <button onClick={save} className="btn-primary flex-1">Guardar</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -n '1,100p' src/app/admin[7m/[7mproductos/page.tsx[27m[K[A[32C[27ms[27me[27md[27m [27m-[27mn[27m [27m'[27m1[27m,[27m1[27m0[27m0[27mp[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+'use client'
+import { useState, useEffect } from 'react'
+import AdminNav from '@/components/admin/AdminNav'
+import { createClient } from '@/lib/supabase'
+import type { Product } from '@/types'
+import { Plus, Edit, Trash2, Search, Eye, AlertTriangle } from 'lucide-react'
+import toast from 'react-hot-toast'
+
+const TIPOS = ['esferico','torico','multifocal','color','solucion','gota'] as const
+
+export default function AdminProductos() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [editing, setEditing] = useState<Product | null>(null)
+  const [form, setForm] = useState({ nombre:'', marca:'', precio:'', costo:'', stock:'', tipo:'esferico' as typeof TIPOS[number], descripcion:'' })
+
+  const sb = createClient()
+
+  const load = async () => {
+    const { data } = await sb.from('products').select('*, categories(*)').order('nombre')
+    setProducts(data ?? []); setLoading(false)
+  }
+
+  useEffect(() => { load() }, [])
+
+  const openEdit = (p: Product) => {
+    setEditing(p)
+    setForm({ nombre: p.nombre, marca: p.marca ?? '', precio: String(p.precio), costo: String(p.costo ?? 0), stock: String(p.stock), tipo: (p.tipo ?? 'esferico') as any, descripcion: p.descripcion ?? '' })
+    setShowForm(true)
+  }
+
+  const save = async () => {
+    const payload = { nombre: form.nombre, marca: form.marca, precio: parseFloat(form.precio), costo: parseFloat(form.costo), stock: parseInt(form.stock), tipo: form.tipo, descripcion: form.descripcion }
+    if (editing) {
+      const { error } = await sb.from('products').update(payload).eq('id', editing.id)
+      if (!error) { toast.success('Producto actualizado'); setShowForm(false); setEditing(null); load() }
+      else toast.error('Error al actualizar')
+    } else {
+      const { error } = await sb.from('products').insert([{ ...payload, activo: true }])
+      if (!error) { toast.success('Producto creado'); setShowForm(false); load() }
+      else toast.error('Error al crear')
+    }
+  }
+
+  const del = async (id: string) => {
+    if (!confirm('¿Eliminar producto?')) return
+    await sb.from('products').update({ activo: false }).eq('id', id)
+    toast.success('Producto desactivado'); load()
+  }
+
+  const filtered = products.filter(p =>
+    p.nombre.toLowerCase().includes(search.toLowerCase()) ||
+    (p.marca ?? '').toLowerCase().includes(search.toLowerCase())
+  )
+
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      <AdminNav />
+      <main className="flex-1 p-6 md:p-8 overflow-auto">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-7">
+            <div>
+              <h1 className="font-display text-2xl font-bold text-gray-900">Productos</h1>
+              <p className="text-gray-500 text-sm">{products.length} productos</p>
+            </div>
+            <button onClick={() => { setEditing(null); setForm({ nombre:'',marca:'',precio:'',costo:'',stock:'',tipo:'esferico',descripcion:'' }); setShowForm(true) }}
+              className="btn-primary flex items-center gap-2">
+              <Plus className="w-4 h-4" /> Nuevo producto
+            </button>
+          </div>
+
+          {/* Search */}
+          <div className="relative mb-5 max-w-sm">
+            <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+            <input value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="Buscar producto..." className="input !pl-9" />
+          </div>
+
+          {/* Table */}
+          <div className="card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {['Producto','Marca','Tipo','Precio','Costo','Stock','Estado','Acciones'].map(h => (
+                      <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {filtered.map(p => (
+                    <tr key={p.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <Eye className="w-4 h-4 text-gray-400" />
+                          </div>
+                          <span className="font-medium text-gray-900 text-xs leading-snug max-w-xs">{p.nombre}</span>
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004hc >....                        
+[7m              </div>[27m[K
+[7m            </div>[27m[K
+[7m            <div className="flex gap-3 mt-6">[27m[K
+[7m              <button onClick={() => setShowForm(false)} className="flex-1 px-4 [7mp[7my-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hov[7me[7mr:bg-gray-50">Cancelar</button>[27m[K
+[7m              <button onClick={save} className="flex-1 px-4 py-2.5 bg-primary-60[7m0[7m hover:bg-primary-700 text-white rounded-xl text-sm font-semibold">Guardar</but[7mt[7mon>[27m[K
+[7m            </div>[27m[K
+[7m          </div>[27m[K
+[7m        </div>[27m[K
+[7m      )}[27m[K
+[7m    </div>[27m[K
+[7m  )[27m[K
+[7m}[27m[K
+[7m'''[27m[K
+[K
+[7mwith open('src/app/admin/productos/page.tsx', 'w') as f:[27m[K
+[7m    f.write(code)[27m[K
+[7mprint('OK')[27m[K
+[7mPYEOF[27m[K
+[7mpython3 /tmp/productos_admin.py[27m[K[22A[20P[14C</div>[40C[K[1B[18P[12C</div>[44C[K[1B[45P[12C<div className="flex gap-3 mt-6">[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mb[27mu[27mt[27mt[27mo[27mn[27m [27mo[27mn[27mC[27ml[27mi[27mc[27mk[27m=[27m{[27m([27m)[27m [27m=[27m>[27m [27ms[27me[27mt[27mS[27mh[27mo[27mw[27mF[27mo[27mr[27mm[27m([27mf[27ma[27ml[27ms[27me[27m)[27m}[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mf[27ml[27me[27mx[27m-[27m1[27m [27mp[27mx[27m-[27m4[27m p[27my[27m-[27m2[27m.[27m5[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27mg[27mr[27ma[27my[27m-[27m2[27m0[27m0[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mt[27me[27mx[27mt[27m-[27ms[27mm[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m6[27m0[27m0[27m [27mh[27mo[27mve[27mr[27m:[27mb[27mg[27m-[27mg[27mr[27ma[27my[27m-[27m5[27m0[27m"[27m>[27mC[27ma[27mn[27mc[27me[27ml[27ma[27mr[27m<[27m/[27mb[27mu[27mt[27mt[27mo[27mn[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mb[27mu[27mt[27mt[27mo[27mn[27m [27mo[27mn[27mC[27ml[27mi[27mc[27mk[27m=[27m{[27ms[27ma[27mv[27me[27m}[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mf[27ml[27me[27mx[27m-[27m1[27m [27mp[27mx[27m-[27m4[27m [27mp[27my[27m-[27m2[27m.[27m5[27m [27mb[27mg[27m-[27mp[27mr[27mi[27mm[27ma[27mr[27my[27m-[27m6[27m00[27m [27mh[27mo[27mv[27me[27mr[27m:[27mb[27mg[27m-[27mp[27mr[27mi[27mm[27ma[27mr[27my[27m-[27m7[27m0[27m0[27m [27mt[27me[27mx[27mt[27m-[27mw[27mh[27mi[27mt[27me[27m [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mt[27me[27mx[27mt[27m-[27ms[27mm[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m"[27m>[27mG[27mu[27ma[27mr[27md[27ma[27mr[27m<[27m/[27mb[27mu[27mtt[27mo[27mn[27m>[1B[18P[12C</div>[44C[K[1B[16P[10C</div>[48C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m [27m [27m [27m [27m)[27m}[1B[27m [27m [27m [27m [27m<[27m/[27md[27mi[27mv[27m>[1B[27m [27m [27m)[1B[27m}[1B[27m'[27m'[27m'[2B[27mw[27mi[27mt[27mh[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m [27ma[27ms[27m [27mf[27m:[1B[27m [27m [27m [27m [27mf[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27mo[27md[27me[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27mP[27mY[27mE[27mO[27mF[1B[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m/[27mt[27mm[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27ms[27m_[27ma[27md[27mm[27mi[27mn[27m.[27mp[27my[?2004l
+/tmp/productos_admin.py:99: SyntaxWarning: invalid escape sequence '\`'
+  toast.success(`Importado: ${created} creados, ${updated} actualizados${errors > 0 ? \`, ${errors} errores\` : \'\'}`)
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep "http://" src/app/admin/[7mp[7mroductos/page.tsx[27m[K
+[7mgit add -A && git commit -m "Admin productos with CSV import/export SKU subcateg[7mo[7mria" && git push[27m[K[3A[34C[27mg[27mr[27me[27mp[27m [27m"[27mh[27mt[27mt[27mp[27m:[27m/[27m/[27m"[27m [27ms[27mr[27mc[27m/[27ma[
