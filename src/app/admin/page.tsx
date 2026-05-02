@@ -53,7 +53,7 @@ export default async function AdminDashboard() {
   const { data: { user } } = await sb.auth.getUser()
   if (!user) redirect('/admin/login')
 
-  const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()
+  const { data: profile } = await sb.from('profiles').select('role')const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/')
 
   const [stats, orders] = await Promise.all([getStats(), getRecentOrders()])
