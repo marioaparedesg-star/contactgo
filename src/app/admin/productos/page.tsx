@@ -14,7 +14,8 @@ export default function AdminProductos() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Product | null>(null)
-  const [form, setForm] = useState({ nombre:'', marca:'', precio:'', costo:'', stock:'', tipo:'esferico' as typeof TIPOS[number], descripcion:'' })
+  const [form, setForm] = useState({ nombre:'', marca:'', precio:'', costo:'', stock:'', tipo:'esferico' as typeof TIPOS[number], descripcion:'', imagen_url:'' })
+  const [uploading, setUploading] = useState(false)
 
   const sb = createClient()
 
@@ -27,12 +28,26 @@ export default function AdminProductos() {
 
   const openEdit = (p: Product) => {
     setEditing(p)
-    setForm({ nombre: p.nombre, marca: p.marca ?? '', precio: String(p.precio), costo: String(p.costo ?? 0), stock: String(p.stock), tipo: (p.tipo ?? 'esferico') as any, descripcion: p.descripcion ?? '' })
+    setForm({ nombre: p.nombre, marca: p.marca ?? '', precio: String(p.precio), costo: String(p.costo ?? 0), stock: String(p.stock), tipo: (p.tipo ?? 'esferico') as any, descripcion: p.descripcion ?? '', imagen_url: p.imagen_url ?? '' })
     setShowForm(true)
   }
 
+
+  const uploadImage = async (file) => {
+    setUploading(true)
+    const sb2 = createClient()
+    const ext = file.name.split('.').pop()
+    const path = 'product-' + Date.now() + '.' + ext
+    const { error } = await sb2.storage.from('products').upload(path, file, { upsert: true })
+    if (!error) {
+      const { data: urlData } = sb2.storage.from('products').getPublicUrl(path)
+      setForm(f => ({ ...f, imagen_url: urlData.publicUrl }))
+    }
+    setUploading(false)
+  }
+
   const save = async () => {
-    const payload = { nombre: form.nombre, marca: form.marca, precio: parseFloat(form.precio), costo: parseFloat(form.costo), stock: parseInt(form.stock), tipo: form.tipo, descripcion: form.descripcion }
+    const payload = { nombre: form.nombre, marca: form.marca, precio: parseFloat(form.precio), costo: parseFloat(form.costo), stock: parseInt(form.stock), tipo: form.tipo, descripcion: form.descripcion, imagen_url: form.imagen_url || null }
     if (editing) {
       const { error } = await sb.from('products').update(payload).eq('id', editing.id)
       if (!error) { toast.success('Producto actualizado'); setShowForm(false); setEditing(null); load() }
