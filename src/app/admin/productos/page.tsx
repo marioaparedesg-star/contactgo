@@ -14,8 +14,7 @@ export default function AdminProductos() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Product | null>(null)
-  const [form, setForm] = useState({ nombre:'', marca:'', precio:'', costo:'', stock:'', tipo:'esferico' as typeof TIPOS[number], descripcion:'', imagen_url:'' })
-  const [uploading, setUploading] = useState(false)
+  const [form, setForm] = useState({ nombre:'', marca:'', precio:'', costo:'', stock:'', tipo:'esferico' as typeof TIPOS[number], descripcion:'' })
 
   const sb = createClient()
 
@@ -28,26 +27,12 @@ export default function AdminProductos() {
 
   const openEdit = (p: Product) => {
     setEditing(p)
-    setForm({ nombre: p.nombre, marca: p.marca ?? '', precio: String(p.precio), costo: String(p.costo ?? 0), stock: String(p.stock), tipo: (p.tipo ?? 'esferico') as any, descripcion: p.descripcion ?? '', imagen_url: p.imagen_url ?? '' })
+    setForm({ nombre: p.nombre, marca: p.marca ?? '', precio: String(p.precio), costo: String(p.costo ?? 0), stock: String(p.stock), tipo: (p.tipo ?? 'esferico') as any, descripcion: p.descripcion ?? '' })
     setShowForm(true)
   }
 
-
-  const uploadImage = async (file) => {
-    setUploading(true)
-    const sb2 = createClient()
-    const ext = file.name.split('.').pop()
-    const path = 'product-' + Date.now() + '.' + ext
-    const { error } = await sb2.storage.from('products').upload(path, file, { upsert: true })
-    if (!error) {
-      const { data: urlData } = sb2.storage.from('products').getPublicUrl(path)
-      setForm(f => ({ ...f, imagen_url: urlData.publicUrl }))
-    }
-    setUploading(false)
-  }
-
   const save = async () => {
-    const payload = { nombre: form.nombre, marca: form.marca, precio: parseFloat(form.precio), costo: parseFloat(form.costo), stock: parseInt(form.stock), tipo: form.tipo, descripcion: form.descripcion, imagen_url: form.imagen_url || null }
+    const payload = { nombre: form.nombre, marca: form.marca, precio: parseFloat(form.precio), costo: parseFloat(form.costo), stock: parseInt(form.stock), tipo: form.tipo, descripcion: form.descripcion }
     if (editing) {
       const { error } = await sb.from('products').update(payload).eq('id', editing.id)
       if (!error) { toast.success('Producto actualizado'); setShowForm(false); setEditing(null); load() }
@@ -193,15 +178,6 @@ export default function AdminProductos() {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Descripción</label>
-                <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Imagen</label>
-                {form.imagen_url && <img src={form.imagen_url} alt="preview" className="w-20 h-20 object-cover rounded-lg mb-2" />}
-                <input type="file" accept="image/*" onChange={e => { if (e.target.files && e.target.files[0]) uploadImage(e.target.files[0]) }}
-                  className="input text-sm" />
-                {uploading && <p className="text-xs text-primary-500 mt-1">Subiendo...</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Descripcion</label>
                 <textarea rows={2} value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} className="input resize-none" />
               </div>
             </div>
