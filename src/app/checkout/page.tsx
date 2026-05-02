@@ -158,7 +158,18 @@ export default function CheckoutPage() {
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Dirección</label>
-                  <input {...register('direccion')} className="input" placeholder="Calle, número, sector" />
+                  {direcciones.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {direcciones.map((d, i) => (
+                        <button key={d.id} type="button"
+                          onClick={() => { setValue('direccion', d.direccion); if (d.ciudad) setValue('ciudad', d.ciudad) }}
+                          className="text-xs px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50 hover:border-primary-400 hover:bg-primary-50 text-gray-600 transition-colors text-left">
+                          {d.direccion}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <input {...register('direccion')} className="input" placeholder="Calle, numero, sector" />
                   {errors.direccion && <p className="text-red-500 text-xs mt-1">{errors.direccion.message}</p>}
                 </div>
                 <div>
