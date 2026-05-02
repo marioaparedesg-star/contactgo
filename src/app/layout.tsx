@@ -5,6 +5,13 @@ import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
   title: 'ContactGo — Lentes de Contacto RD',
+  manifest: '/manifest.json',
+  themeColor: '#16a34a',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'ContactGo',
+  },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
