@@ -20,7 +20,7 @@ export default async function InventarioPage() {
   return (
     <>
       <AdminNav />
-      <main className="ml-64 p-8">
+      <main className="ml-64 p-8 min-h-screen">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Inventario</h1>
           <p className="text-gray-500">{productos?.length ?? 0} productos en total</p>

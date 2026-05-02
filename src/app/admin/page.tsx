@@ -29,7 +29,7 @@ async function getStats() {
 async function getRecentOrders() {
   const sb = createServerSupabaseClient()
   const { data } = await sb.from('orders')
-    .select('*, profiles(nombre, email)')
+    .select('*')
     .order('fecha', { ascending: false })
     .limit(10)
   return data ?? []
