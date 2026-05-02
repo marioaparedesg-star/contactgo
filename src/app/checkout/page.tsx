@@ -113,7 +113,6 @@ export default function CheckoutPage() {
     clearCart()
     setLoading(false)
     router.push(order.id)
-    window.open('https://wa.me/18294089097?text=' + wamsg, '_blank')
     toast.success('¡Pedido confirmado! 🎉')
   }
 
