@@ -43,9 +43,12 @@ export default function CuentaPage() {
     setEditando(false)
   }
 
+  const agregarDireccion = async () => {
     if (!nuevaDireccion.trim()) return
     const sb = createClient()
-const { data, error } = await sb.from('addresses').insert(
+    const { data, error } = await sb.from('addresses').insert({ user_id: user.id, direccion: nuevaDireccion, ciudad: nuevaCiudad, principal: direcciones.length === 0 }).select().single()
+    if (error) { alert(error.message); return }
+    if (data) { setDirecciones(d => [...d, data]); setNuevaDireccion(''); setNuevaCiudad('Santo Domingo'); setAgregandoDir(false) }
   }
 
   const eliminarDireccion = async (id) => {
