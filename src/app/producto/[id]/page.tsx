@@ -201,27 +201,6 @@ export default function ProductoPage() {
               </div>
             )}
 
-            {(product as any).curva_base && (
-              <div className="border border-gray-100 rounded-xl overflow-hidden">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-4 py-2 bg-gray-50">Especificaciones técnicas</p>
-                <div className="grid grid-cols-2 gap-0 divide-y divide-gray-50">
-                  {[
-                    ['Curva base', (product as any).curva_base],
-                    ['Diámetro', (product as any).diametro + ' mm'],
-                    ['Material', (product as any).material],
-                    ['Reemplazo', (product as any).reemplazo],
-                    ['Contenido', (product as any).contenido],
-                    ['Agua', (product as any).agua],
-                    ['Oxígeno', (product as any).oxígeno],
-                  ].filter(([,v]) => v).map(([k, v]) => (
-                    <div key={k as string} className="flex justify-between px-4 py-2.5">
-                      <span className="text-xs text-gray-500">{k}</span>
-                      <span className="text-xs font-semibold text-gray-900">{v}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {['esferico','torico','multifocal'].includes(product.tipo ?? '') && (
               <div className="flex gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">

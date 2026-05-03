@@ -5303,4 +5303,101 @@ Total 14 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
 remote: Resolving deltas:   0% (0/5)[Kremote: Resolving deltas:  20% (1/5)[Kremote: Resolving deltas:  40% (2/5)[Kremote: Resolving deltas:  60% (3/5)[Kremote: Resolving deltas:  80% (4/5)[Kremote: Resolving deltas: 100% (5/5)[Kremote: Resolving deltas: 100% (5/5), completed with 5 local objects.[K
 To https://github.com/marioaparedesg-star/contactgo.git
    2274c178..98807714  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 << 'EOF'[27m
+[7mimport json[27m[K
+[7mf = open('tsconfig.json')[27m[K
+[7mc = json.load(f)[27m[K
+[7mf.close()[27m[K
+[K
+[7mif 'exclude' not in c:[27m[K
+[7m    c['exclude'] = [][27m[K
+[7mif 'supabase' not in c['exclude']:[27m[K
+[7m    c['exclude'].append('supabase')[27m[K
+[K
+[7mopen('tsconfig.json', 'w').write(json.dumps(c, indent=2))[27m[K
+[7mprint('OK')[27m[K
+[7mEOF[27m[K[13A[48C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m<[27m<[27m [27m'[27mE[27mO[27mF[27m'[1B[27mi[27mm[27mp[27mo[27mr[27mt[27m [27mj[27ms[27mo[27mn[1B[27mf[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27mt[27ms[27mc[27mo[27mn[27mf[27mi[27mg[27m.[27mj[27ms[27mo[27mn[27m'[27m)[1B[27mc[27m [27m=[27m [27mj[27ms[27mo[27mn[27m.[27ml[27mo[27ma[27md[27m([27mf[27m)[1B[27mf[27m.[27mc[27ml[27mo[27ms[27me[27m([27m)[2B[27mi[27mf[27m [27m'[27me[27mx[27mc[27ml[27mu[27md[27me[27m'[27m [27mn[27mo[27mt[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m[[27m'[27me[27mx[27mc[27ml[27mu[27md[27me[27m'[27m][27m [27m=[27m [27m[[27m][1B[27mi[27mf[27m [27m'[27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m'[27m [27mn[27mo[27mt[27m [27mi[27mn[27m [27mc[27m[[27m'[27me[27mx[27mc[27ml[27mu[27md[27me[27m'[27m][27m:[1B[27m [27m [27m [27m [27mc[27m[[27m'[27me[27mx[27mc[27ml[27mu[27md[27me[27m'[27m][27m.[27ma[27mp[27mp[27me[27mn[27md[27m([27m'[27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m'[27m)[2B[27mo[27mp[27me[27mn[27m([27m'[27mt[27ms[27mc[27mo[27mn[27mf[27mi[27mg[27m.[27mj[27ms[27mo[27mn[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mj[27ms[27mo[27mn[27m.[27md[27mu[27mm[27mp[27ms[27m([27mc[27m,[27m [27mi[27mn[27md[27me[27mn[27mt[27m=[27m2[27m)[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27mE[27mO[27mF[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgit add -A && git commit -m "[7mE[7mxclude supabase functions from tsconfig" && git push[27m[K[A[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"E[27mx[27mc[27ml[27mu[27md[27me[27m [27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m [27mf[27mu[27mn[27mc[27mt[27mi[27mo[27mn[27ms[27m [27mf[27mr[27mo[27mm[27m [27mt[27ms[27mc[27mo[27mn[27mf[27mi[27mg[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+[main b01ff8ea] Exclude supabase functions from tsconfig
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 61 insertions(+), 6 deletions(-)
+Enumerating objects: 7, done.
+Counting objects:  14% (1/7)Counting objects:  28% (2/7)Counting objects:  42% (3/7)Counting objects:  57% (4/7)Counting objects:  71% (5/7)Counting objects:  85% (6/7)Counting objects: 100% (7/7)Counting objects: 100% (7/7), done.
+Delta compression using up to 12 threads
+Compressing objects:  25% (1/4)Compressing objects:  50% (2/4)Compressing objects:  75% (3/4)Compressing objects: 100% (4/4)Compressing objects: 100% (4/4), done.
+Writing objects:  25% (1/4)Writing objects:  50% (2/4)Writing objects:  75% (3/4)Writing objects: 100% (4/4)Writing objects: 100% (4/4), 1.48 KiB | 302.00 KiB/s, done.
+Total 4 (delta 3), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/3)[Kremote: Resolving deltas:  33% (1/3)[Kremote: Resolving deltas:  66% (2/3)[Kremote: Resolving deltas: 100% (3/3)[Kremote: Resolving deltas: 100% (3/3), completed with 3 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   98807714..b01ff8ea  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 << 'EOF'[27m
+[7mc = open('src/app/producto/[id]/page.tsx').read()[27m[K
+[K
+[7m# Contar cuántas veces aparece[27m[K
+[7mcount = c.count('ESPECIFICACIONES TÉCNICAS')[27m[K
+[7mprint('Veces que aparece:', count)[27m[K
+[K
+[7m# Remover duplicado — dejar solo la primera ocurrencia[27m[K
+[7mif count == 2:[27m[K
+[7m    # Encontrar el segundo bloque y eliminarlo[27m[K
+[7m    first = c.find('ESPECIFICACIONES TÉCNICAS')[27m[K
+[7m    second = c.find('ESPECIFICACIONES TÉCNICAS', first + 1)[27m[K
+[7m    # Buscar el inicio del segundo bloque {(product as any).curva_base[27m[K
+[7m    start = c.rfind('{(product as any).curva_base', 0, second)[27m[K
+[7m    # Buscar el cierre del segundo bloque[27m[K
+[7m    end = c.find(')}', second) + 2[27m[K
+[7m    print('Eliminando desde', start, 'hasta', end)[27m[K
+[7m    c = c[:start] + c[end:][27m[K
+[7m    open('src/app/producto/[id]/page.tsx', 'w').write(c)[27m[K
+[7m    print('OK')[27m[K
+[7melse:[27m[K
+[7m    print('No es duplicado exacto - revisar manualmente')[27m[K
+[7mEOF[27m[K[22A[48C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m<[27m<[27m [27m'[27mE[27mO[27mF[27m'[1B[27mc[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[27md[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m)[27m.[27mr[27me[27ma[27md[27m([27m)[2B[27m#[27m [27mC[27mo[27mn[27mt[27ma[27mr[27m [27mc[27mu[27má[27mn[27mt[27ma[27ms[27m [27mv[27me[27mc[27me[27ms[27m [27ma[27mp[27ma[27mr[27me[27mc[27me[1B[27mc[27mo[27mu[27mn[27mt[27m [27m=[27m [27mc[27m.[27mc[27mo[27mu[27mn[27mt[27m([27m'[27mE[27mS[27mP[27mE[27mC[27mI[27mF[27mI[27mC[27mA[27mC[27mI[27mO[27mN[27mE[27mS[27m [27mT[27mÉ[27mC[27mN[27mI[27mC[27mA[27mS[27m'[27m)[1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mV[27me[27mc[27me[27ms[27m [27mq[27mu[27me[27m [27ma[27mp[27ma[27mr[27me[27mc[27me[27m:[27m'[27m,[27m [27mc[27mo[27mu[27mn[27mt[27m)[2B[27m#[27m [27mR[27me[27mm[27mo[27mv[27me[27mr[27m [27md[27mu[27mp[27ml[27mi[27mc[27ma[27md[27mo[27m [27m—[27m [27md[27me[27mj[27ma[27mr[27m [27ms[27mo[27ml[27mo[27m [27ml[27ma[27m [27mp[27mr[27mi[27mm[27me[27mr[27ma[27m [27mo[27mc[27mu[27mr[27mr[27me[27mn[27mc[27mi[27ma[1B[27mi[27mf[27m [27mc[27mo[27mu[27mn[27mt[27m [27m=[27m=[27m [27m2[27m:[1B[27m [27m [27m [27m [27m#[27m [27mE[27mn[27mc[27mo[27mn[27mt[27mr[27ma[27mr[27m [27me[27ml[27m [27ms[27me[27mg[27mu[27mn[27md[27mo[27m [27mb[27ml[27mo[27mq[27mu[27me[27m [27my[27m [27me[27ml[27mi[27mm[27mi[27mn[27ma[27mr[27ml[27mo[1B[27m [27m [27m [27m [27mf[27mi[27mr[27ms[27mt[27m [27m=[27m [27mc[27m.[27mf[27mi[27mn[27md[27m([27m'[27mE[27mS[27mP[27mE[27mC[27mI[27mF[27mI[27mC[27mA[27mC[27mI[27mO[27mN[27mE[27mS[27m [27mT[27mÉ[27mC[27mN[27mI[27mC[27mA[27mS[27m'[27m)[1B[27m [27m [27m [27m [27ms[27me[27mc[27mo[27mn[27md[27m [27m=[27m [27mc[27m.[27mf[27mi[27mn[27md[27m([27m'[27mE[27mS[27mP[27mE[27mC[27mI[27mF[27mI[27mC[27mA[27mC[27mI[27mO[27mN[27mE[27mS[27m [27mT[27mÉ[27mC[27mN[27mI[27mC[27mA[27mS[27m'[27m,[27m [27mf[27mi[27mr[27ms[27mt[27m [27m+[27m [27m1[27m)[1B[27m [27m [27m [27m [27m#[27m [27mB[27mu[27ms[27mc[27ma[27mr[27m [27me[27ml[27m [27mi[27mn[27mi[27mc[27mi[27mo[27m [27md[27me[27ml[27m [27ms[27me[27mg[27mu[27mn[27md[27mo[27m [27mb[27ml[27mo[27mq[27mu[27me[27m [27m{[27m([27mp[27mr[27mo[27md[27mu[27mc[27mt[27m [27ma[27ms[27m [27ma[27mn[27my[27m)[27m.[27mc[27mu[27mr[27mv[27ma[27m_[27mb[27ma[27ms[27me[1B[27m [27m [27m [27m [27ms[27mt[27ma[27mr[27mt[27m [27m=[27m [27mc[27m.[27mr[27mf[27mi[27mn[27md[27m([27m'[27m{[27m([27mp[27mr[27mo[27md[27mu[27mc[27mt[27m [27ma[27ms[27m [27ma[27mn[27my[27m)[27m.[27mc[27mu[27mr[27mv[27ma[27m_[27mb[27ma[27ms[27me[27m'[27m,[27m [27m0[27m,[27m [27ms[27me[27mc[27mo[27mn[27md[27m)[1B[27m [27m [27m [27m [27m#[27m [27mB[27mu[27ms[27mc[27ma[27mr[27m [27me[27ml[27m [27mc[27mi[27me[27mr[27mr[27me[27m [27md[27me[27ml[27m [27ms[27me[27mg[27mu[27mn[27md[27mo[27m [27mb[27ml[27mo[27mq[27mu[27me[1B[27m [27m [27m [27m [27me[27mn[27md[27m [27m=[27m [27mc[27m.[27mf[27mi[27mn[27md[27m([27m'[27m)[27m}[27m'[27m,[27m [27ms[27me[27mc[27mo[27mn[27md[27m)[27m [27m+[27m [27m2[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mE[27ml[27mi[27mm[27mi[27mn[27ma[27mn[27md[27mo[27m [27md[27me[27ms[27md[27me[27m'[27m,[27m [27ms[27mt[27ma[27mr[27mt[27m,[27m [27m'[27mh[27ma[27ms[27mt[27ma[27m'[27m,[27m [27me[27mn[27md[27m)[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m[[27m:[27ms[27mt[27ma[27mr[27mt[27m][27m [27m+[27m [27mc[27m[[27me[27mn[27md[27m:[27m][1B[27m [27m [27m [27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[27md[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mN[27mo[27m [27me[27ms[27m [27md[27mu[27mp[27ml[27mi[27mc[27ma[27md[27mo[27m [27me[27mx[27ma[27mc[27mt[27mo[27m [27m-[27m [27mr[27me[27mv[27mi[27ms[27ma[27mr[27m [27mm[27ma[27mn[27mu[27ma[27ml[27mm[27me[27mn[27mt[27me[27m'[27m)[1B[27mE[27mO[27mF[?2004l
+Veces que aparece: 0
+No es duplicado exacto - revisar manualmente
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "Especificaciones\|es[7mp[7mecificaciones\|curva_base" src/app/producto/\[id\]/page.tsx | head -10[27m[K[A[20D[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mE[27ms[27mp[27me[27mc[27mi[27mf[27mi[27mc[27ma[27mc[27mi[27mo[27mn[27me[27ms[27m\[27m|[27me[27msp[27me[27mc[27mi[27mf[27mi[27mc[27ma[27mc[27mi[27mo[27mn[27me[27ms[27m\[27m|[27mc[27mu[27mr[27mv[27ma[27m_[27mb[27ma[27ms[27me[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m\[27m[[27mi[27md[27m\[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m1[27m0[?2004l
+182:            {(product as any).curva_base && (
+184:                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-4 py-2 bg-gray-50">Especificaciones técnicas</p>
+187:                    ['Curva base', (product as any).curva_base],
+204:            {(product as any).curva_base && (
+206:                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-4 py-2 bg-gray-50">Especificaciones técnicas</p>
+209:                    ['Curva base', (product as any).curva_base],
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 << 'EOF'[27m
+[7mlines = open('src/app/producto/[id]/page.tsx').read().split('\n')[27m[K
+[K
+[7m# Encontrar las dos ocurrencias del bloque[27m[K
+[7mindices = [i for i, l in enumerate(lines) if '(product as any).curva_base &&' in[7m [7ml][27m[K
+[7mprint('Bloques en líneas:', [i+1 for i in indices])[27m[K
+[K
+[7mif len(indices) == 2:[27m[K
+[7m    # Eliminar el segundo bloque (desde línea indices[1] hasta el siguiente )})[27m[K
+[7m    start = indices[1][27m[K
+[7m    end = start[27m[K
+[7m    depth = 0[27m[K
+[7m    for i in range(start, len(lines)):[27m[K
+[7m        depth += lines[i].count('{') - lines[i].count('}')[27m[K
+[7m        if depth <= 0 and i > start:[27m[K
+[7m            end = i[27m[K
+[7m            break[27m[K
+[7m    print(f'Eliminando líneas {start+1} a {end+1}')[27m[K
+[7m    del lines[start:end+1][27m[K
+[7m    open('src/app/producto/[id]/page.tsx', 'w').write('\n'.join(lines))[27m[K
+[7m    print('OK')[27m[K
+[7mEOF[27m[K[22A[48C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m<[27m<[27m [27m'[27mE[27mO[27mF[27m'[1B[27ml[27mi[27mn[27me[27ms[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[27md[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m)[27m.[27mr[27me[27ma[27md[27m([27m)[27m.[27ms[27mp[27ml[27mi[27mt[27m([27m'[27m\[27mn[27m'[27m)[2B[27m#[27m [27mE[27mn[27mc[27mo[27mn[27mt[27mr[27ma[27mr[27m [27ml[27ma[27ms[27m [27md[27mo[27ms[27m [27mo[27mc[27mu[27mr[27mr[27me[27mn[27mc[27mi[27ma[27ms[27m [27md[27me[27ml[27m [27mb[27ml[27mo[27mq[27mu[27me[1B[27mi[27mn[27md[27mi[27mc[27me[27ms[27m [27m=[27m [27m[[27mi[27m [27mf[27mo[27mr[27m [27mi[27m,[27m [27ml[27m [27mi[27mn[27m [27me[27mn[27mu[27mm[27me[27mr[27ma[27mt[27me[27m([27ml[27mi[27mn[27me[27ms[27m)[27m [27mi[27mf[27m [27m'[27m([27mp[27mr[27mo[27md[27mu[27mc[27mt[27m [27ma[27ms[27m [27ma[27mn[27my[27m)[27m.[27mc[27mu[27mr[27mv[27ma[27m_[27mb[27ma[27ms[27me[27m [27m&[27m&[27m'[27m [27mi[27mn [27ml[27m][1B[27mp[27mr[27mi[27mn[27mt[27m([27m'[27mB[27ml[27mo[27mq[27mu[27me[27ms[27m [27me[27mn[27m [27ml[27mí[27mn[27me[27ma[27ms[27m:[27m'[27m,[27m [27m[[27mi[27m+[27m1[27m [27mf[27mo[27mr[27m [27mi[27m [27mi[27mn[27m [27mi[27mn[27md[27mi[27mc[27me[27ms[27m][27m)[2B[27mi[27mf[27m [27ml[27me[27mn[27m([27mi[27mn[27md[27mi[27mc[27me[27ms[27m)[27m [27m=[27m=[27m [27m2[27m:[1B[27m [27m [27m [27m [27m#[27m [27mE[27ml[27mi[27mm[27mi[27mn[27ma[27mr[27m [27me[27ml[27m [27ms[27me[27mg[27mu[27mn[27md[27mo[27m [27mb[27ml[27mo[27mq[27mu[27me[27m [27m([27md[27me[27ms[27md[27me[27m [27ml[27mí[27mn[27me[27ma[27m [27mi[27mn[27md[27mi[27mc[27me[27ms[27m[[27m1[27m][27m [27mh[27ma[27ms[27mt[27ma[27m [27me[27ml[27m [27ms[27mi[27mg[27mu[27mi[27me[27mn[27mt[27me[27m [27m)[27m}[27m)[1B[27m [27m [27m [27m [27ms[27mt[27ma[27mr[27mt[27m [27m=[27m [27mi[27mn[27md[27mi[27mc[27me[27ms[27m[[27m1[27m][1B[27m [27m [27m [27m [27me[27mn[27md[27m [27m=[27m [27ms[27mt[27ma[27mr[27mt[1B[27m [27m [27m [27m [27md[27me[27mp[27mt[27mh[27m [27m=[27m [27m0[1B[27m [27m [27m [27m [27mf[27mo[27mr[27m [27mi[27m [27mi[27mn[27m [27mr[27ma[27mn[27mg[27me[27m([27ms[27mt[27ma[27mr[27mt[27m,[27m [27ml[27me[27mn[27m([27ml[27mi[27mn[27me[27ms[27m)[27m)[27m:[1B[27m [27m [27m [27m [27m [27m [27m [27m [27md[27me[27mp[27mt[27mh[27m [27m+[27m=[27m [27ml[27mi[27mn[27me[27ms[27m[[27mi[27m][27m.[27mc[27mo[27mu[27mn[27mt[27m([27m'[27m{[27m'[27m)[27m [27m-[27m [27ml[27mi[27mn[27me[27ms[27m[[27mi[27m][27m.[27mc[27mo[27mu[27mn[27mt[27m([27m'[27m}[27m'[27m)[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mi[27mf[27m [27md[27me[27mp[27mt[27mh[27m [27m<[27m=[27m [27m0[27m [27ma[27mn[27md[27m [27mi[27m [27m>[27m [27ms[27mt[27ma[27mr[27mt[27m:[1B[19P[12Cend = i[42C[K[1B[17P[12Cbreak[46C[K[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27mf[27m'[27mE[27ml[27mi[27mm[27mi[27mn[27ma[27mn[27md[27mo[27m [27ml[27mí[27mn[27me[27ma[27ms[27m [27m{[27ms[27mt[27ma[27mr[27mt[27m+[27m1[27m}[27m [27ma[27m [27m{[27me[27mn[27md[27m+[27m1[27m}[27m'[27m)[1B[27m [27m [27m [27m [27md[27me[27ml[27m [27ml[27mi[27mn[27me[27ms[27m[[27ms[27mt[27ma[27mr[27mt[27m:[27me[27mn[27md[27m+[27m1[27m][1B[27m [27m [27m [27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[27md[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27m'[27m\[27mn[27m'[27m.[27mj[27mo[27mi[27mn[27m([27ml[27mi[27mn[27me[27ms[27m)[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27mE[27mO[27mF[?2004l
+Bloques en líneas: [182, 204]
+Eliminando líneas 204 a 224
+OK
 [1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h
