@@ -4,6 +4,69 @@ import { Eye, Phone, Mail, MapPin } from 'lucide-react'
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-400 mt-20">
+      <div className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-1 md:grid-cols-4 gap-8">
+
+        {/* Brand */}
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+              <Eye className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-white font-bold text-lg">ContactGo</span>
+          </div>
+          <p className="text-sm">
+            Lentes de contacto con entrega rápida en toda República Dominicana.
+          </p>
+        </div>
+
+        {/* Ayuda */}
+        <div>
+          <h3 className="text-white font-semibold mb-3">Ayuda</h3>
+          <div className="space-y-2">
+            <Link href="/receta" className="block hover:text-white">Mi Receta</Link>
+            <Link href="/cuenta/pedidos" className="block hover:text-white">Mis Pedidos</Link>
+            <Link href="/ayuda/envios" className="block hover:text-white">Envíos y entregas</Link>
+            <Link href="/ayuda/devoluciones" className="block hover:text-white">Devoluciones</Link>
+            <Link href="/faq" className="block hover:text-white">Preguntas Frecuentes</Link>
+          </div>
+        </div>
+
+        {/* Legal */}
+        <div>
+          <h3 className="text-white font-semibold mb-3">Legal</h3>
+          <div className="space-y-2">
+            <Link href="/privacidad" className="block hover:text-white">Privacidad</Link>
+            <Link href="/terminos" className="block hover:text-white">Términos</Link>
+          </div>
+        </div>
+
+        {/* Contacto */}
+        <div>
+          <h3 className="text-white font-semibold mb-3">Contacto</h3>
+          <div className="space-y-2 text-sm">
+            <p className="flex items-center gap-2">
+              <Phone size={14} /> 829-408-9097
+            </p>
+            <p className="flex items-center gap-2">
+              <Mail size={14} /> info@contactgo.net
+            </p>
+            <p className="flex items-center gap-2">
+              <MapPin size={14} /> Santo Domingo, RD
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div className="border-t border-gray-800 text-center py-4 text-xs">
+        © {new Date().getFullYear()} ContactGo. Todos los derechos reservados.
+      </div>
+    </footer>
+  )
+}
+export default function Footer() {
+  return (
+    <footer className="bg-gray-900 text-gray-400 mt-20">
       <div className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
         <div>
