@@ -32,6 +32,28 @@ export default function CheckoutPage() {
   const [payMethod, setPayMethod] = useState<'paypal'|'transferencia'|'contra_entrega'>('paypal')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [cupon, setCupon] = useState('')
+  const [cuponAplicado, setCuponAplicado] = useState(false)
+  const [descuento, setDescuento] = useState(0)
+
+  const CUPONES: Record<string, number> = {
+    'BIENVENIDO10': 0.10,
+    'CONTACTGO15': 0.15,
+  }
+
+  const aplicarCupon = () => {
+    const code = cupon.trim().toUpperCase()
+    if (CUPONES[code]) {
+      const pct = CUPONES[code]
+      setDescuento(Math.round(sub * pct))
+      setCuponAplicado(true)
+      toast.success('Cupón aplicado: ' + Math.round(pct * 100) + '% de descuento')
+    } else {
+      toast.error('Cupón inválido')
+      setCuponAplicado(false)
+      setDescuento(0)
+    }
+  }
   const [direcciones, setDirecciones] = useState([])
 
   const sub = subtotal(); const tot = total()
@@ -77,7 +99,7 @@ export default function CheckoutPage() {
       estado: 'pendiente',
       subtotal: sub,
       envio: 200,
-      total: tot,
+      total: tot - descuento,
       metodo_pago: payMethod,
       pago_estado: payMethod === 'paypal' ? 'verificado' : 'pendiente',
       pago_referencia: payRef ?? null,
@@ -294,6 +316,31 @@ export default function CheckoutPage() {
                   </div>
                 ))}
               </div>
+              {/* Cupón */}
+              <div className="border border-dashed border-primary-200 rounded-xl p-3 mb-3">
+                <p className="text-xs font-semibold text-gray-600 mb-2">¿Tienes un cupón?</p>
+                <div className="flex gap-2">
+                  <input
+                    value={cupon}
+                    onChange={e => setCupon(e.target.value.toUpperCase())}
+                    placeholder="BIENVENIDO10"
+                    disabled={cuponAplicado}
+                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
+                  />
+                  <button
+                    onClick={aplicarCupon}
+                    disabled={cuponAplicado || !cupon}
+                    className="px-3 py-2 bg-primary-600 text-white text-xs font-semibold rounded-xl hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                  >
+                    {cuponAplicado ? '✓' : 'Aplicar'}
+                  </button>
+                </div>
+                {cuponAplicado && (
+                  <p className="text-xs text-primary-600 font-semibold mt-1.5">
+                    ✓ Descuento aplicado: -RD${descuento.toLocaleString()}
+                  </p>
+                )}
+              </div>
               <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
                 <div className="flex justify-between text-gray-500">
                   <span>Subtotal</span><span>RD${sub.toLocaleString()}</span>
@@ -302,7 +349,7 @@ export default function CheckoutPage() {
                   <span>Envío</span><span>RD$200</span>
                 </div>
                 <div className="flex justify-between font-bold text-base text-gray-900 pt-1">
-                  <span>Total</span><span>RD${tot.toLocaleString()}</span>
+                  <span className="font-bold">Total</span><span className="font-bold">RD${(tot - descuento).toLocaleString()}</span>
                 </div>
               </div>
               <p className="text-xs text-gray-400 text-center mt-4">

@@ -4733,4 +4733,539 @@ To https://github.com/marioaparedesg-star/contactgo.git
 [7m    print('NOT FOUND - buscando contexto')[27m[K
 [7m    idx = c.find("bg-amber-50")[27m[K
 [7m    print(repr(c[idx-100:idx+50]))[27m[K
-[7mEOF[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m5[27m0[27m0[27m"[27m>[27m{[27mk[27m}[27m<[27m/[27ms[27mp[27ma[27mn[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m9[27m0[27m0[27m"[27m>[27m{[27mv[27m}[27m</[27ms[27mp[27ma[27mn[27m>[1B[26P[20C</div>[28C[K[1B[21P[18C))}[38C[K[1B[22P[16C</div>[36C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[2B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m[[27m'[27me[27ms[27mf[27me[27mr[27mi[27mc[27mo[27m'[27m,[27m'[27mt[27mo[27mr[27mi[27mc[27mo[27m'[27m,[27m'[27mm[27mu[27ml[27mt[27mi[27mf[27mo[27mc[27ma[27ml[27m'[27m][27m.[27mi[27mn[27mc[27ml[27mu[27md[27me[27ms[27m([27mp[27mr[27mo[27md[27mu[27mc[27mt[27m.[27mt[27mi[27mp[27mo[27m [27m?[27m?[27m [27m'[27m'[27m)[27m [27m&[27m&[27m ([1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27md[27mi[27mv[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mf[27ml[27me[27mx[27m [27mg[27ma[27mp[27m-[27m2[27m [27mp[27m-[27m3[27m [27mb[27mg[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m5[27m0[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m2[27m0[27m0 [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m8[27m0[27m0[27m"[27m>[27m"[27m"[27m"[2B[27mi[27mf[27m [27mo[27ml[27md[27m_[27md[27mi[27ms[27mc[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m_[27md[27mi[27ms[27mc[27m,[27m [27mn[27me[27mw[27m_[27md[27mi[27ms[27mc[27m)[1B[27m [27m [27m [27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[27md[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1
+[7mEOF[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m5[27m0[27m0[27m"[27m>[27m{[27mk[27m}[27m<[27m/[27ms[27mp[27ma[27mn[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m9[27m0[27m0[27m"[27m>[27m{[27mv[27m}[27m</[27ms[27mp[27ma[27mn[27m>[1B[26P[20C</div>[28C[K[1B[21P[18C))}[38C[K[1B[22P[16C</div>[36C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[2B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m[[27m'[27me[27ms[27mf[27me[27mr[27mi[27mc[27mo[27m'[27m,[27m'[27mt[27mo[27mr[27mi[27mc[27mo[27m'[27m,[27m'[27mm[27mu[27ml[27mt[27mi[27mf[27mo[27mc[27ma[27ml[27m'[27m][27m.[27mi[27mn[27mc[27ml[27mu[27md[27me[27ms[27m([27mp[27mr[27mo[27md[27mu[27mc[27mt[27m.[27mt[27mi[27mp[27mo[27m [27m?[27m?[27m [27m'[27m'[27m)[27m [27m&[27m&[27m ([1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27md[27mi[27mv[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mf[27ml[27me[27mx[27m [27mg[27ma[27mp[27m-[27m2[27m [27mp[27m-[27m3[27m [27mb[27mg[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m5[27m0[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m2[27m0[27m0 [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m8[27m0[27m0[27m"[27m>[27m"[27m"[27m"[2B[27mi[27mf[27m [27mo[27ml[27md[27m_[27md[27mi[27ms[27mc[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m_[27md[27mi[27ms[27mc[27m,[27m [27mn[27me[27mw[27m_[27md[27mi[27ms[27mc[27m)[1B[27m [27m [27m [27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m/[27m[[27mi[27md[27m][27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m [27m-[27m [27mb[27mu[27ms[27mc[27ma[27mn[27md[27mo[27m [27mc[27mo[27mn[27mt[27me[27mx[27mt[27mo[27m'[27m)[1B[27m [27m [27m [27m [27mi[27md[27mx[27m [27m=[27m [27mc[27m.[27mf[27mi[27mn[27md[27m([27m"[27mb[27mg[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m5[27m0[27m"[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27mr[27me[27mp[27mr[27m([27mc[27m[[27mi[27md[27mx[27m-[27m1[27m0[27m0[27m:[27mi[27md[27mx[27m+[27m5[27m0[27m][27m)[27m)[1B[27mE[27mO[27mF[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgit add -A && git commit -m "[7mS[7mpecs tecnicos en pagina de producto" && git push[27m[K[A[2C[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"S[27mp[27me[27mc[27ms[27m [27mt[27me[27mc[27mn[27mi[27mc[27mo[27ms[27m [27me[27mn[27m [27mp[27ma[27mg[27mi[27mn[27ma[27m [27md[27me[27m [27mp[27mr[27mo[27md[27mu[27mc[27mt[27mo[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+[main 2274c178] Specs tecnicos en pagina de producto
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 70 insertions(+), 1 deletion(-)
+Enumerating objects: 15, done.
+Counting objects:   6% (1/15)Counting objects:  13% (2/15)Counting objects:  20% (3/15)Counting objects:  26% (4/15)Counting objects:  33% (5/15)Counting objects:  40% (6/15)Counting objects:  46% (7/15)Counting objects:  53% (8/15)Counting objects:  60% (9/15)Counting objects:  66% (10/15)Counting objects:  73% (11/15)Counting objects:  80% (12/15)Counting objects:  86% (13/15)Counting objects:  93% (14/15)Counting objects: 100% (15/15)Counting objects: 100% (15/15), done.
+Delta compression using up to 12 threads
+Compressing objects:  16% (1/6)Compressing objects:  33% (2/6)Compressing objects:  50% (3/6)Compressing objects:  66% (4/6)Compressing objects:  83% (5/6)Compressing objects: 100% (6/6)Compressing objects: 100% (6/6), done.
+Writing objects:  12% (1/8)Writing objects:  25% (2/8)Writing objects:  37% (3/8)Writing objects:  50% (4/8)Writing objects:  62% (5/8)Writing objects:  75% (6/8)Writing objects:  87% (7/8)Writing objects: 100% (8/8)Writing objects: 100% (8/8), 1.01 KiB | 1.01 MiB/s, done.
+Total 8 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/5)[Kremote: Resolving deltas:  20% (1/5)[Kremote: Resolving deltas:  40% (2/5)[Kremote: Resolving deltas:  60% (3/5)[Kremote: Resolving deltas:  80% (4/5)[Kremote: Resolving deltas: 100% (5/5)[Kremote: Resolving deltas: 100% (5/5), completed with 5 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   5c860180..2274c178  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mls supabase/functions/ 2>/dev[7m/[7mnull || echo "no existe"[27m[K[A[26C[27ml[27ms[27m [27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m/[27mf[27mu[27mn[27mc[27mt[27mi[27mo[27mn[27ms[27m/[27m [27m2[27m>[27m/[27md[27me[27mv/[27mn[27mu[27ml[27ml[27m [27m|[27m|[27m [27me[27mc[27mh[27mo[27m [27m"[27mn[27mo[27m [27me[27mx[27mi[27ms[27mt[27me[27m"[?2004l
+no existe
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mmkdir -p supabase/functions/n[7mo[7mtify-order[27m[K[A[40C[27mm[27mk[27md[27mi[27mr[27m [27m-[27mp[27m [27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m/[27mf[27mu[27mn[27mc[27mt[27mi[27mo[27mn[27ms[27m/[27mno[27mt[27mi[27mf[27my[27m-[27mo[27mr[27md[27me[27mr[?2004l
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7mVer pedido: https://contactgo.net/admin/pedidos[27m[K
+[7m  `[27m[K
+[K
+[7m  const res = await fetch('https://api.resend.com/emails', {[27m[K
+[7m    method: 'POST',[27m[K
+[7m    headers: {[27m[K
+[7m      'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`,[27m[K
+[7m      'Content-Type': 'application/json',[27m[K
+[7m    },[27m[K
+[7m    body: JSON.stringify({[27m[K
+[7m      from: 'ContactGo <notificaciones@contactgo.net>',[27m[K
+[7m      to: [Deno.env.get('ADMIN_EMAIL')!],[27m[K
+[7m      subject,[27m[K
+[7m      text: body,[27m[K
+[7m    }),[27m[K
+[7m  })[27m[K
+[K
+[7m  return new Response(JSON.stringify({ ok: res.ok }), {[27m[K
+[7m    headers: { 'Content-Type': 'application/json' },[27m[K
+[7m  })[27m[K
+[7m})[27m[K
+[7mEOF[27m[K
+[7mecho "OK"[27m[K[22A[27mV[27me[27mr[27m [27mp[27me[27md[27mi[27md[27mo[27m:[27m [27mh[27mt[27mt[27mp[27ms[27m:[27m/[27m/[27mc[27mo[27mn[27mt[27ma[27mc[27mt[27mg[27mo[27m.[27mn[27me[27mt[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27me[27md[27mi[27md[27mo[27ms[1B[27m [27m [27m`[2B[27m [27m [27mc[27mo[27mn[27ms[27mt[27m [27mr[27me[27ms[27m [27m=[27m [27ma[27mw[27ma[27mi[27mt[27m [27mf[27me[27mt[27mc[27mh[27m([27m'[27mh[27mt[27mt[27mp[27ms[27m:[27m/[27m/[27ma[27mp[27mi[27m.[27mr[27me[27ms[27me[27mn[27md[27m.[27mc[27mo[27mm[27m/[27me[27mm[27ma[27mi[27ml[27ms[27m'[27m,[27m [27m{[1B[27m [27m [27m [27m [27mm[27me[27mt[27mh[27mo[27md[27m:[27m [27m'[27mP[27mO[27mS[27mT[27m'[27m,[1B[27m [27m [27m [27m [27mh[27me[27ma[27md[27me[27mr[27ms[27m:[27m [27m{[1B[27m [27m [27m [27m [27m [27m [27m'[27mA[27mu[27mt[27mh[27mo[27mr[27mi[27mz[27ma[27mt[27mi[27mo[27mn[27m'[27m:[27m [27m`[27mB[27me[27ma[27mr[27me[27mr[27m [27m$[27m{[27mD[27me[27mn[27mo[27m.[27me[27mn[27mv[27m.[27mg[27me[27mt[27m([27m'[27mR[27mE[27mS[27mE[27mN[27mD[27m_[27mA[27mP[27mI[27m_[27mK[27mE[27mY[27m'[27m)[27m}[27m`[27m,[1B[27m [27m [27m [27m [27m [27m [27m'[27mC[27mo[27mn[27mt[27me[27mn[27mt[27m-[27mT[27my[27mp[27me[27m'[27m:[27m [27m'[27ma[27mp[27mp[27ml[27mi[27mc[27ma[27mt[27mi[27mo[27mn[27m/[27mj[27ms[27mo[27mn[27m'[27m,[1B[27m [27m [27m [27m [27m}[27m,[1B[27m [27m [27m [27m [27mb[27mo[27md[27my[27m:[27m [27mJ[27mS[27mO[27mN[27m.[27ms[27mt[27mr[27mi[27mn[27mg[27mi[27mf[27my[27m([27m{[1B[27m [27m [27m [27m [27m [27m [27mf[27mr[27mo[27mm[27m:[27m [27m'[27mC[27mo[27mn[27mt[27ma[27mc[27mt[27mG[27mo[27m [27m<[27mn[27mo[27mt[27mi[27mf[27mi[27mc[27ma[27mc[27mi[27mo[27mn[27me[27ms[27m@[27mc[27mo[27mn[27mt[27ma[27mc[27mt[27mg[27mo[27m.[27mn[27me[27mt[27m>[27m'[27m,[1B[27m [27m [27m [27m [27m [27m [27mt[27mo[27m:[27m [27m[[27mD[27me[27mn[27mo[27m.[27me[27mn[27mv[27m.[27mg[27me[27mt[27m([27m'[27mA[27mD[27mM[27mI[27mN[27m_[27mE[27mM[27mA[27mI[27mL[27m'[27m)[27m![27m][27m,[1B[27m [27m [27m [27m [27m [27m [27ms[27mu[27mb[27mj[27me[27mc[27mt[27m,[1B[27m [27m [27m [27m [27m [27m [27mt[27me[27mx[27mt[27m:[27m [27mb[27mo[27md[27my[27m,[1B[27m [27m [27m [27m [27m}[27m)[27m,[1B[27m [27m [27m}[27m)[2B[27m [27m [27mr[27me[27mt[27mu[27mr[27mn[27m [27mn[27me[27mw[27m [27mR[27me[27ms[27mp[27mo[27mn[27ms[27me[27m([27mJ[27mS[27mO[27mN[27m.[27ms[27mt[27mr[27mi[27mn[27mg[27mi[27mf[27my[27m([27m{[27m [27mo[27mk[27m:[27m [27mr[27me[27ms[27m.[27mo[27mk[27m [27m}[27m)[27m,[27m [27m{[1B[27m [27m [27m [27m [27mh[27me[27ma[27md[27me[27mr[27ms[27m:[27m [27m{[27m [27m'[27mC[27mo[27mn[27mt[27me[27mn[27mt[27m-[27mT[27my[27mp[27me[27m'[27m:[27m [27m'[27ma[27mp[27mp[27ml[27mi[27mc[27ma[27mt[27mi[27mo[27mn[27m/[27mj[27ms[27mo[27mn[27m'[27m [27m}[27m,[1B[27m [27m [27m}[27m)[1B[27m}[27m)[1B[27mE[27mO[27mF[1B[27me[27mc[27mh[27mo[27m [27m"[27mO[27mK[27m"[?2004l
+OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m            <tr><td style="padding:8px;border:1px solid #eee"><b>Pago</b></td><t[7md[7m style="padding:8px;border:1px solid #eee">${record.metodo_pago ?? '—'}</td></t[7mr[7m>[27m[K
+[7m            <tr><td style="padding:8px;border:1px solid #eee"><b>Dirección</b></[7mt[7md><td style="padding:8px;border:1px solid #eee">${record.direccion ?? '—'}</td>[7m<[7m/tr>[27m[K
+[7m          </table>[27m[K
+[7m          <br>[27m[K
+[7m          <a href="https://contactgo.net/admin/pedidos" style="background:#16a34[7ma[7m;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weig[7mh[7mt:bold">Ver pedido en admin</a>[27m[K
+[7m        `,[27m[K
+[7m      }),[27m[K
+[7m    })[27m[K
+[7m    const data = await res.json()[27m[K
+[7m    return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'appl[7mi[7mcation/json' } })[27m[K
+[7m  } catch (e) {[27m[K
+[7m    return new Response(JSON.stringify({ error: e.message }), { status: 500 })[27m[K
+[7m  }[27m[K
+[7m})[27m[K
+[7mEOF[27m[K
+[7mecho "función OK"[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mt[27mr[27m>[27m<[27mt[27md[27m [27ms[27mt[27my[27ml[27me[27m=[27m"[27mp[27ma[27md[27md[27mi[27mn[27mg[27m:[27m8[27mp[27mx[27m;[27mb[27mo[27mr[27md[27me[27mr[27m:[27m1[27mp[27mx[27m [27ms[27mo[27ml[27mi[27md[27m [27m#[27me[27me[27me[27m"[27m>[27m<[27mb[27m>[27mP[27ma[27mg[27mo[27m<[27m/[27mb[27m>[27m<[27m/[27mt[27md[27m>[27m<[27mtd[27m [27ms[27mt[27my[27ml[27me[27m=[27m"[27mp[27ma[27md[27md[27mi[27mn[27mg[27m:[27m8[27mp[27mx[27m;[27mb[27mo[27mr[27md[27me[27mr[27m:[27m1[27mp[27mx[27m [27ms[27mo[27ml[27mi[27md[27m [27m#[27me[27me[27me[27m"[27m>[27m$[27m{[27mr[27me[27mc[27mo[27mr[27md[27m.[27mm[27me[27mt[27mo[27md[27mo[27m_[27mp[27ma[27mg[27mo[27m [27m?[27m?[27m [27m'[27m—[27m'[27m}[27m<[27m/[27mt[27md[27m>[27m<[27m/[27mtr[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27mt[27mr[27m>[27m<[27mt[27md[27m [27ms[27mt[27my[27ml[27me[27m=[27m"[27mp[27ma[27md[27md[27mi[27mn[27mg[27m:[27m8[27mp[27mx[27m;[27mb[27mo[27mr[27md[27me[27mr[27m:[27m1[27mp[27mx[27m [27ms[27mo[27ml[27mi[27md[27m [27m#[27me[27me[27me[27m"[27m>[27m<[27mb[27m>[27mD[27mi[27mr[27me[27mc[27mc[27mi[27mó[27mn[27m<[27m/[27mb[27m>[27m<[27m/t[27md[27m>[27m<[27mt[27md[27m [27ms[27mt[27my[27ml[27me[27m=[27m"[27mp[27ma[27md[27md[27mi[27mn[27mg[27m:[27m8[27mp[27mx[27m;[27mb[27mo[27mr[27md[27me[27mr[27m:[27m1[27mp[27mx[27m [27ms[27mo[27ml[27mi[27md[27m [27m#[27me[27me[27me[27m"[27m>[27m$[27m{[27mr[27me[27mc[27mo[27mr[27md[27m.[27md[27mi[27mr[27me[27mc[27mc[27mi[27mo[27mn[27m [27m?[27m?[27m [27m'[27m—[27m'[27m}[27m<[27m/[27mt[27md[27m><[27m/[27mt[27mr[27m>[1B[18P[10C</table>[44C[K[1B[14P[10C<br>[52C[K[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ma[27m [27mh[27mr[27me[27mf[27m=[27m"[27mh[27mt[27mt[27mp[27ms[27m:[27m/[27m/[27mc[27mo[27mn[27mt[27ma[27mc[27mt[27mg[27mo[27m.[27mn[27me[27mt[27m/[27ma[27md[27mm[27mi[27mn[27m/[27mp[27me[27md[27mi[27md[27mo[27ms[27m"[27m [27ms[27mt[27my[27ml[27me[27m=[27m"[27mb[27ma[27mc[27mk[27mg[27mr[27mo[27mu[27mn[27md[27m:[27m#[27m1[27m6[27ma[27m3[27m4a[27m;[27mc[27mo[27ml[27mo[27mr[27m:[27mw[27mh[27mi[27mt[27me[27m;[27mp[27ma[27md[27md[27mi[27mn[27mg[27m:[27m1[27m2[27mp[27mx[27m [27m2[27m4[27mp[27mx[27m;[27mb[27mo[27mr[27md[27me[27mr[27m-[27mr[27ma[27md[27mi[27mu[27ms[27m:[27m8[27mp[27mx[27m;[27mt[27me[27mx[27mt[27m-[27md[27me[27mc[27mo[27mr[27ma[27mt[27mi[27mo[27mn[27m:[27mn[27mo[27mn[27me[27m;[27mf[27mo[27mn[27mt[27m-[27mw[27me[27mi[27mgh[27mt[27m:[27mb[27mo[27ml[27md[27m"[27m>[27mV[27me[27mr[27m [27mp[27me[27md[27mi[27md[27mo[27m [27me[27mn[27m [27ma[27md[27mm[27mi[27mn[27m<[27m/[27ma[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m`[27m,[1B[27m [27m [27m [27m [27m [27m [27m}[27m)[27m,[1B[27m [27m [27m [27m [27m}[27m)[1B[27m [27m [27m [27m [27mc[27mo[27mn[27ms[27mt[27m [27md[27ma[27mt[27ma[27m [27m=[27m [27ma[27mw[27ma[27mi[27mt[27m [27mr[27me[27ms[27m.[27mj[27ms[27mo[27mn[27m([27m)[1B[27m [27m [27m [27m [27mr[27me[27mt[27mu[27mr[27mn[27m [27mn[27me[27mw[27m [27mR[27me[27ms[27mp[27mo[27mn[27ms[27me[27m([27mJ[27mS[27mO[27mN[27m.[27ms[27mt[27mr[27mi[27mn[27mg[27mi[27mf[27my[27m([27md[27ma[27mt[27ma[27m)[27m,[27m [27m{[27m [27mh[27me[27ma[27md[27me[27mr[27ms[27m:[27m [27m{[27m [27m'[27mC[27mo[27mn[27mt[27me[27mn[27mt[27m-[27mT[27my[27mp[27me[27m'[27m:[27m [27m'[27ma[27mp[27mp[27mli[27mc[27ma[27mt[27mi[27mo[27mn[27m/[27mj[27ms[27mo[27mn[27m'[27m [27m}[27m [27m}[27m)[1B[27m [27m [27m}[27m [27mc[27ma[27mt[27mc[27mh[27m [27m([27me[27m)[27m [27m{[1B[27m [27m [27m [27m [27mr[27me[27mt[27mu[27mr[27mn[27m [27mn[27me[27mw[27m [27mR[27me[27ms[27mp[27mo[27mn[27ms[27me[27m([27mJ[27mS[27mO[27mN[27m.[27ms[27mt[27mr[27mi[27mn[27mg[27mi[27mf[27my[27m([27m{[27m [27me[27mr[27mr[27mo[27mr[27m:[27m [27me[27m.[27mm[27me[27ms[27ms[27ma[27mg[27me[27m [27m}[27m)[27m,[27m [27m{[27m [27ms[27mt[27ma[27mt[27mu[27ms[27m:[27m [27m5[27m0[27m0[27m [27m}[27m)[1B[27m [27m [27m}[1B[27m}[27m)[1B[27mE[27mO[27mF[1B[27me[27mc[27mh[27mo[27m [27m"[27mf[27mu[27mn[27mc[27mi[27mó[27mn[27m [27mO[27mK[27m"[?2004l
+función OK
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mnpm install -g supabase 2>/de[7mv[7m/null || true[27m[K
+[7msupabase --version[27m[K[A[A[33C[27mn[27mp[27mm[27m [27mi[27mn[27ms[27mt[27ma[27ml[27ml[27m [27m-[27mg[27m [27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m [27m2[27m>[27m/[27md[27mev[27m/[27mn[27mu[27ml[27ml[27m [27m|[27m|[27m [27mt[27mr[27mu[27me[1B[27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m [27m-[27m-[27mv[27me[27mr[27ms[27mi[27mo[27mn[?2004l
+zsh: command not found: supabase
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msupabase --version[27m[18D[27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m [27m-[27m-[27mv[27me[27mr[27ms[27mi[27mo[27mn[?2004l
+zsh: command not found: supabase
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mbrew install supabase/tap/sup[7ma[7mbase[27m[K[A[46C[27mb[27mr[27me[27mw[27m [27mi[27mn[27ms[27mt[27ma[27ml[27ml[27m [27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m/[27mt[27ma[27mp[27m/[27ms[27mu[27mpa[27mb[27ma[27ms[27me[?2004l
+[34m==>[0m [1mAuto-updating Homebrew...[0m
+Adjust how often this is run with `$HOMEBREW_AUTO_UPDATE_SECS` or disable with
+`$HOMEBREW_NO_AUTO_UPDATE=1`. Hide these hints with `$HOMEBREW_NO_ENV_HINTS=1` (see `man brew`).
+[34m==>[0m [1mDownloading https://ghcr.io/v2/homebrew/core/portable-ruby/blobs/sha256:f2bc4c3b081b09d7dcca97a8b8c5e102116e6ba68a5c118d6d961cf33b3162ec[0m
+#=#=#                                                                           ##O#- #                                                                         ##O=#  #                                                                        #=#=-#  #                                                                       -#O#- #   #                                                                                                                                                 0.2%                                                                            0.6%#                                                                           2.0%####                                                                        5.8%#######                                                                    10.9%###########                                                                15.9%###############                                                            21.8%###################                                                        26.6%#######################                                                    32.6%##########################                                                 37.0%###############################                                            43.1%###################################                                        48.0%#######################################                                    53.8%##########################################                                 58.7%##############################################                             63.6%#################################################                          68.2%####################################################                       72.3%########################################################                   78.0%###########################################################                82.0%################################################################           88.4%####################################################################       93.5%#######################################################################    98.2%#######################################################################    98.3%#######################################################################    98.5%########################################################################   99.0%########################################################################   99.4%######################################################################### 100.0%
+[34m==>[0m [1mPouring portable-ruby-4.0.3.catalina.bottle.tar.gz[0m
+[34m==>[0m [1mHomebrew collects anonymous analytics.[0m
+[1mRead the analytics documentation (and how to opt-out) here:
+  [4mhttps://docs.brew.sh/Analytics[24m[0m
+No analytics have been recorded yet (nor will be during this `brew` run).
+
+[34m==>[0m [1mHomebrew is run entirely by unpaid volunteers. Please consider donating:[0m
+  [4mhttps://github.com/Homebrew/brew#donations[24m
+
+[34m==>[0m [1mAuto-updated Homebrew![0m
+Updated 2 taps (homebrew/core and homebrew/cask).
+[34m==>[0m [1mNew Formulae[0m
+alevin-fry: Efficient and flexible tool for processing single-cell sequencing data
+apache-arrow-adbc: Cross-language, Arrow-native database access
+apache-arrow-adbc-glib: GLib bindings for Apache Arrow ADBC
+apfel: Apple Intelligence from the command-line, with OpenAi-compatible API server
+apkeep: Command-line tool for downloading APK files from various sources
+atuin-server: Sync server for atuin - Improved shell history for zsh, bash, fish and nushell
+barman: Backup and Recovery Manager for PostgreSQL
+buildkitd: Concurrent, cache-efficient, and Dockerfile-agnostic builder toolkit (Daemon)
+cc-connect: Bridges local AI coding agents to messaging platforms
+checkpwn: Check Have I Been Pwned and see if it's time for you to change passwords
+cline: AI-powered coding agent for complex work
+cloudflare-speed-cli: Cloudflare-based speed test with optional TUI
+crip: Tool to extract server certificates
+ctx7: Manage AI coding skills and documentation context
+cyan: iOS app injector and modifier
+dart-sass: Reference implementation of Sass, written in Dart
+dartaotruntime: Command-line tool for running AOT-compiled snapshots of Dart code
+defuddle: Extract article content and metadata from web pages
+dispenso: High-performance C++ library for parallel programming
+dlpack: Common in-memory tensor structure
+docker-engine: Pack, ship and run any application as a lightweight container (Daemon)
+dtop: Terminal dashboard for Docker monitoring across multiple hosts
+echtvar: Rapid variant annotation and filtering
+erfa: Essential Routines for Fundamental Astronomy
+et: Remote terminal with IP roaming
+expert: Official Elixir Language Server Protocol implementation
+ffc.h: Single-header C99 accelerated float/double parsing
+floresta: Lightweight and embeddable Bitcoin client, built for sovereignty
+flowrs: TUI application for Apache Airflow
+forgecode: AI-enhanced terminal development environment
+fvm: Manage Flutter SDK versions per project
+garden: Grow and cultivate collections of Git trees
+gemmi: Macromolecular crystallography library and utilities
+ggml: Tensor library for machine learning
+git-format-staged: Git command to transform staged files using a formatting command
+gittype: CLI code-typing game that turns your source code into typing challenges
+googleworkspace-cli: CLI for Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, and more
+graalvm: JDK distribution with Graal compiler and Native Image
+hf-mount: Mount Hugging Face Buckets and repos as local filesystems
+hyphy: Hypothesis testing using Phylogenies
+icestorm: Tools for analyzing and creating Lattice iCE40 FPGA bitstream files
+ipapatch: CLI tool to patch iOS IPA files and their plugins
+jsongrep: Query tool for JSON, YAML, TOML, and other structured formats
+kubectl-tree: Kubectl plugin to browse Kubernetes object hierarchies as a tree
+kubernetes-cli@1.35: Kubernetes command-line interface
+lazycut: Terminal-based video trimming TUI
+lazymake: Modern TUI for Makefiles
+libchardet: Mozilla's Universal Charset Detector C/C++ API
+libheif-plugins: ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
+libkiwix: Common code base for all Kiwix ports
+libpathrs: C-friendly API to make path resolution safer on Linux
+lief: Library to Instrument Executable Formats
+lua@5.4: Powerful, lightweight programming language
+mcp-remote: Remote proxy for Model Context Protocol with OAuth support
+merve: C++ lexer for extracting named exports from CommonJS modules
+miniaudio: Audio playback and capture library
+mkbrr: Is a tool to create, modify and inspect torrent files. Fast
+models: Fast TUI and CLI for browsing AI models, benchmarks, and coding agents
+nbytes: Library of byte handling functions extracted from Node.js core
+nextpnr-ice40: Portable FPGA place and route tool for Lattice iCE40
+nfd2nfc: Convert filesystem entry names from NFD to NFC for cross-platform compatibility
+nono: Capability-based sandbox shell for AI agents with OS-enforced isolation
+oarfish: Long read RNA-seq quantification
+odinfmt: Formatter for The Odin Programming Language
+oh-my-agent: Portable multi-agent harness for .agents-based skills and workflows
+ols: Language server for The Odin Programming Language
+openspec: Spec-driven development (SDD) for AI coding assistants
+openssl@4: Cryptography and SSL/TLS Toolkit
+opentimestamps-client: Create and verify OpenTimestamps proofs
+overturemaps: Python tools for interacting with Overture Maps data
+paneru: Sliding, tiling window manager for MacOS
+pay: HTTP client that automatically handles 402 Payment Required
+pet: Simple command-line snippet manager
+pipewire-gstreamer: GStreamer Plugin for PipeWire
+pnpm@10: Fast, disk space efficient package manager
+pocket-id: Open-source identity provider for secure user authentication
+pomerium: Identity and context-aware access proxy
+portless: Replace port numbers with stable, named local URLs for humans and agents
+powershell: Command-line shell and scripting language
+proxelar: Man-in-the-Middle proxy for HTTP/HTTPS traffic
+qtcanvaspainter: Accelerated 2D painting solution for Qt Quick and QRhi-based render targets
+qttasktree: General purpose library for asynchronous task execution
+rabbitmqadmin: Command-line tool for RabbitMQ that uses the HTTP API
+resticprofile: Configuration profiles manager and scheduler for restic backup
+rpiboot: Raspberry Pi USB boot tool for Compute Modules
+rustpython: Python Interpreter written in Rust
+rustypaste-cli: CLI tool for rustypaste
+rvvm: RISC-V Virtual Machine
+sarif-fmt: Pretty print SARIF files to easy human readable output
+scala-cli: Scala language runner and build tool
+sdl3_mixer: Sample multi-channel audio mixer library
+sem-cli: Semantic version control CLI with entity-level diffs and blame
+sheets: Terminal based spreadsheet tool
+skip: Tool for building Swift apps for Android
+spicedb: Open Source, Google Zanzibar-inspired database
+spoa: SIMD partial order alignment tool/library
+stellar-xdr: Stellar command-line tool for encoding/decoding XDR for the Stellar network
+summarize: Multi-modal AI tool to extract and summarize content
+t2sz: Compress a file into a seekable zstd with per-file seeking for tar archives
+tini: Tiny but valid init for containers
+topicctl: Declarative Kafka topic management
+torf-cli: CLI tool for creating, reading and editing torrent files
+try: Quickly manage and navigate project directories for experiments
+tsshd: UDP SSH server for trzsz-ssh (tssh) with roaming support
+unordered_dense: Hashmap and hashset based on robin-hood backward shift deletion
+upterm: Instant terminal sharing
+vapoursynth-bestsource: Audio/video source and FFmpeg wrapper
+vapoursynth-bm3d: BM3D denoising filter for VapourSynth
+vapoursynth-descale: VapourSynth plugin to undo upscaling
+vcflib: C++ library and cmdline tools for parsing and manipulating VCF files
+vite-plus: Unified toolchain and entry point for web development
+vuls: Agentless Vulnerability Scanner for Linux/FreeBSD
+weave: Entity-level semantic merge driver for Git using tree-sitter
+wireplumber: Session / policy manager implementation for PipeWire
+wmbusmeters: Read wired or wireless mbus protocol to acquire utility meter readings
+x-cli: Command-line power tool for Twitter
+xcursorgen: Create an X cursor file from a collection of PNG images
+yelp-xsl: Document transformations from Yelp
+zfp: Compressed numerical arrays that support high-speed random access
+zig@0.15: Programming language designed for robustness, optimality, and clarity
+zsign: Cross-platform codesigning tool for iOS apps
+zvbi: Vertical Blanking Interval (VBI) decoding library
+zxc: High-performance asymmetric lossless compression library
+zycore-c: Zyan Core Library for C
+[34m==>[0m [1mNew Casks[0m
+altar-ai: AI-powered meeting assistant
+appgridmac: AI-assisted Launchpad replacement
+backblaze-restore: Computer backup restore client
+baoliandeng: VPN proxy powered by Mihomo (Clash Meta)
+cadran: Desktop clock rendered behind your icons
+cavalry: Procedural motion design and animation software
+cc-switch: Configuration manager for AI coding agents
+claude-code@latest: Terminal-based AI coding assistant
+clearance: Markdown viewer and editor
+copilot-language-server: Language Server Protocol server for GitHub Copilot
+craft-agents: AI assistant for connecting and working across data sources
+dbeaverteam: Universal database tool and SQL client
+dbvr: Lightweight CLI tool for running database operations
+equibop: Custom Discord App
+fidelity-trader+: Trading platform
+fluidvoice: Offline voice-to-text dictation app with AI enhancement
+font-bjcree
+font-estedad
+font-ghanachocolate
+font-ioskeley-mono
+font-miranda-sans
+font-saira-stencil
+font-selawik
+font-strichpunkt-sans
+ghostpepper: Speech-to-text and meeting transcription tool
+google-gemini: Native desktop AI assistant from Google
+gopher64: N64 emulator
+gram: Code editor focused on stability, without AI, subscriptions, or telemetry
+happ: Platform for building proxies to bypass network restrictions
+hive-app: AI agent orchestrator for parallel coding across projects
+hop: View and edit HWP documents
+idevice-pair: Generate pair records for iOS devices
+incident-io: Incident management platform
+intellij-idea-oss: Open-source edition of IntelliJ IDEA
+intiface-central: Frontend application for the Buttplug sex toy control library
+iplay: Multimedia player
+jiba: Apple Music metadata localisation tool
+koharu: ML-powered manga translator
+ltx-desktop: Desktop app for generating videos with LTX models
+macshot: Screenshot and screen recording tool
+mujoco: General purpose physics engine
+nimbalyst: Visual workspace for building with Codex and Claude Code
+notchi: Notch companion for Claude Code
+nvidia-sync: Utility for launching applications and containers on remote Linux systems
+ob-xf: Virtual analog synthesizer
+openin: Route links, emails, and files to your preferred apps
+openusage: AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
+orchard: Native GUI for Apple Containers
+paper-design: Design tool for creating interfaces and prototypes
+paranoia-file-text-encryption: File and text encryptor with steganography and post-quantum key exchange
+paseo: Self-hosted daemon for AI coding agents
+plamo-translate: Translator focused on Japanese
+pluralplay-flclashx: Cross-platform proxy client based on ClashMeta
+proton-meet: Desktop client for Proton Meet
+puremac: Open-source application manager and system cleaner
+radial: Gesture-based launcher for apps, text snippets, and scripts
+rayon: AI-powered drawing for interior designers and architects
+remanager: Desktop app for managing mods on reMarkable tablets
+renameclick: Local-first AI app for file renaming and organisation
+rowboat: Open-source AI coworker, with memory
+rustcast: Application and utility launcher
+screenkite: Screen recorder and editor
+scribus@devel: Free and open-source page layout program
+seamly2d: Pattern making software
+server-box: App for monitoring server status with SSH terminal, SFTP, Container management
+sharefile: Client for the Progress ShareFile storage service
+spectra-app: OpenSpec document management desktop app
+spokenly: Dictation and transcription app with AI-powered editing
+supasidebar: Arc-like sidebar to save links, files and folders from any browser
+super: Analytics database that fuses structured and semi-structured data
+t3-code: Minimal GUI for AI code agents
+t3-code@nightly: Minimal GUI for AI code agents
+tablen: Native SQL client
+tablepro: Native database client for many database types
+tencent-ugit: Tencent Git GUI Client
+tolaria: Markdown knowledgebase manager
+ua-connect: Software installer and device manager for Universal Audio products
+ulaa: Privacy-centric browser with advanced tracking protection
+unblocked: AI-powered developer collaboration platform
+vcmi: Open-source engine for Heroes of Might & Magic III
+vibe-island: Dynamic island AI agent utility
+vibeproxy: Menu bar app for using AI subscriptions with coding tools
+voicemod: Real-time voice changer and soundboard
+voiden@beta: API development tool
+wallspace: Live wallpaper app
+worksheet-crafter: Worksheet and lesson material creator
+wowup-cf: World of Warcraft addon manager
+wox: Launcher tool
+x-air-edit: Remote control for the Behringer X AIR series mixers
+xdeck: TweetDeck-style X/Twitter client
+yakit: Cybersecurity platform
+
+You have [1m5[0m outdated formulae and [1m1[0m outdated cask installed.
+
+[34m==>[0m [1mTapping supabase/tap[0m
+Cloning into '/usr/local/Homebrew/Library/Taps/supabase/homebrew-tap'...
+remote: Enumerating objects: 4751, done.[K
+remote: Counting objects:   3% (1/30)[Kremote: Counting objects:   6% (2/30)[Kremote: Counting objects:  10% (3/30)[Kremote: Counting objects:  13% (4/30)[Kremote: Counting objects:  16% (5/30)[Kremote: Counting objects:  20% (6/30)[Kremote: Counting objects:  23% (7/30)[Kremote: Counting objects:  26% (8/30)[Kremote: Counting objects:  30% (9/30)[Kremote: Counting objects:  33% (10/30)[Kremote: Counting objects:  36% (11/30)[Kremote: Counting objects:  40% (12/30)[Kremote: Counting objects:  43% (13/30)[Kremote: Counting objects:  46% (14/30)[Kremote: Counting objects:  50% (15/30)[Kremote: Counting objects:  53% (16/30)[Kremote: Counting objects:  56% (17/30)[Kremote: Counting objects:  60% (18/30)[Kremote: Counting objects:  63% (19/30)[Kremote: Counting objects:  66% (20/30)[Kremote: Counting objects:  70% (21/30)[Kremote: Counting objects:  73% (22/30)[Kremote: Counting objects:  76% (23/30)[Kremote: Counting objects:  80% (24/30)[Kremote: Counting objects:  83% (25/30)[Kremote: Counting objects:  86% (26/30)[Kremote: Counting objects:  90% (27/30)[Kremote: Counting objects:  93% (28/30)[Kremote: Counting objects:  96% (29/30)[Kremote: Counting objects: 100% (30/30)[Kremote: Counting objects: 100% (30/30), done.[K
+remote: Compressing objects:   3% (1/29)[Kremote: Compressing objects:   6% (2/29)[Kremote: Compressing objects:  10% (3/29)[Kremote: Compressing objects:  13% (4/29)[Kremote: Compressing objects:  17% (5/29)[Kremote: Compressing objects:  20% (6/29)[Kremote: Compressing objects:  24% (7/29)[Kremote: Compressing objects:  27% (8/29)[Kremote: Compressing objects:  31% (9/29)[Kremote: Compressing objects:  34% (10/29)[Kremote: Compressing objects:  37% (11/29)[Kremote: Compressing objects:  41% (12/29)[Kremote: Compressing objects:  44% (13/29)[Kremote: Compressing objects:  48% (14/29)[Kremote: Compressing objects:  51% (15/29)[Kremote: Compressing objects:  55% (16/29)[Kremote: Compressing objects:  58% (17/29)[Kremote: Compressing objects:  62% (18/29)[Kremote: Compressing objects:  65% (19/29)[Kremote: Compressing objects:  68% (20/29)[Kremote: Compressing objects:  72% (21/29)[Kremote: Compressing objects:  75% (22/29)[Kremote: Compressing objects:  79% (23/29)[Kremote: Compressing objects:  82% (24/29)[Kremote: Compressing objects:  86% (25/29)[Kremote: Compressing objects:  89% (26/29)[Kremote: Compressing objects:  93% (27/29)[Kremote: Compressing objects:  96% (28/29)[Kremote: Compressing objects: 100% (29/29)[Kremote: Compressing objects: 100% (29/29), done.[K
+Receiving objects:   0% (1/4751)Receiving objects:   1% (48/4751)Receiving objects:   2% (96/4751)Receiving objects:   3% (143/4751)Receiving objects:   4% (191/4751)Receiving objects:   5% (238/4751)Receiving objects:   6% (286/4751)Receiving objects:   7% (333/4751)Receiving objects:   8% (381/4751)Receiving objects:   9% (428/4751)Receiving objects:  10% (476/4751)Receiving objects:  11% (523/4751)Receiving objects:  12% (571/4751)Receiving objects:  13% (618/4751)Receiving objects:  14% (666/4751)Receiving objects:  15% (713/4751)Receiving objects:  16% (761/4751)Receiving objects:  17% (808/4751)Receiving objects:  18% (856/4751)Receiving objects:  19% (903/4751)Receiving objects:  20% (951/4751)Receiving objects:  21% (998/4751)Receiving objects:  22% (1046/4751)Receiving objects:  23% (1093/4751)Receiving objects:  24% (1141/4751)Receiving objects:  25% (1188/4751)Receiving objects:  26% (1236/4751)Receiving objects:  27% (1283/4751)Receiving objects:  28% (1331/4751)Receiving objects:  29% (1378/4751)Receiving objects:  30% (1426/4751)Receiving objects:  31% (1473/4751)Receiving objects:  32% (1521/4751)Receiving objects:  33% (1568/4751)Receiving objects:  34% (1616/4751)Receiving objects:  35% (1663/4751)Receiving objects:  36% (1711/4751)Receiving objects:  37% (1758/4751)Receiving objects:  38% (1806/4751)Receiving objects:  39% (1853/4751)Receiving objects:  40% (1901/4751)Receiving objects:  41% (1948/4751)Receiving objects:  42% (1996/4751)Receiving objects:  43% (2043/4751)Receiving objects:  44% (2091/4751)Receiving objects:  45% (2138/4751)Receiving objects:  46% (2186/4751)Receiving objects:  47% (2233/4751)Receiving objects:  48% (2281/4751)Receiving objects:  49% (2328/4751)Receiving objects:  50% (2376/4751)Receiving objects:  51% (2424/4751)Receiving objects:  52% (2471/4751)Receiving objects:  53% (2519/4751)Receiving objects:  54% (2566/4751)Receiving objects:  55% (2614/4751)Receiving objects:  56% (2661/4751)Receiving objects:  57% (2709/4751)Receiving objects:  58% (2756/4751)Receiving objects:  59% (2804/4751)Receiving objects:  60% (2851/4751)Receiving objects:  61% (2899/4751)Receiving objects:  62% (2946/4751)Receiving objects:  63% (2994/4751)Receiving objects:  64% (3041/4751)Receiving objects:  65% (3089/4751)Receiving objects:  66% (3136/4751)Receiving objects:  67% (3184/4751)Receiving objects:  68% (3231/4751)Receiving objects:  69% (3279/4751)Receiving objects:  70% (3326/4751)Receiving objects:  71% (3374/4751)Receiving objects:  72% (3421/4751)Receiving objects:  73% (3469/4751)Receiving objects:  74% (3516/4751)Receiving objects:  75% (3564/4751)Receiving objects:  76% (3611/4751)Receiving objects:  77% (3659/4751)Receiving objects:  78% (3706/4751)Receiving objects:  79% (3754/4751)Receiving objects:  80% (3801/4751)Receiving objects:  81% (3849/4751)Receiving objects:  82% (3896/4751)Receiving objects:  83% (3944/4751)Receiving objects:  84% (3991/4751)Receiving objects:  85% (4039/4751)Receiving objects:  86% (4086/4751)Receiving objects:  87% (4134/4751)Receiving objects:  88% (4181/4751)Receiving objects:  89% (4229/4751)Receiving objects:  90% (4276/4751)Receiving objects:  91% (4324/4751)Receiving objects:  92% (4371/4751)Receiving objects:  93% (4419/4751)Receiving objects:  94% (4466/4751)Receiving objects:  95% (4514/4751)Receiving objects:  96% (4561/4751)Receiving objects:  97% (4609/4751)Receiving objects:  98% (4656/4751)Receiving objects:  99% (4704/4751)remote: Total 4751 (delta 14), reused 1 (delta 1), pack-reused 4721 (from 4)[K
+Receiving objects: 100% (4751/4751)Receiving objects: 100% (4751/4751), 1.29 MiB | 3.67 MiB/s, done.
+Resolving deltas:   0% (0/1907)Resolving deltas:   1% (20/1907)Resolving deltas:   2% (39/1907)Resolving deltas:   3% (58/1907)Resolving deltas:   4% (77/1907)Resolving deltas:   5% (99/1907)Resolving deltas:   6% (118/1907)Resolving deltas:   7% (135/1907)Resolving deltas:   8% (154/1907)Resolving deltas:   9% (172/1907)Resolving deltas:  10% (191/1907)Resolving deltas:  11% (210/1907)Resolving deltas:  12% (229/1907)Resolving deltas:  13% (248/1907)Resolving deltas:  14% (268/1907)Resolving deltas:  15% (287/1907)Resolving deltas:  16% (307/1907)Resolving deltas:  17% (325/1907)Resolving deltas:  18% (344/1907)Resolving deltas:  19% (363/1907)Resolving deltas:  20% (382/1907)Resolving deltas:  21% (404/1907)Resolving deltas:  22% (420/1907)Resolving deltas:  23% (439/1907)Resolving deltas:  24% (458/1907)Resolving deltas:  25% (477/1907)Resolving deltas:  26% (497/1907)Resolving deltas:  27% (516/1907)Resolving deltas:  28% (535/1907)Resolving deltas:  29% (554/1907)Resolving deltas:  30% (575/1907)Resolving deltas:  31% (592/1907)Resolving deltas:  32% (611/1907)Resolving deltas:  33% (630/1907)Resolving deltas:  34% (649/1907)Resolving deltas:  35% (669/1907)Resolving deltas:  36% (687/1907)Resolving deltas:  37% (708/1907)Resolving deltas:  38% (725/1907)Resolving deltas:  39% (744/1907)Resolving deltas:  40% (764/1907)Resolving deltas:  41% (782/1907)Resolving deltas:  42% (801/1907)Resolving deltas:  43% (821/1907)Resolving deltas:  44% (840/1907)Resolving deltas:  45% (860/1907)Resolving deltas:  46% (879/1907)Resolving deltas:  47% (897/1907)Resolving deltas:  48% (916/1907)Resolving deltas:  49% (937/1907)Resolving deltas:  50% (954/1907)Resolving deltas:  51% (976/1907)Resolving deltas:  52% (992/1907)Resolving deltas:  53% (1011/1907)Resolving deltas:  54% (1030/1907)Resolving deltas:  55% (1049/1907)Resolving deltas:  56% (1068/1907)Resolving deltas:  57% (1087/1907)Resolving deltas:  58% (1107/1907)Resolving deltas:  59% (1129/1907)Resolving deltas:  60% (1145/1907)Resolving deltas:  61% (1166/1907)Resolving deltas:  62% (1183/1907)Resolving deltas:  63% (1204/1907)Resolving deltas:  64% (1221/1907)Resolving deltas:  65% (1240/1907)Resolving deltas:  66% (1259/1907)Resolving deltas:  67% (1278/1907)Resolving deltas:  68% (1297/1907)Resolving deltas:  69% (1318/1907)Resolving deltas:  70% (1335/1907)Resolving deltas:  71% (1354/1907)Resolving deltas:  72% (1375/1907)Resolving deltas:  73% (1393/1907)Resolving deltas:  74% (1414/1907)Resolving deltas:  75% (1431/1907)Resolving deltas:  76% (1451/1907)Resolving deltas:  77% (1469/1907)Resolving deltas:  78% (1489/1907)Resolving deltas:  79% (1507/1907)Resolving deltas:  80% (1528/1907)Resolving deltas:  81% (1545/1907)Resolving deltas:  82% (1565/1907)Resolving deltas:  83% (1583/1907)Resolving deltas:  84% (1602/1907)Resolving deltas:  85% (1622/1907)Resolving deltas:  86% (1641/1907)Resolving deltas:  87% (1661/1907)Resolving deltas:  88% (1679/1907)Resolving deltas:  89% (1698/1907)Resolving deltas:  90% (1717/1907)Resolving deltas:  91% (1736/1907)Resolving deltas:  92% (1756/1907)Resolving deltas:  93% (1774/1907)Resolving deltas:  94% (1793/1907)Resolving deltas:  95% (1812/1907)Resolving deltas:  96% (1831/1907)Resolving deltas:  97% (1851/1907)Resolving deltas:  98% (1869/1907)Resolving deltas:  99% (1889/1907)Resolving deltas: 100% (1907/1907)Resolving deltas: 100% (1907/1907), done.
+Tapped 3 formulae (17 files, 1.5MB).
+[32m==>[0m [1mFetching downloads for: [32msupabase[39m[0m
+[?25l[34m⠋[0m Formula supabase (2.95.4)[K[0G[34m⠋[0m Formula supabase (2.95.4)[K[0G[34m⠙[0m Formula supabase (2.95.4)[K[0G[34m⠙[0m Formula supabase (2.95.4)[K[0G[34m⠚[0m Formula supabase (2.95.4)[K[0G[34m⠚[0m Formula supabase (2.95.4)[K[0G[34m⠞[0m Formula supabase (2.95.4)[K[0G[34m⠞[0m Formula supabase (2.95.4)[K[0G[34m⠖[0m Formula supabase (2.95.4)[K[0G[34m⠖[0m Formula supabase (2.95.4)                          Downloading  16.4KB/ 30.9MB[K[0G[34m⠦[0m Formula supabase (2.95.4)                          Downloading  41.0KB/ 30.9MB[K[0G[34m⠦[0m Formula supabase (2.95.4)                          Downloading  94.2KB/ 30.9MB[K[0G[34m⠴[0m Formula supabase (2.95.4)                          Downloading 176.1KB/ 30.9MB[K[0G[34m⠴[0m Formula supabase (2.95.4)                          Downloading 323.6KB/ 30.9MB[K[0G[34m⠲[0m Formula supabase (2.95.4)                          Downloading 520.2KB/ 30.9MB[K[0G[34m⠲[0m Formula supabase (2.95.4) #                        Downloading 860.2KB/ 30.9MB[K[0G[34m⠳[0m Formula supabase (2.95.4) #                        Downloading   1.2MB/ 30.9MB[K[0G[34m⠳[0m Formula supabase (2.95.4) #                        Downloading   1.6MB/ 30.9MB[K[0G[34m⠓[0m Formula supabase (2.95.4) ##                       Downloading   2.1MB/ 30.9MB[K[0G[34m⠓[0m Formula supabase (2.95.4) ##                       Downloading   2.5MB/ 30.9MB[K[0G[34m⠋[0m Formula supabase (2.95.4) ##                       Downloading   2.9MB/ 30.9MB[K[0G[34m⠋[0m Formula supabase (2.95.4) ###                      Downloading   3.5MB/ 30.9MB[K[0G[34m⠙[0m Formula supabase (2.95.4) ###                      Downloading   4.0MB/ 30.9MB[K[0G[34m⠙[0m Formula supabase (2.95.4) ###                      Downloading   4.4MB/ 30.9MB[K[0G[34m⠚[0m Formula supabase (2.95.4) ####                     Downloading   4.8MB/ 30.9MB[K[0G[34m⠚[0m Formula supabase (2.95.4) ####                     Downloading   5.4MB/ 30.9MB[K[0G[34m⠞[0m Formula supabase (2.95.4) ####                     Downloading   5.8MB/ 30.9MB[K[0G[34m⠞[0m Formula supabase (2.95.4) ####                     Downloading   5.8MB/ 30.9MB[K[0G[34m⠖[0m Formula supabase (2.95.4) ####                     Downloading   5.8MB/ 30.9MB[K[0G[34m⠖[0m Formula supabase (2.95.4) ####                     Downloading   5.8MB/ 30.9MB[K[0G[34m⠦[0m Formula supabase (2.95.4) #####                    Downloading   5.9MB/ 30.9MB[K[0G[34m⠦[0m Formula supabase (2.95.4) ######                   Downloading   7.4MB/ 30.9MB[K[0G[34m⠴[0m Formula supabase (2.95.4) ######                   Downloading   8.0MB/ 30.9MB[K[0G[34m⠴[0m Formula supabase (2.95.4) ######                   Downloading   8.4MB/ 30.9MB[K[0G[34m⠲[0m Formula supabase (2.95.4) #######                  Downloading   9.6MB/ 30.9MB[K[0G[34m⠲[0m Formula supabase (2.95.4) #######                  Downloading   9.6MB/ 30.9MB[K[0G[34m⠳[0m Formula supabase (2.95.4) #######                  Downloading   9.6MB/ 30.9MB[K[0G[34m⠳[0m Formula supabase (2.95.4) #######                  Downloading   9.6MB/ 30.9MB[K[0G[34m⠓[0m Formula supabase (2.95.4) #######                  Downloading   9.6MB/ 30.9MB[K[0G[34m⠓[0m Formula supabase (2.95.4) #######                  Downloading   9.6MB/ 30.9MB[K[0G[34m⠋[0m Formula supabase (2.95.4) ########                 Downloading  10.1MB/ 30.9MB[K[0G[34m⠋[0m Formula supabase (2.95.4) ########                 Downloading  10.2MB/ 30.9MB[K[0G[34m⠙[0m Formula supabase (2.95.4) #########                Downloading  11.4MB/ 30.9MB[K[0G[34m⠙[0m Formula supabase (2.95.4) ##########               Downloading  13.3MB/ 30.9MB[K[0G[34m⠚[0m Formula supabase (2.95.4) ###########              Downloading  13.6MB/ 30.9MB[K[0G[34m⠚[0m Formula supabase (2.95.4) ###########              Downloading  13.9MB/ 30.9MB[K[0G[34m⠞[0m Formula supabase (2.95.4) ###########              Downloading  13.9MB/ 30.9MB[K[0G[34m⠞[0m Formula supabase (2.95.4) ###########              Downloading  14.7MB/ 30.9MB[K[0G[34m⠖[0m Formula supabase (2.95.4) ############             Downloading  15.2MB/ 30.9MB[K[0G[34m⠖[0m Formula supabase (2.95.4) ############             Downloading  15.6MB/ 30.9MB[K[0G[34m⠦[0m Formula supabase (2.95.4) ############             Downloading  16.1MB/ 30.9MB[K[0G[34m⠦[0m Formula supabase (2.95.4) #############            Downloading  16.5MB/ 30.9MB[K[0G[34m⠴[0m Formula supabase (2.95.4) #############            Downloading  16.9MB/ 30.9MB[K[0G[34m⠴[0m Formula supabase (2.95.4) #############            Downloading  17.2MB/ 30.9MB[K[0G[34m⠲[0m Formula supabase (2.95.4) #############            Downloading  17.4MB/ 30.9MB[K[0G[34m⠲[0m Formula supabase (2.95.4) ##############           Downloading  17.7MB/ 30.9MB[K[0G[34m⠳[0m Formula supabase (2.95.4) ##############           Downloading  18.0MB/ 30.9MB[K[0G[34m⠳[0m Formula supabase (2.95.4) ##############           Downloading  18.1MB/ 30.9MB[K[0G[34m⠓[0m Formula supabase (2.95.4) ##############           Downloading  18.5MB/ 30.9MB[K[0G[34m⠓[0m Formula supabase (2.95.4) ###############          Downloading  19.0MB/ 30.9MB[K[0G[34m⠋[0m Formula supabase (2.95.4) ###############          Downloading  19.2MB/ 30.9MB[K[0G[34m⠋[0m Formula supabase (2.95.4) ###############          Downloading  19.6MB/ 30.9MB[K[0G[34m⠙[0m Formula supabase (2.95.4) ################         Downloading  20.1MB/ 30.9MB[K[0G[34m⠙[0m Formula supabase (2.95.4) ################         Downloading  20.4MB/ 30.9MB[K[0G[34m⠚[0m Formula supabase (2.95.4) ################         Downloading  20.8MB/ 30.9MB[K[0G[34m⠚[0m Formula supabase (2.95.4) ################         Downloading  21.2MB/ 30.9MB[K[0G[34m⠞[0m Formula supabase (2.95.4) #################        Downloading  21.6MB/ 30.9MB[K[0G[34m⠞[0m Formula supabase (2.95.4) #################        Downloading  22.0MB/ 30.9MB[K[0G[34m⠖[0m Formula supabase (2.95.4) #################        Downloading  22.4MB/ 30.9MB[K[0G[34m⠖[0m Formula supabase (2.95.4) ##################       Downloading  22.8MB/ 30.9MB[K[0G[34m⠦[0m Formula supabase (2.95.4) ##################       Downloading  23.3MB/ 30.9MB[K[0G[34m⠦[0m Formula supabase (2.95.4) ##################       Downloading  23.7MB/ 30.9MB[K[0G[34m⠴[0m Formula supabase (2.95.4) ###################      Downloading  24.2MB/ 30.9MB[K[0G[34m⠴[0m Formula supabase (2.95.4) ###################      Downloading  24.7MB/ 30.9MB[K[0G[34m⠲[0m Formula supabase (2.95.4) ####################     Downloading  25.2MB/ 30.9MB[K[0G[34m⠲[0m Formula supabase (2.95.4) ####################     Downloading  25.5MB/ 30.9MB[K[0G[34m⠳[0m Formula supabase (2.95.4) ####################     Downloading  26.1MB/ 30.9MB[K[0G[34m⠳[0m Formula supabase (2.95.4) #####################    Downloading  26.5MB/ 30.9MB[K[0G[34m⠓[0m Formula supabase (2.95.4) #####################    Downloading  26.9MB/ 30.9MB[K[0G[34m⠓[0m Formula supabase (2.95.4) #####################    Downloading  27.3MB/ 30.9MB[K[0G[34m⠋[0m Formula supabase (2.95.4) ######################   Downloading  27.9MB/ 30.9MB[K[0G[34m⠋[0m Formula supabase (2.95.4) ######################   Downloading  28.1MB/ 30.9MB[K[0G[34m⠙[0m Formula supabase (2.95.4) ######################   Downloading  28.6MB/ 30.9MB[K[0G[34m⠙[0m Formula supabase (2.95.4) #######################  Downloading  29.0MB/ 30.9MB[K[0G[34m⠚[0m Formula supabase (2.95.4) #######################  Downloading  29.5MB/ 30.9MB[K[0G[34m⠚[0m Formula supabase (2.95.4) #######################  Downloading  30.0MB/ 30.9MB[K[0G[34m⠞[0m Formula supabase (2.95.4) ######################## Downloading  30.4MB/ 30.9MB[K[0G[34m⠞[0m Formula supabase (2.95.4) ######################## Downloading  30.9MB/ 30.9MB[K[0G[34m⠖[0m Formula supabase (2.95.4)                          Verifying    30.9MB/ 30.9MB[K[0G[32m✔︎[0m Formula supabase (2.95.4)                          Verified     30.9MB/ 30.9MB
+[K[?25h[34m==>[0m [1mInstalling supabase from supabase/tap[0m
+🍺  /usr/local/Cellar/supabase/2.95.4: 9 files, 98.3MB, built in 9 seconds
+[34m==>[0m [1mRunning `brew cleanup supabase`...[0m
+Disable this behaviour by setting `HOMEBREW_NO_INSTALL_CLEANUP=1`.
+Hide these hints with `HOMEBREW_NO_ENV_HINTS=1` (see `man brew`).
+[32m==>[0m [1m`brew cleanup` has not been run in the last 30 days, running now...[0m
+Disable this behaviour by setting `HOMEBREW_NO_INSTALL_CLEANUP=1`.
+Hide these hints with `HOMEBREW_NO_ENV_HINTS=1` (see `man brew`).
+Removing: /Users/gerenntedetienda/Library/Caches/Homebrew/bootsnap/88e898eb643c1c54fca565b265fee218524c29d93ed1dd2a2ec488fa0a14e790... (659 files, 5.8MB)
+Pruned 1 symbolic links from /usr/local
+[32m==>[0m [1mCaveats[0m
+zsh completions have been installed to:
+  /usr/local/share/zsh/site-functions
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msupabase login[27m[14D[27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m [27ml[27mo[27mg[27mi[27mn[?2004l
+]11;?\[6nHello from [96mSupabase[0m! Press [96mEnter[0m to open browser and login automatically.
+c
+[91mfailed to scan line: expected newline[0m
+Try rerunning the command with --debug to troubleshoot the error.
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mzsh completions have been ins[7mt[7malled to:[27m[K
+[7m  /usr/local/share/zsh/site-functions[27m[K
+[7mgerenntedetienda@Gerenntes-MacBook-Pro contactgo % supabase login[27m[K
+[7mHello from Supabase! Press Enter to open browser and login automatically.[27m[K
+[K
+[K[?2004l[K
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msupabase login[27m[14D[27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m [27ml[27mo[27mg[27mi[27mn[?2004l
+]11;?\[6nHello from [96mSupabase[0m! Press [96mEnter[0m to open browser and login automatically.
+
+Here is your login link in case browser did not open [1mhttps://supabase.com/dashboard/cli/login?session_id=7c470cb5-db92-4e60-a42c-5a153df799c9&token_name=cli_gerenntedetienda@Gerenntes-MacBook-Pro.local_1777767074&public_key=0483a48df523e78d7f274295b649af91d0a9ca4af86dc905da417bda9df27f4aed7b0881620835e9c5af9308120332b535a9ccd325f612b3451cf3a0d0b6dd951b[0m
+
+Enter your verification code: 73a16f1c
+Token [1mcli_gerenntedetienda@Gerenntes-MacBook-Pro.local_1777767074[0m created successfully.
+
+You are now logged in. [96mHappy coding![0m
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msupabase functions deploy not[7mi[7mfy-order --project-ref atendbjolicwcsqfyiyh[27m[K[A[7C[27ms[27mu[27mp[27ma[27mb[27ma[27ms[27me[27m [27mf[27mu[27mn[27mc[27mt[27mi[27mo[27mn[27ms[27m [27md[27me[27mp[27ml[27mo[27my[27m [27mn[27mo[27mti[27mf[27my[27m-[27mo[27mr[27md[27me[27mr[27m [27m-[27m-[27mp[27mr[27mo[27mj[27me[27mc[27mt[27m-[27mr[27me[27mf[27m [27ma[27mt[27me[27mn[27md[27mb[27mj[27mo[27ml[27mi[27mc[27mw[27mc[27ms[27mq[27mf[27my[27mi[27my[27mh[?2004l
+]11;?\[6n[93mWARNING:[0m Docker is not running
+Uploading asset (notify-order): supabase/functions/notify-order/index.ts
+Deployed Functions on project [96matendbjolicwcsqfyiyh[0m: notify-order
+You can inspect your deployment in the Dashboard: https://supabase.com/dashboard/project/atendbjolicwcsqfyiyh/functions
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat src/app/checkout/page.tsx[7m [7m| head -50[27m[K[A[40C[27mc[27ma[27mt[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m5[27m0[?2004l
+'use client'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
+import Navbar from '@/components/ui/Navbar'
+import Footer from '@/components/ui/Footer'
+import { useCartStore } from '@/lib/cart-store'
+import { createClient } from '@/lib/supabase'
+import toast from 'react-hot-toast'
+import { CreditCard, Building2, Package, ChevronRight, Copy, CheckCircle } from 'lucide-react'
+
+const schema = z.object({
+  nombre:    z.string().min(3, 'Nombre requerido'),
+  email:     z.string().email('Email inválido'),
+  telefono:  z.string().min(10, 'Teléfono requerido'),
+  direccion: z.string().min(5, 'Dirección requerida'),
+  ciudad:    z.string().min(2, 'Ciudad requerida'),
+})
+type FormData = z.infer<typeof schema>
+
+const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata',
+  'Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad']
+
+const PAYPAL_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!
+
+export default function CheckoutPage() {
+  const router = useRouter()
+  const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
+  const [payMethod, setPayMethod] = useState<'paypal'|'transferencia'|'contra_entrega'>('paypal')
+  const [copied, setCopied] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [direcciones, setDirecciones] = useState([])
+
+  const sub = subtotal(); const tot = total()
+
+  const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(schema)
+  })
+
+  useEffect(() => {
+    if (items.length === 0) router.push('/cart')
+    const sb = createClient()
+    sb.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: perfil }) => {
+          if (perfil) {
+            if (perfil.nombre) setValue('nombre', perfil.nombre)
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "total\|descuento\|cu[7mp[7mon\|order\|insert" src/app/checkout/page.tsx | head -20[27m[K[A[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mt[27mo[27mt[27ma[27ml[27m\[27m|[27md[27me[27ms[27mc[27mu[27me[27mn[27mt[27mo[27m\[27m|[27mc[27mup[27mo[27mn[27m\[27m|[27mo[27mr[27md[27me[27mr[27m\[27m|[27mi[27mn[27ms[27me[27mr[27mt[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m2[27m0[?2004l
+31:  const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
+37:  const sub = subtotal(); const tot = total()
+55:        sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: addrs }) => {
+71:    const { data: order, error } = await sb.from('orders').insert({
+78:      subtotal: sub,
+80:      total: tot,
+86:    if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
+89:    await sb.from('order_items').insert(
+91:        order_id: order.id,
+107:        await sb.from('reminders').insert({
+108:          user_id: user.id, order_id: order.id,
+117:    router.push(order.id)
+166:                          className="text-xs px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50 hover:border-primary-400 hover:bg-primary-50 text-gray-600 transition-colors text-left">
+196:                    className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all text-sm font-semibold
+198:                        ? 'border-primary-600 bg-primary-50 text-primary-700'
+199:                        : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}>
+215:                      createOrder={(_, actions) => actions.order.create({
+223:                        const capture = await actions.order!.capture()
+279:                  <div key={i} className="flex items-start gap-2 text-sm border-b border-gray-50 pb-3 last:border-0 last:pb-0">
+297:              <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7msed -n '65,120p' src/app/chec[7mk[7mout/page.tsx[27m[K[A[38C[27ms[27me[27md[27m [27m-[27mn[27m [27m'[27m6[27m5[27m,[27m1[27m2[27m0[27mp[27m'[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mck[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+
+  const createOrder = async (data: FormData, payRef?: string) => {
+    setLoading(true)
+    const sb = createClient()
+    const { data: { user } } = await sb.auth.getUser()
+
+    const { data: order, error } = await sb.from('orders').insert({
+      user_id: user?.id ?? null,
+      cliente_nombre: data.nombre,
+      cliente_email: data.email,
+      cliente_telefono: data.telefono,
+      direccion_texto: `${data.direccion}, ${data.ciudad}`,
+      estado: 'pendiente',
+      subtotal: sub,
+      envio: 200,
+      total: tot,
+      metodo_pago: payMethod,
+      pago_estado: payMethod === 'paypal' ? 'verificado' : 'pendiente',
+      pago_referencia: payRef ?? null,
+    }).select().single()
+
+    if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
+
+    // Insertar items
+    await sb.from('order_items').insert(
+      items.map(i => ({
+        order_id: order.id,
+        product_id: i.product.id,
+        nombre: i.product.nombre,
+        precio: i.product.precio,
+        cantidad: i.cantidad,
+        sph: i.sph ?? null,
+        cyl: i.cyl ?? null,
+        add_power: i.add_power ? parseFloat(i.add_power) : null,
+      }))
+    )
+
+    // Recordatorio: 25 días si son lentes mensuales
+    if (user?.id) {
+      const hasMonthly = items.some(i => ['esferico','torico','multifocal','color'].includes(i.product.tipo ?? ''))
+      if (hasMonthly) {
+        const fecha = new Date(); fecha.setDate(fecha.getDate() + 25)
+        await sb.from('reminders').insert({
+          user_id: user.id, order_id: order.id,
+          tipo: 'recompra',
+          fecha_recordatorio: fecha.toISOString().split('T')[0]
+        })
+      }
+    }
+
+    clearCart()
+    setLoading(false)
+    router.push(order.id)
+    toast.success('¡Pedido confirmado! 🎉')
+  }
+
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7melse:[27m[K
+[7m    print('estado NOT FOUND')[27m[K
+[K
+[7mif old_total in c:[27m[K
+[7m    c = c.replace(old_total, new_total)[27m[K
+[7m    print('total insert OK')[27m[K
+[7melse:[27m[K
+[7m    print('total insert NOT FOUND')[27m[K
+[K
+[7mif old_summary in c:[27m[K
+[7m    c = c.replace(old_summary, new_summary)[27m[K
+[7m    print('cupon UI OK')[27m[K
+[7melse:[27m[K
+[7m    print('cupon UI NOT FOUND')[27m[K
+[K
+[7mif old_total_display in c:[27m[K
+[7m    c = c.replace(old_total_display, new_total_display)[27m[K
+[7m    print('total display OK')[27m[K
+[7melse:[27m[K
+[7m    print('total display NOT FOUND')[27m[K
+[K
+[7mopen('src/app/checkout/page.tsx', 'w').write(c)[27m[K
+[7mEOF[27m[K[22A[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27me[27ms[27mt[27ma[27md[27mo[27m [27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m'[27m)[2B[27mi[27mf[27m [27mo[27ml[27md[27m_[27mt[27mo[27mt[27ma[27ml[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m_[27mt[27mo[27mt[27ma[27ml[27m,[27m [27mn[27me[27mw[27m_[27mt[27mo[27mt[27ma[27ml[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mt[27mo[27mt[27ma[27ml[27m [27mi[27mn[27ms[27me[27mr[27mt[27m [27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mt[27mo[27mt[27ma[27ml[27m [27mi[27mn[27ms[27me[27mr[27mt[27m [27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m'[27m)[2B[27mi[27mf[27m [27mo[27ml[27md[27m_[27ms[27mu[27mm[27mm[27ma[27mr[27my[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m_[27ms[27mu[27mm[27mm[27ma[27mr[27my[27m,[27m [27mn[27me[27mw[27m_[27ms[27mu[27mm[27mm[27ma[27mr[27my[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mc[27mu[27mp[27mo[27mn[27m [27mU[27mI[27m [27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mc[27mu[27mp[27mo[27mn[27m [27mU[27mI[27m [27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m'[27m)[2B[27mi[27mf[27m [27mo[27ml[27md[27m_[27mt[27mo[27mt[27ma[27ml[27m_[27md[27mi[27ms[27mp[27ml[27ma[27my[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m_[27mt[27mo[27mt[27ma[27ml[27m_[27md[27mi[27ms[27mp[27ml[27ma[27my[27m,[27m [27mn[27me[27mw[27m_[27mt[27mo[27mt[27ma[27ml[27m_[27md[27mi[27ms[27mp[27ml[27ma[27my[27m)[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mt[27mo[27mt[27ma[27ml[27m [27md[27mi[27ms[27mp[27ml[27ma[27my[27m [27mO[27mK[27m'[27m)[1B[27me[27ml[27ms[27me[27m:[1B[27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27m'[27mt[27mo[27mt[27ma[27ml[27m [27md[27mi[27ms[27mp[27ml[27ma[27my[27m [27mN[27mO[27mT[27m [27mF[27mO[27mU[27mN[27mD[27m'[27m)[2B[27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m,[27m [27m'[27mw[27m'[27m)[27m.[27mw[27mr[27mi[27mt[27me[27m([27mc[27m)[1B[27mE[27mO[27mF[?2004l
+estado OK
+total insert OK
+cupon UI OK
+total display NOT FOUND
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "font-bold text-lg" s[7mr[7mc/app/checkout/page.tsx[27m[K[A[27C[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mf[27mo[27mn[27mt[27m-[27mb[27mo[27ml[27md[27m [27mt[27me[27mx[27mt[27m-[27ml[27mg[27m"[27m [27msr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[?2004l
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgrep -n "tot\." src/app/check[7mo[7mut/page.tsx | head -10[27m[K[A[28C[27mg[27mr[27me[27mp[27m [27m-[27mn[27m [27m"[27mt[27mo[27mt[27m\[27m.[27m"[27m [27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mko[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m [27m|[27m [27mh[27me[27ma[27md[27m [27m-[27m1[27m0[?2004l
+284:                    <p>Ten el monto exacto listo: <strong>RD${tot.toLocaleString()}</strong></p>
+352:                  <span>Total</span><span>RD${tot.toLocaleString()}</span>
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mpython3 << 'EOF'[27m
+[7mlines = open('src/app/checkout/page.tsx').read().split('\n')[27m[K
+[7mfor i, line in enumerate(lines):[27m[K
+[7m    if 'tot.toLocaleString()' in line and 'Total' not in lines[i-1] and i > 340:[27m [K
+[7m        print(i+1, repr(line))[27m[K
+[7m    elif i+1 == 352:[27m[K
+[7m        print(i+1, repr(line))[27m[K
+[7mEOF[27m[K[8A[48C[27mp[27my[27mt[27mh[27mo[27mn[27m3[27m [27m<[27m<[27m [27m'[27mE[27mO[27mF[27m'[1B[27ml[27mi[27mn[27me[27ms[27m [27m=[27m [27mo[27mp[27me[27mn[27m([27m'[27ms[27mr[27mc[27m/[27ma[27mp[27mp[27m/[27mc[27mh[27me[27mc[27mk[27mo[27mu[27mt[27m/[27mp[27ma[27mg[27me[27m.[27mt[27ms[27mx[27m'[27m)[27m.[27mr[27me[27ma[27md[27m([27m)[27m.[27ms[27mp[27ml[27mi[27mt[27m([27m'[27m\[27mn[27m'[27m)[1B[27mf[27mo[27mr[27m [27mi[27m,[27m [27ml[27mi[27mn[27me[27m [27mi[27mn[27m [27me[27mn[27mu[27mm[27me[27mr[27ma[27mt[27me[27m([27ml[27mi[27mn[27me[27ms[27m)[27m:[1B[27m [27m [27m [27m [27mi[27mf[27m [27m'[27mt[27mo[27mt[27m.[27mt[27mo[27mL[27mo[27mc[27ma[27ml[27me[27mS[27mt[27mr[27mi[27mn[27mg[27m([27m)[27m'[27m [27mi[27mn[27m [27ml[27mi[27mn[27me[27m [27ma[27mn[27md[27m [27m'[27mT[27mo[27mt[27ma[27ml[27m'[27m [27mn[27mo[27mt[27m [27mi[27mn[27m [27ml[27mi[27mn[27me[27ms[27m[[27mi[27m-[27m1[27m][27m [27ma[27mn[27md[27m [27mi[27m [27m>[27m [27m3[27m4[27m0[27m: [1B[27m [27m [27m [27m [27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27mi[27m+[27m1[27m,[27m [27mr[27me[27mp[27mr[27m([27ml[27mi[27mn[27me[27m)[27m)[1B[27m [27m [27m [27m [27me[27ml[27mi[27mf[27m [27mi[27m+[27m1[27m [27m=[27m=[27m [27m3[27m5[27m2[27m:[1B[27m [27m [27m [27m [27m [27m [27m [27m [27mp[27mr[27mi[27mn[27mt[27m([27mi[27m+[27m1[27m,[27m [27mr[27me[27mp[27mr[27m([27ml[27mi[27mn[27me[27m)[27m)[1B[27mE[27mO[27mF[?2004l
+352 '                  <span>Total</span><span>RD${tot.toLocaleString()}</span>'
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h
