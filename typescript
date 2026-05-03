@@ -4628,4 +4628,62 @@ Total 5 (delta 3), reused 0 (delta 0), pack-reused 0 (from 0)
 remote: Resolving deltas:   0% (0/3)[Kremote: Resolving deltas:  33% (1/3)[Kremote: Resolving deltas:  66% (2/3)[Kremote: Resolving deltas: 100% (3/3)[Kremote: Resolving deltas: 100% (3/3), completed with 3 local objects.[K
 To https://github.com/marioaparedesg-star/contactgo.git
    67ea092f..d27479d8  main -> main
-[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mcat public/sitemap.xml | head[7m [7m-5[27m[K[A[48C[27mc[27ma[27mt[27m [27mp[27mu[27mb[27ml[27mi[27mc[27m/[27ms[27mi[27mt[27me[27mm[27ma[27mp[27m.[27mx[27mm[27ml[27m [27m|[27m [27mh[27me[27ma[27md [27m-[27m5[?2004l
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://contactgo.net/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://contactgo.net/catalogo</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://contactgo.net/catalogo?tipo=esferico</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mgit add -A && git commit -m "[7mF[7morce sitemap redeploy" && git push[27m[K[A[16C[27mg[27mi[27mt[27m [27ma[27md[27md[27m [27m-[27mA[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mc[27mo[27mm[27mm[27mi[27mt[27m [27m-[27mm[27m [27m"F[27mo[27mr[27mc[27me[27m [27ms[27mi[27mt[27me[27mm[27ma[27mp[27m [27mr[27me[27md[27me[27mp[27ml[27mo[27my[27m"[27m [27m&[27m&[27m [27mg[27mi[27mt[27m [27mp[27mu[27ms[27mh[?2004l
+[main 9180e376] Force sitemap redeploy
+ Committer: Mario A. Paredes <gerenntedetienda@Gerenntes-MacBook-Pro.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 27 insertions(+)
+Enumerating objects: 5, done.
+Counting objects:  20% (1/5)Counting objects:  40% (2/5)Counting objects:  60% (3/5)Counting objects:  80% (4/5)Counting objects: 100% (5/5)Counting objects: 100% (5/5), done.
+Delta compression using up to 12 threads
+Compressing objects:  33% (1/3)Compressing objects:  66% (2/3)Compressing objects: 100% (3/3)Compressing objects: 100% (3/3), done.
+Writing objects:  33% (1/3)Writing objects:  66% (2/3)Writing objects: 100% (3/3)Writing objects: 100% (3/3), 927 bytes | 231.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/2)[Kremote: Resolving deltas:  50% (1/2)[Kremote: Resolving deltas: 100% (2/2)[Kremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[K
+To https://github.com/marioaparedesg-star/contactgo.git
+   d27479d8..9180e376  main -> main
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h[7mSELECT nombre, tipo, descripc[7mi[7mon [27m[K
+[7mFROM products [27m[K
+[7mWHERE descripcion IS NULL OR descripcion = ''[27m[K
+[7mORDER BY tipo, nombre;[27m[K[4A[29C[27mS[27mE[27mL[27mE[27mC[27mT[27m [27mn[27mo[27mm[27mb[27mr[27me[27m,[27m [27mt[27mi[27mp[27mo[27m,[27m [27md[27me[27ms[27mc[27mr[27mi[27mp[27mci[27mo[27mn[K[1B[27mF[27mR[27mO[27mM[27m [27mp[27mr[27mo[27md[27mu[27mc[27mt[27ms[K[1B[27mW[27mH[27mE[27mR[27mE[27m [27md[27me[27ms[27mc[27mr[27mi[27mp[27mc[27mi[27mo[27mn[27m [27mI[27mS[27m [27mN[27mU[27mL[27mL[27m [27mO[27mR[27m [27md[27me[27ms[27mc[27mr[27mi[27mp[27mc[27mi[27mo[27mn[27m [27m=[27m [27m'[27m'[1B[27mO[27mR[27mD[27mE[27mR[27m [27mB[27mY[27m [27mt[27mi[27mp[27mo[27m,[27m [27mn[27mo[27mm[27mb[27mr[27me[27m;[?2004l
+zsh: command not found: SELECT
+zsh: command not found: FROM
+zsh: command not found: WHERE
+zsh: command not found: ORDER
+[1m[7m%[27m[1m[0m                                                                                ]7;file://Gerenntes-MacBook-Pro.local/Users/gerenntedetienda/Downloads/contactgo[0m[27m[24m[Jgerenntedetienda@Gerenntes-MacBook-Pro contactgo % [K[?2004h>....                        
+[7m                    <div key={k as string} className="flex justify-between px-4 [7mp[7my-2.5">[27m[K
+[7m                      <span className="text-xs text-gray-500">{k}</span>[27m[K
+[7m                      <span className="text-xs font-semibold text-gray-900">{v}<[7m/[7mspan>[27m[K
+[7m                    </div>[27m[K
+[7m                  ))}[27m[K
+[7m                </div>[27m[K
+[7m              </div>[27m[K
+[7m            )}[27m[K
+[K
+[7m            {['esferico','torico','multifocal'].includes(product.tipo ?? '') && [7m([27m[K
+[7m              <div className="flex gap-2 p-3 bg-amber-50 border border-amber-200[7m [7mrounded-xl text-xs text-amber-800">"""[27m[K
+[K
+[7mif old_disc in c:[27m[K
+[7m    c = c.replace(old_disc, new_disc)[27m[K
+[7m    open('src/app/producto/[id]/page.tsx', 'w').write(c)[27m[K
+[7m    print('OK')[27m[K
+[7melse:[27m[K
+[7m    print('NOT FOUND')[27m[K
+[7mEOF[27m[K[22A[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27md[27mi[27mv[27m [27mk[27me[27my[27m=[27m{[27mk[27m [27ma[27ms[27m [27ms[27mt[27mr[27mi[27mn[27mg[27m}[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mf[27ml[27me[27mx[27m [27mj[27mu[27ms[27mt[27mi[27mf[27my[27m-[27mb[27me[27mt[27mw[27me[27me[27mn[27m [27mp[27mx[27m-[27m4[27m p[27my[27m-[27m2[27m.[27m5[27m"[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m5[27m0[27m0[27m"[27m>[27m{[27mk[27m}[27m<[27m/[27ms[27mp[27ma[27mn[27m>[1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27ms[27mp[27ma[27mn[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mf[27mo[27mn[27mt[27m-[27ms[27me[27mm[27mi[27mb[27mo[27ml[27md[27m [27mt[27me[27mx[27mt[27m-[27mg[27mr[27ma[27my[27m-[27m9[27m0[27m0[27m"[27m>[27m{[27mv[27m}[27m</[27ms[27mp[27ma[27mn[27m>[1B[26P[20C</div>[28C[K[1B[21P[18C))}[38C[K[1B[22P[16C</div>[36C[K[1B[20P[14C</div>[40C[K[1B[14P[12C)}[52C[K[2B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m{[27m[[27m'[27me[27ms[27mf[27me[27mr[27mi[27mc[27mo[27m'[27m,[27m'[27mt[27mo[27mr[27mi[27mc[27mo[27m'[27m,[27m'[27mm[27mu[27ml[27mt[27mi[27mf[27mo[27mc[27ma[27ml[27m'[27m][27m.[27mi[27mn[27mc[27ml[27mu[27md[27me[27ms[27m([27mp[27mr[27mo[27md[27mu[27mc[27mt[27m.[27mt[27mi[27mp[27mo[27m [27m?[27m?[27m [27m'[27m'[27m)[27m [27m&[27m&[27m ([1B[27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m [27m<[27md[27mi[27mv[27m [27mc[27ml[27ma[27ms[27ms[27mN[27ma[27mm[27me[27m=[27m"[27mf[27ml[27me[27mx[27m [27mg[27ma[27mp[27m-[27m2[27m [27mp[27m-[27m3[27m [27mb[27mg[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m5[27m0[27m [27mb[27mo[27mr[27md[27me[27mr[27m [27mb[27mo[27mr[27md[27me[27mr[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m2[27m0[27m0 [27mr[27mo[27mu[27mn[27md[27me[27md[27m-[27mx[27ml[27m [27mt[27me[27mx[27mt[27m-[27mx[27ms[27m [27mt[27me[27mx[27mt[27m-[27ma[27mm[27mb[27me[27mr[27m-[27m8[27m0[27m0[27m"[27m>[27m"[27m"[27m"[2B[27mi[27mf[27m [27mo[27ml[27md[27m_[27md[27mi[27ms[27mc[27m [27mi[27mn[27m [27mc[27m:[1B[27m [27m [27m [27m [27mc[27m [27m=[27m [27mc[27m.[27mr[27me[27mp[27ml[27ma[27mc[27me[27m([27mo[27ml[27md[27m_[27m
