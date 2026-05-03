@@ -18,7 +18,7 @@ const FAQS = [
       { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos PayPal, transferencia bancaria y pago contra entrega (solo en Santo Domingo y Santiago).' },
       { q: '¿El pago contra entrega tiene costo extra?', a: 'No, el costo de envío es el mismo RD$200 independientemente del método de pago.' },
       { q: '¿A qué cuenta hago la transferencia?', a: 'Los datos bancarios aparecen automáticamente al seleccionar "Transferencia bancaria" en el checkout.' },
-      { q: '¿Cuándo confirman mi pedido si pago por transferencia?', a: 'Una vez enviada la transferencia, envíanos el comprobante por WhatsApp al +1 (809) 000-0000 y confirmamos en menos de 2 horas.' },
+      { q: '¿Cuándo confirman mi pedido si pago por transferencia?', a: 'Una vez enviada la transferencia, envíanos el comprobante por WhatsApp al 829-408-9097 y confirmamos en menos de 2 horas.' },
     ]
   },
   {
@@ -78,7 +78,7 @@ export default function FAQPage() {
         <div className="mt-12 bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
           <p className="font-semibold text-gray-900 mb-1">¿No encontraste tu respuesta?</p>
           <p className="text-gray-500 text-sm mb-4">Escríbenos por WhatsApp y te respondemos en minutos.</p>
-          <a href="https://wa.me/18090000000" target="_blank"
+          <a href="https://wa.me/18294089097" target="_blank"
             className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
             💬 Abrir WhatsApp
           </a>
