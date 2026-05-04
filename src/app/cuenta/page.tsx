@@ -286,7 +286,5 @@ export default function CuentaPage() {
             )}
           </div>
         )}
-      </div>
-    </div>
   )
 }
