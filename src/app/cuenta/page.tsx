@@ -22,7 +22,7 @@ export default function CuentaPage() {
   const [loading, setLoading] = useState(false)
   const [recetas, setRecetas] = useState([])
   const [agregandoReceta, setAgregandoReceta] = useState(false)
-  const [recetaForm, setRecetaForm] = useState({ nombre:'Mi receta', od_sph:'', od_cyl:'', od_axis:'', od_add:'', oi_sph:'', oi_cyl:'', oi_axis:'', oi_add:'' })
+  const [recetaForm, setRecetaForm] = useState({ nombre:'Mi receta', diagnostico:'', od_sph:'', od_cyl:'', od_axis:'', od_add:'', oi_sph:'', oi_cyl:'', oi_axis:'', oi_add:'' })
   const [agregandoPago, setAgregandoPago] = useState(false)
   const [pagoForm, setPagoForm] = useState({ titular:'', ultimos4:'', vencimiento:'' })
   const [pagos, setPagos] = useState([])
@@ -47,7 +47,7 @@ export default function CuentaPage() {
   const guardarReceta = async () => {
     const sb = createClient()
     const { data } = await sb.from('prescriptions').insert({ user_id: user.id, ...recetaForm }).select().single()
-    if (data) { setRecetas(r => [data, ...r]); setAgregandoReceta(false); setRecetaForm({ nombre:'Mi receta', od_sph:'', od_cyl:'', od_axis:'', od_add:'', oi_sph:'', oi_cyl:'', oi_axis:'', oi_add:'' }) }
+    if (data) { setRecetas(r => [data, ...r]); setAgregandoReceta(false); setRecetaForm({ nombre:'Mi receta', diagnostico:'', od_sph:'', od_cyl:'', od_axis:'', od_add:'', oi_sph:'', oi_cyl:'', oi_axis:'', oi_add:'' }) }
   }
 
   const eliminarReceta = async (id) => {
@@ -217,7 +217,10 @@ export default function CuentaPage() {
             )}
             {recetas.map(r => (
               <div key={r.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-                <p className="font-bold text-gray-900 mb-3">{r.nombre}</p>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="font-bold text-gray-900">{r.nombre}</p>
+                  {r.diagnostico && <span className="text-xs font-semibold px-2 py-1 bg-primary-50 text-primary-700 rounded-full">{r.diagnostico}</span>}
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   {[['OD Derecho', r.od_sph, r.od_cyl, r.od_axis, r.od_add], ['OI Izquierdo', r.oi_sph, r.oi_cyl, r.oi_axis, r.oi_add]].map(([label, sph, cyl, axis, add]) => (
                     <div key={label} className="bg-gray-50 rounded-xl p-3">
@@ -231,6 +234,16 @@ export default function CuentaPage() {
                     </div>
                   ))}
                 </div>
+                {r.diagnostico && (
+                  <div className="mt-3 bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-800">
+                    <p className="font-semibold mb-1">Lentes recomendados para {r.diagnostico}:</p>
+                    <p>{r.diagnostico === 'Miopia' || r.diagnostico === 'Miopía' ? 'Lentes esfericos con graduacion negativa (SPH -)' :
+                       r.diagnostico === 'Astigmatismo' ? 'Lentes toricos (Acuvue Oasys for Astigmatism, Air Optix for Astigmatism)' :
+                       r.diagnostico === 'Presbicia' ? 'Lentes multifocales (Acuvue Oasys for Multifocal)' :
+                       r.diagnostico === 'Hipermetropia' || r.diagnostico === 'Hipermetropía' ? 'Lentes esfericos con graduacion positiva (SPH +)' :
+                       r.diagnostico === 'Miopia + Astigmatismo' ? 'Lentes toricos con SPH negativo' : 'Consulta con tu oftalmologo'}</p>
+                  </div>
+                )}
                 <div className="flex gap-2 mt-3">
                   <a href="/catalogo" className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center hover:bg-primary-700 transition-colors">Comprar</a>
                   <button onClick={() => eliminarReceta(r.id)} className="px-3 py-2.5 bg-red-50 text-red-500 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">Eliminar</button>
@@ -240,6 +253,18 @@ export default function CuentaPage() {
             {agregandoReceta ? (
               <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
                 <input value={recetaForm.nombre} onChange={e => setRecetaForm(f => ({...f, nombre: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Nombre (ej: Receta 2025)" />
+                <div>
+                  <p className="text-xs font-bold text-gray-500 uppercase mb-2">Diagnostico</p>
+                  <select value={recetaForm.diagnostico} onChange={e => setRecetaForm(f => ({...f, diagnostico: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
+                    <option value="">Selecciona tu condicion visual</option>
+                    <option value="Miopía">Miopía (ver de lejos mal)</option>
+                    <option value="Hipermetropía">Hipermetropía (ver de cerca mal)</option>
+                    <option value="Astigmatismo">Astigmatismo</option>
+                    <option value="Miopía + Astigmatismo">Miopía + Astigmatismo</option>
+                    <option value="Presbicia">Presbicia (vista cansada)</option>
+                    <option value="Presbicia + Miopía">Presbicia + Miopía</option>
+                  </select>
+                </div>
                 {[['OD Ojo Derecho', 'od'], ['OI Ojo Izquierdo', 'oi']].map(([label, side]) => (
                   <div key={side}>
                     <p className="text-xs font-bold text-gray-500 uppercase mb-2">{label}</p>
