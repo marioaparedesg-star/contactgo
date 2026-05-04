@@ -21,6 +21,10 @@ export default function CuentaPage() {
   const [telefono, setTelefono] = useState('')
   const [loading, setLoading] = useState(false)
   const [recetas, setRecetas] = useState([])
+  const [agregandoReceta, setAgregandoReceta] = useState(false)
+  const [recetaForm, setRecetaForm] = useState({ nombre:'Mi receta', od_sph:'', od_cyl:'', od_axis:'', od_add:'', oi_sph:'', oi_cyl:'', oi_axis:'', oi_add:'' })
+  const [agregandoPago, setAgregandoPago] = useState(false)
+  const [pagoForm, setPagoForm] = useState({ titular:'', ultimos4:'', vencimiento:'' })
   const [pagos, setPagos] = useState([])
   const [msg, setMsg] = useState('')
 
@@ -39,6 +43,31 @@ export default function CuentaPage() {
       }
     })
   }, [])
+
+  const guardarReceta = async () => {
+    const sb = createClient()
+    const { data } = await sb.from('prescriptions').insert({ user_id: user.id, ...recetaForm }).select().single()
+    if (data) { setRecetas(r => [data, ...r]); setAgregandoReceta(false); setRecetaForm({ nombre:'Mi receta', od_sph:'', od_cyl:'', od_axis:'', od_add:'', oi_sph:'', oi_cyl:'', oi_axis:'', oi_add:'' }) }
+  }
+
+  const eliminarReceta = async (id) => {
+    const sb = createClient()
+    await sb.from('prescriptions').delete().eq('id', id)
+    setRecetas(r => r.filter(x => x.id !== id))
+  }
+
+  const guardarPago = async () => {
+    if (!pagoForm.titular || !pagoForm.ultimos4 || !pagoForm.vencimiento) return
+    const sb = createClient()
+    const { data } = await sb.from('payment_methods').insert({ user_id: user.id, ...pagoForm, tipo:'tarjeta', principal: pagos.length === 0 }).select().single()
+    if (data) { setPagos(p => [...p, data]); setAgregandoPago(false); setPagoForm({ titular:'', ultimos4:'', vencimiento:'' }) }
+  }
+
+  const eliminarPago = async (id) => {
+    const sb = createClient()
+    await sb.from('payment_methods').delete().eq('id', id)
+    setPagos(p => p.filter(x => x.id !== id))
+  }
 
   const guardarPerfil = async () => {
     const sb = createClient()
@@ -202,11 +231,40 @@ export default function CuentaPage() {
                     </div>
                   ))}
                 </div>
-                <a href="/catalogo" className="mt-3 w-full bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary-700 transition-colors">
-                  Comprar con esta receta
-                </a>
+                <div className="flex gap-2 mt-3">
+                  <a href="/catalogo" className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center hover:bg-primary-700 transition-colors">Comprar</a>
+                  <button onClick={() => eliminarReceta(r.id)} className="px-3 py-2.5 bg-red-50 text-red-500 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">Eliminar</button>
+                </div>
               </div>
             ))}
+            {agregandoReceta ? (
+              <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
+                <input value={recetaForm.nombre} onChange={e => setRecetaForm(f => ({...f, nombre: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Nombre (ej: Receta 2025)" />
+                {[['OD Ojo Derecho', 'od'], ['OI Ojo Izquierdo', 'oi']].map(([label, side]) => (
+                  <div key={side}>
+                    <p className="text-xs font-bold text-gray-500 uppercase mb-2">{label}</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div><p className="text-xs text-gray-400 mb-1">SPH</p>
+                        <input value={recetaForm[side+'_sph']} onChange={e => setRecetaForm(f => ({...f, [side+'_sph']: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="-2.50" /></div>
+                      <div><p className="text-xs text-gray-400 mb-1">CYL</p>
+                        <input value={recetaForm[side+'_cyl']} onChange={e => setRecetaForm(f => ({...f, [side+'_cyl']: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="-0.75" /></div>
+                      <div><p className="text-xs text-gray-400 mb-1">EJE</p>
+                        <input value={recetaForm[side+'_axis']} onChange={e => setRecetaForm(f => ({...f, [side+'_axis']: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="180" /></div>
+                      <div><p className="text-xs text-gray-400 mb-1">ADD</p>
+                        <input value={recetaForm[side+'_add']} onChange={e => setRecetaForm(f => ({...f, [side+'_add']: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="+1.50" /></div>
+                    </div>
+                  </div>
+                ))}
+                <div className="flex gap-2">
+                  <button onClick={guardarReceta} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
+                  <button onClick={() => setAgregandoReceta(false)} className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
+                </div>
+              </div>
+            ) : (
+              <button onClick={() => setAgregandoReceta(true)} className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors">
+                <Plus className="w-5 h-5" /> Agregar receta
+              </button>
+            )}
           </div>
         )}
 
@@ -223,16 +281,34 @@ export default function CuentaPage() {
               </div>
             )}
             {pagos.map(p => (
-              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
-                  <CreditCard className="w-5 h-5 text-white" />
+              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
+                    <CreditCard className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">XXXX XXXX XXXX {p.ultimos4}</p>
+                    <p className="text-xs text-gray-400">{p.titular} · Vence {p.vencimiento}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">XXXX XXXX XXXX {p.ultimos4}</p>
-                  <p className="text-xs text-gray-400">{p.titular} · Vence {p.vencimiento}</p>
-                </div>
+                <button onClick={() => eliminarPago(p.id)} className="text-gray-300 hover:text-red-500 p-1"><Trash2 className="w-4 h-4" /></button>
               </div>
             ))}
+            {agregandoPago ? (
+              <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
+                <input value={pagoForm.titular} onChange={e => setPagoForm(f => ({...f, titular: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Nombre del titular" />
+                <input value={pagoForm.ultimos4} onChange={e => setPagoForm(f => ({...f, ultimos4: e.target.value.slice(0,4)}))} maxLength={4} inputMode="numeric" className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Ultimos 4 digitos" />
+                <input value={pagoForm.vencimiento} onChange={e => setPagoForm(f => ({...f, vencimiento: e.target.value}))} maxLength={5} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="MM/AA" />
+                <div className="flex gap-2">
+                  <button onClick={guardarPago} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar</button>
+                  <button onClick={() => setAgregandoPago(false)} className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
+                </div>
+              </div>
+            ) : (
+              <button onClick={() => setAgregandoPago(true)} className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors">
+                <Plus className="w-5 h-5" /> Agregar tarjeta
+              </button>
+            )}
           </div>
         )}
 
