@@ -73,7 +73,7 @@ export default async function AdminDashboard() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
-      <main className="flex-1 p-6 md:p-8 overflow-auto">
+      <main className="flex-1 p-4 md:p-8 overflow-auto pt-16 pb-24 md:pt-8 md:pb-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
