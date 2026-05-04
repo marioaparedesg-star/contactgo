@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
-import { User, Package, MapPin, Phone, Mail, Edit2, Check, X, Plus, Trash2, LogOut, ChevronRight } from 'lucide-react'
+import { User, Package, MapPin, Phone, Mail, Edit2, Check, X, Plus, Trash2, LogOut, ChevronRight, FileText, CreditCard, RefreshCw, MessageCircle } from 'lucide-react'
 
 export default function CuentaPage() {
   const [user, setUser] = useState(null)
@@ -20,6 +20,8 @@ export default function CuentaPage() {
   const [nombre, setNombre] = useState('')
   const [telefono, setTelefono] = useState('')
   const [loading, setLoading] = useState(false)
+  const [recetas, setRecetas] = useState([])
+  const [pagos, setPagos] = useState([])
   const [msg, setMsg] = useState('')
 
   useEffect(() => {
@@ -32,6 +34,8 @@ export default function CuentaPage() {
         })
         sb.from('orders').select('*').eq('user_id', user.id).order('fecha', { ascending: false }).then(({ data }) => setPedidos(data || []))
         sb.from('addresses').select('*').eq('user_id', user.id).order('created_at').then(({ data }) => setDirecciones(data || []))
+        sb.from('prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).then(({ data }) => setRecetas(data || []))
+        sb.from('payment_methods').select('*').eq('user_id', user.id).order('created_at').then(({ data }) => setPagos(data || []))
       }
     })
   }, [])
@@ -138,7 +142,7 @@ export default function CuentaPage() {
 
       <div className="max-w-2xl mx-auto px-4 py-4">
         <div className="flex bg-white rounded-2xl border border-gray-100 shadow-sm p-1 mb-6">
-          {[{id:'pedidos',label:'Pedidos',icon:Package},{id:'perfil',label:'Perfil',icon:User},{id:'direcciones',label:'Direcciones',icon:MapPin}].map(t => (
+          {[{id:'pedidos',label:'Pedidos',icon:Package},{id:'recetas',label:'Recetas',icon:FileText},{id:'pagos',label:'Pagos',icon:CreditCard},{id:'perfil',label:'Perfil',icon:User},{id:'direcciones',label:'Dirs',icon:MapPin}].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
               className={"flex-1 flex flex-col items-center gap-1 py-3 rounded-xl text-xs font-semibold transition-all " + (tab === t.id ? 'bg-primary-50 text-primary-600 shadow-sm' : 'text-gray-400 hover:text-gray-600')}>
               <t.icon className="w-5 h-5" />
@@ -167,6 +171,65 @@ export default function CuentaPage() {
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                   <span className="text-primary-600 font-bold text-lg">RD${(p.total || 0).toLocaleString()}</span>
                   <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-lg capitalize">{(p.metodo_pago || '').replace('_', ' ')}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === 'recetas' && (
+          <div className="space-y-3">
+            {recetas.length === 0 && (
+              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
+                <FileText className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+                <p className="text-gray-500 font-medium">No tienes recetas guardadas</p>
+                <p className="text-xs text-gray-400 mt-1">Agrega tu receta optica para comprar mas rapido</p>
+              </div>
+            )}
+            {recetas.map(r => (
+              <div key={r.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                <p className="font-bold text-gray-900 mb-3">{r.nombre}</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[['OD Derecho', r.od_sph, r.od_cyl, r.od_axis, r.od_add], ['OI Izquierdo', r.oi_sph, r.oi_cyl, r.oi_axis, r.oi_add]].map(([label, sph, cyl, axis, add]) => (
+                    <div key={label} className="bg-gray-50 rounded-xl p-3">
+                      <p className="text-xs font-bold text-gray-500 mb-2">{label}</p>
+                      <div className="space-y-1 text-xs">
+                        {sph && <p><span className="text-gray-400">SPH: </span><span className="font-semibold">{sph}</span></p>}
+                        {cyl && <p><span className="text-gray-400">CYL: </span><span className="font-semibold">{cyl}</span></p>}
+                        {axis && <p><span className="text-gray-400">EJE: </span><span className="font-semibold">{axis}</span></p>}
+                        {add && <p><span className="text-gray-400">ADD: </span><span className="font-semibold">{add}</span></p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <a href="/catalogo" className="mt-3 w-full bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary-700 transition-colors">
+                  Comprar con esta receta
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === 'pagos' && (
+          <div className="space-y-3">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-800">
+              <p className="font-semibold mb-1">Solo guardamos referencia</p>
+              <p>Ultimos 4 digitos y titular. Nunca el numero completo.</p>
+            </div>
+            {pagos.length === 0 && (
+              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
+                <CreditCard className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+                <p className="text-gray-500 font-medium">No tienes tarjetas guardadas</p>
+              </div>
+            )}
+            {pagos.map(p => (
+              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+                <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
+                  <CreditCard className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">XXXX XXXX XXXX {p.ultimos4}</p>
+                  <p className="text-xs text-gray-400">{p.titular} · Vence {p.vencimiento}</p>
                 </div>
               </div>
             ))}
