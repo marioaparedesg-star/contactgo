@@ -44,9 +44,27 @@ export default function CuentaPage() {
     })
   }, [])
 
+  const detectarDiagnostico = (form) => {
+    const sph = parseFloat(form.od_sph || form.oi_sph || '0')
+    const cyl = parseFloat(form.od_cyl || form.oi_cyl || '0')
+    const add = parseFloat(form.od_add || form.oi_add || '0')
+    const tieneCyl = cyl !== 0 && (form.od_cyl || form.oi_cyl)
+    const tieneAdd = add > 0 && (form.od_add || form.oi_add)
+    if (tieneAdd && sph < 0 && tieneCyl) return 'Presbicia + Miopía + Astigmatismo'
+    if (tieneAdd && sph < 0) return 'Presbicia + Miopía'
+    if (tieneAdd && sph >= 0) return 'Presbicia'
+    if (sph < 0 && tieneCyl) return 'Miopía + Astigmatismo'
+    if (sph > 0 && tieneCyl) return 'Hipermetropía + Astigmatismo'
+    if (tieneCyl) return 'Astigmatismo'
+    if (sph < 0) return 'Miopía'
+    if (sph > 0) return 'Hipermetropía'
+    return ''
+  }
+
   const guardarReceta = async () => {
     const sb = createClient()
-    const { data } = await sb.from('prescriptions').insert({ user_id: user.id, ...recetaForm }).select().single()
+    const diagnostico = detectarDiagnostico(recetaForm)
+    const { data } = await sb.from('prescriptions').insert({ user_id: user.id, ...recetaForm, diagnostico }).select().single()
     if (data) { setRecetas(r => [data, ...r]); setAgregandoReceta(false); setRecetaForm({ nombre:'Mi receta', diagnostico:'', od_sph:'', od_cyl:'', od_axis:'', od_add:'', oi_sph:'', oi_cyl:'', oi_axis:'', oi_add:'' }) }
   }
 
@@ -253,18 +271,12 @@ export default function CuentaPage() {
             {agregandoReceta ? (
               <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
                 <input value={recetaForm.nombre} onChange={e => setRecetaForm(f => ({...f, nombre: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Nombre (ej: Receta 2025)" />
-                <div>
-                  <p className="text-xs font-bold text-gray-500 uppercase mb-2">Diagnostico</p>
-                  <select value={recetaForm.diagnostico} onChange={e => setRecetaForm(f => ({...f, diagnostico: e.target.value}))} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
-                    <option value="">Selecciona tu condicion visual</option>
-                    <option value="Miopía">Miopía (ver de lejos mal)</option>
-                    <option value="Hipermetropía">Hipermetropía (ver de cerca mal)</option>
-                    <option value="Astigmatismo">Astigmatismo</option>
-                    <option value="Miopía + Astigmatismo">Miopía + Astigmatismo</option>
-                    <option value="Presbicia">Presbicia (vista cansada)</option>
-                    <option value="Presbicia + Miopía">Presbicia + Miopía</option>
-                  </select>
-                </div>
+
+                {(recetaForm.od_sph || recetaForm.oi_sph) && (
+                  <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-2.5 text-sm text-blue-800 font-semibold">
+                    Diagnostico detectado: {detectarDiagnostico(recetaForm) || 'Ingresa SPH para detectar'}
+                  </div>
+                )}
                 {[['OD Ojo Derecho', 'od'], ['OI Ojo Izquierdo', 'oi']].map(([label, side]) => (
                   <div key={side}>
                     <p className="text-xs font-bold text-gray-500 uppercase mb-2">{label}</p>
