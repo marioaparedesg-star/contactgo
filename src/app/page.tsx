@@ -5,6 +5,7 @@ import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { createServerSupabaseClient } from '@/lib/supabase'
 import ProductCard from '@/components/shop/ProductCard'
+import PersonalizedSection from '@/components/shop/PersonalizedSection'
 import type { Product } from '@/types'
 
 export const revalidate = 60
@@ -91,6 +92,8 @@ export default async function HomePage() {
         </section>
 
         {/* ── CATEGORÍAS ───────────────────────────────────────── */}
+        <PersonalizedSection />
+
         <section className="max-w-7xl mx-auto px-4 py-14">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-7">Compra por tipo</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -135,6 +138,8 @@ export default async function HomePage() {
         </section>
 
         {/* ── PRODUCTOS DESTACADOS ──────────────────────────────── */}
+        <PersonalizedSection />
+
         <section className="max-w-7xl mx-auto px-4 py-14">
           <div className="flex items-center justify-between mb-7">
             <h2 className="font-display text-2xl font-bold text-gray-900">Más populares</h2>
