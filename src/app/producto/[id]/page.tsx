@@ -40,10 +40,14 @@ export default function ProductoPage() {
   const [qty, setQty] = useState(1)
   const addItem = useCartStore(s => s.addItem)
 
+  const [variants, setVariants] = useState<any[]>([])
+
   useEffect(() => {
     const sb = createClient()
     sb.from('products').select('*, categories(*)').eq('id', id).single()
       .then(({ data }) => { setProduct(data); setLoading(false) })
+    sb.from('product_variants').select('*').eq('product_id', id).gt('stock', 0)
+      .then(({ data }) => setVariants(data ?? []))
   }, [id])
 
   const needsSph = product && ['esferico','torico','multifocal','color'].includes(product.tipo ?? '')
@@ -65,20 +69,32 @@ export default function ProductoPage() {
   if (loading) return (<><Navbar /><div className="flex items-center justify-center h-96"><div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" /></div></>)
   if (!product) return (<><Navbar /><div className="max-w-2xl mx-auto px-4 py-20 text-center"><p className="text-gray-500">Producto no encontrado.</p><button onClick={() => router.back()} className="mt-4 btn-primary">Volver</button></div></>)
 
-  const sphs: number[] = product.sph_disponibles ?? []
+  const sphs: number[] = []
   const cyls: number[] = product.cyl_disponibles ?? []
   const adds: string[] = product.add_disponibles ?? []
   const colores: string[] = product.colores_disponibles ?? []
   const axes: number[] = (product as any).axis_disponibles ?? []
 
-  // Rangos estandar por tipo - no dependen de variantes en DB
   const tipo = product?.tipo ?? ''
-  const sphRange = needsSph ? ALL_SPH : []
-  const cylRange = ['torico'].includes(tipo) ? ALL_CYL : []
-  const addRange = tipo === 'multifocal' ? ['+1.00', '+1.25', '+1.50', '+1.75', '+2.00', '+2.25', '+2.50', '+2.75', '+3.00'] : []
-  const axisRange = (tipo === 'torico' && selectedCyl !== null && selectedCyl !== 0) 
-    ? Array.from({length: 180}, (_, i) => i + 1) 
+  // Usar variantes de DB si existen, sino rangos estandar
+  const variantSphs = [...new Set(variants.map((v:any) => v.sph).filter((s:any) => s !== null))].sort((a:any,b:any)=>a-b)
+  const sphRange = variants.length > 0 ? variantSphs : (needsSph ? ALL_SPH : [])
+  
+  // CYL disponibles segun SPH seleccionado
+  const variantCyls = selectedSph !== null 
+    ? [...new Set(variants.filter((v:any) => v.sph === selectedSph && v.cyl !== null).map((v:any) => v.cyl))].sort((a:any,b:any)=>a-b)
+    : [...new Set(variants.map((v:any) => v.cyl).filter((c:any) => c !== null))].sort((a:any,b:any)=>a-b)
+  const cylRange = variants.length > 0 ? variantCyls : (tipo === 'torico' ? ALL_CYL : [])
+
+  // AXIS disponibles segun SPH+CYL seleccionados
+  const variantAxes = (selectedSph !== null && selectedCyl !== null)
+    ? [...new Set(variants.filter((v:any) => v.sph === selectedSph && v.cyl === selectedCyl && v.axis !== null).map((v:any) => v.axis))].sort((a:any,b:any)=>a-b)
     : []
+  const axisRange = variants.length > 0 ? variantAxes : ((tipo === 'torico' && selectedCyl !== null && selectedCyl !== 0) ? Array.from({length:180},(_,i)=>i+1) : [])
+
+  // ADD disponibles
+  const variantAdds = [...new Set(variants.filter((v:any) => v.add_power !== null && (selectedSph === null || v.sph === selectedSph)).map((v:any) => v.add_power))]
+  const addRange = variants.length > 0 ? variantAdds : (tipo === 'multifocal' ? ['+1.00','+1.25','+1.50','+1.75','+2.00','+2.25','+2.50','+2.75','+3.00'] : [])
 
   return (
     <>
@@ -113,10 +129,9 @@ export default function ProductoPage() {
                 <select value={selectedSph ?? ''} onChange={e => setSelectedSph(e.target.value === '' ? null : parseFloat(e.target.value))}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
                   <option value="">-- Selecciona tu graduacion --</option>
-                  {sphRange.map(s => {
-                    const ok = sphs.includes(s)
-                    return <option key={s} value={s} disabled={!ok}>{s > 0 ? '+' + s : s}{ok ? '' : ' (no disponible)'}</option>
-                  })}
+                  {sphRange.map((s:any) => (
+                    <option key={s} value={s}>{s > 0 ? '+' + s : s}</option>
+                  ))}
                 </select>
               </div>
             )}
@@ -127,10 +142,9 @@ export default function ProductoPage() {
                 <select value={selectedCyl ?? ''} onChange={e => setSelectedCyl(e.target.value === '' ? null : parseFloat(e.target.value))}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
                   <option value="">-- Selecciona cilindro --</option>
-                  {cylRange.map(c => {
-                    const ok = cyls.includes(c)
-                    return <option key={c} value={c} disabled={!ok}>{c}{ok ? '' : ' (no disponible)'}</option>
-                  })}
+                  {cylRange.map((c:any) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
                 </select>
               </div>
             )}
