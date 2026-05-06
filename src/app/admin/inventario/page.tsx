@@ -20,15 +20,17 @@ export default function InventarioPage() {
 
   useEffect(() => {
     sb.from('products').select('*').order('tipo').order('nombre').then(({data}) => setProductos(data??[]))
-    // Cargar resumen de variantes por producto
-    sb.rpc('get_variant_summary').then(({data, error}) => {
-      if (error || !data) {
+    // Cargar solo resumen por producto
+    sb.from('product_variants')
+      .select('product_id, stock')
+      .then(({data: d}) => {
+        const map: Record<string,any[]> = {}
+        ;(d??[]).forEach((v:any) => { if(!map[v.product_id]) map[v.product_id]=[]; map[v.product_id].push(v) })
+        setVariantes(map)
+      })
+    if (false) {
         // Fallback: cargar directamente con limit alto
-        sb.from('product_variants').select('*').limit(50000).then(({data: d}) => {
-          const map: Record<string,any[]> = {}
-          ;(d??[]).forEach((v:any) => { if(!map[v.product_id]) map[v.product_id]=[]; map[v.product_id].push(v) })
-          setVariantes(map)
-        })
+            setVariantes({})
         return
       }
       const map: Record<string,any[]> = {}
@@ -37,7 +39,13 @@ export default function InventarioPage() {
     })
   }, [])
 
-  const toggleExpand = (id: string) => setExpandido(e => e===id ? null : id)
+  const toggleExpand = async (id: string) => {
+    setExpandido(e => e===id ? null : id)
+    if (expandido !== id) {
+      const {data} = await sb.from('product_variants').select('*').eq('product_id', id).order('sph')
+      if (data) setVariantes(v => ({...v, [id]: data}))
+    }
+  }
 
   const agregarVariante = async (p: any) => {
     const nv = nuevaVariante[p.id] ?? {}
