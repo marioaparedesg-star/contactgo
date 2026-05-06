@@ -103,6 +103,25 @@ export default function CartPage() {
                 <span>RD${tot.toLocaleString()}</span>
               </div>
             </div>
+            {/* Cross-sell soluciones */}
+            {!items.some(i => i.product?.tipo === 'solucion') && (
+              <div className="mt-4 bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                <p className="text-sm font-bold text-gray-900 mb-1">¿Tienes solución para lentes? 💧</p>
+                <p className="text-xs text-gray-500 mb-3">La mayoría de nuestros clientes agrega una solución a su pedido.</p>
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {[
+                    { nombre: 'Renu Fresh 120ml', precio: 600, href: '/producto/6a7e8d19-1f70-4da6-a5ab-be458a63ade3' },
+                    { nombre: 'Opti-Free 90ml', precio: 900, href: '/producto/8561bdde-eedc-44c3-b7b5-66687eaf0bd4' },
+                    { nombre: 'Biotrue 300ml', precio: 1300, href: '/producto/869205f9-c81d-4861-b3ea-8b714d8631e0' },
+                  ].map(p => (
+                    <Link key={p.href} href={p.href} className="shrink-0 bg-white border border-gray-200 rounded-xl px-3 py-2 text-left hover:border-primary-300 transition-colors">
+                      <p className="text-xs font-semibold text-gray-900">{p.nombre}</p>
+                      <p className="text-xs text-primary-600 font-bold">RD${p.precio.toLocaleString()}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
             <Link href="/checkout" className="btn-primary w-full mt-5 flex items-center justify-center gap-2 py-3.5">
               Proceder al pago <ArrowRight className="w-4 h-4" />
             </Link>
