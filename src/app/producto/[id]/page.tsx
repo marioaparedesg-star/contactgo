@@ -79,7 +79,7 @@ export default function ProductoPage() {
   // Usar variantes de DB si existen, sino rangos estandar
   const variantSphs = [...new Set(variants.map((v:any) => v.sph).filter((s:any) => s !== null))]
   const sortSph = (arr: number[]) => {
-    const neg = arr.filter(s => s < 0).sort((a,b) => a - b) // -0.25, -0.50... mas negativo al final
+    const neg = arr.filter(s => s < 0).sort((a,b) => b - a) // -0.25, -0.50... de menor a mayor absoluto
     const pos = arr.filter(s => s > 0).sort((a,b) => a - b) // +0.25, +0.50...
     return [...neg, ...pos]
   }
