@@ -77,8 +77,13 @@ export default function ProductoPage() {
 
   const tipo = product?.tipo ?? ''
   // Usar variantes de DB si existen, sino rangos estandar
-  const variantSphs = [...new Set(variants.map((v:any) => v.sph).filter((s:any) => s !== null))].sort((a:any,b:any)=>a-b)
-  const sphRange = variants.length > 0 ? variantSphs : (needsSph ? ALL_SPH : [])
+  const variantSphs = [...new Set(variants.map((v:any) => v.sph).filter((s:any) => s !== null))]
+  const sortSph = (arr: number[]) => {
+    const neg = arr.filter(s => s < 0).sort((a,b) => a - b) // -0.25, -0.50... mas negativo al final
+    const pos = arr.filter(s => s > 0).sort((a,b) => a - b) // +0.25, +0.50...
+    return [...neg, ...pos]
+  }
+  const sphRange = variants.length > 0 ? sortSph(variantSphs) : (needsSph ? sortSph(ALL_SPH) : [])
   
   // CYL disponibles segun SPH seleccionado
   const variantCyls = selectedSph !== null 
