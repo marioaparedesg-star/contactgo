@@ -47,7 +47,6 @@ export default function ProductoPage() {
   }, [id])
 
   const needsSph = product && ['esferico','torico','multifocal','color'].includes(product.tipo ?? '')
-    && (product.sph_disponibles?.length ?? 0) > 0
 
   const handleAdd = () => {
     if (!product) return
@@ -72,8 +71,14 @@ export default function ProductoPage() {
   const colores: string[] = product.colores_disponibles ?? []
   const axes: number[] = (product as any).axis_disponibles ?? []
 
-  const sphRange = sphs.length > 0 ? ALL_SPH.filter(v => { const neg = sphs.filter((x:number) => x < 0); const pos = sphs.filter((x:number) => x > 0); if (v < 0) return neg.length > 0 && v >= Math.min(...neg); if (v > 0) return pos.length > 0 && v <= Math.max(...pos); return false }) : []
-  const cylRange = cyls.length > 0 ? ALL_CYL.filter(v => v >= Math.min(...cyls) && v <= Math.max(...cyls)) : []
+  // Rangos estandar por tipo - no dependen de variantes en DB
+  const tipo = product?.tipo ?? ''
+  const sphRange = needsSph ? ALL_SPH : []
+  const cylRange = ['torico'].includes(tipo) ? ALL_CYL : []
+  const addRange = tipo === 'multifocal' ? ['+1.00', '+1.25', '+1.50', '+1.75', '+2.00', '+2.25', '+2.50', '+2.75', '+3.00'] : []
+  const axisRange = (tipo === 'torico' && selectedCyl !== null && selectedCyl !== 0) 
+    ? Array.from({length: 180}, (_, i) => i + 1) 
+    : []
 
   return (
     <>
@@ -130,24 +135,24 @@ export default function ProductoPage() {
               </div>
             )}
 
-            {axes.length > 0 && (
+            {axisRange.length > 0 && (
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Eje (AXIS)</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Eje (AXIS) <span className="text-red-500">*</span></label>
                 <select value={selectedAxis ?? ''} onChange={e => setSelectedAxis(e.target.value === '' ? null : parseInt(e.target.value))}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
                   <option value="">-- Selecciona el eje --</option>
-                  {axes.map(a => <option key={a} value={a}>{a}</option>)}
+                  {axisRange.map(a => <option key={a} value={a}>{String(a).padStart(3,'0')}</option>)}
                 </select>
               </div>
             )}
 
-            {adds.length > 0 && (
+            {addRange.length > 0 && (
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Adicion (ADD)</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Adición (ADD) <span className="text-red-500">*</span></label>
                 <select value={selectedAdd ?? ''} onChange={e => setSelectedAdd(e.target.value === '' ? null : e.target.value)}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
-                  <option value="">-- Selecciona adicion --</option>
-                  {adds.sort().map(a => <option key={a} value={a}>{a}</option>)}
+                  <option value="">-- Selecciona adición --</option>
+                  {addRange.map(a => <option key={a} value={a}>{a}</option>)}
                 </select>
               </div>
             )}
