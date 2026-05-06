@@ -81,6 +81,8 @@ export default function Footer() {
         <a href="/terminos" className="text-gray-400 hover:text-white transition-colors">Términos de Uso</a>
         <span className="hidden md:inline text-gray-600">·</span>
         <a href="/faq" className="text-gray-400 hover:text-white transition-colors">Preguntas Frecuentes</a>
+        <span className="hidden md:inline text-gray-600">·</span>
+        <a href="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</a>
       </div>
     </footer>
   )
