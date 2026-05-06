@@ -24,6 +24,13 @@ type FormData = z.infer<typeof schema>
 const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata',
   'Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad']
 
+const SEGURIDAD = [
+  { icon: '🔒', text: 'Pago 100% seguro' },
+  { icon: '✅', text: 'Productos originales' },
+  { icon: '🚚', text: 'Envío en 24-48h' },
+  { icon: '↩️', text: 'Devolución en 7 días' },
+]
+
 const PAYPAL_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!
 
 export default function CheckoutPage() {
@@ -340,6 +347,15 @@ export default function CheckoutPage() {
                     ✓ Descuento aplicado: -RD${descuento.toLocaleString()}
                   </p>
                 )}
+              </div>
+              {/* Sellos de seguridad */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                {SEGURIDAD.map(s => (
+                  <div key={s.text} className="flex items-center gap-1.5 bg-gray-50 rounded-xl px-3 py-2">
+                    <span className="text-sm">{s.icon}</span>
+                    <span className="text-xs font-medium text-gray-600">{s.text}</span>
+                  </div>
+                ))}
               </div>
               <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
                 <div className="flex justify-between text-gray-500">
