@@ -20,7 +20,17 @@ export default function InventarioPage() {
 
   useEffect(() => {
     sb.from('products').select('*').order('tipo').order('nombre').then(({data}) => setProductos(data??[]))
-    sb.from('product_variants').select('*').then(({data}) => {
+    // Cargar resumen de variantes por producto
+    sb.rpc('get_variant_summary').then(({data, error}) => {
+      if (error || !data) {
+        // Fallback: cargar directamente con limit alto
+        sb.from('product_variants').select('*').limit(50000).then(({data: d}) => {
+          const map: Record<string,any[]> = {}
+          ;(d??[]).forEach((v:any) => { if(!map[v.product_id]) map[v.product_id]=[]; map[v.product_id].push(v) })
+          setVariantes(map)
+        })
+        return
+      }
       const map: Record<string,any[]> = {}
       ;(data??[]).forEach((v:any) => { if(!map[v.product_id]) map[v.product_id]=[]; map[v.product_id].push(v) })
       setVariantes(map)
