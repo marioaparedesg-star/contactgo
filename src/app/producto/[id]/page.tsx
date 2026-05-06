@@ -130,23 +130,14 @@ export default function ProductoPage() {
 
             {needsSph && sphRange.length > 0 && (
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Graduacion (SPH) <span className="text-red-500">*</span>
-                  {selectedSph !== null && <span className="ml-2 font-bold text-primary-600">{selectedSph > 0 ? '+'+selectedSph : selectedSph}</span>}
-                </label>
-                <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
-                  <div className="h-48 overflow-y-auto">
-                    <div className="p-1">
-                      {sphRange.map((s:any) => (
-                        <button key={s} onClick={() => setSelectedSph(s)}
-                          className={"w-full text-left px-4 py-2.5 text-sm rounded-lg transition-colors font-mono " +
-                            (selectedSph === s ? 'bg-primary-600 text-white font-bold' : 'hover:bg-gray-50 text-gray-700')}>
-                          {s > 0 ? '+' + s : s}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Graduacion (SPH) <span className="text-red-500">*</span></label>
+                <select value={selectedSph ?? ''} onChange={e => setSelectedSph(e.target.value === '' ? null : parseFloat(e.target.value))}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
+                  <option value="">-- Selecciona tu graduacion --</option>
+                  {sphRange.map((s:any) => (
+                    <option key={s} value={s}>{s > 0 ? '+' + s : s}</option>
+                  ))}
+                </select>
               </div>
             )}
 
