@@ -21,12 +21,10 @@ export default function InventarioPage() {
 
   useEffect(() => {
     sb.from('products').select('*').order('tipo').order('nombre').then(({data}) => setProductos(data??[]))
-    sb.from('product_variants').select('product_id, stock').then(({data}) => {
+    sb.rpc('get_variant_summary').then(({data}) => {
       const r: Record<string,{count:number,stock:number}> = {}
       ;(data??[]).forEach((v:any) => {
-        if (!r[v.product_id]) r[v.product_id] = {count:0, stock:0}
-        r[v.product_id].count++
-        r[v.product_id].stock += v.stock
+        r[v.product_id] = {count: Number(v.count), stock: Number(v.total_stock)}
       })
       setResumen(r)
     })
