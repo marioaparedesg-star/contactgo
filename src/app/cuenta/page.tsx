@@ -445,7 +445,6 @@ export default function CuentaPage() {
           </div>
         )}
       </div>
-    </div>
 
       {/* Modal detalle pedido */}
       {selectedPedido && (
@@ -456,7 +455,7 @@ export default function CuentaPage() {
               <X className="w-5 h-5 text-gray-600" />
             </button>
             <div>
-              <p className="font-bold text-gray-900">Pedido #{selectedPedido.id.slice(-6).toUpperCase()}</p>
+              <p className="font-bold text-gray-900">{"Pedido #" + selectedPedido.id.slice(-6).toUpperCase()}</p>
               <p className="text-xs text-gray-400">{new Date(selectedPedido.fecha).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
             </div>
             <span className={"ml-auto px-3 py-1 rounded-full text-xs font-bold " + (ESTADO[selectedPedido.estado] || 'bg-gray-50 text-gray-600')}>
