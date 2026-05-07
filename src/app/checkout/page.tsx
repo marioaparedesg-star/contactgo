@@ -81,13 +81,13 @@ export default function CheckoutPage() {
       color: (i as any).color,
       ojo: (i as any).ojo,
     }))
-    await sb.from('abandoned_carts').insert({
+    sb.from('abandoned_carts').insert({
       cliente_nombre: nombre,
       cliente_telefono: telefono,
       cliente_email: email,
       items: JSON.stringify(itemsData),
       total: subtotal(),
-    }).then(() => {}).catch(() => {})
+    }).then(() => {}).catch((_e: unknown) => {})
   }
 
   useEffect(() => {
