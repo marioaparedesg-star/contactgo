@@ -5,7 +5,17 @@ import type { CartItem, Product } from '@/types'
 
 interface CartStore {
   items: CartItem[]
-  addItem: (product: Product, opts?: { cantidad?: number; sph?: number | null; cyl?: number | null; axis?: number | null; add_power?: string | null; color?: string | null }) => void
+  addItem: (product: Product, opts?: {
+    cantidad?: number
+    sph?: number | null
+    cyl?: number | null
+    axis?: number | null
+    add_power?: string | null
+    color?: string | null
+    ojo?: string | null
+    size?: string | null
+    precio_override?: number | null
+  }) => void
   removeItem: (productId: string, sph?: number | null) => void
   updateQty: (productId: string, cantidad: number, sph?: number | null) => void
   updateItem: (index: number, cantidad: number) => void
@@ -22,10 +32,14 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       addItem: (product, opts = {}) => {
-        const { cantidad = 1, sph, cyl, axis, add_power, color } = opts
+        const { cantidad = 1, sph, cyl, axis, add_power, color, ojo, size, precio_override } = opts
         set(state => {
           const existing = state.items.find(
-            i => i.product.id === product.id && i.sph === sph && i.color === color
+            i => i.product.id === product.id &&
+                 i.sph === sph &&
+                 i.color === color &&
+                 (i as any).ojo === ojo &&
+                 (i as any).size === size
           )
           if (existing) {
             return {
@@ -36,15 +50,26 @@ export const useCartStore = create<CartStore>()(
               )
             }
           }
-          return { items: [...state.items, { product, cantidad, sph, cyl, axis, add_power, color }] }
+          return {
+            items: [...state.items, {
+              product,
+              cantidad,
+              sph,
+              cyl,
+              axis,
+              add_power,
+              color,
+              ojo,
+              size,
+              precio_final: precio_override ?? product.precio,
+            } as any]
+          }
         })
       },
 
       removeItem: (productId, sph) => {
         set(state => ({
-          items: state.items.filter(
-            i => !(i.product.id === productId && i.sph === sph)
-          )
+          items: state.items.filter(i => !(i.product.id === productId && i.sph === sph))
         }))
       },
 
@@ -52,9 +77,7 @@ export const useCartStore = create<CartStore>()(
         if (cantidad <= 0) { get().removeItem(productId, sph); return }
         set(state => ({
           items: state.items.map(i =>
-            i.product.id === productId && i.sph === sph
-              ? { ...i, cantidad }
-              : i
+            i.product.id === productId && i.sph === sph ? { ...i, cantidad } : i
           )
         }))
       },
@@ -63,17 +86,19 @@ export const useCartStore = create<CartStore>()(
         const items = [...get().items]
         if (items[index]) { items[index] = { ...items[index], cantidad }; set({ items }) }
       },
-      removeByIndex: (index) => {
-        const items = get().items.filter((_, i) => i !== index)
-        set({ items })
-      },
+
+      removeByIndex: (index) => set({ items: get().items.filter((_, i) => i !== index) }),
+
       clearCart: () => set({ items: [] }),
 
-      subtotal: () => get().items.reduce((s, i) => s + i.product.precio * i.cantidad, 0),
+      subtotal: () => get().items.reduce((s, i) => {
+        const precio = (i as any).precio_final ?? i.product.precio
+        return s + precio * i.cantidad
+      }, 0),
 
       total: () => {
         const sub = get().subtotal()
-        return sub > 0 ? sub + 200 : 0  // +RD$200 envío
+        return sub > 0 ? sub + 200 : 0
       },
 
       itemCount: () => get().items.reduce((s, i) => s + i.cantidad, 0),

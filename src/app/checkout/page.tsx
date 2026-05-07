@@ -126,7 +126,12 @@ export default function CheckoutPage() {
         cantidad: i.cantidad,
         sph: i.sph ?? null,
         cyl: i.cyl ?? null,
-        add_power: i.add_power ? parseFloat(i.add_power) : null,
+        add_power: i.add_power ? parseFloat(String(i.add_power)) : null,
+        axis: (i as any).axis ?? null,
+        color: (i as any).color ?? null,
+        ojo: (i as any).ojo ?? null,
+        size: (i as any).size ?? null,
+        subtotal: ((i as any).precio_final ?? i.product.precio) * i.cantidad,
       }))
     )
 
