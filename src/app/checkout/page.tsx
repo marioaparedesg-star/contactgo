@@ -69,6 +69,27 @@ export default function CheckoutPage() {
     resolver: zodResolver(schema)
   })
 
+  // Guardar carrito abandonado cuando hay telefono
+  const guardarCarritoAbandonado = async (telefono: string, nombre: string, email: string) => {
+    if (!telefono || telefono.length < 10) return
+    const sb = createClient()
+    const itemsData = items.map(i => ({
+      nombre: i.product.nombre,
+      cantidad: i.cantidad,
+      precio: (i as any).precio_final ?? i.product.precio,
+      sph: i.sph,
+      color: (i as any).color,
+      ojo: (i as any).ojo,
+    }))
+    await sb.from('abandoned_carts').insert({
+      cliente_nombre: nombre,
+      cliente_telefono: telefono,
+      cliente_email: email,
+      items: JSON.stringify(itemsData),
+      total: subtotal(),
+    }).then(() => {}).catch(() => {})
+  }
+
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
     const sb = createClient()
@@ -225,7 +246,13 @@ export default function CheckoutPage() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Teléfono / WhatsApp</label>
-                  <input {...register('telefono')} type="tel" className="input" placeholder="809-000-0000" />
+                  <input {...register('telefono')}
+                  onBlur={(e) => {
+                    const tel = e.target.value
+                    const nom = getValues('nombre')
+                    const em  = getValues('email')
+                    if (tel.length >= 10) guardarCarritoAbandonado(tel, nom, em)
+                  }} type="tel" className="input" placeholder="809-000-0000" />
                   {errors.telefono && <p className="text-red-500 text-xs mt-1">{errors.telefono.message}</p>}
                 </div>
                 <div className="sm:col-span-2">

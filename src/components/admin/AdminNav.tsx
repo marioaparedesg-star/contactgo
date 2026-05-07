@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, ShoppingBag, Package, Users, BarChart2, Repeat, LogOut } from 'lucide-react'
+import { LayoutDashboard, ShoppingBag, Package, Users, BarChart2, Repeat, LogOut, ShoppingCart } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
@@ -12,6 +12,7 @@ const NAV = [
   { href: '/admin/productos',     icon: Package,         label: 'Productos'      },
   { href: '/admin/clientes',      icon: Users,           label: 'Clientes'       },
   { href: '/admin/inventario',    icon: BarChart2,       label: 'Inventario'     },
+  { href: '/admin/abandonados',   icon: ShoppingCart,    label: 'Abandonados'    },
 ]
 
 export default function AdminNav() {
