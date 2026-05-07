@@ -49,6 +49,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <head>
+      {/* Google Analytics — reemplaza G-XXXXXXXXXX con tu Measurement ID */}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXXXXX');
+          `,
+        }}
+      />
         <meta name="theme-color" content="#16a34a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="manifest" href="/manifest.json" />
