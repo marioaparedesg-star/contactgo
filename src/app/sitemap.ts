@@ -20,6 +20,11 @@ export default async function sitemap() {
     { url: 'https://contactgo.net/catalogo?tipo=color', lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
     { url: 'https://contactgo.net/catalogo?tipo=solucion', lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.6 },
     { url: 'https://contactgo.net/catalogo?tipo=gota', lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.6 },
+    { url: 'https://contactgo.net/marca/acuvue', lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
+    { url: 'https://contactgo.net/marca/alcon', lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
+    { url: 'https://contactgo.net/marca/bausch-lomb', lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
+    { url: 'https://contactgo.net/marca/coopervision', lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
+    { url: 'https://contactgo.net/envios-y-entregas', lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 },
     ...productUrls,
   ]
 }

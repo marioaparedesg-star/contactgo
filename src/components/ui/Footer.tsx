@@ -43,6 +43,9 @@ export default function Footer() {
               ['Mi Receta', '/receta'],
               ['Mis Pedidos', '/cuenta/pedidos'],
               ['Envíos y entregas', '/envios-y-entregas'],
+              ['ACUVUE®', '/marca/acuvue'],
+              ['Air Optix®', '/marca/alcon'],
+              ['Biofinity®', '/marca/coopervision'],
               ['Devoluciones', '/ayuda/devoluciones'],
             ].map(([l, h]) => (
               <li key={h}><Link href={h} className="hover:text-primary-400 transition-colors">{l}</Link></li>
