@@ -112,6 +112,8 @@ export default function CheckoutPage() {
       pago_referencia: payRef ?? null,
     }).select().single()
 
+    // Notificar por email
+    fetch(`https://atendbjolicwcsqfyiyh.supabase.co/functions/v1/order-notification`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: order.id }) }).catch(console.error)
     if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
 
     // Insertar items
