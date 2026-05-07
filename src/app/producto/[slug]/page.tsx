@@ -39,10 +39,11 @@ const SOLUTION_SIZES: Record<string, string[]> = {
 }
 
 const SOLUTION_PRICES: Record<string, Record<string, number>> = {
-  'RENU-MULTI': { '60ml':350,'120ml':550,'355ml':950 },
-  'OPTI-MULTI': { '90ml':400,'120ml':600,'300ml':1100 },
-  'PRO-60ML':   { '60ml':400 },
-  'DRE-80ML':   { '80ml':190 },
+  'RENU-MULTI': { '60ml':562,'120ml':655,'355ml':1353 },
+  'OPTI-MULTI': { '90ml':450,'120ml':700,'300ml':1250 },
+  'PRO-60ML':   { '60ml':419 },
+  'PRO-350ML':  { '350ml':869 },
+  'DRE-80ML':   { '80ml':333 },
   'SPR-FOAM':   { 'Frasco único':350 },
 }
 
