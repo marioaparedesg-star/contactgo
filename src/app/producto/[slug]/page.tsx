@@ -118,6 +118,18 @@ export default function ProductoPage() {
 
   useEffect(() => {
     const sb = createClient()
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)
+    const field = isUUID ? 'id' : 'slug'
+    sb.from('products').select('*, categories(*)').eq(field, slug).single()
+      .then(({ data }) => {
+        setProduct(data)
+        setPrice(data?.precio ?? 0)
+        setLoading(false)
+        if (data) {
+          sb.from('product_variants').select('*').eq('product_id', data.id).gt('stock', 0)
+            .then(({ data: v }) => setVariants(v ?? []))
+        }
+      })
   }, [slug])
 
   useEffect(() => {
