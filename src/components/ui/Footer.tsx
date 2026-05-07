@@ -42,7 +42,7 @@ export default function Footer() {
             {[
               ['Mi Receta', '/receta'],
               ['Mis Pedidos', '/cuenta/pedidos'],
-              ['Envíos y entregas', '/ayuda/envios'],
+              ['Envíos y entregas', '/envios-y-entregas'],
               ['Devoluciones', '/ayuda/devoluciones'],
             ].map(([l, h]) => (
               <li key={h}><Link href={h} className="hover:text-primary-400 transition-colors">{l}</Link></li>
