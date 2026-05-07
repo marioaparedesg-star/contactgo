@@ -115,6 +115,7 @@ export default function ProductoPage() {
   const [size,  setSize]  = useState('')
   const [qty,   setQty]   = useState(1)
   const [price, setPrice] = useState(0)
+  const [variants, setVariants] = useState<any[]>([])
 
   useEffect(() => {
     const sb = createClient()
