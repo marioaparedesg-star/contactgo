@@ -28,7 +28,7 @@ function ItemDetail({ item }: { item: any }) {
     <div className="bg-gray-50 rounded-xl p-3 space-y-2">
       <div className="flex justify-between items-start gap-3">
         <p className="font-semibold text-gray-900 text-sm leading-tight">{item.nombre}</p>
-        <p className="font-bold text-gray-900 text-sm whitespace-nowrap">RD${(item.subtotal ?? item.precio * item.cantidad ?? 0).toLocaleString()}</p>
+        <p className="font-bold text-gray-900 text-sm whitespace-nowrap">RD${((item.subtotal ?? (item.precio * item.cantidad)) ?? 0).toLocaleString()}</p>
       </div>
       {specs.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
