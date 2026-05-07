@@ -15,6 +15,7 @@ interface CartStore {
     ojo?: string | null
     size?: string | null
     precio_override?: number | null
+    suscripcion?: string | null
   }) => void
   removeItem: (productId: string, sph?: number | null) => void
   updateQty: (productId: string, cantidad: number, sph?: number | null) => void
@@ -32,7 +33,7 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       addItem: (product, opts = {}) => {
-        const { cantidad = 1, sph, cyl, axis, add_power, color, ojo, size, precio_override } = opts
+        const { cantidad = 1, sph, cyl, axis, add_power, color, ojo, size, precio_override, suscripcion } = opts
         set(state => {
           const existing = state.items.find(
             i => i.product.id === product.id &&

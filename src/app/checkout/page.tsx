@@ -133,6 +133,41 @@ export default function CheckoutPage() {
       }))
     )
 
+    // Crear suscripciones si aplica
+    const itemsConSub = items.filter(i => (i as any).suscripcion)
+    if (itemsConSub.length > 0) {
+      for (const item of itemsConSub) {
+        const frec = (item as any).suscripcion as string
+        const dias = frec === '15_dias' ? 15 : frec === 'mensual' ? 30 : 90
+        const proximo = new Date()
+        proximo.setDate(proximo.getDate() + dias)
+        await sb.from('subscriptions').insert({
+          user_id: user?.id ?? null,
+          cliente_nombre: getValues('nombre'),
+          cliente_email:  getValues('email'),
+          cliente_telefono: getValues('telefono'),
+          direccion_texto: `${getValues('direccion')}, ${getValues('ciudad')}`,
+          items: JSON.stringify([{
+            product_id: item.product.id,
+            nombre: item.product.nombre,
+            cantidad: item.cantidad,
+            sph: item.sph,
+            cyl: item.cyl,
+            axis: (item as any).axis,
+            add_power: item.add_power,
+            color: (item as any).color,
+            ojo: (item as any).ojo,
+            size: (item as any).size,
+            precio: (item as any).precio_final ?? item.product.precio,
+          }]),
+          frecuencia: frec,
+          descuento_pct: frec === '15_dias' ? 5 : frec === 'mensual' ? 10 : 15,
+          proximo_envio: proximo.toISOString().split('T')[0],
+          activa: true,
+        })
+      }
+    }
+
     // Recordatorio: 25 días si son lentes mensuales
     if (user?.id) {
       const hasMonthly = items.some(i => ['esferico','torico','multifocal','color'].includes(i.product.tipo ?? ''))

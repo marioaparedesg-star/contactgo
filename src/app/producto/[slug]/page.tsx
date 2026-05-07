@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase'
 import { useCartStore } from '@/lib/cart-store'
 import type { Product } from '@/types'
 import toast from 'react-hot-toast'
+import SuscripcionSelector, { DESCUENTOS } from '@/components/shop/SuscripcionSelector'
 
 const TIPO_LABELS: Record<string, string> = {
   esferico: 'Esférico', torico: 'Tórico', multifocal: 'Multifocal',
@@ -116,6 +117,7 @@ export default function ProductoPage() {
   const [qty,   setQty]   = useState(1)
   const [price, setPrice] = useState(0)
   const [variants, setVariants] = useState<any[]>([])
+  const [suscripcion, setSuscripcion] = useState<string | null>(null)
 
   useEffect(() => {
     const sb = createClient()
@@ -134,10 +136,15 @@ export default function ProductoPage() {
   }, [slug])
 
   useEffect(() => {
-    if (!product || !size) return
-    const prices = SOLUTION_PRICES[(product as any).sku ?? '']
-    if (prices?.[size]) setPrice(prices[size])
-  }, [size, product])
+    if (!product) return
+    let base = product.precio
+    if (size) {
+      const prices = SOLUTION_PRICES[(product as any).sku ?? '']
+      if (prices?.[size]) base = prices[size]
+    }
+    const desc = suscripcion ? DESCUENTOS[suscripcion] ?? 0 : 0
+    setPrice(Math.round(base * (1 - desc)))
+  }, [size, product, suscripcion])
 
   const tipo   = product?.tipo ?? ''
   const sku    = (product as any)?.sku ?? ''
@@ -160,6 +167,7 @@ export default function ProductoPage() {
     if (isMulti && !add)                      { toast.error('Selecciona la adición (ADD)'); return }
     if (isSolucion && sizes.length > 1 && !size) { toast.error('Selecciona el tamaño'); return }
     addItem(product, {
+      suscripcion: suscripcion ?? undefined,
       cantidad: qty,
       sph:       sph   ? parseFloat(sph)  : undefined,
       cyl:       cyl   ? parseFloat(cyl)  : undefined,
@@ -314,6 +322,13 @@ export default function ProductoPage() {
                 </div>
               </div>
             )}
+
+            <SuscripcionSelector
+              value={suscripcion}
+              onChange={(val) => setSuscripcion(val)}
+              precio={product.precio}
+              tipo={tipo}
+            />
 
             {['esferico','torico','multifocal'].includes(tipo) && (
               <div className="flex gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">

@@ -8,6 +8,7 @@ export default function CuentaPage() {
   const [perfil, setPerfil] = useState(null)
   const [pedidos, setPedidos] = useState([])
   const [selectedPedido, setSelectedPedido] = useState(null)
+  const [suscripciones, setSuscripciones] = useState<any[]>([])
   const [itemsPedido, setItemsPedido] = useState([])
   const [loadingPedido, setLoadingPedido] = useState(false)
   const [tab, setTab] = useState('pedidos')
