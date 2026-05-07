@@ -127,7 +127,7 @@ export default function ProductoPage() {
         setLoading(false)
         if (data) {
           sb.from('product_variants').select('*').eq('product_id', data.id).gt('stock', 0)
-            .then(({ data: v }) => setVariants(v ?? []))
+            .then(({ data: variants }) => setVariants(variants ?? []))
         }
       })
   }, [slug])
