@@ -61,7 +61,7 @@ async function getData() {
   ;(items ?? []).forEach((i: any) => {
     if (!agg[i.nombre]) agg[i.nombre] = { nombre: i.nombre, unidades: 0, revenue: 0 }
     agg[i.nombre].unidades += i.cantidad ?? 1
-    agg[i.nombre].revenue += i.subtotal ?? (i.precio * i.cantidad) ?? 0
+    agg[i.nombre].revenue += i.subtotal ?? ((i.precio ?? 0) * (i.cantidad ?? 1))
   })
   const topProducts = Object.values(agg).sort((a,b) => b.revenue - a.revenue).slice(0, 5)
 
