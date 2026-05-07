@@ -169,7 +169,7 @@ export default async function AdminDashboard() {
           <div className="grid grid-cols-3 gap-4 mb-6">
             {[
               { label: 'Clientes',    value: d.clientes,    icon: Users,        color: 'text-purple-600 bg-purple-50' },
-              { label: 'Entregados',  value: d.entregados ?? entregados,   icon: CheckCircle,  color: 'text-green-600 bg-green-50' },
+              { label: 'Entregados',  value: d.recentOrders.filter((o:any) => o.estado === 'entregado').length,   icon: CheckCircle,  color: 'text-green-600 bg-green-50' },
               { label: 'Conversión',  value: `${d.conversion}%`, icon: TrendingUp, color: 'text-blue-600 bg-blue-50' },
             ].map(s => (
               <div key={s.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
