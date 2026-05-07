@@ -337,6 +337,21 @@ export default function ProductoPage() {
               </div>
             )}
 
+            {/* Indicadores de confianza */}
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { icon: '✅', text: 'Productos 100% originales' },
+                { icon: '🚚', text: 'Envío en 24-48h RD' },
+                { icon: '🔒', text: 'Pago seguro' },
+                { icon: '↩️', text: 'Devolución en 7 días' },
+              ].map(b => (
+                <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2">
+                  <span className="text-base">{b.icon}</span>
+                  <span className="text-xs font-medium text-gray-600">{b.text}</span>
+                </div>
+              ))}
+            </div>
+
             <button onClick={handleAdd} disabled={product.stock === 0}
               className="btn-primary flex items-center justify-center gap-2 py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed">
               <ShoppingCart className="w-5 h-5" />
@@ -349,6 +364,21 @@ export default function ProductoPage() {
           </div>
         </div>
       </main>
+      {/* Sticky CTA móvil */}
+      {product && product.stock > 0 && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 flex items-center gap-3 shadow-lg">
+          <div className="flex-1">
+            <p className="text-xs text-gray-500 truncate">{product.nombre}</p>
+            <p className="font-black text-primary-600 text-lg">RD${price.toLocaleString()}</p>
+          </div>
+          <button onClick={handleAdd}
+            className="btn-primary px-6 py-3 text-sm font-bold flex items-center gap-2 shrink-0">
+            <ShoppingCart className="w-4 h-4" />
+            Agregar
+          </button>
+        </div>
+      )}
+
       <Footer />
       <WhatsAppButton />
     </>
