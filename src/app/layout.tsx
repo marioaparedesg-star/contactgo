@@ -49,15 +49,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <head>
-      {/* Google Analytics — reemplaza G-XXXXXXXXXX con tu Measurement ID */}
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" />
+      {/* Google Analytics — reemplaza G-KGM473ZPDB con tu Measurement ID */}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-KGM473ZPDB" />
       <script
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-XXXXXXXXXX');
+            gtag('config', 'G-KGM473ZPDB');
           `,
         }}
       />
