@@ -62,6 +62,7 @@ export const useCartStore = create<CartStore>()(
               color,
               ojo,
               size,
+              suscripcion,
               precio_final: precio_override ?? product.precio,
             } as any]
           }
