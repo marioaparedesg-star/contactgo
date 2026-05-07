@@ -118,9 +118,7 @@ export default function ProductoPage() {
 
   useEffect(() => {
     const sb = createClient()
-    sb.from('products').select('*, categories(*)').eq('id', id).single()
-      .then(({ data }) => { setProduct(data); setPrice(data?.precio ?? 0); setLoading(false) })
-  }, [id])
+  }, [slug])
 
   useEffect(() => {
     if (!product || !size) return
