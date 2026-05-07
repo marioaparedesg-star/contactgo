@@ -7,6 +7,9 @@ export default function CuentaPage() {
   const [user, setUser] = useState(null)
   const [perfil, setPerfil] = useState(null)
   const [pedidos, setPedidos] = useState([])
+  const [selectedPedido, setSelectedPedido] = useState(null)
+  const [itemsPedido, setItemsPedido] = useState([])
+  const [loadingPedido, setLoadingPedido] = useState(false)
   const [tab, setTab] = useState('pedidos')
   const [editando, setEditando] = useState(false)
   const [form, setForm] = useState({ nombre: '', telefono: '' })
@@ -114,6 +117,15 @@ export default function CuentaPage() {
     window.location.reload()
   }
 
+  const verPedido = async (p) => {
+    setSelectedPedido(p)
+    setLoadingPedido(true)
+    const sb = createClient()
+    const { data } = await sb.from('order_items').select('*').eq('order_id', p.id)
+    setItemsPedido(data || [])
+    setLoadingPedido(false)
+  }
+
   const login = async (e) => {
     e.preventDefault(); setLoading(true); setMsg('')
     const sb = createClient()
@@ -207,7 +219,8 @@ export default function CuentaPage() {
                 <a href="/catalogo" className="mt-4 inline-block bg-primary-600 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors">Ver catalogo</a>
               </div>
             ) : pedidos.map(p => (
-              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <button key={p.id} onClick={() => verPedido(p)}
+                className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-left hover:border-primary-200 hover:shadow-md transition-all">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <p className="font-bold text-gray-900">Pedido #{p.id.slice(-6).toUpperCase()}</p>
@@ -217,9 +230,12 @@ export default function CuentaPage() {
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                   <span className="text-primary-600 font-bold text-lg">RD${(p.total || 0).toLocaleString()}</span>
-                  <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-lg capitalize">{(p.metodo_pago || '').replace('_', ' ')}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-lg capitalize">{(p.metodo_pago || '').replace('_', ' ')}</span>
+                    <ChevronRight className="w-4 h-4 text-gray-300" />
+                  </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -429,6 +445,122 @@ export default function CuentaPage() {
           </div>
         )}
       </div>
+    </div>
+
+      {/* Modal detalle pedido */}
+      {selectedPedido && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-gray-50">
+          <div className="bg-white border-b border-gray-100 px-4 py-4 flex items-center gap-3 sticky top-0">
+            <button onClick={() => setSelectedPedido(null)}
+              className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+            <div>
+              <p className="font-bold text-gray-900">Pedido #{selectedPedido.id.slice(-6).toUpperCase()}</p>
+              <p className="text-xs text-gray-400">{new Date(selectedPedido.fecha).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+            </div>
+            <span className={"ml-auto px-3 py-1 rounded-full text-xs font-bold " + (ESTADO[selectedPedido.estado] || 'bg-gray-50 text-gray-600')}>
+              {selectedPedido.estado}
+            </span>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+            {/* Productos */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-50 flex items-center gap-2">
+                <Package className="w-4 h-4 text-primary-600" />
+                <p className="font-bold text-gray-900 text-sm">Productos</p>
+              </div>
+              <div className="p-4 space-y-3">
+                {loadingPedido ? (
+                  <div className="flex justify-center py-4">
+                    <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : itemsPedido.length === 0 ? (
+                  <p className="text-gray-400 text-sm text-center py-2">Sin detalles disponibles</p>
+                ) : itemsPedido.map((item) => {
+                  const specs = []
+                  if (item.ojo)         specs.push({ label: 'Ojo',    val: item.ojo })
+                  if (item.sph != null) specs.push({ label: 'SPH',   val: item.sph > 0 ? '+'+item.sph : String(item.sph) })
+                  if (item.cyl != null) specs.push({ label: 'CYL',   val: String(item.cyl) })
+                  if (item.axis != null) specs.push({ label: 'AXIS', val: String(item.axis).padStart(3,'0')+'°' })
+                  if (item.add_power)   specs.push({ label: 'ADD',   val: item.add_power })
+                  if (item.color)       specs.push({ label: 'Color', val: item.color })
+                  if (item.size)        specs.push({ label: 'Tamaño',val: item.size })
+                  return (
+                    <div key={item.id} className="bg-gray-50 rounded-xl p-3">
+                      <div className="flex justify-between items-start gap-2 mb-2">
+                        <p className="font-semibold text-gray-900 text-sm">{item.nombre}</p>
+                        <p className="font-bold text-gray-900 text-sm whitespace-nowrap">
+                          RD${(item.subtotal ?? item.precio * item.cantidad).toLocaleString()}
+                        </p>
+                      </div>
+                      {specs.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                          {specs.map(s => (
+                            <span key={s.label} className="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-lg px-2 py-0.5 text-xs">
+                              <span className="text-gray-400">{s.label}:</span>
+                              <span className="font-semibold text-gray-700">{s.val}</span>
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <p className="text-xs text-gray-400">Cantidad: {item.cantidad}</p>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="px-4 py-3 border-t border-gray-50 flex justify-between">
+                <p className="font-bold text-gray-900">Total</p>
+                <p className="font-black text-primary-600 text-lg">RD${(selectedPedido.total || 0).toLocaleString()}</p>
+              </div>
+            </div>
+
+            {/* Envío */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <MapPin className="w-4 h-4 text-primary-600" />
+                <p className="font-bold text-gray-900 text-sm">Dirección de envío</p>
+              </div>
+              <p className="text-gray-700 font-medium">{selectedPedido.direccion_texto || 'Sin dirección registrada'}</p>
+            </div>
+
+            {/* Pago */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <CreditCard className="w-4 h-4 text-primary-600" />
+                <p className="font-bold text-gray-900 text-sm">Información de pago</p>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-xs text-gray-400">Método</p>
+                  <p className="font-semibold text-gray-900 capitalize mt-0.5">{(selectedPedido.metodo_pago || '—').replace('_',' ')}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400">Estado</p>
+                  <p className={"font-semibold mt-0.5 capitalize " + (selectedPedido.pago_estado === 'pagado' ? 'text-green-600' : 'text-amber-600')}>
+                    {selectedPedido.pago_estado || 'pendiente'}
+                  </p>
+                </div>
+                {selectedPedido.pago_referencia && (
+                  <div className="col-span-2">
+                    <p className="text-xs text-gray-400">Referencia</p>
+                    <p className="font-mono font-semibold text-gray-900 mt-0.5">{selectedPedido.pago_referencia}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* WhatsApp soporte */}
+            <a href={"https://wa.me/18294089097?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mi%20pedido%20%23"+selectedPedido.id.slice(-6).toUpperCase()}
+              target="_blank"
+              className="flex items-center justify-center gap-2 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-2xl font-semibold text-sm transition-colors">
+              <MessageCircle className="w-4 h-4" />
+              Consultar por WhatsApp
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
