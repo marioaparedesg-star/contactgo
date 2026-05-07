@@ -70,7 +70,7 @@ export default function CheckoutPage() {
   })
 
   // Guardar carrito abandonado cuando hay telefono
-  const guardarCarritoAbandonado = async (telefono: string, nombre: string, email: string) => {
+  const guardarCarritoAbandonado = (telefono: string, nombre: string, email: string) => {
     if (!telefono || telefono.length < 10) return
     const sb = createClient()
     const itemsData = items.map(i => ({
@@ -81,13 +81,15 @@ export default function CheckoutPage() {
       color: (i as any).color,
       ojo: (i as any).ojo,
     }))
-    sb.from('abandoned_carts').insert({
-      cliente_nombre: nombre,
-      cliente_telefono: telefono,
-      cliente_email: email,
-      items: JSON.stringify(itemsData),
-      total: subtotal(),
-    }).then(() => {}).catch((_e: unknown) => {})
+    try {
+      sb.from('abandoned_carts').insert({
+        cliente_nombre: nombre,
+        cliente_telefono: telefono,
+        cliente_email: email,
+        items: JSON.stringify(itemsData),
+        total: subtotal(),
+      })
+    } catch (_e) {}
   }
 
   useEffect(() => {
