@@ -24,7 +24,7 @@ export default function ProductCard({ product }: Props) {
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault()
     if (needsRx) {
-      window.location.href = `/producto/${product.id}`
+      window.location.href = `/producto/${product.slug || product.id}`
       return
     }
     addItem(product)
@@ -36,7 +36,7 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <Link
-      href={`/producto/${product.id}`}
+      href={`/producto/${product.slug || product.id}`}
       className="card group flex flex-col overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-shadow"
     >
       {/* ── Imagen ── */}
