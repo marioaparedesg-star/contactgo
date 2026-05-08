@@ -2,7 +2,12 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const PROTECTED_ADMIN = ['/admin']
+const PROTECTED_USER  = ['/cuenta', '/checkout', '/cart']
+
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
   let response = NextResponse.next({ request: { headers: request.headers } })
 
   const supabase = createServerClient(
@@ -21,10 +26,32 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Proteger rutas /admin — redirigir a /admin/login si no autenticado
+  const isAdmin = PROTECTED_ADMIN.some(p => pathname.startsWith(p))
+  if (isAdmin && pathname !== '/admin/login') {
+    if (!user) {
+      return NextResponse.redirect(new URL('/admin/login', request.url))
+    }
+    // Verificar rol admin en profiles
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || profile.role !== 'admin') {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
+  }
+
   return response
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/admin/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|api/|robots.txt|sitemap.xml).*)',
+  ],
 }
