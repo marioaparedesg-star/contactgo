@@ -137,32 +137,26 @@ export default function CheckoutPage() {
 
     if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
 
-    // Insertar items via API route server-side (service_role key, bypasea RLS)
+    // Insertar items directo en Supabase (RLS abierta)
     const itemsPayload = items.map(i => ({
       order_id:   order.id,
       product_id: i.product.id,
       nombre:     i.product.nombre,
-      precio:     i.product.precio,
+      precio:     Number((i as any).precio_final ?? i.product.precio),
       cantidad:   i.cantidad,
-      sph:        i.sph ?? null,
-      cyl:        i.cyl ?? null,
-      add_power:  i.add_power ? parseFloat(String(i.add_power)) : null,
-      axis:       (i as any).axis ?? null,
+      sph:        i.sph != null ? Number(i.sph) : null,
+      cyl:        i.cyl != null ? Number(i.cyl) : null,
+      add_power:  i.add_power ? parseFloat(String(i.add_power).replace('+','')) : null,
+      axis:       (i as any).axis != null ? Number((i as any).axis) : null,
       color:      (i as any).color ?? null,
       ojo:        (i as any).ojo ?? null,
       size:       (i as any).size ?? null,
-      subtotal:   ((i as any).precio_final ?? i.product.precio) * i.cantidad,
+      subtotal:   Number((i as any).precio_final ?? i.product.precio) * i.cantidad,
     }))
 
-    const itemsRes = await fetch('/api/order-items', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ order_id: order.id, items: itemsPayload }),
-    })
-
-    if (!itemsRes.ok) {
-      const itemsErr = await itemsRes.json().catch(() => ({}))
-      console.error('Error insertando order_items:', itemsErr)
+    const { error: itemsError } = await sb.from('order_items').insert(itemsPayload)
+    if (itemsError) {
+      console.error('Error insertando order_items:', JSON.stringify(itemsError))
     }
 
     // Crear suscripciones si aplica
