@@ -161,6 +161,37 @@ export default async function HomePage() {
         </section>
 
         {/* ── MARCAS ───────────────────────────────────────────── */}
+        {/* Testimonios */}
+        <section className="max-w-5xl mx-auto px-4 py-14">
+          <div className="text-center mb-10">
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-2">Lo que dicen nuestros clientes</h2>
+            <p className="text-gray-500">Más de 1,000 dominicanos ya confían en ContactGo</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              { nombre: 'Paola R.', ciudad: 'Santo Domingo', texto: 'Llegaron rapidísimo y son 100% originales. Ya hice mi segunda compra. Super recomendado!', producto: 'Acuvue Oasys', stars: 5 },
+              { nombre: 'Carlos M.', ciudad: 'Santiago', texto: 'Nunca pensé que comprar lentes online fuera tan fácil. El sistema de receta es increíble, me detectó el tipo exacto.', producto: '1-Day Acuvue Moist', stars: 5 },
+              { nombre: 'Daniela F.', ciudad: 'Punta Cana', texto: 'Precio mucho mejor que en las ópticas. Llegaron en 24 horas y con empaque sellado. 100% confiable.', producto: 'Air Optix COLOR', stars: 5 },
+              { nombre: 'Ramón G.', ciudad: 'La Romana', texto: 'Tengo astigmatismo y siempre me costaba encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'Acuvue Oasys for Astigmatism', stars: 5 },
+              { nombre: 'Génesis P.', ciudad: 'San Pedro', texto: 'El chat de WhatsApp responde enseguida. Me ayudaron a escoger el lente correcto para mi receta.', producto: 'Biofinity', stars: 5 },
+              { nombre: 'Luis A.', ciudad: 'Santo Domingo', texto: 'Compré Acuvue Moist 90u y me ahorraron como RD$800 vs la óptica. La calidad es la misma, son originales.', producto: '1-Day Acuvue Moist 90u', stars: 5 },
+            ].map((t, i) => (
+              <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col gap-3">
+                <div className="flex gap-0.5">
+                  {[...Array(t.stars)].map((_,s) => (
+                    <svg key={s} className="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  ))}
+                </div>
+                <p className="text-gray-700 text-sm leading-relaxed">"{t.texto}"</p>
+                <div className="mt-auto pt-3 border-t border-gray-50">
+                  <p className="font-semibold text-gray-900 text-sm">{t.nombre}</p>
+                  <p className="text-xs text-gray-400">{t.ciudad} · {t.producto}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section className="bg-gray-50 border-y border-gray-100 py-10">
           <div className="max-w-7xl mx-auto px-4">
             <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">
