@@ -36,9 +36,10 @@ const PAYPAL_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
-  const [payMethod, setPayMethod] = useState<'paypal'|'contra_entrega'>('paypal')
+  const [payMethod, setPayMethod] = useState<'paypal'|'azul'|'contra_entrega'>('azul')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [azulLoading, setAzulLoading] = useState(false)
   const [cupon, setCupon] = useState('')
   const [cuponAplicado, setCuponAplicado] = useState(false)
   const [descuento, setDescuento] = useState(0)
@@ -220,6 +221,118 @@ export default function CheckoutPage() {
     toast.success('¡Pedido confirmado! 🎉')
   }
 
+  const pagarConAzul = async (data: FormData) => {
+    if (!aceptaTerminos) { toast.error('Debes aceptar los Términos y Condiciones'); return }
+    setAzulLoading(true)
+    const sb = createClient()
+    const { data: { user } } = await sb.auth.getUser()
+
+    // Usar datos de prueba del sandbox AZUL según documento técnico
+    const MERCHANT_ID   = process.env.NEXT_PUBLIC_AZUL_MERCHANT_ID ?? '39038540035'
+    const MERCHANT_NAME = process.env.NEXT_PUBLIC_AZUL_MERCHANT_NAME ?? 'ContactGo'
+    const MERCHANT_TYPE = 'ECommerce'
+    const CURRENCY_CODE = '$'
+    const BASE_URL      = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://www.contactgo.net'
+
+    // Número de orden único
+    const orderNumber = Date.now().toString()
+
+    // Amount sin decimales — últimos 2 dígitos son centavos
+    const totalFinal  = tot - descuento
+    const amountStr   = (totalFinal * 100).toFixed(0)
+    const itbisStr    = '000'
+
+    const approvedUrl = BASE_URL + '/azul-retorno'
+    const declinedUrl = BASE_URL + '/azul-retorno'
+    const cancelUrl   = BASE_URL + '/azul-retorno'
+
+    // Calcular hash en servidor (AuthKey nunca sale al frontend)
+    const { hash } = await fetch('/api/azul-hash', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        MerchantId: MERCHANT_ID, MerchantName: MERCHANT_NAME,
+        MerchantType: MERCHANT_TYPE, CurrencyCode: CURRENCY_CODE,
+        OrderNumber: orderNumber, Amount: amountStr, ITBIS: itbisStr,
+        ApprovedUrl: approvedUrl, DeclinedUrl: declinedUrl, CancelUrl: cancelUrl,
+        UseCustomField1: '0', CustomField1Label: '', CustomField1Value: '',
+        UseCustomField2: '0', CustomField2Label: '', CustomField2Value: '',
+      })
+    }).then(r => r.json())
+
+    // Guardar orden en Supabase ANTES de redirigir
+    const { data: order } = await sb.from('orders').insert({
+      user_id:            user?.id ?? null,
+      cliente_nombre:     data.nombre,
+      cliente_email:      data.email,
+      cliente_telefono:   data.telefono,
+      direccion_texto:    `${data.direccion}, ${data.ciudad}`,
+      estado:             'pendiente',
+      subtotal:           sub,
+      envio:              200,
+      total:              totalFinal,
+      metodo_pago:        'azul',
+      pago_estado:        'pendiente',
+      azul_order_number:  orderNumber,
+    }).select().single()
+
+    if (!order) { toast.error('Error creando orden'); setAzulLoading(false); return }
+
+    // Insertar items
+    const itemsPayload = items.map(i => ({
+      order_id: order.id, product_id: i.product.id,
+      nombre: i.product.nombre,
+      precio: Number((i as any).precio_final ?? i.product.precio),
+      cantidad: i.cantidad,
+      sph: i.sph != null ? Number(i.sph) : null,
+      cyl: i.cyl != null ? Number(i.cyl) : null,
+      add_power: i.add_power ? parseFloat(String(i.add_power).replace('+','')) : null,
+      axis: (i as any).axis != null ? Number((i as any).axis) : null,
+      color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
+      size: (i as any).size ?? null,
+      subtotal: Number((i as any).precio_final ?? i.product.precio) * i.cantidad,
+    }))
+    await sb.from('order_items').insert(itemsPayload)
+
+    clearCart()
+
+    // Construir y enviar formulario POST hacia AZUL sandbox
+    const azulUrl = 'https://pruebas.azul.com.do/PaymentPage/'
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = azulUrl
+
+    const fields: Record<string, string> = {
+      MerchantId:         MERCHANT_ID,
+      MerchantName:       MERCHANT_NAME,
+      MerchantType:       MERCHANT_TYPE,
+      CurrencyCode:       CURRENCY_CODE,
+      OrderNumber:        orderNumber,
+      Amount:             amountStr,
+      ITBIS:              itbisStr,
+      ApprovedUrl:        approvedUrl,
+      DeclinedUrl:        declinedUrl,
+      CancelUrl:          cancelUrl,
+      UseCustomField1:    '0',
+      CustomField1Label:  '',
+      CustomField1Value:  '',
+      UseCustomField2:    '0',
+      CustomField2Label:  '',
+      CustomField2Value:  '',
+      AuthHash:           hash,
+      ShowTransactionResult: '1',
+    }
+
+    Object.entries(fields).forEach(([k, v]) => {
+      const input = document.createElement('input')
+      input.type = 'hidden'; input.name = k; input.value = v
+      form.appendChild(input)
+    })
+
+    document.body.appendChild(form)
+    form.submit()
+  }
+
   const copyBank = () => {
     navigator.clipboard.writeText('')
     setCopied(true); setTimeout(() => setCopied(false), 2000)
@@ -296,6 +409,7 @@ export default function CheckoutPage() {
               <h2 className="font-semibold text-gray-900 mb-4">Método de pago</h2>
               <div className="grid grid-cols-3 gap-2 mb-5">
                 {([
+                  { id: 'azul',           icon: CreditCard, label: 'Tarjeta (AZUL)' },
                   { id: 'paypal',         icon: CreditCard, label: 'PayPal' },
                   { id: 'contra_entrega', icon: Package,    label: 'Contra entrega' },
                 ] as const).map(m => (
@@ -309,6 +423,35 @@ export default function CheckoutPage() {
                   </button>
                 ))}
               </div>
+
+              {/* AZUL - Tarjeta de crédito/débito */}
+              {payMethod === 'azul' && (
+                <div className="space-y-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
+                    <p className="font-bold mb-1">💳 Pago con tarjeta de crédito o débito</p>
+                    <p>Serás redirigido a la página segura de AZUL · Banco Popular para completar tu pago.</p>
+                    <div className="flex items-center gap-3 mt-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 16" className="h-5" aria-label="Visa">
+                        <rect width="48" height="16" rx="3" fill="#1A1F71"/>
+                        <text x="5" y="12" fontFamily="Arial" fontSize="12" fontWeight="bold" fill="white" letterSpacing="1">VISA</text>
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" className="h-6" aria-label="Mastercard">
+                        <circle cx="13" cy="12" r="10" fill="#EB001B"/>
+                        <circle cx="25" cy="12" r="10" fill="#F79E1B"/>
+                        <path d="M19 5.3a10 10 0 0 1 0 13.4A10 10 0 0 1 19 5.3z" fill="#FF5F00"/>
+                      </svg>
+                      <span className="text-xs text-blue-600 font-semibold">🔒 Ambiente de pruebas</span>
+                    </div>
+                  </div>
+                  <button type="button"
+                    onClick={handleSubmit(pagarConAzul)}
+                    disabled={azulLoading || !aceptaTerminos}
+                    className="w-full bg-blue-700 hover:bg-blue-800 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors">
+                    {azulLoading ? 'Redirigiendo a AZUL...' : <>💳 Pagar con tarjeta RD${(tot - descuento).toLocaleString()}</>}
+                  </button>
+                  {!aceptaTerminos && <p className="text-xs text-red-500 text-center">Debes aceptar los T&C para continuar</p>}
+                </div>
+              )}
 
               {/* PayPal */}
               {payMethod === 'paypal' && (
