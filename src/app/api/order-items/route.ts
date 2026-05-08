@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 export async function POST(req: NextRequest) {
   try {
     const { order_id, items } = await req.json()
+
     if (!order_id || !items?.length) {
       return NextResponse.json({ error: 'Datos incompletos' }, { status: 400 })
     }
+
+    // Intentar con service role si está disponible, sino usar anon key
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, key)
+
     const rows = items.map((i: any) => ({
       order_id,
       product_id: i.product_id,
@@ -27,14 +28,17 @@ export async function POST(req: NextRequest) {
       size:       i.size ?? null,
       subtotal:   i.subtotal,
     }))
-    const { error } = await supabaseAdmin.from('order_items').insert(rows)
+
+    const { error } = await sb.from('order_items').insert(rows)
+
     if (error) {
-      console.error('order-items error:', error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      console.error('order-items insert error:', JSON.stringify(error))
+      return NextResponse.json({ error: error.message, code: error.code }, { status: 500 })
     }
-    return NextResponse.json({ ok: true })
-  } catch (err) {
-    console.error('order-items route error:', err)
-    return NextResponse.json({ error: 'Error interno' }, { status: 500 })
+
+    return NextResponse.json({ ok: true, count: rows.length })
+  } catch (err: any) {
+    console.error('order-items route error:', err?.message)
+    return NextResponse.json({ error: err?.message || 'Error interno' }, { status: 500 })
   }
 }
