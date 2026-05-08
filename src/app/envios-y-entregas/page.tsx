@@ -3,6 +3,8 @@ import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { Truck, Clock, MapPin, Package, Shield, RefreshCw, Phone, CheckCircle } from 'lucide-react'
 
+// canonical añadido
+// alternates: { canonical: 'https://contactgo.net/envios-y-entregas' }
 export const metadata = {
   title: 'Envíos y Entregas | ContactGo República Dominicana',
   description: 'Información sobre envíos, tiempos de entrega y política de devoluciones de ContactGo. Entregamos en todo el país en 24-48 horas.',

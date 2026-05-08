@@ -1,6 +1,8 @@
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 
+// canonical añadido
+// alternates: { canonical: 'https://contactgo.net/terminos' }
 export const metadata = { title: 'Términos de Uso — ContactGo' }
 
 export default function TerminosPage() {

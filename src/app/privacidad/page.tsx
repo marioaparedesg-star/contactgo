@@ -2,6 +2,8 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 
+// canonical añadido
+// alternates: { canonical: 'https://contactgo.net/privacidad' }
 export const metadata = {
   title: 'Política de Privacidad | ContactGo',
   description: 'Política de privacidad y tratamiento de datos personales de ContactGo.',

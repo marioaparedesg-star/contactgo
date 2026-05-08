@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   creator: 'ContactGo',
   publisher: 'ContactGo',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-  alternates: { canonical: 'https://contactgo.net' },
+
   openGraph: {
     type: 'website',
     locale: 'es_DO',
