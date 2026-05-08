@@ -157,6 +157,9 @@ export default function CheckoutPage() {
     const { error: itemsError } = await sb.from('order_items').insert(itemsPayload)
     if (itemsError) {
       console.error('Error insertando order_items:', JSON.stringify(itemsError))
+      toast.error('Items error: ' + itemsError.message)
+    } else {
+      console.log('order_items insertados:', itemsPayload.length)
     }
 
     // Crear suscripciones si aplica
