@@ -209,6 +209,13 @@ export default function ProductoClient({ product, variants }: Props) {
               </p>
             </div>
 
+            {/* Urgencia y confianza */}
+            <div className="flex flex-wrap gap-2">
+              <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-2.5 py-1.5 rounded-full font-semibold">✅ 100% Original</span>
+              <span className="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1.5 rounded-full font-semibold">🚀 Entrega 24-72h</span>
+              <span className="text-xs bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1.5 rounded-full font-semibold">🏥 Distribuidor autorizado</span>
+            </div>
+
             {product.descripcion && (
               <p className="text-gray-600 text-sm leading-relaxed">{product.descripcion}</p>
             )}
@@ -352,9 +359,13 @@ export default function ProductoClient({ product, variants }: Props) {
             <p className="text-xs text-gray-500 truncate">{product.nombre}</p>
             <p className="font-black text-primary-600 text-lg">RD${price.toLocaleString()}</p>
           </div>
+          <a href="https://wa.me/18294089097" target="_blank" rel="noopener noreferrer"
+            className="bg-green-500 text-white px-3 py-3 rounded-xl text-sm font-bold flex items-center gap-1 shrink-0">
+            💬
+          </a>
           <button onClick={handleAdd}
-            className="btn-primary px-6 py-3 text-sm font-bold flex items-center gap-2 shrink-0">
-            <ShoppingCart className="w-4 h-4" /> Agregar
+            className="btn-primary flex-1 py-3 text-sm font-bold flex items-center justify-center gap-2">
+            <ShoppingCart className="w-4 h-4" /> Agregar al carrito
           </button>
         </div>
       )}
