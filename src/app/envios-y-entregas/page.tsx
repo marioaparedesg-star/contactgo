@@ -1,161 +1,124 @@
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
-import { Truck, Clock, MapPin, Package, Shield, RefreshCw, Phone, CheckCircle } from 'lucide-react'
+import Link from 'next/link'
+import type { Metadata } from 'next'
 
-// canonical añadido
-// alternates: { canonical: 'https://contactgo.net/envios-y-entregas' }
-export const metadata = {
-  title: 'Envíos y Entregas | ContactGo República Dominicana',
-  description: 'Información sobre envíos, tiempos de entrega y política de devoluciones de ContactGo. Entregamos en todo el país en 24-48 horas.',
+export const metadata: Metadata = {
+  title: 'Envíos y Entregas | ContactGo — Lentes de Contacto RD',
+  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Entrega en 24-72 horas a todo el país.',
 }
-
-const CIUDADES = [
-  { ciudad: 'Santo Domingo', tiempo: '24 horas', costo: 'RD$200' },
-  { ciudad: 'Santiago',      tiempo: '24-48 horas', costo: 'RD$250' },
-  { ciudad: 'Punta Cana',    tiempo: '24-48 horas', costo: 'RD$300' },
-  { ciudad: 'La Romana',     tiempo: '24-48 horas', costo: 'RD$280' },
-  { ciudad: 'Puerto Plata',  tiempo: '48 horas',    costo: 'RD$300' },
-  { ciudad: 'San Pedro',     tiempo: '24-48 horas', costo: 'RD$250' },
-  { ciudad: 'La Vega',       tiempo: '48 horas',    costo: 'RD$280' },
-  { ciudad: 'Bonao',         tiempo: '48 horas',    costo: 'RD$280' },
-  { ciudad: 'Baní',          tiempo: '48 horas',    costo: 'RD$280' },
-  { ciudad: 'Otras ciudades',tiempo: '48-72 horas', costo: 'RD$350' },
-]
 
 export default function EnviosPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-4xl mx-auto px-4 py-12 pb-24">
+      <main className="pb-20">
+        <section className="bg-gradient-to-br from-primary-700 to-teal-600 text-white py-14 px-4 text-center">
+          <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">Envíos y Entregas</h1>
+          <p className="text-primary-100 max-w-xl mx-auto">Entregamos tus lentes de contacto en toda la República Dominicana de forma rápida y segura.</p>
+        </section>
 
-        {/* Hero */}
-        <div className="text-center mb-12">
-          <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Truck className="w-8 h-8 text-primary-600" />
-          </div>
-          <h1 className="font-display text-3xl md:text-4xl font-black text-gray-900 mb-3">
-            Envíos y Entregas
-          </h1>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto">
-            Entregamos tus lentes de contacto en toda República Dominicana con rapidez y seguridad.
-          </p>
-        </div>
+        <section className="max-w-3xl mx-auto px-4 py-14 space-y-10">
 
-        {/* Highlights */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-          {[
-            { icon: Clock,     label: 'Entrega rápida',    sub: '24-48 horas' },
-            { icon: Shield,    label: 'Empaque seguro',    sub: 'Protegido siempre' },
-            { icon: Package,   label: 'Rastreo incluido',  sub: 'Número de guía' },
-            { icon: Phone,     label: 'Soporte WhatsApp',  sub: 'Seguimiento en vivo' },
-          ].map(h => (
-            <div key={h.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 text-center">
-              <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <h.icon className="w-5 h-5 text-primary-600" />
+          {/* Tiempos */}
+          <div>
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">⏱️ Tiempos de entrega</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-green-50 border border-green-200 rounded-2xl p-5">
+                <p className="font-bold text-green-800 text-lg mb-1">🚀 24 horas</p>
+                <p className="text-green-700 text-sm font-semibold mb-2">Lentes con graduación negativa (SPH -)</p>
+                <p className="text-gray-600 text-sm">Miopía y astigmatismo con SPH negativo. Procesamiento y despacho inmediato.</p>
               </div>
-              <p className="font-bold text-gray-900 text-sm">{h.label}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{h.sub}</p>
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 24 a 72 horas</p>
+                <p className="text-amber-700 text-sm font-semibold mb-2">Lentes con graduación positiva (SPH +)</p>
+                <p className="text-gray-600 text-sm">Hipermetropía y presbicia con SPH positivo. Requieren procesamiento especial.</p>
+              </div>
             </div>
-          ))}
-        </div>
-
-        {/* Tiempos y costos */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-8">
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary-600" />
-            <h2 className="font-bold text-gray-900">Tiempos y costos por ciudad</h2>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  {['Ciudad / Zona', 'Tiempo estimado', 'Costo de envío'].map(h => (
-                    <th key={h} className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {CIUDADES.map(c => (
-                  <tr key={c.ciudad} className="hover:bg-gray-50/50">
-                    <td className="px-6 py-3.5 font-semibold text-gray-900 text-sm">{c.ciudad}</td>
-                    <td className="px-6 py-3.5 text-sm text-gray-600">
-                      <span className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-primary-500" />
-                        {c.tiempo}
-                      </span>
-                    </td>
-                    <td className="px-6 py-3.5 font-bold text-primary-600 text-sm">{c.costo}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
 
-        {/* Proceso */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
-          <h2 className="font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <Package className="w-5 h-5 text-primary-600" />
-            ¿Cómo funciona el proceso?
-          </h2>
-          <div className="space-y-4">
-            {[
-              { paso: '1', titulo: 'Haces tu pedido',       desc: 'Selecciona tus lentes con la graduación correcta y completa el checkout.' },
-              { paso: '2', titulo: 'Confirmamos el pedido', desc: 'Recibirás una confirmación por email y WhatsApp con los detalles de tu compra.' },
-              { paso: '3', titulo: 'Preparamos tu orden',   desc: 'Empacamos tus productos con cuidado para garantizar que lleguen en perfectas condiciones.' },
-              { paso: '4', titulo: 'Enviamos',              desc: 'Te enviamos el número de guía para que puedas rastrear tu paquete en tiempo real.' },
-              { paso: '5', titulo: 'Entrega en tu puerta',  desc: 'Recibes tu pedido en la dirección indicada. Si no estás, te contactamos por WhatsApp.' },
-            ].map(p => (
-              <div key={p.paso} className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-black shrink-0 mt-0.5">
-                  {p.paso}
+          {/* Zonas */}
+          <div>
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">📍 Zonas de entrega</h2>
+            <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+              {[
+                { zona: 'Santo Domingo y Gran Santo Domingo', tiempo: '24h', costo: 'RD$200' },
+                { zona: 'Santiago de los Caballeros', tiempo: '24-48h', costo: 'RD$300' },
+                { zona: 'La Romana / San Pedro de Macorís', tiempo: '24-48h', costo: 'RD$300' },
+                { zona: 'Punta Cana / Bávaro', tiempo: '48-72h', costo: 'RD$350' },
+                { zona: 'Puerto Plata', tiempo: '48-72h', costo: 'RD$350' },
+                { zona: 'Otras provincias', tiempo: '48-72h', costo: 'RD$350-400' },
+              ].map((z, i) => (
+                <div key={i} className={`flex items-center justify-between px-5 py-4 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">{z.zona}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Tiempo estimado: {z.tiempo}</p>
+                  </div>
+                  <p className="font-bold text-primary-600 text-sm">{z.costo}</p>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-900">{p.titulo}</p>
-                  <p className="text-sm text-gray-500 mt-0.5">{p.desc}</p>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-2">* Los tiempos son estimados y pueden variar según disponibilidad del courier.</p>
+          </div>
+
+          {/* Proceso */}
+          <div>
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">📦 ¿Cómo funciona?</h2>
+            <div className="space-y-3">
+              {[
+                { paso: '1', titulo: 'Haces tu pedido', desc: 'Seleccionas tus lentes, tu graduación y completas el checkout.' },
+                { paso: '2', titulo: 'Confirmamos', desc: 'Verificamos tu pedido y te enviamos confirmación por WhatsApp o email.' },
+                { paso: '3', titulo: 'Preparamos', desc: 'Empacamos tus lentes con cuidado para garantizar que lleguen en perfectas condiciones.' },
+                { paso: '4', titulo: 'Despachamos', desc: 'Entregamos al courier y te enviamos el tracking de tu pedido.' },
+                { paso: '5', titulo: 'Recibes', desc: 'Tu pedido llega a la dirección indicada en el tiempo estimado.' },
+              ].map((s, i) => (
+                <div key={i} className="flex gap-4 items-start">
+                  <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">{s.paso}</div>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">{s.titulo}</p>
+                    <p className="text-gray-500 text-sm">{s.desc}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Devoluciones */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
-          <h2 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <RefreshCw className="w-5 h-5 text-primary-600" />
-            Política de devoluciones
-          </h2>
-          <div className="space-y-3">
-            {[
-              'Tienes 7 días desde la recepción para reportar cualquier problema con tu pedido.',
-              'Aceptamos devoluciones de productos en buen estado, sin abrir y en su empaque original.',
-              'Los lentes de contacto abiertos NO pueden devolverse por razones sanitarias.',
-              'Si recibiste un producto defectuoso o incorrecto, cubrimos el costo de devolución.',
-              'El reembolso se procesa en 3-5 días hábiles por el mismo método de pago.',
-            ].map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-                <p className="text-sm text-gray-600">{item}</p>
-              </div>
-            ))}
+          {/* Métodos de pago */}
+          <div>
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">💳 Métodos de pago</h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              {[
+                { icon: '💵', titulo: 'Contra entrega', desc: 'Pagas en efectivo cuando recibes tu pedido.' },
+                { icon: '🏦', titulo: 'Transferencia', desc: 'Transferencia bancaria a nuestra cuenta BHD o Popular.' },
+                { icon: '💳', titulo: 'Azul (próximo)', desc: 'Pago con tarjeta de crédito/débito. Disponible próximamente.' },
+              ].map((m, i) => (
+                <div key={i} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm text-center">
+                  <span className="text-3xl mb-2 block">{m.icon}</span>
+                  <p className="font-bold text-gray-900 text-sm mb-1">{m.titulo}</p>
+                  <p className="text-gray-500 text-xs">{m.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* CTA WhatsApp */}
-        <div className="bg-primary-50 border border-primary-200 rounded-2xl p-6 text-center">
-          <p className="font-bold text-gray-900 mb-1">¿Tienes preguntas sobre tu envío?</p>
-          <p className="text-sm text-gray-500 mb-4">Contáctanos por WhatsApp y te respondemos en minutos.</p>
-          <a href="https://wa.me/18294089097?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20un%20envío"
-            target="_blank"
-            className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
-            💬 Escribir por WhatsApp
-          </a>
-        </div>
+          {/* CTA */}
+          <div className="bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
+            <p className="font-bold text-gray-900 mb-2">¿Tienes alguna pregunta?</p>
+            <p className="text-gray-500 text-sm mb-4">Nuestro equipo está disponible por WhatsApp para ayudarte.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a href="https://wa.me/18294089097" target="_blank" rel="noopener noreferrer"
+                className="bg-green-500 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-green-600 transition-colors">
+                WhatsApp
+              </a>
+              <Link href="/catalogo" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-primary-700 transition-colors">
+                Ver catálogo
+              </Link>
+            </div>
+          </div>
 
+        </section>
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }
