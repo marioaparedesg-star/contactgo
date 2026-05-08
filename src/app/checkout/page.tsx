@@ -159,35 +159,6 @@ export default function CheckoutPage() {
       console.error('Error insertando order_items:', JSON.stringify(itemsError))
     }
 
-    
-    // === INSERT ORDER ITEMS DIRECTO ===
-    console.log('🛒 Insertando', items.length, 'items para orden', order.id)
-    
-    const itemsPayload = items.map((i: any) => ({
-      order_id:   order.id,
-      product_id: i.product?.id,
-      nombre:     i.product?.nombre || 'Sin nombre',
-      precio:     Number((i as any).precio_final ?? i.product?.precio ?? 0),
-      cantidad:   Number(i.cantidad ?? 1),
-      sph:        i.sph != null ? String(i.sph) : null,
-      cyl:        i.cyl != null ? String(i.cyl) : null,
-      axis:       (i as any).axis != null ? String((i as any).axis) : null,
-      add_power:  i.add_power != null ? String(i.add_power) : null,
-      color:      (i as any).color ?? null,
-      ojo:        (i as any).ojo ?? null,
-      size:       (i as any).size ?? null,
-      subtotal:   Number((i as any).precio_final ?? i.product?.precio ?? 0) * Number(i.cantidad ?? 1),
-    }))
-
-    const { error: itemsError } = await sb.from('order_items').insert(itemsPayload)
-
-    if (itemsError) {
-      console.error('❌ Error items:', itemsError)
-    } else {
-      console.log('✅ Items insertados OK')
-    }
-
-
     // Crear suscripciones si aplica
     const itemsConSub = items.filter(i => (i as any).suscripcion)
     if (itemsConSub.length > 0) {
