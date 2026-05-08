@@ -29,7 +29,7 @@ serve(async (req) => {
     headers: { 'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: 'ContactGo <notificaciones@contactgo.net>',
-      to: ['mparedes@optimax.com.do'],
+      to: ['contactgo.rd@gmail.com'],
       subject: `🛒 Nuevo pedido #${order.id.slice(0,8).toUpperCase()} — RD$${order.total?.toLocaleString()}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:auto;padding:24px">

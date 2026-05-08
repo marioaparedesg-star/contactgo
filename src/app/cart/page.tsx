@@ -129,7 +129,7 @@ export default function CartPage() {
               Seguir comprando
             </Link>
             <p className="text-xs text-gray-400 text-center mt-4">
-              🔒 Pago seguro · PayPal · BHD · Contra entrega
+              🔒 Pago seguro · PayPal · Contra entrega
             </p>
           </div>
         </div>
