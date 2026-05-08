@@ -9,16 +9,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Datos incompletos' }, { status: 400 })
     }
 
-    // Intentar con service role si está disponible, sino usar anon key
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, key)
+    // Usar anon key — RLS permite insert abierto en order_items
+    const sb = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
 
     const rows = items.map((i: any) => ({
       order_id,
       product_id: i.product_id,
       nombre:     i.nombre,
-      precio:     parseFloat(String(i.precio)),
-      cantidad:   parseInt(String(i.cantidad)),
+      precio:     parseFloat(String(i.precio ?? 0)),
+      cantidad:   parseInt(String(i.cantidad ?? 1)),
       sph:        i.sph != null ? parseFloat(String(i.sph)) : null,
       cyl:        i.cyl != null ? parseFloat(String(i.cyl)) : null,
       axis:       i.axis != null ? parseInt(String(i.axis)) : null,
@@ -26,7 +28,7 @@ export async function POST(req: NextRequest) {
       color:      i.color ?? null,
       ojo:        i.ojo ?? null,
       size:       i.size ?? null,
-      subtotal:   parseFloat(String(i.subtotal)),
+      subtotal:   parseFloat(String(i.subtotal ?? 0)),
     }))
 
     const { error } = await sb.from('order_items').insert(rows)
