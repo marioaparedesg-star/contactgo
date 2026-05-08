@@ -17,16 +17,16 @@ export async function POST(req: NextRequest) {
       order_id,
       product_id: i.product_id,
       nombre:     i.nombre,
-      precio:     i.precio,
-      cantidad:   i.cantidad,
-      sph:        i.sph ?? null,
-      cyl:        i.cyl ?? null,
-      axis:       i.axis ?? null,
-      add_power:  i.add_power ?? null,
+      precio:     parseFloat(String(i.precio)),
+      cantidad:   parseInt(String(i.cantidad)),
+      sph:        i.sph != null ? parseFloat(String(i.sph)) : null,
+      cyl:        i.cyl != null ? parseFloat(String(i.cyl)) : null,
+      axis:       i.axis != null ? parseInt(String(i.axis)) : null,
+      add_power:  i.add_power != null ? parseFloat(String(i.add_power).replace('+','')) : null,
       color:      i.color ?? null,
       ojo:        i.ojo ?? null,
       size:       i.size ?? null,
-      subtotal:   i.subtotal,
+      subtotal:   parseFloat(String(i.subtotal)),
     }))
 
     const { error } = await sb.from('order_items').insert(rows)
