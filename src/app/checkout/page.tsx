@@ -72,7 +72,7 @@ export default function CheckoutPage() {
   // Guardar carrito abandonado cuando hay telefono
   const guardarCarritoAbandonado = (telefono: string, nombre: string, email: string) => {
     if (!telefono || telefono.length < 10) return
-    const sb = createClient()
+    const sb = createServerSupabaseClient()
     const itemsData = items.map(i => ({
       nombre: i.product.nombre,
       cantidad: i.cantidad,
@@ -94,7 +94,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
-    const sb = createClient()
+    const sb = createServerSupabaseClient()
     sb.auth.getUser().then(({ data: { user } }) => {
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: perfil }) => {
@@ -117,7 +117,7 @@ export default function CheckoutPage() {
 
   const createOrder = async (data: FormData, payRef?: string) => {
     setLoading(true)
-    const sb = createClient()
+    const sb = createServerSupabaseClient()
     const { data: { user } } = await sb.auth.getUser()
 
     const { data: order, error } = await sb.from('orders').insert({
