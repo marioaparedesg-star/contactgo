@@ -1,138 +1,84 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
-import AdminNav from '@/components/admin/AdminNav'
+import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Search, Clock, CheckCircle, Truck, Package, AlertCircle, Phone, Mail, MapPin, X, Eye, RefreshCw, MessageSquare, Calendar, CreditCard, Printer } from 'lucide-react'
+import AdminNav from '@/components/admin/AdminNav'
+import { Search, ChevronRight, X, Printer, MessageCircle, Package, CheckCircle, Truck, Clock, XCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const ESTADOS = ['pendiente','confirmado','preparando','enviado','entregado','cancelado'] as const
-const ESTADO_CFG: Record<string, { cls: string; bg: string; icon: any; label: string }> = {
-  pendiente:  { cls: 'text-amber-700',  bg: 'bg-amber-50 border-amber-200',   icon: Clock,        label: 'Pendiente'  },
-  confirmado: { cls: 'text-blue-700',   bg: 'bg-blue-50 border-blue-200',     icon: CheckCircle,  label: 'Confirmado' },
-  preparando: { cls: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', icon: Package,      label: 'Preparando' },
-  enviado:    { cls: 'text-indigo-700', bg: 'bg-indigo-50 border-indigo-200', icon: Truck,        label: 'Enviado'    },
-  entregado:  { cls: 'text-green-700',  bg: 'bg-green-50 border-green-200',   icon: CheckCircle,  label: 'Entregado'  },
-  cancelado:  { cls: 'text-red-700',    bg: 'bg-red-50 border-red-200',       icon: AlertCircle,  label: 'Cancelado'  },
+const ESTADOS = ['pendiente','confirmado','preparando','enviado','entregado','cancelado']
+const ESTADO_COLOR: Record<string,string> = {
+  pendiente: 'bg-amber-50 text-amber-700 border-amber-200',
+  confirmado: 'bg-blue-50 text-blue-700 border-blue-200',
+  preparando: 'bg-purple-50 text-purple-700 border-purple-200',
+  enviado: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+  entregado: 'bg-green-50 text-green-700 border-green-200',
+  cancelado: 'bg-red-50 text-red-700 border-red-200',
+}
+const ESTADO_ICON: Record<string,any> = {
+  pendiente: Clock, confirmado: CheckCircle, preparando: Package,
+  enviado: Truck, entregado: CheckCircle, cancelado: XCircle,
 }
 
-function ItemDetail({ item }: { item: any }) {
-  const specs: {label:string,value:string}[] = []
-  if (item.ojo)         specs.push({ label:'Ojo',    value: item.ojo })
-  if (item.sph != null) specs.push({ label:'SPH',   value: item.sph > 0 ? `+${item.sph}` : String(item.sph) })
-  if (item.cyl != null) specs.push({ label:'CYL',   value: String(item.cyl) })
-  if (item.axis != null) specs.push({ label:'AXIS', value: String(item.axis).padStart(3,'0') + '°' })
-  if (item.add_power)   specs.push({ label:'ADD',   value: item.add_power })
-  if (item.color)       specs.push({ label:'Color', value: item.color })
-  if (item.size)        specs.push({ label:'Tamaño',value: item.size })
-  return (
-    <div className="bg-gray-50 rounded-xl p-3 space-y-2">
-      <div className="flex justify-between items-start gap-3">
-        <p className="font-semibold text-gray-900 text-sm leading-tight">{item.nombre}</p>
-        <p className="font-bold text-gray-900 text-sm whitespace-nowrap">RD${((item.subtotal ?? (item.precio * item.cantidad)) ?? 0).toLocaleString()}</p>
-      </div>
-      {specs.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {specs.map(s => (
-            <span key={s.label} className="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-lg px-2 py-0.5 text-xs">
-              <span className="text-gray-400">{s.label}:</span>
-              <span className="font-semibold text-gray-700">{s.value}</span>
-            </span>
-          ))}
-        </div>
-      )}
-      <p className="text-xs text-gray-400">Cantidad: {item.cantidad}</p>
-    </div>
-  )
-}
-
-export default function AdminPedidos() {
-  const [orders, setOrders]     = useState<any[]>([])
-  const [search, setSearch]     = useState('')
-  const [filter, setFilter]     = useState('')
-  const [loading, setLoading]   = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
-  const [selected, setSelected] = useState<any | null>(null)
+export default function PedidosPage() {
   const sb = createClient()
+  const [pedidos, setPedidos] = useState<any[]>([])
+  const [items, setItems] = useState<Record<string,any[]>>({})
+  const [selected, setSelected] = useState<any>(null)
+  const [search, setSearch] = useState('')
+  const [filtroEstado, setFiltroEstado] = useState('todos')
+  const [loading, setLoading] = useState(true)
 
-  const load = useCallback(async () => {
-    setRefreshing(true)
-    const { data } = await sb.from('orders').select('*, order_items(*)').order('fecha', { ascending: false })
-    setOrders(data ?? [])
-    setLoading(false)
-    setRefreshing(false)
+  useEffect(() => {
+    sb.from('orders').select('*').order('fecha', {ascending: false})
+      .then(({data}) => { setPedidos(data??[]); setLoading(false) })
   }, [])
 
-  useEffect(() => { load() }, [load])
-
-  const updateEstado = async (orderId: string, estado: string) => {
-    const { error } = await sb.from('orders').update({ estado }).eq('id', orderId)
-    if (!error) {
-      toast.success(`Estado: ${estado}`)
-      load()
-      if (selected?.id === orderId) setSelected((s: any) => s ? { ...s, estado } : s)
-    } else toast.error('Error al actualizar')
+  const abrirPedido = async (p: any) => {
+    setSelected(p)
+    if (!items[p.id]) {
+      const {data} = await sb.from('order_items').select('*').eq('order_id', p.id)
+      setItems(i => ({...i, [p.id]: data??[]}))
+    }
   }
 
-  const printLabel = (o: any) => {
-    const win = window.open('', '_blank')
-    if (!win) return
-    const items = (o.order_items ?? []).map((item: any) => {
-      const specs = []
-      if (item.ojo)         specs.push(`Ojo: ${item.ojo}`)
-      if (item.sph != null) specs.push(`SPH: ${item.sph > 0 ? '+' : ''}${item.sph}`)
-      if (item.cyl != null) specs.push(`CYL: ${item.cyl}`)
-      if (item.axis != null) specs.push(`AXIS: ${String(item.axis).padStart(3,'0')}°`)
-      if (item.add_power)   specs.push(`ADD: ${item.add_power}`)
-      if (item.color)       specs.push(`Color: ${item.color}`)
-      if (item.size)        specs.push(`Tamaño: ${item.size}`)
-      return `<div style="margin-bottom:8px"><b>${item.nombre}</b> ×${item.cantidad}<br><span style="font-size:11px;color:#666">${specs.join(' · ')}</span></div>`
-    }).join('')
-    win.document.write(`<html><head><title>Etiqueta</title><style>body{font-family:Arial;padding:20px;max-width:400px}hr{border:1px dashed #999;margin:10px 0}@media print{body{padding:5px}}</style></head><body>
-    <div style="text-align:center;margin-bottom:10px"><b style="font-size:18px">📦 ContactGo</b><br><span style="font-size:11px;color:#666">contactgo.net</span></div>
-    <hr><b>PEDIDO #${o.id.slice(0,8).toUpperCase()}</b><br><span style="font-size:11px;color:#666">${new Date(o.fecha).toLocaleString('es-DO')}</span>
-    <hr><b>DESTINATARIO:</b><br><b style="font-size:16px">${o.cliente_nombre ?? '—'}</b><br>
-    <span>${o.direccion_texto ?? 'Sin dirección'}</span><br>
-    ${o.cliente_telefono ? `📱 ${o.cliente_telefono}<br>` : ''}
-    <hr><b>PRODUCTOS:</b><br>${items}
-    <hr><b>TOTAL: RD$${(o.total ?? 0).toLocaleString()}</b><br>
-    <span style="font-size:12px">Pago: ${(o.metodo_pago ?? '—').replace('_',' ')} · ${o.pago_estado ?? 'pendiente'}</span>
-    <script>window.print();window.close()</script></body></html>`)
-    win.document.close()
+  const actualizarEstado = async (orderId: string, estado: string) => {
+    await sb.from('orders').update({estado}).eq('id', orderId)
+    setPedidos(ps => ps.map(p => p.id===orderId ? {...p, estado} : p))
+    setSelected((s: any) => s?.id===orderId ? {...s, estado} : s)
+    toast.success('Estado actualizado')
   }
 
-  const filtered = orders.filter(o => {
-    const matchFilter = !filter || o.estado === filter
-    const matchSearch = !search || (o.cliente_nombre ?? '').toLowerCase().includes(search.toLowerCase()) || o.id.includes(search)
-    return matchFilter && matchSearch
+  const filtrados = pedidos.filter(p => {
+    const matchEstado = filtroEstado === 'todos' || p.estado === filtroEstado
+    const matchSearch = !search || 
+      p.cliente_nombre?.toLowerCase().includes(search.toLowerCase()) ||
+      p.cliente_telefono?.includes(search) ||
+      p.id.slice(0,8).toUpperCase().includes(search.toUpperCase())
+    return matchEstado && matchSearch
   })
-  const counts = ESTADOS.reduce((acc, e) => { acc[e] = orders.filter(o => o.estado === e).length; return acc }, {} as Record<string,number>)
+
+  const formatSph = (v: any) => v == null ? null : (parseFloat(v) > 0 ? '+'+v : String(v))
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
-      <main className="flex-1 overflow-auto pt-16 pb-24 md:pt-0 md:pb-0">
+      <main className="flex-1 overflow-auto pb-24">
         <div className="max-w-7xl mx-auto p-4 md:p-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Pedidos</h1>
-              <p className="text-gray-500 text-sm">{orders.length} pedidos en total</p>
-            </div>
-            <button onClick={load} disabled={refreshing}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
-              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-              Actualizar
-            </button>
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-gray-900">Pedidos</h1>
+            <p className="text-gray-500 text-sm">{pedidos.length} pedidos en total</p>
           </div>
 
-          {/* Stats por estado */}
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-5">
+          {/* Stats rápidos */}
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
             {ESTADOS.map(e => {
-              const cfg = ESTADO_CFG[e]; const Icon = cfg.icon
+              const count = pedidos.filter(p => p.estado === e).length
               return (
-                <button key={e} onClick={() => setFilter(filter === e ? '' : e)}
-                  className={`p-3 rounded-xl border text-left transition-all ${filter === e ? cfg.bg + ' ' + cfg.cls + ' border-current' : 'bg-white border-gray-100 hover:border-gray-200'}`}>
-                  <p className="text-lg font-bold">{counts[e] ?? 0}</p>
-                  <p className="text-xs font-medium truncate">{cfg.label}</p>
+                <button key={e} onClick={() => setFiltroEstado(e === filtroEstado ? 'todos' : e)}
+                  className={`rounded-xl border p-3 text-center transition-all ${filtroEstado===e ? ESTADO_COLOR[e]+' border-2' : 'bg-white border-gray-100'}`}>
+                  <p className="text-2xl font-bold text-gray-900">{count}</p>
+                  <p className="text-xs text-gray-500 capitalize">{e}</p>
                 </button>
               )
             })}
@@ -140,171 +86,199 @@ export default function AdminPedidos() {
 
           {/* Búsqueda */}
           <div className="relative mb-4">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-            <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Buscar por nombre o ID..."
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input value={search} onChange={e=>setSearch(e.target.value)}
+              placeholder="Buscar por nombre, teléfono o # pedido..."
+              className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white" />
           </div>
 
           {/* Tabla */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50 border-b border-gray-100">
-                  <tr>{['#Pedido','Cliente','Productos','Total','Pago','Estado','Fecha','Acciones'].map(h => (
-                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
-                  ))}</tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {loading ? (
-                    <tr><td colSpan={8} className="text-center py-12 text-gray-400">Cargando pedidos...</td></tr>
-                  ) : filtered.length === 0 ? (
-                    <tr><td colSpan={8} className="text-center py-12 text-gray-400">No hay pedidos</td></tr>
-                  ) : filtered.map((o: any) => {
-                    const cfg = ESTADO_CFG[o.estado] ?? ESTADO_CFG.pendiente
-                    const items = o.order_items ?? []
-                    return (
-                      <tr key={o.id} onClick={() => setSelected(o)} className="hover:bg-gray-50/80 transition-colors cursor-pointer">
-                        <td className="px-4 py-3">
-                          <span className="font-mono text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">#{o.id.slice(0,8).toUpperCase()}</span>
-                        </td>
-                        <td className="px-4 py-3">
-                          <p className="font-semibold text-gray-900">{o.cliente_nombre ?? '—'}</p>
-                          <p className="text-xs text-gray-400">{o.cliente_telefono ?? ''}</p>
-                        </td>
-                        <td className="px-4 py-3">
-                          {items.length === 0 ? (
-                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-2 py-1 rounded-lg">⚠ Ver items</span>
-                          ) : (
-                            <>
-                              <p className="text-gray-700 text-xs font-semibold">{items.length} producto(s)</p>
-                              <p className="text-gray-400 text-xs truncate max-w-[150px]">{items.map((i:any)=>i.nombre).join(', ')}</p>
-                            </>
-                          )}
-                        </td>
-                        <td className="px-4 py-3"><p className="font-bold text-gray-900">RD${(o.total??0).toLocaleString()}</p></td>
-                        <td className="px-4 py-3 text-gray-500 text-xs capitalize">{(o.metodo_pago??'—').replace('_',' ')}</td>
-                        <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
-                          <select value={o.estado} onChange={e => updateEstado(o.id, e.target.value)}
-                            className={`text-xs font-semibold px-2 py-1.5 rounded-lg border cursor-pointer focus:outline-none ${cfg.bg} ${cfg.cls}`}>
-                            {ESTADOS.map(s => <option key={s} value={s} className="bg-white text-gray-900">{ESTADO_CFG[s].label}</option>)}
-                          </select>
-                        </td>
-                        <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{new Date(o.fecha).toLocaleDateString('es-DO')}</td>
-                        <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
-                          <div className="flex items-center gap-1">
-                            <button onClick={() => setSelected(o)} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-500" title="Ver detalle"><Eye className="w-4 h-4" /></button>
-                            <button onClick={() => printLabel(o)} className="p-1.5 hover:bg-blue-50 rounded-lg text-blue-500" title="Imprimir"><Printer className="w-4 h-4" /></button>
-                            {o.cliente_telefono && (
-                              <a href={`https://wa.me/${o.cliente_telefono.replace(/\D/g,'')}?text=Hola%20${encodeURIComponent(o.cliente_nombre??'')}%2C%20tu%20pedido%20%23${o.id.slice(0,8).toUpperCase()}%20está%20${o.estado}`}
-                                target="_blank" onClick={e=>e.stopPropagation()} className="p-1.5 hover:bg-green-50 rounded-lg text-green-600" title="WhatsApp">
-                                <MessageSquare className="w-4 h-4" />
-                              </a>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
+            {loading ? (
+              <div className="flex items-center justify-center h-48">
+                <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      {['#','Cliente','Teléfono','Total','Método','Estado','Fecha',''].map(h => (
+                        <th key={h} className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase text-left">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {filtrados.map(p => {
+                      const Icon = ESTADO_ICON[p.estado] ?? Clock
+                      return (
+                        <tr key={p.id} onClick={() => abrirPedido(p)}
+                          className="hover:bg-gray-50 cursor-pointer transition-colors">
+                          <td className="px-4 py-3 font-mono text-xs text-gray-400">#{p.id.slice(0,8).toUpperCase()}</td>
+                          <td className="px-4 py-3 font-semibold text-gray-900 text-sm">{p.cliente_nombre}</td>
+                          <td className="px-4 py-3 text-sm text-gray-600">{p.cliente_telefono}</td>
+                          <td className="px-4 py-3 font-bold text-sm text-gray-900">RD${p.total?.toLocaleString()}</td>
+                          <td className="px-4 py-3 text-xs text-gray-500 capitalize">{p.metodo_pago?.replace('_',' ')}</td>
+                          <td className="px-4 py-3">
+                            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold border ${ESTADO_COLOR[p.estado]}`}>
+                              <Icon className="w-3 h-3" />{p.estado}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-gray-400">
+                            {p.fecha ? new Date(p.fecha).toLocaleDateString('es-DO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '-'}
+                          </td>
+                          <td className="px-4 py-3">
+                            <ChevronRight className="w-4 h-4 text-gray-300" />
+                          </td>
+                        </tr>
+                      )
+                    })}
+                    {filtrados.length === 0 && (
+                      <tr><td colSpan={8} className="px-4 py-12 text-center text-gray-400">No hay pedidos</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       </main>
 
-      {/* Panel detalle */}
+      {/* Panel lateral de detalle */}
       {selected && (
-        <div className="fixed inset-0 z-50 flex">
-          <div className="flex-1 bg-black/30 backdrop-blur-sm" onClick={() => setSelected(null)} />
-          <div className="w-full max-w-lg bg-white h-full overflow-y-auto shadow-2xl flex flex-col">
-            <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setSelected(null)} />
+          <div className="relative bg-white w-full max-w-lg h-full overflow-y-auto shadow-2xl">
+            {/* Header panel */}
+            <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between z-10">
               <div>
-                <p className="font-mono text-xs text-gray-400 font-bold">#{selected.id.slice(0,8).toUpperCase()}</p>
-                <h3 className="font-bold text-gray-900 text-lg">Detalle del Pedido</h3>
+                <p className="font-mono text-xs text-gray-400">#{selected.id.slice(0,8).toUpperCase()}</p>
+                <h2 className="font-bold text-gray-900">Detalle del Pedido</h2>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={() => printLabel(selected)} className="p-2 hover:bg-blue-50 text-blue-600 rounded-xl" title="Imprimir etiqueta"><Printer className="w-5 h-5" /></button>
-                <button onClick={() => setSelected(null)} className="p-2 hover:bg-gray-100 rounded-xl"><X className="w-5 h-5 text-gray-500" /></button>
+                <button onClick={() => window.print()} className="p-2 hover:bg-gray-100 rounded-lg">
+                  <Printer className="w-4 h-4 text-gray-500" />
+                </button>
+                <button onClick={() => setSelected(null)} className="p-2 hover:bg-gray-100 rounded-lg">
+                  <X className="w-4 h-4 text-gray-500" />
+                </button>
               </div>
             </div>
-            <div className="flex-1 p-6 space-y-5">
-              {/* Cambio de estado rápido */}
+
+            <div className="p-5 space-y-5">
+              {/* Estado con botones */}
               <div>
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Estado</p>
+                <p className="text-xs font-semibold text-gray-400 uppercase mb-2">Estado</p>
                 <div className="flex flex-wrap gap-2">
                   {ESTADOS.map(e => {
-                    const cfg = ESTADO_CFG[e]; const Icon = cfg.icon
+                    const Icon = ESTADO_ICON[e]
                     return (
-                      <button key={e} onClick={() => updateEstado(selected.id, e)}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition-all ${selected.estado === e ? cfg.bg+' '+cfg.cls+' border-current' : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'}`}>
-                        <Icon className="w-3.5 h-3.5" />{cfg.label}
+                      <button key={e} onClick={() => actualizarEstado(selected.id, e)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${selected.estado===e ? ESTADO_COLOR[e]+' border-2' : 'bg-gray-50 text-gray-500 border-gray-200 hover:border-gray-300'}`}>
+                        <Icon className="w-3 h-3" />{e.charAt(0).toUpperCase()+e.slice(1)}
                       </button>
                     )
                   })}
                 </div>
               </div>
 
-              {/* Etiqueta envío */}
-              <div className="border-2 border-dashed border-gray-300 rounded-2xl p-5 bg-gray-50">
-                <div className="flex items-center gap-2 mb-3">
-                  <MapPin className="w-4 h-4 text-gray-400" />
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Etiqueta de Envío</p>
-                </div>
-                <p className="text-xl font-black text-gray-900">{selected.cliente_nombre ?? '—'}</p>
-                <p className="text-gray-600 font-medium mt-1">{selected.direccion_texto ?? 'Sin dirección'}</p>
-                {selected.cliente_telefono && <div className="flex items-center gap-2 mt-2"><Phone className="w-3.5 h-3.5 text-gray-400" /><p className="text-sm text-gray-500">{selected.cliente_telefono}</p></div>}
-                {selected.cliente_email && <div className="flex items-center gap-2 mt-1"><Mail className="w-3.5 h-3.5 text-gray-400" /><p className="text-sm text-gray-500">{selected.cliente_email}</p></div>}
+              {/* Etiqueta de envío */}
+              <div className="bg-gray-50 rounded-2xl p-4">
+                <p className="text-xs font-semibold text-gray-400 uppercase mb-2">📍 Etiqueta de Envío</p>
+                <p className="font-bold text-gray-900 text-lg">{selected.cliente_nombre}</p>
+                <p className="text-gray-600 text-sm mt-1">{selected.direccion_texto}</p>
+                <p className="text-gray-500 text-sm mt-1">📞 {selected.cliente_telefono}</p>
+                <p className="text-gray-500 text-sm">✉️ {selected.cliente_email}</p>
               </div>
 
-              {/* Productos con especificaciones completas */}
+              {/* Productos */}
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Package className="w-4 h-4 text-gray-400" />
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Productos</p>
-                </div>
-                <div className="space-y-2">
-                  {(selected.order_items ?? []).length === 0 ? (
-                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-                      <p className="font-semibold mb-1">⚠ Detalle de productos no disponible</p>
-                      <p className="text-xs">Este pedido fue creado antes de la actualización del sistema. El total registrado es <strong>RD${(selected.total ?? 0).toLocaleString()}</strong>. Contacta al cliente por WhatsApp para confirmar los productos.</p>
+                <p className="text-xs font-semibold text-gray-400 uppercase mb-2">📦 Productos</p>
+                {items[selected.id] ? (
+                  items[selected.id].length > 0 ? (
+                    <div className="space-y-2">
+                      {items[selected.id].map((item, i) => (
+                        <div key={i} className="bg-white border border-gray-100 rounded-xl p-3">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <p className="font-semibold text-gray-900 text-sm">{item.nombre}</p>
+                              {(item.sph != null) && (
+                                <p className="text-xs text-primary-600 font-mono mt-0.5">
+                                  SPH: {formatSph(item.sph)}
+                                  {item.cyl != null ? ` · CYL: ${item.cyl}` : ''}
+                                  {item.axis != null ? ` · EJE: ${String(item.axis).padStart(3,'0')}` : ''}
+                                  {item.add_power != null ? ` · ADD: ${item.add_power}` : ''}
+                                  {item.color ? ` · Color: ${item.color}` : ''}
+                                </p>
+                              )}
+                              <p className="text-xs text-gray-400 mt-0.5">x{item.cantidad}</p>
+                            </div>
+                            <p className="font-bold text-gray-900 text-sm">RD${(item.subtotal ?? item.precio * item.cantidad)?.toLocaleString()}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ) : (
-                    (selected.order_items ?? []).map((item: any) => <ItemDetail key={item.id} item={item} />)
-                  )}
-                </div>
-                <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
-                  <p className="font-bold text-gray-900">Total</p>
-                  <p className="font-black text-xl text-primary-600">RD${(selected.total ?? 0).toLocaleString()}</p>
-                </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+                      <p className="text-sm font-semibold text-amber-800">⚠️ Sin detalle de productos</p>
+                      <p className="text-xs text-amber-700 mt-1">Total registrado: RD${selected.total?.toLocaleString()}. Contacta al cliente para confirmar.</p>
+                    </div>
+                  )
+                ) : (
+                  <div className="flex justify-center py-4">
+                    <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
               </div>
 
               {/* Pago */}
-              <div className="bg-white border border-gray-100 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3"><CreditCard className="w-4 h-4 text-gray-400" /><p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Pago</p></div>
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div><p className="text-xs text-gray-400">Método</p><p className="font-semibold text-gray-900 capitalize mt-0.5">{(selected.metodo_pago??'—').replace('_',' ')}</p></div>
-                  <div><p className="text-xs text-gray-400">Estado pago</p><p className={`font-semibold mt-0.5 ${selected.pago_estado==='pagado'?'text-green-600':'text-amber-600'} capitalize`}>{selected.pago_estado??'pendiente'}</p></div>
-                  {selected.pago_referencia && <div className="col-span-2"><p className="text-xs text-gray-400">Referencia</p><p className="font-mono font-semibold text-gray-900 mt-0.5">{selected.pago_referencia}</p></div>}
+              <div className="bg-gray-50 rounded-2xl p-4">
+                <p className="text-xs font-semibold text-gray-400 uppercase mb-3">💳 Pago</p>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-gray-500">Subtotal</span>
+                  <span className="font-medium">RD${selected.subtotal?.toLocaleString()}</span>
+                </div>
+                {selected.descuento > 0 && (
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-gray-500">Descuento</span>
+                    <span className="text-green-600 font-medium">-RD${selected.descuento?.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-sm mb-3">
+                  <span className="text-gray-500">Envío</span>
+                  <span className="font-medium">{selected.envio > 0 ? 'RD$'+selected.envio?.toLocaleString() : 'Gratis'}</span>
+                </div>
+                <div className="flex justify-between font-bold text-gray-900 border-t border-gray-200 pt-2">
+                  <span>Total</span>
+                  <span className="text-primary-600 text-lg">RD${selected.total?.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-sm mt-3">
+                  <span className="text-gray-500">Método</span>
+                  <span className="font-semibold capitalize">{selected.metodo_pago?.replace('_',' ')}</span>
+                </div>
+                <div className="flex justify-between text-sm mt-1">
+                  <span className="text-gray-500">Estado pago</span>
+                  <span className={`font-semibold ${selected.pago_estado==='pagado' ? 'text-green-600' : 'text-amber-600'}`}>
+                    {selected.pago_estado ?? 'Pendiente'}
+                  </span>
                 </div>
               </div>
 
               {/* Fecha */}
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Calendar className="w-4 h-4" />
-                <span>{new Date(selected.fecha).toLocaleString('es-DO', { dateStyle: 'full', timeStyle: 'short' })}</span>
-              </div>
+              <p className="text-xs text-gray-400 text-center">
+                📅 {selected.fecha ? new Date(selected.fecha).toLocaleString('es-DO',{dateStyle:'full',timeStyle:'short'}) : '-'}
+              </p>
 
               {/* Acciones */}
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                {selected.cliente_telefono && (
-                  <a href={`https://wa.me/${selected.cliente_telefono.replace(/\D/g,'')}?text=Hola%20${encodeURIComponent(selected.cliente_nombre??'')}%2C%20tu%20pedido%20%23${selected.id.slice(0,8).toUpperCase()}%20está%20${selected.estado}`}
-                    target="_blank" className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold text-sm transition-colors">
-                    <MessageSquare className="w-4 h-4" />WhatsApp
-                  </a>
-                )}
-                <button onClick={() => printLabel(selected)} className="flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white py-3 rounded-xl font-semibold text-sm transition-colors">
-                  <Printer className="w-4 h-4" />Imprimir
+              <div className="flex gap-2 pt-2">
+                <a href={`https://wa.me/${selected.cliente_telefono?.replace(/\D/g,'')}?text=Hola ${selected.cliente_nombre}, te contactamos de ContactGo sobre tu pedido #${selected.id.slice(0,8).toUpperCase()}.`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-colors">
+                  <MessageCircle className="w-4 h-4" /> WhatsApp
+                </a>
+                <button onClick={() => window.print()}
+                  className="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-colors">
+                  <Printer className="w-4 h-4" /> Imprimir
                 </button>
               </div>
             </div>
