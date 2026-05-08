@@ -76,6 +76,15 @@ export default function Footer() {
           </ul>
         </div>
       </div>
+      {/* Logos tarjetas + seguridad - Requisito AZUL */}
+      <div className="border-t border-gray-800 px-4 py-6 flex flex-col items-center gap-3">
+        <div className="flex items-center gap-4">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" className="h-6 object-contain opacity-60" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6 object-contain opacity-60" />
+          <span className="text-xs text-gray-500">🔒 Pagos cifrados SSL · PCI-DSS</span>
+        </div>
+        <a href="/seguridad" className="text-xs text-gray-500 hover:text-primary-400 transition-colors underline">Política de Seguridad de Pagos</a>
+      </div>
       <div className="border-t border-gray-800 px-4 py-5 text-center text-xs flex flex-col md:flex-row items-center justify-center gap-3">
         <span>© {new Date().getFullYear()} ContactGo. Todos los derechos reservados.</span>
         <span className="hidden md:inline text-gray-600">·</span>
