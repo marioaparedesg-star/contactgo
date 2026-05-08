@@ -60,5 +60,27 @@ export default async function ProductoPage(
     .eq('product_id', product.id)
     .gt('stock', 0)
 
-  return <ProductoClient product={product} variants={variants ?? []} />
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.nombre,
+    "description": product.descripcion ?? `${product.nombre} - Lentes de contacto originales en República Dominicana`,
+    "brand": {"@type":"Brand","name": product.marca},
+    "image": product.imagen_url ?? "https://contactgo.net/logo.png",
+    "offers": {
+      "@type": "Offer",
+      "price": product.precio,
+      "priceCurrency": "DOP",
+      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "seller": {"@type":"Organization","name":"ContactGo"},
+      "url": `https://contactgo.net/producto/${product.id}`
+    }
+  }
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}} />
+      <ProductoClient product={product} variants={variants ?? []} />
+    </>
+  )
 }
