@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://contactgo.net/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://contactgo.net/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
   <url><loc>https://contactgo.net/catalogo</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://contactgo.net/receta</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/sugeridos</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://contactgo.net/sobre-nosotros</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://contactgo.net/envios-y-entregas</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://contactgo.net/faq</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://contactgo.net/catalogo?tipo=esferico</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://contactgo.net/catalogo?tipo=torico</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://contactgo.net/catalogo?tipo=multifocal</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://contactgo.net/catalogo?tipo=color</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://contactgo.net/catalogo?tipo=solucion</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://contactgo.net/catalogo?tipo=gota</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/receta</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://contactgo.net/privacidad</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://contactgo.net/terminos</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://contactgo.net/producto/ab6c7526-5105-4a37-9a42-6a43d9ba59c3</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/17ff9cf1-39ca-4408-a27a-ba49c55efb15</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/63fdbd8f-2691-4329-bc79-7b50a5778ba4</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/2140626c-efaa-48d5-a4a8-6fcf8a0d62b9</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/166def61-c5f8-4ffd-82fb-63cd2760111f</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/252475cc-d5b6-42d4-b401-495cba6069dd</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/b4e6ab3d-9852-431a-898e-fd7a924bd4a0</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/b39b2efb-c12b-4600-9fd7-ebdaa260ff7b</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/581afe4a-4222-4588-a37f-841f4649b405</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/e9ae6e56-7ad3-4bd7-abb1-1308d72b0976</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/7f271c98-eba2-496d-9172-eedc2d912ee4</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/869205f9-c81d-4861-b3ea-8b714d8631e0</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/6d8378aa-d8a1-408a-bcc0-1b2a28275b15</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/c9d5844d-08da-46b9-b88a-0b225650d4dd</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/b4541761-4402-4abe-b9ef-d8e651c40fd7</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://contactgo.net/producto/0679c817-cb57-4414-8fc3-583ed9d4ccb3</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/8561bdde-eedc-44c3-b7b5-66687eaf0bd4</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/66203db5-8ebf-4c7d-b62d-adb1bd6bfbd5</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/6a7e8d19-1f70-4da6-a5ab-be458a63ade3</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/3bee0d1d-cf40-406c-b9a8-e148d628e629</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/8673ba43-a6ca-4f1f-bf43-2bb76f6e5c63</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/producto/3dde2a8f-4099-4533-8210-fad822667304</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://contactgo.net/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://contactgo.net/marca/acuvue</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/marca/alcon</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/marca/bausch-lomb</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/marca/coopervision</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://contactgo.net/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://contactgo.net/blog/como-leer-tu-receta</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://contactgo.net/blog/como-poner-lentes-de-contacto</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://contactgo.net/blog/tipos-de-lentes-de-contacto</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://contactgo.net/terminos</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://contactgo.net/privacidad</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/1-day-acuvue-moist-lentes-contacto-diarios-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/acuvue-2-lentes-contacto-quincenales-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/acuvue-oasys-lentes-contacto-silicona-hidrogel-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/acuvue-oasys-presbyopia-lentes-multifocales-presbicia-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/air-optix-colors-lentes-contacto-color-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/avaira-vitality-toric-lentes-astigmatismo-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/bausch-lomb-ultra-lentes-contacto-mensuales-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/biofinity-lentes-contacto-mensuales-coopervision-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/biofinity-toric-lentes-astigmatismo-coopervision-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/biofinity-xr-toric-lentes-alta-graduacion-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/clariti-1-day-lentes-contacto-diarios-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/color-view-lentes-contacto-cosmeticos-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/dream-eye-solucion-lentes-contacto-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/freshlook-colorblends-lentes-contacto-color-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/frigine-gotas-lubricantes-ojos-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/humylub-ofteno-gotas-ojos-lubricantes-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/humylub-ofteno-pf-gotas-preservante-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/lagricel-ofteno-lubricante-ocular-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/lunare-tri-kolor-lentes-contacto-color-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/manzanilla-sophia-gotas-ojos-naturales-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/opti-free-puremoist-solucion-multipropósito-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/prolub-hyfresh-solucion-multiproposito-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/prolub-ofteno-gotas-lubricantes-oculares-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/refresh-optive-advanced-gotas-ojos-secos-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/refresh-optive-lubricant-gotas-oculares-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/refresh-tears-gotas-lubricantes-ojos-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/renu-advanced-solucion-lentes-contacto-bausch-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/splash-tears-gotas-lubricantes-oculares-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/sprainer-solucion-espumosa-lentes-contacto-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://contactgo.net/producto-slug/systane-ultra-gotas-ojos-secos-alcon-dominicana</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
