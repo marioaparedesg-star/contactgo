@@ -234,8 +234,7 @@ export default function CheckoutPage() {
       <main className="pb-20 max-w-5xl mx-auto px-4 py-8">
         <h1 className="font-display text-2xl font-bold text-gray-900 mb-8">Finalizar pedido</h1>
 
-        <form onSubmit={handleSubmit(data => if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }
-      payMethod !== 'paypal' u0026u0026 createOrder(data))}
+        <form onSubmit={handleSubmit(data => { if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }; if (payMethod !== 'paypal') createOrder(data) })}
           className="grid lg:grid-cols-5 gap-8">
 
           {/* LEFT - Formulario */}
@@ -328,6 +327,7 @@ export default function CheckoutPage() {
                         }]
                       })}
                       onApprove={async (_, actions) => {
+                        if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }
                         const capture = await actions.order!.capture()
                         await createOrder(getValues(), capture.id)
                       }}
@@ -421,25 +421,23 @@ export default function CheckoutPage() {
                   <span className="font-bold">Total</span><span className="font-bold">RD${(tot - descuento).toLocaleString()}</span>
                 </div>
               </div>
-              
-              {/* Logos tarjetas - Requisito AZUL */}
+              {/* Logos tarjetas AZUL */}
               <div className="flex items-center justify-center gap-3 mt-3 mb-2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" className="h-6 object-contain" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6 object-contain" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" className="h-5 object-contain opacity-70" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-5 object-contain opacity-70" />
               </div>
               {/* Checkbox T&C - Requisito AZUL */}
-              <label className="flex items-start gap-2 cursor-pointer mt-3">
+              <label className="flex items-start gap-2 cursor-pointer mt-2 mb-1">
                 <input type="checkbox" checked={aceptaTerminos} onChange={e => setAceptaTerminos(e.target.checked)}
-                  className="mt-0.5 accent-primary-600 w-4 h-4 shrink-0" />
+                  className="mt-0.5 w-4 h-4 shrink-0 accent-green-600" />
                 <span className="text-xs text-gray-500 leading-snug">
                   He leído y acepto los{' '}
                   <a href="/terminos" target="_blank" className="text-primary-600 underline font-semibold">Términos y Condiciones</a>
                   {' '}y la{' '}
                   <a href="/privacidad" target="_blank" className="text-primary-600 underline font-semibold">Política de Privacidad</a>
-                  {' '}de ContactGo. *
+                  {' '}de ContactGo *
                 </span>
               </label>
-
               <p className="text-xs text-gray-400 text-center mt-4">
                 🔒 Pago seguro · Entrega en 24–48h
               </p>
