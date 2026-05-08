@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ShoppingCart, ArrowLeft, Eye, AlertCircle } from 'lucide-react'
+import Reviews from '@/components/ui/Reviews'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
@@ -351,6 +352,8 @@ export default function ProductoClient({ product, variants }: Props) {
           </div>
         </div>
       </main>
+
+      <Reviews productId={product.id} />
 
       {/* Sticky CTA móvil */}
       {product.stock > 0 && (
