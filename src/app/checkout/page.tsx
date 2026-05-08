@@ -555,14 +555,26 @@ export default function CheckoutPage() {
               </div>
               <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
                 <div className="flex justify-between text-gray-500">
-                  <span>Subtotal</span><span>RD${sub.toLocaleString()}</span>
+                  <span>Subtotal (sin ITBIS)</span>
+                  <span>RD${Math.round(sub / 1.18).toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-gray-500">
+                  <span>ITBIS (18%)</span>
+                  <span>RD${Math.round(sub - sub / 1.18).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-gray-500">
                   <span>Envío</span><span>RD$200</span>
                 </div>
-                <div className="flex justify-between font-bold text-base text-gray-900 pt-1">
-                  <span className="font-bold">Total</span><span className="font-bold">RD${(tot - descuento).toLocaleString()}</span>
+                {descuento > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>Descuento</span><span>-RD${descuento.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="flex justify-between font-bold text-base text-gray-900 border-t border-gray-100 pt-2 mt-1">
+                  <span className="font-bold">Total</span>
+                  <span className="font-bold">RD${(tot - descuento).toLocaleString()}</span>
                 </div>
+                <p className="text-xs text-gray-400 text-center">ITBIS incluido en el precio de venta</p>
               </div>
               {/* Logos tarjetas AZUL - SVG inline */}
               <div className="flex items-center justify-center gap-4 mt-3 mb-2">
