@@ -27,6 +27,17 @@ export default async function HomePage() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ContactGo",
+        "url": "https://contactgo.net",
+        "logo": "https://contactgo.net/logo.png",
+        "description": "Tienda online de lentes de contacto originales en República Dominicana.",
+        "address": {"@type":"PostalAddress","addressCountry":"DO","addressLocality":"Santo Domingo"},
+        "contactPoint": {"@type":"ContactPoint","telephone":"+1-829-408-9097","contactType":"customer service","availableLanguage":"Spanish"},
+        "sameAs": ["https://wa.me/18294089097"]
+      })}} />
       <Navbar />
       <main>
         {/* ── HERO ─────────────────────────────────────────────── */}

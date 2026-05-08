@@ -45,6 +45,19 @@ export const metadata: Metadata = {
   },
 }
 
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ContactGo",
+  "url": "https://contactgo.net",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://contactgo.net/catalogo?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
@@ -67,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
         <BottomNav />
         <Toaster
           position="top-center"
