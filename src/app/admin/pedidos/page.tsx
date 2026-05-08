@@ -173,8 +173,14 @@ export default function AdminPedidos() {
                           <p className="text-xs text-gray-400">{o.cliente_telefono ?? ''}</p>
                         </td>
                         <td className="px-4 py-3">
-                          <p className="text-gray-700 text-xs">{items.length} producto(s)</p>
-                          <p className="text-gray-400 text-xs truncate max-w-[150px]">{items.map((i:any)=>i.nombre).join(', ')}</p>
+                          {items.length === 0 ? (
+                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-2 py-1 rounded-lg">⚠ Sin detalle</span>
+                          ) : (
+                            <>
+                              <p className="text-gray-700 text-xs font-semibold">{items.length} producto(s)</p>
+                              <p className="text-gray-400 text-xs truncate max-w-[150px]">{items.map((i:any)=>i.nombre).join(', ')}</p>
+                            </>
+                          )}
                         </td>
                         <td className="px-4 py-3"><p className="font-bold text-gray-900">RD${(o.total??0).toLocaleString()}</p></td>
                         <td className="px-4 py-3 text-gray-500 text-xs capitalize">{(o.metodo_pago??'—').replace('_',' ')}</td>
@@ -258,7 +264,14 @@ export default function AdminPedidos() {
                   <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Productos</p>
                 </div>
                 <div className="space-y-2">
-                  {(selected.order_items ?? []).map((item: any) => <ItemDetail key={item.id} item={item} />)}
+                  {(selected.order_items ?? []).length === 0 ? (
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+                      <p className="font-semibold mb-1">⚠ Detalle de productos no disponible</p>
+                      <p className="text-xs">Este pedido fue creado antes de la actualización del sistema. El total registrado es <strong>RD${(selected.total ?? 0).toLocaleString()}</strong>. Contacta al cliente por WhatsApp para confirmar los productos.</p>
+                    </div>
+                  ) : (
+                    (selected.order_items ?? []).map((item: any) => <ItemDetail key={item.id} item={item} />)
+                  )}
                 </div>
                 <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
                   <p className="font-bold text-gray-900">Total</p>

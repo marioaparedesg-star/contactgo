@@ -138,7 +138,7 @@ export default function CheckoutPage() {
     if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
 
     // Insertar items
-    await sb.from('order_items').insert(
+    const { error: itemsError } = await sb.from('order_items').insert(
       items.map(i => ({
         order_id: order.id,
         product_id: i.product.id,
@@ -155,6 +155,12 @@ export default function CheckoutPage() {
         subtotal: ((i as any).precio_final ?? i.product.precio) * i.cantidad,
       }))
     )
+
+    if (itemsError) {
+      console.error('Error insertando order_items:', itemsError)
+      // No bloqueamos el flujo pero registramos el error
+      toast.error('Pedido creado pero hubo un error guardando los productos. Contacta soporte.')
+    }
 
     // Crear suscripciones si aplica
     const itemsConSub = items.filter(i => (i as any).suscripcion)
