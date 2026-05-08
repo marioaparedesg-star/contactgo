@@ -47,7 +47,7 @@ export default function SobreNosotrosPage() {
                 { icon: '💬', title: 'Soporte real', desc: 'Un equipo humano te atiende por WhatsApp. Sin bots, sin esperas largas.' },
                 { icon: '🩺', title: 'Guía especializada', desc: 'Nuestro buscador inteligente detecta tu tipo de lente según tu receta médica.' },
                 { icon: '💰', title: 'Precios justos', desc: 'Sin intermediarios innecesarios. El precio que ves es el precio que pagas.' },
-                { icon: '🔒', title: 'Compra segura', desc: 'Múltiples métodos de pago. Contra entrega, transferencia y pronto Azul.' },
+                { icon: '🔒', title: 'Compra segura', desc: 'Múltiples métodos de pago. Contra entrega y próximamente Azul (tarjeta).' },
               ].map((v, i) => (
                 <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
                   <span className="text-3xl mb-3 block">{v.icon}</span>

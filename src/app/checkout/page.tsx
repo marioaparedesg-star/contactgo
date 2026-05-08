@@ -36,7 +36,7 @@ const PAYPAL_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
-  const [payMethod, setPayMethod] = useState<'paypal'|'transferencia'|'contra_entrega'>('paypal')
+  const [payMethod, setPayMethod] = useState<'paypal'|'contra_entrega'>('paypal')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
   const [cupon, setCupon] = useState('')
@@ -217,7 +217,7 @@ export default function CheckoutPage() {
   }
 
   const copyBank = () => {
-    navigator.clipboard.writeText('BHD · Mario Paredes · Cta: 12690480037 · DO84BCBH00000000012690480037')
+    navigator.clipboard.writeText('')
     setCopied(true); setTimeout(() => setCopied(false), 2000)
     toast.success('Datos bancarios copiados')
   }
@@ -293,7 +293,6 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-3 gap-2 mb-5">
                 {([
                   { id: 'paypal',         icon: CreditCard, label: 'PayPal' },
-                  { id: 'transferencia',  icon: Building2,  label: 'Transferencia' },
                   { id: 'contra_entrega', icon: Package,    label: 'Contra entrega' },
                 ] as const).map(m => (
                   <button key={m.id} type="button" onClick={() => setPayMethod(m.id)}
@@ -333,32 +332,6 @@ export default function CheckoutPage() {
                 </div>
               )}
 
-              {/* Transferencia BHD */}
-              {payMethod === 'transferencia' && (
-                <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-                  <p className="text-sm font-semibold text-gray-700">Datos bancarios BHD</p>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <div className="flex justify-between"><span className="text-gray-400">Banco</span><span className="font-medium">BHD</span></div>
-                    <div className="flex justify-between"><span className="text-gray-400">Titular</span><span className="font-medium">Mario Paredes</span></div>
-                    <div className="flex justify-between"><span className="text-gray-400">Cuenta RD$</span><span className="font-medium font-mono">12690480037</span></div>
-                    <div className="flex justify-between"><span className="text-gray-400">IBAN</span><span className="font-medium font-mono text-xs">DO84BCBH00000000012690480037</span></div>
-                  </div>
-                  <button type="button" onClick={copyBank}
-                    className="w-full flex items-center justify-center gap-2 text-sm btn-secondary">
-                    {copied ? <CheckCircle className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                    {copied ? 'Copiado' : 'Copiar datos bancarios'}
-                  </button>
-                  <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-2.5">
-                    ⚠️ Envía el comprobante por WhatsApp al 829-408-9097 para confirmar tu pedido.
-                  </p>
-                  <button type="submit" disabled={loading}
-                    className="w-full btn-primary flex items-center justify-center gap-2 py-3.5">
-                    {loading ? 'Procesando...' : <>Confirmar pedido <ChevronRight className="w-4 h-4" /></>}
-                  </button>
-                </div>
-              )}
-
-              {/* Contra entrega */}
               {payMethod === 'contra_entrega' && (
                 <div className="space-y-4">
                   <div className="bg-green-50 rounded-xl p-4 text-sm text-green-800">

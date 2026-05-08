@@ -15,10 +15,8 @@ const FAQS = [
   {
     categoria: '💳 Pagos',
     preguntas: [
-      { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos PayPal, transferencia bancaria y pago contra entrega (solo en Santo Domingo y Santiago).' },
+      { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos PayPal y pago contra entrega. Próximamente tarjeta de crédito/débito vía Azul.' },
       { q: '¿El pago contra entrega tiene costo extra?', a: 'No, el costo de envío es el mismo RD$200 independientemente del método de pago.' },
-      { q: '¿A qué cuenta hago la transferencia?', a: 'Los datos bancarios aparecen automáticamente al seleccionar "Transferencia bancaria" en el checkout.' },
-      { q: '¿Cuándo confirman mi pedido si pago por transferencia?', a: 'Una vez enviada la transferencia, envíanos el comprobante por WhatsApp al 829-408-9097 y confirmamos en menos de 2 horas.' },
     ]
   },
   {
