@@ -56,9 +56,16 @@ export default function SeguridadPage() {
           ))}
         </div>
 
-        <div className="mt-10 flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" className="h-6 object-contain opacity-70" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6 object-contain opacity-70" />
+        <div className="mt-10 flex items-center gap-5 p-4 bg-gray-50 rounded-2xl">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 16" className="h-5" aria-label="Visa">
+            <rect width="48" height="16" rx="3" fill="#1A1F71"/>
+            <text x="5" y="12" fontFamily="Arial" fontSize="12" fontWeight="bold" fill="white" letterSpacing="1">VISA</text>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" className="h-6" aria-label="Mastercard">
+            <circle cx="13" cy="12" r="10" fill="#EB001B"/>
+            <circle cx="25" cy="12" r="10" fill="#F79E1B"/>
+            <path d="M19 5.3a10 10 0 0 1 0 13.4A10 10 0 0 1 19 5.3z" fill="#FF5F00"/>
+          </svg>
           <span className="text-xs text-gray-500">Pagos protegidos · SSL · PCI-DSS</span>
         </div>
       </main>

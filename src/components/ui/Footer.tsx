@@ -78,9 +78,18 @@ export default function Footer() {
       </div>
       {/* Logos tarjetas + seguridad - Requisito AZUL */}
       <div className="border-t border-gray-800 px-4 py-6 flex flex-col items-center gap-3">
-        <div className="flex items-center gap-4">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" className="h-6 object-contain opacity-60" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6 object-contain opacity-60" />
+        <div className="flex items-center gap-5">
+          {/* Visa SVG */}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 16" className="h-5 opacity-70" aria-label="Visa">
+            <rect width="48" height="16" rx="3" fill="#1A1F71"/>
+            <text x="5" y="12" fontFamily="Arial" fontSize="12" fontWeight="bold" fill="white" letterSpacing="1">VISA</text>
+          </svg>
+          {/* Mastercard SVG */}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" className="h-6 opacity-70" aria-label="Mastercard">
+            <circle cx="13" cy="12" r="10" fill="#EB001B"/>
+            <circle cx="25" cy="12" r="10" fill="#F79E1B"/>
+            <path d="M19 5.3a10 10 0 0 1 0 13.4A10 10 0 0 1 19 5.3z" fill="#FF5F00"/>
+          </svg>
           <span className="text-xs text-gray-500">🔒 Pagos cifrados SSL · PCI-DSS</span>
         </div>
         <a href="/seguridad" className="text-xs text-gray-500 hover:text-primary-400 transition-colors underline">Política de Seguridad de Pagos</a>
