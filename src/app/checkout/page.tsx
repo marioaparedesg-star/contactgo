@@ -137,29 +137,32 @@ export default function CheckoutPage() {
 
     if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
 
-    // Insertar items
-    const { error: itemsError } = await sb.from('order_items').insert(
-      items.map(i => ({
-        order_id: order.id,
-        product_id: i.product.id,
-        nombre: i.product.nombre,
-        precio: i.product.precio,
-        cantidad: i.cantidad,
-        sph: i.sph ?? null,
-        cyl: i.cyl ?? null,
-        add_power: i.add_power ? parseFloat(String(i.add_power)) : null,
-        axis: (i as any).axis ?? null,
-        color: (i as any).color ?? null,
-        ojo: (i as any).ojo ?? null,
-        size: (i as any).size ?? null,
-        subtotal: ((i as any).precio_final ?? i.product.precio) * i.cantidad,
-      }))
-    )
+    // Insertar items via API route server-side (service_role key, bypasea RLS)
+    const itemsPayload = items.map(i => ({
+      order_id:   order.id,
+      product_id: i.product.id,
+      nombre:     i.product.nombre,
+      precio:     i.product.precio,
+      cantidad:   i.cantidad,
+      sph:        i.sph ?? null,
+      cyl:        i.cyl ?? null,
+      add_power:  i.add_power ? parseFloat(String(i.add_power)) : null,
+      axis:       (i as any).axis ?? null,
+      color:      (i as any).color ?? null,
+      ojo:        (i as any).ojo ?? null,
+      size:       (i as any).size ?? null,
+      subtotal:   ((i as any).precio_final ?? i.product.precio) * i.cantidad,
+    }))
 
-    if (itemsError) {
-      console.error('Error insertando order_items:', itemsError)
-      // No bloqueamos el flujo pero registramos el error
-      toast.error('Pedido creado pero hubo un error guardando los productos. Contacta soporte.')
+    const itemsRes = await fetch('/api/order-items', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id: order.id, items: itemsPayload }),
+    })
+
+    if (!itemsRes.ok) {
+      const itemsErr = await itemsRes.json().catch(() => ({}))
+      console.error('Error insertando order_items:', itemsErr)
     }
 
     // Crear suscripciones si aplica
