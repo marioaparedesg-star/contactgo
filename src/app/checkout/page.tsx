@@ -240,13 +240,17 @@ export default function CheckoutPage() {
     // Amount sin decimales — últimos 2 dígitos son centavos
     const totalFinal  = tot - descuento
     const amountStr   = (totalFinal * 100).toFixed(0)
-    const itbisStr    = '000'
+    // ITBIS = 18% del total, formato sin decimales (últimos 2 = centavos)
+    const itbisReal   = Math.round(totalFinal * 0.18 / 1.18 * 100)
+    const itbisStr    = itbisReal.toFixed(0).padStart(3, '0')
 
     const approvedUrl = BASE_URL + '/azul-retorno'
     const declinedUrl = BASE_URL + '/azul-retorno'
     const cancelUrl   = BASE_URL + '/azul-retorno'
 
     // Calcular hash en servidor (AuthKey nunca sale al frontend)
+    // El hash se calcula ANTES de definir los fields
+    // Solo los campos del hash según doc técnico (no incluye CardHolder ni LogoImageUrl)
     const { hash } = await fetch('/api/azul-hash', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -321,6 +325,17 @@ export default function CheckoutPage() {
       CustomField2Value:  '',
       AuthHash:           hash,
       ShowTransactionResult: '1',
+      // Logo del comercio en la página de AZUL
+      LogoImageUrl:       BASE_URL + '/logo.png',
+      // Campos CardHolder para 3D Secure (doc técnico p.38)
+      CardHolderName:     data.nombre.substring(0, 96),
+      CardHolderEmail:    data.email.substring(0, 254),
+      CardHolderPhoneMobile: data.telefono.replace(/\D/g,'').substring(0, 32),
+      CardHolderBillingAddressLine1: data.direccion.substring(0, 96),
+      CardHolderBillingAddressCity:  data.ciudad.substring(0, 96),
+      CardHolderBillingAddressState: 'Santo Domingo',
+      CardHolderBillingAddressCountry: 'DO',
+      CardHolderBillingAddressZip:   '10000',
     }
 
     Object.entries(fields).forEach(([k, v]) => {
