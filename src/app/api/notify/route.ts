@@ -7,8 +7,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 const sb = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -169,6 +167,8 @@ export async function POST(req: NextRequest) {
 
     if (!order_id) return NextResponse.json({ error: 'order_id requerido' }, { status: 400 })
     if (!process.env.RESEND_API_KEY) return NextResponse.json({ error: 'RESEND_API_KEY no configurado' }, { status: 500 })
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
 
     // Obtener orden + items
     const { data: order } = await sb.from('orders').select('*').eq('id', order_id).single()
