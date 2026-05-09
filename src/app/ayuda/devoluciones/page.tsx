@@ -1,3 +1,18 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Devoluciones y Garantías | ContactGo RD',
+  description: 'Política de devoluciones y garantías de ContactGo. Productos 100% originales con respaldo de marca.',
+  alternates: { canonical: 'https://contactgo.net/ayuda/devoluciones' },
+  openGraph: {
+    title: 'Devoluciones y Garantías | ContactGo RD',
+    description: 'Política de devoluciones y garantías de ContactGo. Productos 100% originales con respaldo de marca.',
+    url: 'https://contactgo.net/ayuda/devoluciones',
+    locale: 'es_DO',
+    siteName: 'ContactGo',
+  },
+}
+
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'

@@ -46,6 +46,36 @@ export const metadata: Metadata = {
 }
 
 
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": ["Organization", "LocalBusiness"],
+  "@id": "https://contactgo.net/#organization",
+  "name": "ContactGo",
+  "url": "https://contactgo.net",
+  "logo": "https://contactgo.net/icon-512.png",
+  "image": "https://contactgo.net/icon-512.png",
+  "description": "Tienda online especializada en lentes de contacto y soluciones oftálmicas en República Dominicana. Entrega a domicilio en 24-48 horas.",
+  "telephone": "+18294089097",
+  "email": "info@contactgo.net",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "DO",
+    "addressRegion": "Santo Domingo"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "República Dominicana"
+  },
+  "priceRange": "RD$500 - RD$15,000",
+  "currenciesAccepted": "DOP",
+  "paymentAccepted": "Tarjeta de crédito, débito, PayPal, transferencia bancaria, efectivo contra entrega",
+  "sameAs": [
+    "https://www.instagram.com/contactgo.rd",
+    "https://www.facebook.com/contactgo.rd"
+  ]
+}
+
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -81,6 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}} />
         <BottomNav />
         <Toaster
           position="top-center"

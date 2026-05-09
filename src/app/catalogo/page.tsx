@@ -1,3 +1,34 @@
+import type { Metadata } from 'next'
+
+
+const TIPO_META: Record<string, { title: string; description: string }> = {
+  esferico:  { title: 'Lentes de Contacto Esféricos RD | Miopía e Hipermetropía — ContactGo', description: 'Compra lentes de contacto esféricos en República Dominicana. Acuvue, Air Optix, Biofinity para miopía e hipermetropía. Envío 24-48h.' },
+  torico:    { title: 'Lentes para Astigmatismo RD | Lentes Tóricos — ContactGo', description: 'Lentes tóricos para astigmatismo en RD. Acuvue Oasys for Astigmatism, Biofinity Toric. Entrega a domicilio en República Dominicana.' },
+  multifocal:{ title: 'Lentes Multifocales para Presbicia RD — ContactGo', description: 'Lentes de contacto multifocales para vista cansada y presbicia en República Dominicana. Acuvue Oasys Presbyopia. Envío en 24-48h.' },
+  color:     { title: 'Lentes de Contacto de Colores RD | FreshLook, Air Optix Colors — ContactGo', description: 'Lentes de colores en República Dominicana. FreshLook Colorblends, Air Optix Colors. Con y sin graduación. Entrega a domicilio.' },
+  solucion:  { title: 'Soluciones para Lentes de Contacto RD — ContactGo', description: 'Soluciones multipropósito para lentes de contacto en RD. ReNu, Opti-Free, Dream Eye. Envío a domicilio en República Dominicana.' },
+  gota:      { title: 'Gotas Lubricantes Oculares RD | Systane, Refresh — ContactGo', description: 'Gotas lubricantes para ojos secos en República Dominicana. Systane Ultra, Refresh Optive, Frigine. Alivio inmediato. Envío 24h.' },
+}
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const tipo = (await Promise.resolve(searchParams)).tipo ?? ''
+  const meta = TIPO_META[tipo]
+  if (meta) {
+    return {
+      title: meta.title,
+      description: meta.description,
+      alternates: { canonical: `https://contactgo.net/catalogo${tipo ? '?tipo=' + tipo : ''}` },
+      openGraph: { title: meta.title, description: meta.description, url: `https://contactgo.net/catalogo${tipo ? '?tipo=' + tipo : ''}`, locale: 'es_DO', siteName: 'ContactGo' },
+    }
+  }
+  return {
+    title: 'Catálogo de Lentes de Contacto | ContactGo República Dominicana',
+    description: 'Catálogo completo de lentes de contacto en RD. Esféricos, tóricos, multifocales y de colores. Acuvue, Air Optix, Biofinity. Envío 24-48h.',
+    alternates: { canonical: 'https://contactgo.net/catalogo' },
+    openGraph: { title: 'Catálogo — Lentes de Contacto RD', description: 'Todas las marcas premium con entrega a domicilio.', url: 'https://contactgo.net/catalogo', locale: 'es_DO', siteName: 'ContactGo' },
+  }
+}
+
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'

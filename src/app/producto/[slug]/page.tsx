@@ -73,7 +73,7 @@ export default async function ProductoPage(
       "priceCurrency": "DOP",
       "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       "seller": {"@type":"Organization","name":"ContactGo"},
-      "url": `https://contactgo.net/producto/${product.id}`
+      "url": `https://contactgo.net/producto/${product.slug ?? product.id}`
     }
   }
 
