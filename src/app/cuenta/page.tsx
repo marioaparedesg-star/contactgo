@@ -275,9 +275,32 @@ export default function CuentaPage() {
     setSelectedPedido(p)
     setLoadingPedido(true)
     const sb = createClient()
-    const { data } = await sb.from('order_items').select('*').eq('order_id', p.id)
-    setItemsPedido(data || [])
+    // Refresca el estado actual del pedido desde DB (no usar snapshot en memoria)
+    const [{ data: pedidoFresh }, { data: items }] = await Promise.all([
+      sb.from('orders').select('*').eq('id', p.id).single(),
+      sb.from('order_items').select('*').eq('order_id', p.id),
+    ])
+    if (pedidoFresh) {
+      setSelectedPedido(pedidoFresh)
+      // Actualiza también en la lista de pedidos
+      setPedidos(ps => ps.map(x => x.id === p.id ? pedidoFresh : x))
+    }
+    setItemsPedido(items || [])
     setLoadingPedido(false)
+
+    // Suscripción en tiempo real para actualizaciones de estado
+    const channel = sb.channel('pedido-' + p.id)
+      .on('postgres_changes', {
+        event: 'UPDATE', schema: 'public', table: 'orders',
+        filter: 'id=eq.' + p.id
+      }, ({ new: updated }) => {
+        setSelectedPedido((prev: any) => ({ ...prev, ...updated }))
+        setPedidos(ps => ps.map(x => x.id === p.id ? { ...x, estado: updated.estado } : x))
+      })
+      .subscribe()
+
+    // Guardar referencia para desuscribir al cerrar
+    return () => { sb.removeChannel(channel) }
   }
 
   const login = async (e: React.FormEvent) => {
