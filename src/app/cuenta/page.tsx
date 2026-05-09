@@ -115,6 +115,11 @@ export default function CuentaPage() {
     nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',
     oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:''
   })
+  const [subiendoReceta, setSubiendoReceta] = useState(false)
+  const [analizandoIA, setAnalizandoIA] = useState(false)
+  const [recetaAnalizada, setRecetaAnalizada] = useState<any>(null)
+  const [recetaImagenPreview, setRecetaImagenPreview] = useState<string | null>(null)
+  const [fechaEmisionForm, setFechaEmisionForm] = useState('')
   const [agregandoPago, setAgregandoPago] = useState(false)
   const [pagoForm, setPagoForm] = useState({ titular:'', ultimos4:'', vencimiento:'' })
   const [pagos, setPagos]     = useState<any[]>([])
@@ -200,6 +205,59 @@ export default function CuentaPage() {
     localStorage.removeItem(STORAGE_KEY)
     setPasskeyRegistered(false)
     setPasskeyMsg({ type:'ok', text:'Acceso biométrico eliminado.' })
+  }
+
+  const subirYAnalizarReceta = async (file: File) => {
+    setAnalizandoIA(true)
+    setRecetaAnalizada(null)
+    try {
+      // Preview local
+      const reader = new FileReader()
+      reader.onload = (e) => setRecetaImagenPreview(e.target?.result as string)
+      reader.readAsDataURL(file)
+
+      // Convertir a base64 para la API
+      const b64Reader = new FileReader()
+      b64Reader.readAsDataURL(file)
+      b64Reader.onload = async (e) => {
+        const dataUrl = e.target?.result as string
+        const base64 = dataUrl.split(',')[1]
+        const mediaType = file.type || 'image/jpeg'
+
+        const res = await fetch('/api/analizar-receta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imagen_base64: base64, media_type: mediaType }),
+        })
+        const data = await res.json()
+        if (!res.ok || !data.es_receta_valida) {
+          alert('No se pudo leer la receta. Asegúrate de que la imagen sea clara y muestre los valores SPH, CYL y EJE.')
+          setAnalizandoIA(false)
+          return
+        }
+
+        setRecetaAnalizada(data)
+        // Pre-llenar el formulario con los datos extraídos
+        setRecetaForm(f => ({
+          ...f,
+          od_sph:  data.od_sph  != null ? String(data.od_sph)  : f.od_sph,
+          od_cyl:  data.od_cyl  != null ? String(data.od_cyl)  : f.od_cyl,
+          od_axis: data.od_axis != null ? String(data.od_axis) : f.od_axis,
+          oi_sph:  data.oi_sph  != null ? String(data.oi_sph)  : f.oi_sph,
+          oi_cyl:  data.oi_cyl  != null ? String(data.oi_cyl)  : f.oi_cyl,
+          oi_axis: data.oi_axis != null ? String(data.oi_axis) : f.oi_axis,
+          od_add:  data.add_power != null ? String(data.add_power) : f.od_add,
+          diagnostico: data.diagnostico ?? f.diagnostico,
+        }))
+        if (data.fecha_emision) setFechaEmisionForm(data.fecha_emision)
+        setAnalizandoIA(false)
+        setAgregandoReceta(true)
+      }
+    } catch (err) {
+      console.error(err)
+      setAnalizandoIA(false)
+      alert('Error al analizar la imagen. Intenta de nuevo.')
+    }
   }
 
   const detectarDiagnostico = (f: typeof recetaForm) => {
@@ -719,46 +777,163 @@ export default function CuentaPage() {
         {/* TAB: RECETAS */}
         {tab==='recetas' && (
           <div className="space-y-3">
-            {recetas.length===0 && (
-              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
-                <FileText className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-                <p className="text-gray-500 font-medium">No tienes recetas guardadas</p>
-                <p className="text-xs text-gray-400 mt-1">Agrega tu receta óptica para comprar más rápido</p>
-              </div>
-            )}
-            {recetas.map(r => (
-              <div key={r.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="font-bold text-gray-900">{r.nombre}</p>
-                  {r.diagnostico && <span className="text-xs font-semibold px-2 py-1 bg-primary-50 text-primary-700 rounded-full">{r.diagnostico}</span>}
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[['OD Derecho',r.od_sph,r.od_cyl,r.od_axis,r.od_add],['OI Izquierdo',r.oi_sph,r.oi_cyl,r.oi_axis,r.oi_add]].map(([label,sph,cyl,axis,add]) => (
-                    <div key={String(label)} className="bg-gray-50 rounded-xl p-3">
-                      <p className="text-xs font-bold text-gray-500 mb-2">{label}</p>
-                      <div className="space-y-1 text-xs">
-                        {sph && <p><span className="text-gray-400">SPH: </span><span className="font-semibold">{sph}</span></p>}
-                        {cyl && <p><span className="text-gray-400">CYL: </span><span className="font-semibold">{cyl}</span></p>}
-                        {axis && <p><span className="text-gray-400">EJE: </span><span className="font-semibold">{axis}</span></p>}
-                        {add && <p><span className="text-gray-400">ADD: </span><span className="font-semibold">{add}</span></p>}
+
+            {/* Recetas guardadas */}
+            {recetas.map(r => {
+              const fechaEmision = r.fecha_emision ? new Date(r.fecha_emision) : null
+              const ahora = new Date()
+              const mesesDesde = fechaEmision ? (ahora.getFullYear() - fechaEmision.getFullYear()) * 12 + (ahora.getMonth() - fechaEmision.getMonth()) : null
+              const vencida = mesesDesde !== null && mesesDesde >= 12
+              const proxVencer = mesesDesde !== null && mesesDesde >= 10 && mesesDesde < 12
+              return (
+                <div key={r.id} className={`bg-white rounded-2xl border shadow-sm p-4 ${vencida ? 'border-red-200' : proxVencer ? 'border-amber-200' : 'border-gray-100'}`}>
+                  {/* Alerta vencimiento */}
+                  {vencida && (
+                    <div className="bg-red-50 border border-red-100 rounded-xl px-3 py-2.5 mb-3 flex items-start gap-2">
+                      <span className="text-red-500 text-base shrink-0 mt-0.5">⚠️</span>
+                      <div>
+                        <p className="text-red-700 font-bold text-xs">Receta vencida ({mesesDesde} meses)</p>
+                        <p className="text-red-600 text-xs mt-0.5">Tu receta tiene más de un año. Te recomendamos visitar un optometrista antes de comprar.</p>
+                        <a href="https://wa.me/18294089097?text=Hola%2C%20necesito%20información%20sobre%20revisión%20visual"
+                          target="_blank" rel="noopener noreferrer"
+                          className="text-xs font-bold text-red-600 underline mt-1 inline-block">Solicitar consulta →</a>
                       </div>
                     </div>
-                  ))}
+                  )}
+                  {proxVencer && !vencida && (
+                    <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 mb-3 flex items-start gap-2">
+                      <span className="text-amber-500 text-base shrink-0 mt-0.5">🕐</span>
+                      <p className="text-amber-700 text-xs font-medium">Tu receta está próxima a vencer ({mesesDesde} meses). Considera hacer una revisión pronto.</p>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="font-bold text-gray-900 text-sm">{r.nombre}</p>
+                    <div className="flex items-center gap-1.5">
+                      {r.diagnostico && <span className="text-xs font-semibold px-2 py-0.5 bg-primary-50 text-primary-700 rounded-full capitalize">{r.diagnostico}</span>}
+                      {fechaEmision && <span className="text-xs text-gray-400">{fechaEmision.getFullYear()}</span>}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    {[['OD Derecho',r.od_sph,r.od_cyl,r.od_axis,r.od_add],['OI Izquierdo',r.oi_sph,r.oi_cyl,r.oi_axis,r.oi_add]].map(([label,sph,cyl,axis,add]) => (
+                      <div key={String(label)} className="bg-gray-50 rounded-xl p-3">
+                        <p className="text-xs font-bold text-gray-500 mb-1.5">{label}</p>
+                        <div className="space-y-1 text-xs font-mono">
+                          {sph && <p><span className="text-gray-400">SPH </span><span className="font-bold text-gray-800">{Number(sph) > 0 ? '+' : ''}{sph}</span></p>}
+                          {cyl && <p><span className="text-gray-400">CYL </span><span className="font-bold text-gray-800">{cyl}</span></p>}
+                          {axis && <p><span className="text-gray-400">EJE </span><span className="font-bold text-gray-800">{String(axis).padStart(3,'0')}°</span></p>}
+                          {add && <p><span className="text-gray-400">ADD </span><span className="font-bold text-gray-800">{add}</span></p>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Botones acción */}
+                  <div className="flex gap-2">
+                    <a href={`/receta?od_sph=${r.od_sph}&od_cyl=${r.od_cyl}&oi_sph=${r.oi_sph}&oi_cyl=${r.oi_cyl}`}
+                      className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-primary-700 transition-colors">
+                      🛒 Ver mis lentes
+                    </a>
+                    <button onClick={() => eliminarReceta(r.id)}
+                      className="px-3 py-2.5 bg-red-50 text-red-500 rounded-xl text-xs font-semibold hover:bg-red-100 transition-colors">
+                      Eliminar
+                    </button>
+                  </div>
                 </div>
-                <div className="flex gap-2 mt-3">
-                  <a href="/catalogo" className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center hover:bg-primary-700 transition-colors">Comprar</a>
-                  <button onClick={() => eliminarReceta(r.id)} className="px-3 py-2.5 bg-red-50 text-red-500 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors">Eliminar</button>
+              )
+            })}
+
+            {/* Sección: subir imagen */}
+            {!agregandoReceta && (
+              <div className="space-y-3">
+                {/* Upload con IA */}
+                <div className="bg-gradient-to-br from-blue-50 to-teal-50 border border-blue-100 rounded-2xl p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-lg">🤖</span>
+                    <p className="font-bold text-gray-900 text-sm">Subir foto de mi receta</p>
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold ml-auto">IA</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mb-3 leading-relaxed">
+                    Toma una foto clara de tu receta óptica y la IA leerá automáticamente SPH, CYL, EJE y te recomendará los lentes ideales.
+                  </p>
+                  <label className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-xl py-5 cursor-pointer transition-all
+                    ${analizandoIA ? 'border-blue-400 bg-blue-50' : 'border-blue-200 hover:border-blue-400 hover:bg-blue-50/50'}`}>
+                    {analizandoIA ? (
+                      <div className="text-center">
+                        <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                        <p className="text-blue-700 font-semibold text-sm">Analizando tu receta...</p>
+                        <p className="text-blue-500 text-xs mt-0.5">La IA está leyendo los valores</p>
+                      </div>
+                    ) : recetaImagenPreview && recetaAnalizada ? (
+                      <div className="text-center">
+                        <span className="text-2xl">✅</span>
+                        <p className="text-green-700 font-bold text-sm mt-1">Receta leída correctamente</p>
+                        <p className="text-green-600 text-xs mt-0.5 capitalize">{recetaAnalizada.diagnostico}</p>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <span className="text-3xl mb-1 block">📷</span>
+                        <p className="text-blue-700 font-semibold text-sm">Toca para subir foto</p>
+                        <p className="text-gray-400 text-xs mt-0.5">JPG, PNG o PDF · máx 10MB</p>
+                      </div>
+                    )}
+                    <input type="file" accept="image/*,application/pdf" className="hidden"
+                      onChange={e => { const f = e.target.files?.[0]; if (f) subirYAnalizarReceta(f) }} />
+                  </label>
+                  {recetaAnalizada && (
+                    <div className="mt-3 bg-white rounded-xl p-3 border border-green-100">
+                      <p className="text-xs font-bold text-gray-500 uppercase mb-2">Valores detectados</p>
+                      <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                        {recetaAnalizada.od_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD SPH: <b>{recetaAnalizada.od_sph > 0 ? '+' : ''}{recetaAnalizada.od_sph}</b></span>}
+                        {recetaAnalizada.od_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD CYL: <b>{recetaAnalizada.od_cyl}</b></span>}
+                        {recetaAnalizada.oi_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI SPH: <b>{recetaAnalizada.oi_sph > 0 ? '+' : ''}{recetaAnalizada.oi_sph}</b></span>}
+                        {recetaAnalizada.oi_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI CYL: <b>{recetaAnalizada.oi_cyl}</b></span>}
+                        {recetaAnalizada.add_power != null && <span className="bg-purple-50 rounded-lg px-2 py-1 col-span-2">ADD: <b>+{recetaAnalizada.add_power}</b></span>}
+                      </div>
+                      {recetaAnalizada.notas && <p className="text-xs text-amber-600 mt-2 italic">💡 {recetaAnalizada.notas}</p>}
+                      <div className="flex gap-2 mt-3">
+                        <button onClick={() => { setAgregandoReceta(true) }}
+                          className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-xs font-bold transition-colors hover:bg-primary-700">
+                          Revisar y guardar receta
+                        </button>
+                        <a href={`/receta?od_sph=${recetaAnalizada.od_sph}&oi_sph=${recetaAnalizada.oi_sph}&od_cyl=${recetaAnalizada.od_cyl}&oi_cyl=${recetaAnalizada.oi_cyl}`}
+                          className="flex-1 bg-teal-600 text-white py-2.5 rounded-xl text-xs font-bold text-center transition-colors hover:bg-teal-700">
+                          Ver mis lentes 🛒
+                        </a>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {/* Agregar manual */}
+                <button onClick={() => { setAgregandoReceta(true); setRecetaAnalizada(null); setRecetaImagenPreview(null) }}
+                  className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors text-sm">
+                  <Plus className="w-4 h-4" /> Ingresar valores manualmente
+                </button>
               </div>
-            ))}
-            {agregandoReceta ? (
+            )}
+
+            {/* Formulario manual */}
+            {agregandoReceta && (
               <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
+                <div className="flex items-center justify-between mb-1">
+                  <p className="font-bold text-gray-900 text-sm">Nueva receta</p>
+                  {recetaAnalizada && <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">🤖 Completada por IA</span>}
+                </div>
                 <input value={recetaForm.nombre} onChange={e => setRecetaForm(f => ({...f,nombre:e.target.value}))}
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="Nombre (ej: Receta 2025)" />
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 mb-1 block">Fecha de emisión de la receta</label>
+                  <input type="date" value={fechaEmisionForm} onChange={e => setFechaEmisionForm(e.target.value)}
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    max={new Date().toISOString().slice(0,10)} />
+                  <p className="text-xs text-gray-400 mt-1">Si tiene más de 1 año, te avisaremos que necesitas una revisión</p>
+                </div>
                 {(recetaForm.od_sph||recetaForm.oi_sph) && (
                   <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-2.5 text-sm text-blue-800 font-semibold">
-                    Diagnóstico detectado: {detectarDiagnostico(recetaForm)||'Ingresa SPH para detectar'}
+                    Diagnóstico: {detectarDiagnostico(recetaForm)||'—'}
                   </div>
                 )}
                 {[['OD Ojo Derecho','od'],['OI Ojo Izquierdo','oi']].map(([label,side]) => (
@@ -781,15 +956,26 @@ export default function CuentaPage() {
                   </div>
                 ))}
                 <div className="flex gap-2">
-                  <button onClick={guardarReceta} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
-                  <button onClick={() => setAgregandoReceta(false)} className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
+                  <button onClick={async () => {
+                    const diagnostico = detectarDiagnostico(recetaForm)
+                    const sb = createClient()
+                    const { data } = await sb.from('prescriptions').insert({
+                      user_id: user.id, ...recetaForm, diagnostico,
+                      fecha_emision: fechaEmisionForm || null,
+                    }).select().single()
+                    if (data) {
+                      setRecetas(rs => [data, ...rs])
+                      setAgregandoReceta(false)
+                      setRecetaAnalizada(null)
+                      setRecetaImagenPreview(null)
+                      setFechaEmisionForm('')
+                      setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
+                    }
+                  }} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
+                  <button onClick={() => { setAgregandoReceta(false); setRecetaAnalizada(null); setFechaEmisionForm('') }}
+                    className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
                 </div>
               </div>
-            ) : (
-              <button onClick={() => setAgregandoReceta(true)}
-                className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors">
-                <Plus className="w-5 h-5" /> Agregar receta
-              </button>
             )}
           </div>
         )}
