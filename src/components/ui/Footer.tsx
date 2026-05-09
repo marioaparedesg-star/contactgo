@@ -39,7 +39,7 @@ export default function Footer() {
         <div>
           <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Ayuda</h4>
           <ul className="space-y-2 text-sm">
-            [
+            {[
               ['Ayuda', '/ayuda'],
               ['Envíos y entregas', '/ayuda#envios'],
               ['Devoluciones', '/ayuda#devoluciones'],
