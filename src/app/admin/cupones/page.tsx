@@ -176,7 +176,7 @@ export default function CuponesPage() {
                   <tbody className="divide-y divide-gray-50">
                     {cupones.map(c => {
                       const expirado = c.fecha_expira && new Date(c.fecha_expira) < new Date()
-                      const agotado  = c.limite_usos != null && c.usos >= c.limite_usos
+                      const agotado  = c.uso_maximo != null && c.usos_actuales >= c.uso_maximo
                       return (
                         <tr key={c.id} className="hover:bg-gray-50 transition-colors">
                           <td className="px-4 py-3">
@@ -191,7 +191,7 @@ export default function CuponesPage() {
                             {c.tipo === 'porcentaje' ? `${c.valor}%` : `RD$${c.valor.toLocaleString()}`}
                           </td>
                           <td className="px-4 py-3 text-sm text-gray-600">
-                            {c.usos_actuales} {c.limite_usos != null ? `/ ${c.uso_maximo}` : '/ ∞'}
+                            {c.usos_actuales} {c.uso_maximo != null ? `/ ${c.uso_maximo}` : '/ ∞'}
                           </td>
                           <td className="px-4 py-3 text-sm text-gray-500">
                             {c.fecha_expira ? new Date(c.fecha_expira).toLocaleDateString('es-DO') : '—'}
