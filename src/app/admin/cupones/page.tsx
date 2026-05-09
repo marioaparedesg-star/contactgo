@@ -127,7 +127,7 @@ export default function CuponesPage() {
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Límite de usos</label>
-                  <input value={form.uso_maximo} onChange={e => setForm(f => ({ ...f, limite_usos: e.target.value }))}
+                  <input value={form.limite_usos} onChange={e => setForm(f => ({ ...f, limite_usos: e.target.value }))}
                     type="number" placeholder="Sin límite"
                     className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
