@@ -45,7 +45,7 @@ export default function PedidosPage() {
     if (!selected) return
     const pedidoId = selected.id.slice(0,8).toUpperCase()
     const fecha = new Date(selected.fecha).toLocaleDateString('es-DO', {day:'numeric',month:'long',year:'numeric'})
-    const itemsRows = items.map((item: any) => {
+    const itemsRows = (items[selected.id] ?? []).map((item: any) => {
       const specs = [
         item.sph != null ? ('SPH:' + (item.sph > 0 ? '+' : '') + item.sph) : '',
         item.cyl != null ? ('CYL:' + item.cyl) : '',
