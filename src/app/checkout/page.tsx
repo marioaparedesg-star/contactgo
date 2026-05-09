@@ -156,10 +156,19 @@ export default function CheckoutPage() {
       // subtotal es GENERATED (precio*cantidad) — Postgres lo calcula solo
     }))
 
-    const { error: itemsError } = await sb.from('order_items').insert(itemsPayload)
-    if (itemsError) {
-      console.error('Error insertando order_items:', JSON.stringify(itemsError))
-      toast.error('Items error: ' + itemsError.message)
+    // Insertar via API route (service_role) para garantizar que no falle por RLS
+    const itemsRes = await fetch('/api/orders/items', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        order_id: order.id,
+        items: itemsPayload.map(i => ({ ...i, product_id: i.product_id }))
+      })
+    })
+    if (!itemsRes.ok) {
+      const err = await itemsRes.json()
+      console.error('Error insertando order_items:', err)
+      toast.error('Error guardando productos del pedido: ' + (err.error ?? 'desconocido'))
     } else {
       console.log('order_items insertados:', itemsPayload.length)
     }
@@ -296,7 +305,12 @@ export default function CheckoutPage() {
       size: (i as any).size ?? null,
       // subtotal GENERATED — no enviar
     }))
-    await sb.from('order_items').insert(itemsPayload)
+    // Insertar via API route (service_role)
+    await fetch('/api/orders/items', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id: order.id, items: itemsPayload })
+    })
 
     clearCart()
 

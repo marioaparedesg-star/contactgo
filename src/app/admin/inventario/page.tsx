@@ -2,197 +2,211 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import AdminNav from '@/components/admin/AdminNav'
-import { Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
+import { Package, AlertTriangle, TrendingDown, Save, Search, Filter } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const ALL_SPH = [0,-0.25,-0.5,-0.75,-1,-1.25,-1.5,-1.75,-2,-2.25,-2.5,-2.75,-3,-3.25,-3.5,-3.75,-4,-4.25,-4.5,-4.75,-5,-5.25,-5.5,-5.75,-6,-6.5,-7,-7.5,-8,-8.5,-9,-9.5,-10,-10.5,-11,-11.5,-12,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.25,3.5,3.75,4,4.25,4.5,4.75,5,5.25,5.5,5.75,6,6.5,7,7.5,8]
-const ALL_CYL = [-0.25,-0.5,-0.75,-1,-1.25,-1.5,-1.75,-2,-2.25,-2.5,-2.75,-3,-3.25,-3.5,-3.75,-4,-4.25,-4.5,-4.75,-5,-5.25,-5.5,-5.75,-6]
-const ALL_AXIS = Array.from({length:180},(_,i)=>i+1)
-const ALL_ADD = ['+1.00','+1.25','+1.50','+1.75','+2.00','+2.25','+2.50','+2.75','+3.00']
-const TIPO_LABEL: Record<string,string> = {esferico:'Esférico',torico:'Tórico',multifocal:'Multifocal',color:'Color'}
+const TIPO_LABEL: Record<string, string> = {
+  esferico: 'Esférico', torico: 'Tórico', multifocal: 'Multifocal',
+  color: 'Color', gota: 'Gotas', solucion: 'Solución'
+}
+const TIPO_COLOR: Record<string, string> = {
+  esferico: 'bg-blue-100 text-blue-700', torico: 'bg-purple-100 text-purple-700',
+  multifocal: 'bg-indigo-100 text-indigo-700', color: 'bg-pink-100 text-pink-700',
+  gota: 'bg-cyan-100 text-cyan-700', solucion: 'bg-teal-100 text-teal-700'
+}
 
 export default function InventarioPage() {
   const sb = createClient()
   const [productos, setProductos] = useState<any[]>([])
-  const [variantes, setVariantes] = useState<Record<string,any[]>>({})
-  const [resumen, setResumen] = useState<Record<string,{count:number,stock:number}>>({})
-  const [expandido, setExpandido] = useState<string|null>(null)
-  const [nuevaVariante, setNuevaVariante] = useState<Record<string,any>>({})
+  const [loading, setLoading] = useState(true)
+  const [editando, setEditando] = useState<Record<string, number>>({})
+  const [search, setSearch] = useState('')
+  const [filtroTipo, setFiltroTipo] = useState('todos')
+  const [saving, setSaving] = useState<string | null>(null)
 
   useEffect(() => {
-    sb.from('products').select('*').order('tipo').order('nombre').then(({data}) => setProductos(data??[]))
-    sb.rpc('get_variant_summary').then(({data}) => {
-      const r: Record<string,{count:number,stock:number}> = {}
-      ;(data??[]).forEach((v:any) => {
-        r[v.product_id] = {count: Number(v.count), stock: Number(v.total_stock)}
-      })
-      setResumen(r)
-    })
+    sb.from('products')
+      .select('id, nombre, tipo, marca, stock, activo, precio')
+      .eq('activo', true)
+      .order('tipo')
+      .order('nombre')
+      .then(({ data }) => { setProductos(data ?? []); setLoading(false) })
   }, [])
 
-  const toggleExpand = async (id: string) => {
-    if (expandido === id) { setExpandido(null); return }
-    setExpandido(id)
-    if (!variantes[id]) {
-      const {data} = await sb.from('product_variants').select('*').eq('product_id', id).order('sph')
-      if (data) setVariantes(v => ({...v, [id]: data}))
-    }
-  }
-
-  const agregarVariante = async (p: any) => {
-    const nv = nuevaVariante[p.id] ?? {}
-    if (nv.sph === undefined) { toast.error('Selecciona SPH'); return }
-    const {data, error} = await sb.from('product_variants').upsert({
-      product_id: p.id,
-      sph: nv.sph ?? null,
-      cyl: nv.cyl ?? null,
-      axis: nv.axis ?? null,
-      add_power: nv.add_power ?? null,
-      color: nv.color ?? null,
-      stock: parseInt(nv.stock ?? '10')
-    }, {onConflict: 'product_id,sph,cyl,axis,add_power,color'}).select().single()
-    if (error) { toast.error('Error: '+error.message); return }
-    setVariantes(v => ({...v, [p.id]: [...(v[p.id]??[]).filter((x:any)=>x.id!==data.id), data]}))
-    setResumen(r => ({...r, [p.id]: {count:(r[p.id]?.count??0)+1, stock:(r[p.id]?.stock??0)+data.stock}}))
-    setNuevaVariante(n => ({...n, [p.id]: {}}))
-    toast.success('Variante guardada')
-  }
-
-  const actualizarStock = async (varianteId: string, productId: string, stock: number) => {
-    await sb.from('product_variants').update({stock}).eq('id', varianteId)
-    setVariantes(v => ({...v, [productId]: v[productId].map((x:any) => x.id===varianteId ? {...x, stock} : x)}))
+  const guardarStock = async (id: string) => {
+    const nuevoStock = editando[id]
+    if (nuevoStock === undefined) return
+    setSaving(id)
+    const { error } = await sb.from('products').update({ stock: nuevoStock }).eq('id', id)
+    if (error) { toast.error('Error: ' + error.message); setSaving(null); return }
+    setProductos(ps => ps.map(p => p.id === id ? { ...p, stock: nuevoStock } : p))
+    setEditando(e => { const n = { ...e }; delete n[id]; return n })
+    setSaving(null)
     toast.success('Stock actualizado')
   }
 
-  const eliminarVariante = async (varianteId: string, productId: string) => {
-    await sb.from('product_variants').delete().eq('id', varianteId)
-    setVariantes(v => ({...v, [productId]: v[productId].filter((x:any)=>x.id!==varianteId)}))
-    toast.success('Eliminada')
+  const ajustarTodos = async (cantidad: number) => {
+    if (!confirm(`¿Ajustar stock de todos los productos a ${cantidad} unidades?`)) return
+    const { error } = await sb.from('products').update({ stock: cantidad }).eq('activo', true)
+    if (error) { toast.error('Error: ' + error.message); return }
+    setProductos(ps => ps.map(p => ({ ...p, stock: cantidad })))
+    toast.success(`Stock ajustado a ${cantidad} en todos los productos`)
   }
 
-  const setNV = (pid: string, key: string, val: any) =>
-    setNuevaVariante(n => ({...n, [pid]: {...(n[pid]??{}), [key]: val}}))
+  const filtrados = productos.filter(p => {
+    const matchTipo = filtroTipo === 'todos' || p.tipo === filtroTipo
+    const matchSearch = !search || p.nombre.toLowerCase().includes(search.toLowerCase()) || p.marca?.toLowerCase().includes(search.toLowerCase())
+    return matchTipo && matchSearch
+  })
+
+  const sinStock     = productos.filter(p => p.stock === 0).length
+  const stockCritico = productos.filter(p => p.stock > 0 && p.stock <= 3).length
+  const stockNormal  = productos.filter(p => p.stock > 3).length
+  const tipos        = [...new Set(productos.map(p => p.tipo))]
+
+  const getStockColor = (stock: number) => {
+    if (stock === 0) return 'text-red-600 bg-red-50'
+    if (stock <= 3) return 'text-amber-600 bg-amber-50'
+    if (stock <= 5) return 'text-yellow-600 bg-yellow-50'
+    return 'text-green-600 bg-green-50'
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
-      <main className="flex-1 p-4 md:p-8 overflow-auto pb-24">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Inventario por Dioptría</h1>
-            <p className="text-gray-500 text-sm">Haz clic en un producto para ver y editar sus variantes</p>
+      <main className="flex-1 overflow-auto pb-24">
+        <div className="max-w-6xl mx-auto p-4 md:p-8">
+
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-2xl font-black text-gray-900">Inventario</h1>
+              <p className="text-gray-400 text-sm mt-0.5">{productos.length} productos activos</p>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => ajustarTodos(5)}
+                className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-semibold transition-colors">
+                Set todos a 5
+              </button>
+              <button onClick={() => ajustarTodos(10)}
+                className="px-3 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-sm font-semibold transition-colors">
+                Set todos a 10
+              </button>
+            </div>
           </div>
-          <div className="space-y-3">
-            {productos.filter(p => ['esferico','torico','multifocal','color'].includes(p.tipo)).map(p => {
-              const res = resumen[p.id]
-              const pvs = variantes[p.id] ?? []
-              const nv = nuevaVariante[p.id] ?? {}
-              const isOpen = expandido === p.id
-              return (
-                <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                  <button onClick={() => toggleExpand(p.id)} className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
-                    <div className="text-left">
-                      <p className="font-semibold text-gray-900 text-sm">{p.nombre}</p>
-                      <p className="text-xs text-gray-400">{TIPO_LABEL[p.tipo]} · {res?.count ?? 0} variantes · Stock total: {res?.stock ?? 0}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {(!res || res.stock === 0) && <span className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded-full font-semibold">Sin stock</span>}
-                      {res && res.stock > 0 && res.stock < 50 && <span className="text-xs bg-yellow-50 text-yellow-600 px-2 py-1 rounded-full font-semibold">Stock bajo</span>}
-                      {res && res.stock >= 50 && <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full font-semibold">Disponible</span>}
-                      {isOpen ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
-                    </div>
-                  </button>
-                  {isOpen && (
-                    <div className="border-t border-gray-100 p-4 space-y-4">
-                      {pvs.length > 0 && (
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-sm">
-                            <thead>
-                              <tr className="text-xs text-gray-400 uppercase">
-                                <th className="text-left py-2 pr-4">SPH</th>
-                                {p.tipo==='torico' && <><th className="text-left py-2 pr-4">CYL</th><th className="text-left py-2 pr-4">EJE</th></>}
-                                {p.tipo==='multifocal' && <th className="text-left py-2 pr-4">ADD</th>}
-                                <th className="text-center py-2 pr-4">Stock</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-50">
-                              {pvs.map((v:any) => (
-                                <tr key={v.id}>
-                                  <td className="py-2 pr-4 font-mono text-sm">{v.sph > 0 ? '+'+v.sph : v.sph}</td>
-                                  {p.tipo==='torico' && <><td className="py-2 pr-4 font-mono text-sm">{v.cyl}</td><td className="py-2 pr-4 font-mono text-sm">{v.axis}</td></>}
-                                  {p.tipo==='multifocal' && <td className="py-2 pr-4 font-mono text-sm">{v.add_power}</td>}
-                                  <td className="py-2 pr-4 text-center">
-                                    <input type="number" min="0" defaultValue={v.stock}
-                                      onBlur={e => actualizarStock(v.id, p.id, parseInt(e.target.value))}
-                                      className="w-16 border border-gray-200 rounded-lg px-2 py-1 text-center text-sm font-semibold" />
-                                  </td>
-                                  <td className="py-2 text-right">
-                                    <button onClick={() => eliminarVariante(v.id, p.id)} className="text-gray-300 hover:text-red-500 p-1">
-                                      <Trash2 className="w-4 h-4" />
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      )}
-                      <div className="bg-gray-50 rounded-xl p-3">
-                        <p className="text-xs font-bold text-gray-500 uppercase mb-3">Agregar variante</p>
-                        <div className="flex flex-wrap gap-2 items-end">
-                          <div>
-                            <p className="text-xs text-gray-400 mb-1">SPH</p>
-                            <select value={nv.sph??''} onChange={e=>setNV(p.id,'sph',e.target.value===''?undefined:parseFloat(e.target.value))}
-                              className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm bg-white">
-                              <option value="">--</option>
-                              {ALL_SPH.map(s=><option key={s} value={s}>{s>0?'+'+s:s}</option>)}
-                            </select>
-                          </div>
-                          {p.tipo==='torico' && <>
-                            <div>
-                              <p className="text-xs text-gray-400 mb-1">CYL</p>
-                              <select value={nv.cyl??''} onChange={e=>setNV(p.id,'cyl',e.target.value===''?undefined:parseFloat(e.target.value))}
-                                className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm bg-white">
-                                <option value="">--</option>
-                                {ALL_CYL.map(c=><option key={c} value={c}>{c}</option>)}
-                              </select>
+
+          {/* KPIs */}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full" />
+                <p className="text-sm text-gray-500">Stock normal</p>
+              </div>
+              <p className="text-3xl font-black text-gray-900">{stockNormal}</p>
+            </div>
+            <div className={`bg-white border rounded-2xl p-5 shadow-sm ${stockCritico > 0 ? 'border-amber-200 bg-amber-50' : 'border-gray-100'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                <AlertTriangle className={`w-3.5 h-3.5 ${stockCritico > 0 ? 'text-amber-500' : 'text-gray-400'}`} />
+                <p className="text-sm text-gray-500">Stock crítico (≤3)</p>
+              </div>
+              <p className={`text-3xl font-black ${stockCritico > 0 ? 'text-amber-600' : 'text-gray-900'}`}>{stockCritico}</p>
+            </div>
+            <div className={`bg-white border rounded-2xl p-5 shadow-sm ${sinStock > 0 ? 'border-red-200 bg-red-50' : 'border-gray-100'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                <TrendingDown className={`w-3.5 h-3.5 ${sinStock > 0 ? 'text-red-500' : 'text-gray-400'}`} />
+                <p className="text-sm text-gray-500">Sin stock</p>
+              </div>
+              <p className={`text-3xl font-black ${sinStock > 0 ? 'text-red-600' : 'text-gray-900'}`}>{sinStock}</p>
+            </div>
+          </div>
+
+          {/* Filtros */}
+          <div className="flex gap-3 mb-4 flex-wrap">
+            <div className="relative flex-1 min-w-48">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input value={search} onChange={e => setSearch(e.target.value)}
+                placeholder="Buscar producto o marca..."
+                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <select value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)}
+              className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="todos">Todos los tipos</option>
+              {tipos.map(t => <option key={t} value={t}>{TIPO_LABEL[t] ?? t}</option>)}
+            </select>
+          </div>
+
+          {/* Tabla */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            {loading ? (
+              <div className="flex items-center justify-center h-48">
+                <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      {['Producto', 'Marca', 'Tipo', 'Precio', 'Stock', ''].map(h => (
+                        <th key={h} className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase text-left">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {filtrados.map(p => {
+                      const stockEdit = editando[p.id]
+                      const stockActual = stockEdit !== undefined ? stockEdit : p.stock
+                      return (
+                        <tr key={p.id} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2">
+                              {p.stock === 0 && <AlertTriangle className="w-3.5 h-3.5 text-red-500 shrink-0" />}
+                              <p className="font-semibold text-gray-900 text-sm">{p.nombre}</p>
                             </div>
-                            <div>
-                              <p className="text-xs text-gray-400 mb-1">EJE</p>
-                              <select value={nv.axis??''} onChange={e=>setNV(p.id,'axis',e.target.value===''?undefined:parseInt(e.target.value))}
-                                className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm bg-white">
-                                <option value="">--</option>
-                                {ALL_AXIS.map(a=><option key={a} value={a}>{String(a).padStart(3,'0')}</option>)}
-                              </select>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-gray-500 font-medium">{p.marca}</td>
+                          <td className="px-4 py-3">
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${TIPO_COLOR[p.tipo] ?? 'bg-gray-100 text-gray-600'}`}>
+                              {TIPO_LABEL[p.tipo] ?? p.tipo}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-sm font-semibold text-gray-700">
+                            RD${p.precio?.toLocaleString()}
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2">
+                              <button onClick={() => setEditando(e => ({ ...e, [p.id]: Math.max(0, (e[p.id] ?? p.stock) - 1) }))}
+                                className="w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-bold flex items-center justify-center transition-colors">−</button>
+                              <span className={`min-w-[40px] text-center font-black text-sm px-2 py-0.5 rounded-lg ${getStockColor(stockActual)}`}>
+                                {stockActual}
+                              </span>
+                              <button onClick={() => setEditando(e => ({ ...e, [p.id]: (e[p.id] ?? p.stock) + 1 }))}
+                                className="w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-bold flex items-center justify-center transition-colors">+</button>
                             </div>
-                          </>}
-                          {p.tipo==='multifocal' && (
-                            <div>
-                              <p className="text-xs text-gray-400 mb-1">ADD</p>
-                              <select value={nv.add_power??''} onChange={e=>setNV(p.id,'add_power',e.target.value||undefined)}
-                                className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm bg-white">
-                                <option value="">--</option>
-                                {ALL_ADD.map(a=><option key={a} value={a}>{a}</option>)}
-                              </select>
-                            </div>
-                          )}
-                          <div>
-                            <p className="text-xs text-gray-400 mb-1">Stock</p>
-                            <input type="number" min="0" value={nv.stock??''} onChange={e=>setNV(p.id,'stock',e.target.value)}
-                              placeholder="10" className="w-16 border border-gray-200 rounded-lg px-2 py-1.5 text-sm text-center" />
-                          </div>
-                          <button onClick={() => agregarVariante(p)}
-                            className="bg-primary-600 text-white px-3 py-1.5 rounded-lg text-sm font-semibold flex items-center gap-1 hover:bg-primary-700">
-                            <Plus className="w-4 h-4" /> Agregar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+                          </td>
+                          <td className="px-4 py-3">
+                            {editando[p.id] !== undefined && (
+                              <button onClick={() => guardarStock(p.id)}
+                                disabled={saving === p.id}
+                                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition-colors disabled:opacity-60">
+                                {saving === p.id ? (
+                                  <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <Save className="w-3 h-3" />
+                                )}
+                                Guardar
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                    {filtrados.length === 0 && (
+                      <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400">No hay productos</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       </main>
