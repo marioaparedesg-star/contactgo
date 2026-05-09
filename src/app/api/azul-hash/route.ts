@@ -32,17 +32,8 @@ export async function POST(req: NextRequest) {
     CustomField2Value +
     authKey
 
-  // UNICODE (UTF-16LE) como indica el doc técnico de AZUL
-  const buf = Buffer.from(raw, 'utf8')
-  const utf16 = Buffer.alloc(buf.length * 2)
-  for (let i = 0; i < buf.length; i++) {
-    utf16.writeUInt8(buf[i], i * 2)
-    utf16.writeUInt8(0, i * 2 + 1)
-  }
-
-  const hash = createHmac('sha512', authKey)
-    .update(utf16)
-    .digest('hex')
+  const utf16 = Buffer.from(raw, 'utf16le')
+  const hash = createHmac('sha512', authKey).update(utf16).digest('hex')
 
   return NextResponse.json({ hash })
 }
