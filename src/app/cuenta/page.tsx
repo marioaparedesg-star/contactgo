@@ -458,25 +458,51 @@ export default function CuentaPage() {
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-4">
-        {/* Tabs */}
-        <div className="flex bg-white rounded-2xl border border-gray-100 shadow-sm p-1 mb-6 overflow-x-auto">
-          {[
-            {id:'pedidos',      label:'Pedidos',    icon:Package},
-            {id:'suscripciones',label:'Subs',       icon:Repeat},
-            {id:'recetas',     label:'Recetas',    icon:FileText},
-            {id:'pagos',       label:'Pagos',      icon:CreditCard},
-            {id:'perfil',    label:'Perfil',     icon:User},
-            {id:'direcciones',label:'Dirs',      icon:MapPin},
-            {id:'seguridad', label:'Seguridad',  icon:ShieldCheck},
-          ].map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)}
-              className={"flex-1 flex flex-col items-center gap-1 py-3 rounded-xl text-xs font-semibold transition-all min-w-[56px] " +
-                (tab===t.id ? 'bg-primary-50 text-primary-600 shadow-sm' : 'text-gray-400 hover:text-gray-600')}>
-              <t.icon className="w-5 h-5" />
-              {t.label}
+        {/* Menú vertical app-friendly — se oculta cuando hay tab activo */}
+        {tab === '' ? (
+          <div className="space-y-2 mb-4">
+            {[
+              {id:'pedidos',      label:'Pedidos',      desc:'Historial y seguimiento',  icon:Package,     color:'bg-blue-50 text-blue-600'},
+              {id:'suscripciones',label:'Suscripciones',desc:'Entregas automáticas',      icon:Repeat,      color:'bg-purple-50 text-purple-600'},
+              {id:'recetas',      label:'Mis Recetas',  desc:'Prescripciones guardadas',  icon:FileText,    color:'bg-teal-50 text-teal-600'},
+              {id:'pagos',        label:'Métodos de pago',desc:'Tarjetas guardadas',      icon:CreditCard,  color:'bg-green-50 text-green-600'},
+              {id:'perfil',       label:'Mi Perfil',    desc:'Nombre, email, teléfono',   icon:User,        color:'bg-orange-50 text-orange-600'},
+              {id:'direcciones',  label:'Direcciones',  desc:'Dirección de entrega',      icon:MapPin,      color:'bg-pink-50 text-pink-600'},
+              {id:'seguridad',    label:'Seguridad',    desc:'Contraseña y Face ID',      icon:ShieldCheck, color:'bg-indigo-50 text-indigo-600'},
+            ].map(t => (
+              <button key={t.id} onClick={() => setTab(t.id)}
+                className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-gray-200 hover:shadow-sm transition-all text-left">
+                <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 ${t.color}`}>
+                  <t.icon className="w-5 h-5" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-gray-900 text-sm">{t.label}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{t.desc}</p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+              </button>
+            ))}
+            <button onClick={cerrarSesion}
+              className="w-full bg-white border border-red-100 rounded-2xl p-4 flex items-center gap-4 hover:bg-red-50 transition-all text-left mt-2">
+              <div className="w-11 h-11 rounded-2xl bg-red-50 flex items-center justify-center shrink-0">
+                <LogOut className="w-5 h-5 text-red-500" />
+              </div>
+              <div className="flex-1">
+                <p className="font-bold text-red-500 text-sm">Cerrar sesión</p>
+                <p className="text-xs text-gray-400 mt-0.5">{user.email}</p>
+              </div>
             </button>
-          ))}
-        </div>
+          </div>
+        ) : (
+          /* Botón volver al menú */
+          <button onClick={() => setTab('')}
+            className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-800 mb-4 transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Menú
+          </button>
+        )}
 
         {/* TAB: PEDIDOS */}
         {tab==='pedidos' && (

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Eye, Truck, Shield, Clock, ChevronRight, Star } from 'lucide-react'
 import Navbar from '@/components/ui/Navbar'
+import HeroSlider from '@/components/ui/HeroSlider'
 import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { createServerSupabaseClient } from '@/lib/supabase'
@@ -41,44 +42,7 @@ export default async function HomePage() {
       <Navbar />
       <main>
         {/* ── HERO ─────────────────────────────────────────────── */}
-        <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-teal-600 text-white">
-          <div className="max-w-7xl mx-auto px-4 py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <span className="inline-block bg-white/20 backdrop-blur rounded-full px-4 py-1 text-sm font-semibold mb-5">
-                🚚 Envío en 24–48h en todo el país
-              </span>
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
-                Lentes de contacto
-                <br />
-                <span className="text-primary-200">a tu puerta</span>
-              </h1>
-              <p className="text-lg text-primary-100 mb-8 leading-relaxed max-w-md">
-                Acuvue, Air Optix, FreshLook y más marcas premium. Entrega rápida en República Dominicana.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/catalogo" className="bg-white text-primary-700 font-bold px-7 py-3.5 rounded-xl
-                  hover:bg-primary-50 transition-colors shadow-lg shadow-primary-900/20">
-                  Ver catálogo →
-                </Link>
-                <Link href="/receta" className="border-2 border-white/40 text-white font-semibold px-7 py-3.5 rounded-xl
-                  hover:bg-white/10 transition-colors">
-                  Buscar por receta
-                </Link>
-              </div>
-            </div>
-            {/* Visual */}
-            <div className="hidden md:flex justify-center">
-              <div className="relative w-80 h-80">
-                {/* Decorative circles */}
-                <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse" />
-                <div className="absolute inset-8 rounded-full bg-white/10" />
-                <div className="absolute inset-16 rounded-full bg-white/20 flex items-center justify-center">
-                  <Eye className="w-24 h-24 text-white opacity-90" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeroSlider />
 
         {/* ── BENEFICIOS ────────────────────────────────────────── */}
         <section className="bg-white border-b border-gray-100">

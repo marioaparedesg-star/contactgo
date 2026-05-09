@@ -44,6 +44,15 @@ export default function CheckoutPage() {
   const [cuponAplicado, setCuponAplicado] = useState(false)
   const [descuento, setDescuento] = useState(0)
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('register')
+  const [authEmail, setAuthEmail] = useState('')
+  const [authPass, setAuthPass] = useState('')
+  const [authNombre, setAuthNombre] = useState('')
+  const [authTel, setAuthTel] = useState('')
+  const [authLoading, setAuthLoading] = useState(false)
+  const [authMsg, setAuthMsg] = useState('')
 
   const CUPONES: Record<string, number> = {
     'BIENVENIDO10': 0.10,
@@ -98,6 +107,7 @@ export default function CheckoutPage() {
     if (items.length === 0) router.push('/cart')
     const sb = createClient()
     sb.auth.getUser().then(({ data: { user } }) => {
+      setIsLoggedIn(!!user)
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: perfil }) => {
           if (perfil) {
@@ -370,13 +380,81 @@ export default function CheckoutPage() {
 
   if (items.length === 0) return null
 
+  const handleAuth = async () => {
+    setAuthLoading(true); setAuthMsg('')
+    const sb = createClient()
+    if (authMode === 'register') {
+      const { error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: authNombre } } })
+      if (error) { setAuthMsg(error.message); setAuthLoading(false); return }
+      // Create profile
+      const { data: { user } } = await sb.auth.getUser()
+      if (user) {
+        await sb.from('profiles').upsert({ id: user.id, nombre: authNombre, email: authEmail, telefono: authTel, role: 'customer' })
+        setValue('nombre', authNombre); setValue('email', authEmail); if (authTel) setValue('telefono', authTel)
+      }
+      setIsLoggedIn(true); setShowAuthModal(false)
+    } else {
+      const { error } = await sb.auth.signInWithPassword({ email: authEmail, password: authPass })
+      if (error) { setAuthMsg('Email o contraseña incorrectos'); setAuthLoading(false); return }
+      const { data: { user } } = await sb.auth.getUser()
+      if (user) {
+        const { data: perfil } = await sb.from('profiles').select('*').eq('id', user.id).single()
+        if (perfil?.nombre) setValue('nombre', perfil.nombre)
+        if (perfil?.email) setValue('email', perfil.email)
+        if (perfil?.telefono) setValue('telefono', perfil.telefono)
+        const { data: addrs } = await sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false })
+        if (addrs && addrs.length > 0) { setValue('direccion', addrs[0].direccion); if (addrs[0].ciudad) setValue('ciudad', addrs[0].ciudad) }
+      }
+      setIsLoggedIn(true); setShowAuthModal(false)
+    }
+    setAuthLoading(false)
+  }
+
   return (
     <>
       <Navbar />
+      {/* ── Modal Registro/Login obligatorio ── */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl">
+            <div className="p-5 border-b border-gray-100">
+              <h2 className="font-black text-gray-900 text-lg">
+                {authMode === 'register' ? '👋 Crea tu cuenta' : '¡Bienvenido de vuelta!'}
+              </h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                {authMode === 'register' ? 'Para finalizar tu pedido necesitas registrarte' : 'Ingresa para continuar con tu pedido'}
+              </p>
+            </div>
+            <div className="p-5 space-y-3">
+              {authMode === 'register' && (
+                <>
+                  <input value={authNombre} onChange={e => setAuthNombre(e.target.value)}
+                    placeholder="Nombre completo" className="input w-full" />
+                  <input value={authTel} onChange={e => setAuthTel(e.target.value)}
+                    placeholder="Teléfono / WhatsApp" type="tel" className="input w-full" />
+                </>
+              )}
+              <input value={authEmail} onChange={e => setAuthEmail(e.target.value)}
+                placeholder="Correo electrónico" type="email" className="input w-full" />
+              <input value={authPass} onChange={e => setAuthPass(e.target.value)}
+                placeholder="Contraseña (mínimo 6 caracteres)" type="password" className="input w-full" />
+              {authMsg && <p className="text-red-500 text-sm">{authMsg}</p>}
+              <button onClick={handleAuth} disabled={authLoading}
+                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 rounded-xl transition-colors disabled:opacity-60 text-sm">
+                {authLoading ? 'Procesando...' : authMode === 'register' ? 'Crear cuenta y continuar' : 'Entrar y continuar'}
+              </button>
+              <button onClick={() => setAuthMode(m => m === 'register' ? 'login' : 'register')}
+                className="w-full text-primary-600 text-sm font-medium py-1 hover:underline">
+                {authMode === 'register' ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <main className="pb-20 max-w-5xl mx-auto px-4 py-8">
         <h1 className="font-display text-2xl font-bold text-gray-900 mb-8">Finalizar pedido</h1>
 
-        <form onSubmit={handleSubmit(data => { if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }; if (payMethod !== 'paypal') createOrder(data) })}
+        <form onSubmit={handleSubmit(data => { if (!isLoggedIn) { setShowAuthModal(true); return }; if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }; if (payMethod !== 'paypal') createOrder(data) })}
           className="grid lg:grid-cols-5 gap-8">
 
           {/* LEFT - Formulario */}
@@ -466,7 +544,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   <button type="button"
-                    onClick={handleSubmit(pagarConAzul)}
+                    onClick={handleSubmit(data => { if (!isLoggedIn) { setShowAuthModal(true); return }; pagarConAzul(data) })}
                     disabled={azulLoading || !aceptaTerminos}
                     className="w-full bg-blue-700 hover:bg-blue-800 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors">
                     {azulLoading ? 'Redirigiendo a AZUL...' : <>💳 Pagar con tarjeta RD${(tot - descuento).toLocaleString()}</>}
