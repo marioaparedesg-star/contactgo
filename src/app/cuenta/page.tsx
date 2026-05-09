@@ -91,6 +91,10 @@ export default function CuentaPage() {
   const [suscripciones, setSuscripciones]   = useState<any[]>([])
   const [itemsPedido, setItemsPedido]   = useState<any[]>([])
   const [historialPedido, setHistorialPedido] = useState<any[]>([])
+  const [cancelandoSub, setCancelandoSub] = useState<any>(null)
+  const [cancelConfirm, setCancelConfirm] = useState<any>(null)
+  const [motivoCancel, setMotivoCancel] = useState('')
+  const [cancelLoading, setCancelLoading] = useState(false)
   const [loadingPedido, setLoadingPedido] = useState(false)
   const [tab, setTab]         = useState('')
   const [editando, setEditando] = useState(false)
@@ -272,6 +276,35 @@ export default function CuentaPage() {
     const sb = createClient()
     await sb.auth.signOut()
     window.location.reload()
+  }
+
+  const cancelarSuscripcion = async (sub: any, confirmar = false) => {
+    setCancelLoading(true)
+    try {
+      const res = await fetch('/api/suscripciones/cancelar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription_id: sub.id, motivo: motivoCancel, confirmar_pedido: confirmar }),
+      })
+      const data = await res.json()
+      if (!res.ok) { alert(data.error ?? 'Error'); return }
+
+      if (data.requiere_confirmacion) {
+        // Mostrar modal de confirmación con info del cobro
+        setCancelConfirm({ ...data, sub })
+        setCancelandoSub(null)
+      } else {
+        // Cancelada
+        setSuscripciones(ss => ss.filter(s => s.id !== sub.id))
+        setCancelandoSub(null)
+        setCancelConfirm(null)
+        setMotivoCancel('')
+        const msg = data.pedido_id
+          ? '✅ Suscripción cancelada. Tu último pedido fue generado — lo verás en Pedidos.'
+          : '✅ Suscripción cancelada correctamente.'
+        alert(msg)
+      }
+    } finally { setCancelLoading(false) }
   }
 
   const verPedido = async (p: any) => {
@@ -600,9 +633,86 @@ export default function CuentaPage() {
                     </div>
                   )}
                   {s.direccion_texto && <p className="text-xs text-gray-400">📍 {s.direccion_texto}</p>}
+                  {/* Botón cancelar */}
+                  <button onClick={() => { setCancelandoSub(s); setMotivoCancel('') }}
+                    className="mt-3 w-full border border-red-200 text-red-500 hover:bg-red-50 rounded-xl py-2.5 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    <X className="w-3.5 h-3.5" /> Cancelar suscripción
+                  </button>
                 </div>
               )
             })}
+          </div>
+        )}
+
+        {/* Modal: motivo cancelación */}
+        {cancelandoSub && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl">
+              <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                <p className="font-black text-gray-900">Cancelar suscripción</p>
+                <button onClick={() => setCancelandoSub(null)} className="p-1.5 hover:bg-gray-100 rounded-xl"><X className="w-4 h-4 text-gray-500" /></button>
+              </div>
+              <div className="p-5 space-y-4">
+                <div className="bg-amber-50 border border-amber-100 rounded-xl p-3">
+                  <p className="text-amber-800 font-semibold text-sm">¿Seguro que quieres cancelar?</p>
+                  <p className="text-amber-600 text-xs mt-1">Perderás el descuento del {cancelandoSub.descuento_pct}% y las entregas automáticas.</p>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 mb-1.5 block">Motivo (opcional)</label>
+                  <select value={motivoCancel} onChange={e => setMotivoCancel(e.target.value)}
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-red-300">
+                    <option value="">Seleccionar motivo...</option>
+                    <option value="ya_no_uso_lentes">Ya no uso lentes de contacto</option>
+                    <option value="precio">El precio es muy alto</option>
+                    <option value="cambio_de_lente">Cambié de tipo de lente</option>
+                    <option value="problemas_entrega">Problemas con las entregas</option>
+                    <option value="pausar_temporalmente">Solo quiero pausar temporalmente</option>
+                    <option value="otro">Otro motivo</option>
+                  </select>
+                </div>
+              </div>
+              <div className="px-5 pb-5 flex gap-3">
+                <button onClick={() => setCancelandoSub(null)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl text-sm transition-colors">
+                  Mantener
+                </button>
+                <button onClick={() => cancelarSuscripcion(cancelandoSub)} disabled={cancelLoading}
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl text-sm transition-colors disabled:opacity-60">
+                  {cancelLoading ? 'Procesando...' : 'Cancelar suscripción'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal: confirmación de cobro pendiente */}
+        {cancelConfirm && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl">
+              <div className="px-5 py-4 border-b border-gray-100">
+                <p className="font-black text-gray-900">⚠️ Pedido pendiente de pago</p>
+              </div>
+              <div className="p-5 space-y-3">
+                <div className="bg-red-50 border border-red-100 rounded-xl p-4">
+                  <p className="text-red-800 font-semibold text-sm leading-snug">{cancelConfirm.mensaje}</p>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-3 flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Total a cobrar</span>
+                  <span className="font-black text-gray-900 text-lg">RD${cancelConfirm.total_pendiente?.toLocaleString()}</span>
+                </div>
+                <p className="text-xs text-gray-400 text-center">El pedido se procesará como pago contra entrega</p>
+              </div>
+              <div className="px-5 pb-5 space-y-2">
+                <button onClick={() => cancelarSuscripcion(cancelConfirm.sub, true)} disabled={cancelLoading}
+                  className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3.5 rounded-xl text-sm transition-colors disabled:opacity-60">
+                  {cancelLoading ? 'Procesando...' : 'Aceptar cobro y cancelar suscripción'}
+                </button>
+                <button onClick={() => { setCancelConfirm(null); setMotivoCancel('') }}
+                  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl text-sm transition-colors">
+                  Mantener mi suscripción
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
