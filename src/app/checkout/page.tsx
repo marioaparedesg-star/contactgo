@@ -431,15 +431,8 @@ export default function CheckoutPage() {
                     <p className="font-bold mb-1">💳 Pago con tarjeta de crédito o débito</p>
                     <p>Serás redirigido a la página segura de AZUL · Banco Popular para completar tu pago.</p>
                     <div className="flex items-center gap-3 mt-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 16" className="h-5" aria-label="Visa">
-                        <rect width="48" height="16" rx="3" fill="#1A1F71"/>
-                        <text x="5" y="12" fontFamily="Arial" fontSize="12" fontWeight="bold" fill="white" letterSpacing="1">VISA</text>
-                      </svg>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" className="h-6" aria-label="Mastercard">
-                        <circle cx="13" cy="12" r="10" fill="#EB001B"/>
-                        <circle cx="25" cy="12" r="10" fill="#F79E1B"/>
-                        <path d="M19 5.3a10 10 0 0 1 0 13.4A10 10 0 0 1 19 5.3z" fill="#FF5F00"/>
-                      </svg>
+                      <img src="/visa_blue.svg" alt="Visa" className="h-6" />
+                      <img src="/mc_symbol.png" alt="Mastercard" className="h-7" />
                       <span className="text-xs text-blue-600 font-semibold">🔒 Ambiente de pruebas</span>
                     </div>
                   </div>
@@ -578,15 +571,8 @@ export default function CheckoutPage() {
               </div>
               {/* Logos tarjetas AZUL - SVG inline */}
               <div className="flex items-center justify-center gap-4 mt-3 mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 16" className="h-5" aria-label="Visa">
-                  <rect width="48" height="16" rx="3" fill="#1A1F71"/>
-                  <text x="5" y="12" fontFamily="Arial" fontSize="12" fontWeight="bold" fill="white" letterSpacing="1">VISA</text>
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" className="h-6" aria-label="Mastercard">
-                  <circle cx="13" cy="12" r="10" fill="#EB001B"/>
-                  <circle cx="25" cy="12" r="10" fill="#F79E1B"/>
-                  <path d="M19 5.3a10 10 0 0 1 0 13.4A10 10 0 0 1 19 5.3z" fill="#FF5F00"/>
-                </svg>
+                <img src="/visa_blue.svg" alt="Visa" className="h-6" />
+                <img src="/mc_symbol.png" alt="Mastercard" className="h-7" />
               </div>
               {/* Checkbox T&C - Requisito AZUL */}
               <label className="flex items-start gap-2 cursor-pointer mt-2 mb-1">

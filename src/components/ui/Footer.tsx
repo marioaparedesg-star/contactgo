@@ -76,23 +76,26 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      {/* Logos tarjetas + seguridad - Requisito AZUL */}
+            {/* Logos tarjetas aceptadas + 3D Secure — Requisito AZUL */}
       <div className="border-t border-gray-800 px-4 py-6 flex flex-col items-center gap-3">
-        <div className="flex items-center gap-5">
-          {/* Visa SVG */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 16" className="h-5 opacity-70" aria-label="Visa">
-            <rect width="48" height="16" rx="3" fill="#1A1F71"/>
-            <text x="5" y="12" fontFamily="Arial" fontSize="12" fontWeight="bold" fill="white" letterSpacing="1">VISA</text>
-          </svg>
-          {/* Mastercard SVG */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" className="h-6 opacity-70" aria-label="Mastercard">
-            <circle cx="13" cy="12" r="10" fill="#EB001B"/>
-            <circle cx="25" cy="12" r="10" fill="#F79E1B"/>
-            <path d="M19 5.3a10 10 0 0 1 0 13.4A10 10 0 0 1 19 5.3z" fill="#FF5F00"/>
-          </svg>
-          <span className="text-xs text-gray-500">🔒 Pagos cifrados SSL · PCI-DSS</span>
+        <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Métodos de pago aceptados</p>
+        <div className="flex items-center gap-5 flex-wrap justify-center">
+          <img src="/visa_blue.svg" alt="Visa" className="h-7 opacity-80" />
+          <img src="/mc_symbol.png" alt="Mastercard" className="h-8 opacity-80" />
         </div>
-        <a href="/seguridad" className="text-xs text-gray-500 hover:text-primary-400 transition-colors underline">Política de Seguridad de Pagos</a>
+        <p className="text-xs text-gray-500 uppercase tracking-wider mt-2 mb-1">Seguridad 3D Secure</p>
+        <div className="flex items-center gap-5 flex-wrap justify-center">
+          <div className="flex items-center gap-1 bg-gray-800 rounded px-3 py-1">
+            <img src="/visa_blue.svg" alt="Verified by Visa" className="h-5 opacity-70" />
+            <span className="text-xs text-blue-300 font-semibold">SECURE</span>
+          </div>
+          <div className="flex items-center gap-1 bg-gray-800 rounded px-3 py-1">
+            <img src="/mc_symbol.png" alt="Mastercard ID Check" className="h-5 opacity-70" />
+            <span className="text-xs text-orange-300 font-semibold">ID Check</span>
+          </div>
+          <span className="text-xs text-gray-500">🔒 Cifrado SSL · PCI-DSS</span>
+        </div>
+        <a href="/seguridad" className="text-xs text-gray-500 hover:text-primary-400 transition-colors underline mt-1">Política de Seguridad de Pagos</a>
       </div>
       <div className="border-t border-gray-800 px-4 py-5 text-center text-xs flex flex-col md:flex-row items-center justify-center gap-3">
         <span>© {new Date().getFullYear()} ContactGo. Todos los derechos reservados.</span>
