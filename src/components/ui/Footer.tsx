@@ -39,14 +39,15 @@ export default function Footer() {
         <div>
           <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Ayuda</h4>
           <ul className="space-y-2 text-sm">
-            {[
+            [
+              ['Ayuda', '/ayuda'],
+              ['Envíos y entregas', '/ayuda#envios'],
+              ['Devoluciones', '/ayuda#devoluciones'],
               ['Mi Receta', '/receta'],
-              ['Mis Pedidos', '/cuenta/pedidos'],
-              ['Envíos y entregas', '/envios-y-entregas'],
+              ['Mis Pedidos', '/cuenta'],
               ['ACUVUE®', '/marca/acuvue'],
               ['Air Optix®', '/marca/alcon'],
               ['Biofinity®', '/marca/coopervision'],
-              ['Devoluciones', '/ayuda/devoluciones'],
             ].map(([l, h]) => (
               <li key={h}><Link href={h} className="hover:text-primary-400 transition-colors">{l}</Link></li>
             ))}
