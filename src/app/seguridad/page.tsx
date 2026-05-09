@@ -68,6 +68,27 @@ export default function SeguridadPage() {
           </svg>
           <span className="text-xs text-gray-500">Pagos protegidos · SSL · PCI-DSS</span>
         </div>
+      
+        {/* Logos 3D Secure - Requisito AZUL */}
+        <div className="flex flex-col items-center gap-6 mt-8 p-6 bg-white rounded-2xl border border-gray-100">
+          <p className="text-sm font-semibold text-gray-700">Transacciones protegidas con</p>
+          <div className="flex items-center justify-center gap-8">
+            <img 
+              src="https://www.visa.com.ec/content/dam/VCOM/regional/lac/SUR/verified-by-visa/verified-by-visa-logo.png" 
+              alt="Verified by Visa" 
+              className="h-10"
+            />
+            <img 
+              src="https://www.mastercard.com/content/dam/mccom/global/logos/mastercard-id-check.svg" 
+              alt="Mastercard ID Check" 
+              className="h-10"
+            />
+          </div>
+          <p className="text-xs text-center text-gray-500 max-w-md">
+            Verified by Visa y Mastercard ID Check verifican la identidad del tarjetahabiente para mayor seguridad.
+          </p>
+        </div>
+
       </main>
       <Footer />
     </>
