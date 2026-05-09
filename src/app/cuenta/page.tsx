@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase'
 import {
   User, Package, MapPin, Phone, Mail, Edit2, Check, X, Plus, Trash2, LogOut,
   ChevronRight, FileText, CreditCard, MessageCircle, Lock, Fingerprint, ShieldCheck,
-  Eye, EyeOff, KeyRound
+  Eye, EyeOff, KeyRound, Repeat, Calendar, RefreshCw
 } from 'lucide-react'
 
 // ─── WebAuthn helpers ────────────────────────────────────────────────────────
@@ -141,6 +141,7 @@ export default function CuentaPage() {
         sb.from('addresses').select('*').eq('user_id', user.id).order('created_at').then(({ data }) => setDirecciones(data || []))
         sb.from('prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).then(({ data }) => setRecetas(data || []))
         sb.from('payment_methods').select('*').eq('user_id', user.id).order('created_at').then(({ data }) => setPagos(data || []))
+        sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).then(({ data }) => setSuscripciones(data || []))
       }
     })
   }, [])
@@ -432,9 +433,10 @@ export default function CuentaPage() {
         {/* Tabs */}
         <div className="flex bg-white rounded-2xl border border-gray-100 shadow-sm p-1 mb-6 overflow-x-auto">
           {[
-            {id:'pedidos',   label:'Pedidos',    icon:Package},
-            {id:'recetas',   label:'Recetas',    icon:FileText},
-            {id:'pagos',     label:'Pagos',      icon:CreditCard},
+            {id:'pedidos',      label:'Pedidos',    icon:Package},
+            {id:'suscripciones',label:'Subs',       icon:Repeat},
+            {id:'recetas',     label:'Recetas',    icon:FileText},
+            {id:'pagos',       label:'Pagos',      icon:CreditCard},
             {id:'perfil',    label:'Perfil',     icon:User},
             {id:'direcciones',label:'Dirs',      icon:MapPin},
             {id:'seguridad', label:'Seguridad',  icon:ShieldCheck},
@@ -470,12 +472,75 @@ export default function CuentaPage() {
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                   <span className="text-primary-600 font-bold text-lg">RD${(p.total||0).toLocaleString()}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-lg capitalize">{(p.metodo_pago||'').replace('_',' ')}</span>
+                    <a href={`/confirmacion?orden=${p.id}`}
+                      onClick={e => e.stopPropagation()}
+                      className="text-xs bg-primary-50 text-primary-600 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1 hover:bg-primary-100 transition-colors">
+                      <RefreshCw className="w-3 h-3" /> Volver a pedir
+                    </a>
                     <ChevronRight className="w-4 h-4 text-gray-300" />
                   </div>
                 </div>
               </button>
             ))}
+          </div>
+        )}
+
+
+        {/* TAB: SUSCRIPCIONES */}
+        {tab==='suscripciones' && (
+          <div className="space-y-3">
+            {suscripciones.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
+                <Repeat className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+                <p className="text-gray-500 font-medium">No tienes suscripciones activas</p>
+                <p className="text-xs text-gray-400 mt-1">Al comprar activa la opción "suscripción" para recibir tus lentes automáticamente</p>
+                <a href="/catalogo" className="mt-4 inline-block bg-primary-600 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors">Ver catálogo</a>
+              </div>
+            ) : suscripciones.map(s => {
+              let items: any[] = []
+              try { items = typeof s.items === 'string' ? JSON.parse(s.items) : (s.items ?? []) } catch {}
+              const proxDias = s.proximo_envio ? Math.ceil((new Date(s.proximo_envio).getTime() - Date.now()) / (1000*60*60*24)) : null
+              const FREQ: Record<string,string> = { '15_dias':'Cada 15 días', mensual:'Mensual', bimestral:'Bimestral', trimestral:'Trimestral' }
+              return (
+                <div key={s.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${s.activa ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                          {s.activa ? 'Activa' : 'Pausada'}
+                        </span>
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">{FREQ[s.frecuencia] ?? s.frecuencia}</span>
+                        {s.descuento_pct > 0 && <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">-{s.descuento_pct}%</span>}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2 mb-3">
+                    {items.map((item: any, i: number) => (
+                      <div key={i} className="bg-gray-50 rounded-xl p-3">
+                        <p className="font-semibold text-gray-900 text-sm">{item.nombre}</p>
+                        {item.sph != null && (
+                          <p className="text-xs font-mono text-blue-600 mt-0.5">
+                            SPH: {parseFloat(item.sph) > 0 ? '+' : ''}{item.sph}
+                            {item.cyl ? ` · CYL: ${item.cyl}` : ''}
+                            {item.color ? ` · ${item.color}` : ''}
+                            {item.ojo ? ` · ${item.ojo}` : ''}
+                          </p>
+                        )}
+                        <p className="text-xs text-gray-400 mt-0.5">Cantidad: {item.cantidad} · RD${(item.precio * item.cantidad).toLocaleString()}</p>
+                      </div>
+                    ))}
+                  </div>
+                  {s.proximo_envio && (
+                    <div className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium mb-2 ${proxDias != null && proxDias <= 3 ? 'bg-red-50 text-red-700' : proxDias != null && proxDias <= 7 ? 'bg-amber-50 text-amber-700' : 'bg-gray-50 text-gray-600'}`}>
+                      <Calendar className="w-3.5 h-3.5" />
+                      Próximo envío: {new Date(s.proximo_envio).toLocaleDateString('es-DO',{day:'numeric',month:'long'})}
+                      {proxDias != null && proxDias >= 0 && <span className="ml-auto font-semibold">{proxDias === 0 ? 'Hoy' : `en ${proxDias} días`}</span>}
+                    </div>
+                  )}
+                  {s.direccion_texto && <p className="text-xs text-gray-400">📍 {s.direccion_texto}</p>}
+                </div>
+              )
+            })}
           </div>
         )}
 
