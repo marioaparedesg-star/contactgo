@@ -84,6 +84,7 @@ async function passkeyAvailable(): Promise<boolean> {
 // ─── Componente principal ────────────────────────────────────────────────────
 export default function CuentaPage() {
   const [user, setUser]       = useState<any>(null)
+  const [authChecked, setAuthChecked] = useState(false)
   const [perfil, setPerfil]   = useState<any>(null)
   const [pedidos, setPedidos] = useState<any[]>([])
   const [selectedPedido, setSelectedPedido] = useState<any>(null)
@@ -133,6 +134,7 @@ export default function CuentaPage() {
     setPasskeyRegistered(!!localStorage.getItem(STORAGE_KEY))
     const sb = createClient()
     sb.auth.getUser().then(({ data: { user } }) => {
+      setAuthChecked(true)
       if (user) {
         setUser(user)
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data }) => {
@@ -350,6 +352,12 @@ export default function CuentaPage() {
   }
 
   // ──────────────────────────────────── LOGIN SCREEN ──────────────────────────
+  if (!authChecked) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+
   if (!user) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 pb-24">
       <div className="w-full max-w-md">
