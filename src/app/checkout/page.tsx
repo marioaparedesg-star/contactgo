@@ -222,7 +222,7 @@ export default function CheckoutPage() {
     }
 
     // Notificar por email
-    fetch(`https://atendbjolicwcsqfyiyh.supabase.co/functions/v1/order-notification`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: order.id }) }).catch(console.error)
+    fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }) }).catch(console.error)
 
     clearCart()
     setLoading(false)

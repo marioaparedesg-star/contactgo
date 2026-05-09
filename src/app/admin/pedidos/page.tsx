@@ -45,6 +45,12 @@ export default function PedidosPage() {
     await sb.from('orders').update({estado}).eq('id', orderId)
     setPedidos(ps => ps.map(p => p.id===orderId ? {...p, estado} : p))
     setSelected((s: any) => s?.id===orderId ? {...s, estado} : s)
+    // Notificar al cliente por email
+    fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id: orderId, evento: 'estado_cambio', nuevo_estado: estado })
+    }).catch(console.error)
     toast.success('Estado actualizado')
   }
 
