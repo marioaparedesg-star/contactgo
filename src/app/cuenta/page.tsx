@@ -91,7 +91,7 @@ export default function CuentaPage() {
   const [itemsPedido, setItemsPedido]   = useState<any[]>([])
   const [historialPedido, setHistorialPedido] = useState<any[]>([])
   const [loadingPedido, setLoadingPedido] = useState(false)
-  const [tab, setTab]         = useState('pedidos')
+  const [tab, setTab]         = useState('')
   const [editando, setEditando] = useState(false)
   const [form, setForm]       = useState({ nombre: '', telefono: '' })
   const [direcciones, setDirecciones] = useState<any[]>([])
