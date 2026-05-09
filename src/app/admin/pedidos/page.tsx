@@ -43,87 +43,44 @@ export default function PedidosPage() {
 
   const printOrder = () => {
     if (!selected) return
-    const content = document.getElementById('print-order-content')
-    if (!content) return
+    const pedidoId = selected.id.slice(0,8).toUpperCase()
+    const fecha = new Date(selected.fecha).toLocaleDateString('es-DO', {day:'numeric',month:'long',year:'numeric'})
+    const itemsRows = items.map((item: any) => {
+      const specs = [
+        item.sph != null ? ('SPH:' + (item.sph > 0 ? '+' : '') + item.sph) : '',
+        item.cyl != null ? ('CYL:' + item.cyl) : '',
+        item.axis != null ? ('EJE:' + String(item.axis).padStart(3,'0')) : '',
+        item.color || '',
+        item.ojo || '',
+      ].filter(Boolean).join(' · ')
+      const subtotal = 'RD$' + ((item.precio ?? 0) * (item.cantidad ?? 1)).toLocaleString()
+      return '<tr><td>' + item.nombre + '</td><td style="font-family:monospace;font-size:11px;color:#555">' + specs + '</td><td style="text-align:center">' + item.cantidad + '</td><td style="text-align:right;font-weight:600">' + subtotal + '</td></tr>'
+    }).join('')
+
+    const html = '<!DOCTYPE html><html><head><title>Pedido #' + pedidoId + '</title>' +
+      '<style>* { box-sizing:border-box; margin:0; padding:0; } body { font-family:-apple-system,sans-serif; font-size:12px; color:#111; padding:20px; } .header { display:flex; justify-content:space-between; border-bottom:2px solid #111; padding-bottom:12px; margin-bottom:16px; } .logo { font-size:20px; font-weight:900; } .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:14px; } .section-title { font-size:10px; font-weight:700; text-transform:uppercase; color:#888; margin-bottom:6px; } .value { font-size:13px; font-weight:600; } table { width:100%; border-collapse:collapse; } th { text-align:left; font-size:10px; text-transform:uppercase; color:#888; border-bottom:1px solid #e5e7eb; padding:4px 0; } td { padding:6px 0; border-bottom:1px solid #f3f4f6; } .total-row td { font-weight:700; font-size:14px; border-top:2px solid #111; border-bottom:none; padding-top:8px; } .footer { margin-top:20px; padding-top:12px; border-top:1px solid #e5e7eb; text-align:center; color:#aaa; font-size:10px; } @page { size:A4; margin:15mm; } @media print { body { padding:0; } }</style>' +
+      '</head><body>' +
+      '<div class="header"><div><div class="logo">ContactGo</div><div style="color:#888;font-size:11px">contactgo.net · RD</div></div><div style="text-align:right"><div style="font-size:14px;font-weight:700">Pedido #' + pedidoId + '</div><div style="color:#888;font-size:11px">' + fecha + '</div><div style="margin-top:4px;display:inline-block;padding:2px 8px;background:#f3f4f6;border-radius:999px;font-size:10px;font-weight:700">' + selected.estado + '</div></div></div>' +
+      '<div class="grid2">' +
+        '<div><div class="section-title">Cliente</div><div class="value">' + selected.cliente_nombre + '</div><div style="color:#555">' + (selected.cliente_email ?? '') + '</div><div style="color:#555">' + (selected.cliente_telefono ?? '') + '</div></div>' +
+        '<div><div class="section-title">Entrega</div><div style="font-size:12px;font-weight:600">' + (selected.direccion_texto ?? '—') + '</div><div style="color:#555">Método: ' + (selected.metodo_pago ?? '').replace('_',' ') + '</div><div style="color:#555">Pago: ' + (selected.pago_estado ?? 'pendiente') + '</div></div>' +
+      '</div>' +
+      '<div class="section-title" style="margin-bottom:6px">Productos</div>' +
+      '<table><thead><tr><th>Producto</th><th>Graduación</th><th style="text-align:center">Cant</th><th style="text-align:right">Precio</th></tr></thead>' +
+      '<tbody>' + itemsRows + '</tbody>' +
+      '<tfoot><tr class="total-row"><td colspan="3">Total</td><td style="text-align:right">RD$' + (selected.total ?? 0).toLocaleString() + '</td></tr></tfoot></table>' +
+      (selected.notas_admin ? '<div style="margin-top:14px"><div class="section-title">Notas</div><div>' + selected.notas_admin + '</div></div>' : '') +
+      '<div class="footer">ContactGo · contactgo.net · República Dominicana · Impreso ' + new Date().toLocaleDateString('es-DO') + '</div>' +
+      '</body></html>'
+
     const win = window.open('', '_blank', 'width=800,height=600')
     if (!win) return
-    win.document.write(`<!DOCTYPE html><html><head>
-      <title>Pedido #${selected.id.slice(0,8).toUpperCase()}</title>
-      <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; color: #111; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #111; padding-bottom: 12px; margin-bottom: 16px; }
-        .logo { font-size: 20px; font-weight: 900; }
-        .pedido-id { font-size: 14px; font-weight: 700; color: #555; }
-        .section { margin-bottom: 14px; }
-        .section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 6px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; font-size: 10px; text-transform: uppercase; color: #888; border-bottom: 1px solid #e5e7eb; padding: 4px 0; }
-        td { padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px; }
-        .total-row { font-weight: 700; font-size: 14px; border-top: 2px solid #111; }
-        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .label { font-size: 10px; text-transform: uppercase; color: #888; margin-bottom: 2px; }
-        .value { font-size: 13px; font-weight: 600; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; background: #f3f4f6; }
-        .footer { margin-top: 20px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; color: #aaa; font-size: 10px; }
-      </style>
-    </head><body>
-      <div class="header">
-        <div>
-          <div class="logo">ContactGo</div>
-          <div style="color:#888;font-size:11px">contactgo.net · RD</div>
-        </div>
-        <div style="text-align:right">
-          <div class="pedido-id">Pedido #${selected.id.slice(0,8).toUpperCase()}</div>
-          <div style="color:#888;font-size:11px">${new Date(selected.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}</div>
-          <div class="badge" style="margin-top:4px">${selected.estado}</div>
-        </div>
-      </div>
-      <div class="grid2">
-        <div class="section">
-          <div class="section-title">Cliente</div>
-          <div class="value">${selected.cliente_nombre}</div>
-          <div style="color:#555">${selected.cliente_email ?? ''}</div>
-          <div style="color:#555">${selected.cliente_telefono ?? ''}</div>
-        </div>
-        <div class="section">
-          <div class="section-title">Entrega</div>
-          <div class="value" style="font-size:12px">${selected.direccion_texto ?? '—'}</div>
-          <div style="color:#555">Método: ${(selected.metodo_pago ?? '').replace('_',' ')}</div>
-          <div style="color:#555">Pago: ${selected.pago_estado ?? 'pendiente'}</div>
-        </div>
-      </div>
-      <div class="section">
-        <div class="section-title">Productos</div>
-        <table>
-          <thead><tr><th>Producto</th><th>Graduación</th><th style="text-align:center">Cant</th><th style="text-align:right">Precio</th></tr></thead>
-          <tbody>
-            ${(window as any).__printItems?.map((item: any) => `
-              <tr>
-                <td>${item.nombre}</td>
-                <td style="font-family:monospace;font-size:11px;color:#555">${[
-                  item.sph != null ? \`SPH:\${item.sph > 0 ? '+' : ''}\${item.sph}\` : '',
-                  item.cyl != null ? \`CYL:\${item.cyl}\` : '',
-                  item.axis != null ? \`EJE:\${String(item.axis).padStart(3,'0')}\` : '',
-                  item.color || '', item.ojo || ''
-                ].filter(Boolean).join(' · ')}</td>
-                <td style="text-align:center">${item.cantidad}</td>
-                <td style="text-align:right;font-weight:600">RD$${((item.precio ?? 0) * (item.cantidad ?? 1)).toLocaleString()}</td>
-              </tr>`).join('') ?? ''}
-          </tbody>
-          <tfoot>
-            <tr class="total-row"><td colspan="3">Total</td><td style="text-align:right">RD$${(selected.total ?? 0).toLocaleString()}</td></tr>
-          </tfoot>
-        </table>
-      </div>
-      ${selected.notas_admin ? \`<div class="section"><div class="section-title">Notas</div><div>\${selected.notas_admin}</div></div>\` : ''}
-      <div class="footer">ContactGo · contactgo.net · República Dominicana · Impreso ${new Date().toLocaleDateString('es-DO')}</div>
-    </body></html>`)
-    ;(win as any).__printItems = items
+    win.document.write(html)
     win.document.close()
     win.focus()
-    setTimeout(() => { win.print(); win.close() }, 500)
+    setTimeout(() => { win.print(); win.close() }, 600)
   }
+
 
   const actualizarEstado = async (orderId: string, estado: string) => {
     await sb.from('orders').update({estado}).eq('id', orderId)
