@@ -3,10 +3,13 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 export default async function sitemap() {
   const sb = createServerSupabaseClient()
 
-  const [{ data: products }, { data: blogs }] = await Promise.all([
-    sb.from('products').select('slug, id, updated_at').eq('activo', true),
-    sb.from('blog_posts').select('slug, updated_at').eq('activo', true).catch(() => ({ data: null })) as any,
-  ])
+  const { data: products } = await sb.from('products').select('slug, id, updated_at').eq('activo', true)
+
+  let blogs: any[] | null = null
+  try {
+    const { data } = await sb.from('blog_posts').select('slug, updated_at').eq('activo', true)
+    blogs = data
+  } catch { blogs = null }
 
   const now = new Date()
 
