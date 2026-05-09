@@ -1,149 +1,191 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+
+const BASE = 'https://atendbjolicwcsqfyiyh.supabase.co/storage/v1/object/public/products'
 
 const SLIDES = [
   {
-    badge: '🚚 Envío en 24-48h',
+    badge: '🚚 Envío en 24-48h en todo el país',
     title: 'Lentes de contacto\na tu puerta',
-    subtitle: 'Todas las marcas premium. Entrega rápida en toda la República Dominicana.',
-    cta: { label: 'Ver catálogo →', href: '/catalogo' },
+    subtitle: 'Acuvue, Air Optix, FreshLook y más marcas premium. Entrega rápida en República Dominicana.',
+    cta:  { label: 'Ver catálogo', href: '/catalogo' },
     cta2: { label: 'Buscar por receta', href: '/receta' },
-    bg: 'from-primary-700 via-primary-600 to-teal-600',
-    visual: '👁',
-    visualBg: 'bg-white/20',
+    bg: 'from-[#0a4d8c] to-[#0d6efd]',
+    image: '/hero-lens-1.png',
+    imageAlt: 'Cómo poner lentes de contacto',
+    tag: null,
   },
   {
-    badge: '✅ 100% Originales',
-    title: 'Acuvue Oasys\npara astigmatismo',
-    subtitle: 'La lente #1 para astigmatismo. Comodidad todo el día, graduaciones exactas.',
-    cta: { label: 'Ver tóricos →', href: '/catalogo?tipo=torico' },
-    cta2: { label: 'Ver ACUVUE', href: '/marca/acuvue' },
-    bg: 'from-blue-700 via-blue-600 to-primary-600',
-    visual: '💧',
-    visualBg: 'bg-white/20',
+    badge: '✨ Más popular',
+    title: 'ACUVUE® Oasys®',
+    subtitle: 'La lente más vendida en RD. Silicona hidrogel para máxima comodidad durante 2 semanas.',
+    cta:  { label: 'Ver ACUVUE', href: '/marca/acuvue' },
+    cta2: { label: 'Comprar ahora', href: '/producto/acuvue-oasys-lentes-contacto-silicona-hidrogel-dominicana' },
+    bg: 'from-[#003087] to-[#0057b8]',
+    image: `${BASE}/oasys-v2.png`,
+    imageAlt: 'ACUVUE Oasys',
+    tag: 'RD$3,952',
+    precio: 'RD$3,952',
   },
   {
     badge: '🎨 Sin graduación disponible',
     title: 'Lentes de colores\nFreshLook & Air Optix',
-    subtitle: 'Cambia tu look al instante. Más de 12 colores disponibles con y sin graduación.',
-    cta: { label: 'Ver colores →', href: '/catalogo?tipo=color' },
-    cta2: { label: 'Buscar mi color', href: '/receta' },
-    bg: 'from-purple-700 via-pink-600 to-rose-500',
-    visual: '🌈',
-    visualBg: 'bg-white/20',
+    subtitle: 'Cambia tu look al instante. Más de 12 colores. Con o sin graduación.',
+    cta:  { label: 'Ver colores', href: '/catalogo?tipo=color' },
+    cta2: { label: 'Air Optix Colors', href: '/producto/air-optix-colors-lentes-contacto-color-dominicana' },
+    bg: 'from-[#6b21a8] to-[#a855f7]',
+    image: '/hero-lens-2.png',
+    imageAlt: 'Lentes de colores',
+    tag: null,
   },
   {
-    badge: '🔄 Suscripción con descuento',
-    title: 'Recibe tus lentes\nautomáticamente',
-    subtitle: 'Suscríbete y ahorra hasta 15%. Entrega mensual o bimestral según tus necesidades.',
-    cta: { label: 'Ver suscripciones →', href: '/catalogo' },
-    cta2: { label: 'Cómo funciona', href: '/faq' },
-    bg: 'from-emerald-700 via-teal-600 to-cyan-600',
-    visual: '🔄',
-    visualBg: 'bg-white/20',
+    badge: '💙 Para astigmatismo',
+    title: 'Air Optix® Plus\nHydraGlyde',
+    subtitle: 'Visión nítida todo el mes con tecnología HydraGlyde. Disponible en versión tórica.',
+    cta:  { label: 'Ver tóricos', href: '/catalogo?tipo=torico' },
+    cta2: { label: 'Ver producto', href: '/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana' },
+    bg: 'from-[#0f766e] to-[#0d9488]',
+    image: `${BASE}/air_optix_hydraglyde-v3.png`,
+    imageAlt: 'Air Optix HydraGlyde',
+    tag: 'RD$2,750',
   },
   {
-    badge: '⚡ Soluciones y gotas',
-    title: 'Todo para el\ncuidado ocular',
-    subtitle: 'Systane, ReNu, Opti-Free y más. Cuida tus ojos con los mejores productos.',
-    cta: { label: 'Ver soluciones →', href: '/catalogo?tipo=solucion' },
-    cta2: { label: 'Ver gotas', href: '/catalogo?tipo=gota' },
-    bg: 'from-amber-600 via-orange-600 to-red-600',
-    visual: '💊',
-    visualBg: 'bg-white/20',
+    badge: '📝 Del blog',
+    title: '¿Cómo leer\ntu receta de lentes?',
+    subtitle: 'Aprende a interpretar SPH, CYL y EJE para encontrar los lentes exactos para tu graduación.',
+    cta:  { label: 'Leer artículo', href: '/blog/como-leer-tu-receta' },
+    cta2: { label: 'Buscar mis lentes', href: '/receta' },
+    bg: 'from-[#92400e] to-[#d97706]',
+    image: `${BASE}/oasys-v2.png`,
+    imageAlt: 'Cómo leer tu receta',
+    tag: null,
+    isBlog: true,
   },
 ]
 
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0)
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [transitioning, setTransitioning] = useState(false)
 
-  const next = useCallback(() => {
-    if (isAnimating) return
-    setIsAnimating(true)
-    setCurrent(c => (c + 1) % SLIDES.length)
-    setTimeout(() => setIsAnimating(false), 400)
-  }, [isAnimating])
+  const goTo = useCallback((idx: number) => {
+    if (transitioning || idx === current) return
+    setTransitioning(true)
+    setTimeout(() => { setCurrent(idx); setTransitioning(false) }, 300)
+  }, [current, transitioning])
+
+  const next = useCallback(() => goTo((current + 1) % SLIDES.length), [current, goTo])
+  const prev = useCallback(() => goTo((current - 1 + SLIDES.length) % SLIDES.length), [current, goTo])
 
   useEffect(() => {
-    const interval = setInterval(next, 5000)
-    return () => clearInterval(interval)
+    const t = setInterval(next, 6000)
+    return () => clearInterval(t)
   }, [next])
 
-  const goTo = (i: number) => {
-    if (i === current || isAnimating) return
-    setIsAnimating(true)
-    setCurrent(i)
-    setTimeout(() => setIsAnimating(false), 400)
-  }
-
-  const slide = SLIDES[current]
+  const s = SLIDES[current]
 
   return (
-    <section className={`bg-gradient-to-br ${slide.bg} text-white transition-all duration-500 relative overflow-hidden`}>
-      {/* Decorative background circles */}
-      <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-white/5 translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+    <section className={`relative overflow-hidden bg-gradient-to-br ${s.bg} transition-all duration-500`}>
+      {/* Fondo decorativo */}
+      <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
+        <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-white/5" />
+        <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-white/5" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 relative">
-        <div className={`transition-all duration-400 ${isAnimating ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
-          {/* Badge */}
-          <span className="inline-block bg-white/20 backdrop-blur rounded-full px-4 py-1.5 text-sm font-semibold mb-5">
-            {slide.badge}
-          </span>
+      <div className="relative max-w-7xl mx-auto px-4 py-14 md:py-20">
+        <div className={`grid md:grid-cols-2 gap-8 items-center transition-all duration-300 ${transitioning ? 'opacity-0 translate-y-3' : 'opacity-100 translate-y-0'}`}>
 
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 whitespace-pre-line">
-                {slide.title}
-              </h1>
-              <p className="text-base md:text-lg text-white/80 mb-8 leading-relaxed max-w-md">
-                {slide.subtitle}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link href={slide.cta.href}
-                  className="bg-white text-primary-700 font-bold px-6 py-3.5 rounded-xl hover:bg-primary-50 transition-colors shadow-lg shadow-black/20 text-sm md:text-base">
-                  {slide.cta.label}
-                </Link>
-                <Link href={slide.cta2.href}
-                  className="border-2 border-white/40 text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-white/10 transition-colors text-sm md:text-base">
-                  {slide.cta2.label}
-                </Link>
-              </div>
+          {/* Texto */}
+          <div>
+            <div className="flex items-center gap-2 mb-4 flex-wrap">
+              <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3.5 py-1.5 rounded-full">
+                {s.badge}
+              </span>
+              {s.tag && (
+                <span className="bg-yellow-400 text-yellow-900 text-xs font-black px-3 py-1.5 rounded-full">
+                  {s.tag}
+                </span>
+              )}
+              {s.isBlog && (
+                <span className="bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full border border-white/30">
+                  Artículo
+                </span>
+              )}
             </div>
 
-            {/* Visual emoji large */}
-            <div className="hidden md:flex justify-center">
-              <div className="relative w-64 h-64">
-                <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse" />
-                <div className="absolute inset-6 rounded-full bg-white/10" />
-                <div className="absolute inset-12 rounded-full bg-white/20 flex items-center justify-center text-7xl">
-                  {slide.visual}
+            <h1 className="font-display text-3xl md:text-5xl font-black text-white leading-tight mb-4 whitespace-pre-line">
+              {s.title}
+            </h1>
+            <p className="text-white/80 text-base md:text-lg leading-relaxed mb-8 max-w-md">
+              {s.subtitle}
+            </p>
+
+            <div className="flex flex-wrap gap-3">
+              <Link href={s.cta.href}
+                className="bg-white text-gray-900 font-bold px-6 py-3.5 rounded-2xl hover:bg-gray-50 transition-all shadow-lg shadow-black/20 text-sm md:text-base flex items-center gap-2">
+                {s.cta.label}
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+              <Link href={s.cta2.href}
+                className="border-2 border-white/50 text-white font-semibold px-6 py-3.5 rounded-2xl hover:bg-white/10 transition-all text-sm md:text-base">
+                {s.cta2.label}
+              </Link>
+            </div>
+          </div>
+
+          {/* Imagen */}
+          <div className="flex justify-center items-center">
+            <div className="relative w-64 h-64 md:w-80 md:h-80">
+              {/* Halo decorativo */}
+              <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse" />
+              <div className="absolute inset-4 rounded-full bg-white/10" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="relative w-52 h-52 md:w-64 md:h-64 rounded-full overflow-hidden bg-white/10">
+                  <Image
+                    src={s.image}
+                    alt={s.imageAlt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 208px, 256px"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Dots */}
-        <div className="flex items-center gap-2 mt-8">
-          {SLIDES.map((_, i) => (
-            <button key={i} onClick={() => goTo(i)}
-              className={`transition-all duration-300 rounded-full ${i === current ? 'w-6 h-2 bg-white' : 'w-2 h-2 bg-white/40 hover:bg-white/60'}`}
-              aria-label={`Slide ${i + 1}`} />
-          ))}
+        {/* Controls */}
+        <div className="flex items-center gap-3 mt-8">
+          {/* Dots */}
+          <div className="flex items-center gap-2">
+            {SLIDES.map((_, i) => (
+              <button key={i} onClick={() => goTo(i)} aria-label={`Ir a slide ${i + 1}`}
+                className={`transition-all duration-300 rounded-full ${i === current
+                  ? 'w-7 h-2.5 bg-white shadow-sm'
+                  : 'w-2.5 h-2.5 bg-white/35 hover:bg-white/60'}`} />
+            ))}
+          </div>
+
+          {/* Contador */}
+          <span className="text-white/50 text-xs font-mono ml-1">
+            {current + 1}/{SLIDES.length}
+          </span>
+
           {/* Prev/Next */}
           <div className="ml-auto flex gap-2">
-            <button onClick={() => goTo((current - 1 + SLIDES.length) % SLIDES.length)}
-              className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button onClick={prev}
+              className="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 border border-white/20 flex items-center justify-center transition-all">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <button onClick={next}
-              className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              className="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 border border-white/20 flex items-center justify-center transition-all">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
