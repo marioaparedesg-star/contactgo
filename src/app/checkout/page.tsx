@@ -153,7 +153,7 @@ export default function CheckoutPage() {
       color:      (i as any).color ?? null,
       ojo:        (i as any).ojo ?? null,
       size:       (i as any).size ?? null,
-      subtotal:   Number((i as any).precio_final ?? i.product.precio) * i.cantidad,
+      // subtotal es GENERATED (precio*cantidad) — Postgres lo calcula solo
     }))
 
     const { error: itemsError } = await sb.from('order_items').insert(itemsPayload)
@@ -294,7 +294,7 @@ export default function CheckoutPage() {
       axis: (i as any).axis != null ? Number((i as any).axis) : null,
       color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
       size: (i as any).size ?? null,
-      subtotal: Number((i as any).precio_final ?? i.product.precio) * i.cantidad,
+      // subtotal GENERATED — no enviar
     }))
     await sb.from('order_items').insert(itemsPayload)
 
