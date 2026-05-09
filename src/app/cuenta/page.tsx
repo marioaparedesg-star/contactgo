@@ -89,6 +89,7 @@ export default function CuentaPage() {
   const [selectedPedido, setSelectedPedido] = useState<any>(null)
   const [suscripciones, setSuscripciones]   = useState<any[]>([])
   const [itemsPedido, setItemsPedido]   = useState<any[]>([])
+  const [historialPedido, setHistorialPedido] = useState<any[]>([])
   const [loadingPedido, setLoadingPedido] = useState(false)
   const [tab, setTab]         = useState('pedidos')
   const [editando, setEditando] = useState(false)
@@ -276,9 +277,10 @@ export default function CuentaPage() {
     setLoadingPedido(true)
     const sb = createClient()
     // Refresca el estado actual del pedido desde DB (no usar snapshot en memoria)
-    const [{ data: pedidoFresh }, { data: items }] = await Promise.all([
+    const [{ data: pedidoFresh }, { data: items }, { data: historial }] = await Promise.all([
       sb.from('orders').select('*').eq('id', p.id).single(),
       sb.from('order_items').select('*').eq('order_id', p.id),
+      sb.from('order_status_history').select('*').eq('order_id', p.id).order('created_at', { ascending: true }),
     ])
     if (pedidoFresh) {
       setSelectedPedido(pedidoFresh)
@@ -286,6 +288,7 @@ export default function CuentaPage() {
       setPedidos(ps => ps.map(x => x.id === p.id ? pedidoFresh : x))
     }
     setItemsPedido(items || [])
+    setHistorialPedido(historial || [])
     setLoadingPedido(false)
 
     // Suscripción en tiempo real para actualizaciones de estado
@@ -296,6 +299,8 @@ export default function CuentaPage() {
       }, ({ new: updated }) => {
         setSelectedPedido((prev: any) => ({ ...prev, ...updated }))
         setPedidos(ps => ps.map(x => x.id === p.id ? { ...x, estado: updated.estado } : x))
+        // Actualizar historial en tiempo real
+        setHistorialPedido(h => [...h, { estado: updated.estado, created_at: new Date().toISOString() }])
       })
       .subscribe()
 
@@ -993,6 +998,37 @@ export default function CuentaPage() {
                 </div>
               </div>
             </div>
+            {/* Historial de estados */}
+            {historialPedido.length > 0 && (
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm">🕐</span>
+                  <p className="font-bold text-gray-900 text-sm">Historial de estados</p>
+                </div>
+                <div className="relative">
+                  <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gray-100" />
+                  <div className="space-y-3">
+                    {historialPedido.map((h: any, i: number) => {
+                      const ESTADO_ICON: Record<string,string> = { pendiente:'📋', confirmado:'✅', preparando:'📦', enviado:'🚚', entregado:'🎉', cancelado:'❌' }
+                      const isLast = i === historialPedido.length - 1
+                      return (
+                        <div key={h.id ?? i} className="flex items-start gap-3 pl-1">
+                          <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 ${isLast ? 'bg-primary-100 border-2 border-primary-500' : 'bg-gray-100'}`}>
+                            {ESTADO_ICON[h.estado] ?? '•'}
+                          </div>
+                          <div>
+                            <p className={`text-sm font-semibold capitalize ${isLast ? 'text-primary-600' : 'text-gray-600'}`}>{h.estado}</p>
+                            <p className="text-xs text-gray-400">
+                              {new Date(h.created_at).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {new Date(h.created_at).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'})}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
             <a href={"https://wa.me/18294089097?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mi%20pedido%20%23"+selectedPedido.id.slice(-6).toUpperCase()}
               target="_blank"
               className="flex items-center justify-center gap-2 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-2xl font-semibold text-sm transition-colors">

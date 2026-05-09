@@ -52,3 +52,26 @@
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 99px; }
+
+/* ── Print styles — 1 hoja para pedido admin ── */
+@media print {
+  /* Ocultar todo excepto el contenido del pedido seleccionado */
+  body > * { display: none !important; }
+  .print-order { display: block !important; }
+  
+  /* Reset para impresión limpia */
+  .print-order * { color: black !important; background: white !important; border-color: #e5e7eb !important; box-shadow: none !important; }
+  
+  /* Ocultar nav, botones, modales innecesarios */
+  nav, aside, .no-print, button, [data-no-print] { display: none !important; }
+  
+  /* Una sola página */
+  @page { size: A4; margin: 15mm; }
+  
+  /* Forzar 1 página — comprimir contenido */
+  .print-order { font-size: 11px !important; }
+  .print-order h1, .print-order h2 { font-size: 14px !important; }
+  
+  /* Evitar saltos de página en tablas */
+  tr, .print-no-break { page-break-inside: avoid; }
+}

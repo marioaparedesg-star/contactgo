@@ -1,243 +1,285 @@
-import { createServerSupabaseClient } from '@/lib/supabase-server'
-import { redirect } from 'next/navigation'
+'use client'
+import { useEffect, useState, useCallback } from 'react'
+import { createClient } from '@/lib/supabase'
 import AdminNav from '@/components/admin/AdminNav'
-import { TrendingUp, ShoppingBag, Users, DollarSign, Package } from 'lucide-react'
+import { TrendingUp, ShoppingBag, Users, DollarSign, Package, Calendar, ChevronDown } from 'lucide-react'
 
-export const revalidate = 0
+const PERIODOS = [
+  { value: 'hoy',       label: 'Hoy' },
+  { value: 'semana',    label: 'Esta semana' },
+  { value: 'mes',       label: 'Este mes' },
+  { value: 'mes_ant',   label: 'Mes anterior' },
+  { value: 'trimestre', label: 'Trimestre' },
+  { value: 'año',       label: 'Este año' },
+  { value: 'todo',      label: 'Todo el tiempo' },
+  { value: 'custom',    label: 'Personalizado' },
+]
 
-async function getData() {
-  const sb = createServerSupabaseClient()
+function getRango(periodo: string, desde?: string, hasta?: string): { start: string; end: string } {
   const now = new Date()
-  const mesStart  = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
-  const mesAnteriorStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString()
-  const mesAnteriorEnd   = new Date(now.getFullYear(), now.getMonth(), 0).toISOString()
-
-  const [
-    { data: orders },
-    { data: items },
-    { data: clientes },
-    { data: products },
-  ] = await Promise.all([
-    sb.from('orders').select('id,total,estado,fecha,metodo_pago,cliente_email').order('fecha', { ascending: false }),
-    sb.from('order_items').select('nombre,cantidad,precio,product_id,order_id'),
-    sb.from('profiles').select('id,email,created_at').eq('role', 'customer'),
-    sb.from('products').select('id,nombre,stock,tipo,marca'),
-  ])
-
-  const allOrders   = orders ?? []
-  const allItems    = items  ?? []
-  const allClientes = clientes ?? []
-
-  const ordersThisMonth = allOrders.filter(o => o.fecha >= mesStart)
-  const ordersPrevMonth = allOrders.filter(o => o.fecha >= mesAnteriorStart && o.fecha <= mesAnteriorEnd)
-
-  const ventasMes  = ordersThisMonth.reduce((s, o) => s + (o.total ?? 0), 0)
-  const ventasPrev = ordersPrevMonth.reduce((s, o) => s + (o.total ?? 0), 0)
-  const crecimiento = ventasPrev > 0 ? Math.round(((ventasMes - ventasPrev) / ventasPrev) * 100) : 0
-
-  const ticket = allOrders.length ? Math.round(allOrders.reduce((s, o) => s + (o.total ?? 0), 0) / allOrders.length) : 0
-
-  // Top productos
-  const prodAgg: Record<string, { nombre: string; unidades: number; revenue: number }> = {}
-  allItems.forEach((i: any) => {
-    const k = i.nombre
-    if (!prodAgg[k]) prodAgg[k] = { nombre: k, unidades: 0, revenue: 0 }
-    prodAgg[k].unidades += i.cantidad ?? 1
-    prodAgg[k].revenue  += (i.precio ?? 0) * (i.cantidad ?? 1)
-  })
-  const topProductos = Object.values(prodAgg).sort((a, b) => b.unidades - a.unidades).slice(0, 10)
-
-  // Ventas por método de pago
-  const metodoAgg: Record<string, { count: number; total: number }> = {}
-  allOrders.forEach(o => {
-    const k = o.metodo_pago ?? 'otro'
-    if (!metodoAgg[k]) metodoAgg[k] = { count: 0, total: 0 }
-    metodoAgg[k].count++
-    metodoAgg[k].total += o.total ?? 0
-  })
-
-  // Ventas por mes (últimos 6 meses)
-  const mesesChart: { label: string; ventas: number; pedidos: number }[] = []
-  for (let i = 5; i >= 0; i--) {
-    const d  = new Date(now.getFullYear(), now.getMonth() - i, 1)
-    const d2 = new Date(now.getFullYear(), now.getMonth() - i + 1, 0)
-    const label  = d.toLocaleDateString('es-DO', { month: 'short' })
-    const ventas = allOrders
-      .filter(o => o.fecha >= d.toISOString() && o.fecha <= d2.toISOString())
-      .reduce((s, o) => s + (o.total ?? 0), 0)
-    const pedidos = allOrders.filter(o => o.fecha >= d.toISOString() && o.fecha <= d2.toISOString()).length
-    mesesChart.push({ label, ventas, pedidos })
-  }
-  const maxVentas = Math.max(...mesesChart.map(m => m.ventas), 1)
-
-  // Ventas por tipo de producto
-  const tipoAgg: Record<string, number> = {}
-  allItems.forEach((item: any) => {
-    const p = (products ?? []).find((pr: any) => pr.id === item.product_id)
-    const tipo = p?.tipo ?? 'otro'
-    tipoAgg[tipo] = (tipoAgg[tipo] ?? 0) + (item.cantidad ?? 1)
-  })
-
-  return {
-    ventasMes, ventasPrev, crecimiento, ticket,
-    totalPedidos: allOrders.length,
-    pedidosMes: ordersThisMonth.length,
-    totalClientes: allClientes.length,
-    topProductos,
-    metodoAgg,
-    mesesChart, maxVentas,
-    tipoAgg,
-    entregados: allOrders.filter(o => o.estado === 'entregado').length,
-    cancelados:  allOrders.filter(o => o.estado === 'cancelado').length,
+  const pad = (d: Date) => d.toISOString()
+  switch (periodo) {
+    case 'hoy':
+      return { start: new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString(), end: pad(now) }
+    case 'semana': {
+      const day = now.getDay()
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1)
+      return { start: new Date(now.getFullYear(), now.getMonth(), diff).toISOString(), end: pad(now) }
+    }
+    case 'mes':
+      return { start: new Date(now.getFullYear(), now.getMonth(), 1).toISOString(), end: pad(now) }
+    case 'mes_ant':
+      return { start: new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString(), end: new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59).toISOString() }
+    case 'trimestre':
+      return { start: new Date(now.getFullYear(), now.getMonth() - 2, 1).toISOString(), end: pad(now) }
+    case 'año':
+      return { start: new Date(now.getFullYear(), 0, 1).toISOString(), end: pad(now) }
+    case 'todo':
+      return { start: '2020-01-01T00:00:00Z', end: pad(now) }
+    case 'custom':
+      return { start: desde ? new Date(desde).toISOString() : new Date(now.getFullYear(), now.getMonth(), 1).toISOString(), end: hasta ? new Date(hasta + 'T23:59:59').toISOString() : pad(now) }
+    default:
+      return { start: new Date(now.getFullYear(), now.getMonth(), 1).toISOString(), end: pad(now) }
   }
 }
 
-export default async function ReportesPage() {
-  const sb = createServerSupabaseClient()
-  const { data: { user } } = await sb.auth.getUser()
-  if (!user) redirect('/admin/login')
-  const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()
-  if (profile?.role !== 'admin') redirect('/')
+const METODO_LABEL: Record<string, string> = { azul: 'Tarjeta AZUL', paypal: 'PayPal', contra_entrega: 'Contra Entrega', bhd: 'Transferencia BHD' }
+const ESTADO_COLOR: Record<string, string> = { entregado: 'bg-green-100 text-green-700', enviado: 'bg-blue-100 text-blue-700', preparando: 'bg-yellow-100 text-yellow-700', confirmado: 'bg-purple-100 text-purple-700', pendiente: 'bg-gray-100 text-gray-600', cancelado: 'bg-red-100 text-red-700' }
 
-  const d = await getData()
+export default function ReportesPage() {
+  const sb = createClient()
+  const [periodo, setPeriodo] = useState('mes')
+  const [desde, setDesde] = useState('')
+  const [hasta, setHasta] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<any>(null)
+  const [showPeriodo, setShowPeriodo] = useState(false)
 
-  const METODO_LABEL: Record<string, string> = {
-    azul: 'AZUL/Tarjeta', paypal: 'PayPal', bhd: 'BHD', contra_entrega: 'Contra entrega', otro: 'Otro'
-  }
+  const cargar = useCallback(async () => {
+    setLoading(true)
+    const { start, end } = getRango(periodo, desde, hasta)
+
+    const [{ data: orders }, { data: items }, { data: clientes }] = await Promise.all([
+      sb.from('orders').select('id,total,estado,fecha,metodo_pago,cliente_email').gte('fecha', start).lte('fecha', end).order('fecha', { ascending: false }),
+      sb.from('order_items').select('nombre,cantidad,precio,product_id,order_id'),
+      sb.from('profiles').select('id,created_at').eq('role', 'customer'),
+    ])
+
+    const ords = orders ?? []
+    const its  = items  ?? []
+    
+    const orderIds = new Set(ords.map((o: any) => o.id))
+    const itsFiltered = its.filter((i: any) => orderIds.has(i.order_id))
+
+    const ventas = ords.reduce((s: number, o: any) => s + Number(o.total ?? 0), 0)
+    const ticket = ords.length ? Math.round(ventas / ords.length) : 0
+
+    // Top productos
+    const prodAgg: Record<string, { nombre: string; unidades: number; revenue: number }> = {}
+    itsFiltered.forEach((i: any) => {
+      if (!prodAgg[i.nombre]) prodAgg[i.nombre] = { nombre: i.nombre, unidades: 0, revenue: 0 }
+      prodAgg[i.nombre].unidades += i.cantidad ?? 1
+      prodAgg[i.nombre].revenue  += Number(i.precio ?? 0) * (i.cantidad ?? 1)
+    })
+    const topProductos = Object.values(prodAgg).sort((a, b) => b.unidades - a.unidades).slice(0, 8)
+
+    // Por método de pago
+    const metodoAgg: Record<string, { count: number; total: number }> = {}
+    ords.forEach((o: any) => {
+      const k = o.metodo_pago ?? 'otro'
+      if (!metodoAgg[k]) metodoAgg[k] = { count: 0, total: 0 }
+      metodoAgg[k].count++
+      metodoAgg[k].total += Number(o.total ?? 0)
+    })
+
+    // Por estado
+    const estadoAgg: Record<string, number> = {}
+    ords.forEach((o: any) => {
+      estadoAgg[o.estado ?? 'sin_estado'] = (estadoAgg[o.estado ?? 'sin_estado'] ?? 0) + 1
+    })
+
+    // Ventas por día (últimos 30 días del rango)
+    const porDia: Record<string, number> = {}
+    ords.forEach((o: any) => {
+      const dia = o.fecha?.slice(0, 10)
+      if (dia) porDia[dia] = (porDia[dia] ?? 0) + Number(o.total ?? 0)
+    })
+
+    setData({ ventas, ticket, ords, clientes: clientes ?? [], topProductos, metodoAgg, estadoAgg, porDia })
+    setLoading(false)
+  }, [periodo, desde, hasta])
+
+  useEffect(() => { cargar() }, [cargar])
+
+  const periodoLabel = PERIODOS.find(p => p.value === periodo)?.label ?? 'Período'
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       <AdminNav />
       <main className="flex-1 overflow-auto pb-24">
-        <div className="max-w-7xl mx-auto p-4 md:p-8">
+        <div className="max-w-6xl mx-auto p-4 md:p-8">
 
-          <div className="mb-8">
-            <h1 className="text-2xl font-black text-gray-900">Reportes</h1>
-            <p className="text-gray-400 text-sm mt-0.5">Análisis general del negocio</p>
-          </div>
-
-          {/* KPIs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            {[
-              { label: 'Ventas este mes', value: `RD$${d.ventasMes.toLocaleString()}`, sub: `${d.crecimiento >= 0 ? '+' : ''}${d.crecimiento}% vs mes anterior`, color: 'bg-blue-500', icon: DollarSign, pos: d.crecimiento >= 0 },
-              { label: 'Pedidos totales', value: d.totalPedidos, sub: `${d.pedidosMes} este mes`, color: 'bg-purple-500', icon: ShoppingBag },
-              { label: 'Ticket promedio', value: `RD$${d.ticket.toLocaleString()}`, sub: 'por pedido', color: 'bg-green-500', icon: TrendingUp },
-              { label: 'Clientes', value: d.totalClientes, sub: 'registrados', color: 'bg-amber-500', icon: Users },
-            ].map(k => (
-              <div key={k.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <div className={`w-9 h-9 ${k.color} rounded-xl flex items-center justify-center mb-3`}>
-                  <k.icon className="w-4 h-4 text-white" />
-                </div>
-                <p className="text-2xl font-black text-gray-900">{k.value}</p>
-                <p className="text-sm text-gray-500 mt-0.5">{k.label}</p>
-                <p className={`text-xs mt-0.5 font-medium ${(k as any).pos === false ? 'text-red-500' : (k as any).pos ? 'text-green-600' : 'text-gray-400'}`}>{k.sub}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-6">
-            {/* Gráfico 6 meses */}
-            <div className="md:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <h2 className="font-bold text-gray-900 mb-4">Ventas últimos 6 meses</h2>
-              <div className="flex items-end gap-3 h-40">
-                {d.mesesChart.map((m, i) => {
-                  const pct = Math.max((m.ventas / d.maxVentas) * 100, 3)
-                  const isLast = i === d.mesesChart.length - 1
-                  return (
-                    <div key={m.label} className="flex-1 flex flex-col items-center gap-1 group">
-                      <p className="text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        RD${m.ventas.toLocaleString()}
-                      </p>
-                      <div className="w-full flex flex-col justify-end" style={{ height: '120px' }}>
-                        <div className={`w-full rounded-t-lg transition-all ${isLast ? 'bg-blue-500' : 'bg-blue-200'}`}
-                          style={{ height: `${pct}%` }} />
-                      </div>
-                      <span className={`text-xs font-semibold ${isLast ? 'text-blue-600' : 'text-gray-400'}`}>{m.label}</span>
-                      <span className="text-[10px] text-gray-400">{m.pedidos}p</span>
-                    </div>
-                  )
-                })}
-              </div>
+          {/* Header + filtro */}
+          <div className="flex items-start justify-between mb-6 flex-wrap gap-4">
+            <div>
+              <h1 className="text-2xl font-black text-gray-900">Reportes</h1>
+              <p className="text-gray-400 text-sm mt-0.5">{data ? `${data.ords.length} pedidos en el período` : 'Cargando...'}</p>
             </div>
-
-            {/* Estado de pedidos */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <h2 className="font-bold text-gray-900 mb-4">Estado de pedidos</h2>
-              <div className="space-y-3">
-                {[
-                  { label: 'Entregados',  value: d.entregados,  pct: d.totalPedidos ? Math.round(d.entregados/d.totalPedidos*100) : 0,  color: 'bg-green-400' },
-                  { label: 'Cancelados',  value: d.cancelados,  pct: d.totalPedidos ? Math.round(d.cancelados/d.totalPedidos*100) : 0,   color: 'bg-red-400' },
-                  { label: 'Pendientes',  value: d.totalPedidos - d.entregados - d.cancelados,
-                    pct: d.totalPedidos ? Math.round((d.totalPedidos - d.entregados - d.cancelados)/d.totalPedidos*100) : 0, color: 'bg-amber-400' },
-                ].map(s => (
-                  <div key={s.label}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">{s.label}</span>
-                      <span className="font-bold text-gray-900">{s.value} <span className="text-gray-400 font-normal">({s.pct}%)</span></span>
-                    </div>
-                    <div className="w-full bg-gray-100 rounded-full h-2">
-                      <div className={`${s.color} h-2 rounded-full`} style={{ width: `${s.pct}%` }} />
-                    </div>
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Selector período */}
+              <div className="relative">
+                <button onClick={() => setShowPeriodo(!showPeriodo)}
+                  className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold hover:border-gray-300 transition-colors">
+                  <Calendar className="w-4 h-4 text-gray-400" />
+                  {periodoLabel}
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+                </button>
+                {showPeriodo && (
+                  <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-2xl shadow-lg z-20 py-1 min-w-[180px]">
+                    {PERIODOS.map(p => (
+                      <button key={p.value} onClick={() => { setPeriodo(p.value); setShowPeriodo(false) }}
+                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${periodo === p.value ? 'font-bold text-blue-600' : 'text-gray-700'}`}>
+                        {p.label}
+                      </button>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Top productos */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <h2 className="font-bold text-gray-900 mb-4">Top 10 productos más vendidos</h2>
-              {d.topProductos.length === 0 ? (
-                <p className="text-gray-400 text-sm text-center py-8">Sin ventas registradas</p>
-              ) : (
-                <div className="space-y-2">
-                  {d.topProductos.map((p, i) => (
-                    <div key={p.nombre} className="flex items-center gap-3">
-                      <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shrink-0
-                        ${i === 0 ? 'bg-yellow-100 text-yellow-700' : i === 1 ? 'bg-gray-200 text-gray-600' : i === 2 ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-500'}`}>
-                        {i + 1}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-gray-900 truncate">{p.nombre}</p>
-                        <div className="w-full bg-gray-100 rounded-full h-1 mt-1">
-                          <div className="bg-blue-400 h-1 rounded-full"
-                            style={{ width: `${Math.round((p.unidades / d.topProductos[0].unidades) * 100)}%` }} />
-                        </div>
-                      </div>
-                      <span className="text-sm font-bold text-gray-700 shrink-0">{p.unidades}u</span>
-                    </div>
-                  ))}
+              {/* Fechas custom */}
+              {periodo === 'custom' && (
+                <div className="flex items-center gap-2">
+                  <input type="date" value={desde} onChange={e => setDesde(e.target.value)}
+                    className="border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <span className="text-gray-400 text-sm">—</span>
+                  <input type="date" value={hasta} onChange={e => setHasta(e.target.value)}
+                    className="border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
               )}
             </div>
-
-            {/* Métodos de pago */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <h2 className="font-bold text-gray-900 mb-4">Métodos de pago</h2>
-              <div className="space-y-3">
-                {Object.entries(d.metodoAgg).sort((a, b) => b[1].count - a[1].count).map(([k, v]) => {
-                  const total = Object.values(d.metodoAgg).reduce((s, m) => s + m.count, 0)
-                  const pct   = total ? Math.round((v.count / total) * 100) : 0
-                  return (
-                    <div key={k}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-700 font-medium">{METODO_LABEL[k] ?? k}</span>
-                        <span className="text-gray-500">{v.count} pedidos · <span className="font-bold text-gray-900">RD${v.total.toLocaleString()}</span></span>
-                      </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2">
-                        <div className="bg-purple-400 h-2 rounded-full" style={{ width: `${pct}%` }} />
-                      </div>
-                    </div>
-                  )
-                })}
-                {Object.keys(d.metodoAgg).length === 0 && (
-                  <p className="text-gray-400 text-sm text-center py-8">Sin pedidos</p>
-                )}
-              </div>
-            </div>
           </div>
 
+          {loading ? (
+            <div className="flex justify-center py-24"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+          ) : !data ? null : (
+            <>
+              {/* KPIs */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {[
+                  { label: 'Ventas totales', value: `RD$${data.ventas.toLocaleString()}`, icon: DollarSign, color: 'text-green-600', bg: 'bg-green-50' },
+                  { label: 'Pedidos',         value: data.ords.length,                    icon: ShoppingBag,  color: 'text-blue-600',  bg: 'bg-blue-50' },
+                  { label: 'Ticket promedio', value: `RD$${data.ticket.toLocaleString()}`, icon: TrendingUp,   color: 'text-purple-600',bg: 'bg-purple-50' },
+                  { label: 'Clientes',         value: data.clientes.length,               icon: Users,        color: 'text-amber-600', bg: 'bg-amber-50' },
+                ].map(k => (
+                  <div key={k.label} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+                    <div className={`w-9 h-9 ${k.bg} rounded-xl flex items-center justify-center mb-3`}>
+                      <k.icon className={`w-5 h-5 ${k.color}`} />
+                    </div>
+                    <p className="text-2xl font-black text-gray-900">{k.value}</p>
+                    <p className="text-sm text-gray-400 mt-0.5">{k.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+                {/* Top productos */}
+                <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
+                  <p className="font-bold text-gray-900 mb-4">🏆 Top productos</p>
+                  {data.topProductos.length === 0 ? (
+                    <p className="text-gray-400 text-sm text-center py-6">Sin datos en el período</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {data.topProductos.map((p: any, i: number) => (
+                        <div key={p.nombre} className="flex items-center gap-3">
+                          <span className="text-xs font-black text-gray-400 w-4">{i + 1}</span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-gray-900 truncate">{p.nombre}</p>
+                            <div className="w-full bg-gray-100 rounded-full h-1.5 mt-1">
+                              <div className="bg-blue-500 h-1.5 rounded-full"
+                                style={{ width: `${Math.round((p.unidades / data.topProductos[0].unidades) * 100)}%` }} />
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="text-xs font-bold text-gray-700">{p.unidades} uds</p>
+                            <p className="text-xs text-gray-400">RD${p.revenue.toLocaleString()}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Por estado */}
+                <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
+                  <p className="font-bold text-gray-900 mb-4">📊 Por estado</p>
+                  <div className="space-y-2">
+                    {Object.entries(data.estadoAgg).sort(([,a],[,b]) => (b as number)-(a as number)).map(([estado, count]) => (
+                      <div key={estado} className="flex items-center justify-between">
+                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full capitalize ${ESTADO_COLOR[estado] ?? 'bg-gray-100 text-gray-600'}`}>{estado}</span>
+                        <div className="flex items-center gap-3">
+                          <div className="w-24 bg-gray-100 rounded-full h-1.5">
+                            <div className="bg-blue-400 h-1.5 rounded-full"
+                              style={{ width: `${Math.round(((count as number) / data.ords.length) * 100)}%` }} />
+                          </div>
+                          <span className="text-sm font-bold text-gray-700 w-6 text-right">{count as number}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Por método de pago */}
+                  <p className="font-bold text-gray-900 mt-6 mb-3">💳 Por método de pago</p>
+                  <div className="space-y-2">
+                    {Object.entries(data.metodoAgg).sort(([,a],[,b]) => (b as any).total-(a as any).total).map(([metodo, val]: any) => (
+                      <div key={metodo} className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600 font-medium">{METODO_LABEL[metodo] ?? metodo}</span>
+                        <div className="text-right">
+                          <p className="font-bold text-gray-900">RD${val.total.toLocaleString()}</p>
+                          <p className="text-xs text-gray-400">{val.count} pedidos</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Pedidos recientes del período */}
+              <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                  <p className="font-bold text-gray-900">Pedidos del período</p>
+                  <span className="text-xs text-gray-400">{data.ords.length} pedidos</span>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        {['Pedido', 'Cliente', 'Total', 'Estado', 'Método', 'Fecha'].map(h => (
+                          <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {data.ords.slice(0, 50).map((o: any) => (
+                        <tr key={o.id} className="hover:bg-gray-50/50">
+                          <td className="px-4 py-3 font-mono text-xs text-gray-500">#{o.id.slice(-8).toUpperCase()}</td>
+                          <td className="px-4 py-3 text-gray-700 text-xs">{o.cliente_email}</td>
+                          <td className="px-4 py-3 font-bold text-gray-900">RD${Number(o.total).toLocaleString()}</td>
+                          <td className="px-4 py-3">
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold capitalize ${ESTADO_COLOR[o.estado] ?? 'bg-gray-100 text-gray-600'}`}>{o.estado}</span>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-gray-500">{METODO_LABEL[o.metodo_pago] ?? o.metodo_pago}</td>
+                          <td className="px-4 py-3 text-xs text-gray-400">{new Date(o.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short'})}</td>
+                        </tr>
+                      ))}
+                      {data.ords.length === 0 && (
+                        <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400">Sin pedidos en este período</td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </main>
     </div>

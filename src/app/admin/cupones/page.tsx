@@ -11,8 +11,8 @@ interface Cupon {
   tipo: 'porcentaje' | 'fijo'
   valor: number
   activo: boolean
-  usos: number
-  limite_usos: number | null
+  usos_actuales: number
+  uso_maximo: number | null
   fecha_expira: string | null
   created_at: string
 }
@@ -41,10 +41,12 @@ export default function CuponesPage() {
       codigo: form.codigo.toUpperCase().trim(),
       tipo: form.tipo,
       valor: parseFloat(form.valor),
+      uso_maximo: form.limite_usos ? parseInt(form.limite_usos) : null,
       limite_usos: form.limite_usos ? parseInt(form.limite_usos) : null,
+      valido_hasta: form.fecha_expira || null,
       fecha_expira: form.fecha_expira || null,
       activo: true,
-      usos: 0,
+      usos_actuales: 0,
     }).select().single()
     if (error) { toast.error(error.message); return }
     setCupones(c => [data, ...c])
@@ -125,7 +127,7 @@ export default function CuponesPage() {
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Límite de usos</label>
-                  <input value={form.limite_usos} onChange={e => setForm(f => ({ ...f, limite_usos: e.target.value }))}
+                  <input value={form.uso_maximo} onChange={e => setForm(f => ({ ...f, limite_usos: e.target.value }))}
                     type="number" placeholder="Sin límite"
                     className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
@@ -189,7 +191,7 @@ export default function CuponesPage() {
                             {c.tipo === 'porcentaje' ? `${c.valor}%` : `RD$${c.valor.toLocaleString()}`}
                           </td>
                           <td className="px-4 py-3 text-sm text-gray-600">
-                            {c.usos} {c.limite_usos != null ? `/ ${c.limite_usos}` : '/ ∞'}
+                            {c.usos_actuales} {c.limite_usos != null ? `/ ${c.uso_maximo}` : '/ ∞'}
                           </td>
                           <td className="px-4 py-3 text-sm text-gray-500">
                             {c.fecha_expira ? new Date(c.fecha_expira).toLocaleDateString('es-DO') : '—'}

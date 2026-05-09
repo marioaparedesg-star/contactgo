@@ -162,7 +162,7 @@ export default function PedidosPage() {
                 <h2 className="font-bold text-gray-900">Detalle del Pedido</h2>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={() => window.print()} className="p-2 hover:bg-gray-100 rounded-lg">
+                <button onClick={() => { document.querySelector('.admin-pedido-detail')?.classList.add('print-order'); window.print(); setTimeout(() => document.querySelector('.admin-pedido-detail')?.classList.remove('print-order'), 500) }} className="p-2 hover:bg-gray-100 rounded-lg no-print">
                   <Printer className="w-4 h-4 text-gray-500" />
                 </button>
                 <button onClick={() => setSelected(null)} className="p-2 hover:bg-gray-100 rounded-lg">
