@@ -93,13 +93,13 @@ export default function HeroSlider() {
         <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-white/5" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 py-14 md:py-20">
-        <div className={`grid md:grid-cols-2 gap-8 items-center transition-all duration-300 ${transitioning ? 'opacity-0 translate-y-3' : 'opacity-100 translate-y-0'}`}>
+      <div className="relative max-w-7xl mx-auto px-4 py-5 md:py-16">
+        <div className={`flex items-center gap-4 md:grid md:grid-cols-2 md:gap-8 transition-all duration-300 ${transitioning ? 'opacity-0 translate-y-3' : 'opacity-100 translate-y-0'}`}>
 
           {/* Texto */}
           <div>
-            <div className="flex items-center gap-2 mb-4 flex-wrap">
-              <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3.5 py-1.5 rounded-full">
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-full">
                 {s.badge}
               </span>
               {s.tag && (
@@ -114,36 +114,36 @@ export default function HeroSlider() {
               )}
             </div>
 
-            <h1 className="font-display text-3xl md:text-5xl font-black text-white leading-tight mb-4 whitespace-pre-line">
+            <h1 className="font-display text-2xl md:text-5xl font-black text-white leading-tight mb-3 whitespace-pre-line">
               {s.title}
             </h1>
-            <p className="text-white/80 text-base md:text-lg leading-relaxed mb-8 max-w-md">
+            <p className="text-white/80 text-sm md:text-lg leading-relaxed mb-5 max-w-md hidden sm:block">
               {s.subtitle}
             </p>
 
             <div className="flex flex-wrap gap-3">
               <Link href={s.cta.href}
-                className="bg-white text-gray-900 font-bold px-6 py-3.5 rounded-2xl hover:bg-gray-50 transition-all shadow-lg shadow-black/20 text-sm md:text-base flex items-center gap-2">
+                className="bg-white text-gray-900 font-bold px-4 py-2.5 rounded-2xl hover:bg-gray-50 transition-all shadow-lg shadow-black/20 text-xs md:text-base flex items-center gap-1.5">
                 {s.cta.label}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
               <Link href={s.cta2.href}
-                className="border-2 border-white/50 text-white font-semibold px-6 py-3.5 rounded-2xl hover:bg-white/10 transition-all text-sm md:text-base">
+                className="border-2 border-white/50 text-white font-semibold px-4 py-2.5 rounded-2xl hover:bg-white/10 transition-all text-xs md:text-base hidden sm:block">
                 {s.cta2.label}
               </Link>
             </div>
           </div>
 
           {/* Imagen */}
-          <div className="flex justify-center items-center">
-            <div className="relative w-64 h-64 md:w-80 md:h-80">
+          <div className="flex justify-center items-center shrink-0">
+            <div className="relative w-40 h-40 md:w-80 md:h-80">
               {/* Halo decorativo */}
               <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse" />
               <div className="absolute inset-4 rounded-full bg-white/10" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-52 h-52 md:w-64 md:h-64 rounded-full overflow-hidden bg-white/10">
+                <div className="relative w-32 h-32 md:w-64 md:h-64 rounded-full overflow-hidden bg-white/10">
                   <Image
                     src={s.image}
                     alt={s.imageAlt}

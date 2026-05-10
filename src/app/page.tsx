@@ -46,7 +46,7 @@ export default async function HomePage() {
 
         {/* ── BENEFICIOS ────────────────────────────────────────── */}
         <section className="bg-white border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="max-w-7xl mx-auto px-4 py-5 md:py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               { icon: Truck, title: 'Envío en 24–48h', desc: 'A todo el país' },
               { icon: Shield, title: '100% Originales', desc: 'Productos auténticos certificados' },
@@ -69,7 +69,7 @@ export default async function HomePage() {
         {/* ── CATEGORÍAS ───────────────────────────────────────── */}
         <PersonalizedSection />
 
-        <section className="max-w-7xl mx-auto px-4 py-14">
+        <section className="max-w-7xl mx-auto px-4 py-6 md:py-14">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-7">Compra por tipo</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
@@ -115,7 +115,7 @@ export default async function HomePage() {
         {/* ── PRODUCTOS DESTACADOS ──────────────────────────────── */}
         <PersonalizedSection />
 
-        <section className="max-w-7xl mx-auto px-4 py-14">
+        <section className="max-w-7xl mx-auto px-4 py-6 md:py-14">
           <div className="flex items-center justify-between mb-7">
             <h2 className="font-display text-2xl font-bold text-gray-900">Más populares</h2>
             <Link href="/catalogo" className="text-sm font-semibold text-primary-600 hover:text-primary-700
@@ -137,7 +137,7 @@ export default async function HomePage() {
 
         {/* ── MARCAS ───────────────────────────────────────────── */}
         {/* Testimonios */}
-        <section className="max-w-5xl mx-auto px-4 py-14">
+        <section className="max-w-5xl mx-auto px-4 py-6 md:py-14">
           <div className="text-center mb-10">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-2">Lo que dicen nuestros clientes</h2>
             <p className="text-gray-500">Más de 1,000 dominicanos ya confían en ContactGo</p>
