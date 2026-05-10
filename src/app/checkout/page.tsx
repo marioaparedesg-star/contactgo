@@ -236,7 +236,7 @@ export default function CheckoutPage() {
 
     clearCart()
     setLoading(false)
-    router.push(order.id)
+    router.push('/confirmacion?orden=' + order.id)
     toast.success('¡Pedido confirmado! 🎉')
   }
 

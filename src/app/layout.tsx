@@ -4,6 +4,7 @@ import BottomNav from '@/components/ui/BottomNav'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://contactgo.net'),
   title: 'ContactGo — Lentes de Contacto RD',
   manifest: '/manifest.json',
   themeColor: '#16a34a',
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     description: 'Compra lentes de contacto en RD con envío en 24-48h. Acuvue, Air Optix, FreshLook y más marcas premium.',
     url: 'https://contactgo.net',
     siteName: 'ContactGo',
-    images: [{ url: 'https://contactgo.net/icon-512.png', width: 512, height: 512, alt: 'ContactGo' }],
+    images: [{ url: '/icon-512.png', width: 512, height: 512, alt: 'ContactGo — Lentes de Contacto RD' }],
   },
   twitter: {
     card: 'summary_large_image',

@@ -58,7 +58,16 @@ function AzulRetornoContent() {
         .eq('azul_order_number', orderNumber)
         .single()
 
-      if (order) setOrderId(order.id)
+      if (order) {
+        setOrderId(order.id)
+        if (approved) {
+          fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' })
+          }).catch(console.error)
+        }
+      }
       setStatus(approved ? 'approved' : 'declined')
     })
     .catch(() => setStatus('declined'))
@@ -84,8 +93,8 @@ function AzulRetornoContent() {
           <p className="text-gray-500 mb-8">Tu pago con tarjeta fue procesado exitosamente.</p>
           <div className="flex flex-col gap-3">
             {orderId && (
-              <Link href={`/checkout/${orderId}`} className="bg-primary-600 text-white py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors">
-                Ver confirmación del pedido
+              <Link href={`/confirmacion?orden=${orderId}`} className="bg-primary-600 text-white py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors">
+                Ver mi pedido
               </Link>
             )}
             <Link href="/catalogo" className="bg-gray-100 text-gray-700 py-3 rounded-xl font-semibold">

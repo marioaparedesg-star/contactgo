@@ -43,8 +43,8 @@ export default async function sitemap() {
     // Ayuda e info
     { url: 'https://contactgo.net/ayuda',                      priority: 0.80, freq: 'monthly' },
     { url: 'https://contactgo.net/envios-y-entregas',          priority: 0.65, freq: 'monthly' },
-    { url: 'https://contactgo.net/ayuda/envios',               priority: 0.60, freq: 'monthly' },
-    { url: 'https://contactgo.net/ayuda/devoluciones',         priority: 0.60, freq: 'monthly' },
+    { url: 'https://contactgo.net/ayuda/envios',               priority: 0.55, freq: 'monthly' },
+    { url: 'https://contactgo.net/ayuda/devoluciones',         priority: 0.55, freq: 'monthly' },
     { url: 'https://contactgo.net/faq',                        priority: 0.65, freq: 'monthly' },
     { url: 'https://contactgo.net/seguridad',                  priority: 0.55, freq: 'monthly' },
     { url: 'https://contactgo.net/sobre-nosotros',             priority: 0.60, freq: 'monthly' },
