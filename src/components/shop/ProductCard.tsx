@@ -1,7 +1,9 @@
+import React from 'react'
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingCart, Eye } from 'lucide-react'
+import { ShoppingCart, Eye, Heart } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 import { useCartStore } from '@/lib/cart-store'
 import toast from 'react-hot-toast'
@@ -20,6 +22,20 @@ const TIPO_BADGE: Record<string, { label: string; color: string }> = {
 export default function ProductCard({ product }: Props) {
   const addItem = useCartStore(s => s.addItem)
   const needsRx = ['esferico','torico','multifocal'].includes(product.tipo ?? '')
+  const [isFav, setIsFav] = React.useState(false)
+
+  const toggleFav = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    const sb = createClient()
+    const { data: { user } } = await sb.auth.getUser()
+    if (!user) { window.location.href = '/cuenta'; return }
+    if (isFav) {
+      await sb.from('favorites').delete().eq('user_id', user.id).eq('product_id', product.id)
+    } else {
+      await sb.from('favorites').insert({ user_id: user.id, product_id: product.id })
+    }
+    setIsFav(!isFav)
+  }
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -41,6 +57,17 @@ export default function ProductCard({ product }: Props) {
     >
       {/* ── Imagen ── */}
       <div className="relative w-full aspect-square bg-gray-50 overflow-hidden">
+        {/* Favorito */}
+        <button onClick={toggleFav}
+          className={"absolute top-2 right-2 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-sm " + (isFav ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-400 hover:text-red-400')}>
+          <Heart className={"w-3.5 h-3.5 " + (isFav ? 'fill-current' : '')} />
+        </button>
+        {/* Días de uso */}
+        {(product as any).dias_uso && (
+          <span className="absolute bottom-2 left-2 z-10 text-[10px] font-bold bg-black/60 text-white px-1.5 py-0.5 rounded-md">
+            {(product as any).dias_uso === 1 ? 'Diario' : (product as any).dias_uso === 14 ? '2 semanas' : `${(product as any).dias_uso} días`}
+          </span>
+        )}
         {product.imagen_url ? (
           <Image
             src={product.imagen_url}
