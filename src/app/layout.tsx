@@ -72,8 +72,8 @@ const organizationSchema = {
   "currenciesAccepted": "DOP",
   "paymentAccepted": "Tarjeta de crédito, débito, PayPal, transferencia bancaria, efectivo contra entrega",
   "sameAs": [
-    "https://www.instagram.com/contactgo.rd",
-    "https://www.facebook.com/contactgo.rd"
+    "https://www.instagram.com/contactgord",
+    "https://www.facebook.com/profile.php?id=1063834443484441"
   ]
 }
 
