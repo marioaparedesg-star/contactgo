@@ -45,7 +45,7 @@ export default function EnviosPage() {
         <div className="mt-10 bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
           <p className="font-semibold text-gray-900 mb-1">¿Tienes preguntas sobre tu envío?</p>
           <p className="text-gray-500 text-sm mb-4">Escríbenos y te respondemos en minutos.</p>
-          <a href="https://wa.me/18294089097" target="_blank"
+          <a href="https://wa.me/18294728328" target="_blank"
             className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
             💬 Contactar por WhatsApp
           </a>

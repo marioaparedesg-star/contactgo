@@ -73,7 +73,7 @@ export default function PrivacidadPage() {
 
         <div className="mt-10 pt-6 border-t border-gray-100">
           <p className="text-sm font-semibold text-gray-700 mb-2">Contacto para asuntos de privacidad</p>
-          <a href="https://wa.me/18294089097" target="_blank"
+          <a href="https://wa.me/18294728328" target="_blank"
             className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">
             💬 Contactar por WhatsApp
           </a>

@@ -810,7 +810,7 @@ export default function CuentaPage() {
                       <div>
                         <p className="text-red-700 font-bold text-xs">Receta vencida ({mesesDesde} meses)</p>
                         <p className="text-red-600 text-xs mt-0.5">Tu receta tiene más de un año. Te recomendamos visitar un optometrista antes de comprar.</p>
-                        <a href="https://wa.me/18294089097?text=Hola%2C%20necesito%20información%20sobre%20revisión%20visual"
+                        <a href="https://wa.me/18294728328?text=Hola%2C%20necesito%20información%20sobre%20revisión%20visual"
                           target="_blank" rel="noopener noreferrer"
                           className="text-xs font-bold text-red-600 underline mt-1 inline-block">Solicitar consulta →</a>
                       </div>
@@ -1375,7 +1375,7 @@ export default function CuentaPage() {
                 </div>
               </div>
             )}
-            <a href={"https://wa.me/18294089097?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mi%20pedido%20%23"+selectedPedido.id.slice(-6).toUpperCase()}
+            <a href={"https://wa.me/18294728328?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mi%20pedido%20%23"+selectedPedido.id.slice(-6).toUpperCase()}
               target="_blank"
               className="flex items-center justify-center gap-2 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-2xl font-semibold text-sm transition-colors">
               <MessageCircle className="w-4 h-4" />

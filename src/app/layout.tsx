@@ -57,7 +57,7 @@ const organizationSchema = {
   "logo": "https://contactgo.net/icon-512.png",
   "image": "https://contactgo.net/icon-512.png",
   "description": "Tienda online especializada en lentes de contacto y soluciones oftálmicas en República Dominicana. Entrega a domicilio en 24-48 horas.",
-  "telephone": "+18294089097",
+  "telephone": "+18294728328",
   "email": "info@contactgo.net",
   "address": {
     "@type": "PostalAddress",

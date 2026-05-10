@@ -60,7 +60,7 @@ export default function Footer() {
           <ul className="space-y-3 text-sm">
             <li className="flex items-center gap-2">
               <Phone className="w-4 h-4 text-primary-400 shrink-0" />
-              <a href="https://wa.me/18294089097" target="_blank" className="hover:text-primary-400 transition-colors">
+              <a href="https://wa.me/18294728328" target="_blank" className="hover:text-primary-400 transition-colors">
                 829-408-9097
               </a>
             </li>

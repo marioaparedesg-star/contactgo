@@ -110,7 +110,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
           </a>
           <p style="margin:16px 0 0;color:#9ca3af;font-size:12px;">
             ¿Preguntas? Escríbenos al 
-            <a href="https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP ?? '18294089097'}" style="color:#16a34a;">WhatsApp</a>
+            <a href="https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP ?? '18294728328'}" style="color:#16a34a;">WhatsApp</a>
           </p>
         </td></tr>
 

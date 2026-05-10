@@ -105,7 +105,7 @@ export default function EnviosPage() {
             <p className="font-bold text-gray-900 mb-2">¿Tienes alguna pregunta?</p>
             <p className="text-gray-500 text-sm mb-4">Nuestro equipo está disponible por WhatsApp para ayudarte.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="https://wa.me/18294089097" target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer"
                 className="bg-green-500 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-green-600 transition-colors">
                 WhatsApp
               </a>

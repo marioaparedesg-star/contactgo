@@ -63,7 +63,7 @@ function ConfirmacionContent() {
   const stepIdx      = ESTADO_STEPS.findIndex(s => s.key === order.estado)
   const currentStep  = Math.max(stepIdx, 0)
   const whatsappMsg  = encodeURIComponent(`Hola ContactGo, quiero consultar sobre mi pedido #${pedidoId}`)
-  const waNumber     = process.env.NEXT_PUBLIC_WHATSAPP ?? '18294089097'
+  const waNumber     = process.env.NEXT_PUBLIC_WHATSAPP ?? '18294728328'
 
   return (
     <div className="min-h-screen bg-gray-50 pb-24">

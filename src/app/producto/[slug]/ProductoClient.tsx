@@ -362,7 +362,7 @@ export default function ProductoClient({ product, variants }: Props) {
             <p className="text-xs text-gray-500 truncate">{product.nombre}</p>
             <p className="font-black text-primary-600 text-lg">RD${price.toLocaleString()}</p>
           </div>
-          <a href="https://wa.me/18294089097" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer"
             className="bg-green-500 text-white px-3 py-3 rounded-xl text-sm font-bold flex items-center gap-1 shrink-0">
             💬
           </a>

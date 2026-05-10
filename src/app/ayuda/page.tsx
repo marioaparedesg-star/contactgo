@@ -192,7 +192,7 @@ export default function AyudaPage() {
           <p className="text-2xl mb-2">💬</p>
           <h3 className="font-black text-gray-900 text-lg mb-1">¿No encontraste tu respuesta?</h3>
           <p className="text-gray-500 text-sm mb-4">Lunes a sábado · 9am – 7pm</p>
-          <a href="https://wa.me/18294089097?text=Hola%20ContactGo%2C%20tengo%20una%20pregunta"
+          <a href="https://wa.me/18294728328?text=Hola%20ContactGo%2C%20tengo%20una%20pregunta"
             target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-xl transition-colors">
             Escribir por WhatsApp

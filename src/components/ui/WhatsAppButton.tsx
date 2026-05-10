@@ -2,7 +2,7 @@
 export default function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/18294089097?text=Hola%20ContactGo%2C%20necesito%20ayuda%20con%20mi%20pedido"
+      href="https://wa.me/18294728328?text=Hola%20ContactGo%2C%20necesito%20ayuda%20con%20mi%20pedido"
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-20 right-4 z-40 w-14 h-14 bg-[#25D366] rounded-full shadow-lg
