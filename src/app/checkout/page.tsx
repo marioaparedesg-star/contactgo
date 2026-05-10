@@ -380,6 +380,8 @@ export default function CheckoutPage() {
 
   if (items.length === 0) return null
 
+  const hasTorico = items.some(i => i.product?.tipo === 'torico')
+
   const handleAuth = async () => {
     setAuthLoading(true); setAuthMsg('')
     const sb = createClient()

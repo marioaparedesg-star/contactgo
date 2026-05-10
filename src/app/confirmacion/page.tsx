@@ -60,6 +60,7 @@ function ConfirmacionContent() {
   if (!order) return null
 
   const pedidoId     = order.id.slice(-8).toUpperCase()
+  const hasTorico    = items.some((i: any) => i.nombre?.toLowerCase().includes('toric') || i.nombre?.toLowerCase().includes('astigmatismo') || i.nombre?.toLowerCase().includes('astigmat'))
   const stepIdx      = ESTADO_STEPS.findIndex(s => s.key === order.estado)
   const currentStep  = Math.max(stepIdx, 0)
   const whatsappMsg  = encodeURIComponent(`Hola ContactGo, quiero consultar sobre mi pedido #${pedidoId}`)
@@ -117,8 +118,14 @@ function ConfirmacionContent() {
               )
             })}
           </div>
+          {hasTorico && (
+            <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 flex items-start gap-2">
+              <span className="text-amber-500 shrink-0">⏱️</span>
+              <p className="text-amber-700 text-xs font-medium leading-snug">Tu pedido incluye lentes tóricos — tiempo de entrega <strong>20-30 días</strong> por fabricación a medida.</p>
+            </div>
+          )}
           <p className="text-center text-xs text-gray-400 mt-4">
-            Tu pedido llegará en <span className="font-semibold text-gray-600">24-48 horas</span>
+            {hasTorico ? 'Lentes tóricos: 20-30 días · Otros productos: 24-48 horas' : <>Tu pedido llegará en <span className="font-semibold text-gray-600">24-48 horas</span></>}
           </p>
         </div>
 

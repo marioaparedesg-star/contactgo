@@ -210,7 +210,16 @@ export default function ProductoClient({ product, variants }: Props) {
               </p>
             </div>
 
-            {/* Urgencia y confianza */}
+            {/* Aviso entrega tóricos */}
+            {product.tipo === 'torico' && (
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 flex items-start gap-2.5">
+                <span className="text-amber-500 text-lg shrink-0">⏱️</span>
+                <div>
+                  <p className="text-amber-800 font-bold text-sm">Tiempo de entrega: 20-30 días</p>
+                  <p className="text-amber-700 text-xs mt-0.5 leading-relaxed">Los lentes tóricos para astigmatismo se fabrican a medida según tu graduación exacta (SPH, CYL y EJE). El tiempo de entrega es mayor al habitual.</p>
+                </div>
+              </div>
+            )}
             <div className="flex flex-wrap gap-2">
               <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-2.5 py-1.5 rounded-full font-semibold">✅ 100% Original</span>
               <span className="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1.5 rounded-full font-semibold">🚀 Entrega 24-72h</span>

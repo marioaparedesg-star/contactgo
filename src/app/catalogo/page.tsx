@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 const TIPO_META: Record<string, { title: string; description: string }> = {
   esferico:  { title: 'Lentes de Contacto Esféricos RD | Miopía e Hipermetropía — ContactGo', description: 'Compra lentes de contacto esféricos en República Dominicana. Acuvue, Air Optix, Biofinity para miopía e hipermetropía. Envío 24-48h.' },
-  torico:    { title: 'Lentes para Astigmatismo RD | Lentes Tóricos — ContactGo', description: 'Lentes tóricos para astigmatismo en RD. Acuvue Oasys for Astigmatism, Biofinity Toric. Entrega a domicilio en República Dominicana.' },
+  torico:    { title: 'Lentes para Astigmatismo RD | Lentes Tóricos — ContactGo', description: 'Lentes tóricos para astigmatismo en RD. Acuvue Oasys for Astigmatism, Biofinity Toric. Fabricados a medida. Entrega 20-30 días en República Dominicana.' },
   multifocal:{ title: 'Lentes Multifocales para Presbicia RD — ContactGo', description: 'Lentes de contacto multifocales para vista cansada y presbicia en República Dominicana. Acuvue Oasys Presbyopia. Envío en 24-48h.' },
   color:     { title: 'Lentes de Contacto de Colores RD | FreshLook, Air Optix Colors — ContactGo', description: 'Lentes de colores en República Dominicana. FreshLook Colorblends, Air Optix Colors. Con y sin graduación. Entrega a domicilio.' },
   solucion:  { title: 'Soluciones para Lentes de Contacto RD — ContactGo', description: 'Soluciones multipropósito para lentes de contacto en RD. ReNu, Opti-Free, Dream Eye. Envío a domicilio en República Dominicana.' },
