@@ -114,7 +114,7 @@ export default async function ProductoPage(
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <ProductoClient product={product} />
+      <ProductoClient product={product} variants={[]} />
     </>
   )
 }
