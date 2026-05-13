@@ -69,7 +69,7 @@ export default function SeguridadPage() {
           <span className="text-xs text-gray-500">Pagos protegidos · SSL · PCI-DSS</span>
         </div>
       
-        {/* Logos 3D Secure - Requisito AZUL */}
+        {/* Logos 3D Secure - Requisito tarjeta */}
         <div className="flex flex-col items-center gap-6 mt-8 p-6 bg-white rounded-2xl border border-gray-100">
           <p className="text-sm font-semibold text-gray-700">Transacciones protegidas con</p>
           <div className="flex items-center justify-center gap-8">

@@ -43,7 +43,7 @@ function getRango(periodo: string, desde?: string, hasta?: string): { start: str
   }
 }
 
-const METODO_LABEL: Record<string, string> = { azul: 'Tarjeta AZUL', paypal: 'PayPal', contra_entrega: 'Contra Entrega', bhd: 'Transferencia BHD' }
+const METODO_LABEL: Record<string, string> = { azul: 'Tarjeta', paypal: 'PayPal', contra_entrega: 'Contra Entrega', bhd: 'Transferencia BHD' }
 const ESTADO_COLOR: Record<string, string> = { entregado: 'bg-green-100 text-green-700', enviado: 'bg-blue-100 text-blue-700', preparando: 'bg-yellow-100 text-yellow-700', confirmado: 'bg-purple-100 text-purple-700', pendiente: 'bg-gray-100 text-gray-600', cancelado: 'bg-red-100 text-red-700' }
 
 export default function ReportesPage() {

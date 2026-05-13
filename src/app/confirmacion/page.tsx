@@ -14,7 +14,7 @@ const ESTADO_STEPS = [
 ]
 
 const METODO_LABEL: Record<string, string> = {
-  azul:           '💳 Tarjeta (AZUL)',
+  tarjeta:           '💳 Tarjeta',
   paypal:         'PayPal',
   bhd:            'Transferencia BHD',
   contra_entrega: '💵 Pago al recibir',

@@ -37,10 +37,9 @@ const PAYPAL_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
-  const [payMethod, setPayMethod] = useState<'paypal'|'azul'|'contra_entrega'>('azul')
+  const [payMethod, setPayMethod] = useState<'paypal'|'contra_entrega'>('contra_entrega')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [azulLoading, setAzulLoading] = useState(false)
   const [cupon, setCupon] = useState('')
   const [cuponAplicado, setCuponAplicado] = useState(false)
   const [descuento, setDescuento] = useState(0)
@@ -274,148 +273,6 @@ export default function CheckoutPage() {
     toast.success('¡Pedido confirmado! 🎉')
   }
 
-  const pagarConAzul = async (data: FormData) => {
-    if (!aceptaTerminos) { toast.error('Debes aceptar los Términos y Condiciones'); return }
-    setAzulLoading(true)
-    const sb = createClient()
-    const { data: { user } } = await sb.auth.getUser()
-
-    // Usar datos de prueba del sandbox AZUL según documento técnico
-    const MERCHANT_ID   = process.env.NEXT_PUBLIC_AZUL_MERCHANT_ID ?? '39038540035'
-    const MERCHANT_NAME = process.env.NEXT_PUBLIC_AZUL_MERCHANT_NAME ?? 'ContactGo'
-    const MERCHANT_TYPE = 'ECommerce'
-    const CURRENCY_CODE = '$'
-    const BASE_URL      = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://www.contactgo.net'
-
-    // Número de orden único
-    const orderNumber = Date.now().toString()
-
-    // Amount sin decimales — últimos 2 dígitos son centavos
-    const totalFinal  = tot - descuento
-    const amountStr   = (totalFinal * 100).toFixed(0)
-    // ITBIS = 18% del total, formato sin decimales (últimos 2 = centavos)
-    const itbisReal   = Math.round(totalFinal * 0.18 / 1.18 * 100)
-    const itbisStr    = itbisReal.toFixed(0).padStart(3, '0')
-
-    const approvedUrl = BASE_URL + '/azul-retorno'
-    const declinedUrl = BASE_URL + '/azul-retorno'
-    const cancelUrl   = BASE_URL + '/azul-retorno'
-
-    // Calcular hash en servidor (AuthKey nunca sale al frontend)
-    // El hash se calcula ANTES de definir los fields
-    // Solo los campos del hash según doc técnico (no incluye CardHolder ni LogoImageUrl)
-    const { hash } = await fetch('/api/azul-hash', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        MerchantId: MERCHANT_ID, MerchantName: MERCHANT_NAME,
-        MerchantType: MERCHANT_TYPE, CurrencyCode: CURRENCY_CODE,
-        OrderNumber: orderNumber, Amount: amountStr, ITBIS: itbisStr,
-        ApprovedUrl: approvedUrl, DeclinedUrl: declinedUrl, CancelUrl: cancelUrl,
-        UseCustomField1: '0', CustomField1Label: '', CustomField1Value: '',
-        UseCustomField2: '0', CustomField2Label: '', CustomField2Value: '',
-      })
-    }).then(r => r.json())
-
-    // Guardar orden en Supabase ANTES de redirigir
-    const { data: order } = await sb.from('orders').insert({
-      user_id:            user?.id ?? null,
-      cliente_nombre:     data.nombre,
-      cliente_email:      data.email,
-      cliente_telefono:   data.telefono,
-      direccion_texto:    `${data.direccion}, ${data.ciudad}`,
-      estado:             'pendiente',
-      subtotal:           sub,
-      envio:              200,
-      total:              totalFinal,
-      metodo_pago:        'azul',
-      pago_estado:        'pendiente',
-      azul_order_number:  orderNumber,
-    }).select().single()
-
-    if (!order) { toast.error('Error creando orden'); setAzulLoading(false); return }
-
-    // Insertar items
-    const itemsPayload = items.map(i => ({
-      order_id: order.id, product_id: i.product.id,
-      nombre: i.product.nombre,
-      precio: Number((i as any).precio_final ?? i.product.precio),
-      cantidad: i.cantidad,
-      sph: i.sph != null ? Number(i.sph) : null,
-      cyl: i.cyl != null ? Number(i.cyl) : null,
-      add_power: i.add_power ? parseFloat(String(i.add_power).replace('+','')) : null,
-      axis: (i as any).axis != null ? Number((i as any).axis) : null,
-      color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
-      size: (i as any).size ?? null,
-      // subtotal GENERATED — no enviar
-    }))
-    // Insertar via API route (service_role)
-    await fetch('/api/orders/items', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ order_id: order.id, items: itemsPayload })
-    })
-
-    clearCart()
-
-    // Construir y enviar formulario POST hacia AZUL sandbox
-    const azulUrl = 'https://pruebas.azul.com.do/PaymentPage/'
-    const form = document.createElement('form')
-    form.method = 'POST'
-    form.action = azulUrl
-
-    const fields: Record<string, string> = {
-      MerchantId:         MERCHANT_ID,
-      MerchantName:       MERCHANT_NAME,
-      MerchantType:       MERCHANT_TYPE,
-      CurrencyCode:       CURRENCY_CODE,
-      OrderNumber:        orderNumber,
-      Amount:             amountStr,
-      ITBIS:              itbisStr,
-      ApprovedUrl:        approvedUrl,
-      DeclinedUrl:        declinedUrl,
-      CancelUrl:          cancelUrl,
-      UseCustomField1:    '0',
-      CustomField1Label:  '',
-      CustomField1Value:  '',
-      UseCustomField2:    '0',
-      CustomField2Label:  '',
-      CustomField2Value:  '',
-      AuthHash:           hash,
-      ShowTransactionResult: '1',
-      // Logo del comercio en la página de AZUL
-      LogoImageUrl:       BASE_URL + '/logo.png',
-      // Campos CardHolder para 3D Secure (doc técnico p.38)
-      CardHolderName:     data.nombre.substring(0, 96),
-      CardHolderEmail:    data.email.substring(0, 254),
-      CardHolderPhoneMobile: data.telefono.replace(/\D/g,'').substring(0, 32),
-      CardHolderBillingAddressLine1: data.direccion.substring(0, 96),
-      CardHolderBillingAddressCity:  data.ciudad.substring(0, 96),
-      CardHolderBillingAddressState: 'Santo Domingo',
-      CardHolderBillingAddressCountry: 'DO',
-      CardHolderBillingAddressZip:   '10000',
-    }
-
-    Object.entries(fields).forEach(([k, v]) => {
-      const input = document.createElement('input')
-      input.type = 'hidden'; input.name = k; input.value = v
-      form.appendChild(input)
-    })
-
-    document.body.appendChild(form)
-    form.submit()
-  }
-
-  const copyBank = () => {
-    navigator.clipboard.writeText('')
-    setCopied(true); setTimeout(() => setCopied(false), 2000)
-    toast.success('Datos bancarios copiados')
-  }
-
-  if (items.length === 0) return null
-
-  const hasTorico = items.some(i => i.product?.tipo === 'torico')
-
   const handleAuth = async () => {
     setAuthLoading(true); setAuthMsg('')
     const sb = createClient()
@@ -500,7 +357,7 @@ export default function CheckoutPage() {
       <main className="pb-20 max-w-5xl mx-auto px-4 py-8">
         <h1 className="font-display text-2xl font-bold text-gray-900 mb-8">Finalizar pedido</h1>
 
-        <form onSubmit={handleSubmit(data => { if (!isLoggedIn) { setShowAuthModal(true); return }; if (!disclaimerAceptado) { setShowDisclaimer(true); return }; if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }; if (payMethod !== 'paypal') createOrder(data) })}
+        <form onSubmit={handleSubmit(data => { if (!isLoggedIn) { setShowAuthModal(true); return }; if (!disclaimerAceptado) { setShowDisclaimer(true); return }; if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }; createOrder(data) })}
           className="grid lg:grid-cols-5 gap-8">
 
           {/* LEFT - Formulario */}
@@ -560,193 +417,78 @@ export default function CheckoutPage() {
             {/* Método de pago */}
             <div className="card p-5">
               <h2 className="font-semibold text-gray-900 mb-4">Método de pago</h2>
-              <div className="grid grid-cols-3 gap-2 mb-5">
+
+              <div className="grid grid-cols-2 gap-3 mb-5">
                 {([
-                  { id: 'azul',           icon: CreditCard, label: 'Tarjeta (AZUL)' },
-                  { id: 'paypal',         icon: CreditCard, label: 'PayPal' },
-                  { id: 'contra_entrega', icon: Package,    label: 'Contra entrega' },
+                  { id: 'contra_entrega', emoji: '💵', label: 'Contra entrega', desc: 'Pagas en efectivo al recibir' },
+                  { id: 'paypal',         emoji: '🔵', label: 'PayPal',          desc: 'Tarjeta o cuenta PayPal' },
                 ] as const).map(m => (
                   <button key={m.id} type="button" onClick={() => setPayMethod(m.id)}
-                    className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all text-sm font-semibold
+                    className={`flex flex-col items-start gap-1 p-4 rounded-2xl border-2 transition-all text-left
                       ${payMethod === m.id
-                        ? 'border-primary-600 bg-primary-50 text-primary-700'
-                        : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}>
-                    <m.icon className="w-5 h-5" />
-                    {m.label}
+                        ? 'border-primary-500 bg-primary-50'
+                        : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                    <span className="text-xl">{m.emoji}</span>
+                    <p className={`text-sm font-bold ${payMethod === m.id ? 'text-primary-700' : 'text-gray-800'}`}>{m.label}</p>
+                    <p className="text-xs text-gray-500">{m.desc}</p>
                   </button>
                 ))}
               </div>
-
-              {/* AZUL - Tarjeta de crédito/débito */}
-              {payMethod === 'azul' && (
-                <div className="space-y-4">
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
-                    <p className="font-bold mb-1">💳 Pago con tarjeta de crédito o débito</p>
-                    <p>Serás redirigido a la página segura de AZUL · Banco Popular para completar tu pago.</p>
-                    <div className="flex items-center gap-3 mt-3">
-                      <img src="/visa_blue.svg" alt="Visa" className="h-6" />
-                      <img src="/mc_symbol.png" alt="Mastercard" className="h-7" />
-                      <span className="text-xs text-blue-600 font-semibold">🔒 Ambiente de pruebas</span>
-                    </div>
-                  </div>
-                  <button type="button"
-                    onClick={handleSubmit(data => { if (!isLoggedIn) { setShowAuthModal(true); return }; pagarConAzul(data) })}
-                    disabled={azulLoading || !aceptaTerminos}
-                    className="w-full bg-blue-700 hover:bg-blue-800 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors">
-                    {azulLoading ? 'Redirigiendo a AZUL...' : <>💳 Pagar con tarjeta RD${(tot - descuento).toLocaleString()}</>}
-                  </button>
-                  {!aceptaTerminos && <p className="text-xs text-red-500 text-center">Debes aceptar los T&C para continuar</p>}
-                </div>
-              )}
-
-              {/* PayPal */}
-              {payMethod === 'paypal' && (
-                <div>
-                  <p className="text-sm text-gray-500 mb-3 text-center">
-                    Paga con tu cuenta PayPal o tarjeta de crédito/débito
-                  </p>
-                  <PayPalScriptProvider options={{ clientId: PAYPAL_ID, currency: 'USD' }}>
-                    <PayPalButtons
-                      style={{ layout: 'vertical', color: 'blue', shape: 'rect' }}
-                      createOrder={(_, actions) => actions.order.create({
-                        intent: 'CAPTURE',
-                        purchase_units: [{
-                          amount: { currency_code: 'USD', value: (tot / 58).toFixed(2) },
-                          description: 'ContactGo — Lentes de contacto'
-                        }]
-                      })}
-                      onApprove={async (_, actions) => {
-                        if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }
-                        const capture = await actions.order!.capture()
-                        await createOrder(getValues(), capture.id)
-                      }}
-                      onError={() => toast.error('Error con PayPal. Intenta de nuevo.')}
-                    />
-                  </PayPalScriptProvider>
-                </div>
-              )}
 
               {payMethod === 'contra_entrega' && (
                 <div className="space-y-4">
-                  <div className="bg-green-50 rounded-xl p-4 text-sm text-green-800">
-                    <p className="font-semibold mb-1">💵 Pagas en efectivo al recibir tu pedido</p>
-                    <p>Ten el monto exacto listo: <strong>RD${tot.toLocaleString()}</strong></p>
+                  <div className="bg-green-50 border border-green-100 rounded-2xl p-4">
+                    <p className="text-sm font-bold text-green-800 mb-1">💵 Pago en efectivo al recibir</p>
+                    <p className="text-xs text-green-700 mb-3">Ten el monto exacto listo. El mensajero no tiene cambio.</p>
+                    <div className="flex items-center justify-between bg-white rounded-xl px-4 py-2.5">
+                      <span className="text-sm text-gray-600">Total a pagar</span>
+                      <span className="font-black text-gray-900 text-lg">RD${(tot - descuento).toLocaleString()}</span>
+                    </div>
                   </div>
                   <button type="submit" disabled={loading}
-                    className="w-full btn-primary flex items-center justify-center gap-2 py-3.5">
-                    {loading ? 'Procesando...' : <>Confirmar pedido <ChevronRight className="w-4 h-4" /></>}
+                    className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors disabled:opacity-60 text-base">
+                    {loading ? 'Procesando...' : <><span>Confirmar pedido</span><ChevronRight className="w-5 h-5" /></>}
                   </button>
                 </div>
               )}
-            </div>
-          </div>
 
-          {/* RIGHT - Resumen */}
-          <div className="lg:col-span-2">
-            <div className="card p-5 sticky top-20">
-              <h3 className="font-semibold text-gray-900 mb-4">Resumen</h3>
-              <div className="space-y-3 mb-4">
-                {items.map((item, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm border-b border-gray-50 pb-3 last:border-0 last:pb-0">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-gray-800 font-medium leading-snug">{item.product.nombre}</p>
-                      {item.sph !== undefined && item.sph !== null && <p className="text-xs text-gray-400">Grad: {item.sph > 0 ? '+' : ''}{item.sph}</p>}
-                      <p className="text-primary-600 font-bold mt-0.5">RD${(item.product.precio * item.cantidad).toLocaleString()}</p>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <button type="button" onClick={() => updateItem(i, Math.max(1, item.cantidad - 1))}
-                        className="w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg font-bold transition-colors">-</button>
-                      <span className="w-6 text-center font-semibold">{item.cantidad}</span>
-                      <button type="button" onClick={() => updateItem(i, Math.min(item.product.stock, item.cantidad + 1))}
-                        className="w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg font-bold transition-colors">+</button>
-                      <button type="button" onClick={() => removeByIndex(i)}
-                        className="w-7 h-7 flex items-center justify-center bg-red-50 hover:bg-red-100 rounded-lg text-red-400 transition-colors ml-1 font-bold">x</button>
-                    </div>
+              {payMethod === 'paypal' && (
+                <div className="space-y-3">
+                  <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 text-center">
+                    <p className="text-sm font-bold text-blue-800 mb-1">🔵 PayPal</p>
+                    <p className="text-xs text-blue-700">Paga con tu cuenta PayPal o con tarjeta internacional.</p>
+                    <p className="text-xs text-blue-600 mt-2 font-semibold">
+                      USD${((tot - descuento) / 58).toFixed(2)} ≈ RD${(tot - descuento).toLocaleString()}
+                    </p>
                   </div>
-                ))}
-              </div>
-              {/* Cupón */}
-              <div className="border border-dashed border-primary-200 rounded-xl p-3 mb-3">
-                <p className="text-xs font-semibold text-gray-600 mb-2">¿Tienes un cupón?</p>
-                <div className="flex gap-2">
-                  <input
-                    value={cupon}
-                    onChange={e => setCupon(e.target.value.toUpperCase())}
-                    placeholder="BIENVENIDO10"
-                    disabled={cuponAplicado}
-                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:bg-gray-50 disabled:text-gray-400"
-                  />
-                  <button
-                    onClick={aplicarCupon}
-                    disabled={cuponAplicado || !cupon}
-                    className="px-3 py-2 bg-primary-600 text-white text-xs font-semibold rounded-xl hover:bg-primary-700 disabled:opacity-50 transition-colors"
-                  >
-                    {cuponAplicado ? '✓' : 'Aplicar'}
-                  </button>
+                  {aceptaTerminos && disclaimerAceptado ? (
+                    <PayPalScriptProvider options={{ clientId: PAYPAL_ID, currency: 'USD' }}>
+                      <PayPalButtons
+                        style={{ layout: 'vertical', color: 'blue', shape: 'pill', height: 48 }}
+                        createOrder={(_, actions) => actions.order.create({
+                          intent: 'CAPTURE',
+                          purchase_units: [{
+                            amount: { currency_code: 'USD', value: ((tot - descuento) / 58).toFixed(2) },
+                            description: 'ContactGo — Lentes de contacto RD'
+                          }]
+                        })}
+                        onApprove={async (_, actions) => {
+                          const capture = await actions.order!.capture()
+                          await createOrder(getValues(), capture.id)
+                        }}
+                        onError={() => toast.error('Error con PayPal. Intenta de nuevo o usa contra entrega.')}
+                      />
+                    </PayPalScriptProvider>
+                  ) : (
+                    <p className="text-xs text-red-500 text-center py-2">Acepta los términos y el aviso médico para continuar</p>
+                  )}
                 </div>
-                {cuponAplicado && (
-                  <p className="text-xs text-primary-600 font-semibold mt-1.5">
-                    ✓ Descuento aplicado: -RD${descuento.toLocaleString()}
-                  </p>
-                )}
-              </div>
-              {/* Sellos de seguridad */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                {SEGURIDAD.map(s => (
-                  <div key={s.text} className="flex items-center gap-1.5 bg-gray-50 rounded-xl px-3 py-2">
-                    <span className="text-sm">{s.icon}</span>
-                    <span className="text-xs font-medium text-gray-600">{s.text}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
-                <div className="flex justify-between text-gray-500">
-                  <span>Subtotal (sin ITBIS)</span>
-                  <span>RD${Math.round(sub / 1.18).toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between text-gray-500">
-                  <span>ITBIS (18%)</span>
-                  <span>RD${Math.round(sub - sub / 1.18).toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between text-gray-500">
-                  <span>Envío</span><span>RD$200</span>
-                </div>
-                {descuento > 0 && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Descuento</span><span>-RD${descuento.toLocaleString()}</span>
-                  </div>
-                )}
-                <div className="flex justify-between font-bold text-base text-gray-900 border-t border-gray-100 pt-2 mt-1">
-                  <span className="font-bold">Total</span>
-                  <span className="font-bold">RD${(tot - descuento).toLocaleString()}</span>
-                </div>
-                <p className="text-xs text-gray-400 text-center">ITBIS incluido en el precio de venta</p>
-              </div>
-              {/* Logos tarjetas AZUL - SVG inline */}
-              <div className="flex items-center justify-center gap-4 mt-3 mb-2">
-                <img src="/visa_blue.svg" alt="Visa" className="h-6" />
-                <img src="/mc_symbol.png" alt="Mastercard" className="h-7" />
-              </div>
-              {/* Checkbox T&C - Requisito AZUL */}
-              <label className="flex items-start gap-2 cursor-pointer mt-2 mb-1">
-                <input type="checkbox" checked={aceptaTerminos} onChange={e => setAceptaTerminos(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 shrink-0 accent-green-600" />
-                <span className="text-xs text-gray-500 leading-snug">
-                  He leído y acepto los{' '}
-                  <a href="/terminos" target="_blank" className="text-primary-600 underline font-semibold">Términos y Condiciones</a>
-                  {' '}y la{' '}
-                  <a href="/privacidad" target="_blank" className="text-primary-600 underline font-semibold">Política de Privacidad</a>
-                  {' '}de ContactGo *
-                </span>
-              </label>
-              <p className="text-xs text-gray-400 text-center mt-4">
-                🔒 Pago seguro · Entrega en 24–48h
-              </p>
+              )}
             </div>
+
           </div>
         </form>
       </main>
-      <Footer />
     </>
   )
 }
