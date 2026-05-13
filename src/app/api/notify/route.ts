@@ -13,8 +13,11 @@ const sb = createClient(
 )
 
 const BASE_URL    = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'info@contactgo.net'
-const FROM_EMAIL  = process.env.RESEND_FROM ?? 'ContactGo <pedidos@contactgo.net>'
+// Admin recibe notificaciones en este email
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'maparedes0113@gmail.com'
+// FROM: si RESEND_FROM está configurado con dominio verificado, úsalo.
+// Si no, usa onboarding@resend.dev (funciona sin verificar dominio propio)
+const FROM_EMAIL  = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
 
 const ESTADO_LABEL: Record<string, string> = {
   pendiente:  '⏳ Recibido',
@@ -197,7 +200,7 @@ export async function POST(req: NextRequest) {
     // Email al admin (siempre)
     await resend.emails.send({
       from: FROM_EMAIL,
-      to: ADMIN_EMAIL,
+      to: [ADMIN_EMAIL, 'maparedes0113@gmail.com'].filter((v,i,a)=>a.indexOf(v)===i),
       subject: evento === 'nuevo_pedido'
         ? `🛍️ Nuevo pedido #${pedidoId} — RD$${order.total?.toLocaleString()}`
         : `📋 Pedido #${pedidoId} → ${estadoLabel}`,
