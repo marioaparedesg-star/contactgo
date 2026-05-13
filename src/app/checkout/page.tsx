@@ -9,6 +9,7 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import { useCartStore } from '@/lib/cart-store'
 import { createClient } from '@/lib/supabase'
+import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
 import toast from 'react-hot-toast'
 import { CreditCard, Building2, Package, ChevronRight, Copy, CheckCircle } from 'lucide-react'
 
@@ -45,6 +46,9 @@ export default function CheckoutPage() {
   const [descuento, setDescuento] = useState(0)
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
+  const [showDisclaimer, setShowDisclaimer] = useState(false)
+  const [disclaimerAceptado, setDisclaimerAceptado] = useState(false)
+  const [disclaimerId, setDisclaimerId] = useState<string | null>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [authMode, setAuthMode] = useState<'login' | 'register'>('register')
   const [authEmail, setAuthEmail] = useState('')
@@ -127,6 +131,34 @@ export default function CheckoutPage() {
     })
   }, [items, router])
 
+  const saveDisclaimer = async (dData: DisclaimerData, userId?: string): Promise<string | null> => {
+    try {
+      const res = await fetch('/api/disclaimer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: userId || null,
+          version: dData.version,
+          tipo: 'compra',
+          user_agent: dData.user_agent,
+          items_snapshot: dData.items_snapshot,
+          accepted_at: dData.accepted_at,
+        }),
+      })
+      const result = await res.json()
+      return result.disclaimer_id ?? null
+    } catch { return null }
+  }
+
+  const handleDisclaimerAceptado = async (dData: DisclaimerData) => {
+    const sb = createClient()
+    const { data: { user } } = await sb.auth.getUser()
+    const id = await saveDisclaimer(dData, user?.id)
+    if (id) setDisclaimerId(id)
+    setDisclaimerAceptado(true)
+    setShowDisclaimer(false)
+  }
+
   const createOrder = async (data: FormData, payRef?: string) => {
     setLoading(true)
     const sb = createClient()
@@ -145,6 +177,8 @@ export default function CheckoutPage() {
       metodo_pago: payMethod,
       pago_estado: payMethod === 'paypal' ? 'verificado' : 'pendiente',
       pago_referencia: payRef ?? null,
+      disclaimer_acceptance_id: disclaimerId || null,
+      disclaimer_version: DISCLAIMER_VERSION,
     }).select().single()
 
     if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
@@ -415,6 +449,16 @@ export default function CheckoutPage() {
   return (
     <>
       <Navbar />
+      {/* ── Modal Disclaimer Médico ── */}
+      {showDisclaimer && (
+        <DisclaimerMedico
+          showModal={true}
+          items={items}
+          onAceptar={handleDisclaimerAceptado}
+          onCancelar={() => setShowDisclaimer(false)}
+        />
+      )}
+
       {/* ── Modal Registro/Login obligatorio ── */}
       {showAuthModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4">
@@ -456,7 +500,7 @@ export default function CheckoutPage() {
       <main className="pb-20 max-w-5xl mx-auto px-4 py-8">
         <h1 className="font-display text-2xl font-bold text-gray-900 mb-8">Finalizar pedido</h1>
 
-        <form onSubmit={handleSubmit(data => { if (!isLoggedIn) { setShowAuthModal(true); return }; if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }; if (payMethod !== 'paypal') createOrder(data) })}
+        <form onSubmit={handleSubmit(data => { if (!isLoggedIn) { setShowAuthModal(true); return }; if (!disclaimerAceptado) { setShowDisclaimer(true); return }; if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }; if (payMethod !== 'paypal') createOrder(data) })}
           className="grid lg:grid-cols-5 gap-8">
 
           {/* LEFT - Formulario */}

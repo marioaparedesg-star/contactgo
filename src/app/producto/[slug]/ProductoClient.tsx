@@ -233,6 +233,14 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               </div>
             )}
+            {isLente && (
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex items-start gap-2">
+                <span className="text-blue-500 shrink-0 mt-0.5">⚕️</span>
+                <p className="text-xs text-blue-700 leading-snug">
+                  <strong>Dispositivo médico.</strong> Requiere prescripción óptica vigente. Al comprar confirmas que cuentas con una receta actualizada y aceptarás las condiciones de uso seguro.
+                </p>
+              </div>
+            )}
             <div className="flex flex-wrap gap-2">
               <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-2.5 py-1.5 rounded-full font-semibold">✅ 100% Original</span>
               <span className="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1.5 rounded-full font-semibold">🚀 Entrega 24-72h</span>
