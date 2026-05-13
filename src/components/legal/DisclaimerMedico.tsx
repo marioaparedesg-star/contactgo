@@ -1,8 +1,7 @@
 'use client'
 import { useState } from 'react'
-import { AlertTriangle, CheckCircle, Shield, Eye, X } from 'lucide-react'
+import { Shield, ChevronDown, X } from 'lucide-react'
 
-// Versión del disclaimer — incrementar cuando cambie el texto
 export const DISCLAIMER_VERSION = '1.0'
 
 interface Props {
@@ -20,21 +19,11 @@ export interface DisclaimerData {
 }
 
 export default function DisclaimerMedico({ onAceptar, onCancelar, items = [], showModal = true }: Props) {
-  const [checks, setChecks] = useState({
-    receta:      false,
-    responsabilidad: false,
-    uso_seguro:  false,
-    optometrista: false,
-  })
-  const [showCompleto, setShowCompleto] = useState(false)
-
-  const allChecked = Object.values(checks).every(Boolean)
-
-  const toggle = (k: keyof typeof checks) =>
-    setChecks(prev => ({ ...prev, [k]: !prev[k] }))
+  const [aceptado, setAceptado] = useState(false)
+  const [showMore, setShowMore] = useState(false)
 
   const handleAceptar = () => {
-    if (!allChecked) return
+    if (!aceptado) return
     onAceptar({
       version: DISCLAIMER_VERSION,
       accepted_at: new Date().toISOString(),
@@ -47,17 +36,14 @@ export default function DisclaimerMedico({ onAceptar, onCancelar, items = [], sh
 
   return (
     <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 sm:p-4">
-      <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl max-h-[92vh] flex flex-col">
+      <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl">
 
         {/* Header */}
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3 shrink-0">
-          <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center shrink-0">
-            <Shield className="w-5 h-5 text-amber-600" />
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+          <div className="w-9 h-9 bg-amber-100 rounded-xl flex items-center justify-center shrink-0">
+            <Shield className="w-4 h-4 text-amber-600" />
           </div>
-          <div>
-            <p className="font-black text-gray-900 text-sm">Aviso médico y legal</p>
-            <p className="text-xs text-gray-400">Debes leer y aceptar antes de continuar</p>
-          </div>
+          <p className="font-black text-gray-900 text-sm">Aviso médico</p>
           {onCancelar && (
             <button onClick={onCancelar} className="ml-auto p-1.5 hover:bg-gray-100 rounded-xl">
               <X className="w-4 h-4 text-gray-400" />
@@ -66,113 +52,60 @@ export default function DisclaimerMedico({ onAceptar, onCancelar, items = [], sh
         </div>
 
         {/* Contenido */}
-        <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4">
+        <div className="px-5 py-4 space-y-4">
+          <p className="text-sm text-gray-700 leading-relaxed">
+            Los lentes de contacto son <strong>dispositivos médicos</strong> que requieren prescripción óptica vigente. Su uso incorrecto puede causar infecciones o pérdida de visión. ContactGo no asume responsabilidad por uso inadecuado.
+          </p>
 
-          {/* Aviso principal */}
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2.5">
-            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-amber-800 font-bold text-sm">Los lentes de contacto son dispositivos médicos</p>
-              <p className="text-amber-700 text-xs mt-1 leading-relaxed">
-                Su uso incorrecto puede causar infecciones, úlceras corneales y pérdida de visión. 
-                Requieren prescripción de un profesional de la salud visual.
-              </p>
-            </div>
-          </div>
-
-          {/* Ver texto completo */}
-          <button onClick={() => setShowCompleto(!showCompleto)}
-            className="text-xs text-primary-600 font-semibold underline">
-            {showCompleto ? 'Ocultar texto completo' : 'Ver texto completo del aviso legal'}
+          {/* Ver más */}
+          <button onClick={() => setShowMore(!showMore)}
+            className="flex items-center gap-1 text-xs text-primary-600 font-semibold">
+            {showMore ? 'Ver menos' : 'Ver aviso legal completo'}
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showMore ? 'rotate-180' : ''}`} />
           </button>
 
-          {showCompleto && (
-            <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-600 leading-relaxed space-y-2 max-h-48 overflow-y-auto border border-gray-200">
-              <p className="font-bold text-gray-800">AVISO MÉDICO Y LEGAL — VERSIÓN {DISCLAIMER_VERSION}</p>
-              <p><strong>1. Dispositivos médicos.</strong> Los lentes de contacto son dispositivos médicos regulados. Su adquisición y uso requieren una prescripción vigente emitida por un optometrista u oftalmólogo licenciado.</p>
-              <p><strong>2. Responsabilidad del usuario.</strong> ContactGo no es responsable de daños oculares, infecciones, irritaciones o cualquier complicación derivada del uso incorrecto de los lentes, incluyendo: uso más allá del período recomendado, no seguir las instrucciones de higiene, dormir con lentes no aptos, o comprar una graduación incorrecta.</p>
-              <p><strong>3. Uso seguro obligatorio.</strong> El usuario declara conocer y comprometerse a seguir las instrucciones de uso seguro: lavarse las manos antes de manipular los lentes, usar solución limpiadora adecuada, no usar lentes en presencia de infección ocular, y reemplazar los lentes según el calendario indicado.</p>
-              <p><strong>4. Validez de la receta.</strong> El usuario declara que posee una receta óptica vigente (no mayor a 12 meses) que indica la graduación exacta solicitada. ContactGo recomienda renovar la prescripción anualmente.</p>
-              <p><strong>5. Consulta profesional.</strong> Ante cualquier síntoma de malestar ocular (enrojecimiento, dolor, visión borrosa, secreción), el usuario debe retirar inmediatamente los lentes y consultar a un profesional de salud visual.</p>
-              <p><strong>6. Mayores de edad.</strong> Los lentes de contacto son para usuarios mayores de 12 años. Menores deben contar con supervisión de un adulto responsable y prescripción pediátrica específica.</p>
-              <p className="text-gray-400 text-[10px] mt-2">ContactGo · contactgo.net · República Dominicana · v{DISCLAIMER_VERSION} · {new Date().getFullYear()}</p>
+          {showMore && (
+            <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500 leading-relaxed space-y-2 border border-gray-100">
+              <p>Al comprar confirmas que: (1) posees una receta óptica vigente ≤12 meses con la graduación exacta que solicitas, (2) usarás los lentes según las instrucciones del fabricante, (3) te comprometes a la higiene adecuada y a respetar el período de uso, (4) ante cualquier malestar ocular retirarás los lentes y consultarás a un profesional.</p>
+              <p className="text-gray-400">ContactGo · v{DISCLAIMER_VERSION} · {new Date().getFullYear()}</p>
             </div>
           )}
 
-          {/* Checkboxes obligatorios */}
-          <div className="space-y-3">
-            {[
-              {
-                key: 'receta' as const,
-                icon: '📋',
-                titulo: 'Tengo una receta óptica vigente',
-                desc: 'Confirmo que poseo una prescripción de un optometrista u oftalmólogo con la graduación que estoy comprando, emitida en los últimos 12 meses.',
-              },
-              {
-                key: 'responsabilidad' as const,
-                icon: '⚖️',
-                titulo: 'Acepto los términos de responsabilidad',
-                desc: 'Entiendo que ContactGo no es responsable de complicaciones por uso incorrecto. Asumo la responsabilidad de usar los lentes según las indicaciones del fabricante y mi profesional de salud.',
-              },
-              {
-                key: 'uso_seguro' as const,
-                icon: '🛡️',
-                titulo: 'Me comprometo a un uso seguro',
-                desc: 'Me comprometo a: lavar mis manos antes de manipular los lentes, respetar el período de uso indicado, nunca dormir con lentes no aptos para uso nocturno, y usar solución limpiadora apropiada.',
-              },
-              {
-                key: 'optometrista' as const,
-                icon: '👁️',
-                titulo: 'Entiendo la recomendación de consulta profesional',
-                desc: 'Ante cualquier síntoma de irritación, enrojecimiento o malestar ocular, retiraré los lentes inmediatamente y consultaré a un profesional de la salud visual.',
-              },
-            ].map(item => (
-              <label key={item.key}
-                className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                  checks[item.key]
-                    ? 'bg-green-50 border-green-200'
-                    : 'bg-white border-gray-200 hover:border-gray-300'
-                }`}>
-                <div className="relative mt-0.5 shrink-0">
-                  <input type="checkbox" checked={checks[item.key]}
-                    onChange={() => toggle(item.key)}
-                    className="sr-only" />
-                  <div className={`w-5 h-5 rounded flex items-center justify-center transition-all ${
-                    checks[item.key] ? 'bg-green-500' : 'border-2 border-gray-300 bg-white'
-                  }`}>
-                    {checks[item.key] && <CheckCircle className="w-4 h-4 text-white fill-current" />}
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-gray-900">{item.icon} {item.titulo}</p>
-                  <p className="text-xs text-gray-500 mt-0.5 leading-snug">{item.desc}</p>
-                </div>
-              </label>
-            ))}
-          </div>
-
-          {/* Disclaimer de timestamp */}
-          <p className="text-[10px] text-gray-400 text-center leading-relaxed">
-            Al hacer clic en "Acepto y continúo", tu aceptación quedará registrada con fecha, hora y dispositivo.
-            Esta aceptación tiene validez legal bajo los términos de uso de ContactGo.
-          </p>
+          {/* Checkbox único */}
+          <label className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+            aceptado ? 'bg-green-50 border-green-300' : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+          }`}>
+            <div className={`w-5 h-5 rounded shrink-0 mt-0.5 flex items-center justify-center border-2 transition-all ${
+              aceptado ? 'bg-green-500 border-green-500' : 'border-gray-300 bg-white'
+            }`}>
+              {aceptado && (
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+            </div>
+            <input type="checkbox" checked={aceptado} onChange={e => setAceptado(e.target.checked)} className="sr-only" />
+            <p className="text-sm text-gray-800 font-medium leading-snug">
+              Entiendo y acepto las condiciones de uso de lentes de contacto
+            </p>
+          </label>
         </div>
 
         {/* Botones */}
-        <div className="px-5 pb-5 pt-3 border-t border-gray-100 flex gap-3 shrink-0">
+        <div className="px-5 pb-5 flex gap-3">
           {onCancelar && (
             <button onClick={onCancelar}
               className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl text-sm transition-colors">
               Cancelar
             </button>
           )}
-          <button onClick={handleAceptar} disabled={!allChecked}
+          <button onClick={handleAceptar} disabled={!aceptado}
             className={`flex-1 font-bold py-3.5 rounded-xl text-sm transition-all ${
-              allChecked
-                ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-200'
+              aceptado
+                ? 'bg-primary-600 hover:bg-primary-700 text-white'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}>
-            {allChecked ? '✅ Acepto y continúo' : `Acepta los ${Object.values(checks).filter(v=>!v).length} puntos restantes`}
+            Acepto y continúo
           </button>
         </div>
       </div>
