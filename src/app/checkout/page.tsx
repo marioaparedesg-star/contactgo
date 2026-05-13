@@ -462,9 +462,17 @@ export default function CheckoutPage() {
                     </p>
                   </div>
                   {aceptaTerminos && disclaimerAceptado ? (
-                    <PayPalScriptProvider options={{ clientId: PAYPAL_ID, currency: 'USD' }}>
+                    <PayPalScriptProvider options={{
+                      clientId: PAYPAL_ID,
+                      currency: 'USD',
+                      intent: 'capture',
+                      components: 'buttons',
+                      enableFunding: 'card,credit,paylater',
+                      disableFunding: 'venmo',
+                    }}>
                       <PayPalButtons
-                        style={{ layout: 'vertical', color: 'blue', shape: 'pill', height: 48 }}
+                        style={{ layout: 'vertical', color: 'blue', shape: 'pill', height: 48, label: 'pay' }}
+                        fundingSource={undefined}
                         createOrder={(_, actions) => actions.order.create({
                           intent: 'CAPTURE',
                           purchase_units: [{
