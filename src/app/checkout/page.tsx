@@ -487,6 +487,90 @@ export default function CheckoutPage() {
             </div>
 
           </div>
+
+          {/* RIGHT — Resumen del pedido */}
+          <div className="lg:col-span-2 space-y-4">
+
+            {/* Productos */}
+            <div className="card p-5">
+              <h2 className="font-semibold text-gray-900 mb-4">Tu pedido</h2>
+              <div className="space-y-3">
+                {items.map((item, idx) => (
+                  <div key={idx} className="flex gap-3 items-start pb-3 border-b border-gray-50 last:border-0 last:pb-0">
+                    {item.product.imagen_url && (
+                      <img src={item.product.imagen_url} alt={item.product.nombre}
+                        className="w-12 h-12 object-contain rounded-xl bg-gray-50 border border-gray-100 shrink-0" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 leading-tight">{item.product.nombre}</p>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {(item as any).ojo && <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{(item as any).ojo}</span>}
+                        {item.sph != null && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-mono">SPH {Number(item.sph) > 0 ? '+' : ''}{item.sph}</span>}
+                        {(item as any).cyl != null && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-mono">CYL {(item as any).cyl}</span>}
+                        {(item as any).color && <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded">{(item as any).color}</span>}
+                      </div>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-xs text-gray-400">×{item.cantidad}</span>
+                        <span className="text-sm font-bold text-gray-900">
+                          RD${(Number((item as any).precio_final ?? item.product.precio) * item.cantidad).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Cupón */}
+            <div className="card p-4">
+              <div className="flex gap-2">
+                <input placeholder="Código de cupón" id="coupon-input"
+                  className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                <button type="button" onClick={() => {
+                  const v = (document.getElementById('coupon-input') as HTMLInputElement)?.value
+                  if (v) aplicarCupon(v)
+                }} className="bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors">
+                  Aplicar
+                </button>
+              </div>
+            </div>
+
+            {/* Totales */}
+            <div className="card p-5 space-y-2.5">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>Subtotal</span><span>RD${sub.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>Envío</span>
+                <span className={sub >= 8000 ? 'text-green-600 font-semibold' : ''}>
+                  {sub >= 8000 ? '🎁 Gratis' : 'RD$200'}
+                </span>
+              </div>
+              {descuento > 0 && (
+                <div className="flex justify-between text-sm text-green-600 font-semibold">
+                  <span>Descuento cupón</span><span>-RD${descuento.toLocaleString()}</span>
+                </div>
+              )}
+              <div className="border-t border-gray-100 pt-3 flex justify-between font-black text-gray-900">
+                <span>Total</span>
+                <span className="text-xl text-primary-600">RD${(tot - descuento).toLocaleString()}</span>
+              </div>
+            </div>
+
+            {/* T&C */}
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" checked={aceptaTerminos} onChange={e => setAceptaTerminos(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-primary-600 shrink-0" />
+              <span className="text-xs text-gray-500 leading-relaxed">
+                Acepto los{' '}
+                <a href="/terminos" target="_blank" className="text-primary-600 underline font-medium">Términos y Condiciones</a>
+                {' '}y la{' '}
+                <a href="/privacidad" target="_blank" className="text-primary-600 underline font-medium">Política de Privacidad</a>
+              </span>
+            </label>
+
+          </div>
+
         </form>
       </main>
     </>
