@@ -232,20 +232,39 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {isLente && !isColor && <EyeSelector eye={eye} onChange={setEye} />}
 
-            {isLente && (
-              <SelectField label="Graduación (SPH)" value={sph} options={ALL_SPH} required
-                onChange={setSph} format={v => Number(v) > 0 ? `+${v}` : String(v)} />
-            )}
+            {isLente && (() => {
+              const sphOpts = product.sph_disponibles?.length
+                ? [...product.sph_disponibles].sort((a,b) => Number(a)-Number(b))
+                : ALL_SPH
+              return (
+                <SelectField label="Graduación (SPH)" value={sph} options={sphOpts} required
+                  onChange={setSph} format={v => Number(v) > 0 ? `+${Number(v).toFixed(2)}` : Number(v) === 0 ? 'Plano' : Number(v).toFixed(2)} />
+              )
+            })()}
 
-            {isToric && (<>
-              <SelectField label="Cilindro (CYL)" value={cyl} options={ALL_CYL} required onChange={setCyl} />
-              <SelectField label="Eje (AXIS)" value={axis} options={ALL_AXIS} required onChange={setAxis}
-                format={v => String(v).padStart(3,'0') + '°'} />
-            </>)}
+            {isToric && (() => {
+              const cylOpts = product.cyl_disponibles?.length
+                ? [...product.cyl_disponibles].sort((a,b) => Number(a)-Number(b))
+                : ALL_CYL
+              const axisOpts = product.axis_disponibles?.length
+                ? [...product.axis_disponibles].sort((a,b) => Number(a)-Number(b))
+                : ALL_AXIS
+              return (<>
+                <SelectField label="Cilindro (CYL)" value={cyl} options={cylOpts} required onChange={setCyl}
+                  format={v => Number(v).toFixed(2)} />
+                <SelectField label="Eje (AXIS)" value={axis} options={axisOpts} required onChange={setAxis}
+                  format={v => String(v).padStart(3,'0') + '°'} />
+              </>)
+            })()}
 
-            {isMulti && (
-              <SelectField label="Adición (ADD)" value={add} options={ALL_ADD} required onChange={setAdd} />
-            )}
+            {isMulti && (() => {
+              const addOpts = product.add_disponibles?.length
+                ? product.add_disponibles
+                : ALL_ADD
+              return (
+                <SelectField label="Adición (ADD)" value={add} options={addOpts} required onChange={setAdd} />
+              )
+            })()}
 
             {isColor && colors.length > 0 && (
               <div>
