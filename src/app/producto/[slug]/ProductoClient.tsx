@@ -17,17 +17,30 @@ const TIPO_LABELS: Record<string, string> = {
   color: 'Color', solucion: 'Solución', gota: 'Gotas',
 }
 
-const PRODUCT_COLORS: Record<string, string[]> = {
-  'AOC-6U': ['Pure Hazel','Honey','Green','Green Esmeralda','Blue','Gray','Gray Sterling','Brown','True Sapphire'],
-  'LUN-2U': ['Green','Gray','Blue Gray','Light Blue'],
-  'FLC-2U': ['Blue','Brown','Gray','Green','Honey','Pure Hazel'],
-  'CV-2U':  ['Blue'],
-}
-
 const COLOR_CSS: Record<string, string> = {
-  'Pure Hazel':'#7B4F2E','Honey':'#C8860A','Green':'#16A34A','Green Esmeralda':'#059669',
-  'Blue':'#2563EB','Gray':'#6B7280','Gray Sterling':'#9CA3AF','Brown':'#78350F',
-  'True Sapphire':'#1E3A8A','Blue Gray':'#64748B','Light Blue':'#38BDF8',
+  // Air Optix Colors — colores oficiales
+  'Brilliant Blue':  '#1D4ED8',
+  'Blue':            '#3B82F6',
+  'True Sapphire':   '#1E3A8A',
+  'Pure Hazel':      '#92400E',
+  'Honey':           '#D97706',
+  'Brown':           '#78350F',
+  'Sterling Gray':   '#9CA3AF',
+  'Gray':            '#6B7280',
+  'Gemstone Green':  '#059669',
+  'Green':           '#16A34A',
+  'Amethyst':        '#7C3AED',
+  'Turquoise':       '#0891B2',
+  // FreshLook
+  'True Blue':       '#2563EB',
+  // Lunare / Color View (español)
+  'Azul':            '#3B82F6',
+  'Miel':            '#D97706',
+  'Verde':           '#16A34A',
+  'Gris':            '#6B7280',
+  'Avellana':        '#92400E',
+  'Negro':           '#111827',
+  'Turquesa':        '#0891B2',
 }
 
 const SOLUTION_SIZES: Record<string, string[]> = {
@@ -118,7 +131,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
   const tipo       = product.tipo ?? ''
   const sku        = product.sku ?? ''
-  const colors     = PRODUCT_COLORS[sku] ?? []
+  const colors     = (product as any).colores_disponibles ?? []
   const sizes      = SOLUTION_SIZES[sku]  ?? []
 
   const isLente    = ['esferico','torico','multifocal','color'].includes(tipo)
