@@ -525,11 +525,10 @@ export default function CheckoutPage() {
             <div className="card p-4">
               <div className="flex gap-2">
                 <input placeholder="Código de cupón" id="coupon-input"
+                  value={cupon} onChange={e => setCupon(e.target.value)}
                   className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-                <button type="button" onClick={() => {
-                  const v = (document.getElementById('coupon-input') as HTMLInputElement)?.value
-                  if (v) aplicarCupon(v)
-                }} className="bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors">
+                <button type="button" onClick={aplicarCupon}
+                  className="bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors">
                   Aplicar
                 </button>
               </div>
