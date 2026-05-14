@@ -41,6 +41,7 @@ export default async function sitemap() {
     { url: 'https://contactgo.net/blog/como-poner-lentes-de-contacto',           priority: 0.70, freq: 'monthly' },
 
     // Ayuda e info
+    { url: 'https://contactgo.net/lentes-de-contacto',         priority: 0.95, freq: 'weekly' },
     { url: 'https://contactgo.net/ayuda',                      priority: 0.80, freq: 'monthly' },
     { url: 'https://contactgo.net/envios-y-entregas',          priority: 0.65, freq: 'monthly' },
     { url: 'https://contactgo.net/ayuda/envios',               priority: 0.55, freq: 'monthly' },

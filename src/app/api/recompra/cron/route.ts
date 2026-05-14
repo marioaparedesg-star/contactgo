@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
         })
         await sb.from('recompra_notifications').update({ [campo]: true }).eq('id', n.id)
         if (alerta === '7dias') {
-          await sb.from('coupons').update({ activo: true }).eq('code', n.cupon_generado)
+          await sb.from('coupons').update({ activo: true }).eq('codigo', n.cupon_generado)
         }
         enviados++
       } catch (e) { console.error('[recompra cron]', e) }

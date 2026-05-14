@@ -60,14 +60,15 @@ export async function POST(req: NextRequest) {
       await sb.from('recompra_notifications').insert(registros)
       for (const r of registros) {
         await sb.from('coupons').insert({
-          code: r.cupon_generado,
-          descripcion: `Recompra ${r.product_nombre}`,
+          codigo: r.cupon_generado,
           tipo: 'porcentaje',
           valor: r.descuento_ofrecido,
           activo: false,
+          uso_maximo: 1,
           limite_usos: 1,
-          fecha_expira: r.fecha_estimada_fin,
-          usos: 0,
+          valido_hasta: r.fecha_estimada_fin.slice(0, 10),
+          fecha_expira: r.fecha_estimada_fin.slice(0, 10),
+          usos_actuales: 0,
         })
       }
     }
