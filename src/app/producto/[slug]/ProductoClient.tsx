@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ShoppingCart, ArrowLeft, Eye, AlertCircle } from 'lucide-react'
 import Reviews from '@/components/ui/Reviews'
+import CrossSelling from '@/components/shop/CrossSelling'
+import ProductFAQ from '@/components/shop/ProductFAQ'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
@@ -412,6 +414,8 @@ export default function ProductoClient({ product, variants }: Props) {
       </main>
 
       <Reviews productId={product.id} />
+      <CrossSelling tipo={product.tipo} currentId={product.id} />
+      <ProductFAQ tipo={product.tipo} nombre={product.nombre} />
 
       {/* Sticky CTA móvil */}
       {product.stock > 0 && (
