@@ -4,14 +4,12 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
 import Navbar from '@/components/ui/Navbar'
-import Footer from '@/components/ui/Footer'
 import { useCartStore } from '@/lib/cart-store'
 import { createClient } from '@/lib/supabase'
 import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
 import toast from 'react-hot-toast'
-import { CreditCard, Building2, Package, ChevronRight, Copy, CheckCircle } from 'lucide-react'
+import { Shield, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, MapPin, User, Phone, Mail } from 'lucide-react'
 
 const schema = z.object({
   nombre:    z.string().min(3, 'Nombre requerido'),
@@ -25,20 +23,11 @@ type FormData = z.infer<typeof schema>
 const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata',
   'Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad']
 
-const SEGURIDAD = [
-  { icon: '🔒', text: 'Pago 100% seguro' },
-  { icon: '✅', text: 'Productos originales' },
-  { icon: '🚚', text: 'Envío en 24-48h' },
-  { icon: '↩️', text: 'Devolución en 7 días' },
-]
-
-const PAYPAL_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!
+const CUPONES: Record<string,number> = { 'BIENVENIDO10': 0.10, 'CONTACTGO15': 0.15 }
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
-  const [payMethod, setPayMethod] = useState<'paypal'|'contra_entrega'>('contra_entrega')
-  const [copied, setCopied] = useState(false)
+  const { items, subtotal, total, clearCart } = useCartStore()
   const [loading, setLoading] = useState(false)
   const [cupon, setCupon] = useState('')
   const [cuponAplicado, setCuponAplicado] = useState(false)
@@ -49,62 +38,23 @@ export default function CheckoutPage() {
   const [disclaimerAceptado, setDisclaimerAceptado] = useState(false)
   const [disclaimerId, setDisclaimerId] = useState<string | null>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('register')
+  const [authMode, setAuthMode] = useState<'login'|'register'>('register')
   const [authEmail, setAuthEmail] = useState('')
   const [authPass, setAuthPass] = useState('')
   const [authNombre, setAuthNombre] = useState('')
   const [authTel, setAuthTel] = useState('')
   const [authLoading, setAuthLoading] = useState(false)
   const [authMsg, setAuthMsg] = useState('')
+  const [step, setStep] = useState<1|2|3>(1)
 
-  const CUPONES: Record<string, number> = {
-    'BIENVENIDO10': 0.10,
-    'CONTACTGO15': 0.15,
-  }
+  const sub = subtotal()
+  const tot = total()
+  const envio = sub >= 8000 ? 0 : 200
+  const totalFinal = tot + envio - descuento
 
-  const aplicarCupon = () => {
-    const code = cupon.trim().toUpperCase()
-    if (CUPONES[code]) {
-      const pct = CUPONES[code]
-      setDescuento(Math.round(sub * pct))
-      setCuponAplicado(true)
-      toast.success('Cupón aplicado: ' + Math.round(pct * 100) + '% de descuento')
-    } else {
-      toast.error('Cupón inválido')
-      setCuponAplicado(false)
-      setDescuento(0)
-    }
-  }
-  const [direcciones, setDirecciones] = useState([])
-
-  const sub = subtotal(); const tot = total()
-
-  const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, getValues, setValue, trigger, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema)
   })
-
-  // Guardar carrito abandonado cuando hay telefono
-  const guardarCarritoAbandonado = (telefono: string, nombre: string, email: string) => {
-    if (!telefono || telefono.length < 10) return
-    const sb = createClient()
-    const itemsData = items.map(i => ({
-      nombre: i.product.nombre,
-      cantidad: i.cantidad,
-      precio: (i as any).precio_final ?? i.product.precio,
-      sph: i.sph,
-      color: (i as any).color,
-      ojo: (i as any).ojo,
-    }))
-    try {
-      sb.from('abandoned_carts').insert({
-        cliente_nombre: nombre,
-        cliente_telefono: telefono,
-        cliente_email: email,
-        items: JSON.stringify(itemsData),
-        total: subtotal(),
-      })
-    } catch (_e) {}
-  }
 
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
@@ -112,40 +62,34 @@ export default function CheckoutPage() {
     sb.auth.getUser().then(({ data: { user } }) => {
       setIsLoggedIn(!!user)
       if (user) {
-        sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: perfil }) => {
-          if (perfil) {
-            if (perfil.nombre) setValue('nombre', perfil.nombre)
-            if (perfil.email) setValue('email', perfil.email)
-            if (perfil.telefono) setValue('telefono', perfil.telefono)
-          }
+        sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
+          if (p?.nombre) setValue('nombre', p.nombre)
+          if (p?.email) setValue('email', p.email)
+          if (p?.telefono) setValue('telefono', p.telefono)
         })
-        sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: addrs }) => {
-          if (addrs && addrs.length > 0) {
-            setDirecciones(addrs)
-            setValue('direccion', addrs[0].direccion)
-            if (addrs[0].ciudad) setValue('ciudad', addrs[0].ciudad)
-          }
+        sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: a }) => {
+          if (a?.[0]) { setValue('direccion', a[0].direccion); if (a[0].ciudad) setValue('ciudad', a[0].ciudad) }
         })
       }
     })
   }, [items, router])
 
-  const saveDisclaimer = async (dData: DisclaimerData, userId?: string): Promise<string | null> => {
+  const aplicarCupon = () => {
+    const code = cupon.trim().toUpperCase()
+    if (CUPONES[code]) {
+      setDescuento(Math.round(sub * CUPONES[code]))
+      setCuponAplicado(true)
+      toast.success('Cupón aplicado: ' + Math.round(CUPONES[code]*100) + '% off')
+    } else { toast.error('Cupón inválido') }
+  }
+
+  const saveDisclaimer = async (dData: DisclaimerData, userId?: string) => {
     try {
-      const res = await fetch('/api/disclaimer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: userId || null,
-          version: dData.version,
-          tipo: 'compra',
-          user_agent: dData.user_agent,
-          items_snapshot: dData.items_snapshot,
-          accepted_at: dData.accepted_at,
-        }),
-      })
-      const result = await res.json()
-      return result.disclaimer_id ?? null
+      const r = await fetch('/api/disclaimer', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ user_id: userId||null, version: dData.version, tipo:'compra',
+          user_agent: dData.user_agent, items_snapshot: dData.items_snapshot, accepted_at: dData.accepted_at }) })
+      const res = await r.json()
+      return res.disclaimer_id ?? null
     } catch { return null }
   }
 
@@ -156,121 +100,35 @@ export default function CheckoutPage() {
     if (id) setDisclaimerId(id)
     setDisclaimerAceptado(true)
     setShowDisclaimer(false)
+    setStep(3)
   }
 
-  const createOrder = async (data: FormData, payRef?: string) => {
+  const createOrder = async (data: FormData) => {
     setLoading(true)
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
-
     const { data: order, error } = await sb.from('orders').insert({
       user_id: user?.id ?? null,
-      cliente_nombre: data.nombre,
-      cliente_email: data.email,
-      cliente_telefono: data.telefono,
+      cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
       direccion_texto: `${data.direccion}, ${data.ciudad}`,
-      estado: 'pendiente',
-      subtotal: sub,
-      envio: 200,
-      total: tot - descuento,
-      metodo_pago: payMethod,
-      pago_estado: payMethod === 'paypal' ? 'verificado' : 'pendiente',
-      pago_referencia: payRef ?? null,
-      disclaimer_acceptance_id: disclaimerId || null,
-      disclaimer_version: DISCLAIMER_VERSION,
+      estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
+      metodo_pago: 'contra_entrega', pago_estado: 'pendiente',
+      disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
     }).select().single()
-
     if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
-
-    // Insertar items directo en Supabase (RLS abierta)
-    const itemsPayload = items.map(i => ({
-      order_id:   order.id,
-      product_id: i.product.id,
-      nombre:     i.product.nombre,
-      precio:     Number((i as any).precio_final ?? i.product.precio),
-      cantidad:   i.cantidad,
-      sph:        i.sph != null ? Number(i.sph) : null,
-      cyl:        i.cyl != null ? Number(i.cyl) : null,
-      add_power:  i.add_power ? parseFloat(String(i.add_power).replace('+','')) : null,
-      axis:       (i as any).axis != null ? Number((i as any).axis) : null,
-      color:      (i as any).color ?? null,
-      ojo:        (i as any).ojo ?? null,
-      size:       (i as any).size ?? null,
-      // subtotal es GENERATED (precio*cantidad) — Postgres lo calcula solo
-    }))
-
-    // Insertar via API route (service_role) para garantizar que no falle por RLS
-    const itemsRes = await fetch('/api/orders/items', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        order_id: order.id,
-        items: itemsPayload.map(i => ({ ...i, product_id: i.product_id }))
-      })
-    })
-    if (!itemsRes.ok) {
-      const err = await itemsRes.json()
-      console.error('Error insertando order_items:', err)
-      toast.error('Error guardando productos del pedido: ' + (err.error ?? 'desconocido'))
-    } else {
-      console.log('order_items insertados:', itemsPayload.length)
-    }
-
-    // Crear suscripciones si aplica
-    const itemsConSub = items.filter(i => (i as any).suscripcion)
-    if (itemsConSub.length > 0) {
-      for (const item of itemsConSub) {
-        const frec = (item as any).suscripcion as string
-        const dias = frec === '15_dias' ? 15 : frec === 'mensual' ? 30 : 90
-        const proximo = new Date()
-        proximo.setDate(proximo.getDate() + dias)
-        await sb.from('subscriptions').insert({
-          user_id: user?.id ?? null,
-          cliente_nombre: getValues('nombre'),
-          cliente_email:  getValues('email'),
-          cliente_telefono: getValues('telefono'),
-          direccion_texto: `${getValues('direccion')}, ${getValues('ciudad')}`,
-          items: JSON.stringify([{
-            product_id: item.product.id,
-            nombre: item.product.nombre,
-            cantidad: item.cantidad,
-            sph: item.sph,
-            cyl: item.cyl,
-            axis: (item as any).axis,
-            add_power: item.add_power,
-            color: (item as any).color,
-            ojo: (item as any).ojo,
-            size: (item as any).size,
-            precio: (item as any).precio_final ?? item.product.precio,
-          }]),
-          frecuencia: frec,
-          descuento_pct: frec === '15_dias' ? 5 : frec === 'mensual' ? 10 : 15,
-          proximo_envio: proximo.toISOString().split('T')[0],
-          activa: true,
-        })
-      }
-    }
-
-    // Recordatorio: 25 días si son lentes mensuales
-    if (user?.id) {
-      const hasMonthly = items.some(i => ['esferico','torico','multifocal','color'].includes(i.product.tipo ?? ''))
-      if (hasMonthly) {
-        const fecha = new Date(); fecha.setDate(fecha.getDate() + 25)
-        await sb.from('reminders').insert({
-          user_id: user.id, order_id: order.id,
-          tipo: 'recompra',
-          fecha_recordatorio: fecha.toISOString().split('T')[0]
-        })
-      }
-    }
-
-    // Notificar por email
-    fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }) }).catch(console.error)
-
-    clearCart()
-    setLoading(false)
+    await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ order_id: order.id, items: items.map(i => ({
+        order_id: order.id, product_id: i.product.id, nombre: i.product.nombre,
+        precio: Number((i as any).precio_final ?? i.product.precio), cantidad: i.cantidad,
+        sph: i.sph != null ? Number(i.sph) : null, cyl: i.cyl != null ? Number(i.cyl) : null,
+        add_power: i.add_power ? parseFloat(String(i.add_power).replace('+','')) : null,
+        axis: (i as any).axis != null ? Number((i as any).axis) : null,
+        color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
+      })) }) })
+    fetch('/api/notify', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }) }).catch(console.error)
+    clearCart(); setLoading(false)
     router.push('/confirmacion?orden=' + order.id)
-    toast.success('¡Pedido confirmado! 🎉')
   }
 
   const handleAuth = async () => {
@@ -279,311 +137,375 @@ export default function CheckoutPage() {
     if (authMode === 'register') {
       const { error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: authNombre } } })
       if (error) { setAuthMsg(error.message); setAuthLoading(false); return }
-      // Create profile
       const { data: { user } } = await sb.auth.getUser()
       if (user) {
         await sb.from('profiles').upsert({ id: user.id, nombre: authNombre, email: authEmail, telefono: authTel, role: 'customer' })
         setValue('nombre', authNombre); setValue('email', authEmail); if (authTel) setValue('telefono', authTel)
       }
-      setIsLoggedIn(true); setShowAuthModal(false)
     } else {
       const { error } = await sb.auth.signInWithPassword({ email: authEmail, password: authPass })
       if (error) { setAuthMsg('Email o contraseña incorrectos'); setAuthLoading(false); return }
       const { data: { user } } = await sb.auth.getUser()
       if (user) {
-        const { data: perfil } = await sb.from('profiles').select('*').eq('id', user.id).single()
-        if (perfil?.nombre) setValue('nombre', perfil.nombre)
-        if (perfil?.email) setValue('email', perfil.email)
-        if (perfil?.telefono) setValue('telefono', perfil.telefono)
-        const { data: addrs } = await sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false })
-        if (addrs && addrs.length > 0) { setValue('direccion', addrs[0].direccion); if (addrs[0].ciudad) setValue('ciudad', addrs[0].ciudad) }
+        const { data: p } = await sb.from('profiles').select('*').eq('id', user.id).single()
+        if (p?.nombre) setValue('nombre', p.nombre); if (p?.email) setValue('email', p.email); if (p?.telefono) setValue('telefono', p.telefono)
+        const { data: a } = await sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false })
+        if (a?.[0]) { setValue('direccion', a[0].direccion); if (a[0].ciudad) setValue('ciudad', a[0].ciudad) }
       }
-      setIsLoggedIn(true); setShowAuthModal(false)
     }
-    setAuthLoading(false)
+    setIsLoggedIn(true); setShowAuthModal(false); setAuthLoading(false)
+    setStep(2)
   }
+
+  const nextStep = async () => {
+    if (step === 1) {
+      const ok = await trigger(['nombre','email','telefono'])
+      if (!ok) return
+      if (!isLoggedIn) { setShowAuthModal(true); return }
+      setStep(2)
+    } else if (step === 2) {
+      const ok = await trigger(['direccion','ciudad'])
+      if (!ok) return
+      if (!disclaimerAceptado) { setShowDisclaimer(true); return }
+      setStep(3)
+    }
+  }
+
+  const steps = [
+    { n: 1 as const, label: 'Información' },
+    { n: 2 as const, label: 'Entrega' },
+    { n: 3 as const, label: 'Confirmar' },
+  ]
 
   return (
     <>
       <Navbar />
-      {/* ── Modal Disclaimer Médico ── */}
       {showDisclaimer && (
-        <DisclaimerMedico
-          showModal={true}
-          items={items}
-          onAceptar={handleDisclaimerAceptado}
-          onCancelar={() => setShowDisclaimer(false)}
-        />
+        <DisclaimerMedico showModal items={items} onAceptar={handleDisclaimerAceptado} onCancelar={() => setShowDisclaimer(false)} />
       )}
-
-      {/* ── Modal Registro/Login obligatorio ── */}
       {showAuthModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl">
-            <div className="p-5 border-b border-gray-100">
-              <h2 className="font-black text-gray-900 text-lg">
-                {authMode === 'register' ? '👋 Crea tu cuenta' : '¡Bienvenido de vuelta!'}
-              </h2>
-              <p className="text-gray-400 text-sm mt-0.5">
-                {authMode === 'register' ? 'Para finalizar tu pedido necesitas registrarte' : 'Ingresa para continuar con tu pedido'}
-              </p>
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6">
+            <h2 className="font-bold text-gray-900 text-lg mb-1">Necesitas una cuenta</h2>
+            <p className="text-sm text-gray-500 mb-5">Para rastrear tu pedido y guardar tu historial</p>
+            <div className="flex bg-gray-100 rounded-xl p-1 mb-5">
+              {(['register','login'] as const).map(m => (
+                <button key={m} onClick={() => setAuthMode(m)} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${authMode===m ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'}`}>
+                  {m === 'register' ? 'Crear cuenta' : 'Iniciar sesión'}
+                </button>
+              ))}
             </div>
-            <div className="p-5 space-y-3">
-              {authMode === 'register' && (
-                <>
-                  <input value={authNombre} onChange={e => setAuthNombre(e.target.value)}
-                    placeholder="Nombre completo" className="input w-full" />
-                  <input value={authTel} onChange={e => setAuthTel(e.target.value)}
-                    placeholder="Teléfono / WhatsApp" type="tel" className="input w-full" />
-                </>
-              )}
-              <input value={authEmail} onChange={e => setAuthEmail(e.target.value)}
-                placeholder="Correo electrónico" type="email" className="input w-full" />
-              <input value={authPass} onChange={e => setAuthPass(e.target.value)}
-                placeholder="Contraseña (mínimo 6 caracteres)" type="password" className="input w-full" />
-              {authMsg && <p className="text-red-500 text-sm">{authMsg}</p>}
-              <button onClick={handleAuth} disabled={authLoading}
-                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 rounded-xl transition-colors disabled:opacity-60 text-sm">
+            <div className="space-y-3">
+              {authMode === 'register' && <>
+                <input placeholder="Nombre completo" value={authNombre} onChange={e => setAuthNombre(e.target.value)} className="input w-full" />
+                <input placeholder="Teléfono (opcional)" value={authTel} onChange={e => setAuthTel(e.target.value)} className="input w-full" />
+              </>}
+              <input type="email" placeholder="Email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="input w-full" />
+              <input type="password" placeholder="Contraseña" value={authPass} onChange={e => setAuthPass(e.target.value)} className="input w-full" />
+              {authMsg && <p className="text-red-500 text-xs">{authMsg}</p>}
+              <button onClick={handleAuth} disabled={authLoading} className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-60">
                 {authLoading ? 'Procesando...' : authMode === 'register' ? 'Crear cuenta y continuar' : 'Entrar y continuar'}
               </button>
-              <button onClick={() => setAuthMode(m => m === 'register' ? 'login' : 'register')}
-                className="w-full text-primary-600 text-sm font-medium py-1 hover:underline">
-                {authMode === 'register' ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}
-              </button>
+              <button onClick={() => setShowAuthModal(false)} className="w-full text-sm text-gray-400 hover:text-gray-600 py-1">Cancelar</button>
             </div>
           </div>
         </div>
       )}
-      <main className="pb-20 max-w-5xl mx-auto px-4 py-8">
-        <h1 className="font-display text-2xl font-bold text-gray-900 mb-8">Finalizar pedido</h1>
 
-        <form onSubmit={handleSubmit(data => { if (!isLoggedIn) { setShowAuthModal(true); return }; if (!disclaimerAceptado) { setShowDisclaimer(true); return }; if (!aceptaTerminos) { toast.error("Debes aceptar los Términos y Condiciones"); return }; createOrder(data) })}
-          className="grid lg:grid-cols-5 gap-8">
-
-          {/* LEFT - Formulario */}
-          <div className="lg:col-span-3 space-y-5">
-            {/* Datos del cliente */}
-            <div className="card p-5">
-              <h2 className="font-semibold text-gray-900 mb-4">Datos de entrega</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Nombre completo</label>
-                  <input {...register('nombre')} className="input" placeholder="Juan Pérez" />
-                  {errors.nombre && <p className="text-red-500 text-xs mt-1">{errors.nombre.message}</p>}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Email</label>
-                  <input {...register('email')} type="email" className="input" placeholder="tu@email.com" />
-                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Teléfono / WhatsApp</label>
-                  <input {...register('telefono')}
-                  onBlur={(e) => {
-                    const tel = e.target.value
-                    const nom = getValues('nombre')
-                    const em  = getValues('email')
-                    if (tel.length >= 10) guardarCarritoAbandonado(tel, nom, em)
-                  }} type="tel" className="input" placeholder="809-000-0000" />
-                  {errors.telefono && <p className="text-red-500 text-xs mt-1">{errors.telefono.message}</p>}
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Dirección</label>
-                  {direcciones.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {direcciones.map((d, i) => (
-                        <button key={d.id} type="button"
-                          onClick={() => { setValue('direccion', d.direccion); if (d.ciudad) setValue('ciudad', d.ciudad) }}
-                          className="text-xs px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50 hover:border-primary-400 hover:bg-primary-50 text-gray-600 transition-colors text-left">
-                          {d.direccion}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                  <input {...register('direccion')} className="input" placeholder="Calle, numero, sector" />
-                  {errors.direccion && <p className="text-red-500 text-xs mt-1">{errors.direccion.message}</p>}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Ciudad</label>
-                  <select {...register('ciudad')} className="input">
-                    <option value="">Seleccionar...</option>
-                    {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                  {errors.ciudad && <p className="text-red-500 text-xs mt-1">{errors.ciudad.message}</p>}
-                </div>
-              </div>
+      <main className="min-h-screen bg-gray-50 pb-24">
+        {/* Barra de progreso */}
+        <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
+          <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-1.5 text-sm text-green-700 font-semibold">
+              <Lock className="w-4 h-4" />
+              <span className="hidden sm:inline">Pago seguro</span>
             </div>
-
-            {/* Método de pago */}
-            <div className="card p-5">
-              <h2 className="font-semibold text-gray-900 mb-4">Método de pago</h2>
-
-              <div className="grid grid-cols-2 gap-3 mb-5">
-                {([
-                  { id: 'contra_entrega', emoji: '💵', label: 'Contra entrega', desc: 'Pagas en efectivo al recibir' },
-                  { id: 'paypal',         emoji: '🔵', label: 'PayPal',          desc: 'Tarjeta o cuenta PayPal' },
-                ] as const).map(m => (
-                  <button key={m.id} type="button" onClick={() => { setPayMethod(m.id); if (m.id === 'paypal' && !disclaimerAceptado) { setShowDisclaimer(true) } }}
-                    className={`flex flex-col items-start gap-1 p-4 rounded-2xl border-2 transition-all text-left
-                      ${payMethod === m.id
-                        ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
-                    <span className="text-xl">{m.emoji}</span>
-                    <p className={`text-sm font-bold ${payMethod === m.id ? 'text-primary-700' : 'text-gray-800'}`}>{m.label}</p>
-                    <p className="text-xs text-gray-500">{m.desc}</p>
+            <div className="flex items-center gap-2">
+              {steps.map((s, i) => (
+                <div key={s.n} className="flex items-center gap-2">
+                  <button onClick={() => step > s.n && setStep(s.n)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                      step === s.n ? 'bg-primary-600 text-white shadow-md' :
+                      step > s.n ? 'bg-green-100 text-green-700 cursor-pointer hover:bg-green-200' :
+                      'bg-gray-100 text-gray-400'
+                    }`}>
+                    {step > s.n ? <Check className="w-3 h-3" /> : <span>{s.n}</span>}
+                    <span className="hidden sm:inline">{s.label}</span>
                   </button>
-                ))}
-              </div>
+                  {i < steps.length - 1 && (
+                    <div className={`w-8 h-0.5 rounded-full ${step > s.n ? 'bg-green-400' : 'bg-gray-200'}`} />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="text-xs text-gray-400 font-medium hidden sm:block">contactgo.net</div>
+          </div>
+        </div>
 
-              {payMethod === 'contra_entrega' && (
-                <div className="space-y-4">
-                  <div className="bg-green-50 border border-green-100 rounded-2xl p-4">
-                    <p className="text-sm font-bold text-green-800 mb-1">💵 Pago en efectivo al recibir</p>
-                    <p className="text-xs text-green-700 mb-3">Ten el monto exacto listo. El mensajero no tiene cambio.</p>
-                    <div className="flex items-center justify-between bg-white rounded-xl px-4 py-2.5">
-                      <span className="text-sm text-gray-600">Total a pagar</span>
-                      <span className="font-black text-gray-900 text-lg">RD${(tot - descuento).toLocaleString()}</span>
+        <div className="max-w-5xl mx-auto px-4 pt-6">
+          <div className="grid lg:grid-cols-5 gap-6 items-start">
+
+            {/* LEFT */}
+            <div className="lg:col-span-3 space-y-3">
+
+              {/* Paso 1 */}
+              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
+                step === 1 ? 'border-primary-500 shadow-lg' :
+                step > 1 ? 'border-green-200 cursor-pointer hover:border-green-300' :
+                'border-gray-100'
+              }`}>
+                <div className="p-5 flex items-center justify-between" onClick={() => step > 1 && setStep(1)}>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 1 ? 'bg-green-500 text-white' : step === 1 ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
+                      {step > 1 ? <Check className="w-4 h-4" /> : '1'}
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900 text-sm">Información de contacto</p>
+                      {step > 1 && <p className="text-xs text-gray-400 mt-0.5">{getValues('nombre')} · {getValues('email')}</p>}
                     </div>
                   </div>
-                  <button type="submit" disabled={loading}
-                    className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors disabled:opacity-60 text-base">
-                    {loading ? 'Procesando...' : <><span>Confirmar pedido</span><ChevronRight className="w-5 h-5" /></>}
-                  </button>
+                  {step > 1 && <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
-              )}
 
-              {payMethod === 'paypal' && (
-                <div className="space-y-3">
-                  <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 text-center">
-                    <p className="text-sm font-bold text-blue-800 mb-1">🔵 PayPal</p>
-                    <p className="text-xs text-blue-700">Paga con tu cuenta PayPal o con tarjeta internacional.</p>
-                    <p className="text-xs text-blue-600 mt-2 font-semibold">
-                      USD${((tot - descuento) / 58).toFixed(2)} ≈ RD${(tot - descuento).toLocaleString()}
-                    </p>
-                  </div>
-                  {aceptaTerminos && disclaimerAceptado ? (
-                    <PayPalScriptProvider options={{
-                      clientId: PAYPAL_ID,
-                      currency: 'USD',
-                      intent: 'capture',
-                      components: 'buttons',
-                      enableFunding: 'card,credit,paylater',
-                      disableFunding: 'venmo',
-                    }}>
-                      <PayPalButtons
-                        style={{ layout: 'vertical', color: 'blue', shape: 'pill', height: 48, label: 'pay' }}
-                        fundingSource={undefined}
-                        createOrder={(_, actions) => actions.order.create({
-                          intent: 'CAPTURE',
-                          purchase_units: [{
-                            amount: { currency_code: 'USD', value: ((tot - descuento) / 58).toFixed(2) },
-                            description: 'ContactGo — Lentes de contacto RD'
-                          }]
-                        })}
-                        onApprove={async (_, actions) => {
-                          const capture = await actions.order!.capture()
-                          await createOrder(getValues(), capture.id)
-                        }}
-                        onError={() => toast.error('Error con PayPal. Intenta de nuevo o usa contra entrega.')}
-                      />
-                    </PayPalScriptProvider>
-                  ) : (
-                    <div className="text-center py-3">
-                    <button type="button" onClick={() => setShowDisclaimer(true)}
-                      className="text-sm font-semibold text-primary-600 underline hover:text-primary-700">
-                      👆 Toca aquí para aceptar el aviso médico y continuar
+                {step === 1 && (
+                  <div className="px-5 pb-5 space-y-3 border-t border-gray-50 pt-4">
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                      <input {...register('nombre')} placeholder="Nombre completo"
+                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                      {errors.nombre && <p className="text-red-500 text-xs mt-1 flex items-center gap-1">⚠️ {errors.nombre.message}</p>}
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="relative">
+                        <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                        <input {...register('email')} type="email" placeholder="Email"
+                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                        {errors.email && <p className="text-red-500 text-xs mt-1">⚠️ {errors.email.message}</p>}
+                      </div>
+                      <div className="relative">
+                        <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                        <input {...register('telefono')} type="tel" placeholder="WhatsApp / Teléfono"
+                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                        {errors.telefono && <p className="text-red-500 text-xs mt-1">⚠️ {errors.telefono.message}</p>}
+                      </div>
+                    </div>
+                    <button type="button" onClick={nextStep}
+                      className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-primary-200">
+                      Continuar <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
-                  )}
-                </div>
-              )}
-            </div>
+                )}
+              </div>
 
-          </div>
-
-          {/* RIGHT — Resumen del pedido */}
-          <div className="lg:col-span-2 space-y-4">
-
-            {/* Productos */}
-            <div className="card p-5">
-              <h2 className="font-semibold text-gray-900 mb-4">Tu pedido</h2>
-              <div className="space-y-3">
-                {items.map((item, idx) => (
-                  <div key={idx} className="flex gap-3 items-start pb-3 border-b border-gray-50 last:border-0 last:pb-0">
-                    {item.product.imagen_url && (
-                      <img src={item.product.imagen_url} alt={item.product.nombre}
-                        className="w-12 h-12 object-contain rounded-xl bg-gray-50 border border-gray-100 shrink-0" />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 leading-tight">{item.product.nombre}</p>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {(item as any).ojo && <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{(item as any).ojo}</span>}
-                        {item.sph != null && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-mono">SPH {Number(item.sph) > 0 ? '+' : ''}{item.sph}</span>}
-                        {(item as any).cyl != null && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-mono">CYL {(item as any).cyl}</span>}
-                        {(item as any).color && <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded">{(item as any).color}</span>}
-                      </div>
-                      <div className="flex items-center justify-between mt-1">
-                        <span className="text-xs text-gray-400">×{item.cantidad}</span>
-                        <span className="text-sm font-bold text-gray-900">
-                          RD${(Number((item as any).precio_final ?? item.product.precio) * item.cantidad).toLocaleString()}
-                        </span>
-                      </div>
+              {/* Paso 2 */}
+              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
+                step === 2 ? 'border-primary-500 shadow-lg' :
+                step > 2 ? 'border-green-200 cursor-pointer hover:border-green-300' :
+                'border-gray-100 opacity-50'
+              }`}>
+                <div className="p-5 flex items-center justify-between" onClick={() => step > 2 && setStep(2)}>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 2 ? 'bg-green-500 text-white' : step === 2 ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
+                      {step > 2 ? <Check className="w-4 h-4" /> : '2'}
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900 text-sm">Dirección de entrega</p>
+                      {step > 2 && <p className="text-xs text-gray-400 mt-0.5">{getValues('direccion')}, {getValues('ciudad')}</p>}
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Cupón */}
-            <div className="card p-4">
-              <div className="flex gap-2">
-                <input placeholder="Código de cupón" id="coupon-input"
-                  value={cupon} onChange={e => setCupon(e.target.value)}
-                  className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-                <button type="button" onClick={aplicarCupon}
-                  className="bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors">
-                  Aplicar
-                </button>
-              </div>
-            </div>
-
-            {/* Totales */}
-            <div className="card p-5 space-y-2.5">
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>Subtotal</span><span>RD${sub.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>Envío</span>
-                <span className={sub >= 8000 ? 'text-green-600 font-semibold' : ''}>
-                  {sub >= 8000 ? '🎁 Gratis' : 'RD$200'}
-                </span>
-              </div>
-              {descuento > 0 && (
-                <div className="flex justify-between text-sm text-green-600 font-semibold">
-                  <span>Descuento cupón</span><span>-RD${descuento.toLocaleString()}</span>
+                  {step > 2 && <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
-              )}
-              <div className="border-t border-gray-100 pt-3 flex justify-between font-black text-gray-900">
-                <span>Total</span>
-                <span className="text-xl text-primary-600">RD${(tot - descuento).toLocaleString()}</span>
+
+                {step === 2 && (
+                  <div className="px-5 pb-5 space-y-3 border-t border-gray-50 pt-4">
+                    <div className="relative">
+                      <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                      <input {...register('direccion')} placeholder="Calle, número, sector, referencias"
+                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                      {errors.direccion && <p className="text-red-500 text-xs mt-1">⚠️ {errors.direccion.message}</p>}
+                    </div>
+                    <select {...register('ciudad')}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 bg-white transition-colors">
+                      <option value="">Selecciona tu ciudad</option>
+                      {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                    {errors.ciudad && <p className="text-red-500 text-xs">⚠️ {errors.ciudad.message}</p>}
+
+                    {items.some(i => i.product.tipo === 'torico') && (
+                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-2 items-start">
+                        <span className="text-amber-500 shrink-0">⏱️</span>
+                        <p className="text-xs text-amber-700 leading-relaxed"><strong>Tu pedido incluye lentes tóricos.</strong> Tiempo de fabricación: 20-30 días.</p>
+                      </div>
+                    )}
+
+                    <button type="button" onClick={nextStep}
+                      className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-primary-200">
+                      Continuar <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Paso 3 */}
+              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${step === 3 ? 'border-primary-500 shadow-lg' : 'border-gray-100 opacity-50'}`}>
+                <div className="p-5 flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
+                  <p className="font-bold text-gray-900 text-sm">Confirmar y pagar</p>
+                </div>
+
+                {step === 3 && (
+                  <div className="px-5 pb-5 border-t border-gray-50 pt-4 space-y-4">
+                    {/* Resumen de datos */}
+                    <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <User className="w-3.5 h-3.5 shrink-0" />
+                        <span>{getValues('nombre')} · {getValues('telefono')}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <MapPin className="w-3.5 h-3.5 shrink-0" />
+                        <span>{getValues('direccion')}, {getValues('ciudad')}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Truck className="w-3.5 h-3.5 shrink-0" />
+                        <span className="text-green-700 font-semibold">Contra entrega — {envio === 0 ? 'Envío gratis' : `RD$${envio} envío`}</span>
+                      </div>
+                    </div>
+
+                    {/* Total grande */}
+                    <div className="bg-primary-50 rounded-xl p-4 flex items-center justify-between">
+                      <div>
+                        <p className="text-xs text-primary-600 font-semibold uppercase tracking-wider">Total a pagar</p>
+                        <p className="text-2xl font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
+                      </div>
+                      <div className="text-right text-xs text-gray-500">
+                        <p>En efectivo</p>
+                        <p>al recibir</p>
+                      </div>
+                    </div>
+
+                    {/* T&C */}
+                    <label className="flex items-start gap-3 cursor-pointer group">
+                      <div onClick={() => setAceptaTerminos(!aceptaTerminos)}
+                        className={`w-5 h-5 rounded border-2 shrink-0 mt-0.5 flex items-center justify-center transition-all ${aceptaTerminos ? 'bg-primary-600 border-primary-600' : 'border-gray-300 group-hover:border-primary-400'}`}>
+                        {aceptaTerminos && <Check className="w-3 h-3 text-white" />}
+                      </div>
+                      <input type="checkbox" checked={aceptaTerminos} onChange={e => setAceptaTerminos(e.target.checked)} className="sr-only" />
+                      <span className="text-xs text-gray-500 leading-relaxed">
+                        He leído y acepto los <a href="/terminos" target="_blank" className="text-primary-600 underline font-semibold">Términos y Condiciones</a> y la <a href="/privacidad" target="_blank" className="text-primary-600 underline font-semibold">Política de Privacidad</a> de ContactGo
+                      </span>
+                    </label>
+
+                    {/* Botón confirmar */}
+                    <button
+                      onClick={handleSubmit(data => {
+                        if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones'); return }
+                        createOrder(data)
+                      })}
+                      disabled={loading || !aceptaTerminos}
+                      className="w-full bg-green-600 hover:bg-green-700 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-green-200">
+                      {loading ? (
+                        <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Procesando tu pedido...</>
+                      ) : (
+                        <><span>Confirmar pedido · RD${totalFinal.toLocaleString()}</span><ChevronRight className="w-5 h-5" /></>
+                      )}
+                    </button>
+
+                    <div className="flex items-center justify-center gap-5 pt-1">
+                      {[{ icon: Lock, t:'Pago seguro' },{ icon: Shield, t:'100% original' },{ icon: Truck, t:'24-48h' },{ icon: RotateCcw, t:'7 días' }].map(b => (
+                        <div key={b.t} className="flex items-center gap-1 text-[10px] text-gray-400">
+                          <b.icon className="w-3 h-3" />{b.t}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* T&C */}
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" checked={aceptaTerminos} onChange={e => setAceptaTerminos(e.target.checked)}
-                className="mt-0.5 w-4 h-4 accent-primary-600 shrink-0" />
-              <span className="text-xs text-gray-500 leading-relaxed">
-                Acepto los{' '}
-                <a href="/terminos" target="_blank" className="text-primary-600 underline font-medium">Términos y Condiciones</a>
-                {' '}y la{' '}
-                <a href="/privacidad" target="_blank" className="text-primary-600 underline font-medium">Política de Privacidad</a>
-              </span>
-            </label>
+            {/* RIGHT — resumen sticky */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-2xl border-2 border-gray-100 sticky top-20 overflow-hidden">
+                <div className="p-5 border-b border-gray-50 bg-gray-50">
+                  <p className="font-black text-gray-900 text-sm">Resumen del pedido</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{items.length} {items.length===1?'producto':'productos'}</p>
+                </div>
+
+                {/* Items */}
+                <div className="p-4 space-y-3 max-h-56 overflow-y-auto border-b border-gray-50">
+                  {items.map((item, idx) => (
+                    <div key={idx} className="flex gap-3 items-start">
+                      {item.product.imagen_url && (
+                        <img src={item.product.imagen_url} alt="" className="w-11 h-11 object-contain rounded-lg bg-gray-50 shrink-0 border border-gray-100" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-2">{item.product.nombre}</p>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {(item as any).ojo && <span className="text-[9px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{(item as any).ojo}</span>}
+                          {item.sph != null && <span className="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-mono">SPH {Number(item.sph)>0?'+':''}{item.sph}</span>}
+                          {(item as any).cyl != null && <span className="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-mono">CYL {(item as any).cyl}</span>}
+                          {(item as any).color && <span className="text-[9px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded">{(item as any).color}</span>}
+                        </div>
+                        <div className="flex justify-between mt-1">
+                          <span className="text-[10px] text-gray-400">×{item.cantidad}</span>
+                          <span className="text-xs font-bold">RD${(Number((item as any).precio_final ?? item.product.precio)*item.cantidad).toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Cupón */}
+                <div className="p-4 border-b border-gray-50">
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Tag className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
+                      <input value={cupon} onChange={e => setCupon(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && aplicarCupon()}
+                        placeholder="Código de cupón"
+                        className="w-full pl-8 pr-3 py-2.5 border-2 border-gray-200 rounded-xl text-xs focus:outline-none focus:border-primary-500 transition-colors" />
+                    </div>
+                    <button onClick={aplicarCupon} className="bg-gray-900 hover:bg-gray-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors">
+                      Usar
+                    </button>
+                  </div>
+                  {cuponAplicado && (
+                    <p className="text-green-600 text-xs mt-1.5 font-semibold flex items-center gap-1">
+                      <Check className="w-3 h-3" /> Cupón aplicado correctamente
+                    </p>
+                  )}
+                </div>
+
+                {/* Totales */}
+                <div className="p-4 space-y-2">
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>Subtotal</span><span>RD${sub.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>Envío</span>
+                    <span className={envio===0 ? 'text-green-600 font-semibold' : ''}>
+                      {envio===0 ? '🎁 Gratis' : `RD$${envio}`}
+                    </span>
+                  </div>
+                  {descuento > 0 && (
+                    <div className="flex justify-between text-sm text-green-600 font-bold">
+                      <span>Descuento</span><span>-RD${descuento.toLocaleString()}</span>
+                    </div>
+                  )}
+                  <div className="border-t-2 border-gray-100 pt-3 flex justify-between">
+                    <span className="font-black text-gray-900">Total</span>
+                    <span className="font-black text-xl text-primary-600">RD${totalFinal.toLocaleString()}</span>
+                  </div>
+                  {envio > 0 && (
+                    <div className="bg-amber-50 rounded-lg px-3 py-2 text-[10px] text-amber-700 text-center">
+                      Agrega <strong>RD${(8000-sub).toLocaleString()}</strong> más para envío gratis 🚀
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
 
           </div>
-
-        </form>
+        </div>
       </main>
     </>
   )
