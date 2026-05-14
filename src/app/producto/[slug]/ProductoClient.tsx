@@ -177,59 +177,82 @@ export default function ProductoClient({ product, variants }: Props) {
   return (
     <>
       <Navbar />
-      <main className="max-w-6xl mx-auto px-4 py-8 pb-24">
-        <button onClick={() => router.back()}
-          className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
-          <ArrowLeft className="w-4 h-4" /> Volver al catálogo
-        </button>
+      <main className="max-w-6xl mx-auto px-4 pt-4 pb-32 md:pb-8">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
+          <button onClick={() => router.back()} className="hover:text-primary-600 transition-colors flex items-center gap-1">
+            <ArrowLeft className="w-3 h-3" /> Catálogo
+          </button>
+          <span>/</span>
+          <span className="text-gray-600 font-medium truncate max-w-xs">{product.nombre}</span>
+        </div>
 
-        <div className="grid md:grid-cols-2 gap-10">
-          {/* Imagen */}
-          <div className="card overflow-hidden aspect-square flex items-center justify-center bg-gray-50">
-            {product.imagen_url ? (
-              <Image src={product.imagen_url} alt={product.nombre} width={400} height={400}
-                className="object-contain p-8" priority />
-            ) : (
-              <Eye className="w-24 h-24 text-gray-200" />
-            )}
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-10 items-start">
+          {/* Imagen — sticky en desktop */}
+          <div className="md:sticky md:top-20">
+            <div className="rounded-2xl overflow-hidden bg-white border border-gray-100 aspect-square flex items-center justify-center shadow-sm">
+              {product.imagen_url ? (
+                <Image src={product.imagen_url} alt={product.nombre} width={420} height={420}
+                  className="object-contain p-10" priority />
+              ) : (
+                <Eye className="w-20 h-20 text-gray-200" />
+              )}
+            </div>
+            {/* Trust badges bajo la imagen — solo desktop */}
+            <div className="hidden md:grid grid-cols-2 gap-2 mt-3">
+              {[
+                { icon:'✅', text:'100% Original' },
+                { icon:'🚚', text:'Entrega 24-72h' },
+                { icon:'🔒', text:'Pago seguro' },
+                { icon:'↩️', text:'7 días devolución' },
+              ].map(b => (
+                <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                  <span className="text-sm">{b.icon}</span>
+                  <span className="text-xs text-gray-600 font-medium">{b.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Detalle */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <div>
-              <p className="text-sm font-semibold text-primary-600 mb-1">{product.marca}</p>
-              {product.tipo && (
-                <span className="badge bg-primary-100 text-primary-700 mb-3 inline-block">
-                  {TIPO_LABELS[product.tipo]}
-                </span>
-              )}
-              <h1 className="font-display text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-xs font-bold text-primary-600 uppercase tracking-wide">{product.marca}</span>
+                {product.tipo && (
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">
+                    {TIPO_LABELS[product.tipo]}
+                  </span>
+                )}
+              </div>
+              <h1 className="font-display text-xl md:text-2xl font-bold text-gray-900 leading-tight">
                 {product.nombre}
               </h1>
             </div>
 
-            <div>
-              <p className="text-3xl font-bold text-gray-900">RD${price.toLocaleString()}</p>
-              <p className="text-sm text-gray-400 mt-0.5">
-                {product.contenido && `${product.contenido} · `}{product.reemplazo}
-              </p>
-              <p className="text-xs mt-0.5 font-medium">
-                {product.stock > 0
-                  ? product.stock <= 5
-                    ? <span className="text-orange-600">¡Solo {product.stock} en stock!</span>
-                    : <span className="text-green-600">En stock ✓</span>
-                  : <span className="text-red-500">Sin stock</span>
-                }
-              </p>
+            <div className="flex items-baseline justify-between flex-wrap gap-2">
+              <div>
+                <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  {product.contenido && `${product.contenido} · `}{product.reemplazo}
+                </p>
+              </div>
+              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                product.stock === 0 ? 'bg-red-100 text-red-600' :
+                product.stock <= 5 ? 'bg-orange-100 text-orange-600' :
+                'bg-green-100 text-green-700'
+              }`}>
+                {product.stock === 0 ? 'Sin stock' : product.stock <= 5 ? `¡Solo ${product.stock} en stock!` : 'En stock ✓'}
+              </span>
             </div>
 
             {/* Aviso entrega tóricos */}
             {product.tipo === 'torico' && (
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 flex items-start gap-2.5">
-                <span className="text-amber-500 text-lg shrink-0">⏱️</span>
+              <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 flex items-start gap-2">
+                <span className="text-amber-500 shrink-0 mt-0.5">⏱️</span>
                 <div>
-                  <p className="text-amber-800 font-bold text-sm">Tiempo de entrega: 20-30 días</p>
-                  <p className="text-amber-700 text-xs mt-0.5 leading-relaxed">Los lentes tóricos para astigmatismo se fabrican a medida según tu graduación exacta (SPH, CYL y EJE). El tiempo de entrega es mayor al habitual.</p>
+                  <p className="text-amber-800 font-bold text-xs">Tiempo de entrega: 20-30 días</p>
+                  <p className="text-amber-600 text-[10px] mt-0.5 leading-relaxed">Los lentes tóricos para astigmatismo se fabrican a medida según tu graduación exacta (SPH, CYL y EJE). El tiempo de entrega es mayor al habitual.</p>
                 </div>
               </div>
             )}
@@ -241,14 +264,10 @@ export default function ProductoClient({ product, variants }: Props) {
                 </p>
               </div>
             )}
-            <div className="flex flex-wrap gap-2">
-              <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-2.5 py-1.5 rounded-full font-semibold">✅ 100% Original</span>
-              <span className="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1.5 rounded-full font-semibold">🚀 Entrega 24-72h</span>
-              <span className="text-xs bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1.5 rounded-full font-semibold">🏥 Distribuidor autorizado</span>
-            </div>
+
 
             {product.descripcion && (
-              <p className="text-gray-600 text-sm leading-relaxed">{product.descripcion}</p>
+              <p className="text-gray-500 text-xs leading-relaxed line-clamp-4">{product.descripcion}</p>
             )}
 
             {isLente && !isColor && <EyeSelector eye={eye} onChange={setEye} />}
@@ -375,29 +394,19 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { icon:'✅', text:'Productos 100% originales' },
-                { icon:'🚚', text:'Envío en 24-48h RD' },
-                { icon:'🔒', text:'Pago seguro' },
-                { icon:'↩️', text:'Devolución en 7 días' },
-              ].map(b => (
-                <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2">
-                  <span className="text-base">{b.icon}</span>
-                  <span className="text-xs font-medium text-gray-600">{b.text}</span>
-                </div>
-              ))}
-            </div>
 
-            <button onClick={handleAdd} disabled={product.stock === 0}
-              className="btn-primary flex items-center justify-center gap-2 py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed">
-              <ShoppingCart className="w-5 h-5" />
-              {product.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
-            </button>
-            <button onClick={handleBuyNow} disabled={product.stock === 0}
-              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors text-base disabled:opacity-50">
-              Comprar ahora →
-            </button>
+
+            <div className="flex flex-col gap-2">
+              <button onClick={handleAdd} disabled={product.stock === 0}
+                className="btn-primary flex items-center justify-center gap-2 py-3.5 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+                <ShoppingCart className="w-4 h-4" />
+                {product.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
+              </button>
+              <button onClick={handleBuyNow} disabled={product.stock === 0}
+                className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.99] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-50">
+                Comprar ahora →
+              </button>
+            </div>
           </div>
         </div>
       </main>
