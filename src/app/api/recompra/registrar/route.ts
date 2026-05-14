@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     if (!order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
 
     const { data: items } = await sb.from('order_items')
-      .select('product_id, cantidad, products(id, nombre, tipo, dias_uso, reemplazo)')
+      .select('product_id, cantidad, products(id, nombre, tipo, dias_uso)')
       .eq('order_id', order_id)
 
     if (!items?.length) return NextResponse.json({ ok: true, registros: 0 })
@@ -28,7 +28,8 @@ export async function POST(req: NextRequest) {
 
     for (const item of items) {
       const product = item.products as any
-      if (!product?.dias_uso || !['esferico','torico','multifocal','color'].includes(product.tipo)) continue
+      // Todos los productos con dias_uso definido — lentes, gotas, soluciones
+      if (!product?.dias_uso) continue
 
       const diasTotales = product.dias_uso * (item.cantidad || 1)
       const fechaFin = new Date(fechaCompra.getTime() + diasTotales * 24 * 60 * 60 * 1000)
@@ -37,16 +38,21 @@ export async function POST(req: NextRequest) {
       const cupon = `RECARGA${Math.random().toString(36).substring(2, 6).toUpperCase()}`
 
       registros.push({
-        order_id: order.id, user_id: order.user_id,
-        email: order.cliente_email, nombre: order.cliente_nombre,
-        product_id: product.id, product_nombre: product.nombre,
+        order_id: order.id,
+        user_id: order.user_id,
+        email: order.cliente_email,
+        nombre: order.cliente_nombre,
+        product_id: product.id,
+        product_nombre: product.nombre,
+        tipo_producto: product.tipo,
         dias_uso: diasTotales,
         fecha_compra: fechaCompra.toISOString(),
         fecha_estimada_fin: fechaFin.toISOString(),
         fecha_notificacion_7: alerta7.toISOString(),
         fecha_notificacion_3: alerta3.toISOString(),
         fecha_notificacion_0: fechaFin.toISOString(),
-        descuento_ofrecido: 10, cupon_generado: cupon,
+        descuento_ofrecido: 10,
+        cupon_generado: cupon,
       })
     }
 
@@ -56,9 +62,12 @@ export async function POST(req: NextRequest) {
         await sb.from('coupons').insert({
           code: r.cupon_generado,
           descripcion: `Recompra ${r.product_nombre}`,
-          tipo: 'porcentaje', valor: r.descuento_ofrecido,
-          activo: false, limite_usos: 1,
-          fecha_expira: r.fecha_estimada_fin, usos: 0,
+          tipo: 'porcentaje',
+          valor: r.descuento_ofrecido,
+          activo: false,
+          limite_usos: 1,
+          fecha_expira: r.fecha_estimada_fin,
+          usos: 0,
         })
       }
     }
