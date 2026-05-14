@@ -423,7 +423,7 @@ export default function CheckoutPage() {
                   { id: 'contra_entrega', emoji: '💵', label: 'Contra entrega', desc: 'Pagas en efectivo al recibir' },
                   { id: 'paypal',         emoji: '🔵', label: 'PayPal',          desc: 'Tarjeta o cuenta PayPal' },
                 ] as const).map(m => (
-                  <button key={m.id} type="button" onClick={() => setPayMethod(m.id)}
+                  <button key={m.id} type="button" onClick={() => { setPayMethod(m.id); if (m.id === 'paypal' && !disclaimerAceptado) { setShowDisclaimer(true) } }}
                     className={`flex flex-col items-start gap-1 p-4 rounded-2xl border-2 transition-all text-left
                       ${payMethod === m.id
                         ? 'border-primary-500 bg-primary-50'
@@ -488,7 +488,12 @@ export default function CheckoutPage() {
                       />
                     </PayPalScriptProvider>
                   ) : (
-                    <p className="text-xs text-red-500 text-center py-2">Acepta los términos y el aviso médico para continuar</p>
+                    <div className="text-center py-3">
+                    <button type="button" onClick={() => setShowDisclaimer(true)}
+                      className="text-sm font-semibold text-primary-600 underline hover:text-primary-700">
+                      👆 Toca aquí para aceptar el aviso médico y continuar
+                    </button>
+                  </div>
                   )}
                 </div>
               )}
