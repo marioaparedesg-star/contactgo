@@ -1,0 +1,106 @@
+// GET /api/recompra/cron
+// Llamado por Vercel Cron cada día a las 9am
+// Busca notificaciones pendientes y envía emails
+import { NextRequest, NextResponse } from 'next/server'
+import { Resend } from 'resend'
+import { createClient } from '@supabase/supabase-js'
+
+const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+const FROM = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
+
+function emailTemplate(nombre: string, producto: string, dias: number, cupon: string, descuento: number, tipo: '7dias' | '3dias' | 'hoy') {
+  const mensajes = {
+    '7dias': { titulo: `${nombre}, tus ${producto} se terminan en 7 días 👁️`, urgencia: 'Tienes tiempo, pero actúa ahora para no quedarte sin lentes.' },
+    '3dias': { titulo: `¡Últimos 3 días! Tus ${producto} se acaban pronto ⚠️`, urgencia: 'Actúa antes de quedarte sin lentes — ¡pueden tardar en llegar!' },
+    'hoy':   { titulo: `Hoy terminan tus ${producto} — recárgalos ahora 🔴`, urgencia: 'Hoy es el último día de tus lentes. Pide ya y evita días sin visión.' },
+  }
+  const { titulo, urgencia } = mensajes[tipo]
+  return `
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #fff;">
+    <div style="background: linear-gradient(135deg, #0a4d8c, #0d6efd); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+      <h1 style="color: white; margin: 0; font-size: 22px;">ContactGo</h1>
+      <p style="color: rgba(255,255,255,0.8); margin: 5px 0 0; font-size: 13px;">Lentes de Contacto República Dominicana</p>
+    </div>
+    <div style="padding: 32px 24px;">
+      <h2 style="color: #1a1a1a; font-size: 20px; margin-bottom: 8px;">${titulo}</h2>
+      <p style="color: #555; font-size: 15px; line-height: 1.6;">${urgencia}</p>
+      <div style="background: #f8faff; border: 2px solid #0d6efd; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
+        <p style="color: #555; font-size: 13px; margin: 0 0 8px;">Tu cupón exclusivo de recompra:</p>
+        <p style="color: #0d6efd; font-size: 28px; font-weight: 900; margin: 0; letter-spacing: 4px;">${cupon}</p>
+        <p style="color: #0d6efd; font-size: 14px; margin: 6px 0 0; font-weight: bold;">${descuento}% de descuento en tu próxima orden</p>
+      </div>
+      <div style="text-align: center; margin: 28px 0;">
+        <a href="${BASE}/catalogo?recompra=${cupon}" 
+           style="background: #0d6efd; color: white; padding: 14px 32px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block;">
+          Pedir mis lentes →
+        </a>
+      </div>
+      <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;">
+      <p style="color: #999; font-size: 12px; text-align: center;">
+        Este recordatorio fue creado automáticamente basado en la duración de tus lentes (${dias} días).<br>
+        Si ya pediste nuevos lentes, ignora este mensaje.
+      </p>
+    </div>
+  </div>`
+}
+
+export async function GET(req: NextRequest) {
+  const authHeader = req.headers.get('authorization')
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY!)
+  const ahora = new Date()
+  let enviados = 0
+
+  // Notificaciones a 7 días
+  const { data: lista7 } = await sb.from('recompra_notifications')
+    .select('*').eq('notificado_7', false)
+    .lte('fecha_notificacion_7', ahora.toISOString())
+
+  for (const n of lista7 || []) {
+    await resend.emails.send({
+      from: FROM, to: n.email,
+      subject: `Tus ${n.product_nombre} se terminan en 7 días 👁️`,
+      html: emailTemplate(n.nombre, n.product_nombre, n.dias_uso, n.cupon_generado, n.descuento_ofrecido, '7dias')
+    })
+    await sb.from('recompra_notifications').update({ notificado_7: true }).eq('id', n.id)
+    // Activar el cupón
+    await sb.from('coupons').update({ activo: true }).eq('code', n.cupon_generado)
+    enviados++
+  }
+
+  // Notificaciones a 3 días
+  const { data: lista3 } = await sb.from('recompra_notifications')
+    .select('*').eq('notificado_3', false)
+    .lte('fecha_notificacion_3', ahora.toISOString())
+
+  for (const n of lista3 || []) {
+    await resend.emails.send({
+      from: FROM, to: n.email,
+      subject: `¡Solo 3 días! Tus ${n.product_nombre} se acaban pronto ⚠️`,
+      html: emailTemplate(n.nombre, n.product_nombre, n.dias_uso, n.cupon_generado, n.descuento_ofrecido, '3dias')
+    })
+    await sb.from('recompra_notifications').update({ notificado_3: true }).eq('id', n.id)
+    enviados++
+  }
+
+  // Notificaciones el día que terminan
+  const { data: lista0 } = await sb.from('recompra_notifications')
+    .select('*').eq('notificado_0', false)
+    .lte('fecha_notificacion_0', ahora.toISOString())
+
+  for (const n of lista0 || []) {
+    await resend.emails.send({
+      from: FROM, to: n.email,
+      subject: `Hoy terminan tus ${n.product_nombre} 🔴`,
+      html: emailTemplate(n.nombre, n.product_nombre, n.dias_uso, n.cupon_generado, n.descuento_ofrecido, 'hoy')
+    })
+    await sb.from('recompra_notifications').update({ notificado_0: true }).eq('id', n.id)
+    enviados++
+  }
+
+  return NextResponse.json({ ok: true, enviados, timestamp: ahora.toISOString() })
+}

@@ -207,6 +207,17 @@ export async function POST(req: NextRequest) {
       html: emailAdmin(order, itemsList, evento, nuevo_estado),
     })
 
+    // Registrar recompra automáticamente para pedidos nuevos
+    if (evento === 'nuevo_pedido') {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'}/api/recompra/registrar`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id })
+        })
+      } catch (e) { /* no bloquear si falla */ }
+    }
+
     return NextResponse.json({ ok: true })
   } catch (err: any) {
     console.error('[notify]', err)
