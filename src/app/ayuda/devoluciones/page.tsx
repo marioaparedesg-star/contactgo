@@ -30,7 +30,7 @@ export default function DevolucionesPage() {
           {[
             { title: '✅ ¿Cuándo puedo devolver un producto?', body: 'Aceptamos devoluciones dentro de los 7 días posteriores a la entrega, siempre que el producto esté sellado, sin abrir y en su empaque original.' },
             { title: '❌ ¿Qué productos NO son devolvibles?', body: 'No aceptamos devoluciones de lentes de contacto que hayan sido abiertos o usados, por razones de higiene y salud.' },
-            { title: '📦 ¿Cómo hago una devolución?', body: 'Contáctanos por WhatsApp al 829-408-9097 dentro de los 7 días con tu número de pedido y foto del producto. Coordinamos la devolución sin costo adicional.' },
+            { title: '📦 ¿Cómo hago una devolución?', body: 'Contáctanos por WhatsApp al 829-472-8328 dentro de los 7 días con tu número de pedido y foto del producto. Coordinamos la devolución sin costo adicional.' },
             { title: '💰 ¿Cómo recibo mi reembolso?', body: 'El reembolso se procesa por el mismo método de pago original dentro de 3 a 5 días hábiles tras recibir el producto devuelto.' },
             { title: '🔄 ¿Puedo cambiar por otro producto?', body: 'Sí. Si prefieres un cambio en lugar de reembolso, lo gestionamos sin costo adicional de envío.' },
             { title: '⚠️ Producto dañado o incorrecto', body: 'Si recibiste un producto dañado o diferente al pedido, contáctanos inmediatamente. Lo reemplazamos sin ningún costo para ti.' },

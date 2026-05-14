@@ -36,7 +36,7 @@ export default async function HomePage() {
         "logo": "https://contactgo.net/logo.png",
         "description": "Tienda online de lentes de contacto originales en República Dominicana.",
         "address": {"@type":"PostalAddress","addressCountry":"DO","addressLocality":"Santo Domingo"},
-        "contactPoint": {"@type":"ContactPoint","telephone":"+1-829-408-9097","contactType":"customer service","availableLanguage":"Spanish"},
+        "contactPoint": {"@type":"ContactPoint","telephone":"+1-829-472-8328","contactType":"customer service","availableLanguage":"Spanish"},
         "sameAs": ["https://wa.me/18294728328"]
       })}} />
       <Navbar />

@@ -46,7 +46,7 @@ export default function SeguridadPage() {
             },
             {
               title: '6. Contacto',
-              body: 'Si tienes dudas sobre la seguridad de un pago, contáctanos en info@contactgo.net o al 829-408-9097 antes de proceder.',
+              body: 'Si tienes dudas sobre la seguridad de un pago, contáctanos en info@contactgo.net o al 829-472-8328 antes de proceder.',
             },
           ].map(s => (
             <div key={s.title}>
