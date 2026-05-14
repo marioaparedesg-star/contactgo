@@ -384,16 +384,18 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* T&C */}
-                    <label className="flex items-start gap-3 cursor-pointer group">
-                      <div onClick={() => setAceptaTerminos(!aceptaTerminos)}
-                        className={`w-5 h-5 rounded border-2 shrink-0 mt-0.5 flex items-center justify-center transition-all ${aceptaTerminos ? 'bg-primary-600 border-primary-600' : 'border-gray-300 group-hover:border-primary-400'}`}>
+                    <div className="flex items-start gap-3 cursor-pointer" onClick={() => setAceptaTerminos(!aceptaTerminos)}>
+                      <div className={`w-5 h-5 rounded border-2 shrink-0 mt-0.5 flex items-center justify-center transition-all ${aceptaTerminos ? 'bg-primary-600 border-primary-600' : 'border-gray-300 hover:border-primary-400'}`}>
                         {aceptaTerminos && <Check className="w-3 h-3 text-white" />}
                       </div>
-                      <input type="checkbox" checked={aceptaTerminos} onChange={e => setAceptaTerminos(e.target.checked)} className="sr-only" />
-                      <span className="text-xs text-gray-500 leading-relaxed">
-                        He leído y acepto los <a href="/terminos" target="_blank" className="text-primary-600 underline font-semibold">Términos y Condiciones</a> y la <a href="/privacidad" target="_blank" className="text-primary-600 underline font-semibold">Política de Privacidad</a> de ContactGo
+                      <span className="text-xs text-gray-500 leading-relaxed select-none">
+                        He leído y acepto los{' '}
+                        <a href="/terminos" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 underline font-semibold">Términos y Condiciones</a>
+                        {' '}y la{' '}
+                        <a href="/privacidad" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 underline font-semibold">Política de Privacidad</a>
+                        {' '}de ContactGo
                       </span>
-                    </label>
+                    </div>
 
                     {/* Botón confirmar */}
                     <button
