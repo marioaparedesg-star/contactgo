@@ -36,6 +36,14 @@ export default async function sitemap() {
 
     // Blog
     { url: 'https://contactgo.net/blog',                       priority: 0.75, freq: 'weekly' },
+    { url: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd',       priority: 0.70, freq: 'monthly' },
+    { url: 'https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd',  priority: 0.75, freq: 'monthly' },
+    { url: 'https://contactgo.net/blog/lentes-multifocales-presbicia-rd',         priority: 0.75, freq: 'monthly' },
+    { url: 'https://contactgo.net/blog/biofinity-vs-acuvue-comparacion',           priority: 0.75, freq: 'monthly' },
+    { url: 'https://contactgo.net/blog/ojos-secos-lentes-contacto',               priority: 0.70, freq: 'monthly' },
+    { url: 'https://contactgo.net/blog/lentes-contacto-colores-rd',               priority: 0.70, freq: 'monthly' },
+    { url: 'https://contactgo.net/blog/cuanto-duran-lentes-contacto',             priority: 0.70, freq: 'monthly' },
+    { url: 'https://contactgo.net/blog/solucion-limpieza-lentes-contacto',        priority: 0.70, freq: 'monthly' },
     { url: 'https://contactgo.net/blog/tipos-de-lentes-de-contacto',             priority: 0.70, freq: 'monthly' },
     { url: 'https://contactgo.net/blog/como-leer-tu-receta',                     priority: 0.70, freq: 'monthly' },
     { url: 'https://contactgo.net/blog/como-poner-lentes-de-contacto',           priority: 0.70, freq: 'monthly' },

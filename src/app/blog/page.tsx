@@ -4,6 +4,14 @@ import Footer from '@/components/ui/Footer'
 
 const POSTS = [
   {
+    slug: 'primeros-pasos-lentes-contacto-rd',
+    titulo: 'Primeros pasos con lentes de contacto en República Dominicana',
+    descripcion: 'Todo lo que necesitas saber antes de comprar tu primer par de lentes de contacto en RD. Receta, tipos y qué esperar.',
+    imagen: '🌟',
+    tiempo: '7 min',
+    categoria: 'Principiantes',
+  },
+  {
     slug: 'como-leer-tu-receta',
     titulo: 'Cómo leer tu receta de lentes de contacto',
     descripcion: 'Aprende a interpretar los valores SPH, CYL, EJE y ADD de tu receta óptica para comprar los lentes correctos.',
@@ -26,6 +34,62 @@ const POSTS = [
     imagen: '🔍',
     tiempo: '5 min',
     categoria: 'Educación',
+  },
+  {
+    slug: 'lentes-de-contacto-para-astigmatismo-rd',
+    titulo: 'Lentes de contacto para astigmatismo en República Dominicana',
+    descripcion: 'Guía completa de lentes tóricos en RD. Marcas, precios, tiempos de entrega y cómo elegir el correcto.',
+    imagen: '🎯',
+    tiempo: '6 min',
+    categoria: 'Astigmatismo',
+  },
+  {
+    slug: 'lentes-multifocales-presbicia-rd',
+    titulo: 'Lentes multifocales para presbicia: la guía definitiva',
+    descripcion: 'Todo sobre lentes de contacto multifocales en RD. Marcas disponibles, adaptación y precios actualizados.',
+    imagen: '🔭',
+    tiempo: '6 min',
+    categoria: 'Presbicia',
+  },
+  {
+    slug: 'biofinity-vs-acuvue-comparacion',
+    titulo: 'Biofinity vs ACUVUE: ¿Cuál es mejor en República Dominicana?',
+    descripcion: 'Comparación completa entre Biofinity de CooperVision y ACUVUE Oasys de J&J. Precio, comodidad e hidratación.',
+    imagen: '⚖️',
+    tiempo: '7 min',
+    categoria: 'Comparaciones',
+  },
+  {
+    slug: 'ojos-secos-lentes-contacto',
+    titulo: 'Ojos secos y lentes de contacto: soluciones reales',
+    descripcion: '¿Sientes sequedad con tus lentes? Descubre los mejores lentes y gotas para ojos secos disponibles en RD.',
+    imagen: '💧',
+    tiempo: '5 min',
+    categoria: 'Salud ocular',
+  },
+  {
+    slug: 'lentes-contacto-colores-rd',
+    titulo: 'Lentes de contacto de colores en República Dominicana',
+    descripcion: 'FreshLook, Air Optix Colors, con y sin graduación. Los colores más populares según tu tono de piel.',
+    imagen: '🎨',
+    tiempo: '4 min',
+    categoria: 'Estética',
+  },
+  {
+    slug: 'cuanto-duran-lentes-contacto',
+    titulo: '¿Cuánto duran los lentes de contacto? Guía completa',
+    descripcion: 'Diarios, quincenales y mensuales: cuándo cambiarlos, cómo sacarles el máximo y cuándo desecharlos antes.',
+    imagen: '📅',
+    tiempo: '5 min',
+    categoria: 'Guías',
+  },
+  {
+    slug: 'solucion-limpieza-lentes-contacto',
+    titulo: 'Cómo elegir la mejor solución para tus lentes de contacto',
+    descripcion: 'Opti-Free, ReNu, Prolub — cuál usar según tu tipo de lente y cómo limpiarlos correctamente en RD.',
+    imagen: '🧴',
+    tiempo: '4 min',
+    categoria: 'Cuidado',
   },
 ]
 
