@@ -60,7 +60,7 @@ const ORDENES = [
 
 async function getProducts(tipo?: string, marca?: string, q?: string, orden?: string): Promise<Product[]> {
   const sb = createServerSupabaseClient()
-  let query = sb.from('products').select('*, categories(*)').eq('activo', true).gt('stock', 0)
+  let query = sb.from('products').select('*').eq('activo', true)
   if (tipo)  query = query.eq('tipo', tipo)
   if (marca) query = query.ilike('marca', '%' + marca + '%')
   if (q)     query = query.ilike('nombre', '%' + q + '%')
@@ -93,7 +93,7 @@ function buildUrl(current: Record<string, string | undefined>, override: Record<
 }
 
 export default async function CatalogoPage({ searchParams }: Props) {
-  const sp = searchParams
+  const sp = await Promise.resolve(searchParams)
   const [products, marcas] = await Promise.all([
     getProducts(sp.tipo, sp.marca, sp.q, sp.orden),
     getMarcas(),
