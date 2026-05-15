@@ -108,16 +108,79 @@ export default function CheckoutPage() {
     setLoading(true)
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
+
+    // ─── TARJETA: primero preparar AZUL, luego crear orden ───────────────
+    if (metodoPago === 'tarjeta') {
+      // 1. Pre-generar campos AZUL con un order_number temporal
+      const tempOrderNum = `CG-${Date.now().toString().slice(-8)}`
+      const preRes = await fetch('/api/azul/preparar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_number: tempOrderNum, total: totalFinal })
+      })
+      if (!preRes.ok) {
+        toast.error('Error al conectar con pasarela de pago. Usa contra entrega.')
+        setLoading(false)
+        return
+      }
+      const { url, fields } = await preRes.json()
+
+      // 2. Crear la orden en Supabase
+      const { data: order, error } = await sb.from('orders').insert({
+        user_id: user?.id ?? null,
+        cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
+        direccion_texto: `${data.direccion}, ${data.ciudad}`,
+        estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
+        metodo_pago: 'tarjeta', pago_estado: 'pendiente',
+        numero_orden: tempOrderNum,
+        disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
+      }).select().single()
+
+      if (error || !order) {
+        toast.error('Error al procesar pedido: ' + (error?.message ?? 'Sin respuesta'))
+        setLoading(false)
+        return
+      }
+
+      // 3. Guardar items
+      await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ order_id: order.id, items: items.map(i => ({
+          order_id: order.id, product_id: i.product.id, nombre: i.product.nombre,
+          precio: Number((i as any).precio_final ?? i.product.precio), cantidad: i.cantidad,
+          sph: i.sph != null ? Number(i.sph) : null, cyl: i.cyl != null ? Number(i.cyl) : null,
+          add_power: i.add_power ? parseFloat(String(i.add_power).replace('+','')) : null,
+          axis: (i as any).axis != null ? Number((i as any).axis) : null,
+          color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
+        })) }) })
+
+      // 4. Actualizar ApprovedUrl con el order_id real
+      fields['ApprovedUrl'] = `${window.location.origin}/confirmacion?orden=${order.id}&origen=azul&resultado=aprobado`
+
+      // 5. Limpiar carrito y enviar al portal AZUL
+      clearCart()
+      const form = document.createElement('form')
+      form.method = 'POST'
+      form.action = url
+      Object.entries(fields as Record<string,string>).forEach(([k,v]) => {
+        const input = document.createElement('input')
+        input.type = 'hidden'; input.name = k; input.value = v
+        form.appendChild(input)
+      })
+      document.body.appendChild(form)
+      form.submit()
+      return
+    }
+
+    // ─── CONTRA ENTREGA ──────────────────────────────────────────────────
     const { data: order, error } = await sb.from('orders').insert({
       user_id: user?.id ?? null,
       cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
       direccion_texto: `${data.direccion}, ${data.ciudad}`,
       estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
-      metodo_pago: metodoPago, pago_estado: 'pendiente',
+      metodo_pago: 'contra_entrega', pago_estado: 'pendiente',
       disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
     }).select().single()
     if (error || !order) {
-      console.error('[checkout] Order insert error:', JSON.stringify(error))
       toast.error('Error al procesar pedido: ' + (error?.message ?? 'Sin respuesta'))
       setLoading(false)
       return
@@ -133,36 +196,8 @@ export default function CheckoutPage() {
       })) }) })
     fetch('/api/notify', { method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }) }).catch(console.error)
-
-    if (metodoPago === 'tarjeta') {
-      // Redirigir a portal AZUL con los parámetros de la orden
-      clearCart(); setLoading(false)
-      const res = await fetch('/api/azul/iniciar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id: order.id, total: totalFinal })
-      })
-      if (res.ok) {
-        const { url, fields } = await res.json()
-        // Auto-submit form to AZUL
-        const form = document.createElement('form')
-        form.method = 'POST'
-        form.action = url
-        Object.entries(fields as Record<string,string>).forEach(([k,v]) => {
-          const input = document.createElement('input')
-          input.type = 'hidden'; input.name = k; input.value = v
-          form.appendChild(input)
-        })
-        document.body.appendChild(form)
-        form.submit()
-      } else {
-        toast.error('Error al conectar con pasarela de pago. Intente contra entrega.')
-        setLoading(false)
-      }
-    } else {
-      clearCart(); setLoading(false)
-      router.push('/confirmacion?orden=' + order.id)
-    }
+    clearCart(); setLoading(false)
+    router.push('/confirmacion?orden=' + order.id)
   }
 
   const handleAuth = async () => {
