@@ -54,24 +54,24 @@ export default function CartPage() {
                 </div>
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  {item.product.marca && (
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{item.product.marca}</p>
+                  {(item.product as any).marca && (
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{(item.product as any).marca}</p>
                   )}
                   <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
 
                   {/* Badges tipo + ojo */}
                   <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                    {item.product.tipo && (
+                    {(item.product as any).tipo && (
                       <span className="text-[10px] bg-primary-50 text-primary-700 font-semibold px-2 py-0.5 rounded-full">
-                        {item.product.tipo === 'esferico' ? 'Esférico' : item.product.tipo === 'torico' ? 'Tórico' : item.product.tipo === 'multifocal' ? 'Multifocal' : item.product.tipo === 'color' ? 'Color' : item.product.tipo === 'solucion' ? 'Solución' : 'Gotas'}
+                        {(item.product as any).tipo === 'esferico' ? 'Esférico' : (item.product as any).tipo === 'torico' ? 'Tórico' : (item.product as any).tipo === 'multifocal' ? 'Multifocal' : (item.product as any).tipo === 'color' ? 'Color' : (item.product as any).tipo === 'solucion' ? 'Solución' : 'Gotas'}
                       </span>
                     )}
-                    {item.product.reemplazo && (
-                      <span className="text-[10px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-full">{item.product.reemplazo}</span>
+                    {(item.product as any).reemplazo && (
+                      <span className="text-[10px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-full">{(item.product as any).reemplazo}</span>
                     )}
-                    {item.ojo && (
-                      <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${item.ojo === 'OD' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'}`}>
-                        {item.ojo === 'OD' ? '👁 Ojo Derecho' : '👁 Ojo Izquierdo'}
+                    {(item as any).ojo && (
+                      <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${(item as any).ojo === 'OD' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'}`}>
+                        {(item as any).ojo === 'OD' ? '👁 Ojo Derecho' : '👁 Ojo Izquierdo'}
                       </span>
                     )}
                   </div>
