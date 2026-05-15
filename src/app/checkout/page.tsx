@@ -371,13 +371,41 @@ export default function CheckoutPage() {
                       </div>
                     </div>
 
+                    {/* Selector método de pago */}
+                    <div>
+                      <p className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Método de pago</p>
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all border-primary-500 bg-primary-50">
+                          <input type="radio" name="metodo" value="contra_entrega" defaultChecked className="accent-primary-600" />
+                          <div className="flex-1">
+                            <p className="font-semibold text-gray-900 text-sm">💵 Contra entrega</p>
+                            <p className="text-xs text-gray-500">Paga en efectivo cuando recibas tu pedido</p>
+                          </div>
+                        </label>
+                        <label className="flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all border-gray-200 hover:border-blue-300"
+                          onClick={() => {
+                            window.open('/api/azul-test', '_blank')
+                          }}>
+                          <input type="radio" name="metodo" value="tarjeta" className="accent-blue-600" />
+                          <div className="flex-1">
+                            <p className="font-semibold text-gray-900 text-sm">💳 Tarjeta de crédito/débito</p>
+                            <p className="text-xs text-gray-500">Visa, Mastercard — Procesado por AZUL (Banco Popular)</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <img src="/visa-blue.png" alt="Visa" className="h-3 object-contain" />
+                            <img src="/mastercard.png" alt="MC" className="h-4 object-contain" />
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
                     {/* Logos seguridad AZUL — Verified by Visa + Mastercard ID Check */}
                     <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100 flex-wrap">
                       <span className="text-[10px] text-gray-500 font-semibold">Pago seguro:</span>
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/400px-Visa.svg.png" alt="Visa" className="h-4 object-contain" />
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/400px-Mastercard-logo.svg.png" alt="Mastercard" className="h-4 object-contain" />
+                      <img src="/visa-blue.png" alt="Visa" className="h-4 object-contain" />
+                      <img src="/mastercard.png" alt="Mastercard" className="h-5 object-contain" />
                       <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.5 rounded font-bold">Verified by VISA</span>
-                      <span className="text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded font-bold">ID Check</span>
+                      <span className="text-[9px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-bold">Mastercard ID Check</span>
                       <span className="text-[9px] bg-green-600 text-white px-1.5 py-0.5 rounded font-bold">🔒 SSL</span>
                     </div>
 

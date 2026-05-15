@@ -32,7 +32,7 @@ const SECCIONES = [
   },
   {
     title: '6. Seguridad',
-    body: 'Implementamos medidas técnicas y organizativas para proteger sus datos: conexiones HTTPS cifradas, bases de datos seguras con acceso restringido, autenticación de dos factores para el panel administrativo. Sin embargo, ningún sistema es 100% infalible. Le recomendamos usar contraseñas seguras y no compartir su cuenta.'
+    body: 'Implementamos medidas técnicas y organizativas para proteger sus datos: conexiones HTTPS cifradas, bases de datos seguras con acceso restringido, autenticación de dos factores para el panel administrativo. Sin embargo, ningún sistema es 100% infalible. Le recomendamos usar contraseñas seguras y no compartir su cuenta. Para más detalles, consulte nuestra política de seguridad.'
   },
   {
     title: '7. Cookies y Analytics',
