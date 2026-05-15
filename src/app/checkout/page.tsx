@@ -442,10 +442,16 @@ export default function CheckoutPage() {
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-2">{item.product.nombre}</p>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {(item as any).ojo && <span className="text-[9px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{(item as any).ojo}</span>}
-                          {item.sph != null && <span className="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-mono">SPH {Number(item.sph)>0?'+':''}{item.sph}</span>}
-                          {(item as any).cyl != null && <span className="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-mono">CYL {(item as any).cyl}</span>}
-                          {(item as any).color && <span className="text-[9px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded">{(item as any).color}</span>}
+                          {(item as any).ojo && (item as any).ojo !== 'AMBOS' && (
+                            <span className={`text-[9px] font-black px-1.5 py-0.5 rounded ${(item as any).ojo === 'OD' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'}`}>
+                              {(item as any).ojo === 'OD' ? '👁 OD' : '👁 OI'}
+                            </span>
+                          )}
+                          {item.sph != null && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">SPH {Number(item.sph)>0?`+${Number(item.sph).toFixed(2)}`:Number(item.sph).toFixed(2)}</span>}
+                          {(item as any).cyl != null && (item as any).cyl !== 0 && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">CYL {Number((item as any).cyl).toFixed(2)}</span>}
+                          {(item as any).axis && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">{(item as any).axis}°</span>}
+                          {(item as any).add_power && <span className="text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded font-mono font-bold">ADD {(item as any).add_power}</span>}
+                          {(item as any).color && <span className="text-[9px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded font-bold">{(item as any).color}</span>}
                         </div>
                         <div className="flex justify-between mt-1">
                           <span className="text-[10px] text-gray-400">×{item.cantidad}</span>
