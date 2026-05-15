@@ -54,15 +54,66 @@ export default function CartPage() {
                 </div>
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
-                  {item.sph !== undefined && item.sph !== null && (
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      SPH: {item.sph > 0 ? `+${item.sph}` : item.sph}
-                      {item.cyl ? ` · CYL: ${item.cyl}` : ''}
-                      {item.add_power ? ` · ADD: ${item.add_power}` : ''}
-                    </p>
+                  {item.product.marca && (
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{item.product.marca}</p>
                   )}
-                  <p className="text-primary-600 font-bold mt-1">
+                  <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
+
+                  {/* Badges tipo + ojo */}
+                  <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                    {item.product.tipo && (
+                      <span className="text-[10px] bg-primary-50 text-primary-700 font-semibold px-2 py-0.5 rounded-full">
+                        {item.product.tipo === 'esferico' ? 'Esférico' : item.product.tipo === 'torico' ? 'Tórico' : item.product.tipo === 'multifocal' ? 'Multifocal' : item.product.tipo === 'color' ? 'Color' : item.product.tipo === 'solucion' ? 'Solución' : 'Gotas'}
+                      </span>
+                    )}
+                    {item.product.reemplazo && (
+                      <span className="text-[10px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-full">{item.product.reemplazo}</span>
+                    )}
+                    {item.ojo && (
+                      <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${item.ojo === 'OD' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'}`}>
+                        {item.ojo === 'OD' ? '👁 Ojo Derecho' : '👁 Ojo Izquierdo'}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Receta */}
+                  {item.sph !== undefined && item.sph !== null && (
+                    <div className="mt-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                      <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Receta</p>
+                      <div className="flex flex-wrap gap-3">
+                        <div>
+                          <p className="text-[9px] text-gray-400">SPH</p>
+                          <p className="text-xs font-black text-gray-900">{item.sph > 0 ? `+${item.sph.toFixed(2)}` : item.sph.toFixed(2)}</p>
+                        </div>
+                        {item.cyl && item.cyl !== 0 && (
+                          <div>
+                            <p className="text-[9px] text-gray-400">CYL</p>
+                            <p className="text-xs font-black text-gray-900">{Number(item.cyl).toFixed(2)}</p>
+                          </div>
+                        )}
+                        {item.axis && (
+                          <div>
+                            <p className="text-[9px] text-gray-400">AXIS</p>
+                            <p className="text-xs font-black text-gray-900">{item.axis}°</p>
+                          </div>
+                        )}
+                        {item.add_power && (
+                          <div>
+                            <p className="text-[9px] text-gray-400">ADD</p>
+                            <p className="text-xs font-black text-gray-900">{item.add_power}</p>
+                          </div>
+                        )}
+                        {item.color && (
+                          <div>
+                            <p className="text-[9px] text-gray-400">Color</p>
+                            <p className="text-xs font-black text-gray-900">{item.color}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <p className="text-primary-600 font-black mt-2 text-base">
                     RD${(item.product.precio * item.cantidad).toLocaleString()}
                   </p>
                   {/* Qty controls */}
