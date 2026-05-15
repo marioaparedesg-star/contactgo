@@ -105,10 +105,10 @@ function ReciboContent() {
         tr:nth-child(even) td { background: #f9fafb; }
       `}</style>
 
-      <div className="page">
+      <div style={{maxWidth:"720px",margin:"0 auto",background:"white",padding:"32px",minHeight:"100vh",fontFamily:"Arial,sans-serif"}}>
 
         {/* Botones - solo pantalla */}
-        <div className="no-print" style={{display:'flex',gap:'10px',marginBottom:'20px',justifyContent:'flex-end'}}>
+        <div className="no-print" style={{display:"flex",gap:"10px",marginBottom:"20px",justifyContent:"flex-end"}}>
           <button onClick={() => window.print()} style={{background:'#0d6efd',color:'white',border:'none',padding:'10px 20px',borderRadius:'8px',cursor:'pointer',fontWeight:'bold',fontSize:'14px'}}>
             🖨️ Imprimir / Guardar PDF
           </button>

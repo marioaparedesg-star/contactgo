@@ -46,6 +46,7 @@ export default function CheckoutPage() {
   const [authLoading, setAuthLoading] = useState(false)
   const [authMsg, setAuthMsg] = useState('')
   const [step, setStep] = useState<1|2|3>(1)
+  const [metodoPago, setMetodoPago] = useState<'contra_entrega'|'tarjeta'>('contra_entrega')
 
   const sub = subtotal()
   const tot = total()
@@ -112,7 +113,7 @@ export default function CheckoutPage() {
       cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
       direccion_texto: `${data.direccion}, ${data.ciudad}`,
       estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
-      metodo_pago: 'contra_entrega', pago_estado: 'pendiente',
+      metodo_pago: metodoPago, pago_estado: 'pendiente',
       disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
     }).select().single()
     if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
@@ -127,8 +128,36 @@ export default function CheckoutPage() {
       })) }) })
     fetch('/api/notify', { method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }) }).catch(console.error)
-    clearCart(); setLoading(false)
-    router.push('/confirmacion?orden=' + order.id)
+
+    if (metodoPago === 'tarjeta') {
+      // Redirigir a portal AZUL con los parámetros de la orden
+      clearCart(); setLoading(false)
+      const res = await fetch('/api/azul/iniciar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: order.id, total: totalFinal })
+      })
+      if (res.ok) {
+        const { url, fields } = await res.json()
+        // Auto-submit form to AZUL
+        const form = document.createElement('form')
+        form.method = 'POST'
+        form.action = url
+        Object.entries(fields as Record<string,string>).forEach(([k,v]) => {
+          const input = document.createElement('input')
+          input.type = 'hidden'; input.name = k; input.value = v
+          form.appendChild(input)
+        })
+        document.body.appendChild(form)
+        form.submit()
+      } else {
+        toast.error('Error al conectar con pasarela de pago. Intente contra entrega.')
+        setLoading(false)
+      }
+    } else {
+      clearCart(); setLoading(false)
+      router.push('/confirmacion?orden=' + order.id)
+    }
   }
 
   const handleAuth = async () => {
@@ -375,28 +404,39 @@ export default function CheckoutPage() {
                     <div>
                       <p className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Método de pago</p>
                       <div className="space-y-2">
-                        <label className="flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all border-primary-500 bg-primary-50">
-                          <input type="radio" name="metodo" value="contra_entrega" defaultChecked className="accent-primary-600" />
+                        <label
+                          className={`flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all ${metodoPago === 'contra_entrega' ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300'}`}
+                          onClick={() => setMetodoPago('contra_entrega')}>
+                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${metodoPago === 'contra_entrega' ? 'border-primary-600' : 'border-gray-300'}`}>
+                            {metodoPago === 'contra_entrega' && <div className="w-2 h-2 bg-primary-600 rounded-full"/>}
+                          </div>
                           <div className="flex-1">
                             <p className="font-semibold text-gray-900 text-sm">💵 Contra entrega</p>
                             <p className="text-xs text-gray-500">Paga en efectivo cuando recibas tu pedido</p>
                           </div>
                         </label>
-                        <label className="flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all border-gray-200 hover:border-blue-300"
-                          onClick={() => {
-                            window.open('/api/azul-test', '_blank')
-                          }}>
-                          <input type="radio" name="metodo" value="tarjeta" className="accent-blue-600" />
+                        <label
+                          className={`flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all ${metodoPago === 'tarjeta' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
+                          onClick={() => setMetodoPago('tarjeta')}>
+                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${metodoPago === 'tarjeta' ? 'border-blue-600' : 'border-gray-300'}`}>
+                            {metodoPago === 'tarjeta' && <div className="w-2 h-2 bg-blue-600 rounded-full"/>}
+                          </div>
                           <div className="flex-1">
                             <p className="font-semibold text-gray-900 text-sm">💳 Tarjeta de crédito/débito</p>
                             <p className="text-xs text-gray-500">Visa, Mastercard — Procesado por AZUL (Banco Popular)</p>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <img src="/visa-blue.png" alt="Visa" className="h-3 object-contain" />
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <img src="/visa-blue.png" alt="Visa" className="h-3.5 object-contain" />
                             <img src="/mastercard.png" alt="MC" className="h-4 object-contain" />
                           </div>
                         </label>
                       </div>
+                      {metodoPago === 'tarjeta' && (
+                        <div className="mt-2 bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-start gap-2">
+                          <span className="text-lg shrink-0">🔒</span>
+                          <p className="text-xs text-blue-800">Al confirmar serás redirigido al portal seguro de <strong>AZUL (Banco Popular)</strong> para ingresar los datos de tu tarjeta. ContactGo no almacena datos de tarjetas.</p>
+                        </div>
+                      )}
                     </div>
 
                     {/* Logos seguridad AZUL — Verified by Visa + Mastercard ID Check */}
