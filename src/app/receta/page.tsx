@@ -303,10 +303,40 @@ export default function RecetaPage() {
                             <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide mb-0.5">{p.marca??'ContactGo'}</p>
                             <p className="font-semibold text-gray-900 text-xs leading-snug line-clamp-2 mb-1">{p.nombre}</p>
                             <p className="font-black text-primary-600 text-sm">RD${p.precio?.toLocaleString()}</p>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {od_sph&&<span className="text-[9px] bg-green-50 text-green-700 font-bold px-1.5 py-0.5 rounded-md">OD {parseFloat(od_sph)>0?`+${parseFloat(od_sph).toFixed(2)}`:parseFloat(od_sph).toFixed(2)}</span>}
+                              {oi_sph&&<span className="text-[9px] bg-teal-50 text-teal-700 font-bold px-1.5 py-0.5 rounded-md">OI {parseFloat(oi_sph)>0?`+${parseFloat(oi_sph).toFixed(2)}`:parseFloat(oi_sph).toFixed(2)}</span>}
+                            </div>
                           </Link>
-                          <button onClick={()=>{addItem(p);toast.success('Agregado al carrito')}}
+                          <button onClick={()=>{
+                            // OD
+                            if(od_sph){
+                              addItem(p,{
+                                sph: parseFloat(od_sph),
+                                cyl: od_cyl&&od_cyl!=='0.00'?parseFloat(od_cyl):null,
+                                axis: od_ax?parseInt(od_ax):null,
+                                add_power: add||null,
+                                ojo:'OD',
+                                cantidad:1,
+                              })
+                            }
+                            // OI
+                            if(oi_sph){
+                              addItem(p,{
+                                sph: parseFloat(oi_sph),
+                                cyl: oi_cyl&&oi_cyl!=='0.00'?parseFloat(oi_cyl):null,
+                                axis: oi_ax?parseInt(oi_ax):null,
+                                add_power: add||null,
+                                ojo:'OI',
+                                cantidad:1,
+                              })
+                            }
+                            // If neither OD nor OI has sph (shouldn't happen), add plain
+                            if(!od_sph&&!oi_sph) addItem(p)
+                            toast.success(`${p.nombre} agregado con tu receta ✓`)
+                          }}
                             className="mt-2 w-full bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1 transition-all">
-                            <ShoppingCart className="w-3 h-3"/>Agregar
+                            <ShoppingCart className="w-3 h-3"/>Agregar con mi receta
                           </button>
                         </div>
                       ))}
