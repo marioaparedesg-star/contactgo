@@ -116,7 +116,12 @@ export default function CheckoutPage() {
       metodo_pago: metodoPago, pago_estado: 'pendiente',
       disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
     }).select().single()
-    if (error || !order) { toast.error('Error al procesar pedido'); setLoading(false); return }
+    if (error || !order) {
+      console.error('[checkout] Order insert error:', JSON.stringify(error))
+      toast.error('Error al procesar pedido: ' + (error?.message ?? 'Sin respuesta'))
+      setLoading(false)
+      return
+    }
     await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ order_id: order.id, items: items.map(i => ({
         order_id: order.id, product_id: i.product.id, nombre: i.product.nombre,
@@ -383,81 +388,104 @@ export default function CheckoutPage() {
                 </div>
 
                 {step === 3 && (
-                  <div className="px-5 pb-5 border-t border-gray-50 pt-4 space-y-4">
-                    {/* Resumen de datos */}
-                    <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm">
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <User className="w-3.5 h-3.5 shrink-0" />
-                        <span>{getValues('nombre')} · {getValues('telefono')}</span>
+                  <div className="px-5 pb-5 border-t border-gray-50 pt-4 space-y-3">
+
+                    {/* Resumen info cliente */}
+                    <div className="bg-gray-50 rounded-xl p-3.5 space-y-1.5 text-sm">
+                      <div className="flex items-center gap-2 text-gray-700">
+                        <User className="w-3.5 h-3.5 shrink-0 text-gray-400" />
+                        <span className="font-semibold">{getValues('nombre')}</span>
+                        <span className="text-gray-400">·</span>
+                        <span className="text-gray-500">{getValues('telefono')}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <MapPin className="w-3.5 h-3.5 shrink-0" />
-                        <span>{getValues('direccion')}, {getValues('ciudad')}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <Truck className="w-3.5 h-3.5 shrink-0" />
-                        <span className="text-green-700 font-semibold">Contra entrega — {envio === 0 ? 'Envío gratis' : `RD$${envio} envío`}</span>
+                      <div className="flex items-center gap-2 text-gray-500">
+                        <MapPin className="w-3.5 h-3.5 shrink-0 text-gray-400" />
+                        <span className="text-sm">{getValues('direccion')}, {getValues('ciudad')}</span>
                       </div>
                     </div>
 
-                    {/* Selector método de pago */}
+                    {/* MÉTODO DE PAGO */}
                     <div>
-                      <p className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Método de pago</p>
-                      <div className="space-y-2">
-                        <label
-                          className={`flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all ${metodoPago === 'contra_entrega' ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300'}`}
-                          onClick={() => setMetodoPago('contra_entrega')}>
-                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${metodoPago === 'contra_entrega' ? 'border-primary-600' : 'border-gray-300'}`}>
-                            {metodoPago === 'contra_entrega' && <div className="w-2 h-2 bg-primary-600 rounded-full"/>}
+                      <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Método de pago</p>
+                      <div className="grid grid-cols-1 gap-2">
+
+                        {/* Contra entrega */}
+                        <button type="button"
+                          onClick={() => setMetodoPago('contra_entrega')}
+                          className={`flex items-center gap-3 p-3.5 rounded-xl border-2 text-left transition-all w-full ${
+                            metodoPago === 'contra_entrega'
+                              ? 'border-primary-500 bg-primary-50 shadow-sm'
+                              : 'border-gray-200 bg-white hover:border-gray-300'
+                          }`}>
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+                            metodoPago === 'contra_entrega' ? 'border-primary-600' : 'border-gray-300'
+                          }`}>
+                            {metodoPago === 'contra_entrega' && <div className="w-2.5 h-2.5 bg-primary-600 rounded-full"/>}
                           </div>
-                          <div className="flex-1">
-                            <p className="font-semibold text-gray-900 text-sm">💵 Contra entrega</p>
-                            <p className="text-xs text-gray-500">Paga en efectivo cuando recibas tu pedido</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-bold text-gray-900 text-sm">Contra entrega</p>
+                            <p className="text-xs text-gray-500 mt-0.5">Pagas en efectivo cuando recibes tu pedido</p>
                           </div>
-                        </label>
-                        <label
-                          className={`flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all ${metodoPago === 'tarjeta' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
-                          onClick={() => setMetodoPago('tarjeta')}>
-                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${metodoPago === 'tarjeta' ? 'border-blue-600' : 'border-gray-300'}`}>
-                            {metodoPago === 'tarjeta' && <div className="w-2 h-2 bg-blue-600 rounded-full"/>}
+                          <span className="text-xl shrink-0">💵</span>
+                        </button>
+
+                        {/* Tarjeta AZUL */}
+                        <button type="button"
+                          onClick={() => setMetodoPago('tarjeta')}
+                          className={`flex items-center gap-3 p-3.5 rounded-xl border-2 text-left transition-all w-full ${
+                            metodoPago === 'tarjeta'
+                              ? 'border-blue-500 bg-blue-50 shadow-sm'
+                              : 'border-gray-200 bg-white hover:border-blue-200'
+                          }`}>
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+                            metodoPago === 'tarjeta' ? 'border-blue-600' : 'border-gray-300'
+                          }`}>
+                            {metodoPago === 'tarjeta' && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"/>}
                           </div>
-                          <div className="flex-1">
-                            <p className="font-semibold text-gray-900 text-sm">💳 Tarjeta de crédito/débito</p>
-                            <p className="text-xs text-gray-500">Visa, Mastercard — Procesado por AZUL (Banco Popular)</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-bold text-gray-900 text-sm">Tarjeta de crédito / débito</p>
+                            <p className="text-xs text-gray-500 mt-0.5">Procesado por AZUL · Banco Popular</p>
                           </div>
-                          <div className="flex items-center gap-1.5 shrink-0">
-                            <img src="/visa-blue.png" alt="Visa" className="h-3.5 object-contain" />
-                            <img src="/mastercard.png" alt="MC" className="h-4 object-contain" />
+                          <div className="flex items-center gap-1 shrink-0">
+                            <img src="/visa-blue.png" alt="Visa" className="h-4 object-contain" />
+                            <img src="/mastercard.png" alt="MC" className="h-5 object-contain" />
                           </div>
-                        </label>
+                        </button>
                       </div>
+
+                      {/* Aviso tarjeta */}
                       {metodoPago === 'tarjeta' && (
-                        <div className="mt-2 bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-start gap-2">
-                          <span className="text-lg shrink-0">🔒</span>
-                          <p className="text-xs text-blue-800">Al confirmar serás redirigido al portal seguro de <strong>AZUL (Banco Popular)</strong> para ingresar los datos de tu tarjeta. ContactGo no almacena datos de tarjetas.</p>
+                        <div className="mt-2 flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-xl p-3">
+                          <span className="shrink-0">🔒</span>
+                          <p className="text-xs text-blue-800 leading-relaxed">
+                            Al confirmar serás redirigido al portal seguro de <strong>AZUL (Banco Popular)</strong> para ingresar los datos de tu tarjeta. ContactGo <strong>no almacena</strong> datos de tarjetas.
+                          </p>
                         </div>
                       )}
                     </div>
 
-                    {/* Logos seguridad AZUL — Verified by Visa + Mastercard ID Check */}
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100 flex-wrap">
-                      <span className="text-[10px] text-gray-500 font-semibold">Pago seguro:</span>
-                      <img src="/visa-blue.png" alt="Visa" className="h-4 object-contain" />
-                      <img src="/mastercard.png" alt="Mastercard" className="h-5 object-contain" />
-                      <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.5 rounded font-bold">Verified by VISA</span>
+                    {/* Logos seguridad */}
+                    <div className="flex items-center gap-2 flex-wrap p-3 bg-gray-50 rounded-xl border border-gray-100">
+                      <span className="text-[10px] text-gray-400 font-semibold">Pago seguro:</span>
+                      <img src="/visa-blue.png" alt="Visa" className="h-3.5 object-contain" />
+                      <img src="/mastercard.png" alt="Mastercard" className="h-4 object-contain" />
+                      <span className="text-[9px] bg-blue-700 text-white px-1.5 py-0.5 rounded font-bold">Verified by VISA</span>
                       <span className="text-[9px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-bold">Mastercard ID Check</span>
                       <span className="text-[9px] bg-green-600 text-white px-1.5 py-0.5 rounded font-bold">🔒 SSL</span>
                     </div>
 
-                    {/* Total grande */}
-                    <div className="bg-primary-50 rounded-xl p-4 flex items-center justify-between">
+                    {/* TOTAL + MÉTODO */}
+                    <div className={`rounded-xl p-4 flex items-center justify-between ${metodoPago === 'tarjeta' ? 'bg-blue-50 border border-blue-100' : 'bg-primary-50 border border-primary-100'}`}>
                       <div>
-                        <p className="text-xs text-primary-600 font-semibold uppercase tracking-wider">Total a pagar</p>
-                        <p className="text-2xl font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
+                        <p className={`text-xs font-bold uppercase tracking-wider ${metodoPago === 'tarjeta' ? 'text-blue-600' : 'text-primary-600'}`}>Total a pagar</p>
+                        <p className={`text-2xl font-black ${metodoPago === 'tarjeta' ? 'text-blue-700' : 'text-primary-700'}`}>RD${totalFinal.toLocaleString()}</p>
                       </div>
-                      <div className="text-right text-xs text-gray-500">
-                        <p>En efectivo</p>
-                        <p>al recibir</p>
+                      <div className={`text-right text-xs font-semibold ${metodoPago === 'tarjeta' ? 'text-blue-600' : 'text-primary-600'}`}>
+                        {metodoPago === 'tarjeta' ? (
+                          <><p>💳 Tarjeta</p><p className="font-normal text-gray-400">Portal AZUL</p></>
+                        ) : (
+                          <><p>💵 Efectivo</p><p className="font-normal text-gray-400">Al recibir</p></>
+                        )}
                       </div>
                     </div>
 
@@ -475,16 +503,23 @@ export default function CheckoutPage() {
                       </span>
                     </div>
 
-                    {/* Botón confirmar */}
+                    {/* Botón principal — cambia según método */}
                     <button
                       onClick={handleSubmit(data => {
-                        if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones'); return }
+                        if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones para continuar'); return }
                         createOrder(data)
                       })}
                       disabled={loading || !aceptaTerminos}
-                      className="w-full bg-green-600 hover:bg-green-700 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-green-200">
+                      className={`w-full active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg ${
+                        metodoPago === 'tarjeta'
+                          ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-200'
+                          : 'bg-green-600 hover:bg-green-700 shadow-green-200'
+                      }`}>
                       {loading ? (
-                        <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Procesando tu pedido...</>
+                        <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        {metodoPago === 'tarjeta' ? 'Conectando con AZUL...' : 'Procesando pedido...'}</>
+                      ) : metodoPago === 'tarjeta' ? (
+                        <><span>Pagar con tarjeta · RD${totalFinal.toLocaleString()}</span><ChevronRight className="w-5 h-5" /></>
                       ) : (
                         <><span>Confirmar pedido · RD${totalFinal.toLocaleString()}</span><ChevronRight className="w-5 h-5" /></>
                       )}
