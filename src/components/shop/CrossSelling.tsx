@@ -3,17 +3,17 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ShoppingCart, ChevronRight } from 'lucide-react'
-import { useCartStore } from '@/store/cartStore'
+import { useCartStore } from '@/lib/cart-store'
 
 interface Product { id: string; nombre: string; slug: string; precio: number; imagen_url?: string; tipo: string }
 
 const CROSS_MAP: Record<string, string[]> = {
-  esferico:  ['solucion', 'gota'],
-  torico:    ['solucion', 'gota'],
-  multifocal:['solucion', 'gota'],
-  color:     ['solucion', 'gota'],
-  solucion:  ['gota'],
-  gota:      ['solucion'],
+  esferico:   ['solucion', 'gota'],
+  torico:     ['solucion', 'gota'],
+  multifocal: ['solucion', 'gota'],
+  color:      ['solucion', 'gota'],
+  solucion:   ['gota'],
+  gota:       ['solucion'],
 }
 
 export default function CrossSelling({ tipo, currentId }: { tipo: string; currentId: string }) {
@@ -23,14 +23,16 @@ export default function CrossSelling({ tipo, currentId }: { tipo: string; curren
   useEffect(() => {
     const tipos = CROSS_MAP[tipo] ?? ['solucion']
     fetch(`/api/cross-selling?tipos=${tipos.join(',')}&exclude=${currentId}`)
-      .then(r => r.json()).then(d => setProducts(d.products ?? []))
+      .then(r => r.json())
+      .then(d => setProducts(d.products ?? []))
+      .catch(() => {})
   }, [tipo, currentId])
 
   if (!products.length) return null
 
-  const titulo = tipo === 'gota' ? 'Completa tu rutina ocular' :
-                 tipo === 'solucion' ? 'Añade lubricación extra' :
-                 'Completa tu kit de lentes'
+  const titulo = tipo === 'gota' ? 'Completa tu rutina ocular'
+    : tipo === 'solucion' ? 'Añade lubricación extra'
+    : 'Completa tu kit de lentes'
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-8 border-t border-gray-100">
@@ -48,17 +50,16 @@ export default function CrossSelling({ tipo, currentId }: { tipo: string; curren
           <div key={p.id} className="card p-3 flex flex-col gap-2 hover:-translate-y-0.5 transition-all">
             <Link href={`/producto/${p.slug}`}>
               <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2">
-                {p.imagen_url ? (
-                  <Image src={p.imagen_url} alt={p.nombre} fill className="object-contain p-2" sizes="160px" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-3xl">💧</div>
-                )}
+                {p.imagen_url
+                  ? <Image src={p.imagen_url} alt={p.nombre} fill className="object-contain p-2" sizes="160px" />
+                  : <div className="w-full h-full flex items-center justify-center text-3xl">💧</div>
+                }
               </div>
               <p className="text-xs font-semibold text-gray-800 line-clamp-2 leading-snug">{p.nombre}</p>
               <p className="text-primary-600 font-black text-sm">RD${p.precio?.toLocaleString()}</p>
             </Link>
             <button
-              onClick={() => addItem({ id: p.id, nombre: p.nombre, precio: p.precio, imagen_url: p.imagen_url, slug: p.slug, tipo: p.tipo })}
+              onClick={() => addItem(p as any)}
               className="w-full bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1 transition-all mt-auto">
               <ShoppingCart className="w-3 h-3" /> Agregar
             </button>
