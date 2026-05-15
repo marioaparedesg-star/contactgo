@@ -314,10 +314,19 @@ export default async function HomePage() {
         <section className="bg-gray-50 border-y border-gray-100 py-8">
           <div className="max-w-7xl mx-auto px-4">
             <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">Distribuidores autorizados</p>
-            <div className="flex flex-wrap justify-center gap-x-10 gap-y-3">
+            <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 mb-5">
               {['ACUVUE®', 'AIR OPTIX®', 'FreshLook®', 'Bausch+Lomb', 'CooperVision®', 'Biofinity®', 'Opti-Free®', 'Prolub®'].map(m => (
                 <span key={m} className="text-gray-500 font-bold text-sm">{m}</span>
               ))}
+            </div>
+            {/* Logos tarjetas en homepage — Requerido por Visa/Mastercard/AZUL */}
+            <div className="flex items-center justify-center gap-3 pt-3 border-t border-gray-100 flex-wrap">
+              <span className="text-xs text-gray-400 font-semibold">Pagos seguros:</span>
+              <img src="/visa-blue.png" alt="Visa" className="h-4 object-contain" />
+              <img src="/mastercard.png" alt="Mastercard" className="h-5 object-contain" />
+              <span className="text-[9px] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded font-medium">Verified by VISA</span>
+              <span className="text-[9px] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded font-medium">Mastercard ID Check</span>
+              <span className="text-[9px] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded font-medium">🔒 SSL</span>
             </div>
           </div>
         </section>

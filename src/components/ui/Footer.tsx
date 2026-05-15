@@ -68,7 +68,7 @@ export default function Footer() {
             {[
               ['Centro de ayuda', '/ayuda'],
               ['Envíos', '/ayuda#envios'],
-              ['Devoluciones', '/ayuda#devoluciones'],
+              ['Devoluciones', '/devoluciones'],
               ['Mi Receta', '/receta'],
               ['FAQ', '/faq'],
               ['Blog', '/blog'],
@@ -105,9 +105,11 @@ export default function Footer() {
           <div className="mt-5">
             <p className="text-[10px] text-gray-600 uppercase tracking-widest mb-2">Pagos seguros</p>
             <div className="flex items-center gap-2 flex-wrap">
-              <img src="/visa_blue.svg" alt="Visa" className="h-5 opacity-60" />
-              <img src="/mc_symbol.png" alt="Mastercard" className="h-5 opacity-60" />
-              <span className="text-[10px] text-gray-600 bg-gray-800 px-2 py-0.5 rounded">🔒 SSL</span>
+              <img src="/visa-blue.png" alt="Visa" className="h-5 opacity-60" />
+              <img src="/mastercard.png" alt="Mastercard" className="h-5 opacity-80" />
+              <span className="text-[9px] text-gray-500 border border-gray-700 px-1.5 py-0.5 rounded">Verified by VISA</span>
+              <span className="text-[9px] text-gray-500 border border-gray-700 px-1.5 py-0.5 rounded">Mastercard ID Check</span>
+              <span className="text-[9px] text-gray-500 border border-gray-700 px-1.5 py-0.5 rounded">🔒 SSL</span>
             </div>
           </div>
         </div>
