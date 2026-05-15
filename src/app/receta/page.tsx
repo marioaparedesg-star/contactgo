@@ -41,7 +41,8 @@ export default function RecetaPage() {
   const [add,set_add]=useState('')
   const [igual,set_igual]=useState(false)
   const [result,setResult]=useState<any>(null)
-  const [products,setProducts]=useState<any[]>([])
+  const [allProducts,setAllProducts]=useState<Record<string,any[]>>({esferico:[],torico:[],multifocal:[]})
+  const [activeTab,setActiveTab]=useState('')
   const [loading,setLoading]=useState(false)
   const [done,setDone]=useState(false)
   const [showConsent,setShowConsent]=useState(false)
@@ -53,7 +54,7 @@ export default function RecetaPage() {
 
   const resetear=()=>{
     set_od_sph('');set_od_cyl('');set_od_ax('');set_oi_sph('');set_oi_cyl('');set_oi_ax('');set_add('');set_igual(false)
-    setResult(null);setProducts([]);setDone(false)
+    setResult(null);setAllProducts({esferico:[],torico:[],multifocal:[]});setActiveTab('');setDone(false)
   }
 
   const calcular=async()=>{
@@ -64,11 +65,19 @@ export default function RecetaPage() {
     setResult(analysis)
     const sb=createClient()
     const sph=rx.od_sph??rx.oi_sph??0
-    let q=sb.from('products').select('*').eq('activo',true).gt('stock',0).eq('tipo',analysis.recomendacion)
-    if(sph!==0)q=q.contains('sph_disponibles',[Number(sph.toFixed(2))])
-    const {data}=await q.limit(6)
-    if(!data||data.length===0){const {data:fb}=await sb.from('products').select('*').eq('activo',true).eq('tipo',analysis.recomendacion).limit(6);setProducts(fb??[])}
-    else setProducts(data)
+    // Fetch all 3 types simultaneously
+    const fetched: Record<string,any[]> = {}
+    for(const tipo of ['esferico','torico','multifocal']){
+      let q=sb.from('products').select('*').eq('activo',true).gt('stock',0).eq('tipo',tipo)
+      if(sph!==0)q=q.contains('sph_disponibles',[Number(sph.toFixed(2))])
+      const {data}=await q.limit(4)
+      if(!data||data.length===0){
+        const {data:fb}=await sb.from('products').select('*').eq('activo',true).eq('tipo',tipo).limit(4)
+        fetched[tipo]=fb??[]
+      } else fetched[tipo]=data
+    }
+    setAllProducts(fetched)
+    setActiveTab(analysis.recomendacion)
     setLoading(false);setDone(true)
     setTimeout(()=>document.getElementById('res')?.scrollIntoView({behavior:'smooth',block:'start'}),100)
   }
@@ -247,49 +256,76 @@ export default function RecetaPage() {
               </div>
             </div>
 
-            {/* Productos */}
-            {products.length>0&&(
-              <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="font-display text-lg font-bold text-gray-900">Lentes para tu receta</h3>
-                    <p className="text-sm text-gray-500">Productos disponibles en ContactGo con tus parámetros</p>
+            {/* Productos con TABS — 3 tipos */}
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="p-5 border-b border-gray-100">
+                <h3 className="font-display text-lg font-bold text-gray-900 mb-1">Lentes disponibles para tu receta</h3>
+                <p className="text-sm text-gray-500">Selecciona el tipo de lente que prefieres</p>
+              </div>
+              {/* TABS */}
+              <div className="flex border-b border-gray-100">
+                {([
+                  {tipo:'esferico',  label:'Esféricos',   emoji:'👁️', desc:'Miopía / Hipermetropía'},
+                  {tipo:'torico',    label:'Tóricos',     emoji:'🎯', desc:'Astigmatismo'},
+                  {tipo:'multifocal',label:'Multifocales',emoji:'🔭', desc:'Presbicia'},
+                ] as const).map(t=>(
+                  <button key={t.tipo} onClick={()=>setActiveTab(t.tipo)}
+                    className={`flex-1 flex flex-col items-center py-3 px-2 text-center transition-all relative border-b-2 ${activeTab===t.tipo?'border-primary-600 bg-primary-50':'border-transparent hover:bg-gray-50'}`}>
+                    {t.tipo===result.recomendacion&&(
+                      <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-400 rounded-full"/>
+                    )}
+                    <span className="text-lg mb-0.5">{t.emoji}</span>
+                    <span className={`text-xs font-bold ${activeTab===t.tipo?'text-primary-700':'text-gray-600'}`}>{t.label}</span>
+                    <span className="text-[10px] text-gray-400 hidden md:block">{t.desc}</span>
+                    {t.tipo===result.recomendacion&&(
+                      <span className="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full mt-0.5 hidden md:block">Recomendado</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              {/* Contenido del tab activo */}
+              <div className="p-4">
+                {activeTab==='torico'&&(
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-3 flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5"/>
+                    <p className="text-xs text-amber-700"><strong>Entrega 20-30 días</strong> — Los lentes tóricos se fabrican a medida según tu SPH + CYL + AXIS exactos.</p>
                   </div>
-                  <Link href={`/catalogo?tipo=${result.recomendacion}`} className="text-sm text-primary-600 font-semibold flex items-center gap-1 hover:text-primary-700">
-                    Ver más <ChevronRight className="w-4 h-4"/>
-                  </Link>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {products.map((p:any)=>(
-                    <div key={p.id} className="border border-gray-100 rounded-2xl p-3 hover:border-primary-200 hover:-translate-y-0.5 transition-all">
-                      <Link href={`/producto/${p.slug}`}>
-                        <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2">
-                          {p.imagen_url?<Image src={p.imagen_url} alt={p.nombre} fill className="object-contain p-2" sizes="180px"/>:<div className="w-full h-full flex items-center justify-center text-3xl">👁️</div>}
+                )}
+                {(allProducts[activeTab]??[]).length>0?(
+                  <>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {(allProducts[activeTab]??[]).map((p:any)=>(
+                        <div key={p.id} className="border border-gray-100 rounded-2xl p-3 hover:border-primary-200 hover:-translate-y-0.5 transition-all">
+                          <Link href={`/producto/${p.slug}`}>
+                            <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2">
+                              {p.imagen_url?<Image src={p.imagen_url} alt={p.nombre} fill className="object-contain p-2" sizes="160px"/>:<div className="w-full h-full flex items-center justify-center text-2xl">👁️</div>}
+                            </div>
+                            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide mb-0.5">{p.marca??'ContactGo'}</p>
+                            <p className="font-semibold text-gray-900 text-xs leading-snug line-clamp-2 mb-1">{p.nombre}</p>
+                            <p className="font-black text-primary-600 text-sm">RD${p.precio?.toLocaleString()}</p>
+                          </Link>
+                          <button onClick={()=>{addItem(p);toast.success('Agregado al carrito')}}
+                            className="mt-2 w-full bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1 transition-all">
+                            <ShoppingCart className="w-3 h-3"/>Agregar
+                          </button>
                         </div>
-                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-0.5">{p.marca??'ContactGo'}</p>
-                        <p className="font-semibold text-gray-900 text-xs leading-snug line-clamp-2 mb-1">{p.nombre}</p>
-                        <p className="font-black text-primary-600 text-sm">RD${p.precio?.toLocaleString()}</p>
-                      </Link>
-                      <button onClick={()=>{addItem(p);toast.success('Agregado al carrito')}}
-                        className={`mt-2 w-full ${cfg.color.btn} text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1 transition-all`}>
-                        <ShoppingCart className="w-3 h-3"/>Agregar
-                      </button>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                    <div className="mt-3 text-center">
+                      <Link href={`/catalogo?tipo=${activeTab}`} className="text-sm text-primary-600 font-semibold hover:text-primary-700 flex items-center justify-center gap-1">
+                        Ver todos los lentes {activeTab==='esferico'?'esféricos':activeTab==='torico'?'tóricos':'multifocales'} disponibles <ChevronRight className="w-4 h-4"/>
+                      </Link>
+                    </div>
+                  </>
+                ):(
+                  <div className="text-center py-8 text-gray-400">
+                    <p className="text-sm">Cargando productos...</p>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
 
-            {/* Aviso tórico */}
-            {result.recomendacion==='torico'&&(
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5"/>
-                <div>
-                  <p className="font-semibold text-amber-800 text-sm mb-1">Tiempo de entrega especial — 20-30 días</p>
-                  <p className="text-amber-700 text-xs leading-relaxed">Los lentes tóricos se fabrican a medida según tu prescripción exacta (SPH + CYL + AXIS). A diferencia de los esféricos que se envían en 24-48h, los tóricos requieren fabricación personalizada.</p>
-                </div>
-              </div>
-            )}
+
 
             {/* CTA WhatsApp */}
             <div className="bg-gray-900 rounded-3xl p-5 flex flex-col sm:flex-row items-center gap-4 justify-between">
