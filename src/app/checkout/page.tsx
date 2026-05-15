@@ -371,6 +371,16 @@ export default function CheckoutPage() {
                       </div>
                     </div>
 
+                    {/* Logos seguridad AZUL — Verified by Visa + Mastercard ID Check */}
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100 flex-wrap">
+                      <span className="text-[10px] text-gray-500 font-semibold">Pago seguro:</span>
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/400px-Visa.svg.png" alt="Visa" className="h-4 object-contain" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/400px-Mastercard-logo.svg.png" alt="Mastercard" className="h-4 object-contain" />
+                      <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.5 rounded font-bold">Verified by VISA</span>
+                      <span className="text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded font-bold">ID Check</span>
+                      <span className="text-[9px] bg-green-600 text-white px-1.5 py-0.5 rounded font-bold">🔒 SSL</span>
+                    </div>
+
                     {/* Total grande */}
                     <div className="bg-primary-50 rounded-xl p-4 flex items-center justify-between">
                       <div>

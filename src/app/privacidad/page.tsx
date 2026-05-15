@@ -12,7 +12,7 @@ export const metadata = {
 const SECCIONES = [
   {
     title: '1. Responsable del Tratamiento',
-    body: 'ContactGo (contactgo.net) es responsable del tratamiento de los datos personales que usted proporciona al utilizar nuestra plataforma. Operamos desde República Dominicana conforme a las disposiciones de la Ley 172-13 sobre Protección de Datos Personales.'
+    body: 'ContactGo (contactgo.net) es responsable del tratamiento de los datos personales que usted proporciona al utilizar nuestra plataforma. Datos del responsable: ContactGo · contactgo.net · Email: info@contactgo.net · Teléfono: (829) 472-8328 · Santo Domingo, República Dominicana. Operamos conforme a la Ley 172-13 sobre Protección de Datos Personales de la República Dominicana.'
   },
   {
     title: '2. Datos que Recopilamos',

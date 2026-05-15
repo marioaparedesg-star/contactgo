@@ -231,6 +231,12 @@ function ConfirmacionContent() {
             className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-colors">
             <Package className="w-5 h-5" /> Seguir mi pedido
           </Link>
+          {orderId && (
+            <a href={`/recibo?orden=${orderId}`} target="_blank" rel="noopener noreferrer"
+              className="w-full bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-colors text-sm">
+              🖨️ Ver comprobante de pago
+            </a>
+          )}
           <a href={`https://wa.me/${waNumber}?text=${whatsappMsg}`}
             target="_blank" rel="noopener noreferrer"
             className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-colors">
