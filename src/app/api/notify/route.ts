@@ -320,6 +320,25 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    // WhatsApp al cliente — solo para pedidos nuevos
+    if (evento === 'nuevo_pedido' && order.cliente_telefono) {
+      const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+      fetch(`${BASE}/api/whatsapp/notify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_id,
+          cliente_nombre: order.cliente_nombre,
+          cliente_telefono: order.cliente_telefono,
+          total: order.total,
+          numero_orden: order.numero_orden,
+          metodo_pago: order.metodo_pago,
+        })
+      }).then(r => r.json())
+        .then(d => console.log('[notify] WA:', d?.success ? '✅ enviado' : d))
+        .catch(e => console.error('[notify] WA error:', e))
+    }
+
     // Email al admin (siempre)
     await resend.emails.send({
       from: FROM_EMAIL,
