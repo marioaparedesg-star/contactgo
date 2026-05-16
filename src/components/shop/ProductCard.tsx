@@ -48,11 +48,22 @@ export default function ProductCard({ product }: Props) {
   }
 
   const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
-  const stockLow = product.stock > 0 && product.stock <= 5
-  const stockMed = product.stock > 5 && product.stock <= 10
-  // Hora RD (UTC-4) — entrega hoy si pide antes de las 3pm
-  const horaRD = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santo_Domingo' })).getHours()
-  const entregaHoy = horaRD < 15
+
+  // Stock badge — solo si stock es REALMENTE bajo (≤4) o agotado
+  const stockCritical = product.stock > 0 && product.stock <= 4
+
+  // Contenido de la caja
+  const contenidoLabel = product.tipo === 'gota' || product.tipo === 'solucion'
+    ? '1 frasco'
+    : product.reemplazo === 'Diario' || (product as any).dias_uso === 1
+      ? 'caja de 30u'
+      : product.reemplazo === 'Quincenal' || (product as any).dias_uso === 14
+        ? 'caja de 6u'
+        : product.reemplazo === 'Mensual' || (product as any).dias_uso === 30
+          ? 'caja de 6u'
+          : product.tipo === 'color'
+            ? '2 lentes'
+            : (product as any).contenido ?? 'por caja'
 
   return (
     <Link
@@ -65,47 +76,48 @@ export default function ProductCard({ product }: Props) {
         <button onClick={toggleFav}
           aria-label={isFav ? `Quitar ${product.nombre} de favoritos` : `Agregar ${product.nombre} a favoritos`}
           className={"absolute top-2 right-2 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-sm " + (isFav ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-400 hover:text-red-400')}>
-          <Heart className={"w-3.5 h-3.5 " + (isFav ? 'fill-current' : '')} />
+          <Heart className={"w-3.5 h-3.5 " + (isFav ? 'fill-current' : '')} aria-hidden="true" />
         </button>
-        {/* Días de uso */}
+
+        {/* Días de uso badge */}
         {(product as any).dias_uso && (
           <span className="absolute bottom-2 left-2 z-10 text-[10px] font-bold bg-black/60 text-white px-1.5 py-0.5 rounded-md">
             {(product as any).dias_uso === 1 ? 'Diario' : (product as any).dias_uso === 14 ? '2 semanas' : `${(product as any).dias_uso} días`}
           </span>
         )}
+
         {product.imagen_url ? (
           <Image
             src={product.imagen_url}
-            alt={`${product.nombre}${product.marca ? " — " + product.marca : ""} — lente de contacto en República Dominicana`}
+            alt={`${product.nombre}${product.marca ? ' — ' + product.marca : ''} — lente de contacto en República Dominicana`}
             fill
             className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 400px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw"
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-gray-100">
-            <Eye className="w-10 h-10 text-gray-300" />
+            <Eye className="w-10 h-10 text-gray-300" aria-hidden="true" />
             <span className="text-[10px] text-gray-400">Sin imagen</span>
           </div>
         )}
 
-        {/* Badges superiores */}
-        <div className="absolute top-2 left-2 right-2 flex justify-between items-start pointer-events-none">
+        {/* Badge tipo — arriba izquierda */}
+        <div className="absolute top-2 left-2 flex items-start gap-1 pointer-events-none">
           {badge && (
             <span className={`badge text-[10px] px-1.5 py-0.5 rounded-full font-medium ${badge.color}`}>
               {badge.label}
             </span>
           )}
-          {stockLow && (
-            <span className="badge bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full ml-auto animate-pulse">
+        </div>
+
+        {/* Badge stock crítico — solo si ≤4 unidades reales */}
+        {stockCritical && (
+          <div className="absolute top-2 right-8 pointer-events-none">
+            <span className="badge bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full animate-pulse">
               ¡Solo {product.stock}!
             </span>
-          )}
-          {!stockLow && stockMed && (
-            <span className="badge bg-orange-100 text-orange-700 text-[10px] px-1.5 py-0.5 rounded-full ml-auto">
-              Pocas unidades
-            </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Sin stock overlay */}
         {product.stock === 0 && (
@@ -122,12 +134,12 @@ export default function ProductCard({ product }: Props) {
           {product.marca}
         </p>
 
-        {/* Nombre — siempre visible completo, wrap natural */}
+        {/* Nombre */}
         <h3 className="font-semibold text-gray-900 text-sm leading-snug min-h-[2.5rem]">
           {product.nombre}
         </h3>
 
-        {/* Precio + Botón — siempre en column en móvil */}
+        {/* Precio + Botón */}
         <div className="mt-auto pt-2 flex flex-col gap-2">
           <div>
             {(product as any).precio_anterior && (product as any).precio_anterior > product.precio ? (
@@ -143,24 +155,7 @@ export default function ProductCard({ product }: Props) {
                 RD${product.precio.toLocaleString()}
               </p>
             )}
-            <p className="text-[10px] text-gray-400">
-              {product.tipo === 'gota' || product.tipo === 'solucion'
-                ? '1 frasco'
-                : product.reemplazo === 'Diario' || product.dias_uso === 1
-                  ? 'caja de 30u'
-                  : product.reemplazo === 'Quincenal' || product.dias_uso === 14
-                    ? 'caja de 6u'
-                    : product.reemplazo === 'Mensual' || product.dias_uso === 30
-                      ? 'caja de 6u'
-                      : product.tipo === 'color'
-                        ? '2 lentes'
-                        : product.contenido ?? 'por caja'}
-            </p>
-            {entregaHoy && product.stock > 0 && (
-              <p className="text-[10px] text-green-600 font-semibold mt-0.5">
-                🚚 Entrega hoy
-              </p>
-            )}
+            <p className="text-[10px] text-gray-400">{contenidoLabel}</p>
           </div>
 
           <button
@@ -170,7 +165,7 @@ export default function ProductCard({ product }: Props) {
             className="w-full btn-primary py-2 text-sm flex items-center justify-center gap-1.5
                        disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <ShoppingCart className="w-4 h-4 shrink-0" />
+            <ShoppingCart className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{needsRx ? 'Ver opciones' : 'Agregar'}</span>
           </button>
         </div>

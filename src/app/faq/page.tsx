@@ -30,7 +30,7 @@ const FAQS = [
   {
     categoria: '💳 Pagos',
     preguntas: [
-      { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos PayPal y pago contra entrega. Próximamente tarjeta de crédito/débito vía Azul.' },
+      { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos pago contra entrega en efectivo y tarjeta de crédito/débito (Visa y Mastercard vía AZUL — Banco Popular). El pago con tarjeta está disponible en el checkout.' },
       { q: '¿El pago contra entrega tiene costo extra?', a: 'No, el costo de envío es el mismo RD$200 independientemente del método de pago.' },
     ]
   },

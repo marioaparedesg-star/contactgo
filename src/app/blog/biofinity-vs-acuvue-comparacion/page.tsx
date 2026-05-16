@@ -38,7 +38,7 @@ export default function Page() {
                   ['Dk/t (oxígeno)', '160', '147'],
                   ['Reemplazo', 'Mensual', 'Quincenal'],
                   ['Precio en RD', 'RD$4,560', 'RD$3,720'],
-                  ['Precio por día de uso', '~RD$152', '~RD$266'],
+                  ['Precio por día de uso', '~RD$50', '~RD$88'],
                   ['Disponible en tórico', '✅ Sí', '✅ Sí'],
                   ['Disponible en multifocal', '✅ Sí', '✅ Sí'],
                   ['Tecnología hidratación', 'Aquaform®', 'HYDRACLEAR® Plus'],
@@ -57,7 +57,7 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">💙 Biofinity — para quién es mejor</h2>
             <ul className="space-y-2 text-sm">
               {[
-                'Si quieres el menor costo por día de uso (~RD$152 vs ~RD$266)',
+                'Si quieres el menor costo por día de uso (~RD$50 vs ~RD$88)',
                 'Si prefieres no tener que comprar lentes tan frecuentemente (mensual)',
                 'Si tienes ojos muy secos — el 48% de agua es mayor',
                 'Si necesitas lentes de alta graduación (XR llega hasta ±20.00)',
@@ -89,7 +89,7 @@ export default function Page() {
 
           <div className="bg-gray-50 rounded-2xl p-5">
             <h2 className="font-bold text-gray-900 mb-2">🏆 Veredicto final</h2>
-            <p className="text-sm"><strong>Si el precio es tu prioridad:</strong> Biofinity gana — RD$152 por día vs RD$266.</p>
+            <p className="text-sm"><strong>Si el precio es tu prioridad:</strong> Biofinity gana — ~RD$50 por día vs ~RD$88 (calculado sobre 90 días/caja de 6u vs 42 días/caja de 6u).</p>
             <p className="text-sm mt-2"><strong>Si la comodidad es tu prioridad:</strong> ACUVUE Oasys gana — especialmente para trabajo digital intenso.</p>
             <p className="text-sm mt-2"><strong>Si no estás seguro:</strong> Pide una muestra de ambas con tu optometrista y comprueba cuál te sienta mejor. Ambas son excelentes opciones — la diferencia real está en cómo responde <em>tu ojo</em> específicamente.</p>
           </div>
