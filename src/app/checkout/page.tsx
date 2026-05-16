@@ -194,7 +194,8 @@ export default function CheckoutPage() {
         axis: (i as any).axis != null ? Number((i as any).axis) : null,
         color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
       })) }) })
-    fetch('/api/notify', { method:'POST', headers:{'Content-Type':'application/json'},
+    // Notify DESPUÉS de confirmar que items se guardaron
+    await fetch('/api/notify', { method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }) }).catch(console.error)
     clearCart(); setLoading(false)
     router.push('/confirmacion?orden=' + order.id)
