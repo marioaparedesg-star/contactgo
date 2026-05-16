@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
       nombre:     i.nombre,
       precio:     Number(i.precio),
       cantidad:   Number(i.cantidad),
+      subtotal:   Number(i.precio) * Number(i.cantidad),  // campo requerido
       sph:        i.sph        != null ? Number(i.sph)        : null,
       cyl:        i.cyl        != null ? Number(i.cyl)        : null,
       add_power:  i.add_power  != null ? Number(i.add_power)  : null,
