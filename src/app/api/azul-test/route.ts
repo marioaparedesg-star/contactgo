@@ -5,6 +5,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
 
 export async function GET(req: NextRequest) {
+  // Proteger endpoint — solo accesible con clave secreta
+  const secret = req.nextUrl.searchParams.get('secret')
+  const expected = process.env.CRON_SECRET ?? 'contactgo2026'
+  if (secret !== expected) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
+
   const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
   const MERCHANT_ID = process.env.AZUL_MERCHANT_ID ?? '39038540035'
   const MERCHANT_NAME = 'ContactGo'

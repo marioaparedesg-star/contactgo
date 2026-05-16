@@ -52,7 +52,7 @@ const SCHEMA_ORG = {
         { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias." } },
         { "@type": "Question", "name": "¿Son originales los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, 100% originales y certificados. Somos distribuidores autorizados de Acuvue, Air Optix, CooperVision y Bausch+Lomb." } },
         { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
-        { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Transferencia bancaria, efectivo contra entrega o tarjeta de crédito/débito." } }
+        { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard (procesado por AZUL — Banco Popular), efectivo contra entrega y transferencia bancaria. El pago con tarjeta es 100% seguro con tecnología 3D Secure." } }
       ]
     }
   ]
@@ -77,7 +77,7 @@ export default async function HomePage() {
               {[
                 { icon: Truck,    title: 'Envío 24–48h',     desc: 'A todo el país',              color: 'text-blue-600',   bg: 'bg-blue-50' },
                 { icon: Shield,   title: '100% Originales',  desc: 'Distribuidores autorizados',  color: 'text-green-600',  bg: 'bg-green-50' },
-                { icon: Star,     title: '+1,000 clientes',  desc: 'Calificación 4.9/5',          color: 'text-amber-500',  bg: 'bg-amber-50' },
+                { icon: Star,     title: '1,000+ clientes',  desc: 'Calificación 4.9/5',          color: 'text-amber-500',  bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Soporte 24/7',     desc: 'WhatsApp y email',            color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
                 <div key={title} className="flex items-center gap-3">
@@ -254,7 +254,7 @@ export default async function HomePage() {
               <div className="flex justify-center gap-0.5 mb-2">
                 {[...Array(5)].map((_,i) => <svg key={i} className="w-5 h-5 text-amber-400 fill-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>)}
               </div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-1">+1,000 dominicanos confían en ContactGo</h2>
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-1">Dominicanos que ya confían en ContactGo</h2>
               <p className="text-gray-500 text-sm">Promedio 4.9/5 — 127 reseñas verificadas</p>
             </div>
             <div className="grid md:grid-cols-3 gap-4">
@@ -295,7 +295,7 @@ export default async function HomePage() {
               { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
               { q: '¿Son 100% originales?', a: 'Sí. Somos distribuidores autorizados de Acuvue (J&J), Air Optix (Alcon), CooperVision y Bausch+Lomb. Cada producto tiene código de autenticidad.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados sí. Puedes subirla en /receta o enviárnosla por WhatsApp. Para colores sin graduación no es necesaria.' },
-              { q: '¿Cómo pago?', a: 'Transferencia bancaria, efectivo contra entrega o tarjeta de crédito/débito.' },
+              { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard (procesado por AZUL — Banco Popular), efectivo contra entrega y transferencia bancaria. El pago con tarjeta es 100% seguro con tecnología 3D Secure.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },
               { q: '¿Puedo suscribirme para recompra automática?', a: 'Sí. Te enviamos recordatorio cuando tus lentes estén por terminarse y puedes recomprar con 1 click con 10% de descuento.' },
             ].map((faq, i) => (

@@ -1,8 +1,12 @@
 {
   "crons": [
     {
+      "path": "/api/carrito-abandonado",
+      "schedule": "0 * * * *"
+    },
+    {
       "path": "/api/recompra/cron",
-      "schedule": "0 13 * * *"
+      "schedule": "0 8 * * *"
     }
   ]
 }

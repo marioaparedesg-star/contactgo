@@ -68,6 +68,13 @@ export default async function sitemap() {
     priority: p.priority,
   }))
 
+  // Páginas estáticas de categorías (para SEO)
+  { url: 'https://contactgo.net/esfericos',    lastModified: now, changeFrequency: 'weekly' as const, priority: 0.85 },
+  { url: 'https://contactgo.net/toricos',      lastModified: now, changeFrequency: 'weekly' as const, priority: 0.85 },
+  { url: 'https://contactgo.net/multifocales', lastModified: now, changeFrequency: 'weekly' as const, priority: 0.85 },
+  { url: 'https://contactgo.net/color',        lastModified: now, changeFrequency: 'weekly' as const, priority: 0.80 },
+  { url: 'https://contactgo.net/soluciones',   lastModified: now, changeFrequency: 'weekly' as const, priority: 0.75 },
+
   // Productos — URL canónica con slug SEO-friendly
   const productUrls = (products ?? []).map(p => ({
     url: `https://contactgo.net/producto/${p.slug || p.id}`,

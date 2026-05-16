@@ -17,11 +17,18 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const tipo = (await Promise.resolve(searchParams)).tipo ?? ''
   const meta = TIPO_META[tipo]
   if (meta) {
+    const staticRoute: Record<string, string> = {
+      esferico: 'esfericos', torico: 'toricos', multifocal: 'multifocales',
+      color: 'color', solucion: 'soluciones',
+    }
+    const canonical = staticRoute[tipo]
+      ? `https://contactgo.net/${staticRoute[tipo]}`
+      : `https://contactgo.net/catalogo${tipo ? '?tipo=' + tipo : ''}`
     return {
       title: meta.title,
       description: meta.description,
-      alternates: { canonical: `https://contactgo.net/catalogo${tipo ? '?tipo=' + tipo : ''}` },
-      openGraph: { title: meta.title, description: meta.description, url: `https://contactgo.net/catalogo${tipo ? '?tipo=' + tipo : ''}`, locale: 'es_DO', siteName: 'ContactGo' },
+      alternates: { canonical },
+      openGraph: { title: meta.title, description: meta.description, url: canonical, locale: 'es_DO', siteName: 'ContactGo' },
     }
   }
   return {

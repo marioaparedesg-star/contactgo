@@ -34,7 +34,14 @@ export async function generateMetadata(
       images: data.imagen_url ? [{ url: data.imagen_url }] : [],
       locale: 'es_DO',
       siteName: 'ContactGo',
-      type: 'website',
+      type: 'website' as const,
+      // @ts-ignore — og:type product for rich snippets
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.nombre,
+      description: desc,
+      images: data.imagen_url ? [data.imagen_url] : ['/icon-512.png'],
     },
   }
 }

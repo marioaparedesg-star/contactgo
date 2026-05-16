@@ -237,6 +237,22 @@ export default function ProductoClient({ product, variants }: Props) {
                 <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
                 <p className="text-xs text-gray-400 mt-0.5">
                   {product.contenido && `${product.contenido} · `}{product.reemplazo}
+                  {/* Precio por lente para lentes graduados */}
+                  {product.dias_uso === 1 && price > 0 && (
+                    <span className="ml-2 text-primary-600 font-semibold">
+                      ≈ RD${Math.round(price / 30).toLocaleString()}/lente
+                    </span>
+                  )}
+                  {product.dias_uso === 14 && price > 0 && (
+                    <span className="ml-2 text-primary-600 font-semibold">
+                      ≈ RD${Math.round(price / 6).toLocaleString()}/lente
+                    </span>
+                  )}
+                  {product.dias_uso === 30 && price > 0 && (
+                    <span className="ml-2 text-primary-600 font-semibold">
+                      ≈ RD${Math.round(price / 6).toLocaleString()}/lente
+                    </span>
+                  )}
                 </p>
               </div>
               <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${

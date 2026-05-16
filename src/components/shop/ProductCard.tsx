@@ -123,7 +123,19 @@ export default function ProductCard({ product }: Props) {
             <p className="text-base font-bold text-gray-900">
               RD${product.precio.toLocaleString()}
             </p>
-            <p className="text-[10px] text-gray-400">por unidad</p>
+            <p className="text-[10px] text-gray-400">
+              {product.tipo === 'gota' || product.tipo === 'solucion'
+                ? '1 frasco'
+                : product.reemplazo === 'Diario' || product.dias_uso === 1
+                  ? 'caja de 30u'
+                  : product.reemplazo === 'Quincenal' || product.dias_uso === 14
+                    ? 'caja de 6u'
+                    : product.reemplazo === 'Mensual' || product.dias_uso === 30
+                      ? 'caja de 6u'
+                      : product.tipo === 'color'
+                        ? '2 lentes'
+                        : product.contenido ?? 'por caja'}
+            </p>
           </div>
 
           <button
