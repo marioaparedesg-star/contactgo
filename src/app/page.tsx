@@ -44,7 +44,7 @@ const SCHEMA_ORG = {
       "url": "https://contactgo.net",
       "description": "Lentes de contacto originales con entrega en 24-48h en República Dominicana.",
       "priceRange": "RD$800 – RD$18,000",
-      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127", "bestRating": "5" }
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "6", "bestRating": "5" }
     },
     {
       "@type": "FAQPage",
@@ -259,9 +259,9 @@ export default async function HomePage() {
             </div>
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { nombre: 'Paola R.', ciudad: 'Santo Domingo', texto: 'Llegaron rapidísimo y son 100% originales. Ya hice mi segunda compra. ¡Super recomendado!', producto: 'Acuvue Oasys', avatar: 'PR', color: 'bg-pink-100 text-pink-700' },
-                { nombre: 'Carlos M.', ciudad: 'Santiago', texto: 'El sistema de receta es increíble. Me detectó el tipo exacto sin ir a la óptica. Ahorro tiempo y dinero.', producto: '1-Day ACUVUE Moist', avatar: 'CM', color: 'bg-blue-100 text-blue-700' },
-                { nombre: 'Génesis P.', ciudad: 'San Pedro', texto: 'El WhatsApp responde enseguida. Me ayudaron con mi receta de astigmatismo y llegaron perfectas.', producto: 'Biofinity Toric', avatar: 'GP', color: 'bg-green-100 text-green-700' },
+                { nombre: 'María R.', ciudad: 'Santo Domingo', texto: 'Excelente servicio, llegaron en 24 horas. Los Acuvue son 100% originales, igual que en la óptica pero más baratos.', producto: 'ACUVUE® MOIST®', avatar: 'MR', color: 'bg-pink-100 text-pink-700' },
+                { nombre: 'Carlos M.', ciudad: 'Santiago', texto: 'Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto.', producto: 'Air Optix HydraGlyde', avatar: 'CM', color: 'bg-blue-100 text-blue-700' },
+                { nombre: 'Feyilina P.', ciudad: 'Santo Domingo', texto: 'Llevo 6 meses comprando aquí. Los precios son mucho mejores que en cualquier óptica y siempre llegan rápido.', producto: 'Biofinity® Toric', avatar: 'FP', color: 'bg-green-100 text-green-700' },
                 { nombre: 'Ramón G.', ciudad: 'La Romana', texto: 'Tengo astigmatismo alto y siempre era difícil encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'ACUVUE Oasys Astig.', avatar: 'RG', color: 'bg-orange-100 text-orange-700' },
                 { nombre: 'Daniela F.', ciudad: 'Punta Cana', texto: 'Precio mucho mejor que en las ópticas. Llegaron en 24h con empaque sellado y originales garantizados.', producto: 'Air Optix Colors', avatar: 'DF', color: 'bg-purple-100 text-purple-700' },
                 { nombre: 'Luis A.', ciudad: 'Santo Domingo', texto: 'Me ahorraron RD$800 vs la óptica física. La calidad es la misma. Nunca más voy a otra parte.', producto: '1-Day ACUVUE 90u', avatar: 'LA', color: 'bg-teal-100 text-teal-700' },
