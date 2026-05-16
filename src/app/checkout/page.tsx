@@ -282,7 +282,7 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      <main className="min-h-screen bg-gray-50 pb-24">
+      <main id="main-content" className="min-h-screen bg-gray-50 pb-24">
         {/* Barra de progreso */}
         <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
           <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">

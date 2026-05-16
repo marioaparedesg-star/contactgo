@@ -34,8 +34,7 @@ export async function generateMetadata(
       images: data.imagen_url ? [{ url: data.imagen_url }] : [],
       locale: 'es_DO',
       siteName: 'ContactGo',
-      type: 'website' as const,
-      // @ts-ignore — og:type product for rich snippets
+      type: 'website' as const, // Next.js solo soporta 'website' en el type, el og:type product se inyecta via JSON-LD
     },
     twitter: {
       card: 'summary_large_image',

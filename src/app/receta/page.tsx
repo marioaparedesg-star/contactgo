@@ -85,8 +85,8 @@ export default function RecetaPage() {
   const canCalc=od_sph!==''||oi_sph!==''
   const cfg=result?TIPO_CFG[result.recomendacion as keyof typeof TIPO_CFG]:null
 
-  const Select=({val,onChange,opts,placeholder='Seleccionar',disabled=false}:{val:string,onChange:(v:string)=>void,opts:{label:string,val:string}[],placeholder?:string,disabled?:boolean})=>(
-    <select value={val} onChange={e=>onChange(e.target.value)} disabled={disabled}
+  const Select=({val,onChange,opts,placeholder='Seleccionar',disabled=false,ariaLabel}:{val:string,onChange:(v:string)=>void,opts:{label:string,val:string}[],placeholder?:string,disabled?:boolean,ariaLabel?:string})=>(
+    <select aria-label={ariaLabel||placeholder} value={val} onChange={e=>onChange(e.target.value)} disabled={disabled}
       className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 bg-white disabled:opacity-50 disabled:cursor-not-allowed">
       <option value="">{placeholder}</option>
       {opts.filter(o=>o.val!=='').map(o=><option key={o.val} value={o.val}>{o.label}</option>)}

@@ -113,7 +113,7 @@ export default async function CatalogoPage({ searchParams }: Props) {
   return (
     <>
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-6 pb-24">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 py-6 pb-24">
         {/* Breadcrumb visual */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
           <a href="/" className="hover:text-primary-600 transition-colors">Inicio</a>

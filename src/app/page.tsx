@@ -65,7 +65,7 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA_ORG) }} />
       <Navbar />
-      <main>
+      <main id="main-content">
 
         {/* ── HERO ── */}
         <HeroSlider />

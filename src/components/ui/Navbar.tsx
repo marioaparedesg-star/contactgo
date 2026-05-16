@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import NextImage from 'next/image'
-import { ShoppingCart, User, Menu, X, Eye } from 'lucide-react'
+import { ShoppingCart, User, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { useCartStore } from '@/lib/cart-store'
 
@@ -19,15 +19,18 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm" role="banner">
+      {/* Skip to main — accesibilidad teclado */}
+      <a href="#main-content" className="skip-link">Ir al contenido principal</a>
+
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center" aria-label="ContactGo — Ir al inicio">
           <NextImage src="/logo.png" alt="ContactGo" width={140} height={50} className="h-10 w-auto object-contain" priority />
         </Link>
 
         {/* Nav desktop */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-1" aria-label="Navegación principal">
           {links.map(l => (
             <Link key={l.href} href={l.href}
               className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-primary-700 hover:bg-primary-50 transition-colors">
@@ -37,38 +40,47 @@ export default function Navbar() {
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
-          <Link href="/cart" className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors">
-            <ShoppingCart className="w-5 h-5 text-gray-700" />
+        <div className="flex items-center gap-2" role="navigation" aria-label="Acciones de usuario">
+          <Link href="/cart" className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors"
+            aria-label={itemCount > 0 ? `Carrito — ${itemCount} producto${itemCount !== 1 ? 's' : ''}` : 'Carrito de compras'}>
+            <ShoppingCart className="w-5 h-5 text-gray-700" aria-hidden="true" />
             {itemCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary-600 text-white text-xs font-bold rounded-full flex items-center justify-center"
+                aria-hidden="true">
                 {itemCount > 9 ? '9+' : itemCount}
               </span>
             )}
           </Link>
           <Link href="/cuenta"
-            className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700">
-            <User className="w-4 h-4" />
+            className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700"
+            aria-label="Mi cuenta">
+            <User className="w-4 h-4" aria-hidden="true" />
             Mi cuenta
           </Link>
-          <button onClick={() => setOpen(!open)} className="md:hidden p-2 rounded-xl hover:bg-gray-100">
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <button
+            onClick={() => setOpen(!open)}
+            className="md:hidden p-2 rounded-xl hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={open}
+            aria-controls="mobile-menu">
+            {open ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-1">
+        <div id="mobile-menu" className="md:hidden border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-1"
+          role="navigation" aria-label="Menú móvil">
           {links.map(l => (
             <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
-              className="px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-700">
+              className="px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-700 min-h-[44px] flex items-center">
               {l.label}
             </Link>
           ))}
           <Link href="/cuenta" onClick={() => setOpen(false)}
-            className="px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-700 flex items-center gap-2">
-            <User className="w-4 h-4" /> Mi cuenta
+            className="px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-700 flex items-center gap-2 min-h-[44px]">
+            <User className="w-4 h-4" aria-hidden="true" /> Mi cuenta
           </Link>
         </div>
       )}

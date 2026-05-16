@@ -59,6 +59,7 @@ export default function ProductCard({ product }: Props) {
       <div className="relative w-full aspect-square bg-gray-50 overflow-hidden">
         {/* Favorito */}
         <button onClick={toggleFav}
+          aria-label={isFav ? `Quitar ${product.nombre} de favoritos` : `Agregar ${product.nombre} a favoritos`}
           className={"absolute top-2 right-2 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-sm " + (isFav ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-400 hover:text-red-400')}>
           <Heart className={"w-3.5 h-3.5 " + (isFav ? 'fill-current' : '')} />
         </button>
@@ -71,7 +72,7 @@ export default function ProductCard({ product }: Props) {
         {product.imagen_url ? (
           <Image
             src={product.imagen_url}
-            alt={product.nombre}
+            alt={`${product.nombre}${product.marca ? " — " + product.marca : ""} — lente de contacto en República Dominicana`}
             fill
             className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 400px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw"
@@ -151,6 +152,7 @@ export default function ProductCard({ product }: Props) {
           <button
             onClick={handleAdd}
             disabled={product.stock === 0}
+            aria-label={product.stock === 0 ? `${product.nombre} sin stock` : needsRx ? `Ver opciones de ${product.nombre}` : `Agregar ${product.nombre} al carrito`}
             className="w-full btn-primary py-2 text-sm flex items-center justify-center gap-1.5
                        disabled:opacity-40 disabled:cursor-not-allowed"
           >
