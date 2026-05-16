@@ -17,7 +17,7 @@ const BASE_URL    = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
 const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'maparedes0113@gmail.com'
 // FROM: si RESEND_FROM está configurado con dominio verificado, úsalo.
 // Si no, usa onboarding@resend.dev (funciona sin verificar dominio propio)
-const FROM_EMAIL  = process.env.RESEND_FROM ?? 'ContactGo <info@contactgo.net>'
+const FROM_EMAIL  = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
 
 const ESTADO_LABEL: Record<string, string> = {
   pendiente:  '⏳ Recibido',
