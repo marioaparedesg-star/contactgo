@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const VALORES = [
   { icon: '🏥', title: 'Especialización total', desc: 'Solo lentes de contacto. No somos una óptica genérica — somos expertos en una sola cosa y la hacemos muy bien.' },
-  { icon: '✅', title: '100% originales', desc: 'Cada producto que vendemos viene directamente de distribuidores autorizados. Nunca imitaciones, nunca productos vencidos.' },
+  { icon: '✅', title: '100% originales', desc: 'Cada producto viene directamente de distribuidores autorizados. Nunca imitaciones, nunca productos vencidos.' },
   { icon: '🚚', title: 'Entrega en 24-48h', desc: 'Cubrimos Santo Domingo, Santiago y todo el país. Tu pedido sale el mismo día si ordenas antes de las 3pm.' },
   { icon: '👁️', title: 'Soporte especializado', desc: 'Nuestro equipo conoce cada producto a fondo. Si tienes dudas sobre tu receta, te ayudamos antes de comprar.' },
 ]
@@ -71,42 +71,18 @@ export default function SobreNosotrosPage() {
               Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — directamente de distribuidores autorizados.
             </p>
             <p>
-              Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin tus lentes, y entrega en 24-48 horas a todo el país.
+              Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin lentes, y entrega en 24-48 horas a todo el país.
             </p>
           </div>
         </section>
 
-        {/* Equipo / Fundador */}
-        <section className="bg-gray-50 py-16 px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="font-display text-2xl font-bold text-gray-900 mb-10 text-center">El equipo detrás de ContactGo</h2>
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col md:flex-row gap-8 items-center">
-              {/* Avatar placeholder profesional */}
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary-500 to-teal-500 flex items-center justify-center text-white text-4xl font-black shrink-0">
-                M
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-gray-900">Mario A. Paredes G.</h3>
-                <p className="text-primary-600 font-semibold text-sm mb-3">Fundador & Director General</p>
-                <p className="text-gray-600 leading-relaxed text-sm">
-                  Con más de 8 años en la industria óptica dominicana como Gerente de Tiendas en Óptica Optimax — la cadena de ópticas más grande del país — Mario conoce mejor que nadie las necesidades de los usuarios de lentes de contacto en RD. ContactGo es su apuesta por llevar esa experiencia directo al consumidor, con tecnología y sin intermediarios innecesarios.
-                </p>
-                <div className="flex gap-3 mt-4">
-                  <span className="inline-flex items-center gap-1 text-xs bg-primary-50 text-primary-700 px-3 py-1 rounded-full font-semibold">
-                    👁️ 8+ años en óptica
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-xs bg-teal-50 text-teal-700 px-3 py-1 rounded-full font-semibold">
-                    🇩🇴 Santo Domingo, RD
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-center text-gray-500 text-sm mt-8">
-              ¿Quieres unirte al equipo o colaborar? Escríbenos a{' '}
-              <a href="mailto:info@contactgo.net" className="text-primary-600 font-semibold hover:underline">
-                info@contactgo.net
-              </a>
+        {/* Misión */}
+        <section className="bg-primary-50 border-y border-primary-100 py-14 px-4">
+          <div className="max-w-2xl mx-auto text-center">
+            <span className="text-4xl mb-4 block">🎯</span>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Nuestra misión</h2>
+            <p className="text-gray-600 leading-relaxed text-lg">
+              Ser la plataforma líder de salud visual recurrente en República Dominicana — haciendo que conseguir lentes de contacto sea tan fácil, seguro y confiable como cualquier compra en línea en el mundo.
             </p>
           </div>
         </section>
@@ -157,6 +133,12 @@ export default function SobreNosotrosPage() {
               Ver catálogo
             </Link>
           </div>
+          <p className="text-sm text-gray-400 mt-8">
+            ¿Preguntas? Escríbenos a{' '}
+            <a href="mailto:info@contactgo.net" className="text-primary-600 font-semibold hover:underline">
+              info@contactgo.net
+            </a>
+          </p>
         </section>
 
       </main>
