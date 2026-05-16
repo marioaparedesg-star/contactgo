@@ -114,6 +114,14 @@ export default async function CatalogoPage({ searchParams }: Props) {
     <>
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 py-6 pb-24">
+        {/* Breadcrumb visual */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
+          <a href="/" className="hover:text-primary-600 transition-colors">Inicio</a>
+          <span>/</span>
+          <span className="text-gray-700 font-medium">Catálogo</span>
+          {tipo && <><span>/</span><span className="text-primary-600 font-semibold capitalize">{tipo === 'esferico' ? 'Esféricos' : tipo === 'torico' ? 'Tóricos' : tipo === 'multifocal' ? 'Multifocales' : tipo === 'solucion' ? 'Soluciones' : tipo === 'gota' ? 'Gotas' : tipo}</span></>}
+        </nav>
+
         {/* Header */}
         <div className="mb-4">
           <h1 className="font-display text-2xl font-bold text-gray-900">Catálogo</h1>

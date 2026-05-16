@@ -340,20 +340,26 @@ export default function CheckoutPage() {
                   <div className="px-5 pb-5 space-y-3 border-t border-gray-50 pt-4">
                     <div className="relative">
                       <User className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                      <input {...register('nombre')} placeholder="Nombre completo"
+                      <label htmlFor="nombre" className="sr-only">Nombre completo</label>
+                      <input id="nombre" {...register('nombre')} placeholder="Nombre completo" autoComplete="name"
+                        aria-label="Nombre completo"
                         className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                       {errors.nombre && <p className="text-red-500 text-xs mt-1 flex items-center gap-1">⚠️ {errors.nombre.message}</p>}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="relative">
                         <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                        <input {...register('email')} type="email" placeholder="Email"
+                        <label htmlFor="email" className="sr-only">Email</label>
+                        <input id="email" {...register('email')} type="email" placeholder="Email" autoComplete="email"
+                          aria-label="Correo electrónico"
                           className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                         {errors.email && <p className="text-red-500 text-xs mt-1">⚠️ {errors.email.message}</p>}
                       </div>
                       <div className="relative">
                         <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                        <input {...register('telefono')} type="tel" placeholder="WhatsApp / Teléfono"
+                        <label htmlFor="telefono" className="sr-only">Teléfono</label>
+                        <input id="telefono" {...register('telefono')} type="tel" placeholder="WhatsApp / Teléfono" autoComplete="tel"
+                          aria-label="Número de teléfono"
                           className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                         {errors.telefono && <p className="text-red-500 text-xs mt-1">⚠️ {errors.telefono.message}</p>}
                       </div>
@@ -389,7 +395,9 @@ export default function CheckoutPage() {
                   <div className="px-5 pb-5 space-y-3 border-t border-gray-50 pt-4">
                     <div className="relative">
                       <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                      <input {...register('direccion')} placeholder="Calle, número, sector, referencias"
+                      <label htmlFor="direccion" className="sr-only">Dirección</label>
+                      <input id="direccion" {...register('direccion')} placeholder="Calle, número, sector, referencias" autoComplete="street-address"
+                        aria-label="Dirección de entrega"
                         className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                       {errors.direccion && <p className="text-red-500 text-xs mt-1">⚠️ {errors.direccion.message}</p>}
                     </div>

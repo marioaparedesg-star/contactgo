@@ -1,27 +1,19 @@
-export default function robots() {
+import type { MetadataRoute } from 'next'
+
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: [
-          '/admin',
-          '/checkout',
-          '/cart',
-          '/carrito',
-          '/cuenta',
-          '/confirmacion',
-          '/azul-retorno',
-          '/api/',
-        ],
+        disallow: ['/admin', '/checkout', '/cart', '/cuenta', '/confirmacion', '/azul-retorno', '/api/'],
       },
       {
-        // Bloquear bots agresivos de IA
         userAgent: ['GPTBot', 'Google-Extended', 'CCBot', 'anthropic-ai'],
         disallow: '/',
       },
     ],
-    sitemap: 'https://contactgo.net/sitemap.xml',
     host: 'https://contactgo.net',
+    sitemap: 'https://contactgo.net/sitemap.xml',
   }
 }

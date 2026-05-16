@@ -36,7 +36,9 @@ export default async function sitemap() {
 
     // Blog
     { url: 'https://contactgo.net/blog',                       priority: 0.75, freq: 'weekly' },
-    { url: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd',       priority: 0.70, freq: 'monthly' },
+    { url: 'https://contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd', lastModified: now, changeFrequency: 'monthly' as const, priority: 0.72 },
+  { url: 'https://contactgo.net/blog/como-leer-receta-optica-rd', lastModified: now, changeFrequency: 'monthly' as const, priority: 0.72 },
+  { url: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd',       priority: 0.70, freq: 'monthly' },
     { url: 'https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd',  priority: 0.75, freq: 'monthly' },
     { url: 'https://contactgo.net/blog/lentes-multifocales-presbicia-rd',         priority: 0.75, freq: 'monthly' },
     { url: 'https://contactgo.net/blog/biofinity-vs-acuvue-comparacion',           priority: 0.75, freq: 'monthly' },

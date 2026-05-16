@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import BottomNav from '@/components/ui/BottomNav'
+import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
@@ -98,6 +99,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#16a34a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="manifest" href="/manifest.json" />
+        {/* Preconnect para performance */}
+        <link rel="preconnect" href="https://atendbjolicwcsqfyiyh.supabase.co" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://wa.me" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         {/* Google Tag Manager — GTM-M9GZGJJQ */}
         <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M9GZGJJQ');` }} />
       </head>
@@ -108,6 +114,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}} />
         <BottomNav />
+        <WhatsAppButton />
         <Toaster
           position="top-center"
           toastOptions={{

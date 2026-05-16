@@ -120,9 +120,19 @@ export default function ProductCard({ product }: Props) {
         {/* Precio + Botón — siempre en column en móvil */}
         <div className="mt-auto pt-2 flex flex-col gap-2">
           <div>
-            <p className="text-base font-bold text-gray-900">
-              RD${product.precio.toLocaleString()}
-            </p>
+            {(product as any).precio_anterior && (product as any).precio_anterior > product.precio ? (
+              <div className="flex items-baseline gap-1.5">
+                <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
+                <p className="text-xs text-gray-400 line-through">RD${((product as any).precio_anterior).toLocaleString()}</p>
+                <span className="text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded-full">
+                  -{Math.round(((product as any).precio_anterior - product.precio) / (product as any).precio_anterior * 100)}%
+                </span>
+              </div>
+            ) : (
+              <p className="text-base font-bold text-gray-900">
+                RD${product.precio.toLocaleString()}
+              </p>
+            )}
             <p className="text-[10px] text-gray-400">
               {product.tipo === 'gota' || product.tipo === 'solucion'
                 ? '1 frasco'

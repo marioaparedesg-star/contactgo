@@ -4,6 +4,22 @@ import Footer from '@/components/ui/Footer'
 
 const POSTS = [
   {
+    slug: 'cuanto-cuestan-lentes-contacto-rd',
+    titulo: '¿Cuánto cuestan los lentes de contacto en RD en 2026?',
+    descripcion: 'Compara precios entre ópticas físicas y online. Descubre por qué comprar online puede ahorrarte hasta RD$2,780 al mes.',
+    imagen: '💰',
+    tiempo: '6 min',
+    categoria: 'Precios',
+  },
+  {
+    slug: 'como-leer-receta-optica-rd',
+    titulo: 'Cómo leer tu receta óptica — Guía visual completa',
+    descripcion: 'SPH, CYL, AXIS, ADD... ¿qué significa todo eso? Explicamos cada término de tu receta en español simple.',
+    imagen: '📋',
+    tiempo: '5 min',
+    categoria: 'Guías',
+  },
+  {
     slug: 'primeros-pasos-lentes-contacto-rd',
     titulo: 'Primeros pasos con lentes de contacto en República Dominicana',
     descripcion: 'Todo lo que necesitas saber antes de comprar tu primer par de lentes de contacto en RD. Receta, tipos y qué esperar.',
