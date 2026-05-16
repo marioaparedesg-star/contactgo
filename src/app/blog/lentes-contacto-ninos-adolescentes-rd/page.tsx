@@ -108,6 +108,18 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </main>
+    
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Lentes de Contacto para Niños y Adolescentes en RD",
+        "author": {"@type": "Organization", "name": "Equipo ContactGo", "url": "https://contactgo.net"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-16",
+        "inLanguage": "es-DO",
+        "url": "https://contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd"
+      })}} />
+      </main>
   )
 }

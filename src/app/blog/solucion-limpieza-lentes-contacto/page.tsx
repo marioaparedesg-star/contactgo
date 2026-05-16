@@ -5,7 +5,6 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Cómo elegir la mejor solución para lentes de contacto — ContactGo',
   description: 'Guía completa sobre soluciones de limpieza para lentes de contacto en RD. Opti-Free, ReNu, Prolub — cuál usar y cómo limpiar correctamente.',
-  keywords: 'solucion lentes contacto RD, liquido lentes contacto dominicana, opti free RD, renu advanced',
 }
 
 export default function Page() {
@@ -84,6 +83,18 @@ export default function Page() {
             Ver todas las soluciones disponibles →
           </Link>
         </div>
+      
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Cómo elegir la mejor solución para lentes de contacto",
+        "author": {"@type": "Organization", "name": "Equipo ContactGo", "url": "https://contactgo.net"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-16",
+        "inLanguage": "es-DO",
+        "url": "https://contactgo.net/blog/solucion-limpieza-lentes-contacto"
+      })}} />
       </main>
       <Footer />
     </>

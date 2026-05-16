@@ -16,7 +16,7 @@ const SLIDES = [
     image: '/hero-lens-1.png',
     imageAlt: 'Lentes de contacto originales República Dominicana',
     stats: [
-      { num: '+1,000', label: 'clientes' },
+      { num: '60+', label: 'clientes' },
       { num: '24h', label: 'entrega' },
       { num: '100%', label: 'originales' },
     ],

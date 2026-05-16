@@ -47,7 +47,7 @@ export default function EnviosPage() {
                 { zona: 'La Romana / San Pedro de Macorís', tiempo: '24-48h', costo: 'RD$350' },
                 { zona: 'Punta Cana / Bávaro', tiempo: '48-72h', costo: 'RD$350' },
                 { zona: 'Puerto Plata', tiempo: '48-72h', costo: 'RD$350' },
-                { zona: 'Otras provincias', tiempo: '48-72h', costo: 'RD$350-400' },
+                { zona: 'Otras provincias', tiempo: '48-72h', costo: 'RD$350' },
               ].map((z, i) => (
                 <div key={i} className={`flex items-center justify-between px-5 py-4 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                   <div>

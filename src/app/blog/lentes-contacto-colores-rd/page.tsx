@@ -5,7 +5,6 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Lentes de contacto de colores en República Dominicana — ContactGo',
   description: 'Guía completa de lentes de colores en RD. FreshLook, Air Optix Colors, con y sin graduación. Cuáles son los colores más populares y cómo elegir.',
-  keywords: 'lentes de colores RD, lentes contacto colores dominicana, lentes sin graduacion colores',
 }
 
 export default function Page() {
@@ -88,6 +87,18 @@ export default function Page() {
             Ver todos los lentes de colores disponibles →
           </Link>
         </div>
+      
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Lentes de contacto de colores en República Dominicana",
+        "author": {"@type": "Organization", "name": "Equipo ContactGo", "url": "https://contactgo.net"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-16",
+        "inLanguage": "es-DO",
+        "url": "https://contactgo.net/blog/lentes-contacto-colores-rd"
+      })}} />
       </main>
       <Footer />
     </>

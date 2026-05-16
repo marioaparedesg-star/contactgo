@@ -95,6 +95,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es">
       <head>
         <meta name="google-site-verification" content="lESKC-PqCyerfH9lDLzKi1em3nnRvh7LwKXKuPOmn1k" />
+        
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "ContactGo",
+          "url": "https://contactgo.net",
+          "logo": "https://contactgo.net/logo.png",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-829-472-8328",
+            "contactType": "customer service",
+            "availableLanguage": "Spanish",
+            "contactOption": "TollFree"
+          },
+          "sameAs": [
+            "https://www.instagram.com/contactgord",
+            "https://www.facebook.com/contactgord"
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "DO",
+            "addressRegion": "Distrito Nacional",
+            "addressLocality": "Santo Domingo"
+          }
+        })}} />
         <meta name="facebook-domain-verification" content="521fb5uvf0p1bbtgc59jz9j7fumekg" />
         <meta name="theme-color" content="#16a34a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

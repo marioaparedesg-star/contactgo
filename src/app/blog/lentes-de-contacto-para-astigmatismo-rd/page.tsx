@@ -5,7 +5,6 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Lentes de contacto para astigmatismo en RD — ContactGo',
   description: 'Todo lo que necesitas saber sobre lentes tóricos para astigmatismo en República Dominicana. Marcas, precios y cómo elegir el correcto.',
-  keywords: 'lentes astigmatismo RD, lentes tóricos dominicana, astigmatismo lentes contacto',
 }
 
 export default function Page() {
@@ -78,6 +77,18 @@ export default function Page() {
             </Link>
           </div>
         </div>
+      
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Lentes de contacto para astigmatismo en RD",
+        "author": {"@type": "Organization", "name": "Equipo ContactGo", "url": "https://contactgo.net"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-16",
+        "inLanguage": "es-DO",
+        "url": "https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd"
+      })}} />
       </main>
       <Footer />
     </>

@@ -5,7 +5,6 @@ import Link from 'next/link'
 export const metadata = {
   title: '¿Cuánto duran los lentes de contacto? Guía completa — ContactGo',
   description: 'Lentes diarios, quincenales y mensuales: cuánto duran, cuándo cambiarlos y cómo sacarles el máximo provecho. Guía para usuarios en RD.',
-  keywords: 'cuanto duran lentes contacto, lentes diarios vs mensuales, cambiar lentes contacto RD',
 }
 
 export default function Page() {
@@ -110,6 +109,18 @@ export default function Page() {
             </a>
           </div>
         </div>
+      
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "¿Cuánto duran los lentes de contacto? Guía completa",
+        "author": {"@type": "Organization", "name": "Equipo ContactGo", "url": "https://contactgo.net"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-16",
+        "inLanguage": "es-DO",
+        "url": "https://contactgo.net/blog/cuanto-duran-lentes-contacto"
+      })}} />
       </main>
       <Footer />
     </>

@@ -5,7 +5,6 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Biofinity vs ACUVUE: ¿Cuál es mejor en RD? — ContactGo',
   description: 'Comparamos Biofinity de CooperVision vs ACUVUE Oasys de J&J. Precio, comodidad, hidratación y disponibilidad en República Dominicana.',
-  keywords: 'biofinity vs acuvue RD, mejor lente contacto dominicana, comparar lentes contacto',
 }
 
 export default function Page() {
@@ -100,6 +99,18 @@ export default function Page() {
             <p className="text-sm mt-2"><strong>Si no estás seguro:</strong> Pide una muestra de ambas con tu optometrista y comprueba cuál te sienta mejor. Ambas son excelentes opciones — la diferencia real está en cómo responde <em>tu ojo</em> específicamente.</p>
           </div>
         </div>
+      
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Biofinity vs ACUVUE: ¿Cuál es mejor en RD?",
+        "author": {"@type": "Organization", "name": "Equipo ContactGo", "url": "https://contactgo.net"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-16",
+        "inLanguage": "es-DO",
+        "url": "https://contactgo.net/blog/biofinity-vs-acuvue-comparacion"
+      })}} />
       </main>
       <Footer />
     </>

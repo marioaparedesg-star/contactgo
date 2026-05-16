@@ -29,7 +29,7 @@ const SECCIONES = [
     items: [
       { q: '¿Cuánto tarda en llegar mi pedido?', a: 'Santo Domingo: 24-48 horas. Santiago: 48-72 horas. Resto del país: 3-5 días hábiles. Todos los pedidos se procesan de lunes a sábado. Excepción: lentes tóricos para astigmatismo (20-30 días, ver abajo).' },
       { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos (para astigmatismo) se fabrican a medida según la graduación exacta de cada paciente: potencia esférica (SPH), cilindro (CYL) y eje (EJE). A diferencia de los lentes esféricos que tenemos en inventario, los tóricos requieren fabricación especial que toma entre 20 y 30 días calendario desde la confirmación del pedido. Te notificaremos por WhatsApp en cada etapa.' },
-      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Santiago: RD$200. Interior del país: RD$350. Pedidos mayores a RD$6,000: envío GRATIS.' },
+      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Santiago: RD$350. Interior del país: RD$350. Pedidos mayores a RD$6,000: envío GRATIS.' },
       { q: '¿Cómo sé dónde está mi pedido?', a: 'Recibirás un mensaje de WhatsApp con tu número de seguimiento. También puedes ver el estado en Mi cuenta → Pedidos.' },
       { q: '¿Entregan en toda la República Dominicana?', a: 'Sí, hacemos envíos a todo el país. Zonas remotas pueden tomar 1-2 días adicionales.' },
       { q: '¿Puedo cambiar la dirección después de hacer el pedido?', a: 'Sí, siempre que el pedido no haya sido enviado. Escríbenos por WhatsApp lo antes posible.' },

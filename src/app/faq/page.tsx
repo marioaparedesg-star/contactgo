@@ -46,7 +46,7 @@ const FAQS = [
   {
     categoria: '🔄 Devoluciones y Garantía',
     preguntas: [
-      { q: '¿Puedo devolver un producto?', a: 'Aceptamos devoluciones dentro de los 7 días posteriores a la entrega, siempre que el producto esté sellado y sin abrir.' },
+      { q: '¿Puedo devolver un producto?', a: 'Aceptamos devoluciones dentro de las 48 horas posteriores a la entrega, siempre que el producto esté sellado y sin abrir.' },
       { q: '¿Qué hago si recibí un producto dañado o incorrecto?', a: 'Contáctanos inmediatamente por WhatsApp con una foto del producto. Lo reemplazamos sin costo adicional.' },
       { q: '¿Los productos tienen garantía?', a: 'Garantizamos la autenticidad de todos nuestros productos. Si detectas algún problema con la calidad, nos hacemos responsables.' },
     ]

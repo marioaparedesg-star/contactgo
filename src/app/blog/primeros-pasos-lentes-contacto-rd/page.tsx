@@ -5,7 +5,6 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Primeros pasos con lentes de contacto en RD — ContactGo',
   description: 'Guía completa para quienes quieren empezar a usar lentes de contacto en República Dominicana. Qué necesitas, cómo empezar y qué esperar.',
-  keywords: 'empezar usar lentes contacto RD, primera vez lentes contacto dominicana, guia principiantes lentes',
 }
 
 export default function Page() {
@@ -122,6 +121,18 @@ export default function Page() {
             </div>
           </div>
         </div>
+      
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Primeros pasos con lentes de contacto en RD",
+        "author": {"@type": "Organization", "name": "Equipo ContactGo", "url": "https://contactgo.net"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-16",
+        "inLanguage": "es-DO",
+        "url": "https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd"
+      })}} />
       </main>
       <Footer />
     </>
