@@ -45,7 +45,7 @@ export default function RecetaPage() {
   const [activeTab,setActiveTab]=useState('')
   const [loading,setLoading]=useState(false)
   const [done,setDone]=useState(false)
-  const [showConsent,setShowConsent]=useState(false)
+  const [showConsent,setShowConsent]=useState(true)
   const addItem=useCartStore(s=>s.addItem)
 
   const fmtSph=(v:string)=>v===''?'':parseFloat(v)>0?`+${parseFloat(v).toFixed(2)}`:parseFloat(v).toFixed(2)

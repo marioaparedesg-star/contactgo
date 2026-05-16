@@ -570,7 +570,7 @@ export default function CheckoutPage() {
                     </button>
 
                     <div className="flex items-center justify-center gap-5 pt-1">
-                      {[{ icon: Lock, t:'Pago seguro' },{ icon: Shield, t:'100% original' },{ icon: Truck, t:'24-48h' },{ icon: RotateCcw, t:'7 días' }].map(b => (
+                      {[{ icon: Lock, t:'Pago seguro' },{ icon: Shield, t:'100% original' },{ icon: Truck, t:'24-48h' },{ icon: RotateCcw, t:'30 días' }].map(b => (
                         <div key={b.t} className="flex items-center gap-1 text-[10px] text-gray-400">
                           <b.icon className="w-3 h-3" />{b.t}
                         </div>
