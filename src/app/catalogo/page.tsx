@@ -152,7 +152,25 @@ export default async function CatalogoPage({ searchParams }: Props) {
           ))}
         </div>
 
-        {/* Fila: filtro marca + ordenamiento */}
+        {/* Filtro por marca — combinable con tipo */}
+        {marcas.length > 0 && (
+          <div className="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-hide">
+            <a href={buildUrl(currentParams, { marca: undefined })}
+              className={"shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border " +
+                (!sp.marca ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400')}>
+              Todas las marcas
+            </a>
+            {marcas.map(m => (
+              <a key={m} href={buildUrl(currentParams, { marca: m })}
+                className={"shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border " +
+                  (sp.marca === m ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400')}>
+                {m}
+              </a>
+            ))}
+          </div>
+        )}
+
+        {/* Fila: marca activa + ordenamiento */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
           {/* Marca activa */}
           {sp.marca && (
@@ -193,21 +211,7 @@ export default async function CatalogoPage({ searchParams }: Props) {
           </div>
         )}
 
-        {/* Filtro por marca */}
-        {marcas.length > 0 && (
-          <div className="mt-8 border-t border-gray-100 pt-6">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Filtrar por marca</p>
-            <div className="flex flex-wrap gap-2">
-              {marcas.map(m => (
-                <a key={m} href={buildUrl(currentParams, { marca: m })}
-                  className={"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors " +
-                    (sp.marca === m ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')}>
-                  {m}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
+
       </main>
       <Footer />
       <WhatsAppButton />

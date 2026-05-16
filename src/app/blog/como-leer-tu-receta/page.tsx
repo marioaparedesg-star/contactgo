@@ -2,12 +2,15 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+import { redirect } from 'next/navigation'
+
 export const metadata = {
   title: 'Cómo leer tu receta de lentes de contacto — ContactGo',
   description: 'Aprende a interpretar SPH, CYL, EJE y ADD de tu receta óptica para comprar los lentes correctos en República Dominicana.',
 }
 
 export default function Page() {
+  redirect('/blog/como-leer-receta-optica-rd')
   return (
     <>
       <Navbar />
