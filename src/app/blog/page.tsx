@@ -4,6 +4,14 @@ import Footer from '@/components/ui/Footer'
 
 const POSTS = [
   {
+    slug: 'lentes-contacto-ninos-adolescentes-rd',
+    titulo: 'Lentes de contacto para adolescentes en RD — ¿A qué edad?',
+    descripcion: 'Guía para padres: edad recomendada, los mejores tipos de lentes para jóvenes y las reglas de oro para el uso seguro.',
+    imagen: '👶',
+    tiempo: '7 min',
+    categoria: 'Guías',
+  },
+  {
     slug: 'cuanto-cuestan-lentes-contacto-rd',
     titulo: '¿Cuánto cuestan los lentes de contacto en RD en 2026?',
     descripcion: 'Compara precios entre ópticas físicas y online. Descubre por qué comprar online puede ahorrarte hasta RD$2,780 al mes.',

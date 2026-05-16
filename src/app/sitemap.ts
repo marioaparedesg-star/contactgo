@@ -36,7 +36,8 @@ export default async function sitemap() {
 
     // Blog
     { url: 'https://contactgo.net/blog',                       priority: 0.75, freq: 'weekly' },
-    { url: 'https://contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd', lastModified: now, changeFrequency: 'monthly' as const, priority: 0.72 },
+    { url: 'https://contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd', lastModified: now, changeFrequency: 'monthly' as const, priority: 0.72 },
+  { url: 'https://contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd', lastModified: now, changeFrequency: 'monthly' as const, priority: 0.72 },
   { url: 'https://contactgo.net/blog/como-leer-receta-optica-rd', lastModified: now, changeFrequency: 'monthly' as const, priority: 0.72 },
   { url: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd',       priority: 0.70, freq: 'monthly' },
     { url: 'https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd',  priority: 0.75, freq: 'monthly' },
@@ -58,7 +59,8 @@ export default async function sitemap() {
     { url: 'https://contactgo.net/ayuda/devoluciones',         priority: 0.55, freq: 'monthly' },
     { url: 'https://contactgo.net/faq',                        priority: 0.65, freq: 'monthly' },
     { url: 'https://contactgo.net/seguridad',                  priority: 0.55, freq: 'monthly' },
-    { url: 'https://contactgo.net/sobre-nosotros',             priority: 0.60, freq: 'monthly' },
+    { url: 'https://contactgo.net/resenas',      lastModified: now, changeFrequency: 'weekly' as const, priority: 0.80 },
+  { url: 'https://contactgo.net/sobre-nosotros',             priority: 0.60, freq: 'monthly' },
     { url: 'https://contactgo.net/terminos',                   priority: 0.40, freq: 'yearly'  },
     { url: 'https://contactgo.net/privacidad',                 priority: 0.40, freq: 'yearly'  },
   ]

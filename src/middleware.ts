@@ -1,57 +1,31 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const PROTECTED_ADMIN = ['/admin']
-const PROTECTED_USER  = ['/cuenta', '/checkout', '/cart']
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  // Block crawlers from protected paths
+  const blocked = ['/admin', '/api/azul-test', '/api/carrito-abandonado', '/api/recompra/cron']
+  const userAgent = req.headers.get('user-agent') ?? ''
+  const isCrawler = /bot|crawler|spider|scraper/i.test(userAgent)
 
-  let response = NextResponse.next({ request: { headers: request.headers } })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return request.cookies.getAll() },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value)
-            response.cookies.set(name, value, options)
-          })
-        },
-      },
-    }
-  )
-
-  const { data: { user } } = await supabase.auth.getUser()
-
-  // Proteger rutas /admin — redirigir a /admin/login si no autenticado
-  const isAdmin = PROTECTED_ADMIN.some(p => pathname.startsWith(p))
-  if (isAdmin && pathname !== '/admin/login') {
-    if (!user) {
-      return NextResponse.redirect(new URL('/admin/login', request.url))
-    }
-    // Verificar rol admin en profiles
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile || profile.role !== 'admin') {
-      return NextResponse.redirect(new URL('/', request.url))
-    }
+  if (isCrawler && blocked.some(p => pathname.startsWith(p))) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  return response
+  // Add security headers
+  const res = NextResponse.next()
+  res.headers.set('X-Robots-Tag', pathname.startsWith('/admin') ? 'noindex, nofollow' : 'index, follow')
+
+  return res
 }
 
 export const config = {
   matcher: [
     '/admin/:path*',
-    '/((?!_next/static|_next/image|favicon.ico|api/|robots.txt|sitemap.xml).*)',
+    '/api/:path*',
+    '/checkout',
+    '/cart',
+    '/cuenta/:path*',
   ],
 }

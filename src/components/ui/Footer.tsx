@@ -124,6 +124,7 @@ export default function Footer() {
             <Link href="/terminos" className="hover:text-gray-400 transition-colors">Términos</Link>
             <Link href="/seguridad" className="hover:text-gray-400 transition-colors">Seguridad</Link>
             <Link href="/sobre-nosotros" className="hover:text-gray-400 transition-colors">Nosotros</Link>
+            <Link href="/resenas" className="hover:text-gray-400 transition-colors">Reseñas</Link>
           </div>
         </div>
       </div>
