@@ -119,7 +119,7 @@ export default async function CatalogoPage({ searchParams }: Props) {
           <a href="/" className="hover:text-primary-600 transition-colors">Inicio</a>
           <span>/</span>
           <span className="text-gray-700 font-medium">Catálogo</span>
-          {tipo && <><span>/</span><span className="text-primary-600 font-semibold capitalize">{tipo === 'esferico' ? 'Esféricos' : tipo === 'torico' ? 'Tóricos' : tipo === 'multifocal' ? 'Multifocales' : tipo === 'solucion' ? 'Soluciones' : tipo === 'gota' ? 'Gotas' : tipo}</span></>}
+          {sp.tipo && <><span>/</span><span className="text-primary-600 font-semibold capitalize">{sp.tipo === 'esferico' ? 'Esféricos' : sp.tipo === 'torico' ? 'Tóricos' : sp.tipo === 'multifocal' ? 'Multifocales' : sp.tipo === 'solucion' ? 'Soluciones' : sp.tipo === 'gota' ? 'Gotas' : sp.tipo}</span></>}
         </nav>
 
         {/* Header */}

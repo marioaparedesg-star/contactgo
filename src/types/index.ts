@@ -33,6 +33,16 @@ export interface Product {
   add_disponibles: string[]
   colores_disponibles: string[]
   categories?: Category
+  // Campos extendidos de la BD
+  slug?: string | null
+  reemplazo?: string | null
+  dias_uso?: number | null
+  contenido?: string | null
+  updated_at?: string | null
+  precio_anterior?: number | null
+  ojo?: string | null
+  size?: string | null
+  precio_final?: number | null
 }
 
 export interface Address {
@@ -107,6 +117,10 @@ export interface CartItem {
   axis?: number | null
   add_power?: string | null
   color?: string | null
+  ojo?: string | null
+  size?: string | null
+  precio_final?: number | null
+  suscripcion?: string | null
 }
 
 // Análisis de receta
