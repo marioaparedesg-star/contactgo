@@ -264,6 +264,20 @@ export default function ProductoClient({ product, variants }: Props) {
               </span>
             </div>
 
+            {/* Badge entrega hoy */}
+            {(() => {
+              const horaRD = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santo_Domingo' })).getHours()
+              return horaRD < 15 && product.stock > 0 ? (
+                <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-4 py-2.5 mt-2">
+                  <span className="text-green-600 text-lg">🚚</span>
+                  <div>
+                    <p className="text-green-800 font-bold text-sm">¡Entrega hoy!</p>
+                    <p className="text-green-600 text-xs">Pide antes de las 3pm y recibes hoy</p>
+                  </div>
+                </div>
+              ) : null
+            })()}
+
             {/* Aviso entrega tóricos */}
             {product.tipo === 'torico' && (
               <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 flex items-start gap-2">

@@ -49,6 +49,10 @@ export default function ProductCard({ product }: Props) {
 
   const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
   const stockLow = product.stock > 0 && product.stock <= 5
+  const stockMed = product.stock > 5 && product.stock <= 10
+  // Hora RD (UTC-4) — entrega hoy si pide antes de las 3pm
+  const horaRD = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santo_Domingo' })).getHours()
+  const entregaHoy = horaRD < 15
 
   return (
     <Link
@@ -92,8 +96,13 @@ export default function ProductCard({ product }: Props) {
             </span>
           )}
           {stockLow && (
+            <span className="badge bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full ml-auto animate-pulse">
+              ¡Solo {product.stock}!
+            </span>
+          )}
+          {!stockLow && stockMed && (
             <span className="badge bg-orange-100 text-orange-700 text-[10px] px-1.5 py-0.5 rounded-full ml-auto">
-              ¡Últimas!
+              Pocas unidades
             </span>
           )}
         </div>
@@ -147,6 +156,11 @@ export default function ProductCard({ product }: Props) {
                         ? '2 lentes'
                         : product.contenido ?? 'por caja'}
             </p>
+            {entregaHoy && product.stock > 0 && (
+              <p className="text-[10px] text-green-600 font-semibold mt-0.5">
+                🚚 Entrega hoy
+              </p>
+            )}
           </div>
 
           <button
