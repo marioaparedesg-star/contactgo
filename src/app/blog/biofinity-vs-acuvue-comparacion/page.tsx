@@ -16,7 +16,13 @@ export default function Page() {
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">Comparaciones</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Biofinity vs ACUVUE Oasys: ¿Cuál es mejor para ti?</h1>
-        <p className="text-gray-400 text-sm mb-8">7 min lectura · ContactGo</p>
+        <div className="flex items-center gap-3 text-xs text-gray-400 mb-8 flex-wrap">
+          <span>📅 10 de mayo, 2026</span>
+          <span>·</span>
+          <span>✍️ Equipo ContactGo</span>
+          <span>·</span>
+          <span>⏱ 7 min lectura</span>
+        </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>Biofinity de CooperVision y ACUVUE Oasys de Johnson & Johnson son las dos marcas de lentes de contacto más vendidas en República Dominicana. Ambas son de silicona hidrogel premium, pero tienen diferencias importantes que pueden hacer una de ellas mejor para ti específicamente.</p>

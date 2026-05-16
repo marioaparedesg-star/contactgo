@@ -200,13 +200,13 @@ export default function ProductoClient({ product, variants }: Props) {
                 <Eye className="w-20 h-20 text-gray-200" />
               )}
             </div>
-            {/* Trust badges bajo la imagen — solo desktop */}
-            <div className="hidden md:grid grid-cols-2 gap-2 mt-3">
+            {/* Trust strip — visible en móvil y desktop */}
+            <div className="grid grid-cols-2 gap-2 mt-3">
               {[
                 { icon:'✅', text:'100% Original' },
-                { icon:'🚚', text:'Entrega 24-72h' },
-                { icon:'🔒', text:'Pago seguro' },
-                { icon:'↩️', text:'7 días devolución' },
+                { icon:'🚚', text:'Entrega 24-48h' },
+                { icon:'💳', text:'Pago seguro AZUL' },
+                { icon:'↩️', text:'30 días devolución' },
               ].map(b => (
                 <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
                   <span className="text-sm">{b.icon}</span>
@@ -237,22 +237,6 @@ export default function ProductoClient({ product, variants }: Props) {
                 <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
                 <p className="text-xs text-gray-400 mt-0.5">
                   {product.contenido && `${product.contenido} · `}{product.reemplazo}
-                  {/* Precio por lente para lentes graduados */}
-                  {product.dias_uso === 1 && price > 0 && (
-                    <span className="ml-2 text-primary-600 font-semibold">
-                      ≈ RD${Math.round(price / 30).toLocaleString()}/lente
-                    </span>
-                  )}
-                  {product.dias_uso === 14 && price > 0 && (
-                    <span className="ml-2 text-primary-600 font-semibold">
-                      ≈ RD${Math.round(price / 6).toLocaleString()}/lente
-                    </span>
-                  )}
-                  {product.dias_uso === 30 && price > 0 && (
-                    <span className="ml-2 text-primary-600 font-semibold">
-                      ≈ RD${Math.round(price / 6).toLocaleString()}/lente
-                    </span>
-                  )}
                 </p>
               </div>
               <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${

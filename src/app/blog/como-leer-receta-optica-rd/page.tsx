@@ -33,6 +33,13 @@ export default function Page() {
       <h1 className="font-display text-2xl md:text-3xl font-black text-gray-900 mb-3 leading-tight">
         Cómo leer tu receta óptica para lentes de contacto en RD
       </h1>
+        <div className="flex items-center gap-3 text-xs text-gray-400 mb-8 flex-wrap">
+          <span>📅 10 de mayo, 2026</span>
+          <span>·</span>
+          <span>✍️ Equipo ContactGo</span>
+          <span>·</span>
+          <span>⏱ 6 min lectura</span>
+        </div>
       <p className="text-gray-500 text-sm mb-8">Guía visual · 5 min de lectura</p>
 
       <div className="space-y-8 text-gray-700 leading-relaxed">

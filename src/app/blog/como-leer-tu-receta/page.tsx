@@ -15,7 +15,13 @@ export default function Page() {
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">Guías</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Cómo leer tu receta de lentes de contacto</h1>
-        <p className="text-gray-400 text-sm mb-8">3 min lectura · ContactGo</p>
+        <div className="flex items-center gap-3 text-xs text-gray-400 mb-8 flex-wrap">
+          <span>📅 10 de mayo, 2026</span>
+          <span>·</span>
+          <span>✍️ Equipo ContactGo</span>
+          <span>·</span>
+          <span>⏱ 5 min lectura</span>
+        </div>
 
         <div className="prose prose-gray max-w-none space-y-6 text-gray-700 leading-relaxed">
           <p>Si alguna vez has mirado tu receta óptica y no entendiste nada, no te preocupes — es normal. En esta guía te explicamos cada valor de forma simple para que puedas comprar tus lentes con confianza.</p>

@@ -16,7 +16,13 @@ export default function Page() {
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">Astigmatismo</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Lentes de contacto para astigmatismo en República Dominicana</h1>
-        <p className="text-gray-400 text-sm mb-8">6 min lectura · ContactGo</p>
+        <div className="flex items-center gap-3 text-xs text-gray-400 mb-8 flex-wrap">
+          <span>📅 10 de mayo, 2026</span>
+          <span>·</span>
+          <span>✍️ Equipo ContactGo</span>
+          <span>·</span>
+          <span>⏱ 5 min lectura</span>
+        </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>El astigmatismo es una de las condiciones visuales más comunes en República Dominicana, afectando aproximadamente al 30% de la población. La buena noticia es que los lentes de contacto tóricos lo corrigen perfectamente, y hoy están disponibles en múltiples marcas y parámetros para encontrar el ajuste exacto que necesitas.</p>

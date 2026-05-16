@@ -15,7 +15,13 @@ export default function Page() {
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">Tutoriales</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Cómo poner y quitar lentes de contacto por primera vez</h1>
-        <p className="text-gray-400 text-sm mb-8">4 min lectura · ContactGo</p>
+        <div className="flex items-center gap-3 text-xs text-gray-400 mb-8 flex-wrap">
+          <span>📅 10 de mayo, 2026</span>
+          <span>·</span>
+          <span>✍️ Equipo ContactGo</span>
+          <span>·</span>
+          <span>⏱ 5 min lectura</span>
+        </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>Ponerse lentes de contacto por primera vez puede parecer intimidante, pero con práctica se vuelve tan natural como cepillarse los dientes. Sigue estos pasos y lo lograrás.</p>
