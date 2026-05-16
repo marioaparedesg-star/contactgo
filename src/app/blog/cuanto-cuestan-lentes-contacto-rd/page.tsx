@@ -48,7 +48,7 @@ export default function Page() {
                   { nombre: 'Acuvue Moist (30u)', optica: 'RD$5,500–7,000', online: 'RD$3,720' },
                   { nombre: 'Acuvue Oasys (6u)', optica: 'RD$5,000–6,500', online: 'RD$3,720' },
                   { nombre: 'Air Optix HydraGlyde', optica: 'RD$6,000–7,500', online: 'RD$4,200' },
-                  { nombre: 'Biofinity mensual', optica: 'RD$5,500–7,000', online: 'RD$3,960' },
+                  { nombre: 'Biofinity mensual', optica: 'RD$5,500–7,000', online: 'RD$4,560' },
                   { nombre: 'Air Optix Colors', optica: 'RD$3,500–5,000', online: 'RD$2,520' },
                 ].map(r => (
                   <tr key={r.nombre} className="border-b border-green-100">
@@ -74,7 +74,7 @@ export default function Page() {
           <div className="grid grid-cols-2 gap-3">
             {[
               { tipo: 'Lentes diarios', optica: 'RD$6,500/mes', online: 'RD$3,720/mes', ahorro: 'RD$2,780' },
-              { tipo: 'Lentes mensuales', optica: 'RD$6,500/año', online: 'RD$3,960/año', ahorro: 'RD$2,540' },
+              { tipo: 'Lentes mensuales', optica: 'RD$6,500/año', online: 'RD$4,560/año', ahorro: 'RD$2,540' },
             ].map(c => (
               <div key={c.tipo} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
                 <p className="font-bold text-gray-900 text-sm mb-2">{c.tipo}</p>

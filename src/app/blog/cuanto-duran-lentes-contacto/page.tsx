@@ -55,7 +55,7 @@ export default function Page() {
               },
               {
                 tipo: 'Lentes mensuales',
-                duracion: '30 días',
+                duracion: '48h',
                 emoji: '📆',
                 color: 'bg-green-50 border-green-200',
                 titulo_color: 'text-green-900',

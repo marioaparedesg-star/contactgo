@@ -206,7 +206,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 { icon:'✅', text:'100% Original' },
                 { icon:'🚚', text:'Entrega 24-48h' },
                 { icon:'💳', text:'Pago seguro AZUL' },
-                { icon:'↩️', text:'30 días devolución' },
+                { icon:'↩️', text:'48h devolución' },
               ].map(b => (
                 <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
                   <span className="text-sm">{b.icon}</span>

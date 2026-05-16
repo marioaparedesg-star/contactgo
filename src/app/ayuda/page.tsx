@@ -29,7 +29,7 @@ const SECCIONES = [
     items: [
       { q: '¿Cuánto tarda en llegar mi pedido?', a: 'Santo Domingo: 24-48 horas. Santiago: 48-72 horas. Resto del país: 3-5 días hábiles. Todos los pedidos se procesan de lunes a sábado. Excepción: lentes tóricos para astigmatismo (20-30 días, ver abajo).' },
       { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos (para astigmatismo) se fabrican a medida según la graduación exacta de cada paciente: potencia esférica (SPH), cilindro (CYL) y eje (EJE). A diferencia de los lentes esféricos que tenemos en inventario, los tóricos requieren fabricación especial que toma entre 20 y 30 días calendario desde la confirmación del pedido. Te notificaremos por WhatsApp en cada etapa.' },
-      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Santiago: RD$200. Interior del país: RD$350. Pedidos mayores a RD$8,000: envío GRATIS.' },
+      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Santiago: RD$200. Interior del país: RD$350. Pedidos mayores a RD$6,000: envío GRATIS.' },
       { q: '¿Cómo sé dónde está mi pedido?', a: 'Recibirás un mensaje de WhatsApp con tu número de seguimiento. También puedes ver el estado en Mi cuenta → Pedidos.' },
       { q: '¿Entregan en toda la República Dominicana?', a: 'Sí, hacemos envíos a todo el país. Zonas remotas pueden tomar 1-2 días adicionales.' },
       { q: '¿Puedo cambiar la dirección después de hacer el pedido?', a: 'Sí, siempre que el pedido no haya sido enviado. Escríbenos por WhatsApp lo antes posible.' },
@@ -39,7 +39,7 @@ const SECCIONES = [
     id: 'devoluciones', emoji: '🔄', titulo: 'Devoluciones y Cambios',
     color: 'bg-amber-50 border-amber-100', badge: 'bg-amber-100 text-amber-700',
     items: [
-      { q: '¿Puedo devolver un producto?', a: 'Sí. Aceptamos devoluciones dentro de los 7 días calendario desde la entrega, siempre que el producto esté en su empaque original, sin abrir y sin usar.' },
+      { q: '¿Puedo devolver un producto?', a: 'Sí. Aceptamos devoluciones dentro de los 48 horas calendario desde la entrega, siempre que el producto esté en su empaque original, sin abrir y sin usar.' },
       { q: '¿Qué productos NO son devolvibles?', a: 'Por razones de higiene: lentes de contacto abiertos, soluciones y gotas ya usadas. Solo aplica a productos sin abrir.' },
       { q: '¿Cómo inicio una devolución?', a: 'Escríbenos por WhatsApp con tu número de pedido. El reembolso se procesa en 3-5 días hábiles.' },
       { q: '¿Me devuelven el dinero completo?', a: 'Sí. El costo de envío de la devolución corre por cuenta del cliente, excepto si el error fue nuestro.' },

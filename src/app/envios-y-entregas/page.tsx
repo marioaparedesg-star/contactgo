@@ -43,8 +43,8 @@ export default function EnviosPage() {
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               {[
                 { zona: 'Santo Domingo y Gran Santo Domingo', tiempo: '24h', costo: 'RD$200' },
-                { zona: 'Santiago de los Caballeros', tiempo: '24-48h', costo: 'RD$300' },
-                { zona: 'La Romana / San Pedro de Macorís', tiempo: '24-48h', costo: 'RD$300' },
+                { zona: 'Santiago de los Caballeros', tiempo: '24-48h', costo: 'RD$350' },
+                { zona: 'La Romana / San Pedro de Macorís', tiempo: '24-48h', costo: 'RD$350' },
                 { zona: 'Punta Cana / Bávaro', tiempo: '48-72h', costo: 'RD$350' },
                 { zona: 'Puerto Plata', tiempo: '48-72h', costo: 'RD$350' },
                 { zona: 'Otras provincias', tiempo: '48-72h', costo: 'RD$350-400' },

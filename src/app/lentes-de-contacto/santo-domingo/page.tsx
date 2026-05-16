@@ -24,7 +24,7 @@ export default function Page() {
           <p>ContactGo te entrega lentes de contacto originales directamente en Santo Domingo. Somos distribuidores autorizados de ACUVUE®, Air Optix®, Biofinity® y Bausch+Lomb — todos con garantía de autenticidad.</p>
           <p>Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> para encontrar el lente exacto según tu graduación SPH, CYL y AXIS en minutos, sin salir de casa.</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 text-center">
-            {[['🚚','Envío rápido'],['✅','100% Original'],['💳','Pago seguro'],['↩️','30 días devolución']].map(([i,t])=>(
+            {[['🚚','Envío rápido'],['✅','100% Original'],['💳','Pago seguro'],['↩️','48h devolución']].map(([i,t])=>(
               <div key={String(t)} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <span className="text-2xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>

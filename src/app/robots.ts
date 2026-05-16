@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/checkout', '/cart', '/cuenta', '/confirmacion', '/azul-retorno', '/api/'],
+        disallow: ['/admin', '/checkout', '/cart', '/cuenta', '/confirmacion', '/recibo', '/azul-retorno', '/api/'],
       },
       // Permitir feed de Google Merchant para Google Shopping
       {
