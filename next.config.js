@@ -10,7 +10,7 @@ const csp = [
   // Fuentes
   "font-src 'self' https://fonts.gstatic.com",
   // Imágenes: self + Supabase Storage + Google + Facebook + data URIs
-  "img-src 'self' data: blob: https://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://pixel.wp.com",
+  "img-src 'self' data: blob: https://atendbjolicwcsqfyiyh.supabase.co https://*.supabase.co https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://pixel.wp.com https://contactgo.net https://www.contactgo.net",
   // Conexiones API: self + Supabase + GA + AZUL + Resend
   "connect-src 'self' https://atendbjolicwcsqfyiyh.supabase.co wss://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pruebas.azul.com.do https://pagos.azul.com.do https://api.resend.com https://e.clarity.ms https://*.clarity.ms",
   // Frames: AZUL necesita poder renderizar en frame para su portal de pago
@@ -31,7 +31,7 @@ const securityHeaders = [
   { key: 'Strict-Transport-Security',   value: 'max-age=63072000; includeSubDomains; preload' },
   { key: 'X-DNS-Prefetch-Control',      value: 'on' },
   { key: 'Cross-Origin-Opener-Policy',  value: 'same-origin' },
-  { key: 'Cross-Origin-Resource-Policy', value: 'same-site' },
+  { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
   { key: 'Content-Security-Policy',     value: csp },
 ]
 
@@ -49,6 +49,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'atendbjolicwcsqfyiyh.supabase.co' },
       { protocol: 'https', hostname: 'www.contactgo.net' },
       { protocol: 'https', hostname: 'contactgo.net' },
+      { protocol: 'https', hostname: '*.supabase.co' },
     ],
   },
   async headers() {
