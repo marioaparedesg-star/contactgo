@@ -82,7 +82,7 @@ export default async function Page() {
           <p>Cubrimos toda la Gran Santo Domingo: <strong>Piantini, Naco, Mirador Sur, Bella Vista, Gazcue, Zona Colonial, Los Cacicazgos, Arroyo Hondo, La Esperilla, Serralles, Los Prados, Evaristo Morales</strong> y también sectores populares como <strong>Los Mina, Villa Mella, Herrera, Cristo Rey, Villas Agrícolas, Alma Rosa y Km 13</strong>. También entregamos en el Distrito Nacional y la provincia Santo Domingo Este, Oeste y Norte.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo enviar tu receta desde Santo Domingo?</h3>
-          <p>Tienes tres opciones: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta</a> con los valores de tu prescripción. (2) Envíanos foto de tu receta por WhatsApp al (829) 472-8328. (3) Si eres cliente de <strong>Óptica Optimax</strong> en Santo Domingo, tu receta ya está en nuestro sistema — solo indícala al pedir.</p>
+          <p>Tienes tres opciones: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta</a> con los valores de tu prescripción. (2) Envíanos foto de tu receta por WhatsApp al (829) 472-8328.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santo Domingo</h3>
           <div className="space-y-3">
