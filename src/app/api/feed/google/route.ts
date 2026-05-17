@@ -14,19 +14,34 @@ export async function GET() {
                  p.tipo === 'multifocal' ? 'Lentes Multifocales' : p.tipo === 'color' ? 'Lentes de Color' :
                  p.tipo === 'solucion' ? 'Solución para Lentes' : 'Lentes de Contacto'
     const desc = (p.descripcion ?? `${tipo} ${p.marca} en República Dominicana.`).slice(0, 500)
+    const gtin = p.ean ?? p.upc ?? ''
+    const mpn = p.sku ?? `CG-${p.id?.slice(0,8)}`
     return `<item>
       <g:id>${p.id}</g:id>
-      <g:title><![CDATA[${p.nombre}]]></g:title>
+      <g:title><![CDATA[${p.nombre} — Lentes de Contacto RD]]></g:title>
       <g:description><![CDATA[${desc}]]></g:description>
       <g:link>${BASE}/producto/${slug}</g:link>
       <g:image_link>${p.imagen_url ?? BASE + '/icon-512.png'}</g:image_link>
       <g:condition>new</g:condition>
-      <g:availability>in stock</g:availability>
-      <g:price>${p.precio} DOP</g:price>
+      <g:availability>${(p.stock ?? 0) > 0 ? 'in stock' : 'out of stock'}</g:availability>
+      <g:price>${p.precio}.00 DOP</g:price>
       <g:brand><![CDATA[${p.marca}]]></g:brand>
+      <g:mpn>${mpn}</g:mpn>
+      ${gtin ? `<g:gtin>${gtin}</g:gtin>` : '<g:identifier_exists>false</g:identifier_exists>'}
       <g:google_product_category>2271</g:google_product_category>
-      <g:shipping><g:country>DO</g:country><g:price>0 DOP</g:price></g:shipping>
-      <g:identifier_exists>false</g:identifier_exists>
+      <g:product_type><![CDATA[Salud > Óptica > ${tipo}]]></g:product_type>
+      <g:shipping>
+        <g:country>DO</g:country>
+        <g:service>Envío estándar</g:service>
+        <g:price>200.00 DOP</g:price>
+        <g:min_handling_time>0</g:min_handling_time>
+        <g:max_handling_time>1</g:max_handling_time>
+        <g:min_transit_time>1</g:min_transit_time>
+        <g:max_transit_time>2</g:max_transit_time>
+      </g:shipping>
+      <g:return_policy_label>standard-return-policy</g:return_policy_label>
+      <g:custom_label_0>${p.tipo ?? 'lente'}</g:custom_label_0>
+      <g:custom_label_1>${p.marca}</g:custom_label_1>
     </item>`
   }).join('\n')
 
