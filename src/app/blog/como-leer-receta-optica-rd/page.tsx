@@ -123,7 +123,7 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Cómo leer tu receta óptica para lentes de contacto",
-        "author": {"@type": "Person", "name": "Lic. Ana Torres", "jobTitle": "Optómetra Colegiada", "url": "https://contactgo.net/autor/equipo-contactgo"},
+        "author": {"@type": "Person", "name": "Lic. Ana Torres", "jobTitle": "Optómetra Colegiada", "url": "https://contactgo.net/autor/equipo-contactgo", "memberOf": {"@type": "Organization", "name": "Colegio Dominicano de Optómetras"}},
         "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
