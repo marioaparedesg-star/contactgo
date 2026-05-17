@@ -8,7 +8,7 @@ const BASE = 'https://atendbjolicwcsqfyiyh.supabase.co/storage/v1/object/public/
 const SLIDES = [
   {
     badge: '🇩🇴 La #1 en lentes de contacto en RD',
-    title: 'Tus lentes en\n24 horas',
+    title: 'Tus lentes\na domicilio',
     subtitle: 'Originales. Seguros. Con soporte profesional. Entrega a todo el país.',
     cta:  { label: 'Comprar ahora', href: '/catalogo' },
     cta2: { label: 'Subir mi receta', href: '/receta' },
@@ -16,7 +16,7 @@ const SLIDES = [
     image: '/hero-lens-1.png',
     imageAlt: 'Lentes de contacto originales República Dominicana',
     stats: [
-      { num: '60+', label: 'clientes' },
+      { num: '60+', label: 'pedidos' },
       { num: '24h', label: 'entrega' },
       { num: '100%', label: 'originales' },
     ],
