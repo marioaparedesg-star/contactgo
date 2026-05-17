@@ -31,11 +31,17 @@ const securityHeaders = [
   { key: 'Strict-Transport-Security',   value: 'max-age=63072000; includeSubDomains; preload' },
   { key: 'X-DNS-Prefetch-Control',      value: 'on' },
   { key: 'Cross-Origin-Opener-Policy',  value: 'same-origin' },
-  { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
+  { key: 'Cross-Origin-Resource-Policy', value: 'same-site' },
   { key: 'Content-Security-Policy',     value: csp },
 ]
 
 const nextConfig = {
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@supabase/supabase-js'],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'atendbjolicwcsqfyiyh.supabase.co' },
@@ -51,6 +57,11 @@ const nextConfig = {
 }
 
 nextConfig.redirects = async () => [
+  { source: '/login',           destination: '/cuenta', permanent: true },
+  { source: '/signin',          destination: '/cuenta', permanent: true },
+  { source: '/iniciar-sesion',  destination: '/cuenta', permanent: true },
+  { source: '/register',        destination: '/cuenta', permanent: true },
+  { source: '/registro',        destination: '/cuenta', permanent: true },
   {
     source: '/blog/como-leer-tu-receta',
     destination: '/blog/como-leer-receta-optica-rd',

@@ -75,14 +75,30 @@ export default async function ProductoPage(
       "url": `https://contactgo.net/producto/${product.slug}`,
       "priceCurrency": "DOP",
       "price": String(product.precio ?? 0),
-      "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+      "priceValidUntil": "2026-12-31",
+      "itemCondition": "https://schema.org/NewCondition",
       "availability": product.stock > 0
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
-      "seller": {
-        "@type": "Organization",
-        "name": "ContactGo",
-        "url": "https://contactgo.net"
+      "seller": { "@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net" },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": { "@type": "MonetaryAmount", "value": "200", "currency": "DOP" },
+        "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "DO" },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": { "@type": "QuantitativeValue", "minValue": "0", "maxValue": "1", "unitCode": "DAY" },
+          "transitTime": { "@type": "QuantitativeValue", "minValue": "1", "maxValue": "2", "unitCode": "DAY" }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "DO",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": "2",
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn",
+        "merchantReturnLink": "https://contactgo.net/devoluciones"
       }
     }
   }

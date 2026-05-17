@@ -111,12 +111,12 @@ export default function Page() {
       
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "Article",
+        "@type": ["Article", "MedicalWebPage"],
         "headline": "Biofinity vs ACUVUE: ¿Cuál es mejor en RD?",
-        "author": {"@type": "Organization", "name": "Equipo ContactGo", "url": "https://contactgo.net"},
+        "author": {"@type": "Person", "name": "Equipo ContactGo", "jobTitle": "Especialistas en Salud Visual", "url": "https://contactgo.net/autor/equipo-contactgo"},
         "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
-        "dateModified": "2026-05-16",
+        "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
         "inLanguage": "es-DO",
         "url": "https://contactgo.net/blog/biofinity-vs-acuvue-comparacion"
       })}} />

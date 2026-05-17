@@ -70,6 +70,21 @@ export default async function Page() {
           <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Santiago</strong> y toda su región. No necesitas ir a una óptica — tus lentes llegan directamente donde estás en 24-48 horas.</p>
           <p>Somos distribuidores autorizados de <strong>ACUVUE®</strong>, <strong>Air Optix®</strong>, <strong>Biofinity®</strong> y <strong>Bausch+Lomb</strong>. Todos los productos son 100% originales. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en pedidos superiores a RD$6,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto en minutos.</p>
+
+          <h3 className="font-bold text-gray-900 text-lg mt-6">Marcas más pedidas en Santiago</h3>
+          <p>Los clientes de Santiago prefieren <strong>ACUVUE® OASYS®</strong> para uso diario intenso y <strong>Biofinity®</strong> para uso mensual. Los lentes de color <strong>FreshLook® Colorblends</strong> son muy populares entre jóvenes del Cibao.</p>
+          
+          <h3 className="font-bold text-gray-900 text-lg mt-6">Sectores con entrega en 24-48h</h3>
+          <p>Cubrimos todos los sectores de Santiago: <strong>Centro de la Ciudad, Los Jardines, Pueblo Nuevo, Las Colinas, La Trinitaria, Bella Vista, Ensanche Bermúdez, Gurabo</strong> y todos los municipios del Gran Santiago incluyendo Licey al Medio, Tamboril, Villa González y Puñal.</p>
+          
+          <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo enviar tu receta desde Santiago?</h3>
+          <p>Tienes tres opciones desde Santiago: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta en línea</a> con los valores de tu prescripción. (2) Envíanos una foto clara de tu receta por WhatsApp al (829) 472-8328. (3) Indica los valores SPH, CYL y AXIS al hacer tu pedido. Tu optómetra de confianza en Santiago puede darte estos datos.</p>
+          
+          <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santiago</h3>
+          <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
+            <p className="text-gray-700 text-sm italic">"Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto a mi casa en Santiago."</p>
+            <p className="text-xs text-gray-500 mt-2 font-semibold">— Carlos M., Santiago de los Caballeros ⭐⭐⭐⭐⭐</p>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
             {[['🚚','Envío RD$350'],['📦','24-48 horas'],['✅','100% Original'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
