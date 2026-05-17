@@ -49,6 +49,7 @@ export async function GET() {
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
   <channel>
     <title>ContactGo — Lentes de Contacto RD</title>
+    <g:merchant_id>5786261428</g:merchant_id>
     <link>${BASE}</link>
     <description>Catálogo de lentes de contacto en República Dominicana</description>
     ${items}
