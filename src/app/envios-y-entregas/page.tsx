@@ -42,7 +42,7 @@ export default function EnviosPage() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">📍 Zonas de entrega</h2>
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               {[
-                { zona: 'Santo Domingo y Gran Santo Domingo', tiempo: '24h', costo: 'RD$200' },
+                { zona: 'Santo Domingo y Gran Santo Domingo', tiempo: '24-48h', costo: 'RD$200' },
                 { zona: 'Santiago de los Caballeros', tiempo: '24-48h', costo: 'RD$350' },
                 { zona: 'La Romana / San Pedro de Macorís', tiempo: '24-48h', costo: 'RD$350' },
                 { zona: 'Punta Cana / Bávaro', tiempo: '48-72h', costo: 'RD$350' },

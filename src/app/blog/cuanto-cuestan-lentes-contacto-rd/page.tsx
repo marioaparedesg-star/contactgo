@@ -74,7 +74,7 @@ export default function Page() {
           <div className="grid grid-cols-2 gap-3">
             {[
               { tipo: 'Lentes diarios', optica: 'RD$6,500/mes', online: 'RD$3,720/mes', ahorro: 'RD$2,780' },
-              { tipo: 'Lentes mensuales', optica: 'RD$6,500/año', online: '~RD$18,240/año', ahorro: 'RD$2,540' },
+              { tipo: 'Lentes mensuales', optica: '~RD$26,000/año', online: '~RD$18,240/año', ahorro: '~RD$7,760' },
             ].map(c => (
               <div key={c.tipo} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
                 <p className="font-bold text-gray-900 text-sm mb-2">{c.tipo}</p>

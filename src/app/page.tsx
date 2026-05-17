@@ -1,4 +1,12 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'ContactGo — Lentes de Contacto en República Dominicana | Envío 24-48h',
+  description: 'Compra lentes de contacto originales en RD. ACUVUE, Air Optix, Biofinity, FreshLook. Distribuidores autorizados. Envío a domicilio en Santo Domingo, Santiago y todo el país.',
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+  alternates: { canonical: 'https://contactgo.net' },
+}
 import { ChevronRight, Truck, Shield, Star, Clock, Zap, RefreshCw, Award, Users, CheckCircle } from 'lucide-react'
 import Navbar from '@/components/ui/Navbar'
 import HeroSlider from '@/components/ui/HeroSlider'
