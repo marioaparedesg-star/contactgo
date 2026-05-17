@@ -48,4 +48,12 @@ const nextConfig = {
   },
 }
 
+nextConfig.redirects = async () => [
+  {
+    source: '/blog/como-leer-tu-receta',
+    destination: '/blog/como-leer-receta-optica-rd',
+    permanent: true,
+  },
+]
+
 module.exports = nextConfig

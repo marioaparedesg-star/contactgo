@@ -85,7 +85,7 @@ export default function Footer() {
           <h3 className="text-white font-semibold mb-3 text-xs uppercase tracking-widest">Contacto</h3>
           <ul className="space-y-2.5 text-xs">
             <li>
-              <a href="https://wa.me/18294728328" target="_blank"
+              <a href="https://wa.me/18294728328" target="_blank" aria-label="Llamar o WhatsApp (829) 472-8328"
                 className="text-gray-500 hover:text-primary-400 transition-colors">
                 📞 (829) 472-8328
               </a>

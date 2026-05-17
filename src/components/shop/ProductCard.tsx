@@ -20,17 +20,22 @@ const TIPO_BADGE: Record<string, { label: string; color: string }> = {
 }
 
 // Calcula días totales de uso por caja
-function getDiasTotales(product: any): number | null {
+function getPrecioMetrica(product: any): { valor: number; unidad: string } | null {
   const dias = product.dias_uso
   if (!dias) return null
   const tipo = product.tipo
-  if (tipo === 'gota' || tipo === 'solucion') return dias
-  // Lentes: pares = unidades/2, días totales = pares × días
-  const unidades = tipo === 'esferico' || tipo === 'torico' || tipo === 'multifocal'
-    ? (dias === 1 ? 30 : 6)  // diario=30u, quincenal/mensual=6u
-    : tipo === 'color' ? 2 : 6
+  // Gotas y soluciones: precio/frasco (sin métrica por día)
+  if (tipo === 'gota' || tipo === 'solucion') return null
+  // Lentes DIARIOS: mostrar precio/par (más amigable que precio/día)
+  if (dias === 1) {
+    const pares = Math.floor(30 / 2) // 30 lentes = 15 pares
+    return { valor: Math.round(product.precio / pares), unidad: 'par' }
+  }
+  // Lentes QUINCENALES y MENSUALES: mostrar precio/día (correcto y atractivo)
+  const unidades = 6 // siempre vienen en cajas de 6u
   const pares = Math.floor(unidades / 2)
-  return pares * dias
+  const diasTotales = pares * dias
+  return { valor: Math.round(product.precio / diasTotales), unidad: 'día' }
 }
 
 export default function ProductCard({ product }: Props) {
@@ -60,8 +65,7 @@ export default function ProductCard({ product }: Props) {
 
   const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
   const stockCritical = product.stock > 0 && product.stock <= 4
-  const diasTotales = getDiasTotales(product as any)
-  const precioPorDia = diasTotales && diasTotales > 0 ? Math.round(product.precio / diasTotales) : null
+  const precioMetrica = getPrecioMetrica(product as any)
 
   // Etiqueta de contenido
   const contenidoLabel = product.tipo === 'gota' || product.tipo === 'solucion'
@@ -172,9 +176,9 @@ export default function ProductCard({ product }: Props) {
             )}
             <div className="flex items-center gap-2 flex-wrap">
               <p className="text-[10px] text-gray-400">{contenidoLabel}</p>
-              {precioPorDia && (
+              {precioMetrica && (
                 <p className="text-[10px] text-primary-700 font-semibold">
-                  ≈ RD${precioPorDia}/día
+                  ≈ RD${precioMetrica.valor}/{precioMetrica.unidad}
                 </p>
               )}
             </div>
