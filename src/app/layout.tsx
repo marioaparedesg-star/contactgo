@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import BottomNav from '@/components/ui/BottomNav'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
+import CookieConsent from '@/components/ui/CookieConsent'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
@@ -144,6 +145,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}} />
         <BottomNav />
         <WhatsAppButton />
+        <CookieConsent />
         <Toaster
           position="top-center"
           toastOptions={{

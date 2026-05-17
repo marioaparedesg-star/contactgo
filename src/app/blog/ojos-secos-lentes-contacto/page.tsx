@@ -100,6 +100,11 @@ export default function Page() {
         "inLanguage": "es-DO",
         "url": "https://contactgo.net/blog/ojos-secos-lentes-contacto"
       })}} />
+      
+          {/* Disclaimer médico */}
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-8 text-sm text-amber-900">
+            <strong>⚠️ Aviso médico:</strong> Este artículo es informativo y no sustituye la consulta con un profesional óptico u oftalmólogo. Los lentes de contacto son productos sanitarios que requieren prescripción. Si experimentas molestias, suspende su uso y consulta a tu especialista.
+          </div>
       </main>
       <Footer />
     </>
