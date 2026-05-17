@@ -13,6 +13,7 @@ export default function Navbar() {
     { href: '/catalogo', label: 'Catálogo' },
     { href: '/catalogo?tipo=esferico', label: 'Esféricos' },
     { href: '/catalogo?tipo=torico', label: 'Tóricos' },
+    { href: '/multifocales', label: 'Multifocales' },
     { href: '/catalogo?tipo=color', label: 'Color' },
     { href: '/catalogo?tipo=solucion', label: 'Soluciones' },
     { href: '/receta', label: 'Mi Receta' },

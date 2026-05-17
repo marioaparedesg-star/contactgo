@@ -419,7 +419,7 @@ export default function RecetaPage() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-blue-700 mt-3">¿No entiendes tu receta? <Link href="/blog/como-leer-tu-receta" className="font-semibold underline">Lee nuestra guía completa →</Link></p>
+            <p className="text-xs text-blue-700 mt-3">¿No entiendes tu receta? <Link href="/blog/como-leer-receta-optica-rd" className="font-semibold underline">Lee nuestra guía completa →</Link></p>
           </div>
         </section>
 

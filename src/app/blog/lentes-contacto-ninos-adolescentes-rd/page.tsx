@@ -27,7 +27,7 @@ export default function Page() {
           <span>·</span>
           <span>✍️ Equipo ContactGo</span>
           <span>·</span>
-          <span>⏱ 6 min lectura</span>
+          <span>⏱ 7 min lectura</span>
         </div>
       <p className="text-gray-500 text-sm mb-8">Guía para padres · 7 min de lectura</p>
 
@@ -45,7 +45,9 @@ export default function Page() {
         </div>
 
         <div>
-          <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Cómo saber si mi hijo está listo?</h2>
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 text-sm text-amber-800"><strong>⚠️ Importante:</strong> La adaptación de lentes de contacto en menores requiere evaluación previa por un optometrista o oftalmólogo pediátrico certificado. No se recomienda sin supervisión profesional.</div>
+
+        <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Cómo saber si mi hijo está listo?</h2>
           <div className="space-y-2">
             {[
               { q: '¿Se lava las manos sin que se lo recuerden?', si: 'Buena señal', no: 'Espera un poco más' },
@@ -65,7 +67,9 @@ export default function Page() {
         </div>
 
         <div>
-          <h2 className="font-display text-xl font-bold text-gray-900 mb-3">El mejor tipo de lente para adolescentes</h2>
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 text-sm text-amber-800"><strong>⚠️ Importante:</strong> La adaptación de lentes de contacto en menores requiere evaluación previa por un optometrista o oftalmólogo pediátrico certificado. No se recomienda sin supervisión profesional.</div>
+
+        <h2 className="font-display text-xl font-bold text-gray-900 mb-3">El mejor tipo de lente para adolescentes</h2>
           <p>Para jóvenes que empiezan, siempre recomendamos <strong>lentes diarios</strong>. La razón es simple: no requieren limpieza ni mantenimiento. Se usan y se descartan. El riesgo de infección es mínimo y la higiene está garantizada.</p>
           <div className="mt-4 space-y-3">
             <Link href="/producto/1-day-acuvue-moist-lentes-contacto-diarios-dominicana" className="flex items-center gap-3 bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">

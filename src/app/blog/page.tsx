@@ -36,14 +36,6 @@ const POSTS = [
     categoria: 'Principiantes',
   },
   {
-    slug: 'como-leer-tu-receta',
-    titulo: 'Cómo leer tu receta de lentes de contacto',
-    descripcion: 'Aprende a interpretar los valores SPH, CYL, EJE y ADD de tu receta óptica para comprar los lentes correctos.',
-    imagen: '👁️',
-    tiempo: '3 min',
-    categoria: 'Guías',
-  },
-  {
     slug: 'como-poner-lentes-de-contacto',
     titulo: 'Cómo poner y quitar lentes de contacto por primera vez',
     descripcion: 'Guía paso a paso para principiantes. Todo lo que necesitas saber para usar lentes de contacto de forma segura.',
