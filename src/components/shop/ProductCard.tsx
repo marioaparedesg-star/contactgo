@@ -151,8 +151,8 @@ export default function ProductCard({ product }: Props) {
           {product.stock === 0
             ? <span className="text-red-500">Sin stock</span>
             : product.stock <= 4
-              ? <span className="text-orange-600">¡Solo {product.stock} disponibles!</span>
-              : <span className="text-green-600">✅ En stock</span>
+              ? <span className="text-orange-700">¡Solo {product.stock} disponibles!</span>
+              : <span className="text-green-700">✅ En stock</span>
           }
         </p>
 

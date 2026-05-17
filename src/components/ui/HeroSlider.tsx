@@ -182,7 +182,7 @@ export default function HeroSlider() {
               <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`}
                 className={`transition-all duration-300 rounded-full ${i === current
                   ? 'w-7 h-2.5 bg-white shadow-sm'
-                  : 'w-2.5 h-2.5 bg-white/35 hover:bg-white/60'}`} />
+                  : 'w-5 h-5 bg-white/35 hover:bg-white/60'}`} />
             ))}
           </div>
           <span className="text-white/40 text-xs font-mono ml-1">{current + 1}/{SLIDES.length}</span>
