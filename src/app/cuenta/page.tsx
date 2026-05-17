@@ -1,8 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
-import {
 import { LoyaltySection } from '@/components/ui/LoyaltySection'
+import {
   User, Package, MapPin, Phone, Mail, Edit2, Check, X, Plus, Trash2, LogOut,
   ChevronRight, FileText, CreditCard, MessageCircle, Lock, Fingerprint, ShieldCheck,
   Eye, EyeOff, KeyRound, Repeat, Calendar, RefreshCw
