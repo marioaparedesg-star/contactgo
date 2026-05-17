@@ -85,13 +85,29 @@ export default function RecetaPage() {
   const canCalc=od_sph!==''||oi_sph!==''
   const cfg=result?TIPO_CFG[result.recomendacion as keyof typeof TIPO_CFG]:null
 
-  const Select=({val,onChange,opts,placeholder='Seleccionar',disabled=false,ariaLabel}:{val:string,onChange:(v:string)=>void,opts:{label:string,val:string}[],placeholder?:string,disabled?:boolean,ariaLabel?:string})=>(
-    <select aria-label={ariaLabel||placeholder} value={val} onChange={e=>onChange(e.target.value)} disabled={disabled}
-      className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 bg-white disabled:opacity-50 disabled:cursor-not-allowed">
-      <option value="">{placeholder}</option>
-      {opts.filter(o=>o.val!=='').map(o=><option key={o.val} value={o.val}>{o.label}</option>)}
-    </select>
-  )
+  // Stepper numérico — reemplaza los selects de 80+ opciones
+  const Stepper = ({val, onChange, opts, placeholder='—', disabled=false, ariaLabel}: {val:string, onChange:(v:string)=>void, opts:{label:string,val:string}[], placeholder?:string, disabled?:boolean, ariaLabel?:string}) => {
+    const idx = opts.findIndex(o => o.val === val)
+    const prev = () => { if (disabled) return; const i = idx <= 0 ? opts.length-1 : idx-1; onChange(opts[i].val) }
+    const next = () => { if (disabled) return; const i = idx >= opts.length-1 ? 0 : idx+1; onChange(opts[i].val) }
+    const label = idx >= 0 ? opts[idx].label : placeholder
+    return (
+      <div className={`flex items-center border rounded-xl overflow-hidden ${disabled ? 'opacity-50' : 'border-gray-200'}`}>
+        <button type="button" onClick={prev} disabled={disabled} aria-label={`Disminuir ${ariaLabel}`}
+          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors text-lg font-bold shrink-0 disabled:cursor-not-allowed">
+          −
+        </button>
+        <div className="flex-1 text-center text-sm font-semibold text-gray-900 py-2 px-1 min-w-0">
+          {label}
+        </div>
+        <button type="button" onClick={next} disabled={disabled} aria-label={`Aumentar ${ariaLabel}`}
+          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors text-lg font-bold shrink-0 disabled:cursor-not-allowed">
+          +
+        </button>
+      </div>
+    )
+  }
+  const Select = Stepper // Alias para no cambiar el JSX existente
 
   const sphOpts=SPH_VALS.map(v=>({label:v>0?`+${v.toFixed(2)}`:v.toFixed(2),val:v.toFixed(2)}))
   const cylOpts=CYL_VALS.map(v=>({label:v===0?'Sin cilindro':v.toFixed(2),val:v.toFixed(2)}))

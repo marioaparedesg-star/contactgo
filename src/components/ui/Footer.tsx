@@ -103,6 +103,7 @@ export default function Footer() {
               {[
                 ['Nosotros', '/sobre-nosotros'],
                 ['Reseñas', '/resenas'],
+              ['Referidos 🎁', '/referidos'],
                 ['Seguridad', '/seguridad'],
                 ['Privacidad', '/privacidad'],
                 ['Términos', '/terminos'],

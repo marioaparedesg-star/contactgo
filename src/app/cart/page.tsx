@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { useCartStore } from '@/lib/cart-store'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
@@ -145,9 +146,23 @@ export default function CartPage() {
                 <span>Subtotal</span>
                 <span>RD${sub.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
-                <span>Envío</span>
-                <span>RD$200</span>
+              {/* Selector de zona para estimar envío */}
+              <div className="space-y-2">
+                <div className="flex justify-between text-gray-600">
+                  <span>Zona de envío</span>
+                </div>
+                <select onChange={e => setZona(e.target.value)} value={zona}
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-primary-200">
+                  <option value="">Selecciona tu zona</option>
+                  <option value="sd">Santo Domingo</option>
+                  <option value="interior">Interior del país</option>
+                </select>
+                <div className="flex justify-between text-gray-600">
+                  <span>Envío</span>
+                  <span className={sub >= 6000 ? 'text-green-600 font-semibold' : ''}>
+                    {sub >= 6000 ? '¡Gratis! 🎉' : zona === 'sd' ? 'RD$200' : zona === 'interior' ? 'RD$350' : 'Selecciona zona'}
+                  </span>
+                </div>
               </div>
               <div className="border-t border-gray-100 pt-3 flex justify-between font-bold text-gray-900 text-base">
                 <span>Total</span>
