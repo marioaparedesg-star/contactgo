@@ -153,13 +153,13 @@ export default function ProductoClient({ product, variants }: Props) {
     setPrice(Math.round(base * (1 - desc)))
   }, [size, product.precio, sku, suscripcion])
 
-  const handleAdd = () => {
-    if (isLente && !isColor && !sph)               { toast.error('Selecciona una graduación'); return }
-    if (isColor && !color)                          { toast.error('Selecciona un color'); return }
-    if (isToric && !cyl)                            { toast.error('Selecciona el cilindro (CYL)'); return }
-    if (isToric && !axis)                           { toast.error('Selecciona el eje (AXIS)'); return }
-    if (isMulti && !add)                            { toast.error('Selecciona la adición (ADD)'); return }
-    if (isSolucion && sizes.length > 1 && !size)    { toast.error('Selecciona el tamaño'); return }
+  const handleAdd = (): boolean => {
+    if (isLente && !isColor && !sph)               { toast.error('Selecciona una graduación (SPH)'); return false }
+    if (isColor && !color)                          { toast.error('Selecciona un color'); return false }
+    if (isToric && !cyl)                            { toast.error('Selecciona el cilindro (CYL)'); return false }
+    if (isToric && !axis)                           { toast.error('Selecciona el eje (AXIS)'); return false }
+    if (isMulti && !add)                            { toast.error('Selecciona la adición (ADD)'); return false }
+    if (isSolucion && sizes.length > 1 && !size)    { toast.error('Selecciona el tamaño'); return false }
     addItem(product, {
       suscripcion: suscripcion ?? undefined,
       cantidad: qty,
@@ -172,9 +172,10 @@ export default function ProductoClient({ product, variants }: Props) {
       size:      size  || undefined,
     } as any)
     toast.success('Agregado al carrito ✓')
+    return true
   }
 
-  const handleBuyNow = () => { handleAdd(); router.push('/checkout') }
+  const handleBuyNow = () => { if (handleAdd()) router.push('/checkout') }
 
   return (
     <>
