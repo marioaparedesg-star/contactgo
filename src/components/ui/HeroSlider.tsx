@@ -189,6 +189,7 @@ export default function HeroSlider() {
           <div className="ml-auto flex gap-2">
             {[prev, next].map((fn, i) => (
               <button key={i} onClick={fn}
+                aria-label={i === 0 ? 'Slide anterior' : 'Siguiente slide'}
                 className="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 border border-white/20 flex items-center justify-center transition-all">
                 <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={i === 0 ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />

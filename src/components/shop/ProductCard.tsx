@@ -137,7 +137,7 @@ export default function ProductCard({ product }: Props) {
       {/* ── Info ── */}
       <div className="p-3 flex flex-col flex-1 gap-1">
         {/* Marca */}
-        <p className="text-[10px] font-bold text-primary-600 uppercase tracking-widest truncate">
+        <p className="text-[10px] font-bold text-primary-700 uppercase tracking-widest truncate">
           {product.marca}
         </p>
 
@@ -151,7 +151,7 @@ export default function ProductCard({ product }: Props) {
           {product.stock === 0
             ? <span className="text-red-500">Sin stock</span>
             : product.stock <= 4
-              ? <span className="text-orange-500">¡Solo {product.stock} disponibles!</span>
+              ? <span className="text-orange-600">¡Solo {product.stock} disponibles!</span>
               : <span className="text-green-600">✅ En stock</span>
           }
         </p>
@@ -173,7 +173,7 @@ export default function ProductCard({ product }: Props) {
             <div className="flex items-center gap-2 flex-wrap">
               <p className="text-[10px] text-gray-400">{contenidoLabel}</p>
               {precioPorDia && (
-                <p className="text-[10px] text-primary-600 font-semibold">
+                <p className="text-[10px] text-primary-700 font-semibold">
                   ≈ RD${precioPorDia}/día
                 </p>
               )}

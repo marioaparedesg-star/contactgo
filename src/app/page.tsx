@@ -141,7 +141,7 @@ export default async function HomePage() {
                 ].map(m => (
                   <div key={m.brand} className={`${m.color} border rounded-2xl p-4 text-center`}>
                     <p className="font-black text-gray-900 text-sm">{m.brand}</p>
-                    <p className="text-gray-500 text-[11px] mt-0.5">{m.sub}</p>
+                    <p className="text-gray-600 text-[11px] mt-0.5">{m.sub}</p>
                     <div className="flex items-center justify-center gap-1 mt-2">
                       <CheckCircle className="w-3 h-3 text-green-500" />
                       <span className="text-[10px] text-green-700 font-semibold">Autorizado</span>
@@ -216,7 +216,7 @@ export default async function HomePage() {
               <h2 className="font-display text-xl md:text-2xl font-bold text-gray-900">Más populares</h2>
               <p className="text-gray-500 text-sm mt-0.5">Los más vendidos esta semana</p>
             </div>
-            <Link href="/catalogo" className="text-sm font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1">
+            <Link href="/catalogo" className="text-sm font-semibold text-primary-700 hover:text-primary-800 flex items-center gap-1">
               Ver todos <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
