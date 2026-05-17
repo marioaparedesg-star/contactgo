@@ -1,11 +1,16 @@
-import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export async function GET() {
   const start = Date.now()
   try {
-    const sb = createServerSupabaseClient()
+    // Usar cliente directo sin cookies para el health check
+    const sb = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
     const { error } = await sb.from('products').select('id').limit(1)
     if (error) throw error
+
     return Response.json({
       status: 'ok',
       timestamp: new Date().toISOString(),

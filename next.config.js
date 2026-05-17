@@ -38,7 +38,6 @@ const securityHeaders = [
 const nextConfig = {
   poweredByHeader: false,
   experimental: {
-    legacyBrowsers: false,
     optimizePackageImports: ['lucide-react', '@supabase/supabase-js'],
   },
   compiler: {
