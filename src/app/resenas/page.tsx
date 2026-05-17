@@ -16,7 +16,7 @@ async function getResenas() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
     const { data } = await sb
-      .from('product_reviews')
+      .from('reviews')
       .select('*, products(nombre, marca)')
       .eq('aprobado', true)
       .order('created_at', { ascending: false })
@@ -39,7 +39,7 @@ export default async function ResenasPage() {
   ]
 
   const displayResenas = resenas.length > 0 ? resenas : fallback
-  const avgRating = displayResenas.reduce((s: number, r: any) => s + (r.calificacion ?? 5), 0) / displayResenas.length
+  const avgRating = displayResenas.reduce((s: number, r: any) => s + (r.rating ?? 5), 0) / displayResenas.length
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-10 pb-32">
@@ -66,12 +66,12 @@ export default async function ResenasPage() {
           <div key={r.id ?? i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
             <div className="flex items-start justify-between mb-3">
               <div>
-                <p className="font-bold text-gray-900 text-sm">{r.autor_nombre}</p>
+                <p className="font-bold text-gray-900 text-sm">{r.nombre}</p>
                 <p className="text-xs text-gray-400">{r.ciudad ?? 'República Dominicana'}</p>
               </div>
               <div className="flex gap-0.5">
                 {[1,2,3,4,5].map(s => (
-                  <Star key={s} className={`w-3.5 h-3.5 ${s <= (r.calificacion ?? 5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
+                  <Star key={s} className={`w-3.5 h-3.5 ${s <= (r.rating ?? 5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
                 ))}
               </div>
             </div>

@@ -84,6 +84,7 @@ export async function generateMetadata({ params }: { params: { marca: string } }
   const found = encontrarMarca(params.marca)
   if (!found) return { title: 'Marca no encontrada | ContactGo' }
   return {
+    alternates: { canonical: `https://contactgo.net/marca/${params.marca}` },
     title: `Lentes de Contacto ${found.info.nombre} | ContactGo República Dominicana`,
     description: `Compra lentes de contacto ${found.info.nombre} originales en ContactGo. Envío rápido en toda República Dominicana. ${found.info.descripcion.slice(0, 100)}`,
   }
