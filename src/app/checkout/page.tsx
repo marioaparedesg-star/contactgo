@@ -1,4 +1,5 @@
 'use client'
+import { trackEcommerce } from '@/lib/analytics'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -26,6 +27,16 @@ const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís'
 const CUPONES: Record<string,number> = { 'BIENVENIDO10': 0.10, 'CONTACTGO15': 0.15 }
 
 export default function CheckoutPage() {
+  useEffect(() => {
+    // Trackear inicio de checkout
+    const items = useCartStore.getState().items
+    if (items.length > 0) {
+      trackEcommerce('begin_checkout', {
+        items: items.map(i => ({ item_id: i.id, item_name: i.nombre, item_brand: i.marca ?? '', price: i.precio, quantity: i.quantity })),
+        value: items.reduce((s, i) => s + i.precio * i.quantity, 0)
+      })
+    }
+  }, [])
   const router = useRouter()
   const { items, subtotal, total, clearCart } = useCartStore()
   const [loading, setLoading] = useState(false)

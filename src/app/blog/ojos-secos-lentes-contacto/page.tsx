@@ -114,6 +114,13 @@ export default function Page() {
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-8 text-sm text-amber-900">
             <strong>⚠️ Aviso médico:</strong> Este artículo es informativo y no sustituye la consulta con un profesional óptico u oftalmólogo. Los lentes de contacto son productos sanitarios que requieren prescripción. Si experimentas molestias, suspende su uso y consulta a tu especialista.
           </div>
+      
+        <div className="mt-10 bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <p className="text-sm text-gray-600 mb-3">Gotas y soluciones para ojos secos</p>
+          <a href="/catalogo?tipo=solucion" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
+            Ver soluciones hidratantes →
+          </a>
+        </div>
       </main>
       <Footer />
     </>

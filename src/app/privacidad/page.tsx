@@ -1,54 +1,63 @@
+import type { Metadata } from 'next'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
+import Link from 'next/link'
 
-// canonical añadido
-// alternates: { canonical: 'https://contactgo.net/privacidad' }
-export const metadata = {
-  title: 'Política de Privacidad | ContactGo',
-  description: 'Política de privacidad y tratamiento de datos personales de ContactGo.',
+export const metadata: Metadata = {
+  title: 'Política de Privacidad — ContactGo',
+  description: 'Política de privacidad de ContactGo. Cómo recopilamos, usamos y protegemos tus datos personales conforme a la Ley 172-13 de República Dominicana.',
+  robots: { index: false, follow: false },
+  alternates: { canonical: 'https://contactgo.net/privacidad' },
 }
 
-const SECCIONES = [
+const secciones = [
   {
-    title: '1. Responsable del Tratamiento',
-    body: 'ContactGo (contactgo.net) es responsable del tratamiento de los datos personales que usted proporciona al utilizar nuestra plataforma. Datos del responsable: ContactGo · contactgo.net · Email: info@contactgo.net · Teléfono: (829) 472-8328 · Santo Domingo, República Dominicana. Operamos conforme a la Ley 172-13 sobre Protección de Datos Personales de la República Dominicana.'
+    title: '1. Responsable del tratamiento',
+    body: 'ContactGo (en adelante "la Empresa") es responsable del tratamiento de los datos personales recopilados a través del sitio web contactgo.net. Correo de contacto: info@contactgo.net | Teléfono: (829) 472-8328 | Santo Domingo, República Dominicana.'
   },
   {
-    title: '2. Datos que Recopilamos',
-    body: 'Recopilamos los siguientes datos: nombre completo, correo electrónico, número de teléfono, dirección de entrega, parámetros ópticos de la prescripción (SPH, CYL, AXIS, ADD), historial de pedidos e información de pago (no almacenamos datos de tarjetas de crédito). Esta información es necesaria para procesar y entregar sus pedidos correctamente.'
+    title: '2. Base legal (Ley 172-13)',
+    body: 'El tratamiento de tus datos personales se basa en: (a) Ejecución del contrato de compraventa; (b) Consentimiento explícito para comunicaciones de marketing; (c) Interés legítimo para mejora del servicio y prevención de fraudes; (d) Cumplimiento de obligaciones legales.'
   },
   {
-    title: '3. Uso de los Datos',
-    body: 'Sus datos son utilizados para: procesar y gestionar pedidos, coordinar envíos y entregas, enviar confirmaciones y actualizaciones de pedidos, recordatorios de reposición de lentes, mejorar nuestros servicios y atención al cliente. No utilizamos sus datos para publicidad de terceros ni los vendemos a otras empresas.'
+    title: '3. Datos que recopilamos',
+    body: 'Recopilamos: Datos de identificación (nombre, email, teléfono), Datos de envío (dirección), Datos de navegación (cookies, IP, dispositivo), Datos de prescripción óptica (SPH, CYL, AXIS) proporcionados voluntariamente, Datos de pago procesados por AZUL (Banco Popular) — ContactGo NO almacena datos de tarjetas.'
   },
   {
-    title: '4. Datos de Salud Visual',
-    body: 'Los parámetros ópticos (graduación, curvatura base, diámetro) que usted proporciona son datos sensibles de salud. ContactGo los almacena de forma segura y cifrada, los utiliza exclusivamente para procesar su pedido y personalizar recomendaciones de productos. Nunca son compartidos con terceros sin su consentimiento explícito.'
+    title: '4. Finalidad del tratamiento',
+    body: 'Usamos tus datos para: Procesar y gestionar pedidos, Enviar notificaciones de pedido por email/WhatsApp, Validar prescripciones ópticas, Mejorar la experiencia en el sitio web, Enviar comunicaciones de marketing (solo con consentimiento), Cumplir obligaciones legales y fiscales, Prevenir fraudes.'
   },
   {
-    title: '5. Compartición de Datos',
-    body: 'Sus datos pueden ser compartidos con empresas de mensajería y logística para coordinar la entrega de su pedido. Nunca compartimos sus datos con terceros para fines comerciales o publicitarios. En caso de requerimiento legal por autoridades competentes, procederemos conforme a la ley.'
+    title: '5. Destinatarios (transferencias)',
+    body: 'Tus datos son compartidos con: Vercel Inc. (hosting, EEUU — acogido a SCCs), Supabase Inc. (base de datos, EEUU/UE — acogido a SCCs), Resend Inc. (emails transaccionales, EEUU — acogido a SCCs), AZUL/Banco Popular Dominicano (procesamiento de pagos, RD), Google LLC (Analytics/GTM — acogido a SCCs), Meta Platforms Inc. (Pixel — acogido a SCCs). No vendemos ni cedemos datos a terceros con fines comerciales.'
   },
   {
-    title: '6. Seguridad',
-    body: 'Implementamos medidas técnicas y organizativas para proteger sus datos: conexiones HTTPS cifradas, bases de datos seguras con acceso restringido, autenticación de dos factores para el panel administrativo. Sin embargo, ningún sistema es 100% infalible. Le recomendamos usar contraseñas seguras y no compartir su cuenta. Para más detalles, consulte nuestra política de seguridad.'
+    title: '6. Plazo de conservación',
+    body: 'Datos de cuenta: mientras la cuenta esté activa + 2 años tras cierre. Datos de pedidos: 5 años (obligación fiscal). Prescripciones: 2 años. Datos de marketing: hasta que retires el consentimiento. Logs de acceso: 90 días.'
   },
   {
-    title: '7. Cookies y Analytics',
-    body: 'Utilizamos Google Analytics (GA4) para analizar el tráfico y comportamiento en el sitio. Esta herramienta puede recopilar datos anónimos de navegación. Puede desactivar las cookies en su navegador, aunque esto puede afectar la funcionalidad del sitio.'
+    title: '7. Tus derechos (ARCO)',
+    body: 'Conforme a la Ley 172-13, tienes derecho a: Acceso a tus datos, Rectificación de datos incorrectos, Cancelación (eliminación), Oposición al tratamiento. Para ejercerlos escríbenos a info@contactgo.net indicando tu nombre, email y el derecho que deseas ejercer. Respondemos en máximo 15 días hábiles.'
   },
   {
-    title: '8. Sus Derechos',
-    body: 'Usted tiene derecho a: acceder a sus datos personales, rectificar datos incorrectos, solicitar la eliminación de sus datos, oponerse al tratamiento de sus datos, solicitar la portabilidad de sus datos. Para ejercer estos derechos, contáctenos vía WhatsApp o correo electrónico.'
+    title: '8. Cookies',
+    body: 'Usamos cookies esenciales (sesión, carrito), de análisis (Google Analytics, Microsoft Clarity) y de marketing (Meta Pixel). Puedes gestionar tus preferencias en el banner de cookies al ingresar al sitio, o desde la configuración de tu navegador. Las cookies esenciales no pueden desactivarse.'
   },
   {
-    title: '9. Retención de Datos',
-    body: 'Conservamos sus datos mientras mantenga una cuenta activa o sean necesarios para el servicio. Los datos de pedidos se conservan por 5 años por obligaciones fiscales y legales. Puede solicitar la eliminación de su cuenta en cualquier momento.'
+    title: '9. Seguridad',
+    body: 'Implementamos medidas técnicas y organizativas: cifrado SSL/TLS en tránsito, Row Level Security en base de datos, autenticación multifactor en sistemas de administración, acceso restringido a datos sensibles. Ante una brecha de seguridad, notificaremos a los afectados en el plazo que establezca la ley.'
   },
   {
-    title: '10. Cambios a esta Política',
-    body: 'Podemos actualizar esta política periódicamente. Los cambios serán notificados en el sitio web. El uso continuado de ContactGo después de los cambios implica su aceptación.'
+    title: '10. Menores de edad',
+    body: 'Nuestros servicios no están dirigidos a menores de 18 años sin supervisión de un tutor. Si un padre/tutor detecta que su hijo menor ha proporcionado datos, puede solicitar su eliminación en info@contactgo.net.'
+  },
+  {
+    title: '11. Modificaciones',
+    body: 'Podemos actualizar esta política. Notificaremos los cambios significativos por email o mediante aviso destacado en el sitio. El uso continuado tras la notificación implica aceptación.'
+  },
+  {
+    title: '12. Autoridad de control',
+    body: 'Si consideras que el tratamiento de tus datos vulnera la Ley 172-13, puedes presentar una reclamación ante el Instituto Dominicano de las Telecomunicaciones (INDOTEL) o ante los tribunales competentes de la República Dominicana.'
   },
 ]
 
@@ -56,32 +65,27 @@ export default function PrivacidadPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 py-12 pb-24">
-        <div className="mb-10">
-          <h1 className="font-display text-3xl font-black text-gray-900 mb-2">Política de Privacidad</h1>
-          <p className="text-gray-400 text-sm">Última actualización: mayo 2026</p>
-        </div>
+      <main id="main-content" className="max-w-2xl mx-auto px-4 py-12 pb-24">
+        <div className="mb-4"><Link href="/" className="text-sm text-primary-600 font-semibold">← Inicio</Link></div>
+        <h1 className="font-display text-3xl font-bold text-gray-900 mb-2">Política de Privacidad</h1>
+        <p className="text-gray-400 text-sm mb-8">Última actualización: mayo 2026 · Conforme a la Ley 172-13 de República Dominicana</p>
 
-        <div className="space-y-8">
-          {SECCIONES.map(s => (
-            <div key={s.title}>
-              <h2 className="font-bold text-gray-900 mb-2">{s.title}</h2>
+        <div className="space-y-6">
+          {secciones.map(s => (
+            <section key={s.title} className="border-b border-gray-100 pb-6">
+              <h2 className="font-bold text-gray-900 text-base mb-2">{s.title}</h2>
               <p className="text-gray-600 text-sm leading-relaxed">{s.body}</p>
-            </div>
+            </section>
           ))}
         </div>
 
-        <div className="mt-10 pt-6 border-t border-gray-100">
-          <p className="text-sm font-semibold text-gray-700 mb-2">Contacto para asuntos de privacidad</p>
-          <a href="https://wa.me/18294728328" target="_blank"
-            className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">
-            💬 Contactar por WhatsApp
-          </a>
-          <p className="text-xs text-gray-400 mt-6 text-center">ContactGo · contactgo.net · República Dominicana · Mayo 2026</p>
+        <div className="mt-10 bg-gray-50 rounded-2xl p-5 text-sm text-gray-500">
+          <p>¿Preguntas sobre tu privacidad? Escríbenos a{' '}
+            <a href="mailto:info@contactgo.net" className="text-primary-600 font-semibold">info@contactgo.net</a>
+          </p>
         </div>
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }

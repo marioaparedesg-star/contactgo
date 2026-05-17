@@ -10,7 +10,7 @@ const TIPO_META: Record<string, { title: string; description: string }> = {
 }
 
 interface Props {
-  searchParams: { tipo?: string; marca?: string; q?: string; orden?: string }
+  searchParams: { tipo?: string; marca?: string; q?: string; orden?: string; duracion?: string }
 }
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
@@ -65,12 +65,13 @@ const ORDENES = [
   { value: 'novedad',    label: 'Más nuevo' },
 ]
 
-async function getProducts(tipo?: string, marca?: string, q?: string, orden?: string): Promise<Product[]> {
+async function getProducts(tipo?: string, marca?: string, q?: string, orden?: string, duracion?: string): Promise<Product[]> {
   const sb = createServerSupabaseClient()
   let query = sb.from('products').select('*').eq('activo', true)
-  if (tipo)  query = query.eq('tipo', tipo)
-  if (marca) query = query.ilike('marca', '%' + marca + '%')
-  if (q)     query = query.ilike('nombre', '%' + q + '%')
+  if (tipo)     query = query.eq('tipo', tipo)
+  if (marca)    query = query.ilike('marca', '%' + marca + '%')
+  if (q)        query = query.ilike('nombre', '%' + q + '%')
+  if (duracion) query = query.eq('dias_uso', parseInt(duracion))
 
   // Ordenamiento
   switch (orden) {
@@ -102,12 +103,12 @@ function buildUrl(current: Record<string, string | undefined>, override: Record<
 export default async function CatalogoPage({ searchParams }: Props) {
   const sp = await Promise.resolve(searchParams)
   const [products, marcas] = await Promise.all([
-    getProducts(sp.tipo, sp.marca, sp.q, sp.orden),
+    getProducts(sp.tipo, sp.marca, sp.q, sp.orden, sp.duracion),
     getMarcas(),
   ])
 
   const currentParams = {
-    tipo: sp.tipo, marca: sp.marca, q: sp.q, orden: sp.orden,
+    tipo: sp.tipo, marca: sp.marca, q: sp.q, orden: sp.orden, duracion: sp.duracion,
   }
 
   return (
@@ -169,6 +170,22 @@ export default async function CatalogoPage({ searchParams }: Props) {
             ))}
           </div>
         )}
+
+        {/* Filtro duración */}
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-hide">
+          <a href={buildUrl(currentParams, { duracion: undefined })}
+            className={"shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border " +
+              (!sp.duracion ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400')}>
+            Toda duración
+          </a>
+          {[{ v: '1', l: 'Diarios' }, { v: '14', l: 'Quincenales' }, { v: '30', l: 'Mensuales' }].map(d => (
+            <a key={d.v} href={buildUrl(currentParams, { duracion: d.v })}
+              className={"shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border " +
+                (sp.duracion === d.v ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400')}>
+              {d.l}
+            </a>
+          ))}
+        </div>
 
         {/* Fila: marca activa + ordenamiento */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
