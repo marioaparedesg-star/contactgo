@@ -74,6 +74,27 @@ export default async function Page() {
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto según tu SPH, CYL y AXIS en minutos.</p>
 
           {/* Trust strip */}
+
+          <h3 className="font-bold text-gray-900 text-lg mt-6">Marcas más pedidas en Santo Domingo</h3>
+          <p>Los clientes de la capital prefieren <strong>ACUVUE® OASYS®</strong> para uso diario y laboral, y <strong>AIR OPTIX® Colors</strong> para ocasiones especiales. Los lentes <strong>Biofinity®</strong> mensuales son favoritos en zonas como Piantini y Naco por su comodidad duradera.</p>
+
+          <h3 className="font-bold text-gray-900 text-lg mt-6">Sectores con entrega en 24 horas</h3>
+          <p>Cubrimos toda la Gran Santo Domingo: <strong>Piantini, Naco, Mirador Sur, Bella Vista, Gazcue, Zona Colonial, Los Cacicazgos, Arroyo Hondo, La Esperilla, Serralles, Los Prados, Evaristo Morales</strong> y también sectores populares como <strong>Los Mina, Villa Mella, Herrera, Cristo Rey, Villas Agrícolas, Alma Rosa y Km 13</strong>. También entregamos en el Distrito Nacional y la provincia Santo Domingo Este, Oeste y Norte.</p>
+
+          <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo enviar tu receta desde Santo Domingo?</h3>
+          <p>Tienes tres opciones: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta</a> con los valores de tu prescripción. (2) Envíanos foto de tu receta por WhatsApp al (829) 472-8328. (3) Si eres cliente de <strong>Óptica Optimax</strong> en Santo Domingo, tu receta ya está en nuestro sistema — solo indícala al pedir.</p>
+
+          <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santo Domingo</h3>
+          <div className="space-y-3">
+            <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
+              <p className="text-gray-700 text-sm italic">"Excelente servicio, llegaron en 24 horas como prometieron. Los Acuvue son 100% originales, igual que en la óptica pero más baratos."</p>
+              <p className="text-xs text-gray-500 mt-2 font-semibold">— María R., Piantini ⭐⭐⭐⭐⭐</p>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
+              <p className="text-gray-700 text-sm italic">"Llevo 6 meses comprando aquí. Los precios son mucho mejores que en cualquier óptica y siempre llegan rápido a Arroyo Hondo."</p>
+              <p className="text-xs text-gray-500 mt-2 font-semibold">— Feyilina P., Arroyo Hondo ⭐⭐⭐⭐⭐</p>
+            </div>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
             {[['🚚','Envío RD$200'],['📦','Entrega 24-48h'],['✅','100% Original'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">

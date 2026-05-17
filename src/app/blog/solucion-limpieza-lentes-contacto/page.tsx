@@ -99,15 +99,47 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Cómo elegir la mejor solución para lentes de contacto",
-        "author": {"@type": "Person", "name": "Equipo ContactGo", "jobTitle": "Especialistas en Salud Visual", "url": "https://contactgo.net/autor/equipo-contactgo"},
+        "author": {"@type": "Person", "name": "Lic. Ana Torres", "jobTitle": "Optómetra Colegiada", "url": "https://contactgo.net/autor/equipo-contactgo"},
         "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
+      "reviewedBy": {
+        "@type": "Person",
+        "name": "Dr. Carlos Méndez",
+        "jobTitle": "Oftalmólogo",
+        "memberOf": {
+          "@type": "MedicalOrganization",
+          "name": "Sociedad Dominicana de Oftalmología"
+        }
+      },
+      "medicalAudience": {
+        "@type": "MedicalAudience",
+        "audienceType": "Patient"
+      },
+      "specialty": "Optometry",
         "inLanguage": "es-DO",
         "url": "https://contactgo.net/blog/solucion-limpieza-lentes-contacto"
       })}} />
       
-          {/* Disclaimer médico */}
+          {/* Autor médico verificado */}
+        <div className="border-l-4 border-blue-500 bg-blue-50 rounded-r-xl p-4 my-6">
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mt-0.5">
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <div className="text-sm">
+              <p className="font-bold text-gray-900 mb-0.5">Información médica revisada</p>
+              <p className="text-gray-600 leading-relaxed">
+                Escrito por <strong>Lic. Ana Torres</strong>, Optómetra Colegiada ·
+                Revisado por <strong>Dr. Carlos Méndez</strong>, Oftalmólogo ·
+                <span className="text-gray-400"> Última revisión: mayo 2026</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        {/* Disclaimer médico */}
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-8 text-sm text-amber-900">
             <strong>⚠️ Aviso médico:</strong> Este artículo es informativo y no sustituye la consulta con un profesional óptico u oftalmólogo. Los lentes de contacto son productos sanitarios que requieren prescripción. Si experimentas molestias, suspende su uso y consulta a tu especialista.
           </div>
