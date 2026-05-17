@@ -29,13 +29,15 @@ const CUPONES: Record<string,number> = { 'BIENVENIDO10': 0.10, 'CONTACTGO15': 0.
 export default function CheckoutPage() {
   useEffect(() => {
     // Trackear inicio de checkout
-    const items = useCartStore.getState().items
-    if (items.length > 0) {
-      trackEcommerce('begin_checkout', {
-        items: items.map(i => ({ item_id: i.id, item_name: i.nombre, item_brand: i.marca ?? '', price: i.precio, quantity: i.quantity })),
-        value: items.reduce((s, i) => s + i.precio * i.quantity, 0)
-      })
-    }
+    try {
+      const cartItems = useCartStore.getState().items
+      if (cartItems && cartItems.length > 0) {
+        trackEcommerce('begin_checkout', {
+          items: cartItems.map((i: any) => ({ item_id: i.id, item_name: i.nombre, item_brand: i.marca ?? '', price: i.precio, quantity: i.quantity ?? 1 })),
+          value: cartItems.reduce((s: number, i: any) => s + i.precio * (i.quantity ?? 1), 0)
+        })
+      }
+    } catch {}
   }, [])
   const router = useRouter()
   const { items, subtotal, total, clearCart } = useCartStore()

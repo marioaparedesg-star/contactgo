@@ -73,12 +73,7 @@ export default async function Page() {
           "name": "Lentes de contacto soluciones en República Dominicana",
           "description": "Lista de lentes de contacto soluciones disponibles en ContactGo RD",
           "url": "https://contactgo.net/soluciones",
-          "itemListElement": (products ?? []).slice(0, 10).map((p: any, i: number) => ({
-            "@type": "ListItem",
-            "position": i + 1,
-            "name": p.nombre,
-            "url": `https://contactgo.net/producto/${p.slug || p.id}`
-          }))
+          "itemListElement": []
         })}} />
       </main>
       <Footer />

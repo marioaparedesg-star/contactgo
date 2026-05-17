@@ -89,12 +89,7 @@ export default async function Page() {
           "name": "Lentes de contacto toricos en República Dominicana",
           "description": "Lista de lentes de contacto toricos disponibles en ContactGo RD",
           "url": "https://contactgo.net/toricos",
-          "itemListElement": (products ?? []).slice(0, 10).map((p: any, i: number) => ({
-            "@type": "ListItem",
-            "position": i + 1,
-            "name": p.nombre,
-            "url": `https://contactgo.net/producto/${p.slug || p.id}`
-          }))
+          "itemListElement": []
         })}} />
       </main>
       <Footer />
