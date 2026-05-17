@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/solucion-limpieza-lentes-contacto' },
   title: 'Cómo elegir la mejor solución para lentes de contacto — ContactGo',
   description: 'Guía completa sobre soluciones de limpieza para lentes de contacto en RD. Opti-Free, ReNu, Prolub — cuál usar y cómo limpiar correctamente.',
 }

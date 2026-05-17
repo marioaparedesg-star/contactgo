@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/tipos-de-lentes-de-contacto' },
   title: 'Tipos de lentes de contacto — ContactGo',
   description: 'Diferencias entre lentes esféricos, tóricos, multifocales y de color. Cómo elegir el correcto según tu diagnóstico en RD.',
 }

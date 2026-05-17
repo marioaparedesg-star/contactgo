@@ -3,7 +3,9 @@ import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
+// canonical agregado
 export const metadata: Metadata = {
+  alternates: { canonical: 'https://contactgo.net/sobre-nosotros' },
   title: 'Sobre Nosotros | ContactGo — Lentes de Contacto RD',
   description: 'Conoce a ContactGo, la única tienda dominicana especializada 100% en lentes de contacto originales. Distribuidores autorizados de ACUVUE, Alcon, CooperVision y Bausch+Lomb.',
 }

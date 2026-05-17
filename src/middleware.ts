@@ -20,6 +20,9 @@ function rateLimit(key: string, limit: number, windowMs: number): boolean {
 }
 
 export function middleware(req: NextRequest) {
+  // Generar nonce para CSP más seguro
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  req.headers.set('x-nonce', nonce)
   const { pathname } = req.nextUrl
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
   const userAgent = req.headers.get('user-agent') ?? ''
@@ -55,6 +58,7 @@ export function middleware(req: NextRequest) {
   }
 
   const res = NextResponse.next()
+  res.headers.set('x-nonce', nonce)
   
   // ── X-Robots-Tag por ruta ──
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/')) {

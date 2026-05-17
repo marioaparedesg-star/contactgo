@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd' },
   title: 'Lentes de contacto para astigmatismo en RD — ContactGo',
   description: 'Todo lo que necesitas saber sobre lentes tóricos para astigmatismo en República Dominicana. Marcas, precios y cómo elegir el correcto.',
 }

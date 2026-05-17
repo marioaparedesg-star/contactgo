@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/ojos-secos-lentes-contacto' },
   title: 'Ojos secos y lentes de contacto: soluciones reales — ContactGo',
   description: 'Tienes ojos secos y usas lentes de contacto? Descubre qué productos y marcas funcionan mejor para mantener tus ojos hidratados en RD.',
 }

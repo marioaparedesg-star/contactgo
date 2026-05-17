@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/lentes-contacto-colores-rd' },
   title: 'Lentes de contacto de colores en República Dominicana — ContactGo',
   description: 'Guía completa de lentes de colores en RD. FreshLook, Air Optix Colors, con y sin graduación. Cuáles son los colores más populares y cómo elegir.',
 }

@@ -6,7 +6,9 @@ import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import ProductCard from '@/components/shop/ProductCard'
 
+// canonical agregado
 export const metadata: Metadata = {
+  alternates: { canonical: 'https://contactgo.net/lentes-de-contacto' },
   title: 'Lentes de Contacto en República Dominicana | ContactGo',
   description: 'Compra lentes de contacto originales en República Dominicana. Acuvue, Air Optix, Biofinity, FreshLook. Entrega en 24-48h. Distribuidores autorizados.',
   openGraph: {

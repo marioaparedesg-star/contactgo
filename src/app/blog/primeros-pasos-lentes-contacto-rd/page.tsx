@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd' },
   title: 'Primeros pasos con lentes de contacto en RD — ContactGo',
   description: 'Guía completa para quienes quieren empezar a usar lentes de contacto en República Dominicana. Qué necesitas, cómo empezar y qué esperar.',
 }

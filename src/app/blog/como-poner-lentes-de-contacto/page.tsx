@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/como-poner-lentes-de-contacto' },
   title: 'Cómo poner y quitar lentes de contacto — ContactGo',
   description: 'Guía paso a paso para principiantes. Aprende a colocarte y quitarte lentes de contacto de forma segura en República Dominicana.',
 }

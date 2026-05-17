@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/lentes-multifocales-presbicia-rd' },
   title: 'Lentes multifocales para presbicia en RD — ContactGo',
   description: 'Guía completa sobre lentes de contacto multifocales para presbicia en República Dominicana. Marcas disponibles, adaptación y precios.',
 }

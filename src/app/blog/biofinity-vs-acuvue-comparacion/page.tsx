@@ -2,7 +2,9 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 
+// canonical
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog/biofinity-vs-acuvue-comparacion' },
   title: 'Biofinity vs ACUVUE: ¿Cuál es mejor en RD? — ContactGo',
   description: 'Comparamos Biofinity de CooperVision vs ACUVUE Oasys de J&J. Precio, comodidad, hidratación y disponibilidad en República Dominicana.',
 }
