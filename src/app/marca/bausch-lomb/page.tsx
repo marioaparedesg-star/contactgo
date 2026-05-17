@@ -10,6 +10,20 @@ export const metadata: Metadata = {
   description: 'Compra lentes Bausch+Lomb Ultra y solución ReNu en RD. 170 años de experiencia en salud visual. Entrega a domicilio.',
 }
 
+export const metadata = {
+  title: 'Lentes Bausch+Lomb en República Dominicana | ContactGo',
+  description: 'Compra lentes de contacto Bausch+Lomb originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',
+  alternates: { canonical: 'https://contactgo.net/marca/bausch-lomb' },
+  openGraph: {
+    title: 'Lentes Bausch+Lomb en RD | ContactGo',
+    description: 'Distribuidor autorizado de Bausch+Lomb en República Dominicana.',
+    url: 'https://contactgo.net/marca/bausch-lomb',
+    locale: 'es_DO',
+    siteName: 'ContactGo',
+    type: 'website',
+  },
+}
+
 export default async function BauschLombPage() {
   const sb = createServerSupabaseClient()
   const { data: productos } = await sb.from('products').select('*').eq('marca', 'BAUSCH+LOMB').order('tipo')

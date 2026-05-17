@@ -10,6 +10,20 @@ export const metadata: Metadata = {
   description: 'Compra lentes de contacto Acuvue originales en RD. Acuvue Oasys, 1-Day Moist, for Astigmatism y más. Entrega a domicilio en 24-72h.',
 }
 
+export const metadata = {
+  title: 'Lentes ACUVUE en República Dominicana | ContactGo',
+  description: 'Compra lentes de contacto ACUVUE originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',
+  alternates: { canonical: 'https://contactgo.net/marca/acuvue' },
+  openGraph: {
+    title: 'Lentes ACUVUE en RD | ContactGo',
+    description: 'Distribuidor autorizado de ACUVUE en República Dominicana.',
+    url: 'https://contactgo.net/marca/acuvue',
+    locale: 'es_DO',
+    siteName: 'ContactGo',
+    type: 'website',
+  },
+}
+
 export default async function AcuvuePage() {
   const sb = createServerSupabaseClient()
   const { data: productos } = await sb.from('products').select('*').eq('marca', 'ACUVUE').order('tipo')

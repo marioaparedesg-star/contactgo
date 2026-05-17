@@ -10,6 +10,20 @@ export const metadata: Metadata = {
   description: 'Compra lentes Biofinity, Avaira Vitality y clariti de CooperVision en RD. Tecnología avanzada para máxima comodidad.',
 }
 
+export const metadata = {
+  title: 'Lentes CooperVision en República Dominicana | ContactGo',
+  description: 'Compra lentes de contacto CooperVision originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',
+  alternates: { canonical: 'https://contactgo.net/marca/coopervision' },
+  openGraph: {
+    title: 'Lentes CooperVision en RD | ContactGo',
+    description: 'Distribuidor autorizado de CooperVision en República Dominicana.',
+    url: 'https://contactgo.net/marca/coopervision',
+    locale: 'es_DO',
+    siteName: 'ContactGo',
+    type: 'website',
+  },
+}
+
 export default async function CooperVisionPage() {
   const sb = createServerSupabaseClient()
   const { data: productos } = await sb.from('products').select('*').eq('marca', 'COOPERVISION').order('tipo')

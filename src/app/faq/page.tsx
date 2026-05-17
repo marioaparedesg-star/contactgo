@@ -22,7 +22,7 @@ const FAQS = [
     categoria: '🚚 Envíos',
     preguntas: [
       { q: '¿Cuánto tarda el envío?', a: 'Entregamos en 24 a 48 horas hábiles en Santo Domingo y Santiago. Para otras provincias puede tomar de 2 a 4 días hábiles.' },
-      { q: '¿Cuánto cuesta el envío?', a: 'El envío tiene un costo fijo de RD$200 en Santo Domingo, RD$350 en el interior del país de República Dominicana.' },
+      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo: RD$200. Interior del país: RD$350. Envío gratis en pedidos superiores a RD$6,000.' },
       { q: '¿Envían a todo el país?', a: 'Sí, hacemos envíos a todas las provincias de República Dominicana.' },
       { q: '¿Puedo rastrear mi pedido?', a: 'Sí. Una vez confirmado tu pedido, te notificamos por WhatsApp cuando esté en camino con los datos del mensajero.' },
     ]
@@ -31,7 +31,7 @@ const FAQS = [
     categoria: '💳 Pagos',
     preguntas: [
       { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos pago contra entrega en efectivo y tarjeta de crédito/débito (Visa y Mastercard vía AZUL — Banco Popular). El pago con tarjeta está disponible en el checkout.' },
-      { q: '¿El pago contra entrega tiene costo extra?', a: 'No, el costo de envío es el mismo RD$200 independientemente del método de pago.' },
+      { q: '¿El pago contra entrega tiene costo extra?', a: 'No, el costo de envío es el mismo independientemente del método de pago (RD$200 en SD, RD$350 en el interior).' },
     ]
   },
   {

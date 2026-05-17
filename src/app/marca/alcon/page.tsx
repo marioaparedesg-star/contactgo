@@ -10,6 +10,20 @@ export const metadata: Metadata = {
   description: 'Compra lentes Air Optix, FreshLook y Systane de Alcon en RD. 100% originales con entrega a domicilio.',
 }
 
+export const metadata = {
+  title: 'Lentes Alcon en República Dominicana | ContactGo',
+  description: 'Compra lentes de contacto Alcon originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',
+  alternates: { canonical: 'https://contactgo.net/marca/alcon' },
+  openGraph: {
+    title: 'Lentes Alcon en RD | ContactGo',
+    description: 'Distribuidor autorizado de Alcon en República Dominicana.',
+    url: 'https://contactgo.net/marca/alcon',
+    locale: 'es_DO',
+    siteName: 'ContactGo',
+    type: 'website',
+  },
+}
+
 export default async function AlconPage() {
   const sb = createServerSupabaseClient()
   const { data: productos } = await sb.from('products').select('*').eq('marca', 'ALCON').order('tipo')

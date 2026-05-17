@@ -8,8 +8,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en República Dominicana | ContactGo',
-  description: 'Compra lentes de contacto originales en República Dominicana. Acuvue, Air Optix, Biofinity, FreshLook. Entrega en 24-48h. Distribuidores autorizados.',
-  keywords: 'lentes de contacto RD, lentes contacto dominicana, comprar lentes contacto, lentes contacto santo domingo',
+  description: 'Compra lentes de contacto originales en República Dominicana. Acuvue, Air Optix, Biofinity, FreshLook. Entrega en 24-48h. Distribuidores autorizados.'
   openGraph: {
     title: 'Lentes de Contacto en República Dominicana — ContactGo',
     description: 'La tienda especializada #1 en lentes de contacto originales en RD.',
