@@ -1,215 +1,304 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
-import AdminNav from '@/components/admin/AdminNav'
-import { Package, AlertTriangle, TrendingDown, Save, Search, Filter } from 'lucide-react'
+import { AlertTriangle, Package, Search, ChevronDown, ChevronRight, Save } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const TIPO_LABEL: Record<string, string> = {
-  esferico: 'Esférico', torico: 'Tórico', multifocal: 'Multifocal',
-  color: 'Color', gota: 'Gotas', solucion: 'Solución'
+const sb = createClient()
+
+type Producto = {
+  id: string
+  nombre: string
+  tipo: string
+  marca: string
+  stock: number
+  activo: boolean
+  precio: number
 }
-const TIPO_COLOR: Record<string, string> = {
-  esferico: 'bg-blue-100 text-blue-700', torico: 'bg-purple-100 text-purple-700',
-  multifocal: 'bg-indigo-100 text-indigo-700', color: 'bg-pink-100 text-pink-700',
-  gota: 'bg-cyan-100 text-cyan-700', solucion: 'bg-teal-100 text-teal-700'
+
+type Inventario = {
+  id: string
+  product_id: string
+  sph: number
+  stock: number
 }
 
 export default function InventarioPage() {
-  const sb = createClient()
-  const [productos, setProductos] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-  const [editando, setEditando] = useState<Record<string, number>>({})
-  const [search, setSearch] = useState('')
-  const [filtroTipo, setFiltroTipo] = useState('todos')
-  const [saving, setSaving] = useState<string | null>(null)
+  const [productos, setProductos]   = useState<Producto[]>([])
+  const [inventario, setInventario] = useState<Record<string, Inventario[]>>({})
+  const [expandido, setExpandido]   = useState<string | null>(null)
+  const [editando, setEditando]     = useState<Record<string, number>>({})  // key: productId-sph
+  const [busqueda, setBusqueda]     = useState('')
+  const [tipoFiltro, setTipoFiltro] = useState<string>('todos')
+  const [loading, setLoading]       = useState(true)
+  const [guardando, setGuardando]   = useState<string | null>(null)
 
-  useEffect(() => {
-    sb.from('products')
+  const cargarProductos = useCallback(async () => {
+    setLoading(true)
+    const { data } = await sb.from('products')
       .select('id, nombre, tipo, marca, stock, activo, precio')
-      .eq('activo', true)
-      .order('tipo')
-      .order('nombre')
-      .then(({ data }) => { setProductos(data ?? []); setLoading(false) })
+      .in('tipo', ['esferico', 'color', 'torico', 'multifocal'])
+      .order('tipo').order('nombre')
+    setProductos(data ?? [])
+    setLoading(false)
   }, [])
 
-  const guardarStock = async (id: string) => {
-    const nuevoStock = editando[id]
-    if (nuevoStock === undefined) return
-    setSaving(id)
-    const { error } = await sb.from('products').update({ stock: nuevoStock }).eq('id', id)
-    if (error) { toast.error('Error: ' + error.message); setSaving(null); return }
-    setProductos(ps => ps.map(p => p.id === id ? { ...p, stock: nuevoStock } : p))
-    setEditando(e => { const n = { ...e }; delete n[id]; return n })
-    setSaving(null)
-    toast.success('Stock actualizado')
+  useEffect(() => { cargarProductos() }, [cargarProductos])
+
+  const cargarInventario = async (productId: string) => {
+    if (inventario[productId]) return // ya cargado
+    const { data } = await sb.from('product_inventory')
+      .select('*')
+      .eq('product_id', productId)
+      .order('sph')
+    setInventario(prev => ({ ...prev, [productId]: data ?? [] }))
   }
 
-  const ajustarTodos = async (cantidad: number) => {
-    if (!confirm(`¿Ajustar stock de todos los productos a ${cantidad} unidades?`)) return
-    const { error } = await sb.from('products').update({ stock: cantidad }).eq('activo', true)
-    if (error) { toast.error('Error: ' + error.message); return }
-    setProductos(ps => ps.map(p => ({ ...p, stock: cantidad })))
-    toast.success(`Stock ajustado a ${cantidad} en todos los productos`)
+  const toggleExpand = async (productId: string, tipo: string) => {
+    if (tipo === 'torico' || tipo === 'multifocal') return // no tienen inventario por SPH
+    if (expandido === productId) {
+      setExpandido(null)
+    } else {
+      setExpandido(productId)
+      await cargarInventario(productId)
+    }
   }
 
-  const filtrados = productos.filter(p => {
-    const matchTipo = filtroTipo === 'todos' || p.tipo === filtroTipo
-    const matchSearch = !search || p.nombre.toLowerCase().includes(search.toLowerCase()) || p.marca?.toLowerCase().includes(search.toLowerCase())
-    return matchTipo && matchSearch
+  const setStockEdit = (productId: string, sph: number, valor: number) => {
+    setEditando(prev => ({ ...prev, [`${productId}-${sph}`]: valor }))
+  }
+
+  const guardarStock = async (item: Inventario) => {
+    const key = `${item.product_id}-${item.sph}`
+    const nuevoStock = editando[key]
+    if (nuevoStock === undefined || nuevoStock === item.stock) return
+
+    setGuardando(key)
+    const { error } = await sb.from('product_inventory')
+      .update({ stock: nuevoStock, updated_at: new Date().toISOString() })
+      .eq('id', item.id)
+
+    if (!error) {
+      setInventario(prev => ({
+        ...prev,
+        [item.product_id]: prev[item.product_id].map(i =>
+          i.id === item.id ? { ...i, stock: nuevoStock } : i
+        )
+      }))
+      setEditando(prev => { const n = { ...prev }; delete n[key]; return n })
+      toast.success(`SPH ${item.sph > 0 ? '+' : ''}${item.sph} → ${nuevoStock} unidades`)
+    } else {
+      toast.error('Error al guardar')
+    }
+    setGuardando(null)
+  }
+
+  const guardarTodos = async (productId: string) => {
+    const items = inventario[productId] ?? []
+    const pendientes = items.filter(i => editando[`${productId}-${i.sph}`] !== undefined)
+    if (pendientes.length === 0) return
+
+    setGuardando(productId)
+    for (const item of pendientes) {
+      const key = `${productId}-${item.sph}`
+      const nuevoStock = editando[key]
+      if (nuevoStock === undefined) continue
+      await sb.from('product_inventory')
+        .update({ stock: nuevoStock, updated_at: new Date().toISOString() })
+        .eq('id', item.id)
+    }
+
+    setInventario(prev => ({
+      ...prev,
+      [productId]: prev[productId].map(i => {
+        const key = `${productId}-${i.sph}`
+        return editando[key] !== undefined ? { ...i, stock: editando[key] } : i
+      })
+    }))
+    setEditando(prev => {
+      const n = { ...prev }
+      pendientes.forEach(i => delete n[`${productId}-${i.sph}`])
+      return n
+    })
+    toast.success(`${pendientes.length} dioptría${pendientes.length !== 1 ? 's' : ''} actualizadas`)
+    setGuardando(null)
+  }
+
+  const productosFiltrados = productos.filter(p => {
+    const matchBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+                          p.marca.toLowerCase().includes(busqueda.toLowerCase())
+    const matchTipo = tipoFiltro === 'todos' || p.tipo === tipoFiltro
+    return matchBusqueda && matchTipo
   })
 
-  const sinStock     = productos.filter(p => p.stock === 0).length
-  const stockCritico = productos.filter(p => p.stock > 0 && p.stock <= 3).length
-  const stockNormal  = productos.filter(p => p.stock > 3).length
-  const tipos        = [...new Set(productos.map(p => p.tipo))]
+  const TIPOS = ['todos', 'esferico', 'color', 'torico', 'multifocal']
 
-  const getStockColor = (stock: number) => {
-    if (stock === 0) return 'text-red-600 bg-red-50'
-    if (stock <= 3) return 'text-amber-600 bg-amber-50'
-    if (stock <= 5) return 'text-yellow-600 bg-yellow-50'
-    return 'text-green-600 bg-green-50'
-  }
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-96">
+      <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary-600 border-t-transparent" />
+    </div>
+  )
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav />
-      <main className="flex-1 overflow-auto pb-24">
-        <div className="max-w-6xl mx-auto p-4 md:p-8">
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Inventario por Dioptría</h1>
+        <p className="text-gray-500 text-sm mt-1">
+          Gestiona el stock de cada graduación SPH para esféricos y color.
+          Tóricos y multifocales se piden a pedido — no requieren inventario.
+        </p>
+      </div>
 
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-2xl font-black text-gray-900">Inventario</h1>
-              <p className="text-gray-400 text-sm mt-0.5">{productos.length} productos activos</p>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={() => ajustarTodos(5)}
-                className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-semibold transition-colors">
-                Set todos a 5
-              </button>
-              <button onClick={() => ajustarTodos(10)}
-                className="px-3 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-sm font-semibold transition-colors">
-                Set todos a 10
-              </button>
-            </div>
-          </div>
-
-          {/* KPIs */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <p className="text-sm text-gray-500">Stock normal</p>
-              </div>
-              <p className="text-3xl font-black text-gray-900">{stockNormal}</p>
-            </div>
-            <div className={`bg-white border rounded-2xl p-5 shadow-sm ${stockCritico > 0 ? 'border-amber-200 bg-amber-50' : 'border-gray-100'}`}>
-              <div className="flex items-center gap-2 mb-1">
-                <AlertTriangle className={`w-3.5 h-3.5 ${stockCritico > 0 ? 'text-amber-500' : 'text-gray-400'}`} />
-                <p className="text-sm text-gray-500">Stock crítico (≤3)</p>
-              </div>
-              <p className={`text-3xl font-black ${stockCritico > 0 ? 'text-amber-600' : 'text-gray-900'}`}>{stockCritico}</p>
-            </div>
-            <div className={`bg-white border rounded-2xl p-5 shadow-sm ${sinStock > 0 ? 'border-red-200 bg-red-50' : 'border-gray-100'}`}>
-              <div className="flex items-center gap-2 mb-1">
-                <TrendingDown className={`w-3.5 h-3.5 ${sinStock > 0 ? 'text-red-500' : 'text-gray-400'}`} />
-                <p className="text-sm text-gray-500">Sin stock</p>
-              </div>
-              <p className={`text-3xl font-black ${sinStock > 0 ? 'text-red-600' : 'text-gray-900'}`}>{sinStock}</p>
-            </div>
-          </div>
-
-          {/* Filtros */}
-          <div className="flex gap-3 mb-4 flex-wrap">
-            <div className="relative flex-1 min-w-48">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input value={search} onChange={e => setSearch(e.target.value)}
-                placeholder="Buscar producto o marca..."
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <select value={filtroTipo} onChange={e => setFiltroTipo(e.target.value)}
-              className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="todos">Todos los tipos</option>
-              {tipos.map(t => <option key={t} value={t}>{TIPO_LABEL[t] ?? t}</option>)}
-            </select>
-          </div>
-
-          {/* Tabla */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            {loading ? (
-              <div className="flex items-center justify-center h-48">
-                <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-100">
-                    <tr>
-                      {['Producto', 'Marca', 'Tipo', 'Precio', 'Stock', ''].map(h => (
-                        <th key={h} className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase text-left">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {filtrados.map(p => {
-                      const stockEdit = editando[p.id]
-                      const stockActual = stockEdit !== undefined ? stockEdit : p.stock
-                      return (
-                        <tr key={p.id} className="hover:bg-gray-50/50 transition-colors">
-                          <td className="px-4 py-3">
-                            <div className="flex items-center gap-2">
-                              {p.stock === 0 && <AlertTriangle className="w-3.5 h-3.5 text-red-500 shrink-0" />}
-                              <p className="font-semibold text-gray-900 text-sm">{p.nombre}</p>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 text-xs text-gray-500 font-medium">{p.marca}</td>
-                          <td className="px-4 py-3">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${TIPO_COLOR[p.tipo] ?? 'bg-gray-100 text-gray-600'}`}>
-                              {TIPO_LABEL[p.tipo] ?? p.tipo}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-sm font-semibold text-gray-700">
-                            RD${p.precio?.toLocaleString()}
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-center gap-2">
-                              <button onClick={() => setEditando(e => ({ ...e, [p.id]: Math.max(0, (e[p.id] ?? p.stock) - 1) }))}
-                                className="w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-bold flex items-center justify-center transition-colors">−</button>
-                              <span className={`min-w-[40px] text-center font-black text-sm px-2 py-0.5 rounded-lg ${getStockColor(stockActual)}`}>
-                                {stockActual}
-                              </span>
-                              <button onClick={() => setEditando(e => ({ ...e, [p.id]: (e[p.id] ?? p.stock) + 1 }))}
-                                className="w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-bold flex items-center justify-center transition-colors">+</button>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3">
-                            {editando[p.id] !== undefined && (
-                              <button onClick={() => guardarStock(p.id)}
-                                disabled={saving === p.id}
-                                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition-colors disabled:opacity-60">
-                                {saving === p.id ? (
-                                  <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                ) : (
-                                  <Save className="w-3 h-3" />
-                                )}
-                                Guardar
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                    {filtrados.length === 0 && (
-                      <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400">No hay productos</td></tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+      {/* Filtros */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            value={busqueda}
+            onChange={e => setBusqueda(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
         </div>
-      </main>
+        <div className="flex gap-2 flex-wrap">
+          {TIPOS.map(t => (
+            <button key={t} onClick={() => setTipoFiltro(t)}
+              className={`px-3 py-2 rounded-xl text-xs font-semibold capitalize transition-colors ${
+                tipoFiltro === t ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}>
+              {t === 'todos' ? 'Todos' : t === 'esferico' ? 'Esféricos' : t === 'color' ? 'Color' : t === 'torico' ? 'Tóricos' : 'Multifocales'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Lista de productos */}
+      <div className="space-y-3">
+        {productosFiltrados.map(p => {
+          const esPedidoAMedida = p.tipo === 'torico' || p.tipo === 'multifocal'
+          const estaExpandido = expandido === p.id
+          const items = inventario[p.id] ?? []
+          const pendientesCount = items.filter(i => editando[`${p.id}-${i.sph}`] !== undefined).length
+          const stockTotal = items.reduce((acc, i) => {
+            const key = `${p.id}-${i.sph}`
+            return acc + (editando[key] ?? i.stock)
+          }, 0)
+          const sinStock = items.filter(i => (editando[`${p.id}-${i.sph}`] ?? i.stock) === 0).length
+          const stockBajo = items.filter(i => {
+            const s = editando[`${p.id}-${i.sph}`] ?? i.stock
+            return s > 0 && s <= 2
+          }).length
+
+          return (
+            <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              {/* Header del producto */}
+              <button
+                onClick={() => toggleExpand(p.id, p.tipo)}
+                disabled={esPedidoAMedida}
+                className={`w-full flex items-center gap-4 p-4 text-left transition-colors ${
+                  esPedidoAMedida ? 'cursor-default opacity-70' : 'hover:bg-gray-50'
+                }`}
+              >
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-gray-900 text-sm">{p.nombre}</span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      p.tipo === 'esferico' ? 'bg-blue-100 text-blue-700' :
+                      p.tipo === 'color' ? 'bg-pink-100 text-pink-700' :
+                      p.tipo === 'torico' ? 'bg-purple-100 text-purple-700' :
+                      'bg-amber-100 text-amber-700'
+                    }`}>
+                      {p.tipo === 'esferico' ? 'Esférico' : p.tipo === 'color' ? 'Color' : p.tipo === 'torico' ? 'Tórico' : 'Multifocal'}
+                    </span>
+                    <span className="text-xs text-gray-400">{p.marca}</span>
+                    {esPedidoAMedida && (
+                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+                        Se pide a medida — sin inventario por SPH
+                      </span>
+                    )}
+                  </div>
+                  {!esPedidoAMedida && estaExpandido && items.length > 0 && (
+                    <div className="flex gap-3 mt-1 text-xs text-gray-500">
+                      <span>{items.length} dioptría{items.length !== 1 ? 's' : ''}</span>
+                      <span>·</span>
+                      <span>{stockTotal} unidades totales</span>
+                      {sinStock > 0 && <span className="text-red-500">· {sinStock} agotadas</span>}
+                      {stockBajo > 0 && <span className="text-amber-500">· {stockBajo} en stock bajo</span>}
+                    </div>
+                  )}
+                </div>
+
+                {!esPedidoAMedida && (
+                  <div className="flex items-center gap-3">
+                    {pendientesCount > 0 && (
+                      <button
+                        onClick={e => { e.stopPropagation(); guardarTodos(p.id) }}
+                        disabled={guardando === p.id}
+                        className="flex items-center gap-1.5 bg-primary-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-primary-700 transition-colors"
+                      >
+                        <Save className="w-3 h-3" />
+                        Guardar {pendientesCount}
+                      </button>
+                    )}
+                    {estaExpandido ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
+                  </div>
+                )}
+              </button>
+
+              {/* Grid de dioptrías */}
+              {estaExpandido && !esPedidoAMedida && (
+                <div className="border-t border-gray-100 p-4">
+                  {items.length === 0 ? (
+                    <p className="text-gray-400 text-sm text-center py-4">Cargando dioptrías...</p>
+                  ) : (
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2">
+                      {items.map(item => {
+                        const key = `${p.id}-${item.sph}`
+                        const stockActual = editando[key] ?? item.stock
+                        const modificado = editando[key] !== undefined && editando[key] !== item.stock
+                        const sphLabel = item.sph > 0 ? `+${item.sph}` : `${item.sph}`
+
+                        return (
+                          <div key={item.id} className={`border rounded-xl p-2 text-center transition-colors ${
+                            modificado ? 'border-primary-300 bg-primary-50' :
+                            stockActual === 0 ? 'border-red-200 bg-red-50' :
+                            stockActual <= 2 ? 'border-amber-200 bg-amber-50' :
+                            'border-gray-100 bg-gray-50'
+                          }`}>
+                            <p className="text-[10px] font-bold text-gray-600 mb-1">{sphLabel}</p>
+                            <input
+                              type="number"
+                              min="0"
+                              max="999"
+                              value={stockActual}
+                              onChange={e => setStockEdit(p.id, item.sph, Math.max(0, parseInt(e.target.value) || 0))}
+                              onBlur={() => guardarStock(item)}
+                              onKeyDown={e => e.key === 'Enter' && guardarStock(item)}
+                              className={`w-full text-center text-sm font-bold border-0 bg-transparent outline-none focus:ring-1 focus:ring-primary-400 rounded ${
+                                stockActual === 0 ? 'text-red-600' :
+                                stockActual <= 2 ? 'text-amber-600' :
+                                modificado ? 'text-primary-700' :
+                                'text-gray-900'
+                              }`}
+                            />
+                            {guardando === key && (
+                              <div className="w-3 h-3 border border-primary-400 border-t-transparent rounded-full animate-spin mx-auto mt-1" />
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-400 mt-3 text-center">
+                    Haz clic en una dioptría y cambia el número · Enter o clic fuera para guardar · "Guardar X" para guardar todo
+                  </p>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
