@@ -144,7 +144,7 @@ export default async function HomePage() {
                     <p className="text-gray-500 text-[11px] mt-0.5">{m.sub}</p>
                     <div className="flex items-center justify-center gap-1 mt-2">
                       <CheckCircle className="w-3 h-3 text-green-500" />
-                      <span className="text-[10px] text-green-600 font-semibold">Autorizado</span>
+                      <span className="text-[10px] text-green-700 font-semibold">Autorizado</span>
                     </div>
                   </div>
                 ))}
