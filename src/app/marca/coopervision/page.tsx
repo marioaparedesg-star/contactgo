@@ -5,11 +5,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Lentes CooperVision en República Dominicana | ContactGo',
-  description: 'Compra lentes Biofinity, Avaira Vitality y clariti de CooperVision en RD. Tecnología avanzada para máxima comodidad.',
-}
-
 export const metadata = {
   title: 'Lentes CooperVision en República Dominicana | ContactGo',
   description: 'Compra lentes de contacto CooperVision originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',

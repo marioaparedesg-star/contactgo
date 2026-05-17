@@ -5,11 +5,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Lentes Bausch+Lomb en República Dominicana | ContactGo',
-  description: 'Compra lentes Bausch+Lomb Ultra y solución ReNu en RD. 170 años de experiencia en salud visual. Entrega a domicilio.',
-}
-
 export const metadata = {
   title: 'Lentes Bausch+Lomb en República Dominicana | ContactGo',
   description: 'Compra lentes de contacto Bausch+Lomb originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',

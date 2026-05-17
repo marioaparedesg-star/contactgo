@@ -5,11 +5,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Lentes Acuvue en República Dominicana | ContactGo',
-  description: 'Compra lentes de contacto Acuvue originales en RD. Acuvue Oasys, 1-Day Moist, for Astigmatism y más. Entrega a domicilio en 24-72h.',
-}
-
 export const metadata = {
   title: 'Lentes ACUVUE en República Dominicana | ContactGo',
   description: 'Compra lentes de contacto ACUVUE originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',

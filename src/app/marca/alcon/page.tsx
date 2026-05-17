@@ -5,11 +5,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Lentes Alcon en República Dominicana | ContactGo',
-  description: 'Compra lentes Air Optix, FreshLook y Systane de Alcon en RD. 100% originales con entrega a domicilio.',
-}
-
 export const metadata = {
   title: 'Lentes Alcon en República Dominicana | ContactGo',
   description: 'Compra lentes de contacto Alcon originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',
