@@ -128,34 +128,7 @@ export default function RecetaPage() {
             </div>
             <h1 className="font-display text-2xl md:text-4xl font-black mb-3">Calculadora de lentes de contacto</h1>
             <p className="text-white/80 text-sm md:text-base max-w-xl mx-auto">Ingresa tu receta y te recomendamos los lentes exactos disponibles en República Dominicana.</p>
-
-        {/* Tabs */}
-        <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-6">
-          <button onClick={() => setTabActivo('calcular')}
-            className={"flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all " + (tabActivo === 'calcular' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700')}>
-            🧮 Calcular mis lentes
-          </button>
-          <button onClick={() => setTabActivo('subir')}
-            className={"flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all " + (tabActivo === 'subir' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700')}>
-            📷 Subir mi receta
-          </button>
-        </div>
-
-        {tabActivo === 'subir' && (
-          <div className="text-center py-10 px-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50">
-            <p className="text-4xl mb-3">📋</p>
-            <h3 className="font-bold text-gray-900 mb-2">Envíanos tu receta por WhatsApp</h3>
-            <p className="text-sm text-gray-500 mb-4">Toma una foto clara de tu receta óptica y envíanosla. Un especialista te ayuda a encontrar los lentes correctos en minutos.</p>
-            <a href="https://wa.me/18294728328?text=Hola%20ContactGo!%20Quiero%20subir%20mi%20receta%20para%20encontrar%20mis%20lentes" 
-              target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors">
-              📱 Enviar receta por WhatsApp
-            </a>
-            <p className="text-xs text-gray-400 mt-3">Respondemos en menos de 30 minutos · Lun–Sáb 9am–7pm</p>
-          </div>
-        )}
-
-        {tabActivo === 'calcular' && (            <div className="flex items-center justify-center gap-3 mt-5 flex-wrap">
+<div className="flex items-center justify-center gap-3 mt-5 flex-wrap">
               {['Gratis','Sin registro','Resultado inmediato'].map(b=>(
                 <div key={b} className="flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-semibold">
                   <CheckCircle className="w-3.5 h-3.5"/> {b}
@@ -465,7 +438,22 @@ export default function RecetaPage() {
             <p className="text-xs text-blue-700 mt-3">¿No entiendes tu receta? <Link href="/blog/como-leer-receta-optica-rd" className="font-semibold underline">Lee nuestra guía completa →</Link></p>
           </div>
         </section>
-        )}
+
+        {/* Subir receta por WhatsApp */}
+        <div className="max-w-3xl mx-auto px-4 mt-4">
+          <div className="bg-green-50 border border-green-100 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4">
+            <div className="text-3xl">📋</div>
+            <div className="flex-1 text-center sm:text-left">
+              <p className="font-bold text-gray-900 text-sm mb-1">¿Tienes tu receta en papel o foto?</p>
+              <p className="text-xs text-gray-500">Envíanosla por WhatsApp y un especialista te ayuda a encontrar tus lentes en minutos.</p>
+            </div>
+            <a href="https://wa.me/18294728328?text=Hola%20ContactGo!%20Quiero%20enviar%20mi%20receta%20%C3%B3ptica%20para%20encontrar%20mis%20lentes"
+              target="_blank" rel="noopener noreferrer"
+              className="shrink-0 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#20ba58] transition-colors flex items-center gap-2">
+              📱 Enviar receta
+            </a>
+          </div>
+        </div>
 
       </main>
       <Footer />
