@@ -30,8 +30,7 @@ export default function ReportesPage() {
     const [kpiRes, pedidosRes, topRes] = await Promise.all([
       sb.from('admin_kpis').select('*').single(),
       sb.from('orders').select('id, cliente_nombre, total, estado, created_at').order('created_at', { ascending: false }).limit(10),
-      sb.rpc('top_productos_30d').limit ? null :
-        sb.from('order_items').select('product_id, cantidad, subtotal, products(nombre, marca)').limit(50),
+      sb.from('order_items').select('product_id, cantidad, subtotal, products(nombre, marca)').order('created_at', { ascending: false }).limit(50),
     ])
     if (kpiRes.data) setKpis(kpiRes.data as KPIs)
     if (pedidosRes.data) setUltimos(pedidosRes.data as UltimosPedidos[])
