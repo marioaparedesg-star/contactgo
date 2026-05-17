@@ -4,7 +4,7 @@
 const csp = [
   "default-src 'self'",
   // Scripts: self + GTM + Meta Pixel + inline (Next.js necesita unsafe-inline)
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms",
   // Estilos: self + inline (Tailwind genera estilos inline)
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   // Fuentes
@@ -12,7 +12,7 @@ const csp = [
   // Imágenes: self + Supabase Storage + Google + Facebook + data URIs
   "img-src 'self' data: blob: https://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://pixel.wp.com",
   // Conexiones API: self + Supabase + GA + AZUL + Resend
-  "connect-src 'self' https://atendbjolicwcsqfyiyh.supabase.co wss://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pruebas.azul.com.do https://pagos.azul.com.do https://api.resend.com",
+  "connect-src 'self' https://atendbjolicwcsqfyiyh.supabase.co wss://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pruebas.azul.com.do https://pagos.azul.com.do https://api.resend.com https://e.clarity.ms https://*.clarity.ms",
   // Frames: AZUL necesita poder renderizar en frame para su portal de pago
   "frame-src 'self' https://pruebas.azul.com.do https://pagos.azul.com.do https://www.googletagmanager.com",
   // Forms: puede hacer POST a AZUL
