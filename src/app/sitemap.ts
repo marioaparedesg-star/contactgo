@@ -43,6 +43,7 @@ export default async function sitemap() {
     { url: 'https://contactgo.net/lentes-de-contacto/santiago',      priority: 0.85, changeFrequency: 'monthly' },
     { url: 'https://contactgo.net/lentes-de-contacto/punta-cana',    priority: 0.80, changeFrequency: 'monthly' },
     { url: 'https://contactgo.net/resenas',                                     priority: 0.80, changeFrequency: 'weekly'  },
+    { url: 'https://contactgo.net/autor/equipo-contactgo', priority: 0.6, changeFrequency: 'monthly' as const },
     { url: 'https://contactgo.net/sobre-nosotros',                              priority: 0.60, changeFrequency: 'monthly' },
     { url: 'https://contactgo.net/envios-y-entregas',                           priority: 0.65, changeFrequency: 'monthly' },
     { url: 'https://contactgo.net/devoluciones',                                priority: 0.55, changeFrequency: 'monthly' },

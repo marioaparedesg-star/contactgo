@@ -22,10 +22,19 @@ export default function Page() {
       <h1 className="font-display text-2xl md:text-3xl font-black text-gray-900 mb-3 leading-tight">
         Lentes de contacto para niños y adolescentes en RD — ¿A qué edad se pueden usar?
       </h1>
-        <div className="flex items-center gap-3 text-xs text-gray-400 mb-8 flex-wrap">
+                <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
+          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+            <span className="text-white font-bold text-sm">CG</span>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-gray-900">Equipo ContactGo</p>
+            <p className="text-xs text-gray-500">Especialistas en salud visual · Revisado por optómetra certificado</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
           <span>📅 10 de mayo, 2026</span>
           <span>·</span>
-          <span>✍️ Equipo ContactGo</span>
+          <a href="/autor/equipo-contactgo" className="hover:text-primary-600 transition-colors">✍️ Equipo ContactGo</a>
           <span>·</span>
           <span>⏱ 7 min lectura</span>
         </div>

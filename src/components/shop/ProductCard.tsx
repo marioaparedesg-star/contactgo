@@ -6,6 +6,7 @@ import { ShoppingCart, Eye, Heart } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 import { useCartStore } from '@/lib/cart-store'
+import { trackEcommerce } from '@/lib/analytics'
 import toast from 'react-hot-toast'
 
 interface Props { product: Product }
@@ -45,6 +46,10 @@ export default function ProductCard({ product }: Props) {
     if (needsRx) { window.location.href = `/producto/${(product as any).slug || product.id}`; return }
     addItem(product)
     toast.success(`${product.nombre} agregado`)
+    trackEcommerce('add_to_cart', {
+      items: [{ item_id: product.id, item_name: product.nombre, item_brand: product.marca ?? '', item_category: product.tipo ?? '', price: product.precio, quantity: 1 }],
+      value: product.precio
+    })
   }
 
   const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
