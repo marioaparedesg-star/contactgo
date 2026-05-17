@@ -59,6 +59,21 @@ export default async function Page() {
             {faqs.map(f => (<div key={f.q} className="bg-gray-50 rounded-2xl p-5"><h3 className="font-bold text-gray-900 text-sm mb-2">{f.q}</h3><p className="text-gray-600 text-sm leading-relaxed">{f.a}</p></div>))}
           </div>
         </section>
+
+        {/* Schema ItemList para rich results */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "Lentes de contacto multifocales en República Dominicana",
+          "description": "Lista de lentes de contacto multifocales disponibles en ContactGo RD",
+          "url": "https://contactgo.net/multifocales",
+          "itemListElement": (products ?? []).slice(0, 10).map((p: any, i: number) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": p.nombre,
+            "url": `https://contactgo.net/producto/${p.slug || p.id}`
+          }))
+        })}} />
       </main>
       <Footer />
     </>
