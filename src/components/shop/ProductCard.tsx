@@ -19,6 +19,20 @@ const TIPO_BADGE: Record<string, { label: string; color: string }> = {
   gota:       { label: 'Gotas',      color: 'bg-cyan-100 text-cyan-700' },
 }
 
+// Calcula días totales de uso por caja
+function getDiasTotales(product: any): number | null {
+  const dias = product.dias_uso
+  if (!dias) return null
+  const tipo = product.tipo
+  if (tipo === 'gota' || tipo === 'solucion') return dias
+  // Lentes: pares = unidades/2, días totales = pares × días
+  const unidades = tipo === 'esferico' || tipo === 'torico' || tipo === 'multifocal'
+    ? (dias === 1 ? 30 : 6)  // diario=30u, quincenal/mensual=6u
+    : tipo === 'color' ? 2 : 6
+  const pares = Math.floor(unidades / 2)
+  return pares * dias
+}
+
 export default function ProductCard({ product }: Props) {
   const addItem = useCartStore(s => s.addItem)
   const needsRx = ['esferico','torico','multifocal'].includes(product.tipo ?? '')
@@ -39,36 +53,29 @@ export default function ProductCard({ product }: Props) {
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault()
-    if (needsRx) {
-      window.location.href = `/producto/${(product as any).slug || product.id}`
-      return
-    }
+    if (needsRx) { window.location.href = `/producto/${(product as any).slug || product.id}`; return }
     addItem(product)
     toast.success(`${product.nombre} agregado`)
   }
 
   const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
-
-  // Stock badge — solo si stock es REALMENTE bajo (≤4) o agotado
   const stockCritical = product.stock > 0 && product.stock <= 4
+  const diasTotales = getDiasTotales(product as any)
+  const precioPorDia = diasTotales && diasTotales > 0 ? Math.round(product.precio / diasTotales) : null
 
-  // Contenido de la caja
+  // Etiqueta de contenido
   const contenidoLabel = product.tipo === 'gota' || product.tipo === 'solucion'
     ? '1 frasco'
-    : product.reemplazo === 'Diario' || (product as any).dias_uso === 1
-      ? 'caja de 30u'
-      : product.reemplazo === 'Quincenal' || (product as any).dias_uso === 14
-        ? 'caja de 6u'
-        : product.reemplazo === 'Mensual' || (product as any).dias_uso === 30
-          ? 'caja de 6u'
-          : product.tipo === 'color'
-            ? '2 lentes'
-            : (product as any).contenido ?? 'por caja'
+    : (product as any).dias_uso === 1 ? 'caja de 30u'
+    : (product as any).dias_uso === 14 ? 'caja de 6u'
+    : (product as any).dias_uso === 30 ? 'caja de 6u'
+    : product.tipo === 'color' ? '2 lentes'
+    : (product as any).contenido ?? 'por caja'
 
   return (
     <Link
       href={`/producto/${(product as any).slug || product.id}`}
-      className="card group flex flex-col overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-shadow"
+      className="card group flex flex-col overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-white"
     >
       {/* ── Imagen ── */}
       <div className="relative w-full aspect-square bg-gray-50 overflow-hidden">
@@ -79,10 +86,10 @@ export default function ProductCard({ product }: Props) {
           <Heart className={"w-3.5 h-3.5 " + (isFav ? 'fill-current' : '')} aria-hidden="true" />
         </button>
 
-        {/* Días de uso badge */}
+        {/* Días badge */}
         {(product as any).dias_uso && (
           <span className="absolute bottom-2 left-2 z-10 text-[10px] font-bold bg-black/60 text-white px-1.5 py-0.5 rounded-md">
-            {(product as any).dias_uso === 1 ? 'Diario' : (product as any).dias_uso === 14 ? '2 semanas' : `${(product as any).dias_uso} días`}
+            {(product as any).dias_uso === 1 ? 'Diario' : (product as any).dias_uso === 14 ? 'Quincenal' : 'Mensual'}
           </span>
         )}
 
@@ -101,8 +108,8 @@ export default function ProductCard({ product }: Props) {
           </div>
         )}
 
-        {/* Badge tipo — arriba izquierda */}
-        <div className="absolute top-2 left-2 flex items-start gap-1 pointer-events-none">
+        {/* Badge tipo */}
+        <div className="absolute top-2 left-2 pointer-events-none">
           {badge && (
             <span className={`badge text-[10px] px-1.5 py-0.5 rounded-full font-medium ${badge.color}`}>
               {badge.label}
@@ -110,7 +117,7 @@ export default function ProductCard({ product }: Props) {
           )}
         </div>
 
-        {/* Badge stock crítico — solo si ≤4 unidades reales */}
+        {/* Stock crítico */}
         {stockCritical && (
           <div className="absolute top-2 right-8 pointer-events-none">
             <span className="badge bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full animate-pulse">
@@ -119,7 +126,7 @@ export default function ProductCard({ product }: Props) {
           </div>
         )}
 
-        {/* Sin stock overlay */}
+        {/* Sin stock */}
         {product.stock === 0 && (
           <div className="absolute inset-0 bg-white/75 flex items-center justify-center">
             <span className="badge bg-gray-100 text-gray-500 text-xs">Sin stock</span>
@@ -128,7 +135,7 @@ export default function ProductCard({ product }: Props) {
       </div>
 
       {/* ── Info ── */}
-      <div className="p-3 flex flex-col flex-1 gap-1.5">
+      <div className="p-3 flex flex-col flex-1 gap-1">
         {/* Marca */}
         <p className="text-[10px] font-bold text-primary-600 uppercase tracking-widest truncate">
           {product.marca}
@@ -139,31 +146,45 @@ export default function ProductCard({ product }: Props) {
           {product.nombre}
         </h3>
 
-        {/* Precio + Botón */}
-        <div className="mt-auto pt-2 flex flex-col gap-2">
+        {/* Stock real */}
+        <p className="text-[10px] font-semibold">
+          {product.stock === 0
+            ? <span className="text-red-500">Sin stock</span>
+            : product.stock <= 4
+              ? <span className="text-orange-500">¡Solo {product.stock} disponibles!</span>
+              : <span className="text-green-600">✅ En stock</span>
+          }
+        </p>
+
+        {/* Precio + precio/día */}
+        <div className="mt-auto pt-1.5 flex flex-col gap-2">
           <div>
             {(product as any).precio_anterior && (product as any).precio_anterior > product.precio ? (
-              <div className="flex items-baseline gap-1.5">
+              <div className="flex items-baseline gap-1.5 flex-wrap">
                 <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
-                <p className="text-xs text-gray-400 line-through">RD${((product as any).precio_anterior).toLocaleString()}</p>
+                <p className="text-xs text-gray-400 line-through">RD${(product as any).precio_anterior.toLocaleString()}</p>
                 <span className="text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded-full">
                   -{Math.round(((product as any).precio_anterior - product.precio) / (product as any).precio_anterior * 100)}%
                 </span>
               </div>
             ) : (
-              <p className="text-base font-bold text-gray-900">
-                RD${product.precio.toLocaleString()}
-              </p>
+              <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
             )}
-            <p className="text-[10px] text-gray-400">{contenidoLabel}</p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-[10px] text-gray-400">{contenidoLabel}</p>
+              {precioPorDia && (
+                <p className="text-[10px] text-primary-600 font-semibold">
+                  ≈ RD${precioPorDia}/día
+                </p>
+              )}
+            </div>
           </div>
 
           <button
             onClick={handleAdd}
             disabled={product.stock === 0}
             aria-label={product.stock === 0 ? `${product.nombre} sin stock` : needsRx ? `Ver opciones de ${product.nombre}` : `Agregar ${product.nombre} al carrito`}
-            className="w-full btn-primary py-2 text-sm flex items-center justify-center gap-1.5
-                       disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full btn-primary py-2 text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{needsRx ? 'Ver opciones' : 'Agregar'}</span>

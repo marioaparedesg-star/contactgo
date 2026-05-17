@@ -71,7 +71,7 @@ export default function HeroSlider() {
   const prev = useCallback(() => goTo((current - 1 + SLIDES.length) % SLIDES.length), [current, goTo])
 
   useEffect(() => {
-    const t = setInterval(next, 6000)
+    const t = null // autoplay desactivado — mejora CTR del CTA principal
     return () => clearInterval(t)
   }, [next])
 
