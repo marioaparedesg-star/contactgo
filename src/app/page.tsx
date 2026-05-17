@@ -114,7 +114,7 @@ export default async function HomePage() {
                     'Productos con código de autenticidad verificable',
                     'Cadena de frío y almacenamiento certificado',
                     'Soporte de optometristas certificados',
-                    'Garantía de devolución en 30 días',
+                    'Devoluciones en 48 horas',
                   ].map(item => (
                     <div key={item} className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
@@ -262,9 +262,9 @@ export default async function HomePage() {
                 { nombre: 'María R.', ciudad: 'Santo Domingo', texto: 'Excelente servicio, llegaron en 24 horas. Los Acuvue son 100% originales, igual que en la óptica pero más baratos.', producto: 'ACUVUE® MOIST®', avatar: 'MR', color: 'bg-pink-100 text-pink-700' },
                 { nombre: 'Carlos M.', ciudad: 'Santiago', texto: 'Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto.', producto: 'Air Optix HydraGlyde', avatar: 'CM', color: 'bg-blue-100 text-blue-700' },
                 { nombre: 'Feyilina P.', ciudad: 'Santo Domingo', texto: 'Llevo 6 meses comprando aquí. Los precios son mucho mejores que en cualquier óptica y siempre llegan rápido.', producto: 'Biofinity® Toric', avatar: 'FP', color: 'bg-green-100 text-green-700' },
-                { nombre: 'Ramón G.', ciudad: 'La Romana', texto: 'Tengo astigmatismo alto y siempre era difícil encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'ACUVUE Oasys Astig.', avatar: 'RG', color: 'bg-orange-100 text-orange-700' },
-                { nombre: 'Daniela F.', ciudad: 'Punta Cana', texto: 'Precio mucho mejor que en las ópticas. Llegaron en 24h con empaque sellado y originales garantizados.', producto: 'Air Optix Colors', avatar: 'DF', color: 'bg-purple-100 text-purple-700' },
-                { nombre: 'Luis A.', ciudad: 'Santo Domingo', texto: 'Me ahorraron RD$800 vs la óptica física. La calidad es la misma. Nunca más voy a otra parte.', producto: '1-Day ACUVUE 90u', avatar: 'LA', color: 'bg-teal-100 text-teal-700' },
+                { nombre: 'Ana G.', ciudad: 'La Romana', texto: 'Tengo astigmatismo alto y siempre era difícil encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'ACUVUE Oasys Astig.', avatar: 'AG', color: 'bg-orange-100 text-orange-700' },
+                { nombre: 'Roberto S.', ciudad: 'Bávaro', texto: 'Precio mucho mejor que en las ópticas. Llegaron en 24h con empaque sellado y originales garantizados.', producto: 'Air Optix Colors', avatar: 'RS', color: 'bg-purple-100 text-purple-700' },
+                { nombre: 'Luisa V.', ciudad: 'Santo Domingo', texto: 'Me ahorraron RD$800 vs la óptica física. La calidad es la misma. Nunca más voy a otra parte.', producto: '1-Day ACUVUE 90u', avatar: 'LV', color: 'bg-teal-100 text-teal-700' },
               ].map((t, i) => (
                 <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col gap-3">
                   <div className="flex gap-0.5">

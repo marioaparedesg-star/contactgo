@@ -14,7 +14,7 @@ const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "¿Cuánto tarda en llegar mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Santo Domingo: 24-48 horas. Santiago: 48-72 horas. Resto del país: 3-5 días hábiles." } },
+    { "@type": "Question", "name": "¿Cuánto tarda en llegar mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Santo Domingo: 24 horas. Santiago: 24-48 horas. Resto del país: 48-72 horas." } },
     { "@type": "Question", "name": "¿Cuánto tiempo toma adaptarse a los lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "La mayoría de personas se adaptan en 1-2 semanas. Durante los primeros días es normal sentir algo de molestia leve. Si el malestar persiste más de 2 semanas, consulta a tu optometrista." } },
     { "@type": "Question", "name": "¿Qué hago si siento los lentes secos?", "acceptedAnswer": { "@type": "Answer", "text": "Usa gotas lubricantes compatibles con lentes de contacto (como Refresh, Systane o Blink). Asegúrate de no usar lentes más horas de lo recomendado y de hidratarte bien." } },
     { "@type": "Question", "name": "¿Cuándo debo dejar de usar lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "Deja de usarlos si tienes ojo rojo, dolor, visión borrosa repentina, secreción o infección. Consulta a tu médico antes de volver a usarlos." } },
@@ -27,9 +27,9 @@ const SECCIONES = [
     id: 'envios', emoji: '🚚', titulo: 'Envíos y Entregas',
     color: 'bg-blue-50 border-blue-100', badge: 'bg-blue-100 text-blue-700',
     items: [
-      { q: '¿Cuánto tarda en llegar mi pedido?', a: 'Santo Domingo: 24-48 horas. Santiago: 48-72 horas. Resto del país: 3-5 días hábiles. Todos los pedidos se procesan de lunes a sábado. Excepción: lentes tóricos para astigmatismo (20-30 días, ver abajo).' },
+      { q: '¿Cuánto tarda en llegar mi pedido?', a: 'Santo Domingo: 24 horas. Santiago: 24-48 horas. Resto del país: 48-72 horas. Todos los pedidos se procesan de lunes a sábado. Excepción: lentes tóricos para astigmatismo (20-30 días, ver abajo).' },
       { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos (para astigmatismo) se fabrican a medida según la graduación exacta de cada paciente: potencia esférica (SPH), cilindro (CYL) y eje (EJE). A diferencia de los lentes esféricos que tenemos en inventario, los tóricos requieren fabricación especial que toma entre 20 y 30 días calendario desde la confirmación del pedido. Te notificaremos por WhatsApp en cada etapa.' },
-      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Santiago: RD$350. Interior del país: RD$350. Pedidos mayores a RD$6,000: envío GRATIS.' },
+      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo: RD$200 · Santiago: RD$350. Interior del país: RD$350. Pedidos mayores a RD$6,000: envío GRATIS.' },
       { q: '¿Cómo sé dónde está mi pedido?', a: 'Recibirás un mensaje de WhatsApp con tu número de seguimiento. También puedes ver el estado en Mi cuenta → Pedidos.' },
       { q: '¿Entregan en toda la República Dominicana?', a: 'Sí, hacemos envíos a todo el país. Zonas remotas pueden tomar 1-2 días adicionales.' },
       { q: '¿Puedo cambiar la dirección después de hacer el pedido?', a: 'Sí, siempre que el pedido no haya sido enviado. Escríbenos por WhatsApp lo antes posible.' },
@@ -114,9 +114,9 @@ const SECCIONES = [
     id: 'pagos', emoji: '💳', titulo: 'Pagos y Seguridad',
     color: 'bg-indigo-50 border-indigo-100', badge: 'bg-indigo-100 text-indigo-700',
     items: [
-      { q: '¿Qué métodos de pago aceptan?', a: 'Tarjeta de crédito/débito (Visa, Mastercard vía tarjeta), PayPal, y pago en efectivo contra entrega.' },
+      { q: '¿Qué métodos de pago aceptan?', a: 'Tarjeta Visa/Mastercard vía AZUL (Banco Popular) y pago en efectivo contra entrega.' },
       { q: '¿Es seguro pagar con tarjeta?', a: 'Sí. Usamos tarjeta (Banco Popular), con encriptación SSL y verificación 3D Secure.' },
-      { q: '¿Puedo pagar contra entrega?', a: 'Sí, disponible para Santo Domingo y Santiago. Solo efectivo, monto exacto.' },
+      { q: '¿Puedo pagar contra entrega?', a: 'Sí, disponible en todo el país. Se paga en efectivo al recibir el pedido.' },
     ],
   },
 ]

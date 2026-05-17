@@ -74,7 +74,7 @@ export default function Page() {
           <div className="grid grid-cols-2 gap-3">
             {[
               { tipo: 'Lentes diarios', optica: 'RD$6,500/mes', online: 'RD$3,720/mes', ahorro: 'RD$2,780' },
-              { tipo: 'Lentes mensuales', optica: 'RD$6,500/año', online: 'RD$4,560/año', ahorro: 'RD$2,540' },
+              { tipo: 'Lentes mensuales', optica: 'RD$6,500/año', online: '~RD$18,240/año', ahorro: 'RD$2,540' },
             ].map(c => (
               <div key={c.tipo} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
                 <p className="font-bold text-gray-900 text-sm mb-2">{c.tipo}</p>
@@ -88,7 +88,7 @@ export default function Page() {
 
         <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5">
           <h2 className="font-bold text-gray-900 mb-2">¿Listo para ahorrar?</h2>
-          <p className="text-sm text-gray-700 mb-4">Revisa nuestro catálogo completo con todos los precios. Envío gratis en pedidos mayores a RD$3,000.</p>
+          <p className="text-sm text-gray-700 mb-4">Revisa nuestro catálogo completo con todos los precios. Envío gratis en pedidos superiores a RD$6,000.</p>
           <div className="flex gap-3">
             <Link href="/catalogo" className="bg-primary-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm">Ver catálogo y precios</Link>
             <Link href="/receta" className="border border-primary-300 text-primary-700 px-4 py-2.5 rounded-xl font-bold text-sm">Usar mi receta</Link>

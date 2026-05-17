@@ -53,7 +53,7 @@ export default async function AcuvuePage() {
                 {t:'Tecnología HYDRACLEAR®',d:'Hidratación superior durante todo el día, incluso con pantallas.'},
                 {t:'UV Protection',d:'Los únicos lentes de contacto con protección UV clase 1 y clase 2.'},
                 {t:'BLINK STABILIZED®',d:'Diseño que se estabiliza con cada parpadeo para visión nítida y estable.'},
-                {t:'Disponibles en RD',d:'Entrega en 24-72h a Santo Domingo, Santiago, Punta Cana y todo el país.'},
+                {t:'Disponibles en RD',d:'Entrega en 24-48h en Santo Domingo y Santiago. 48-72h en el resto del país.'},
               ].map((item,i) => (
                 <div key={i} className="bg-white rounded-xl p-4 border border-primary-100">
                   <p className="font-bold text-gray-900 text-sm mb-1">{item.t}</p>

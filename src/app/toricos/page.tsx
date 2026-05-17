@@ -9,6 +9,14 @@ export const metadata: Metadata = {
   title: 'Lentes para Astigmatismo RD | Lentes Tóricos — ContactGo',
   description: 'Lentes tóricos para astigmatismo en República Dominicana. ACUVUE Oasys for Astigmatism, Biofinity Toric, Air Optix for Astigmatism. Fabricados a medida.',
   alternates: { canonical: 'https://contactgo.net/toricos' },
+  openGraph: {
+    title: 'Lentes Tóricos para Astigmatismo RD',
+    description: 'Lentes tóricos fabricados a medida para astigmatismo en RD.',
+    url: 'https://contactgo.net/toricos',
+    locale: 'es_DO',
+    siteName: 'ContactGo',
+    type: 'website',
+  },
 }
 export const revalidate = 60
 
