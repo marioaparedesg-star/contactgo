@@ -1,3 +1,4 @@
+import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
 
@@ -21,6 +22,10 @@ export async function POST(req: NextRequest) {
     if (origin && !allowed.includes(origin)) {
       return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
     }
+
+    // Rate limit para pagos
+    const guard = guardRequest(req, { limitPerMin: 30, requireOrigin: false })
+    if (!guard.ok) return guard.response
 
     const body = await req.json()
     const { order_number, total } = body

@@ -1,3 +1,4 @@
+import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
@@ -63,6 +64,9 @@ function emailTemplate(
 }
 
 export async function GET(req: NextRequest) {
+  const guard = guardRequest(req, { limitPerMin: 2 })
+  if (!guard.ok) return guard.response
+
   const authHeader = req.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && process.env.NODE_ENV === 'production') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

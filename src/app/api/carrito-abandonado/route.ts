@@ -1,3 +1,4 @@
+import { guardRequest } from '@/lib/api-guard'
 // POST /api/carrito-abandonado
 // Cron job que detecta carritos abandonados (2h sin completar) y envía email con cupón
 import { NextRequest, NextResponse } from 'next/server'
@@ -10,6 +11,9 @@ const FROM = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
+  const guard = guardRequest(req, { limitPerMin: 5 })
+  if (!guard.ok) return guard.response
+
   // Verificar secret
   const auth = req.headers.get('authorization')
   if (auth !== `Bearer ${process.env.CRON_SECRET ?? 'contactgo2026'}`) {

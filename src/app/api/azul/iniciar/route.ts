@@ -1,3 +1,4 @@
+import { guardRequest } from '@/lib/api-guard'
 // POST /api/azul/iniciar
 // Genera los campos del formulario POST para AZUL Payment Page
 import { NextRequest, NextResponse } from 'next/server'
@@ -17,6 +18,9 @@ const AZUL_URL = AZUL_ENV === 'production'
   : 'https://pruebas.azul.com.do/PaymentPage/'
 
 export async function POST(req: NextRequest) {
+  const guard = guardRequest(req, { limitPerMin: 30 })
+  if (!guard.ok) return guard.response
+
   try {
     const { order_id, total } = await req.json()
 
