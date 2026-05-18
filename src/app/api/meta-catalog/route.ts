@@ -24,7 +24,7 @@ const BRAND = 'ContactGo'
 const CURRENCY = 'DOP'
 const BASE = 'https://contactgo.net'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
   if (guardErr) return guardErr
 
