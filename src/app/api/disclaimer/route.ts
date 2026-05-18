@@ -9,8 +9,8 @@ const sb = createClient(
 )
 
 export async function POST(req: NextRequest) {
-  const guard = guardRequest(req, { limitPerMin: 5 })
-  if (!guard.ok) return guard.response
+  const guardErr = guardRequest(req, { limitPerMin: 5 })
+  if (guardErr) return guardErr
   try {
     const body = await req.json()
     const { user_id, order_id, version, tipo, user_agent, items_snapshot, accepted_at } = body

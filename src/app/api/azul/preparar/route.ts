@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Rate limit para pagos
-    const guard = guardRequest(req, { limitPerMin: 30, requireOrigin: false })
-    if (!guard.ok) return guard.response
+    const guardErr = guardRequest(req, { limitPerMin: 30, requireOrigin: false })
+    if (guardErr) return guardErr
 
     const body = await req.json()
     const { order_number, total } = body

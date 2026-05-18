@@ -25,8 +25,8 @@ const CURRENCY = 'DOP'
 const BASE = 'https://contactgo.net'
 
 export async function GET() {
-  const guard = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
-  if (!guard.ok) return guard.response
+  const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
+  if (guardErr) return guardErr
 
   const { data: products } = await sb
     .from('products')

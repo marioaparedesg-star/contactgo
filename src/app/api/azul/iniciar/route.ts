@@ -18,8 +18,8 @@ const AZUL_URL = AZUL_ENV === 'production'
   : 'https://pruebas.azul.com.do/PaymentPage/'
 
 export async function POST(req: NextRequest) {
-  const guard = guardRequest(req, { limitPerMin: 30 })
-  if (!guard.ok) return guard.response
+  const guardErr = guardRequest(req, { limitPerMin: 30 })
+  if (guardErr) return guardErr
 
   try {
     const { order_id, total } = await req.json()

@@ -11,8 +11,8 @@ const FROM = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
-  const guard = guardRequest(req, { limitPerMin: 5 })
-  if (!guard.ok) return guard.response
+  const guardErr = guardRequest(req, { limitPerMin: 5 })
+  if (guardErr) return guardErr
 
   // Verificar secret
   const auth = req.headers.get('authorization')

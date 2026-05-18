@@ -1,4 +1,4 @@
-import { guardRequest } from '@/lib/api-guard'
+import { guardRequest, getIP } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 
 const WA_TOKEN    = process.env.WHATSAPP_TOKEN
@@ -10,9 +10,9 @@ const ADMIN_PHONE   = process.env.NEXT_PUBLIC_WHATSAPP ?? '18294728328'
 
 export async function POST(req: NextRequest) {
   // Seguridad: origin + rate limit
-  const guard = guardRequest(req, { limitPerMin: 20 })
-  if (!guard.ok) return guard.response
-  const { ip } = guard
+  const guardErr = guardRequest(req, { limitPerMin: 20 })
+  if (guardErr) return guardErr
+  const ip = getIP(req)
 
 
   try {

@@ -64,8 +64,8 @@ function emailTemplate(
 }
 
 export async function GET(req: NextRequest) {
-  const guard = guardRequest(req, { limitPerMin: 2 })
-  if (!guard.ok) return guard.response
+  const guardErr = guardRequest(req, { limitPerMin: 2 })
+  if (guardErr) return guardErr
 
   const authHeader = req.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && process.env.NODE_ENV === 'production') {
