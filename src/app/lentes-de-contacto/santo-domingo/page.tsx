@@ -122,6 +122,29 @@ export default async function Page() {
           "@context": "https://schema.org", "@type": "FAQPage",
           "mainEntity": faqs.map(f => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } }))
         })}} />
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "ContactGo — Lentes de Contacto Santo Domingo",
+        "url": "https://contactgo.net/lentes-de-contacto/santo-domingo",
+        "telephone": "+1-829-472-8328",
+        "email": "info@contactgo.net",
+        "areaServed": {
+          "@type": "City",
+          "name": "Santo Domingo",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Distrito Nacional",
+            "addressCountry": "DO"
+          }
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Lentes de contacto en Santo Domingo",
+          "url": "https://contactgo.net/catalogo"
+        }
+      })}} />
       </main>
       <Footer />
     </>

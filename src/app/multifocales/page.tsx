@@ -69,6 +69,13 @@ export default async function Page() {
           "url": "https://contactgo.net/multifocales",
           "itemListElement": []
         })}} />
+
+        {/* FAQPage Schema */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [{"@type": "Question", "name": "¿Qué son los lentes de contacto multifocales?", "acceptedAnswer": {"@type": "Answer", "text": "Los lentes multifocales son lentes de contacto diseñados para personas con presbicia (vista cansada) que necesitan ver claramente tanto de cerca como de lejos. Tienen múltiples zonas de graduación en un solo lente."}}, {"@type": "Question", "name": "¿A partir de qué edad se necesitan lentes multifocales?", "acceptedAnswer": {"@type": "Answer", "text": "La presbicia suele aparecer alrededor de los 40-45 años. Si necesitas gafas de lectura pero también usas lentes de contacto, los multifocales son la solución ideal."}}, {"@type": "Question", "name": "¿Son difíciles de adaptar los lentes multifocales?", "acceptedAnswer": {"@type": "Answer", "text": "La adaptación puede tomar 1-2 semanas. El cerebro necesita aprender a seleccionar la zona correcta del lente según la distancia. La mayoría de usuarios se adapta sin dificultad."}}]
+        })}} />
       </main>
       <Footer />
     </>

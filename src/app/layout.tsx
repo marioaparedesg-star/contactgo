@@ -171,7 +171,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CookieConsent />
       <Analytics />
       <SpeedInsights />
-        <Toaster
+        {/* Skip link accesibilidad WCAG */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-primary-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-semibold">
+        Saltar al contenido principal
+      </a>
+      <Toaster
           position="top-center"
           toastOptions={{
             className: '!rounded-xl !shadow-soft !font-medium',

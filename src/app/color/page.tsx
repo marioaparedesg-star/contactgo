@@ -73,6 +73,13 @@ export default async function Page() {
           "url": "https://contactgo.net/color",
           "itemListElement": []
         })}} />
+
+        {/* FAQPage Schema */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [{"@type": "Question", "name": "¿Se pueden usar lentes de color sin graduación?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, existen lentes de color con graduación 0.00 (plano) para uso puramente estético. También están disponibles con graduación para personas que necesitan corrección visual."}}, {"@type": "Question", "name": "¿Cuánto duran los lentes de contacto de color?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del tipo: los diarios se descartan cada día, los quincenales cada 15 días y los mensuales cada 30 días. Siempre siguiendo las indicaciones del fabricante."}}, {"@type": "Question", "name": "¿Son seguros los lentes de contacto de color?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, siempre que sean de marcas certificadas como AIR OPTIX, FreshLook o equivalentes, y se usen con una prescripción válida de un profesional óptico."}}]
+        })}} />
       </main>
       <Footer />
     </>

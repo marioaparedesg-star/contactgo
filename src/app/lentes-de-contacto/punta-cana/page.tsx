@@ -111,6 +111,29 @@ export default async function Page() {
           "@context": "https://schema.org", "@type": "FAQPage",
           "mainEntity": faqs.map(f => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } }))
         })}} />
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "ContactGo — Lentes de Contacto Punta Cana",
+        "url": "https://contactgo.net/lentes-de-contacto/punta-cana",
+        "telephone": "+1-829-472-8328",
+        "email": "info@contactgo.net",
+        "areaServed": {
+          "@type": "City",
+          "name": "Punta Cana",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "La Altagracia",
+            "addressCountry": "DO"
+          }
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Lentes de contacto en Punta Cana",
+          "url": "https://contactgo.net/catalogo"
+        }
+      })}} />
       </main>
       <Footer />
     </>

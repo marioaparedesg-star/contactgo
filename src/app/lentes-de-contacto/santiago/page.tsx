@@ -111,6 +111,29 @@ export default async function Page() {
           "@context": "https://schema.org", "@type": "FAQPage",
           "mainEntity": faqs.map(f => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } }))
         })}} />
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "ContactGo — Lentes de Contacto Santiago de los Caballeros",
+        "url": "https://contactgo.net/lentes-de-contacto/santiago",
+        "telephone": "+1-829-472-8328",
+        "email": "info@contactgo.net",
+        "areaServed": {
+          "@type": "City",
+          "name": "Santiago de los Caballeros",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Santiago",
+            "addressCountry": "DO"
+          }
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Lentes de contacto en Santiago de los Caballeros",
+          "url": "https://contactgo.net/catalogo"
+        }
+      })}} />
       </main>
       <Footer />
     </>
