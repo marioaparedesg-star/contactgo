@@ -4,7 +4,20 @@ import Anthropic from '@anthropic-ai/sdk'
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(req: NextRequest) {
-  const { image, mimeType } = await req.json()
+  // Validar body antes del try para retornar 400 correcto
+  let image: string, mimeType: string
+  try {
+    const body = await req.json()
+    image = body.image
+    mimeType = body.mimeType
+  } catch {
+    return NextResponse.json({ error: 'Body inválido' }, { status: 400 })
+  }
+
+  if (!image || !mimeType) {
+    return NextResponse.json({ error: 'image y mimeType son requeridos' }, { status: 400 })
+  }
+
   try {
     const msg = await client.messages.create({
       model: 'claude-opus-4-5',

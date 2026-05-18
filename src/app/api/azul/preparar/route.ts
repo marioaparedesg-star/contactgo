@@ -15,8 +15,25 @@ const AZUL_URL = AZUL_ENV === 'production'
 
 export async function POST(req: NextRequest) {
   try {
-    const { order_number, total } = await req.json()
-    const totalNum = Number(total ?? 0)
+    // Validar origin — solo desde contactgo.net
+    const origin = req.headers.get('origin') ?? ''
+    const allowed = ['https://contactgo.net', 'https://www.contactgo.net']
+    if (origin && !allowed.includes(origin)) {
+      return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+    }
+
+    const body = await req.json()
+    const { order_number, total } = body
+
+    // Validar campos obligatorios
+    if (!order_number || !total) {
+      return NextResponse.json({ error: 'order_number y total son requeridos' }, { status: 400 })
+    }
+    if (isNaN(Number(total)) || Number(total) <= 0) {
+      return NextResponse.json({ error: 'total inválido' }, { status: 400 })
+    }
+
+    const totalNum = Number(total)
     const amount   = String(Math.round(totalNum * 100)).padStart(3, '0')
     const itbisNum = Math.round((totalNum * 18 / 118) * 100)
     const itbis    = String(itbisNum).padStart(3, '0')
@@ -47,7 +64,16 @@ export async function POST(req: NextRequest) {
       ShowTransactionResult: '0', Locale: 'ES', SaveToDataVault: '1', AuthHash: authHash,
     }
 
-    console.log('[AZUL/preparar]', { order_number, amount, itbis, env: AZUL_ENV, hashed: !!AUTH_KEY })
+    // No exponer MerchantId en sandbox si no hay auth key configurada
+    if (!AUTH_KEY) {
+      console.warn('[AZUL/preparar] Sin AUTH_KEY — modo test limitado')
+      return NextResponse.json({ 
+        error: 'Pasarela de pago en configuración. Usa pago contra entrega.',
+        sandbox: true
+      }, { status: 503 })
+    }
+
+    console.log('[AZUL/preparar]', { order_number, amount, itbis, env: AZUL_ENV })
     return NextResponse.json({ url: AZUL_URL, fields })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
