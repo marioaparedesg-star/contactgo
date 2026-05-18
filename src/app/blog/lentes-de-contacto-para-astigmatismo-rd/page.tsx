@@ -4,6 +4,13 @@ import Link from 'next/link'
 
 // canonical
 export const metadata = {
+  openGraph: {
+    title: 'Lentes para Astigmatismo en RD',
+    url: 'https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+    type: 'article',
+  },
   alternates: { canonical: 'https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd' },
   title: 'Lentes de contacto para astigmatismo en RD — ContactGo',
   description: 'Todo lo que necesitas saber sobre lentes tóricos para astigmatismo en República Dominicana. Marcas, precios y cómo elegir el correcto.',

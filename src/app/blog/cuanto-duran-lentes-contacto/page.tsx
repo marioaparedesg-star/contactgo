@@ -4,6 +4,13 @@ import Link from 'next/link'
 
 // canonical
 export const metadata = {
+  openGraph: {
+    title: '¿Cuánto Duran los Lentes de Contacto?',
+    url: 'https://contactgo.net/blog/cuanto-duran-lentes-contacto',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+    type: 'article',
+  },
   alternates: { canonical: 'https://contactgo.net/blog/cuanto-duran-lentes-contacto' },
   title: '¿Cuánto duran los lentes de contacto? Guía completa — ContactGo',
   description: 'Lentes diarios, quincenales y mensuales: cuánto duran, cuándo cambiarlos y cómo sacarles el máximo provecho. Guía para usuarios en RD.',

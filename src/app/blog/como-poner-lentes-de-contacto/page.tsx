@@ -4,6 +4,13 @@ import Link from 'next/link'
 
 // canonical
 export const metadata = {
+  openGraph: {
+    title: 'Cómo Ponerse los Lentes de Contacto Paso a Paso',
+    url: 'https://contactgo.net/blog/como-poner-lentes-de-contacto',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+    type: 'article',
+  },
   alternates: { canonical: 'https://contactgo.net/blog/como-poner-lentes-de-contacto' },
   title: 'Cómo poner y quitar lentes de contacto — ContactGo',
   description: 'Guía paso a paso para principiantes. Aprende a colocarte y quitarte lentes de contacto de forma segura en República Dominicana.',

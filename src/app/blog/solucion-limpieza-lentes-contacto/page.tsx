@@ -4,6 +4,13 @@ import Link from 'next/link'
 
 // canonical
 export const metadata = {
+  openGraph: {
+    title: 'Soluciones para Limpiar Lentes de Contacto',
+    url: 'https://contactgo.net/blog/solucion-limpieza-lentes-contacto',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+    type: 'article',
+  },
   alternates: { canonical: 'https://contactgo.net/blog/solucion-limpieza-lentes-contacto' },
   title: 'Cómo elegir la mejor solución para lentes de contacto — ContactGo',
   description: 'Guía completa sobre soluciones de limpieza para lentes de contacto en RD. Opti-Free, ReNu, Prolub — cuál usar y cómo limpiar correctamente.',

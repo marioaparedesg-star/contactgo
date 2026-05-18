@@ -4,6 +4,13 @@ import Link from 'next/link'
 
 // canonical
 export const metadata = {
+  openGraph: {
+    title: 'Primeros Pasos con Lentes de Contacto en RD',
+    url: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+    type: 'article',
+  },
   alternates: { canonical: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd' },
   title: 'Primeros pasos con lentes de contacto en RD — ContactGo',
   description: 'Guía completa para quienes quieren empezar a usar lentes de contacto en República Dominicana. Qué necesitas, cómo empezar y qué esperar.',

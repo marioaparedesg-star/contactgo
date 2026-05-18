@@ -4,6 +4,13 @@ import Link from 'next/link'
 
 // canonical
 export const metadata = {
+  openGraph: {
+    title: 'Lentes de Contacto para Ojos Secos',
+    url: 'https://contactgo.net/blog/ojos-secos-lentes-contacto',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+    type: 'article',
+  },
   alternates: { canonical: 'https://contactgo.net/blog/ojos-secos-lentes-contacto' },
   title: 'Ojos secos y lentes de contacto: soluciones reales — ContactGo',
   description: 'Tienes ojos secos y usas lentes de contacto? Descubre qué productos y marcas funcionan mejor para mantener tus ojos hidratados en RD.',

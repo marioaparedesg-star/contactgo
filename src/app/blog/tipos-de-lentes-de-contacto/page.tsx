@@ -4,6 +4,13 @@ import Link from 'next/link'
 
 // canonical
 export const metadata = {
+  openGraph: {
+    title: 'Tipos de Lentes de Contacto',
+    url: 'https://contactgo.net/blog/tipos-de-lentes-de-contacto',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+    type: 'article',
+  },
   alternates: { canonical: 'https://contactgo.net/blog/tipos-de-lentes-de-contacto' },
   title: 'Tipos de lentes de contacto — ContactGo',
   description: 'Diferencias entre lentes esféricos, tóricos, multifocales y de color. Cómo elegir el correcto según tu diagnóstico en RD.',

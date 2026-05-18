@@ -4,6 +4,13 @@ import Link from 'next/link'
 
 // canonical
 export const metadata = {
+  openGraph: {
+    title: 'Lentes Multifocales para Presbicia en RD',
+    url: 'https://contactgo.net/blog/lentes-multifocales-presbicia-rd',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+    type: 'article',
+  },
   alternates: { canonical: 'https://contactgo.net/blog/lentes-multifocales-presbicia-rd' },
   title: 'Lentes multifocales para presbicia en RD — ContactGo',
   description: 'Guía completa sobre lentes de contacto multifocales para presbicia en República Dominicana. Marcas disponibles, adaptación y precios.',
