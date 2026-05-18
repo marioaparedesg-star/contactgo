@@ -2,7 +2,7 @@ import { guardRequest } from '@/lib/api-guard'
 // API: Meta Product Catalog Feed (XML)
 // URL: https://contactgo.net/api/meta-catalog
 // Formato: RSS/XML compatible con Meta Commerce Manager
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 const sb = createClient(
