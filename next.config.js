@@ -4,7 +4,7 @@
 const csp = [
   "default-src 'self'",
   // Scripts: self + GTM + Meta Pixel + inline (Next.js necesita unsafe-inline)
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms https://*.clarity.ms",
   // Estilos: self + inline (Tailwind genera estilos inline)
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   // Fuentes
