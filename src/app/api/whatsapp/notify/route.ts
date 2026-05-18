@@ -1,3 +1,4 @@
+import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 
 const WA_TOKEN    = process.env.WHATSAPP_TOKEN
@@ -8,6 +9,12 @@ const CALLMEBOT_API = process.env.CALLMEBOT_API_KEY  // Tu API key de callmebot.
 const ADMIN_PHONE   = process.env.NEXT_PUBLIC_WHATSAPP ?? '18294728328'
 
 export async function POST(req: NextRequest) {
+  // Seguridad: origin + rate limit
+  const guard = guardRequest(req, { limitPerMin: 20 })
+  if (!guard.ok) return guard.response
+  const { ip } = guard
+
+
   try {
     const { order_id, cliente_nombre, cliente_telefono, total, numero_orden, metodo_pago } = await req.json()
 

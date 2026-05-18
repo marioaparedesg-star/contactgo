@@ -1,3 +1,4 @@
+import { guardRequest } from '@/lib/api-guard'
 // API: Guardar aceptación de disclaimer médico/legal
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
@@ -8,6 +9,8 @@ const sb = createClient(
 )
 
 export async function POST(req: NextRequest) {
+  const guard = guardRequest(req, { limitPerMin: 5 })
+  if (!guard.ok) return guard.response
   try {
     const body = await req.json()
     const { user_id, order_id, version, tipo, user_agent, items_snapshot, accepted_at } = body

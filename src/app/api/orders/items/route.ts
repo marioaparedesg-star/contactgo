@@ -1,7 +1,14 @@
+import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 export async function POST(req: NextRequest) {
+  // Seguridad: origin + rate limit
+  const guard = guardRequest(req, { limitPerMin: 30 })
+  if (!guard.ok) return guard.response
+  const { ip } = guard
+
+
   try {
     const body = await req.json()
     const { order_id, items } = body

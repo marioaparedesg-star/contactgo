@@ -1,3 +1,4 @@
+import { guardRequest } from '@/lib/api-guard'
 // ============================================================
 // ContactGo — API: Notificaciones de pedidos
 // Envía email al cliente + email al admin cuando cambia estado
@@ -288,6 +289,12 @@ function emailAdmin(order: any, items: any[], evento: string, nuevoEstado?: stri
 }
 
 export async function POST(req: NextRequest) {
+  // Seguridad: origin + rate limit
+  const guard = guardRequest(req, { limitPerMin: 10 })
+  if (!guard.ok) return guard.response
+  const { ip } = guard
+
+
   try {
     const { order_id, evento = 'nuevo_pedido', nuevo_estado } = await req.json()
 

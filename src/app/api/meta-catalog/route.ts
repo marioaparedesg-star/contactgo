@@ -1,3 +1,4 @@
+import { guardRequest } from '@/lib/api-guard'
 // API: Meta Product Catalog Feed (XML)
 // URL: https://contactgo.net/api/meta-catalog
 // Formato: RSS/XML compatible con Meta Commerce Manager
@@ -24,6 +25,9 @@ const CURRENCY = 'DOP'
 const BASE = 'https://contactgo.net'
 
 export async function GET() {
+  const guard = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
+  if (!guard.ok) return guard.response
+
   const { data: products } = await sb
     .from('products')
     .select('id, nombre, descripcion, precio, imagen_url, slug, tipo, marca, stock, activo')
