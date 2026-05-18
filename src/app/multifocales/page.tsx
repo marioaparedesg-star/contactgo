@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://contactgo.net/multifocales' },
   openGraph: {
     title: 'Lentes Multifocales para Presbicia RD',
-    description: 'Lentes multifocales para presbicia en República Dominicana.',
+    description: 'Lentes de contacto multifocales en RD para presbicia. ACUVUE OASYS Multifocal, Biofinity Multifocal, Proclear Multifocal. Ve bien de cerca y lejos.',
     url: 'https://contactgo.net/multifocales',
     locale: 'es_DO',
     siteName: 'ContactGo',

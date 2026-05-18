@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://contactgo.net/toricos' },
   openGraph: {
     title: 'Lentes Tóricos para Astigmatismo RD',
-    description: 'Lentes tóricos fabricados a medida para astigmatismo en RD.',
+    description: 'Lentes de contacto tóricos para astigmatismo en RD. ACUVUE Oasys for Astigmatism, Biofinity Toric, Air Optix for Astigmatism. Envío a domicilio.',
     url: 'https://contactgo.net/toricos',
     locale: 'es_DO',
     siteName: 'ContactGo',

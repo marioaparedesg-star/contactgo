@@ -110,6 +110,7 @@ const POSTS = [
 ]
 
 export const metadata = {
+  alternates: { canonical: 'https://contactgo.net/blog' },
   title: 'Blog — ContactGo | Guías de lentes de contacto en RD',
   description: 'Guías, tutoriales y consejos sobre lentes de contacto en República Dominicana.',
 }

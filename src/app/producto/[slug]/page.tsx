@@ -67,7 +67,7 @@ export default async function ProductoPage(
     "image": product.imagen_url ?? "https://contactgo.net/icon-512.png",
     "brand": { "@type": "Brand", "name": product.marca ?? "ContactGo" },
     "sku": product.id,
-    "mpn": product.slug,
+    "mpn": product.sku ? String(product.sku) : `CG-${String(product.id).slice(0,8).toUpperCase()}`,
     "category": product.tipo,
     "url": `https://contactgo.net/producto/${product.slug}`,
     "offers": {

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://contactgo.net/color' },
   openGraph: {
     title: 'Lentes de Color RD | FreshLook, Air Optix Colors',
-    description: 'Lentes de contacto de color en RD. Con y sin graduación.',
+    description: 'Lentes de contacto de color en República Dominicana. AIR OPTIX Colors, FreshLook Colorblends, Lunare Tri-Kolor. Colores naturales y dramáticos.',
     url: 'https://contactgo.net/color',
     locale: 'es_DO',
     siteName: 'ContactGo',

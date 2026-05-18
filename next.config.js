@@ -60,6 +60,7 @@ const nextConfig = {
 
 nextConfig.redirects = async () => [
   { source: '/login',           destination: '/cuenta', permanent: true },
+  { source: '/carrito',          destination: '/cart',   permanent: true },
   { source: '/signin',          destination: '/cuenta', permanent: true },
   { source: '/iniciar-sesion',  destination: '/cuenta', permanent: true },
   { source: '/register',        destination: '/cuenta', permanent: true },
