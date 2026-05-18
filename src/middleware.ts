@@ -25,9 +25,13 @@ export function middleware(req: NextRequest) {
   const userAgent = req.headers.get('user-agent') ?? ''
   const origin = req.headers.get('origin') ?? ''
 
-  // ── 1. /admin/login es siempre pública — NO redirigir ──
-  if (pathname === '/admin/login') {
-    return NextResponse.next()
+  // ── 1. /admin/login es siempre pública — NO redirigir NUNCA ──
+  if (pathname === '/admin/login' || pathname === '/admin/login/') {
+    const res = NextResponse.next()
+    // Anti-cache para que Cloudflare no cachee este path
+    res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    res.headers.set('X-Admin-Login', 'public')
+    return res
   }
 
   // ── 2. Bloquear crawlers en rutas privadas ──
