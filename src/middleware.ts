@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const ALLOWED_ORIGINS = ['https://contactgo.net', 'https://www.contactgo.net']
-
+// Rate limiting simple (Edge Runtime)
 const rateMap = new Map<string, { count: number; reset: number }>()
-
 function rateLimit(key: string, limit: number, windowMs = 60_000): boolean {
   const now = Date.now()
   const entry = rateMap.get(key)
@@ -17,26 +15,25 @@ function rateLimit(key: string, limit: number, windowMs = 60_000): boolean {
   return true
 }
 
+const ALLOWED_ORIGINS = ['https://contactgo.net', 'https://www.contactgo.net']
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
   const origin = req.headers.get('origin') ?? ''
-  const userAgent = req.headers.get('user-agent') ?? ''
 
-  // ── 1. /admin/login SIEMPRE público — sale ANTES de cualquier check ──
+  // ══════════════════════════════════════════════════════════
+  // 1. /admin/login — SIEMPRE PÚBLICO, sale inmediatamente
+  // ══════════════════════════════════════════════════════════
   if (pathname === '/admin/login' || pathname === '/admin/login/') {
     const res = NextResponse.next()
-    res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    res.headers.set('Cache-Control', 'no-store, no-cache')
     return res
   }
 
-  // ── 2. Bloquear crawlers en rutas privadas ──
-  const isCrawler = /bot|crawler|spider|GPTBot|anthropic/i.test(userAgent)
-  if (isCrawler && (pathname.startsWith('/admin') || pathname.startsWith('/api/azul'))) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
-  // ── 3. APIs sensibles: validar origin + rate limit ──
+  // ══════════════════════════════════════════════════════════
+  // 2. APIs de AZUL — origin check
+  // ══════════════════════════════════════════════════════════
   if (pathname.startsWith('/api/azul')) {
     if (origin && !ALLOWED_ORIGINS.includes(origin)) {
       return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
@@ -46,7 +43,9 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // ── 4. Rate limiting en endpoints sensibles ──
+  // ══════════════════════════════════════════════════════════
+  // 3. Rate limiting en endpoints sensibles
+  // ══════════════════════════════════════════════════════════
   const rateLimits: Record<string, number> = {
     '/api/orders': 20,
     '/api/notify': 10,
@@ -55,12 +54,11 @@ export function middleware(req: NextRequest) {
     '/api/analizar-receta': 10,
     '/api/ocr-receta': 10,
   }
-
   for (const [path, limit] of Object.entries(rateLimits)) {
     if (pathname.startsWith(path)) {
       if (!rateLimit(`${ip}:${path}`, limit)) {
         return NextResponse.json(
-          { error: 'Too many requests. Intenta en un momento.' },
+          { error: 'Too many requests' },
           { status: 429, headers: { 'Retry-After': '60' } }
         )
       }
@@ -68,6 +66,9 @@ export function middleware(req: NextRequest) {
     }
   }
 
+  // ══════════════════════════════════════════════════════════
+  // 4. noindex headers en rutas privadas
+  // ══════════════════════════════════════════════════════════
   const res = NextResponse.next()
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/')) {
     res.headers.set('X-Robots-Tag', 'noindex, nofollow')
@@ -77,7 +78,8 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/admin/((?!login$|login/).*)',  // protege /admin/* EXCEPTO /admin/login
+    // Protege /admin/* PERO EXCLUYE /admin/login del matcher completamente
+    '/admin/((?!login(?:/|$)).*)',
     '/api/:path*',
     '/checkout',
     '/cart',

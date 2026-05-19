@@ -1,45 +1,45 @@
-import { guardRequest } from '@/lib/api-guard'
 // GET /api/azul-logs
-// Endpoint público para certificación técnica AZUL — solo muestra parámetros del formulario
+// Endpoint para certificación técnica AZUL — requiere Bearer token
 import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
+import { guardRequest } from '@/lib/api-guard'
 
 export async function GET(req: NextRequest) {
   // Rate limit anti-abuse
   const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
   if (guardErr) return guardErr
 
-  // Remover CORS wildcard — solo desde contactgo.net o con token
-  const origin = req.headers.get('origin') ?? ''
+  // ─── Auth Bearer obligatorio ─────────────────────────────────
   const auth = req.headers.get('authorization') ?? ''
   const token = process.env.AZUL_LOGS_TOKEN ?? ''
-  const isContactGo = origin.includes('contactgo.net')
-  const hasToken = token && auth === `Bearer ${token}`
   
-  if (!isContactGo && !hasToken && origin !== '') {
-    return NextResponse.json({ error: 'Acceso restringido' }, { status: 401 })
+  if (!token || auth !== `Bearer ${token}`) {
+    return NextResponse.json(
+      { error: 'No autorizado. Endpoint de certificación técnica.' },
+      { 
+        status: 401,
+        headers: { 'WWW-Authenticate': 'Bearer realm="ContactGo AZUL Logs"' }
+      }
+    )
   }
 
-  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+  // ─── Datos de certificación (solo con token válido) ───────────
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
   const MERCHANT_ID  = process.env.AZUL_MERCHANT_ID  ?? '39038540035'
-  const MERCHANT_NAME = 'ContactGo'
-  const MERCHANT_TYPE = 'ECommerce'
-  const CURRENCY = '$'
   const ORDER_NUM = `CG-TEST-${Date.now()}`
-  const AMOUNT = '500000'   // RD$5,000.00 (en centavos sin punto)
-  const ITBIS = '076271'    // 18% de 500000 = 90000, en centavos
+  const AMOUNT = '500000'
+  const ITBIS = '076271'
   const APPROVED = `${BASE_URL}/confirmacion?origen=azul&resultado=aprobado`
   const DECLINED  = `${BASE_URL}/confirmacion?origen=azul&resultado=declinado`
   const CANCEL    = `${BASE_URL}/cart`
-  const AUTH_KEY  = process.env.AZUL_AUTH_KEY ?? 'PENDIENTE_CREDENCIALES'
+  const AUTH_KEY  = process.env.AZUL_AUTH_KEY ?? ''
 
-  // Generar AuthHash según especificación AZUL (HMAC SHA-512 UTF-16LE)
   let authHash = 'REQUIRES_AUTH_KEY_FROM_AZUL'
-  if (AUTH_KEY && AUTH_KEY !== 'PENDIENTE_CREDENCIALES') {
+  if (AUTH_KEY && AUTH_KEY !== 'REQUIRES_AUTH_KEY_FROM_AZUL') {
     const raw = [
-      MERCHANT_ID, MERCHANT_NAME, MERCHANT_TYPE, CURRENCY,
+      MERCHANT_ID, 'ContactGo', 'ECommerce', '$',
       ORDER_NUM, AMOUNT, ITBIS, APPROVED, DECLINED, CANCEL,
-      '1' // UseCustomField1
+      '1', '', '', '0', '', ''
     ].join('')
     const keyBuf  = Buffer.from(AUTH_KEY, 'utf16le')
     const dataBuf = Buffer.from(raw, 'utf16le')
@@ -49,40 +49,40 @@ export async function GET(req: NextRequest) {
   const paymentUrl = process.env.AZUL_PAYMENT_URL ?? 'https://pruebas.azul.com.do/PaymentPage/'
 
   return NextResponse.json({
-    status: 'SANDBOX_MODE',
+    status: AUTH_KEY ? 'PRODUCTION_READY' : 'SANDBOX_MODE',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
     payment_url: paymentUrl,
     form_fields: {
-      MerchantId:    '***REDACTED***',
-      MerchantName:  MERCHANT_NAME,
-      MerchantType:  MERCHANT_TYPE,
-      CurrencyCode:  CURRENCY,
-      OrderNumber:   ORDER_NUM,
-      Amount:        AMOUNT,
-      ITBIS:         ITBIS,
-      ApprovedUrl:   APPROVED,
-      DeclinedUrl:   DECLINED,
-      CancelUrl:     CANCEL,
+      MerchantId:      MERCHANT_ID,
+      MerchantName:    'ContactGo',
+      MerchantType:    'ECommerce',
+      CurrencyCode:    '$',
+      OrderNumber:     ORDER_NUM,
+      Amount:          AMOUNT,
+      ITBIS:           ITBIS,
+      ApprovedUrl:     APPROVED,
+      DeclinedUrl:     DECLINED,
+      CancelUrl:       CANCEL,
       UseCustomField1: '1',
+      CustomField1Label: '',
+      CustomField1Value: '',
       UseCustomField2: '0',
       CustomField2Label: '',
       CustomField2Value: '',
-      UseGooglePay: '1',
-      AuthHash:      authHash,
+      UseGooglePay:    '1',
+      AuthHash:        authHash,
     },
     notes: {
       amount_dop: 'RD$5,000.00',
       itbis_pct: '18%',
       hash_algo: 'HMAC-SHA512 UTF-16LE',
-      auth_key_status: AUTH_KEY === 'PENDIENTE_CREDENCIALES' 
-        ? AUTH_KEY === 'PENDIENTE_CREDENCIALES' ? 'PENDIENTE — Esperando credenciales de AZUL' : 'CONFIGURADO'
-        : 'CONFIGURADO'
+      auth_key_status: AUTH_KEY ? 'CONFIGURADO' : 'PENDIENTE',
     }
   }, {
     headers: {
       'Cache-Control': 'no-store',
-      'Access-Control-Allow-Origin': 'https://www.contactgo.net'
+      'Access-Control-Allow-Origin': 'https://www.contactgo.net',
     }
   })
 }
