@@ -1,3 +1,5 @@
+export const revalidate = 3600
+
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
