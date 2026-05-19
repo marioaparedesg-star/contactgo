@@ -105,6 +105,7 @@ export default function Page() {
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
       "specialty": "Optometry",
+      "medicalAudience": {"@type": "MedicalAudience", "audienceType": "Patient"},
         "inLanguage": "es-DO",
         "url": "https://www.contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd"
       })}} />

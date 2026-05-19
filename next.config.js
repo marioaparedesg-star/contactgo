@@ -55,6 +55,10 @@ const nextConfig = {
     return [
       { source: '/(.*)', headers: securityHeaders },
       {
+        source: '/(cart|checkout|cuenta|confirmacion|recibo)(/.*)?',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
+      {
         source: '/admin/login',
         headers: [
           { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate' },
