@@ -97,9 +97,27 @@ export default function RecetaPage() {
           className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors text-lg font-bold shrink-0 disabled:cursor-not-allowed">
           −
         </button>
-        <div className="flex-1 text-center text-sm font-semibold text-gray-900 py-2 px-1 min-w-0">
-          {label}
-        </div>
+        <input
+          type="text"
+          inputMode="decimal"
+          value={val || ''}
+          onChange={(e) => {
+            const v = e.target.value
+            if (v === '' || v === '-') { onChange(''); return }
+            const num = parseFloat(v)
+            if (!isNaN(num)) {
+              const closest = opts.reduce((a, b) => 
+                Math.abs(parseFloat(b.val) - num) < Math.abs(parseFloat(a.val) - num) ? b : a
+              )
+              onChange(closest.val)
+            }
+          }}
+          onBlur={() => { if (!val && opts.length) onChange('') }}
+          placeholder={placeholder}
+          disabled={disabled}
+          aria-label={ariaLabel}
+          className="flex-1 text-center text-sm font-semibold text-gray-900 py-2 px-1 min-w-0 bg-transparent outline-none border-none focus:bg-gray-50 transition-colors"
+        />
         <button type="button" onClick={next} disabled={disabled} aria-label={`Aumentar ${ariaLabel}`}
           className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors text-lg font-bold shrink-0 disabled:cursor-not-allowed">
           +

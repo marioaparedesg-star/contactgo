@@ -44,7 +44,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
   images: {
-    unoptimized: false,
+    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'atendbjolicwcsqfyiyh.supabase.co' },
       { protocol: 'https', hostname: 'www.contactgo.net' },
