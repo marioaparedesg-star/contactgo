@@ -1,9 +1,14 @@
+import { guardRequest } from '@/lib/api-guard'
 // GET /api/azul-logs
 // Endpoint público para certificación técnica AZUL — solo muestra parámetros del formulario
 import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
 
 export async function GET(req: NextRequest) {
+  // Rate limit anti-abuse — público pero limitado
+  const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
+  if (guardErr) return guardErr
+
   const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
   const MERCHANT_ID  = process.env.AZUL_MERCHANT_ID  ?? '39038540035'
   const MERCHANT_NAME = 'ContactGo'

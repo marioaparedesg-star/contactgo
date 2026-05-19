@@ -82,6 +82,15 @@ export default async function Page() {
           "@type": "FAQPage",
           "mainEntity": [{"@type": "Question", "name": "¿Cuál es la diferencia entre solución multipropósito y de peróxido?", "acceptedAnswer": {"@type": "Answer", "text": "La multipropósito limpia, aclara y desinfecta en un solo paso. La de peróxido (como AOSept) es más efectiva para limpiar depósitos pero requiere neutralización antes de usar los lentes."}}, {"@type": "Question", "name": "¿Con qué frecuencia debo cambiar la solución?", "acceptedAnswer": {"@type": "Answer", "text": "Debes cambiar la solución de tu estuche cada vez que guardes los lentes. Nunca reutilices la solución anterior ni mezcles marcas diferentes."}}, {"@type": "Question", "name": "¿Puedo usar solución salina para limpiar lentes de contacto?", "acceptedAnswer": {"@type": "Answer", "text": "No. La solución salina solo enjuaga, no desinfecta. Siempre usa una solución multipropósito o de peróxido certificada para lentes de contacto."}}]
         })}} />
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net"},
+          {"@type": "ListItem", "position": 2, "name": "Soluciones para Lentes", "item": "https://contactgo.net/soluciones"}
+        ]
+      })}} />
       </main>
       <Footer />
     </>
