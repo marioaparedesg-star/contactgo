@@ -36,10 +36,10 @@ const SCHEMA_ORG = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://contactgo.net/#org",
+      "@id": "https://www.contactgo.net/#org",
       "name": "ContactGo",
       "url": "https://contactgo.net",
-      "logo": "https://contactgo.net/logo.png",
+      "logo": "https://www.contactgo.net/logo.png",
       "description": "Tienda especializada en lentes de contacto originales en República Dominicana. Entrega en 24-48 horas.",
       "address": { "@type": "PostalAddress", "addressCountry": "DO", "addressLocality": "Santo Domingo" },
       "contactPoint": { "@type": "ContactPoint", "telephone": "+1-829-472-8328", "contactType": "customer service", "availableLanguage": "Spanish" },
@@ -47,7 +47,7 @@ const SCHEMA_ORG = {
     },
     {
       "@type": "Store",
-      "@id": "https://contactgo.net/#store",
+      "@id": "https://www.contactgo.net/#store",
       "name": "ContactGo",
       "url": "https://contactgo.net",
       "description": "Lentes de contacto originales con entrega en 24-48h en República Dominicana.",

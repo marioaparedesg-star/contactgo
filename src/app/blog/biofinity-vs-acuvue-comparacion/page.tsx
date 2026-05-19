@@ -6,12 +6,12 @@ import Link from 'next/link'
 export const metadata = {
   openGraph: {
     title: 'Biofinity vs ACUVUE: ¿Cuál es mejor en RD?',
-    url: 'https://contactgo.net/blog/biofinity-vs-acuvue-comparacion',
+    url: 'https://www.contactgo.net/blog/biofinity-vs-acuvue-comparacion',
     siteName: 'ContactGo',
     locale: 'es_DO',
     type: 'article',
   },
-  alternates: { canonical: 'https://contactgo.net/blog/biofinity-vs-acuvue-comparacion' },
+  alternates: { canonical: 'https://www.contactgo.net/blog/biofinity-vs-acuvue-comparacion' },
   title: 'Biofinity vs ACUVUE: ¿Cuál es mejor en RD? — ContactGo',
   description: 'Comparamos Biofinity de CooperVision vs ACUVUE Oasys de J&J. Precio, comodidad, hidratación y disponibilidad en República Dominicana.',
 }
@@ -122,13 +122,13 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Biofinity vs ACUVUE: ¿Cuál es mejor en RD?",
-        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://contactgo.net/autor/equipo-contactgo"},
-        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
       "specialty": "Optometry",
         "inLanguage": "es-DO",
-        "url": "https://contactgo.net/blog/biofinity-vs-acuvue-comparacion"
+        "url": "https://www.contactgo.net/blog/biofinity-vs-acuvue-comparacion"
       })}} />
       
           {/* Autor médico verificado */}

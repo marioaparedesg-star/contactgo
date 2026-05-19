@@ -8,11 +8,11 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   title: 'Soluciones y Gotas para Lentes de Contacto RD — ContactGo',
   description: 'Soluciones multipropósito y gotas lubricantes para lentes de contacto en República Dominicana. ReNu, Opti-Free, Systane, Refresh. Envío 24-48h.',
-  alternates: { canonical: 'https://contactgo.net/soluciones' },
+  alternates: { canonical: 'https://www.contactgo.net/soluciones' },
   openGraph: {
     title: 'Soluciones y Gotas para Lentes RD',
     description: 'Soluciones multipropósito y gotas para lentes de contacto en RD.',
-    url: 'https://contactgo.net/soluciones',
+    url: 'https://www.contactgo.net/soluciones',
     locale: 'es_DO',
     siteName: 'ContactGo',
     type: 'website',
@@ -72,7 +72,7 @@ export default async function Page() {
           "@type": "ItemList",
           "name": "Lentes de contacto soluciones en República Dominicana",
           "description": "Lista de lentes de contacto soluciones disponibles en ContactGo RD",
-          "url": "https://contactgo.net/soluciones",
+          "url": "https://www.contactgo.net/soluciones",
           "itemListElement": []
         })}} />
 
@@ -88,7 +88,7 @@ export default async function Page() {
         "@type": "BreadcrumbList",
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net"},
-          {"@type": "ListItem", "position": 2, "name": "Soluciones para Lentes", "item": "https://contactgo.net/soluciones"}
+          {"@type": "ListItem", "position": 2, "name": "Soluciones para Lentes", "item": "https://www.contactgo.net/soluciones"}
         ]
       })}} />
       </main>

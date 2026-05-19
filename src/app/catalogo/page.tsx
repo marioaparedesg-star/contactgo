@@ -34,8 +34,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   return {
     title: 'Catálogo de Lentes de Contacto | ContactGo República Dominicana',
     description: 'Catálogo completo de lentes de contacto en RD. Esféricos, tóricos, multifocales y de colores. Acuvue, Air Optix, Biofinity. Envío 24-48h.',
-    alternates: { canonical: 'https://contactgo.net/catalogo' },
-    openGraph: { title: 'Catálogo — Lentes de Contacto RD', description: 'Todas las marcas premium con entrega a domicilio.', url: 'https://contactgo.net/catalogo', locale: 'es_DO', siteName: 'ContactGo' },
+    alternates: { canonical: 'https://www.contactgo.net/catalogo' },
+    openGraph: { title: 'Catálogo — Lentes de Contacto RD', description: 'Todas las marcas premium con entrega a domicilio.', url: 'https://www.contactgo.net/catalogo', locale: 'es_DO', siteName: 'ContactGo' },
   }
 }
 

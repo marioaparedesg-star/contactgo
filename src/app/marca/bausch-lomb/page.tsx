@@ -8,11 +8,11 @@ import type { Metadata } from 'next'
 export const metadata = {
   title: 'Lentes Bausch+Lomb en República Dominicana | ContactGo',
   description: 'Lentes Bausch+Lomb ULTRA® y solución ReNu® en RD. 170 años de experiencia en salud visual. Envío a domicilio.',
-  alternates: { canonical: 'https://contactgo.net/marca/bausch-lomb' },
+  alternates: { canonical: 'https://www.contactgo.net/marca/bausch-lomb' },
   openGraph: {
     title: 'Lentes Bausch+Lomb en RD | ContactGo',
     description: 'Distribuidor autorizado de Bausch+Lomb en República Dominicana.',
-    url: 'https://contactgo.net/marca/bausch-lomb',
+    url: 'https://www.contactgo.net/marca/bausch-lomb',
     locale: 'es_DO',
     siteName: 'ContactGo',
     type: 'website',

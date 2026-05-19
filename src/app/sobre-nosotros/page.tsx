@@ -1,3 +1,5 @@
+export const revalidate = 3600
+
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
@@ -5,7 +7,7 @@ import type { Metadata } from 'next'
 
 // canonical agregado
 export const metadata: Metadata = {
-  alternates: { canonical: 'https://contactgo.net/sobre-nosotros' },
+  alternates: { canonical: 'https://www.contactgo.net/sobre-nosotros' },
   title: 'Sobre Nosotros | ContactGo — Lentes de Contacto RD',
   description: 'Conoce a ContactGo, la única tienda dominicana especializada 100% en lentes de contacto originales. Distribuidores autorizados de ACUVUE, Alcon, CooperVision y Bausch+Lomb.',
 }
@@ -149,7 +151,7 @@ export default function SobreNosotrosPage() {
         "@type": "Organization",
         "name": "ContactGo",
         "url": "https://contactgo.net",
-        "logo": "https://contactgo.net/logo.png",
+        "logo": "https://www.contactgo.net/logo.png",
         "description": "Tienda especializada en lentes de contacto originales en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Envío a domicilio en 24-48h.",
         "foundingDate": "2026",
         "address": {

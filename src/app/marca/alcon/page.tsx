@@ -8,11 +8,11 @@ import type { Metadata } from 'next'
 export const metadata = {
   title: 'Lentes Alcon en República Dominicana | ContactGo',
   description: 'Lentes Air Optix®, FreshLook® y gotas Systane® de Alcon en RD. Distribuidor autorizado. Envío a domicilio.',
-  alternates: { canonical: 'https://contactgo.net/marca/alcon' },
+  alternates: { canonical: 'https://www.contactgo.net/marca/alcon' },
   openGraph: {
     title: 'Lentes Alcon en RD | ContactGo',
     description: 'Distribuidor autorizado de Alcon en República Dominicana.',
-    url: 'https://contactgo.net/marca/alcon',
+    url: 'https://www.contactgo.net/marca/alcon',
     locale: 'es_DO',
     siteName: 'ContactGo',
     type: 'website',

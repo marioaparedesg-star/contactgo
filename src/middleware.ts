@@ -83,7 +83,7 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/admin/:path*',
+    '/admin/((?!login$|login/).*)' ,  // protege /admin/* EXCEPTO /admin/login
     '/api/:path*',
     '/checkout',
     '/cart',

@@ -6,12 +6,12 @@ import Link from 'next/link'
 export const metadata = {
   openGraph: {
     title: 'Primeros Pasos con Lentes de Contacto en RD',
-    url: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd',
+    url: 'https://www.contactgo.net/blog/primeros-pasos-lentes-contacto-rd',
     siteName: 'ContactGo',
     locale: 'es_DO',
     type: 'article',
   },
-  alternates: { canonical: 'https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd' },
+  alternates: { canonical: 'https://www.contactgo.net/blog/primeros-pasos-lentes-contacto-rd' },
   title: 'Primeros pasos con lentes de contacto en RD — ContactGo',
   description: 'Guía completa para quienes quieren empezar a usar lentes de contacto en República Dominicana. Qué necesitas, cómo empezar y qué esperar.',
 }
@@ -144,13 +144,13 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Primeros pasos con lentes de contacto en RD",
-        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://contactgo.net/autor/equipo-contactgo"},
-        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
       "specialty": "Optometry",
         "inLanguage": "es-DO",
-        "url": "https://contactgo.net/blog/primeros-pasos-lentes-contacto-rd"
+        "url": "https://www.contactgo.net/blog/primeros-pasos-lentes-contacto-rd"
       })}} />
       
           {/* Autor médico verificado */}

@@ -8,11 +8,11 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Punta Cana RD | Envío a Domicilio — ContactGo',
   description: 'Compra lentes de contacto con entrega en Punta Cana. ACUVUE, Biofinity, Air Optix 100% originales. Envío RD$350. Entrega en 48-72 horas.',
-  alternates: { canonical: 'https://contactgo.net/lentes-de-contacto/punta-cana' },
+  alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/punta-cana' },
   openGraph: {
     title: 'Lentes de Contacto en Punta Cana | ContactGo',
     description: 'Entrega a domicilio en Punta Cana en 48-72 horas. Distribuidores autorizados.',
-    url: 'https://contactgo.net/lentes-de-contacto/punta-cana',
+    url: 'https://www.contactgo.net/lentes-de-contacto/punta-cana',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
 }
@@ -116,7 +116,7 @@ export default async function Page() {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": "ContactGo — Lentes de Contacto Punta Cana",
-        "url": "https://contactgo.net/lentes-de-contacto/punta-cana",
+        "url": "https://www.contactgo.net/lentes-de-contacto/punta-cana",
         "telephone": "+1-829-472-8328",
         "email": "info@contactgo.net",
         "areaServed": {
@@ -131,7 +131,7 @@ export default async function Page() {
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Lentes de contacto en Punta Cana",
-          "url": "https://contactgo.net/catalogo"
+          "url": "https://www.contactgo.net/catalogo"
         }
       })}} />
       </main>

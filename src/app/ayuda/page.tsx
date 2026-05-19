@@ -1,3 +1,5 @@
+export const revalidate = 3600
+
 import type { Metadata } from 'next'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
@@ -7,7 +9,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Ayuda — Envíos, Devoluciones, Guía Médica | ContactGo RD',
   description: 'Centro de ayuda ContactGo: envíos, devoluciones, tiempos de adaptación, lentes secos, errores comunes y guía completa de lentes de contacto en República Dominicana.',
-  alternates: { canonical: 'https://contactgo.net/ayuda' },
+  alternates: { canonical: 'https://www.contactgo.net/ayuda' },
 }
 
 const faqSchema = {

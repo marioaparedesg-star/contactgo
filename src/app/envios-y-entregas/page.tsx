@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 
 // canonical agregado
 export const metadata: Metadata = {
-  alternates: { canonical: 'https://contactgo.net/envios-y-entregas' },
+  alternates: { canonical: 'https://www.contactgo.net/envios-y-entregas' },
   title: 'Envíos y Entregas | ContactGo — Lentes de Contacto RD',
   description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Entrega en 24-72 horas a todo el país.',
 }

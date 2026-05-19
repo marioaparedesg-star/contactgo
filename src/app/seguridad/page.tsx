@@ -5,7 +5,7 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 
 export const metadata: Metadata = {
-  alternates: { canonical: 'https://contactgo.net/seguridad' },
+  alternates: { canonical: 'https://www.contactgo.net/seguridad' },
   title: 'Política de Seguridad | ContactGo',
   description: 'Políticas de seguridad para la transmisión de datos de tarjetas en ContactGo. Verified by Visa y Mastercard ID Check.',
 }

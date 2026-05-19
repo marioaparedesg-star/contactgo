@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Envíos y Entregas | ContactGo República Dominicana',
   description: 'Envíos en 24-48 horas a Santo Domingo, Santiago y toda la República Dominicana. Costo de envío, zonas de cobertura y política de entregas.',
-  alternates: { canonical: 'https://contactgo.net/ayuda/envios' },
+  alternates: { canonical: 'https://www.contactgo.net/ayuda/envios' },
   openGraph: {
     title: 'Envíos y Entregas | ContactGo República Dominicana',
     description: 'Envíos en 24-48 horas a Santo Domingo, Santiago y toda la República Dominicana. Costo de envío, zonas de cobertura y política de entregas.',
-    url: 'https://contactgo.net/ayuda/envios',
+    url: 'https://www.contactgo.net/ayuda/envios',
     locale: 'es_DO',
     siteName: 'ContactGo',
   },

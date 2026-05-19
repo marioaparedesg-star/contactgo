@@ -6,7 +6,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Política de Devoluciones — ContactGo',
   description: 'Política de devoluciones de ContactGo. 48 horas para devolver productos sellados y sin abrir. Reembolso por el mismo método de pago.',
-  alternates: { canonical: 'https://contactgo.net/devoluciones' },
+  alternates: { canonical: 'https://www.contactgo.net/devoluciones' },
 }
 
 export default function DevolucionesPage() {

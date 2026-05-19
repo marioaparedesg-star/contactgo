@@ -1,3 +1,5 @@
+export const revalidate = 3600
+
 import Link from 'next/link'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
@@ -110,7 +112,7 @@ const POSTS = [
 ]
 
 export const metadata = {
-  alternates: { canonical: 'https://contactgo.net/blog' },
+  alternates: { canonical: 'https://www.contactgo.net/blog' },
   title: 'Blog — ContactGo | Guías de lentes de contacto en RD',
   description: 'Guías, tutoriales y consejos sobre lentes de contacto en República Dominicana.',
 }

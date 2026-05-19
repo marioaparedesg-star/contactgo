@@ -4,11 +4,11 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Cómo leer tu receta óptica para lentes de contacto — Guía visual RD',
   description: 'Aprende a leer tu receta óptica en República Dominicana. Qué significa SPH, CYL, AXIS, ADD y BC. Guía paso a paso para entender tu graduación y comprar los lentes correctos.',
-  alternates: { canonical: 'https://contactgo.net/blog/como-leer-receta-optica-rd' },
+  alternates: { canonical: 'https://www.contactgo.net/blog/como-leer-receta-optica-rd' },
   openGraph: {
     title: 'Cómo leer tu receta óptica — Guía para comprar lentes de contacto en RD',
     description: 'Guía visual para entender tu receta óptica: SPH, CYL, AXIS, ADD y BC explicados en español.',
-    url: 'https://contactgo.net/blog/como-leer-receta-optica-rd',
+    url: 'https://www.contactgo.net/blog/como-leer-receta-optica-rd',
     locale: 'es_DO', siteName: 'ContactGo', type: 'article',
   },
 }
@@ -123,13 +123,13 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Cómo leer tu receta óptica para lentes de contacto",
-        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://contactgo.net/autor/equipo-contactgo"},
-        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
       "specialty": "Optometry",
         "inLanguage": "es-DO",
-        "url": "https://contactgo.net/blog/como-leer-receta-optica-rd"
+        "url": "https://www.contactgo.net/blog/como-leer-receta-optica-rd"
       })}} />
       
           {/* Autor médico verificado */}

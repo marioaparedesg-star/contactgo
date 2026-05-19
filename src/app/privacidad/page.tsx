@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Política de Privacidad — ContactGo',
   description: 'Política de privacidad de ContactGo. Cómo recopilamos, usamos y protegemos tus datos personales conforme a la Ley 172-13 de República Dominicana.',
   robots: { index: false, follow: false },
-  alternates: { canonical: 'https://contactgo.net/privacidad' },
+  alternates: { canonical: 'https://www.contactgo.net/privacidad' },
 }
 
 const secciones = [

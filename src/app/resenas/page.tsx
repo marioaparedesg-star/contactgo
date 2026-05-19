@@ -1,3 +1,5 @@
+export const revalidate = 3600
+
 import type { Metadata } from 'next'
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
@@ -6,7 +8,7 @@ import { Star } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Reseñas de Clientes — ContactGo República Dominicana',
   description: 'Lee las opiniones reales de clientes que compran lentes de contacto en ContactGo. Reseñas verificadas de Acuvue, Air Optix, Biofinity y más marcas en RD.',
-  alternates: { canonical: 'https://contactgo.net/resenas' },
+  alternates: { canonical: 'https://www.contactgo.net/resenas' },
 }
 
 async function getResenas() {

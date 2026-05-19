@@ -8,11 +8,11 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santiago RD | Envío a Domicilio — ContactGo',
   description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity, Air Optix 100% originales. Envío RD$350. Entrega en 24-48 horas.',
-  alternates: { canonical: 'https://contactgo.net/lentes-de-contacto/santiago' },
+  alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santiago' },
   openGraph: {
     title: 'Lentes de Contacto en Santiago | ContactGo',
     description: 'Entrega a domicilio en Santiago en 24-48 horas. Distribuidores autorizados.',
-    url: 'https://contactgo.net/lentes-de-contacto/santiago',
+    url: 'https://www.contactgo.net/lentes-de-contacto/santiago',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
 }
@@ -116,7 +116,7 @@ export default async function Page() {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": "ContactGo — Lentes de Contacto Santiago de los Caballeros",
-        "url": "https://contactgo.net/lentes-de-contacto/santiago",
+        "url": "https://www.contactgo.net/lentes-de-contacto/santiago",
         "telephone": "+1-829-472-8328",
         "email": "info@contactgo.net",
         "areaServed": {
@@ -131,7 +131,7 @@ export default async function Page() {
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Lentes de contacto en Santiago de los Caballeros",
-          "url": "https://contactgo.net/catalogo"
+          "url": "https://www.contactgo.net/catalogo"
         }
       })}} />
       </main>

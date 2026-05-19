@@ -8,11 +8,11 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santo Domingo RD | Envío 24-48h — ContactGo',
   description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity, Air Optix 100% originales. Envío RD$200. Entrega en 24-48 horas.',
-  alternates: { canonical: 'https://contactgo.net/lentes-de-contacto/santo-domingo' },
+  alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo' },
   openGraph: {
     title: 'Lentes de Contacto en Santo Domingo | ContactGo',
     description: 'Entrega a domicilio en Santo Domingo en 24-48h. Distribuidores autorizados.',
-    url: 'https://contactgo.net/lentes-de-contacto/santo-domingo',
+    url: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
 }
@@ -127,7 +127,7 @@ export default async function Page() {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": "ContactGo — Lentes de Contacto Santo Domingo",
-        "url": "https://contactgo.net/lentes-de-contacto/santo-domingo",
+        "url": "https://www.contactgo.net/lentes-de-contacto/santo-domingo",
         "telephone": "+1-829-472-8328",
         "email": "info@contactgo.net",
         "areaServed": {
@@ -142,7 +142,7 @@ export default async function Page() {
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Lentes de contacto en Santo Domingo",
-          "url": "https://contactgo.net/catalogo"
+          "url": "https://www.contactgo.net/catalogo"
         }
       })}} />
       </main>

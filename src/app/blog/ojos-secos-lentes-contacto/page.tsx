@@ -6,12 +6,12 @@ import Link from 'next/link'
 export const metadata = {
   openGraph: {
     title: 'Lentes de Contacto para Ojos Secos',
-    url: 'https://contactgo.net/blog/ojos-secos-lentes-contacto',
+    url: 'https://www.contactgo.net/blog/ojos-secos-lentes-contacto',
     siteName: 'ContactGo',
     locale: 'es_DO',
     type: 'article',
   },
-  alternates: { canonical: 'https://contactgo.net/blog/ojos-secos-lentes-contacto' },
+  alternates: { canonical: 'https://www.contactgo.net/blog/ojos-secos-lentes-contacto' },
   title: 'Ojos secos y lentes de contacto: soluciones reales — ContactGo',
   description: 'Tienes ojos secos y usas lentes de contacto? Descubre qué productos y marcas funcionan mejor para mantener tus ojos hidratados en RD.',
 }
@@ -111,13 +111,13 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Ojos secos y lentes de contacto: soluciones reales",
-        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://contactgo.net/autor/equipo-contactgo"},
-        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
       "specialty": "Optometry",
         "inLanguage": "es-DO",
-        "url": "https://contactgo.net/blog/ojos-secos-lentes-contacto"
+        "url": "https://www.contactgo.net/blog/ojos-secos-lentes-contacto"
       })}} />
       
           {/* Autor médico verificado */}

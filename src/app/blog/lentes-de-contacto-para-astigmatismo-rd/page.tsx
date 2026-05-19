@@ -6,12 +6,12 @@ import Link from 'next/link'
 export const metadata = {
   openGraph: {
     title: 'Lentes para Astigmatismo en RD',
-    url: 'https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd',
+    url: 'https://www.contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd',
     siteName: 'ContactGo',
     locale: 'es_DO',
     type: 'article',
   },
-  alternates: { canonical: 'https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd' },
+  alternates: { canonical: 'https://www.contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd' },
   title: 'Lentes de contacto para astigmatismo en RD — ContactGo',
   description: 'Todo lo que necesitas saber sobre lentes tóricos para astigmatismo en República Dominicana. Marcas, precios y cómo elegir el correcto.',
 }
@@ -100,13 +100,13 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Lentes de contacto para astigmatismo en RD",
-        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://contactgo.net/autor/equipo-contactgo"},
-        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
       "specialty": "Optometry",
         "inLanguage": "es-DO",
-        "url": "https://contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd"
+        "url": "https://www.contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd"
       })}} />
       
           {/* Autor médico verificado */}

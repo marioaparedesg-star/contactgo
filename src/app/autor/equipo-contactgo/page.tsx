@@ -6,7 +6,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Equipo ContactGo — Especialistas en Salud Visual',
   description: 'Nuestro equipo editorial es revisado por optómetras certificados con experiencia en lentes de contacto en República Dominicana.',
-  alternates: { canonical: 'https://contactgo.net/autor/equipo-contactgo' },
+  alternates: { canonical: 'https://www.contactgo.net/autor/equipo-contactgo' },
 }
 
 export default function AutorPage() {

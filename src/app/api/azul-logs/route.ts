@@ -5,9 +5,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
 
 export async function GET(req: NextRequest) {
-  // Rate limit anti-abuse — público pero limitado
+  // Rate limit anti-abuse
   const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
   if (guardErr) return guardErr
+
+  // Remover CORS wildcard — solo desde contactgo.net o con token
+  const origin = req.headers.get('origin') ?? ''
+  const auth = req.headers.get('authorization') ?? ''
+  const token = process.env.AZUL_LOGS_TOKEN ?? ''
+  const isContactGo = origin.includes('contactgo.net')
+  const hasToken = token && auth === `Bearer ${token}`
+  
+  if (!isContactGo && !hasToken && origin !== '') {
+    return NextResponse.json({ error: 'Acceso restringido' }, { status: 401 })
+  }
 
   const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
   const MERCHANT_ID  = process.env.AZUL_MERCHANT_ID  ?? '39038540035'
@@ -71,7 +82,7 @@ export async function GET(req: NextRequest) {
   }, {
     headers: {
       'Cache-Control': 'no-store',
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': 'https://www.contactgo.net'
     }
   })
 }

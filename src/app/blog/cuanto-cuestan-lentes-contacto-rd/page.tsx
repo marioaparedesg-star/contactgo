@@ -4,11 +4,11 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: '¿Cuánto cuestan los lentes de contacto en República Dominicana? — ContactGo',
   description: 'Guía de precios de lentes de contacto en RD 2026. Compara Acuvue, Air Optix, Biofinity vs ópticas físicas. Descubre por qué comprar online es hasta 40% más barato.',
-  alternates: { canonical: 'https://contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd' },
+  alternates: { canonical: 'https://www.contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd' },
   openGraph: {
     title: '¿Cuánto cuestan los lentes de contacto en RD? Guía de precios 2026',
     description: 'Compara precios de lentes de contacto en ópticas vs online en República Dominicana.',
-    url: 'https://contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd',
+    url: 'https://www.contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd',
     locale: 'es_DO', siteName: 'ContactGo', type: 'article',
   },
 }
@@ -109,13 +109,13 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "¿Cuánto cuestan los lentes de contacto en República Dominicana?",
-        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://contactgo.net/autor/equipo-contactgo"},
-        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
       "specialty": "Optometry",
         "inLanguage": "es-DO",
-        "url": "https://contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd"
+        "url": "https://www.contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd"
       })}} />
       
           {/* Autor médico verificado */}

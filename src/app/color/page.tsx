@@ -8,11 +8,11 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   title: 'Lentes de Color RD | FreshLook, Air Optix Colors — ContactGo',
   description: 'Lentes de contacto de color en República Dominicana. FreshLook Colorblends, Air Optix Colors. Con y sin graduación. Entrega a domicilio en 24-48h.',
-  alternates: { canonical: 'https://contactgo.net/color' },
+  alternates: { canonical: 'https://www.contactgo.net/color' },
   openGraph: {
     title: 'Lentes de Color RD | FreshLook, Air Optix Colors',
     description: 'Lentes de contacto de color en República Dominicana. AIR OPTIX Colors, FreshLook Colorblends, Lunare Tri-Kolor. Colores naturales y dramáticos.',
-    url: 'https://contactgo.net/color',
+    url: 'https://www.contactgo.net/color',
     locale: 'es_DO',
     siteName: 'ContactGo',
     type: 'website',
@@ -70,7 +70,7 @@ export default async function Page() {
           "@type": "ItemList",
           "name": "Lentes de contacto color en República Dominicana",
           "description": "Lista de lentes de contacto color disponibles en ContactGo RD",
-          "url": "https://contactgo.net/color",
+          "url": "https://www.contactgo.net/color",
           "itemListElement": []
         })}} />
 
@@ -86,7 +86,7 @@ export default async function Page() {
         "@type": "BreadcrumbList",
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net"},
-          {"@type": "ListItem", "position": 2, "name": "Lentes de Contacto de Color", "item": "https://contactgo.net/color"}
+          {"@type": "ListItem", "position": 2, "name": "Lentes de Contacto de Color", "item": "https://www.contactgo.net/color"}
         ]
       })}} />
       </main>

@@ -16,7 +16,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
       latency_ms: Date.now() - start,
       services: { supabase: 'ok' },
-      version: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'local'
+      version: 'ok'
     })
   } catch (error: any) {
     return Response.json({

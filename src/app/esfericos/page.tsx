@@ -8,8 +8,8 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   title: 'Lentes Esféricos RD | Miopía e Hipermetropía — ContactGo',
   description: 'Compra lentes de contacto esféricos en República Dominicana. ACUVUE Moist, Air Optix, Biofinity para miopía e hipermetropía. Envío 24-48h a todo el país.',
-  alternates: { canonical: 'https://contactgo.net/esfericos' },
-  openGraph: { title: 'Lentes Esféricos RD | Miopía e Hipermetropía', description: 'Los mejores lentes esféricos originales con envío a domicilio en RD.', url: 'https://contactgo.net/esfericos', locale: 'es_DO', siteName: 'ContactGo', type: 'website' },
+  alternates: { canonical: 'https://www.contactgo.net/esfericos' },
+  openGraph: { title: 'Lentes Esféricos RD | Miopía e Hipermetropía', description: 'Los mejores lentes esféricos originales con envío a domicilio en RD.', url: 'https://www.contactgo.net/esfericos', locale: 'es_DO', siteName: 'ContactGo', type: 'website' },
 }
 
 export const revalidate = 60
@@ -82,7 +82,7 @@ export default async function Page() {
           "@type": "ItemList",
           "name": "Lentes de contacto esfericos en República Dominicana",
           "description": "Lista de lentes de contacto esfericos disponibles en ContactGo RD",
-          "url": "https://contactgo.net/esfericos",
+          "url": "https://www.contactgo.net/esfericos",
           "itemListElement": []
         })}} />
 
@@ -91,7 +91,7 @@ export default async function Page() {
         "@type": "BreadcrumbList",
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net"},
-          {"@type": "ListItem", "position": 2, "name": "Lentes de Contacto Esféricos", "item": "https://contactgo.net/esfericos"}
+          {"@type": "ListItem", "position": 2, "name": "Lentes de Contacto Esféricos", "item": "https://www.contactgo.net/esfericos"}
         ]
       })}} />
       </main>

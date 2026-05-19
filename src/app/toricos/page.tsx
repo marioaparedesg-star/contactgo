@@ -8,11 +8,11 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   title: 'Lentes para Astigmatismo RD | Lentes Tóricos — ContactGo',
   description: 'Lentes tóricos para astigmatismo en República Dominicana. ACUVUE Oasys for Astigmatism, Biofinity Toric, Air Optix for Astigmatism. Fabricados a medida.',
-  alternates: { canonical: 'https://contactgo.net/toricos' },
+  alternates: { canonical: 'https://www.contactgo.net/toricos' },
   openGraph: {
     title: 'Lentes Tóricos para Astigmatismo RD',
     description: 'Lentes de contacto tóricos para astigmatismo en RD. ACUVUE Oasys for Astigmatism, Biofinity Toric, Air Optix for Astigmatism. Envío a domicilio.',
-    url: 'https://contactgo.net/toricos',
+    url: 'https://www.contactgo.net/toricos',
     locale: 'es_DO',
     siteName: 'ContactGo',
     type: 'website',
@@ -88,7 +88,7 @@ export default async function Page() {
           "@type": "ItemList",
           "name": "Lentes de contacto toricos en República Dominicana",
           "description": "Lista de lentes de contacto toricos disponibles en ContactGo RD",
-          "url": "https://contactgo.net/toricos",
+          "url": "https://www.contactgo.net/toricos",
           "itemListElement": []
         })}} />
 
@@ -97,7 +97,7 @@ export default async function Page() {
         "@type": "BreadcrumbList",
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net"},
-          {"@type": "ListItem", "position": 2, "name": "Lentes Tóricos para Astigmatismo", "item": "https://contactgo.net/toricos"}
+          {"@type": "ListItem", "position": 2, "name": "Lentes Tóricos para Astigmatismo", "item": "https://www.contactgo.net/toricos"}
         ]
       })}} />
       </main>

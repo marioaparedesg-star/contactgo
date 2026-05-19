@@ -8,11 +8,11 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   title: 'Lentes Multifocales para Presbicia RD — ContactGo',
   description: 'Lentes multifocales para presbicia y vista cansada en República Dominicana. ACUVUE Oasys Presbyopia, AIR OPTIX Multifocal, Proclear Multifocal. Envío 24-48h.',
-  alternates: { canonical: 'https://contactgo.net/multifocales' },
+  alternates: { canonical: 'https://www.contactgo.net/multifocales' },
   openGraph: {
     title: 'Lentes Multifocales para Presbicia RD',
     description: 'Lentes de contacto multifocales en RD para presbicia. ACUVUE OASYS Multifocal, Biofinity Multifocal, Proclear Multifocal. Ve bien de cerca y lejos.',
-    url: 'https://contactgo.net/multifocales',
+    url: 'https://www.contactgo.net/multifocales',
     locale: 'es_DO',
     siteName: 'ContactGo',
     type: 'website',
@@ -66,7 +66,7 @@ export default async function Page() {
           "@type": "ItemList",
           "name": "Lentes de contacto multifocales en República Dominicana",
           "description": "Lista de lentes de contacto multifocales disponibles en ContactGo RD",
-          "url": "https://contactgo.net/multifocales",
+          "url": "https://www.contactgo.net/multifocales",
           "itemListElement": []
         })}} />
 
@@ -82,7 +82,7 @@ export default async function Page() {
         "@type": "BreadcrumbList",
         "itemListElement": [
           {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net"},
-          {"@type": "ListItem", "position": 2, "name": "Lentes Multifocales", "item": "https://contactgo.net/multifocales"}
+          {"@type": "ListItem", "position": 2, "name": "Lentes Multifocales", "item": "https://www.contactgo.net/multifocales"}
         ]
       })}} />
       </main>

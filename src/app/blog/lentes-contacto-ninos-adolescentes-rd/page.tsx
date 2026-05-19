@@ -4,11 +4,11 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Lentes de Contacto para Niños y Adolescentes en RD — ¿A qué edad? — ContactGo',
   description: '¿Tu hijo puede usar lentes de contacto? Descubre la edad recomendada, los mejores tipos para jóvenes y cómo hacer la transición segura en República Dominicana.',
-  alternates: { canonical: 'https://contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd' },
+  alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd' },
   openGraph: {
     title: 'Lentes de contacto para adolescentes en RD — ¿Cuándo empezar?',
     description: 'Guía para padres: edad, tipos de lentes y consejos para que tu hijo use lentes de contacto de forma segura en RD.',
-    url: 'https://contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd',
+    url: 'https://www.contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd',
     locale: 'es_DO', siteName: 'ContactGo', type: 'article',
   },
 }
@@ -126,13 +126,13 @@ export default function Page() {
         "@context": "https://schema.org",
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Lentes de Contacto para Niños y Adolescentes en RD",
-        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://contactgo.net/autor/equipo-contactgo"},
-        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://contactgo.net/logo.png"}},
+        "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo"},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-17",
       "specialty": "Optometry",
         "inLanguage": "es-DO",
-        "url": "https://contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd"
+        "url": "https://www.contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd"
       })}} />
       
           {/* Autor médico verificado */}

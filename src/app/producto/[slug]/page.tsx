@@ -64,7 +64,7 @@ export default async function ProductoPage(
     "@id": `https://contactgo.net/producto/${product.slug}#product`,
     "name": product.nombre,
     "description": product.descripcion ?? `${product.nombre} disponible en ContactGo República Dominicana.`,
-    "image": product.imagen_url ?? "https://contactgo.net/icon-512.png",
+    "image": product.imagen_url ?? "https://www.contactgo.net/icon-512.png",
     "brand": { "@type": "Brand", "name": product.marca ?? "ContactGo" },
     "sku": product.id,
     "mpn": product.sku ? String(product.sku) : `CG-${String(product.id).slice(0,8).toUpperCase()}`,
@@ -98,7 +98,7 @@ export default async function ProductoPage(
         "merchantReturnDays": "2",
         "returnMethod": "https://schema.org/ReturnByMail",
         "returnFees": "https://schema.org/FreeReturn",
-        "merchantReturnLink": "https://contactgo.net/devoluciones"
+        "merchantReturnLink": "https://www.contactgo.net/devoluciones"
       }
     }
   }
@@ -127,7 +127,7 @@ export default async function ProductoPage(
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net" },
-      { "@type": "ListItem", "position": 2, "name": "Catálogo", "item": "https://contactgo.net/catalogo" },
+      { "@type": "ListItem", "position": 2, "name": "Catálogo", "item": "https://www.contactgo.net/catalogo" },
       { "@type": "ListItem", "position": 3, "name": product.nombre, "item": `https://contactgo.net/producto/${product.slug}` }
     ]
   }

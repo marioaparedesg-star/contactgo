@@ -1,13 +1,15 @@
+export const revalidate = 3600
+
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Preguntas Frecuentes | ContactGo — Lentes de Contacto RD',
   description: '¿Cómo usar lentes de contacto? ¿Cómo pedir? ¿Cuánto tarda el envío? Todas las respuestas sobre comprar lentes en República Dominicana.',
-  alternates: { canonical: 'https://contactgo.net/faq' },
+  alternates: { canonical: 'https://www.contactgo.net/faq' },
   openGraph: {
     title: 'Preguntas Frecuentes | ContactGo — Lentes de Contacto RD',
     description: '¿Cómo usar lentes de contacto? ¿Cómo pedir? ¿Cuánto tarda el envío? Todas las respuestas sobre comprar lentes en República Dominicana.',
-    url: 'https://contactgo.net/faq',
+    url: 'https://www.contactgo.net/faq',
     locale: 'es_DO',
     siteName: 'ContactGo',
   },
