@@ -27,6 +27,6 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     host: 'https://contactgo.net',
-    sitemap: 'https://contactgo.net/sitemap.xml',
+    sitemap: 'https://www.contactgo.net/sitemap.xml',
   }
 }

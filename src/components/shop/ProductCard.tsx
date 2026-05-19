@@ -87,7 +87,7 @@ export default function ProductCard({ product }: Props) {
 
         {product.imagen_url ? (
           <Image
-            src={product.imagen_url}
+            src={product.imagen_url} unoptimized
             alt={`${product.nombre}${product.marca ? ' — ' + product.marca : ''} — lente de contacto en República Dominicana`}
             fill
             className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"

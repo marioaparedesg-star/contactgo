@@ -196,7 +196,7 @@ export default function ProductoClient({ product, variants }: Props) {
             <div className="rounded-2xl overflow-hidden bg-white border border-gray-100 aspect-square flex items-center justify-center shadow-sm">
               {product.imagen_url ? (
                 <Image src={product.imagen_url} alt={product.nombre} width={420} height={420}
-                  className="object-contain p-10" priority />
+                  className="object-contain p-10" priority unoptimized />
               ) : (
                 <Eye className="w-20 h-20 text-gray-200" />
               )}

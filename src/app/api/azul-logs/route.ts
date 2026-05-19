@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     environment: process.env.NODE_ENV,
     payment_url: paymentUrl,
     form_fields: {
-      MerchantId:    MERCHANT_ID,
+      MerchantId:    '***REDACTED***',
       MerchantName:  MERCHANT_NAME,
       MerchantType:  MERCHANT_TYPE,
       CurrencyCode:  CURRENCY,
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
       itbis_pct: '18%',
       hash_algo: 'HMAC-SHA512 UTF-16LE',
       auth_key_status: AUTH_KEY === 'PENDIENTE_CREDENCIALES' 
-        ? 'PENDIENTE — Esperando credenciales de AZUL (fparedes@azul.com.do)'
+        ? AUTH_KEY === 'PENDIENTE_CREDENCIALES' ? 'PENDIENTE — Esperando credenciales de AZUL' : 'CONFIGURADO'
         : 'CONFIGURADO'
     }
   }, {
