@@ -1,40 +1,45 @@
-import { redirect } from 'next/navigation'
-import { cookies, headers } from 'next/headers'
-import { createServerSupabaseClient } from '@/lib/supabase-server'
+'use client'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  // Leer la ruta actual desde el header x-pathname que Next.js expone
-  const headersList = headers()
-  const referer = headersList.get('referer') ?? ''
-  const invokedPath = headersList.get('x-invoke-path') ?? 
-                      headersList.get('x-pathname') ??
-                      headersList.get('x-url') ?? ''
-  
-  // Detectar si estamos en /admin/login a través de la cookie de sesión
-  // En /admin/login NO hay sesión (es el punto de entrada de login)
-  // Todos los demás /admin/* requieren sesión válida
-  
-  // Verificar la sesión
-  const sb = createServerSupabaseClient()
-  const { data: { user }, error } = await sb.auth.getUser()
-  
-  // Si no hay usuario, redirigir a login
-  // PERO: /admin/login se renderiza SIN el layout de admin gracias al
-  // archivo src/app/admin/login/layout.tsx que hace override
-  if (!user) {
-    redirect('/admin/login')
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const router = useRouter()
+  const [checking, setChecking] = useState(true)
+
+  useEffect(() => {
+    // /admin/login es pública — no verificar
+    if (pathname === '/admin/login') {
+      setChecking(false)
+      return
+    }
+
+    // Verificar sesión para todas las demás rutas /admin/*
+    const sb = createClient()
+    sb.auth.getUser().then(({ data: { user } }) => {
+      if (!user) {
+        router.replace('/admin/login')
+      } else {
+        setChecking(false)
+      }
+    })
+  }, [pathname, router])
+
+  // En /admin/login mostrar directamente sin check
+  if (pathname === '/admin/login') {
+    return <>{children}</>
   }
-  
-  // Verificar rol admin
-  const { data: profile } = await sb
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile || !['admin','operaciones','ventas','soporte'].includes(profile.role ?? '')) {
-    redirect('/')
+
+  // Mostrar loading mientras verifica auth
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
   }
-  
+
   return <>{children}</>
 }
