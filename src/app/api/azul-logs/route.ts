@@ -49,6 +49,10 @@ export async function GET(req: NextRequest) {
       DeclinedUrl:   DECLINED,
       CancelUrl:     CANCEL,
       UseCustomField1: '1',
+      UseCustomField2: '0',
+      CustomField2Label: '',
+      CustomField2Value: '',
+      UseGooglePay: '1',
       AuthHash:      authHash,
     },
     notes: {
