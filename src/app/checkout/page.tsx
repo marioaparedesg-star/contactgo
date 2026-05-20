@@ -26,6 +26,9 @@ const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís'
 
 const CUPONES: Record<string,number> = { 'BIENVENIDO10': 0.10, 'CONTACTGO15': 0.15 }
 
+// AZUL disponible solo cuando hay AUTH_KEY configurada
+const AZUL_READY = Boolean(process.env.NEXT_PUBLIC_AZUL_READY)
+
 export default function CheckoutPage() {
   useEffect(() => {
     // Trackear inicio de checkout
@@ -132,7 +135,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({ order_number: tempOrderNum, total: totalFinal })
       })
       if (!preRes.ok) {
-        toast.error('Error al conectar con pasarela de pago. Usa contra entrega.')
+        toast.error('Pago con tarjeta temporalmente no disponible. Por favor usa pago contra entrega o contáctanos por WhatsApp.')
         setLoading(false)
         return
       }

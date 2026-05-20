@@ -71,10 +71,12 @@ export async function POST(req: NextRequest) {
 
     // No exponer MerchantId en sandbox si no hay auth key configurada
     if (!AUTH_KEY) {
-      console.warn('[AZUL/preparar] Sin AUTH_KEY — modo test limitado')
+      console.warn('[AZUL/preparar] Sin AUTH_KEY — modo sandbox')
+      // Sin credenciales reales, no podemos procesar pagos con tarjeta
       return NextResponse.json({ 
-        error: 'Pasarela de pago en configuración. Usa pago contra entrega.',
-        sandbox: true
+        error: 'Pago con tarjeta no disponible. Usa pago contra entrega.',
+        sandbox: true,
+        pending_credentials: true
       }, { status: 503 })
     }
 
