@@ -47,6 +47,24 @@ export default async function BauschLombPage() {
             ))}
           </div>
         </section>
+
+      {/* Brand Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Brand",
+        "name": "Bausch + Lomb",
+        "url": "https://www.bausch.com",
+        "manufacturer": {
+          "@type": "Organization",
+          "name": "Bausch Health Companies",
+          "url": "https://www.bausch.com"
+        },
+        "isRelatedTo": {
+          "@type": "Store",
+          "name": "ContactGo",
+          "url": "https://www.contactgo.net"
+        }
+      })}} />
       </main>
       <Footer />
     </>

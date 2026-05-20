@@ -65,6 +65,24 @@ export default async function AcuvuePage() {
             </div>
           </div>
         </section>
+
+      {/* Brand Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Brand",
+        "name": "ACUVUE",
+        "url": "https://www.acuvue.com",
+        "manufacturer": {
+          "@type": "Organization",
+          "name": "Johnson & Johnson Vision",
+          "url": "https://www.acuvue.com"
+        },
+        "isRelatedTo": {
+          "@type": "Store",
+          "name": "ContactGo",
+          "url": "https://www.contactgo.net"
+        }
+      })}} />
       </main>
       <Footer />
     </>

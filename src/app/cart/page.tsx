@@ -119,6 +119,12 @@ export default function CartPage() {
                 </div>
               </div>
 
+              {/* ITBIS 18% incluido — Ley 11-92 */}
+              <div className="flex justify-between text-gray-500 text-xs">
+                <span>ITBIS incluido (18%)</span>
+                <span>RD${Math.round(tot * 18 / 118).toLocaleString()}</span>
+              </div>
+
               <div className="border-t border-gray-100 pt-3 flex justify-between font-bold text-gray-900 text-base">
                 <span>Total</span>
                 <span>RD${tot.toLocaleString()}</span>

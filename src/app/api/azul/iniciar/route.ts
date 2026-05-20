@@ -91,6 +91,7 @@ export async function POST(req: NextRequest) {
       CustomField2Value: value2,
       ShowTransactionResult: '0',
       Locale:            'ES',
+      UseGooglePay:      '1',
       SaveToDataVault:   '1',
       AuthHash:          authHash,
     }

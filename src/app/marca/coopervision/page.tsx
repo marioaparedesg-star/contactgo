@@ -47,6 +47,24 @@ export default async function CooperVisionPage() {
             ))}
           </div>
         </section>
+
+      {/* Brand Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Brand",
+        "name": "CooperVision",
+        "url": "https://coopervision.com",
+        "manufacturer": {
+          "@type": "Organization",
+          "name": "CooperVision Inc.",
+          "url": "https://coopervision.com"
+        },
+        "isRelatedTo": {
+          "@type": "Store",
+          "name": "ContactGo",
+          "url": "https://www.contactgo.net"
+        }
+      })}} />
       </main>
       <Footer />
     </>

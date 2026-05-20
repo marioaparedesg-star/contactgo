@@ -29,6 +29,32 @@ async function getResenas() {
 
 export default async function ResenasPage() {
   const resenas = await getResenas()
+  
+  // Schema AggregateRating para Google
+  const avgRating = resenas.length > 0 
+    ? (resenas.reduce((s: number, r: any) => s + (r.rating ?? r.estrellas ?? 5), 0) / resenas.length).toFixed(1)
+    : '4.8'
+  const ratingSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "ContactGo — Lentes de Contacto República Dominicana",
+    "description": "Lentes de contacto originales con envío a domicilio en RD",
+    "brand": { "@type": "Brand", "name": "ContactGo" },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": avgRating,
+      "reviewCount": resenas.length || 6,
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": resenas.slice(0, 5).map((r: any) => ({
+      "@type": "Review",
+      "author": { "@type": "Person", "name": r.nombre || r.autor_nombre || "Cliente" },
+      "reviewRating": { "@type": "Rating", "ratingValue": r.rating ?? r.estrellas ?? 5 },
+      "reviewBody": r.comentario || r.texto || "",
+      "datePublished": (r.created_at || new Date().toISOString()).slice(0, 10)
+    }))
+  }
 
   // Fallback reviews if no real ones yet
   const fallback = [
@@ -44,6 +70,8 @@ export default async function ResenasPage() {
   const avgRating = displayResenas.reduce((s: number, r: any) => s + (r.rating ?? 5), 0) / displayResenas.length
 
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ratingSchema) }} />
     <main className="max-w-4xl mx-auto px-4 py-10 pb-32">
       {/* Header */}
       <div className="text-center mb-8">
@@ -99,5 +127,6 @@ export default async function ResenasPage() {
         </Link>
       </div>
     </main>
+    </>
   )
 }

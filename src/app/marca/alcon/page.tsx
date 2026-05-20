@@ -47,6 +47,24 @@ export default async function AlconPage() {
             ))}
           </div>
         </section>
+
+      {/* Brand Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Brand",
+        "name": "Alcon",
+        "url": "https://www.alcon.com",
+        "manufacturer": {
+          "@type": "Organization",
+          "name": "Alcon Laboratories",
+          "url": "https://www.alcon.com"
+        },
+        "isRelatedTo": {
+          "@type": "Store",
+          "name": "ContactGo",
+          "url": "https://www.contactgo.net"
+        }
+      })}} />
       </main>
       <Footer />
     </>

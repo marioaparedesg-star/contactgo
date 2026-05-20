@@ -339,6 +339,28 @@ export default async function HomePage() {
           </div>
         </section>
 
+
+      {/* WebSite + SearchAction Schema */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ContactGo",
+        "url": "https://www.contactgo.net",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.contactgo.net/catalogo?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        "inLanguage": "es-DO",
+        "publisher": {
+          "@type": "Organization",
+          "name": "ContactGo",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.contactgo.net/icon-192.png"
+          }
+        }
+      })}} />
       </main>
       <Footer />
       <WhatsAppButton />
