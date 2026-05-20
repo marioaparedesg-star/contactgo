@@ -26,7 +26,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/checkout', '/cart', '/cuenta', '/api/'],
       },
     ],
-    host: 'https://contactgo.net',
+    host: 'https://www.contactgo.net',
     sitemap: 'https://www.contactgo.net/sitemap.xml',
   }
 }
