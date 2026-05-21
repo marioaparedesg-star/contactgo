@@ -61,13 +61,27 @@ export async function POST(req: NextRequest) {
     }
 
     const fields: Record<string,string> = {
-      MerchantId: MERCHANT_ID, MerchantName: MERCHANT_NAME,
-      MerchantType: MERCHANT_TYPE, CurrencyCode: CURRENCY,
-      OrderNumber: order_number, Amount: amount, ITBIS: itbis,
-      ApprovedUrl: approvedUrl, DeclinedUrl: declinedUrl, CancelUrl: cancelUrl,
-      UseCustomField1: useCustom1, CustomField1Label: label1, CustomField1Value: value1,
-      UseCustomField2: useCustom2, CustomField2Label: label2, CustomField2Value: value2,
-      ShowTransactionResult: '0', Locale: 'ES', SaveToDataVault: '1', AuthHash: authHash,
+      MerchantId:        MERCHANT_ID,
+      TrxType:           'Sale',        // requerido por AZUL, NO va en el hash
+      MerchantName:      MERCHANT_NAME,
+      MerchantType:      MERCHANT_TYPE,
+      CurrencyCode:      CURRENCY,
+      OrderNumber:       order_number,
+      Amount:            amount,
+      ITBIS:             itbis,
+      ApprovedUrl:       approvedUrl,
+      DeclinedUrl:       declinedUrl,
+      CancelUrl:         cancelUrl,
+      UseCustomField1:   useCustom1,
+      CustomField1Label: label1,
+      CustomField1Value: value1,
+      UseCustomField2:   useCustom2,
+      CustomField2Label: label2,
+      CustomField2Value: value2,
+      ShowTransactionResult: '0',
+      Locale:            'ES',
+      // SaveToDataVault eliminado — puede causar error si no está habilitado en sandbox
+      AuthHash:          authHash,
     }
 
     // No exponer MerchantId en sandbox si no hay auth key configurada
@@ -81,7 +95,16 @@ export async function POST(req: NextRequest) {
       }, { status: 503 })
     }
 
-    console.log('[AZUL/preparar]', { order_number, amount, itbis, env: AZUL_ENV })
+    console.log('[AZUL/preparar] campos hash:', { 
+      order_number, amount, itbis, 
+      approvedUrl: approvedUrl.slice(0,60),
+      declinedUrl: declinedUrl.slice(0,60),
+      cancelUrl,
+      useCustom1, label1, value1: value1.slice(0,15),
+      useCustom2,
+      hash_preview: authHash.slice(0,20),
+      env: AZUL_ENV 
+    })
     return NextResponse.json({ url: AZUL_URL, fields })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
