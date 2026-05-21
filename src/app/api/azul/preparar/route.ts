@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     let authHash = 'REQUIRES_AUTH_KEY'
     if (AUTH_KEY) {
       authHash = createHmac('sha512', AUTH_KEY)
-        .update(Buffer.from(raw, 'utf16le')).digest('hex')
+        .update(raw, 'utf8').digest('hex')
     }
 
     const fields: Record<string,string> = {

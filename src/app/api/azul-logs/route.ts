@@ -46,9 +46,11 @@ export async function GET(req: NextRequest) {
       ORDER_NUM, AMOUNT, ITBIS, APPROVED, DECLINED, CANCEL,
       '1', '', '', '0', '', ''
     ].join('')
-    const keyBuf  = Buffer.from(AUTH_KEY, 'utf16le')
-    const dataBuf = Buffer.from(raw, 'utf16le')
-    authHash = createHmac('sha512', keyBuf).update(dataBuf).digest('hex').toUpperCase()
+    // AZUL usa HMAC-SHA512 con strings UTF-8 (confirmado con ejemplo oficial de Luis Recio)
+    authHash = createHmac('sha512', AUTH_KEY)
+      .update(raw, 'utf8')
+      .digest('hex')
+      .toUpperCase()
   }
 
   const paymentUrl = process.env.AZUL_PAYMENT_URL ?? 'https://pruebas.azul.com.do/PaymentPage/'
