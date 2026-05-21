@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     if (guardErr) return guardErr
 
     const body = await req.json()
-    const { order_number, total } = body
+    const { order_number, total, approved_url } = body
 
     // Validar campos obligatorios
     if (!order_number || !total) {
@@ -43,9 +43,10 @@ export async function POST(req: NextRequest) {
     const itbisNum = Math.round((totalNum * 18 / 118) * 100)
     const itbis    = String(itbisNum).padStart(3, '0')
 
-    const approvedUrl = `${BASE}/confirmacion?origen=azul&resultado=aprobado`
+    // Usar la URL exacta del cliente (incluye orden=ID) para que el hash coincida
+    const approvedUrl = approved_url ?? `${BASE}/confirmacion?origen=azul&resultado=aprobado`
     const declinedUrl = `${BASE}/confirmacion?origen=azul&resultado=declinado`
-    const cancelUrl   = `${BASE}/checkout`  // Volver al checkout si cancela, no al carrito vacío
+    const cancelUrl   = `${BASE}/checkout`
     const useCustom1 = '1', label1 = 'No. Orden', value1 = order_number
     const useCustom2 = '0', label2 = '', value2 = ''
 

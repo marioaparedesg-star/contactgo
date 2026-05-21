@@ -125,30 +125,17 @@ export default function CheckoutPage() {
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
 
-    // ─── TARJETA: primero preparar AZUL, luego crear orden ───────────────
+    // ─── TARJETA: crear orden PRIMERO, luego preparar AZUL con ID real ──
     if (metodoPago === 'tarjeta') {
-      // 1. Pre-generar campos AZUL con un order_number temporal
-      const tempOrderNum = `CG-${Date.now().toString().slice(-8)}`
-      const preRes = await fetch('/api/azul/preparar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_number: tempOrderNum, total: totalFinal })
-      })
-      if (!preRes.ok) {
-        toast.error('Pago con tarjeta temporalmente no disponible. Por favor usa pago contra entrega o contáctanos por WhatsApp.')
-        setLoading(false)
-        return
-      }
-      const { url, fields } = await preRes.json()
-
-      // 2. Crear la orden en Supabase
+      // 1. Crear la orden en Supabase primero (necesitamos el ID para la URL de retorno)
+      const orderNum = `CG-${Date.now().toString().slice(-8)}`
       const { data: order, error } = await sb.from('orders').insert({
         user_id: user?.id ?? null,
         cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
         direccion_texto: `${data.direccion}, ${data.ciudad}`,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
         metodo_pago: 'tarjeta', pago_estado: 'pendiente',
-        numero_orden: tempOrderNum,
+        numero_orden: orderNum,
         disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
       }).select().single()
 
@@ -158,7 +145,7 @@ export default function CheckoutPage() {
         return
       }
 
-      // 3. Guardar items
+      // 2. Guardar items
       await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ order_id: order.id, items: items.map(i => ({
           order_id: order.id, product_id: i.product.id, nombre: i.product.nombre,
@@ -169,10 +156,25 @@ export default function CheckoutPage() {
           color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
         })) }) })
 
-      // 4. Actualizar ApprovedUrl con el order_id real
-      fields['ApprovedUrl'] = `${window.location.origin}/confirmacion?orden=${order.id}&origen=azul&resultado=aprobado`
+      // 3. Preparar AZUL con el order.id real — el hash se calcula con la URL final correcta
+      const approvedUrl = `${window.location.origin}/confirmacion?orden=${order.id}&origen=azul&resultado=aprobado`
+      const preRes = await fetch('/api/azul/preparar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          order_number: orderNum, 
+          total: totalFinal,
+          approved_url: approvedUrl  // URL exacta para el hash
+        })
+      })
+      if (!preRes.ok) {
+        toast.error('Pago con tarjeta temporalmente no disponible. Por favor usa pago contra entrega.')
+        setLoading(false)
+        return
+      }
+      const { url, fields } = await preRes.json()
 
-      // 5. Enviar al portal AZUL (NO limpiar carrito aquí — se limpia en /confirmacion cuando AZUL aprueba)
+      // 4. Enviar al portal AZUL con hash correcto (NO modificar fields)
       const form = document.createElement('form')
       form.method = 'POST'
       form.action = url
