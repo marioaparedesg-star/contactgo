@@ -530,7 +530,7 @@ export default function CheckoutPage() {
                       <img src="/visa-blue.png" alt="Visa" className="h-3.5 object-contain" />
                       <img src="/mastercard.png" alt="Mastercard" className="h-4 object-contain" />
                       <span className="text-[9px] bg-blue-700 text-white px-1.5 py-0.5 rounded font-bold">Verified by VISA</span>
-                      <span className="text-[9px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-bold">Mastercard ID Check</span>
+                      <img src="/mastercard-id-check.png" alt="Mastercard ID Check" className="h-5 object-contain" />
                       <span className="text-[9px] bg-green-600 text-white px-1.5 py-0.5 rounded font-bold">🔒 SSL</span>
                     </div>
 

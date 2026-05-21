@@ -331,6 +331,8 @@ export default async function HomePage() {
             <div className="flex items-center justify-center gap-3 pt-3 border-t border-gray-100 flex-wrap">
               <span className="text-xs text-gray-400 font-semibold">Pagos seguros:</span>
               <img src="/visa-blue.png" alt="Visa" className="h-4 object-contain" />
+              <img src="/visa-secure.png" alt="Visa Secure" className="h-4 object-contain" />
+              <img src="/mastercard-id-check.png" alt="Mastercard ID Check" className="h-5 object-contain" />
               <img src="/mastercard.png" alt="Mastercard" className="h-5 object-contain" />
               <span className="text-[9px] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded font-medium">Verified by VISA</span>
               <span className="text-[9px] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded font-medium">Mastercard ID Check</span>

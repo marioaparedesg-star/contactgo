@@ -27,10 +27,10 @@ export default function SeguridadPage() {
           <Image src="/mastercard.png" alt="Mastercard" width={32} height={24} className="object-contain h-6 w-auto" />
           <div className="flex items-center gap-1 border border-blue-200 rounded px-2 py-0.5">
             <span className="text-[10px] font-bold text-blue-800">Verified by</span>
-            <Image src="/visa-blue.png" alt="Verified by Visa" width={28} height={10} className="object-contain h-3 w-auto" />
+            <Image src="/visa-secure.png" alt="Visa Secure" width={28} height={10} className="object-contain h-3 w-auto" />
           </div>
           <div className="flex items-center gap-1 border border-orange-200 rounded px-2 py-0.5">
-            <Image src="/mastercard.png" alt="Mastercard" width={16} height={12} className="object-contain h-3 w-auto" />
+            <Image src="/mastercard-id-check.png" alt="Mastercard ID Check" width={32} height={25} className="object-contain h-6 w-auto" />
             <span className="text-[10px] font-bold text-gray-700">ID Check</span>
           </div>
           <span className="text-xs bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded-full">🔒 SSL Seguro</span>
