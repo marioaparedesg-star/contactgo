@@ -86,18 +86,7 @@ nextConfig.redirects = async () => [
   },
 ]
 
-// Sentry config
-const { withSentryConfig } = require('@sentry/nextjs')
-
-module.exports = withSentryConfig(nextConfig, {
-  org: 'contactgo',
-  project: 'javascript-nextjs',
-  silent: true,
-  widenClientFileUpload: true,
-  hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
-})
+module.exports = nextConfig
 
 
 // Injected content via Sentry wizard below
