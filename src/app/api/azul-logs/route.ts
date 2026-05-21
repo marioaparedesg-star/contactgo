@@ -9,11 +9,16 @@ export async function GET(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
   if (guardErr) return guardErr
 
-  // ─── Auth Bearer obligatorio ─────────────────────────────────
-  const auth = req.headers.get('authorization') ?? ''
-  const token = process.env.AZUL_LOGS_TOKEN ?? ''
+  // ─── Auth: Bearer header O query param ?token=XXX ────────────
+  const auth    = req.headers.get('authorization') ?? ''
+  const qToken  = req.nextUrl.searchParams.get('token') ?? ''
+  const token   = process.env.AZUL_LOGS_TOKEN ?? ''
+
+  const isAuthorized = token && (
+    auth === `Bearer ${token}` || qToken === token
+  )
   
-  if (!token || auth !== `Bearer ${token}`) {
+  if (!isAuthorized) {
     return NextResponse.json(
       { error: 'No autorizado. Endpoint de certificación técnica.' },
       { 

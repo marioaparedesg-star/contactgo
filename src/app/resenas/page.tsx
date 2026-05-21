@@ -30,31 +30,7 @@ async function getResenas() {
 export default async function ResenasPage() {
   const resenas = await getResenas()
   
-  // Schema AggregateRating para Google
-  const avgRating = resenas.length > 0 
-    ? (resenas.reduce((s: number, r: any) => s + (r.rating ?? r.estrellas ?? 5), 0) / resenas.length).toFixed(1)
-    : '4.8'
-  const ratingSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "ContactGo — Lentes de Contacto República Dominicana",
-    "description": "Lentes de contacto originales con envío a domicilio en RD",
-    "brand": { "@type": "Brand", "name": "ContactGo" },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": avgRating,
-      "reviewCount": resenas.length || 6,
-      "bestRating": "5",
-      "worstRating": "1"
-    },
-    "review": resenas.slice(0, 5).map((r: any) => ({
-      "@type": "Review",
-      "author": { "@type": "Person", "name": r.nombre || r.autor_nombre || "Cliente" },
-      "reviewRating": { "@type": "Rating", "ratingValue": r.rating ?? r.estrellas ?? 5 },
-      "reviewBody": r.comentario || r.texto || "",
-      "datePublished": (r.created_at || new Date().toISOString()).slice(0, 10)
-    }))
-  }
+  // Schema se genera después con avgRating real
 
   // Fallback reviews if no real ones yet
   const fallback = [
@@ -68,6 +44,20 @@ export default async function ResenasPage() {
 
   const displayResenas = resenas.length > 0 ? resenas : fallback
   const avgRating = displayResenas.reduce((s: number, r: any) => s + (r.rating ?? 5), 0) / displayResenas.length
+
+  const ratingSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "ContactGo — Lentes de Contacto República Dominicana",
+    "brand": { "@type": "Brand", "name": "ContactGo" },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": avgRating.toFixed(1),
+      "reviewCount": displayResenas.length,
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  }
 
   return (
     <>

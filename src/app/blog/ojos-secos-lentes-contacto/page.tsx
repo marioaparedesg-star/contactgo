@@ -119,8 +119,8 @@ export default function Page() {
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-19",
       "reviewedBy": {
         "@type": "Organization",
-        "name": "Colegio Dominicano de Optometría",
-        "url": "https://www.contactgo.net/sobre-nosotros"
+        "name": "Comité de Optometría de ContactGo",
+        "url": "https://www.contactgo.net/autor/equipo-contactgo"
       },
       "specialty": "Optometry",
       "medicalAudience": {"@type": "MedicalAudience", "audienceType": "Patient"},
