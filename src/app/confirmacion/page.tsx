@@ -34,6 +34,21 @@ function ConfirmacionContent() {
   const [loading, setLoading] = useState(true)
   const [showConfetti, setShowConfetti] = useState(false)
 
+  // Limpiar carrito cuando AZUL confirma pago aprobado
+  const clearCart = typeof window !== 'undefined' 
+    ? (() => { try { const s = JSON.parse(localStorage.getItem('cart-storage') || '{}'); if(s.state) { s.state.items = []; localStorage.setItem('cart-storage', JSON.stringify(s)) } } catch(e) {} })
+    : () => {}
+
+  const origen = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('origen') : null
+  const resultado = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('resultado') : null
+
+  useEffect(() => {
+    // Limpiar carrito cuando AZUL aprueba
+    if (origen === 'azul' && resultado === 'aprobado') {
+      clearCart()
+    }
+  }, [origen, resultado])
+
   useEffect(() => {
     if (!orderId) { router.push('/'); return }
     const sb = createClient()

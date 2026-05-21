@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 
     const approvedUrl = `${BASE}/confirmacion?origen=azul&resultado=aprobado`
     const declinedUrl = `${BASE}/confirmacion?origen=azul&resultado=declinado`
-    const cancelUrl   = `${BASE}/cart`
+    const cancelUrl   = `${BASE}/checkout`  // Volver al checkout si cancela, no al carrito vacío
     const useCustom1 = '1', label1 = 'No. Orden', value1 = order_number
     const useCustom2 = '0', label2 = '', value2 = ''
 

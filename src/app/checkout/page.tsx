@@ -172,8 +172,7 @@ export default function CheckoutPage() {
       // 4. Actualizar ApprovedUrl con el order_id real
       fields['ApprovedUrl'] = `${window.location.origin}/confirmacion?orden=${order.id}&origen=azul&resultado=aprobado`
 
-      // 5. Limpiar carrito y enviar al portal AZUL
-      clearCart()
+      // 5. Enviar al portal AZUL (NO limpiar carrito aquí — se limpia en /confirmacion cuando AZUL aprueba)
       const form = document.createElement('form')
       form.method = 'POST'
       form.action = url
