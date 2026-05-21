@@ -36,6 +36,9 @@ const securityHeaders = [
 ]
 
 const nextConfig = {
+  experimental: {
+    instrumentationHook: true,
+  },
   poweredByHeader: false,
   experimental: {
     optimizePackageImports: ['lucide-react', '@supabase/supabase-js'],
