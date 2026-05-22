@@ -111,7 +111,11 @@ function ConfirmacionContent() {
           <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
             <CheckCircle className="w-9 h-9 text-white" />
           </div>
+          {resultado === 'declinado' ? (
+          <h1 className="text-2xl font-black text-white mb-1">⚠️ Pago no procesado</h1>
+        ) : (
           <h1 className="text-2xl font-black text-white mb-1">¡Pedido confirmado!</h1>
+        )}
           <p className="text-green-100 text-sm mb-4">Gracias por comprar en ContactGo</p>
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur rounded-xl px-5 py-2.5">
             <span className="text-white/70 text-sm">Pedido</span>
