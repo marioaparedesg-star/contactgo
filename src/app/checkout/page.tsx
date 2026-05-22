@@ -489,7 +489,15 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* TOTAL + MÉTODO */}
-                    <div className={`rounded-xl p-4 flex items-center justify-between ${metodoPago === 'tarjeta' ? 'bg-blue-50 border border-blue-100' : 'bg-primary-50 border border-primary-100'}`}>
+                    {/* Trust Badges AZUL — requerido por Visa/Mastercard */}
+              <div className="flex items-center justify-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 mt-2">
+                <img src="/visa-blue.png" alt="Visa" className="h-5 object-contain" />
+                <img src="/mastercard.png" alt="Mastercard" className="h-5 object-contain" />
+                <img src="/visa-secure.png" alt="Visa Secure" className="h-5 object-contain" />
+                <img src="/mastercard-id-check.png" alt="Mastercard ID Check" className="h-6 object-contain" />
+              </div>
+
+              <div className={`rounded-xl p-4 flex items-center justify-between ${metodoPago === 'tarjeta' ? 'bg-blue-50 border border-blue-100' : 'bg-primary-50 border border-primary-100'}`}>
                       <div>
                         <p className={`text-xs font-bold uppercase tracking-wider ${metodoPago === 'tarjeta' ? 'text-blue-600' : 'text-primary-600'}`}>Total a pagar</p>
                         <p className={`text-2xl font-black ${metodoPago === 'tarjeta' ? 'text-blue-700' : 'text-primary-700'}`}>RD${totalFinal.toLocaleString()}</p>

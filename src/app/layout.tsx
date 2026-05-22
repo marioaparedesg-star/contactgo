@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     description: 'Compra lentes de contacto en RD con envío en 24-48h. Acuvue, Air Optix, FreshLook y más marcas premium.',
     url: 'https://www.contactgo.net',
     siteName: 'ContactGo',
-    images: [{ url: '/og-1200x630.svg', width: 512, height: 512, alt: 'ContactGo — Lentes de Contacto RD' }],
+    images: [{ url: '/og-1200x630.svg', width: 1200, height: 630, alt: 'ContactGo — Lentes de Contacto RD' }],
   },
   twitter: {
     card: 'summary_large_image',

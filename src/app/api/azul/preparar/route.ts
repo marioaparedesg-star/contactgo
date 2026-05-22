@@ -2,7 +2,7 @@ import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
 
-const BASE          = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+const BASE          = 'https://www.contactgo.net'
 const MERCHANT_ID   = process.env.AZUL_MERCHANT_ID    ?? '39038540035'
 const MERCHANT_NAME = process.env.AZUL_MERCHANT_NAME  ?? 'ContactGo'
 const MERCHANT_TYPE = 'ECommerce'

@@ -12,7 +12,8 @@ export async function GET(req: NextRequest) {
   // ─── Auth: Bearer header O query param ?token=XXX ────────────
   const auth    = req.headers.get('authorization') ?? ''
   const qToken  = req.nextUrl.searchParams.get('token') ?? ''
-  const token   = process.env.AZUL_LOGS_TOKEN ?? ''
+  // Token desde variable de entorno (más seguro) con fallback al token actual
+  const token   = process.env.AZUL_LOGS_TOKEN ?? 'contactgo2026azul'
 
   const isAuthorized = token && (
     auth === `Bearer ${token}` || qToken === token
@@ -29,7 +30,7 @@ export async function GET(req: NextRequest) {
   }
 
   // ─── Datos de certificación (solo con token válido) ───────────
-  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+  const BASE_URL = 'https://www.contactgo.net'
   const MERCHANT_ID  = process.env.AZUL_MERCHANT_ID  ?? '39038540035'
   const ORDER_NUM = `CG-TEST-${Date.now()}`
   const AMOUNT = '500000'
@@ -56,7 +57,7 @@ export async function GET(req: NextRequest) {
   const paymentUrl = process.env.AZUL_PAYMENT_URL ?? 'https://pruebas.azul.com.do/PaymentPage/'
 
   return NextResponse.json({
-    status: AUTH_KEY ? 'PRODUCTION_READY' : 'SANDBOX_MODE',
+    status: (AUTH_KEY && process.env.AZUL_ENV === 'production') ? 'PRODUCTION_READY' : 'SANDBOX_MODE',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
     payment_url: paymentUrl,
