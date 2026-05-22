@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 
     // Usar la URL exacta del cliente (incluye orden=ID) para que el hash coincida
     const approvedUrl = approved_url ?? `${BASE}/confirmacion?origen=azul&resultado=aprobado`
-    const declinedUrl = `${BASE}/confirmacion?origen=azul&resultado=declinado`
+    const declinedUrl = `${BASE}/api/azul/retorno?resultado=declinado`
     const cancelUrl   = `${BASE}/checkout`
     const useCustom1 = '1', label1 = 'No. Orden', value1 = order_number
     const useCustom2 = '0', label2 = '', value2 = ''

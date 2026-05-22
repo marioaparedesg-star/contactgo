@@ -60,12 +60,17 @@ function ConfirmacionContent() {
   }, [origen, resultado, orderId])
 
   useEffect(() => {
-    if (!orderId) { router.push('/'); return }
+    if (!orderId) { 
+      // Dar un momento para que los query params carguen antes de redirigir
+      const timer = setTimeout(() => { router.push('/') }, 1500)
+      return () => clearTimeout(timer)
+    }
     const sb = createClient()
     Promise.all([
       sb.from('orders').select('*').eq('id', orderId).single(),
       sb.from('order_items').select('*').eq('order_id', orderId),
     ]).then(([{ data: o }, { data: i }]) => {
+      if (!o) { router.push('/'); return }
       setOrder(o)
       setItems(i ?? [])
       setLoading(false)

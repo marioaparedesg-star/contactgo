@@ -156,7 +156,7 @@ export default function CheckoutPage() {
         })) }) })
 
       // 3. Preparar AZUL con el order.id real — el hash se calcula con la URL final correcta
-      const approvedUrl = `${window.location.origin}/confirmacion?orden=${order.id}&origen=azul&resultado=aprobado`
+      const approvedUrl = `${window.location.origin}/api/azul/retorno?orden=${order.id}&resultado=aprobado`
       const preRes = await fetch('/api/azul/preparar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
