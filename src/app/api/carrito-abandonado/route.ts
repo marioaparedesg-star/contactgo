@@ -7,8 +7,8 @@ import { createClient } from '@supabase/supabase-js'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
-const FROM = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
-const resend = new Resend(process.env.RESEND_API_KEY)
+const FROM = process.env.RESEND_FROM ?? 'ContactGo <onboarding@getResend().dev>'
+function getResend() { return new Resend(process.env.RESEND_API_KEY) }
 
 export async function POST(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 5 })
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
 </table></td></tr></table>
 </body></html>`
 
-      await resend.emails.send({
+      await getResend().emails.send({
         from: FROM,
         to: cart.cliente_email,
         subject: `${nombre}, olvidaste tus lentes en el carrito 👀 — 5% OFF esperándote`,

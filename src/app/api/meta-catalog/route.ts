@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
   if (guardErr) return guardErr
 
-  const { data: products } = await sb
+  const { data: products } = await getSb()
     .from('products')
     .select('id, nombre, descripcion, precio, imagen_url, slug, tipo, marca, stock, activo')
     .eq('activo', true)

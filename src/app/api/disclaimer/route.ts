@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     // Si hay order_id, validar que existe
     if (order_id) {
-      const { data: order, error: orderErr } = await sb
+      const { data: order, error: orderErr } = await getSb()
         .from('orders')
         .select('id')
         .eq('id', order_id)
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       req.headers.get('x-real-ip') ||
       'unknown'
 
-    const { data, error } = await sb
+    const { data, error } = await getSb()
       .from('disclaimer_acceptances')
       .insert({
         user_id: user_id || null,
