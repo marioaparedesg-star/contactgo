@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 
-const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
 const FROM = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
 
@@ -93,24 +93,24 @@ export async function GET(req: NextRequest) {
             alerta, n.tipo_producto || 'esferico'
           ),
         })
-        await sb.from('recompra_notifications').update({ [campo]: true }).eq('id', n.id)
+        await getSb().from('recompra_notifications').update({ [campo]: true }).eq('id', n.id)
         if (alerta === '7dias') {
-          await sb.from('coupons').update({ activo: true }).eq('codigo', n.cupon_generado)
+          await getSb().from('coupons').update({ activo: true }).eq('codigo', n.cupon_generado)
         }
         enviados++
       } catch (e) { console.error('[recompra cron]', e) }
     }
   }
 
-  const { data: l7 } = await sb.from('recompra_notifications')
+  const { data: l7 } = await getSb().from('recompra_notifications')
     .select('*').eq('notificado_7', false).lte('fecha_notificacion_7', ahora.toISOString())
   await procesarLista(l7 || [], 'notificado_7', '7dias')
 
-  const { data: l3 } = await sb.from('recompra_notifications')
+  const { data: l3 } = await getSb().from('recompra_notifications')
     .select('*').eq('notificado_3', false).lte('fecha_notificacion_3', ahora.toISOString())
   await procesarLista(l3 || [], 'notificado_3', '3dias')
 
-  const { data: l0 } = await sb.from('recompra_notifications')
+  const { data: l0 } = await getSb().from('recompra_notifications')
     .select('*').eq('notificado_0', false).lte('fecha_notificacion_0', ahora.toISOString())
   await procesarLista(l0 || [], 'notificado_0', 'hoy')
 

@@ -8,10 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 
-const sb = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 
 const BASE_URL    = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
 // Admin recibe notificaciones en este email
@@ -304,10 +301,10 @@ export async function POST(req: NextRequest) {
     const resend = new Resend(process.env.RESEND_API_KEY)
 
     // Obtener orden + items
-    const { data: order } = await sb.from('orders').select('*').eq('id', order_id).single()
+    const { data: order } = await getSb().from('orders').select('*').eq('id', order_id).single()
     if (!order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 })
 
-    const { data: items } = await sb.from('order_items').select('*').eq('order_id', order_id)
+    const { data: items } = await getSb().from('order_items').select('*').eq('order_id', order_id)
     const itemsList = items ?? []
 
     const pedidoId = order.id.slice(-8).toUpperCase()

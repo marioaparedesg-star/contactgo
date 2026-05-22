@@ -144,8 +144,8 @@ export default function CheckoutPage() {
         return
       }
 
-      // 2. Guardar items
-      await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
+      // 2. Guardar items — crítico: verificar que se guardan
+      const itemsRes = await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ order_id: order.id, items: items.map(i => ({
           order_id: order.id, product_id: i.product.id, nombre: i.product.nombre,
           precio: Number((i as any).precio_final ?? i.product.precio), cantidad: i.cantidad,
@@ -154,6 +154,11 @@ export default function CheckoutPage() {
           axis: (i as any).axis != null ? Number((i as any).axis) : null,
           color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
         })) }) })
+      if (!itemsRes.ok) {
+        const itemsErr = await itemsRes.text().catch(() => 'unknown')
+        console.error('[checkout] order_items FAILED:', itemsErr)
+        // No bloqueamos el pago, pero lo logueamos
+      }
 
       // 3. Preparar AZUL con el order.id real — el hash se calcula con la URL final correcta
       // Usamos orderNum (numero_orden) porque AZUL devuelve OrderNumber en el retorno

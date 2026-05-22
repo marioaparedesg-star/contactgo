@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 const BASE = 'https://contactgo.net'
 
 export async function GET() {
-  const { data: products } = await sb
+  const { data: products } = await getSb()
     .from('products').select('*').eq('activo', true).gt('stock', 0).order('nombre')
 
   const items = (products ?? []).map(p => {

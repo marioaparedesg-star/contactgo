@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 
-const sb  = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
 const FROM = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   const hace2h  = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
   const hace4h  = new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
 
-  const { data: carritos, error } = await sb
+  const { data: carritos, error } = await getSb()
     .from('abandoned_carts')
     .select('*')
     .gte('updated_at', hace4h)
@@ -106,9 +106,9 @@ export async function POST(req: NextRequest) {
       })
 
       // Crear cupón si no existe
-      const { data: existing } = await sb.from('coupons').select('id').eq('codigo', cupon).single()
+      const { data: existing } = await getSb().from('coupons').select('id').eq('codigo', cupon).single()
       if (!existing) {
-        await sb.from('coupons').insert({
+        await getSb().from('coupons').insert({
           codigo: cupon, tipo: 'porcentaje', valor: 5,
           uso_maximo: 9999, usos_actuales: 0,
           activo: true,
@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Marcar como email enviado (no recovered todavía)
-      await sb.from('abandoned_carts').update({ email_sent: true }).eq('id', cart.id)
+      await getSb().from('abandoned_carts').update({ email_sent: true }).eq('id', cart.id)
 
       sent++
       console.log(`[carrito-abandonado] Email sent to ${cart.cliente_email}`)

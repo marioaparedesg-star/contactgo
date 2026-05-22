@@ -2,10 +2,7 @@ import { guardRequest, getIP } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const sb = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 
 export async function POST(req: NextRequest) {
   // Seguridad: origin + rate limit
@@ -18,13 +15,13 @@ export async function POST(req: NextRequest) {
     const { order_id } = await req.json()
     if (!order_id) return NextResponse.json({ error: 'order_id requerido' }, { status: 400 })
 
-    const { data: order } = await sb.from('orders')
+    const { data: order } = await getSb().from('orders')
       .select('id, user_id, cliente_email, cliente_nombre, fecha')
       .eq('id', order_id).single()
 
     if (!order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
 
-    const { data: items } = await sb.from('order_items')
+    const { data: items } = await getSb().from('order_items')
       .select('product_id, cantidad, products(id, nombre, tipo, dias_uso)')
       .eq('order_id', order_id)
 
@@ -64,9 +61,9 @@ export async function POST(req: NextRequest) {
     }
 
     if (registros.length > 0) {
-      await sb.from('recompra_notifications').insert(registros)
+      await getSb().from('recompra_notifications').insert(registros)
       for (const r of registros) {
-        await sb.from('coupons').insert({
+        await getSb().from('coupons').insert({
           codigo: r.cupon_generado,
           tipo: 'porcentaje',
           valor: r.descuento_ofrecido,

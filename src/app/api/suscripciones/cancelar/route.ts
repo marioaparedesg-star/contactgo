@@ -2,10 +2,7 @@ import { guardRequest, getIP } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const sb = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 
 export async function POST(req: NextRequest) {
   // Seguridad: origin + rate limit
@@ -18,7 +15,7 @@ export async function POST(req: NextRequest) {
     const { subscription_id, motivo, confirmar_pedido = false } = await req.json()
     if (!subscription_id) return NextResponse.json({ error: 'subscription_id requerido' }, { status: 400 })
 
-    const { data: sub } = await sb.from('subscriptions').select('*').eq('id', subscription_id).single()
+    const { data: sub } = await getSb().from('subscriptions').select('*').eq('id', subscription_id).single()
     if (!sub) return NextResponse.json({ error: 'No encontrada' }, { status: 404 })
     if (sub.cancelada) return NextResponse.json({ error: 'Ya cancelada' }, { status: 400 })
 
@@ -48,7 +45,7 @@ export async function POST(req: NextRequest) {
     // Generar pedido si aplica
     let pedidoGenerado = null
     if (confirmar_pedido && proxEnvio && diasRestantes !== null && diasRestantes <= 7 && diasRestantes >= 0) {
-      const { data: order } = await sb.from('orders').insert({
+      const { data: order } = await getSb().from('orders').insert({
         user_id: sub.user_id, cliente_nombre: sub.cliente_nombre,
         cliente_email: sub.cliente_email, cliente_telefono: sub.cliente_telefono,
         direccion_texto: sub.direccion_texto, estado: 'pendiente',
@@ -58,7 +55,7 @@ export async function POST(req: NextRequest) {
       }).select().single()
 
       if (order) {
-        await sb.from('order_items').insert(items.map((i: any) => ({
+        await getSb().from('order_items').insert(items.map((i: any) => ({
           order_id: order.id, product_id: i.product_id ?? null,
           nombre: i.nombre, precio: Number(i.precio ?? 0), cantidad: Number(i.cantidad ?? 1),
           sph: i.sph != null ? Number(i.sph) : null, cyl: i.cyl != null ? Number(i.cyl) : null,
@@ -70,7 +67,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Cancelar
-    await sb.from('subscriptions').update({
+    await getSb().from('subscriptions').update({
       activa: false, cancelada: true,
       cancelada_en: new Date().toISOString(),
       motivo_cancelacion: motivo ?? null,
