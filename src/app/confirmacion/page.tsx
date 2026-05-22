@@ -43,11 +43,21 @@ function ConfirmacionContent() {
   const resultado = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('resultado') : null
 
   useEffect(() => {
-    // Limpiar carrito cuando AZUL aprueba
-    if (origen === 'azul' && resultado === 'aprobado') {
+    if (origen === 'azul' && resultado === 'aprobado' && orderId) {
+      // Limpiar carrito
       clearCart()
+      // Enviar notificacion de email (cliente + admin)
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: orderId, evento: 'nuevo_pedido' })
+      }).catch(console.error)
+      // Actualizar pago_estado a 'pagado' en Supabase
+      const sb = createClient()
+      sb.from('orders').update({ pago_estado: 'pagado', estado: 'confirmado' })
+        .eq('id', orderId).then(() => {})
     }
-  }, [origen, resultado])
+  }, [origen, resultado, orderId])
 
   useEffect(() => {
     if (!orderId) { router.push('/'); return }

@@ -43,7 +43,7 @@ export default function CheckoutPage() {
     } catch {}
   }, [])
   const router = useRouter()
-  const { items, subtotal, total, clearCart } = useCartStore()
+  const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
   const [loading, setLoading] = useState(false)
   const [cupon, setCupon] = useState('')
   const [cuponAplicado, setCuponAplicado] = useState(false)
@@ -62,7 +62,7 @@ export default function CheckoutPage() {
   const [authLoading, setAuthLoading] = useState(false)
   const [authMsg, setAuthMsg] = useState('')
   const [step, setStep] = useState<1|2|3>(1)
-  const [metodoPago, setMetodoPago] = useState<'contra_entrega'|'tarjeta'>('contra_entrega')
+  const metodoPago = 'tarjeta' as const
 
   const sub = subtotal()
   const tot = total()
@@ -188,34 +188,6 @@ export default function CheckoutPage() {
       return
     }
 
-    // ─── CONTRA ENTREGA ──────────────────────────────────────────────────
-    const { data: order, error } = await sb.from('orders').insert({
-      user_id: user?.id ?? null,
-      cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
-      direccion_texto: `${data.direccion}, ${data.ciudad}`,
-      estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
-      metodo_pago: 'contra_entrega', pago_estado: 'pendiente',
-      disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
-    }).select().single()
-    if (error || !order) {
-      toast.error('Error al procesar pedido: ' + (error?.message ?? 'Sin respuesta'))
-      setLoading(false)
-      return
-    }
-    await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ order_id: order.id, items: items.map(i => ({
-        order_id: order.id, product_id: i.product.id, nombre: i.product.nombre,
-        precio: Number((i as any).precio_final ?? i.product.precio), cantidad: i.cantidad,
-        sph: i.sph != null ? Number(i.sph) : null, cyl: i.cyl != null ? Number(i.cyl) : null,
-        add_power: i.add_power ? parseFloat(String(i.add_power).replace('+','')) : null,
-        axis: (i as any).axis != null ? Number((i as any).axis) : null,
-        color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
-      })) }) })
-    // Notify DESPUÉS de confirmar que items se guardaron
-    await fetch('/api/notify', { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }) }).catch(console.error)
-    clearCart(); setLoading(false)
-    router.push('/confirmacion?orden=' + order.id)
   }
 
   const handleAuth = async () => {
@@ -470,29 +442,11 @@ export default function CheckoutPage() {
                       <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Método de pago</p>
                       <div className="grid grid-cols-1 gap-2">
 
-                        {/* Contra entrega */}
-                        <button type="button"
-                          onClick={() => setMetodoPago('contra_entrega')}
-                          className={`flex items-center gap-3 p-3.5 rounded-xl border-2 text-left transition-all w-full ${
-                            metodoPago === 'contra_entrega'
-                              ? 'border-primary-500 bg-primary-50 shadow-sm'
-                              : 'border-gray-200 bg-white hover:border-gray-300'
-                          }`}>
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-                            metodoPago === 'contra_entrega' ? 'border-primary-600' : 'border-gray-300'
-                          }`}>
-                            {metodoPago === 'contra_entrega' && <div className="w-2.5 h-2.5 bg-primary-600 rounded-full"/>}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-bold text-gray-900 text-sm">Contra entrega</p>
-                            <p className="text-xs text-gray-500 mt-0.5">Pagas en efectivo cuando recibes tu pedido</p>
-                          </div>
-                          <span className="text-xl shrink-0">💵</span>
-                        </button>
+                        
 
                         {/* Tarjeta AZUL */}
                         <button type="button"
-                          onClick={() => setMetodoPago('tarjeta')}
+                          
                           className={`flex items-center gap-3 p-3.5 rounded-xl border-2 text-left transition-all w-full ${
                             metodoPago === 'tarjeta'
                               ? 'border-blue-500 bg-blue-50 shadow-sm'
@@ -611,10 +565,15 @@ export default function CheckoutPage() {
                   {items.map((item, idx) => (
                     <div key={idx} className="flex gap-3 items-start">
                       {item.product.imagen_url && (
-                        <img src={item.product.imagen_url} alt="" className="w-11 h-11 object-contain rounded-lg bg-gray-50 shrink-0 border border-gray-100" />
+                        <img src={item.product.imagen_url} alt="" className="w-10 h-10 object-contain rounded-lg bg-gray-50 shrink-0 border border-gray-100" />
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-2">{item.product.nombre}</p>
+                        <div className="flex justify-between items-start gap-1">
+                          <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-2 flex-1">{item.product.nombre}</p>
+                          <button onClick={() => removeByIndex(idx)} className="text-gray-300 hover:text-red-500 transition-colors shrink-0 ml-1" title="Eliminar">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                          </button>
+                        </div>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {(item as any).ojo && (item as any).ojo !== 'AMBOS' && (
                             <span className={`text-[9px] font-black px-1.5 py-0.5 rounded ${(item as any).ojo === 'OD' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'}`}>
@@ -627,9 +586,15 @@ export default function CheckoutPage() {
                           {(item as any).add_power && <span className="text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded font-mono font-bold">ADD {(item as any).add_power}</span>}
                           {(item as any).color && <span className="text-[9px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded font-bold">{(item as any).color}</span>}
                         </div>
-                        <div className="flex justify-between mt-1">
-                          <span className="text-[10px] text-gray-400">×{item.cantidad}</span>
-                          <span className="text-xs font-bold">RD${(Number((item as any).precio_final ?? item.product.precio)*item.cantidad).toLocaleString()}</span>
+                        <div className="flex justify-between items-center mt-1.5">
+                          <div className="flex items-center gap-1">
+                            <button onClick={() => updateItem(idx, Math.max(1, item.cantidad - 1))}
+                              className="w-5 h-5 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs transition-colors">−</button>
+                            <span className="text-xs font-bold text-gray-700 w-5 text-center">{item.cantidad}</span>
+                            <button onClick={() => updateItem(idx, item.cantidad + 1)}
+                              className="w-5 h-5 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs transition-colors">+</button>
+                          </div>
+                          <span className="text-xs font-bold text-gray-900">RD${(Number((item as any).precio_final ?? item.product.precio)*item.cantidad).toLocaleString()}</span>
                         </div>
                       </div>
                     </div>
