@@ -23,7 +23,12 @@ export async function GET(req: NextRequest) {
   console.log('[AZUL/retorno] params:', { orderNumber, azulOrderId, responseCode, resultado, amount })
 
   let orderId = ''
-  const esAprobado = resultado === 'aprobado' || responseCode === '00' || responseCode === '000'
+  // AZUL ResponseCode: "00" = aprobado, "ISO0" = aprobado en algunos casos
+  const esAprobado = resultado === 'aprobado' || 
+    responseCode === '00' || 
+    responseCode === '000' ||
+    responseCode === 'ISO0' ||
+    responseCode === '0'
 
   // Buscar la orden por numero_orden (AZUL devuelve OrderNumber, no el UUID)
   if (orderNumber) {
