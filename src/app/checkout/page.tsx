@@ -65,9 +65,8 @@ export default function CheckoutPage() {
   const metodoPago = 'tarjeta' as const
 
   const sub = subtotal()
-  const tot = total()
   const envio = sub >= 8000 ? 0 : 200
-  const totalFinal = tot + envio - descuento
+  const totalFinal = sub + envio - descuento
 
   const { register, handleSubmit, getValues, setValue, trigger, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema)
