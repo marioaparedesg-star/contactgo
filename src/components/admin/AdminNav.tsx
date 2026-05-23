@@ -59,7 +59,12 @@ export default function AdminNav() {
   const [stockAlerts, setStockAlerts] = useState(0)
 
   useEffect(() => {
-    sb.from('orders').select('*', { count: 'exact', head: true }).eq('estado', 'pendiente')
+    // Pedidos que necesitan atención = estado pendiente o confirmado (aún no en preparación)
+    sb.from('orders').select('*', { count: 'exact', head: true })
+      .in('estado', ['pendiente', 'confirmado'])
+      .not('pago_estado', 'eq', 'declinado')
+      .not('numero_orden', 'like', 'CG-TEST%')
+      .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
       .then(({ count }) => setPendientes(count ?? 0))
     sb.from('products').select('*', { count: 'exact', head: true }).eq('activo', true).lte('stock', 3)
       .then(({ count }) => setStockAlerts(count ?? 0))

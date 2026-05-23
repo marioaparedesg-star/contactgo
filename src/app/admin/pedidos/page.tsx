@@ -96,7 +96,7 @@ export default function PedidosPage() {
 
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">Pedidos</h1>
-            <p className="text-sm text-gray-400 mt-0.5">{pedidos.length} total · {pedidos.filter(p=>p.estado==='pendiente').length} pendientes</p>
+            <p className="text-sm text-gray-400 mt-0.5">{pedidos.length} total · {pedidos.filter(p=>p.estado==='confirmado'&&p.pago_estado!=='pagado').length} por preparar · {pedidos.filter(p=>p.pago_estado==='pagado'&&p.estado!=='entregado').length} pagados</p>
           </div>
 
           {/* Filtros */}
