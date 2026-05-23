@@ -80,8 +80,18 @@ export default function LocationPicker({ initialLat, initialLng, initialAddress,
     if (!apiKey) { setLoading(false); return }
 
     loadGoogleMaps(apiKey).then(() => {
-      if (!mapRef.current) return
+      // mapRef might not be ready yet — retry up to 10 times
+      let attempts = 0
+      const tryInit = () => {
+        if (!mapRef.current) {
+          if (attempts++ < 10) setTimeout(tryInit, 150)
+          else setLoading(false)
+          return
+        }
+        doInit()
+      }
 
+      const doInit = () => {
       const center = initialLat && initialLng
         ? { lat: initialLat, lng: initialLng }
         : SD
@@ -129,6 +139,8 @@ export default function LocationPicker({ initialLat, initialLng, initialAddress,
       if (initialLat && initialLng) reverseGeocode(initialLat, initialLng)
 
       setLoading(false)
+      } // end doInit
+      tryInit()
     }).catch(() => setLoading(false))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
