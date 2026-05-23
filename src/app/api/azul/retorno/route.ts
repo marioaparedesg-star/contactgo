@@ -62,23 +62,33 @@ export async function GET(req: NextRequest) {
         console.log('[AZUL/retorno] orden encontrada:', orderId, '| pago_estado actual:', order.pago_estado)
 
         if (esAprobado) {
-          // ── Guardar TODOS los datos de AZUL en la orden ─────────────────
+          // ── Obtener próximo NCF ──────────────────────────────────────────
+          let ncf: string | null = null
+          try {
+            const { data: ncfData, error: ncfErr } = await sb.rpc('get_next_ncf', { p_serie: 'E02' })
+            if (ncfErr) console.error('[AZUL/retorno] NCF error:', ncfErr.message)
+            else { ncf = ncfData as string; console.log('[AZUL/retorno] NCF asignado:', ncf) }
+          } catch (e) { console.error('[AZUL/retorno] NCF excepción:', e) }
+
+          // ── Guardar TODOS los datos de AZUL + NCF en la orden ───────────
           const { error: updateErr } = await sb.from('orders').update({
-            pago_estado:       'pagado',
-            estado:            'confirmado',
-            azul_order_number: orderNumber,
-            azul_order_id:     azulOrderId  || null,
-            azul_auth_code:    authCode     || null,
-            azul_rrn:          rrn         || null,
-            azul_response_code: responseCode || null,  // ISO8583
-            azul_iso_code:     isoCode      || null,   // 00 = aprobado
-            pagado_en:         new Date().toISOString(),
+            pago_estado:        'pagado',
+            estado:             'confirmado',
+            azul_order_number:  orderNumber,
+            azul_order_id:      azulOrderId  || null,
+            azul_auth_code:     authCode     || null,
+            azul_rrn:           rrn          || null,
+            azul_response_code: responseCode || null,
+            azul_iso_code:      isoCode      || null,
+            pagado_en:          new Date().toISOString(),
+            ncf:                ncf,
+            ncf_tipo:           'E02',
           }).eq('id', orderId)
 
           if (updateErr) {
             console.error('[AZUL/retorno] ERROR actualizando orden:', updateErr.message)
           } else {
-            console.log('[AZUL/retorno] ✅ orden actualizada pago_estado=pagado')
+            console.log('[AZUL/retorno] ✅ orden actualizada pago_estado=pagado, ncf:', ncf)
             // Notificar por email
             fetch(`${BASE}/api/notify`, {
               method: 'POST',

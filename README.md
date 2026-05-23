@@ -74,13 +74,13 @@ git init
 git add .
 git commit -m "ContactGo v1.0 — Initial commit"
 git branch -M main
-git remote add origin https://github.com/marioaparedesg-star/contactgo
+git remote add origin https://github.com/contactgo/contactgo
 git push -u origin main
 ```
 
 ### 3.2 Conectar Vercel
 1. [vercel.com](https://vercel.com) → Add New Project
-2. Importar: `marioaparedesg-star/contactgo`
+2. Importar: `contactgo/contactgo`
 3. Framework: **Next.js** (detecta automático)
 4. **Environment Variables** → Agregar todas las del `.env.local`
 5. Clic **Deploy**

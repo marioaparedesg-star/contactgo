@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingBag, Package, Users, BarChart2,
   Repeat, ShoppingCart, TrendingUp, Tag, Settings, ChevronLeft,
-  ChevronRight, LogOut, Menu, X, Bell, ExternalLink
+  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -38,6 +38,7 @@ const NAV_SECTIONS = [
     label: 'Análisis',
     items: [
       { href: '/admin/reportes',      icon: TrendingUp,      label: 'Reportes',       badge: null },
+      { href: '/admin/dgii',          icon: FileText,        label: 'DGII / 607',     badge: null },
     ]
   },
   {
