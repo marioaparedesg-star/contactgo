@@ -58,11 +58,13 @@ export default function InventarioPage() {
     if (val===undefined||val===item.stock) return
     setGuardando(key)
     await sb.from('product_inventory').update({stock:val,updated_at:new Date().toISOString()}).eq('id',item.id)
-    const newInv = prev[item.product_id].map(i=>i.id===item.id?{...i,stock:val}:i)
-    setInventario(prev=>({...prev,[item.product_id]:newInv}))
-    // Actualizar stock total del producto en la lista
-    const nuevoTotal = newInv.reduce((s,i)=>s+i.stock,0)
-    setProductos(ps=>ps.map(p=>p.id===item.product_id?{...p,stock:nuevoTotal}:p))
+    setInventario(prev=>{
+      const newInv = (prev[item.product_id]??[]).map(i=>i.id===item.id?{...i,stock:val}:i)
+      const nuevoTotalInner = newInv.reduce((s,i)=>s+i.stock,0)
+      setProductos(ps=>ps.map(p=>p.id===item.product_id?{...p,stock:nuevoTotalInner}:p))
+      return {...prev,[item.product_id]:newInv}
+    })
+
     setEditando(prev=>{const n={...prev};delete n[key];return n})
     const sphLabel = `SPH ${item.sph>0?'+':''}${item.sph}${item.cyl!=null?` CYL ${item.cyl}`:''}`
     toast.success(`${sphLabel} → ${val}u ✓`)
