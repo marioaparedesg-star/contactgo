@@ -23,24 +23,33 @@ declare global {
 const SD = { lat: 18.4861, lng: -69.9312 }
 
 function loadGoogleMaps(apiKey: string): Promise<void> {
-  if (window._gmapsLoaded && window.google?.maps) return Promise.resolve()
-  if (window._gmapsLoaded) {
-    // Script tag exists but not loaded yet — wait
-    return new Promise(resolve => {
-      const check = setInterval(() => {
-        if (window.google?.maps) { clearInterval(check); resolve() }
-      }, 100)
-    })
-  }
-  window._gmapsLoaded = true
+  // Already loaded
+  if (window.google?.maps) return Promise.resolve()
+
   return new Promise((resolve, reject) => {
+    // Script already injected — poll until ready
+    const existing = document.querySelector('script[src*="maps.googleapis.com"]')
+    if (existing) {
+      const poll = setInterval(() => {
+        if (window.google?.maps) { clearInterval(poll); resolve() }
+      }, 150)
+      setTimeout(() => { clearInterval(poll); reject(new Error('timeout')) }, 15000)
+      return
+    }
+
+    // Inject script
     const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&language=es&region=DO`
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&language=es&region=DO&v=weekly`
     script.async = true
-    script.defer = true
-    script.onload = () => resolve()
-    script.onerror = () => reject(new Error('Google Maps failed to load'))
     document.head.appendChild(script)
+
+    // Poll for google.maps instead of relying on onload
+    const poll = setInterval(() => {
+      if (window.google?.maps) { clearInterval(poll); resolve() }
+    }, 150)
+
+    script.onerror = () => { clearInterval(poll); reject(new Error('script error')) }
+    setTimeout(() => { clearInterval(poll); reject(new Error('timeout')) }, 15000)
   })
 }
 
