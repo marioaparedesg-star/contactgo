@@ -7,6 +7,7 @@ import {
   ChevronRight, FileText, CreditCard, MessageCircle, Lock, Fingerprint, ShieldCheck,
   Eye, EyeOff, KeyRound, Repeat, Calendar, RefreshCw
 } from 'lucide-react'
+import LocationPicker, { type LocationData } from '@/components/ui/LocationPicker'
 
 // ─── WebAuthn helpers ────────────────────────────────────────────────────────
 function bufferToBase64url(buf: ArrayBuffer): string {
@@ -103,6 +104,10 @@ export default function CuentaPage() {
   const [direcciones, setDirecciones] = useState<any[]>([])
   const [nuevaDireccion, setNuevaDireccion] = useState('')
   const [nuevaCiudad, setNuevaCiudad]   = useState('Santo Domingo')
+  const [showMap,     setShowMap]       = useState(false)
+  const [profileLat,  setProfileLat]    = useState<number|null>(null)
+  const [profileLng,  setProfileLng]    = useState<number|null>(null)
+  const [profileAddr, setProfileAddr]   = useState<string|null>(null)
   const [agregandoDir, setAgregandoDir] = useState(false)
   const [modo, setModo]       = useState('login')
   const [email, setEmail]     = useState('')
@@ -148,7 +153,7 @@ export default function CuentaPage() {
       if (user) {
         setUser(user)
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data }) => {
-          if (data) { setPerfil(data); setForm({ nombre: data.nombre || '', telefono: data.telefono || '' }) }
+          if (data) { setPerfil(data); setForm({ nombre: data.nombre || '', telefono: data.telefono || '' }); setProfileLat(data.lat ?? null); setProfileLng(data.lng ?? null); setProfileAddr(data.direccion_completa ?? null) }
         })
         sb.from('orders').select('*').eq('user_id', user.id).order('fecha', { ascending: false }).then(({ data }) => setPedidos(data || []))
         sb.from('addresses').select('*').eq('user_id', user.id).order('created_at').then(({ data }) => setDirecciones(data || []))
@@ -1102,43 +1107,116 @@ export default function CuentaPage() {
 
         {/* TAB: DIRECCIONES */}
         {tab==='direcciones' && (
-          <div className="space-y-3">
-            {direcciones.map(d => (
-              <div key={d.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-start justify-between gap-3">
-                <div className="flex items-start gap-3">
-                  <div className={"w-8 h-8 rounded-xl flex items-center justify-center shrink-0 " + (d.principal?'bg-primary-100':'bg-gray-100')}>
-                    <MapPin className={"w-4 h-4 " + (d.principal?'text-primary-600':'text-gray-400')} />
+          <div className="space-y-4">
+
+            {/* ── Ubicación en mapa ────────────────────────────────── */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-primary-100 rounded-xl flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-primary-600" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 text-sm">{d.direccion}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{d.ciudad}</p>
-                    {d.principal && <span className="text-xs text-primary-600 font-semibold bg-primary-50 px-2 py-0.5 rounded-full mt-1 inline-block">Principal</span>}
+                    <p className="text-sm font-bold text-gray-900">Ubicación en mapa</p>
+                    <p className="text-xs text-gray-400">Para entregas más rápidas y precisas</p>
                   </div>
                 </div>
-                <button onClick={() => eliminarDireccion(d.id)} className="text-gray-300 hover:text-red-500 transition-colors p-1">
-                  <Trash2 className="w-4 h-4" />
+                <button onClick={() => setShowMap(m => !m)}
+                  className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors ${showMap ? 'bg-gray-100 text-gray-600' : 'bg-primary-600 text-white hover:bg-primary-700'}`}>
+                  {showMap ? 'Cerrar' : profileLat ? '✏️ Editar' : '📍 Marcar'}
                 </button>
               </div>
-            ))}
-            {agregandoDir ? (
-              <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
-                <input value={nuevaDireccion} onChange={e => setNuevaDireccion(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                  placeholder="Calle, número, sector" />
-                <input value={nuevaCiudad} onChange={e => setNuevaCiudad(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                  placeholder="Ciudad" />
-                <div className="flex gap-2">
-                  <button onClick={agregarDireccion} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors">Guardar</button>
-                  <button onClick={() => setAgregandoDir(false)} className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors">Cancelar</button>
+
+              {/* Preview cuando ya tiene ubicación */}
+              {profileLat && profileLng && !showMap && (
+                <div className="relative w-full" style={{height:160}}>
+                  <img
+                    src={`https://maps.googleapis.com/maps/api/staticmap?center=${profileLat},${profileLng}&zoom=16&size=600x160&scale=2&markers=color:green%7C${profileLat},${profileLng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`}
+                    alt="Tu ubicación"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur rounded-xl px-3 py-2">
+                    <p className="text-xs text-gray-700 truncate">{profileAddr ?? 'Ubicación guardada'}</p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <button onClick={() => setAgregandoDir(true)}
-                className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors">
-                <Plus className="w-5 h-5" /> Agregar dirección
-              </button>
-            )}
+              )}
+
+              {/* Sin ubicación aún */}
+              {!profileLat && !showMap && (
+                <div className="px-4 py-5 text-center">
+                  <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <MapPin className="w-6 h-6 text-gray-300" />
+                  </div>
+                  <p className="text-sm text-gray-500 font-medium">Sin ubicación guardada</p>
+                  <p className="text-xs text-gray-400 mt-1">Marca tu pin en el mapa para que podamos entregarte más rápido</p>
+                </div>
+              )}
+
+              {/* Mapa activo */}
+              {showMap && (
+                <div className="p-4">
+                  <LocationPicker
+                    initialLat={profileLat}
+                    initialLng={profileLng}
+                    initialAddress={profileAddr}
+                    onSave={async (data: LocationData) => {
+                      if (!user) return
+                      const sbLocal = createClient()
+                      await sbLocal.from('profiles').update({
+                        lat: data.lat, lng: data.lng,
+                        direccion_completa: data.direccion_completa
+                      }).eq('id', user.id)
+                      setProfileLat(data.lat)
+                      setProfileLng(data.lng)
+                      setProfileAddr(data.direccion_completa)
+                      setShowMap(false)
+                    }}
+                    onCancel={() => setShowMap(false)}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* ── Direcciones de texto ─────────────────────────────── */}
+            <div>
+              <p className="text-xs font-bold text-gray-500 uppercase mb-2 px-1">Direcciones guardadas</p>
+              {direcciones.map(d => (
+                <div key={d.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-start justify-between gap-3 mb-2">
+                  <div className="flex items-start gap-3">
+                    <div className={"w-8 h-8 rounded-xl flex items-center justify-center shrink-0 " + (d.principal?'bg-primary-100':'bg-gray-100')}>
+                      <MapPin className={"w-4 h-4 " + (d.principal?'text-primary-600':'text-gray-400')} />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900 text-sm">{d.direccion}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{d.ciudad}</p>
+                      {d.principal && <span className="text-xs text-primary-600 font-semibold bg-primary-50 px-2 py-0.5 rounded-full mt-1 inline-block">Principal</span>}
+                    </div>
+                  </div>
+                  <button onClick={() => eliminarDireccion(d.id)} className="text-gray-300 hover:text-red-500 transition-colors p-1">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+              {agregandoDir ? (
+                <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
+                  <input value={nuevaDireccion} onChange={e => setNuevaDireccion(e.target.value)}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                    placeholder="Calle, número, sector" />
+                  <input value={nuevaCiudad} onChange={e => setNuevaCiudad(e.target.value)}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                    placeholder="Ciudad" />
+                  <div className="flex gap-2">
+                    <button onClick={agregarDireccion} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors">Guardar</button>
+                    <button onClick={() => setAgregandoDir(false)} className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors">Cancelar</button>
+                  </div>
+                </div>
+              ) : (
+                <button onClick={() => setAgregandoDir(true)}
+                  className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors">
+                  <Plus className="w-5 h-5" /> Agregar dirección de texto
+                </button>
+              )}
+            </div>
           </div>
         )}
 

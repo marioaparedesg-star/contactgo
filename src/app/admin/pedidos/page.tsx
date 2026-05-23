@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import AdminNav from '@/components/admin/AdminNav'
-import { Search, X, Printer, MessageCircle, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell } from 'lucide-react'
+import { Search, X, Printer, MessageCircle, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const ESTADOS = ['pendiente','confirmado','preparando','enviado','entregado','cancelado']
@@ -168,6 +168,9 @@ export default function PedidosPage() {
                   <p className="text-gray-500">{selected.cliente_email}</p>
                   <p className="text-gray-500">{selected.cliente_telefono}</p>
                   <p className="text-gray-500 text-xs">{selected.direccion_texto}</p>
+                  {selected.lat && selected.lng && (
+                    <p className="text-[10px] text-blue-500 font-mono mt-0.5">{selected.lat?.toFixed(5)}, {selected.lng?.toFixed(5)}</p>
+                  )}
                 </div>
 
                 {/* NCF */}
@@ -239,6 +242,13 @@ export default function PedidosPage() {
                     className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700">
                     <MessageCircle className="w-3.5 h-3.5"/>WA
                   </button>
+                  {selected.lat && selected.lng && (
+                    <button onClick={()=>window.open(`https://www.google.com/maps?q=${selected.lat},${selected.lng}`,'_blank')}
+                      className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
+                      title="Ver ubicación del cliente en Google Maps">
+                      <Navigation className="w-3.5 h-3.5"/>Mapa
+                    </button>
+                  )}
                   <button onClick={printOrder}
                     className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50">
                     <Printer className="w-3.5 h-3.5"/>Imprimir
