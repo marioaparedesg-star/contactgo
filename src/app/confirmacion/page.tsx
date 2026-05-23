@@ -35,8 +35,8 @@ function ConfirmacionContent() {
   const [showConfetti, setShowConfetti] = useState(false)
 
   // Limpiar carrito cuando AZUL confirma pago aprobado
-  const clearCart = typeof window !== 'undefined' 
-    ? (() => { try { const s = JSON.parse(localStorage.getItem('cart-storage') || '{}'); if(s.state) { s.state.items = []; localStorage.setItem('cart-storage', JSON.stringify(s)) } } catch(e) {} })
+  const clearCart = typeof window !== 'undefined'
+    ? (() => { try { const s = JSON.parse(localStorage.getItem('contactgo-cart') || '{}'); if(s.state) { s.state.items = []; localStorage.setItem('contactgo-cart', JSON.stringify(s)) } } catch(e) {} })
     : () => {}
 
   const origen = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('origen') : null

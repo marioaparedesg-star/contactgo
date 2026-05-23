@@ -12,10 +12,10 @@ function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, pr
 
 const BASE_URL    = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
 // Admin recibe notificaciones en este email
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'info@contactgo.net'
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'info@contactgo.net'
 // FROM: si RESEND_FROM está configurado con dominio verificado, úsalo.
 // Si no, usa onboarding@resend.dev (funciona sin verificar dominio propio)
-const FROM_EMAIL  = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
+const FROM_EMAIL  = process.env.RESEND_FROM ?? 'ContactGo <notifications@contactgo.net>'
 
 const ESTADO_LABEL: Record<string, string> = {
   pendiente:  '⏳ Recibido',
