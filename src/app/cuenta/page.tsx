@@ -104,10 +104,18 @@ export default function CuentaPage() {
   const [direcciones, setDirecciones] = useState<any[]>([])
   const [nuevaDireccion, setNuevaDireccion] = useState('')
   const [nuevaCiudad, setNuevaCiudad]   = useState('Santo Domingo')
-  const [showMap,     setShowMap]       = useState(false)
-  const [profileLat,  setProfileLat]    = useState<number|null>(null)
-  const [profileLng,  setProfileLng]    = useState<number|null>(null)
-  const [profileAddr, setProfileAddr]   = useState<string|null>(null)
+  const [showMap,       setShowMap]       = useState(false)
+  const [profileLat,    setProfileLat]    = useState<number|null>(null)
+  const [profileLng,    setProfileLng]    = useState<number|null>(null)
+  const [profileAddr,   setProfileAddr]   = useState<string|null>(null)
+  // Dirección seleccionada para nueva dirección con mapa
+  const [mapEditId,     setMapEditId]     = useState<string|null>(null)  // id de direccion editando mapa
+  const [showAddDir,    setShowAddDir]    = useState(false)              // formulario nueva dirección
+  const [newDirData,    setNewDirData]    = useState({ etiqueta:'Casa', direccion:'', ciudad:'Santo Domingo', referencias:'' })
+  const [newDirStep,    setNewDirStep]    = useState<'form'|'map'>('form')  // paso: form o mapa
+  const [newDirLat,     setNewDirLat]     = useState<number|null>(null)
+  const [newDirLng,     setNewDirLng]     = useState<number|null>(null)
+  const [newDirMapAddr, setNewDirMapAddr] = useState<string|null>(null)
   const [agregandoDir, setAgregandoDir] = useState(false)
   const [modo, setModo]       = useState('login')
   const [email, setEmail]     = useState('')
@@ -321,13 +329,40 @@ export default function CuentaPage() {
   }
 
   const agregarDireccion = async () => {
-    if (!nuevaDireccion.trim()) return
+    if (!newDirData.direccion.trim()) return
     const sb = createClient()
     const { data, error } = await sb.from('addresses').insert({
-      user_id: user.id, direccion: nuevaDireccion, ciudad: nuevaCiudad, principal: direcciones.length === 0
+      user_id: user.id,
+      etiqueta:    newDirData.etiqueta,
+      direccion:   newDirData.direccion,
+      ciudad:      newDirData.ciudad,
+      referencias: newDirData.referencias || null,
+      lat:         newDirLat,
+      lng:         newDirLng,
+      principal:   direcciones.length === 0,
     }).select().single()
     if (error) { alert(error.message); return }
-    if (data) { setDirecciones(d => [...d, data]); setNuevaDireccion(''); setNuevaCiudad('Santo Domingo'); setAgregandoDir(false) }
+    if (data) {
+      setDirecciones(d => [...d, data])
+      setShowAddDir(false)
+      setNewDirData({ etiqueta:'Casa', direccion:'', ciudad:'Santo Domingo', referencias:'' })
+      setNewDirLat(null); setNewDirLng(null); setNewDirMapAddr(null)
+      setNewDirStep('form')
+    }
+  }
+
+  const marcarPrincipal = async (id: string) => {
+    const sb = createClient()
+    await sb.from('addresses').update({ principal: false }).eq('user_id', user.id)
+    await sb.from('addresses').update({ principal: true }).eq('id', id)
+    setDirecciones(ds => ds.map(d => ({ ...d, principal: d.id === id })))
+  }
+
+  const guardarMapaDireccion = async (id: string, lat: number, lng: number) => {
+    const sb = createClient()
+    await sb.from('addresses').update({ lat, lng }).eq('id', id)
+    setDirecciones(ds => ds.map(d => d.id === id ? { ...d, lat, lng } : d))
+    setMapEditId(null)
   }
 
   const eliminarDireccion = async (id: string) => {
@@ -1107,116 +1142,171 @@ export default function CuentaPage() {
 
         {/* TAB: DIRECCIONES */}
         {tab==='direcciones' && (
-          <div className="space-y-4">
+          <div className="space-y-3">
 
-            {/* ── Ubicación en mapa ────────────────────────────────── */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-primary-100 rounded-xl flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-primary-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900">Ubicación en mapa</p>
-                    <p className="text-xs text-gray-400">Para entregas más rápidas y precisas</p>
-                  </div>
-                </div>
-                <button onClick={() => setShowMap(m => !m)}
-                  className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors ${showMap ? 'bg-gray-100 text-gray-600' : 'bg-primary-600 text-white hover:bg-primary-700'}`}>
-                  {showMap ? 'Cerrar' : profileLat ? '✏️ Editar' : '📍 Marcar'}
-                </button>
-              </div>
-
-              {/* Preview cuando ya tiene ubicación */}
-              {profileLat && profileLng && !showMap && (
-                <div className="relative w-full" style={{height:160}}>
-                  <img
-                    src={`https://maps.googleapis.com/maps/api/staticmap?center=${profileLat},${profileLng}&zoom=16&size=600x160&scale=2&markers=color:green%7C${profileLat},${profileLng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`}
-                    alt="Tu ubicación"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur rounded-xl px-3 py-2">
-                    <p className="text-xs text-gray-700 truncate">{profileAddr ?? 'Ubicación guardada'}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Sin ubicación aún */}
-              {!profileLat && !showMap && (
-                <div className="px-4 py-5 text-center">
-                  <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <MapPin className="w-6 h-6 text-gray-300" />
-                  </div>
-                  <p className="text-sm text-gray-500 font-medium">Sin ubicación guardada</p>
-                  <p className="text-xs text-gray-400 mt-1">Marca tu pin en el mapa para que podamos entregarte más rápido</p>
-                </div>
-              )}
-
-              {/* Mapa activo */}
-              {showMap && (
-                <div className="p-4">
-                  <LocationPicker
-                    initialLat={profileLat}
-                    initialLng={profileLng}
-                    initialAddress={profileAddr}
-                    onSave={async (data: LocationData) => {
-                      if (!user) return
-                      const sbLocal = createClient()
-                      await sbLocal.from('profiles').update({
-                        lat: data.lat, lng: data.lng,
-                        direccion_completa: data.direccion_completa
-                      }).eq('id', user.id)
-                      setProfileLat(data.lat)
-                      setProfileLng(data.lng)
-                      setProfileAddr(data.direccion_completa)
-                      setShowMap(false)
-                    }}
-                    onCancel={() => setShowMap(false)}
-                  />
-                </div>
-              )}
-            </div>
-
-            {/* ── Direcciones de texto ─────────────────────────────── */}
-            <div>
-              <p className="text-xs font-bold text-gray-500 uppercase mb-2 px-1">Direcciones guardadas</p>
-              {direcciones.map(d => (
-                <div key={d.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-start justify-between gap-3 mb-2">
-                  <div className="flex items-start gap-3">
-                    <div className={"w-8 h-8 rounded-xl flex items-center justify-center shrink-0 " + (d.principal?'bg-primary-100':'bg-gray-100')}>
-                      <MapPin className={"w-4 h-4 " + (d.principal?'text-primary-600':'text-gray-400')} />
+            {/* Lista de direcciones guardadas */}
+            {direcciones.map(d => {
+              const isEditingMap = mapEditId === d.id
+              const ETIQUETA_ICON: Record<string,string> = { Casa:'🏠', Trabajo:'💼', Otro:'📍' }
+              return (
+                <div key={d.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${d.principal ? 'border-primary-300' : 'border-gray-100'}`}>
+                  {/* Header dirección */}
+                  <div className="flex items-start gap-3 p-4">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg ${d.principal ? 'bg-primary-100' : 'bg-gray-100'}`}>
+                      {ETIQUETA_ICON[d.etiqueta ?? 'Casa'] ?? '📍'}
                     </div>
-                    <div>
-                      <p className="font-medium text-gray-900 text-sm">{d.direccion}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{d.ciudad}</p>
-                      {d.principal && <span className="text-xs text-primary-600 font-semibold bg-primary-50 px-2 py-0.5 rounded-full mt-1 inline-block">Principal</span>}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-bold text-gray-900 text-sm">{d.etiqueta ?? 'Dirección'}</p>
+                        {d.principal && <span className="text-[10px] font-bold text-primary-600 bg-primary-50 border border-primary-200 px-2 py-0.5 rounded-full">Principal</span>}
+                        {d.lat && d.lng && <span className="text-[10px] font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">📍 Mapa</span>}
+                      </div>
+                      <p className="text-sm text-gray-700 mt-0.5">{d.direccion}</p>
+                      <p className="text-xs text-gray-400">{d.ciudad}</p>
+                      {d.referencias && <p className="text-xs text-gray-400 italic mt-0.5">{d.referencias}</p>}
                     </div>
+                    <button onClick={() => eliminarDireccion(d.id)} className="text-gray-300 hover:text-red-500 p-1 shrink-0">
+                      <Trash2 className="w-4 h-4"/>
+                    </button>
                   </div>
-                  <button onClick={() => eliminarDireccion(d.id)} className="text-gray-300 hover:text-red-500 transition-colors p-1">
-                    <Trash2 className="w-4 h-4" />
+
+                  {/* Acciones */}
+                  <div className="flex gap-2 px-4 pb-3">
+                    {!d.principal && (
+                      <button onClick={() => marcarPrincipal(d.id)}
+                        className="flex-1 text-xs font-semibold py-1.5 rounded-lg border border-primary-200 text-primary-600 hover:bg-primary-50 transition-colors">
+                        ★ Marcar principal
+                      </button>
+                    )}
+                    <button onClick={() => setMapEditId(isEditingMap ? null : d.id)}
+                      className={`flex-1 text-xs font-semibold py-1.5 rounded-lg border transition-colors ${
+                        isEditingMap
+                          ? 'border-gray-300 bg-gray-100 text-gray-600'
+                          : d.lat ? 'border-green-200 text-green-700 hover:bg-green-50' : 'border-blue-200 text-blue-600 hover:bg-blue-50'
+                      }`}>
+                      {isEditingMap ? 'Cerrar mapa' : d.lat ? '✏️ Editar pin' : '📍 Agregar pin'}
+                    </button>
+                    {d.lat && d.lng && (
+                      <a href={`https://www.google.com/maps?q=${d.lat},${d.lng}`} target="_blank" rel="noopener"
+                        className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors">
+                        Ver
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Mapa edición inline */}
+                  {isEditingMap && (
+                    <div className="border-t border-gray-100 p-4 bg-gray-50/50">
+                      <LocationPicker
+                        initialLat={d.lat}
+                        initialLng={d.lng}
+                        initialAddress={d.direccion + ', ' + d.ciudad}
+                        onSave={async (data: LocationData) => {
+                          await guardarMapaDireccion(d.id, data.lat, data.lng)
+                        }}
+                        onCancel={() => setMapEditId(null)}
+                      />
+                    </div>
+                  )}
+
+                  {/* Mini preview si tiene pin y no está editando */}
+                  {d.lat && d.lng && !isEditingMap && process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY && (
+                    <div className="border-t border-gray-50">
+                      <img
+                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${d.lat},${d.lng}&zoom=16&size=600x120&scale=2&markers=color:green%7C${d.lat},${d.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`}
+                        alt="Mapa"
+                        className="w-full object-cover"
+                        style={{height:100}}
+                      />
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+
+            {/* Formulario nueva dirección */}
+            {showAddDir ? (
+              <div className="bg-white rounded-2xl border border-primary-200 shadow-sm overflow-hidden">
+                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                  <p className="font-bold text-gray-900 text-sm">Nueva dirección</p>
+                  <button onClick={() => { setShowAddDir(false); setNewDirStep('form') }} className="text-gray-400 hover:text-gray-600">
+                    <X className="w-4 h-4"/>
                   </button>
                 </div>
-              ))}
-              {agregandoDir ? (
-                <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
-                  <input value={nuevaDireccion} onChange={e => setNuevaDireccion(e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                    placeholder="Calle, número, sector" />
-                  <input value={nuevaCiudad} onChange={e => setNuevaCiudad(e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                    placeholder="Ciudad" />
-                  <div className="flex gap-2">
-                    <button onClick={agregarDireccion} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors">Guardar</button>
-                    <button onClick={() => setAgregandoDir(false)} className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors">Cancelar</button>
+
+                {newDirStep === 'form' ? (
+                  <div className="p-4 space-y-3">
+                    {/* Etiqueta */}
+                    <div className="flex gap-2">
+                      {['Casa','Trabajo','Otro'].map(e => (
+                        <button key={e} onClick={() => setNewDirData(d => ({...d, etiqueta:e}))}
+                          className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition-all ${newDirData.etiqueta===e ? 'bg-primary-600 text-white border-primary-600' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}>
+                          {e === 'Casa' ? '🏠' : e === 'Trabajo' ? '💼' : '📍'} {e}
+                        </button>
+                      ))}
+                    </div>
+                    <input value={newDirData.direccion} onChange={e => setNewDirData(d => ({...d,direccion:e.target.value}))}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                      placeholder="Calle, número, sector *"/>
+                    <select value={newDirData.ciudad} onChange={e => setNewDirData(d => ({...d,ciudad:e.target.value}))}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white">
+                      {['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata','Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad'].map(c => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                    <input value={newDirData.referencias} onChange={e => setNewDirData(d => ({...d,referencias:e.target.value}))}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                      placeholder="Referencias: portón azul, cerca del parque... (opcional)"/>
+
+                    {/* Preview pin si ya marcó */}
+                    {newDirLat && newDirLng && (
+                      <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+                        <MapPin className="w-4 h-4 text-green-600 shrink-0"/>
+                        <p className="text-xs text-green-700 flex-1 truncate">{newDirMapAddr ?? 'Pin marcado'}</p>
+                        <button onClick={() => { setNewDirLat(null); setNewDirLng(null); setNewDirMapAddr(null) }}
+                          className="text-green-500 hover:text-green-700">
+                          <X className="w-3.5 h-3.5"/>
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="flex gap-2 pt-1">
+                      <button onClick={() => setNewDirStep('map')}
+                        className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors">
+                        {newDirLat ? '✏️ Editar pin' : '📍 Marcar en mapa'}
+                      </button>
+                      <button onClick={agregarDireccion}
+                        disabled={!newDirData.direccion.trim()}
+                        className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-40 transition-colors">
+                        Guardar
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <button onClick={() => setAgregandoDir(true)}
-                  className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors">
-                  <Plus className="w-5 h-5" /> Agregar dirección de texto
-                </button>
-              )}
-            </div>
+                ) : (
+                  <div className="p-4">
+                    <p className="text-xs text-gray-500 mb-3">Marca el pin exacto de tu dirección</p>
+                    <LocationPicker
+                      initialLat={newDirLat}
+                      initialLng={newDirLng}
+                      initialAddress={newDirData.direccion ? `${newDirData.direccion}, ${newDirData.ciudad}` : null}
+                      onSave={(data: LocationData) => {
+                        setNewDirLat(data.lat)
+                        setNewDirLng(data.lng)
+                        setNewDirMapAddr(data.direccion_completa)
+                        setNewDirStep('form')
+                      }}
+                      onCancel={() => setNewDirStep('form')}
+                    />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button onClick={() => setShowAddDir(true)}
+                className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors">
+                <Plus className="w-5 h-5"/> Nueva dirección
+              </button>
+            )}
+
           </div>
         )}
 

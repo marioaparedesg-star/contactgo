@@ -63,6 +63,8 @@ export default function CheckoutPage() {
   const [authLoading, setAuthLoading] = useState(false)
   const [authMsg, setAuthMsg] = useState('')
   const [step, setStep] = useState<1|2|3>(1)
+  const [savedAddresses, setSavedAddresses] = useState<any[]>([])
+  const [selectedAddrId, setSelectedAddrId] = useState<string|null>(null)
   const metodoPago = 'tarjeta' as const
 
   const sub = subtotal()
@@ -85,7 +87,13 @@ export default function CheckoutPage() {
           if (p?.telefono) setValue('telefono', p.telefono)
         })
         sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: a }) => {
-          if (a?.[0]) { setValue('direccion', a[0].direccion); if (a[0].ciudad) setValue('ciudad', a[0].ciudad) }
+          if (a && a.length > 0) {
+            setSavedAddresses(a)
+            const principal = a.find((x:any) => x.principal) ?? a[0]
+            setSelectedAddrId(principal.id)
+            setValue('direccion', principal.direccion)
+            if (principal.ciudad) setValue('ciudad', principal.ciudad)
+          }
         })
       }
     })
@@ -137,6 +145,11 @@ export default function CheckoutPage() {
         metodo_pago: 'tarjeta', pago_estado: 'pendiente',
         numero_orden: orderNum,
         disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
+        // Coordenadas de la dirección seleccionada
+        ...(() => {
+          const sel = savedAddresses.find((a:any) => a.id === selectedAddrId)
+          return sel?.lat ? { lat: sel.lat, lng: sel.lng } : {}
+        })(),
       }).select().single()
 
       if (error || !order) {
@@ -215,7 +228,13 @@ export default function CheckoutPage() {
         const { data: p } = await sb.from('profiles').select('*').eq('id', user.id).single()
         if (p?.nombre) setValue('nombre', p.nombre); if (p?.email) setValue('email', p.email); if (p?.telefono) setValue('telefono', p.telefono)
         const { data: a } = await sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false })
-        if (a?.[0]) { setValue('direccion', a[0].direccion); if (a[0].ciudad) setValue('ciudad', a[0].ciudad) }
+        if (a && a.length > 0) {
+          setSavedAddresses(a)
+          const principal = a.find((x:any) => x.principal) ?? a[0]
+          setSelectedAddrId(principal.id)
+          setValue('direccion', principal.direccion)
+          if (principal.ciudad) setValue('ciudad', principal.ciudad)
+        }
       }
     }
     setIsLoggedIn(true); setShowAuthModal(false); setAuthLoading(false)
@@ -389,20 +408,76 @@ export default function CheckoutPage() {
 
                 {step === 2 && (
                   <div className="px-5 pb-5 space-y-3 border-t border-gray-50 pt-4">
-                    <div className="relative">
-                      <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                      <label htmlFor="direccion" className="sr-only">Dirección</label>
-                      <input id="direccion" {...register('direccion')} placeholder="Calle, número, sector, referencias" autoComplete="street-address"
-                        aria-label="Dirección de entrega"
-                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
-                      {errors.direccion && <p className="text-red-500 text-xs mt-1">⚠️ {errors.direccion.message}</p>}
-                    </div>
-                    <select {...register('ciudad')}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 bg-white transition-colors">
-                      <option value="">Selecciona tu ciudad</option>
-                      {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
-                    {errors.ciudad && <p className="text-red-500 text-xs">⚠️ {errors.ciudad.message}</p>}
+
+                    {/* Selector de direcciones guardadas */}
+                    {savedAddresses.length > 0 ? (
+                      <div className="space-y-2">
+                        <p className="text-xs font-bold text-gray-500 uppercase">Selecciona tu dirección</p>
+                        {savedAddresses.map((addr:any) => {
+                          const ICON: Record<string,string> = { Casa:'🏠', Trabajo:'💼', Otro:'📍' }
+                          const isSelected = selectedAddrId === addr.id
+                          return (
+                            <button key={addr.id} type="button"
+                              onClick={() => {
+                                setSelectedAddrId(addr.id)
+                                setValue('direccion', addr.direccion)
+                                if (addr.ciudad) setValue('ciudad', addr.ciudad)
+                              }}
+                              className={`w-full text-left p-3 rounded-xl border-2 transition-all ${isSelected ? 'border-primary-500 bg-primary-50/50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                              <div className="flex items-start gap-2">
+                                <span className="text-base shrink-0 mt-0.5">{ICON[addr.etiqueta ?? 'Casa'] ?? '📍'}</span>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                                    {addr.etiqueta ?? 'Dirección'}
+                                    {addr.principal && <span className="text-[10px] font-semibold text-primary-600 bg-primary-50 px-1.5 py-0.5 rounded-full">Principal</span>}
+                                    {addr.lat && <span className="text-[10px] text-green-600">📍 Pin</span>}
+                                  </p>
+                                  <p className="text-xs text-gray-600 truncate">{addr.direccion}</p>
+                                  <p className="text-xs text-gray-400">{addr.ciudad}</p>
+                                  {addr.referencias && <p className="text-xs text-gray-400 italic">{addr.referencias}</p>}
+                                </div>
+                                {isSelected && <div className="w-5 h-5 bg-primary-600 rounded-full flex items-center justify-center shrink-0"><svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/></svg></div>}
+                              </div>
+                              {/* Mini mapa preview si tiene pin */}
+                              {isSelected && addr.lat && addr.lng && process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY && (
+                                <div className="mt-2 rounded-lg overflow-hidden">
+                                  <img
+                                    src={`https://maps.googleapis.com/maps/api/staticmap?center=${addr.lat},${addr.lng}&zoom=16&size=600x100&scale=2&markers=color:green%7C${addr.lat},${addr.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`}
+                                    alt="Mapa" className="w-full object-cover" style={{height:80}}
+                                  />
+                                </div>
+                              )}
+                            </button>
+                          )
+                        })}
+                        <a href="/cuenta" className="text-xs text-primary-600 font-semibold flex items-center gap-1 pt-1">
+                          <MapPin className="w-3 h-3"/> Agregar o editar direcciones
+                        </a>
+                      </div>
+                    ) : (
+                      /* Sin direcciones guardadas — input manual */
+                      <div className="space-y-3">
+                        <div className="relative">
+                          <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                          <label htmlFor="direccion" className="sr-only">Dirección</label>
+                          <input id="direccion" {...register('direccion')} placeholder="Calle, número, sector, referencias" autoComplete="street-address"
+                            aria-label="Dirección de entrega"
+                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                          {errors.direccion && <p className="text-red-500 text-xs mt-1">⚠️ {errors.direccion.message}</p>}
+                        </div>
+                        <select {...register('ciudad')}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 bg-white transition-colors">
+                          <option value="">Selecciona tu ciudad</option>
+                          {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                        {errors.ciudad && <p className="text-red-500 text-xs">⚠️ {errors.ciudad.message}</p>}
+                        {isLoggedIn && (
+                          <a href="/cuenta" className="text-xs text-primary-600 font-semibold flex items-center gap-1">
+                            <MapPin className="w-3 h-3"/> Guardar esta dirección en tu perfil
+                          </a>
+                        )}
+                      </div>
+                    )}
 
                     {items.some(i => i.product.tipo === 'torico') && (
                       <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-2 items-start">
