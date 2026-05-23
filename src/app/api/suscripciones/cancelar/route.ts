@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         cliente_email: sub.cliente_email, cliente_telefono: sub.cliente_telefono,
         direccion_texto: sub.direccion_texto, estado: 'pendiente',
         subtotal: totalConDescuento, envio: 0, descuento: totalBruto - totalConDescuento,
-        total: totalConDescuento, metodo_pago: 'contra_entrega', pago_estado: 'pendiente',
+        total: totalConDescuento, metodo_pago: 'tarjeta', pago_estado: 'pendiente',
         notas_admin: `Auto-generado al cancelar suscripción #${subscription_id.slice(0,8).toUpperCase()}`,
       }).select().single()
 

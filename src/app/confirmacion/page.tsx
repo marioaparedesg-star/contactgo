@@ -14,10 +14,7 @@ const ESTADO_STEPS = [
 ]
 
 const METODO_LABEL: Record<string, string> = {
-  tarjeta:           '💳 Tarjeta',
-  paypal:         'PayPal',
-  bhd:            'Transferencia BHD',
-  contra_entrega: '💵 Pago al recibir',
+  tarjeta: '💳 Tarjeta de crédito/débito (AZUL)',
 }
 
 function fmtSph(v: any) {

@@ -86,7 +86,7 @@ export default function PedidosPage() {
            p.id.toLowerCase().includes(q)
   })
 
-  const METODO_LABEL: Record<string,string> = {tarjeta:'💳 Tarjeta', contra_entrega:'💵 Contra entrega', transferencia:'🏦 Transferencia'}
+  const METODO_LABEL: Record<string,string> = {tarjeta:'💳 AZUL', contra_entrega:'💵 Contra entrega'}
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -113,9 +113,8 @@ export default function PedidosPage() {
             </select>
             <select value={filtroPago} onChange={e=>setFiltroPago(e.target.value)}
               className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-400">
-              <option value="todos">Todos los pagos</option>
-              <option value="tarjeta">💳 Tarjeta</option>
-              <option value="contra_entrega">💵 Contra entrega</option>
+              <option value="todos">Todos</option>
+              <option value="tarjeta">💳 Tarjeta AZUL</option>
             </select>
           </div>
 

@@ -74,7 +74,7 @@ const organizationSchema = {
   },
   "priceRange": "RD$500 - RD$15,000",
   "currenciesAccepted": "DOP",
-  "paymentAccepted": "Tarjeta de crédito, débito, PayPal, transferencia bancaria, efectivo contra entrega",
+  "paymentAccepted": "Tarjeta de crédito/débito Visa y Mastercard procesada por AZUL (Banco Popular)",
   "sameAs": [
     "https://www.instagram.com/contactgord",
     "https://www.facebook.com/profile.php?id=1063834443484441"

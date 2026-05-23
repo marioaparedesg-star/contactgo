@@ -116,9 +116,9 @@ const SECCIONES = [
     id: 'pagos', emoji: '💳', titulo: 'Pagos y Seguridad',
     color: 'bg-indigo-50 border-indigo-100', badge: 'bg-indigo-100 text-indigo-700',
     items: [
-      { q: '¿Qué métodos de pago aceptan?', a: 'Tarjeta Visa/Mastercard vía AZUL (Banco Popular) y pago en efectivo contra entrega.' },
+      { q: '¿Qué métodos de pago aceptan?', a: 'Tarjeta de crédito/débito Visa y Mastercard procesada por AZUL (Banco Popular) con 3D Secure. Seguro y rápido.' },
       { q: '¿Es seguro pagar con tarjeta?', a: 'Sí. Usamos tarjeta (Banco Popular), con encriptación SSL y verificación 3D Secure.' },
-      { q: '¿Puedo pagar contra entrega?', a: 'Sí, disponible en todo el país. Se paga en efectivo al recibir el pedido.' },
+      { q: '¿Es seguro pagar con tarjeta?', a: 'Sí. Usamos AZUL de Banco Popular con tecnología 3D Secure. ContactGo nunca almacena datos de tarjetas.' },
     ],
   },
 ]

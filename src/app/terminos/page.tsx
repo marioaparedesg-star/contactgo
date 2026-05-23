@@ -27,7 +27,7 @@ const secciones = [
   },
   {
     title: '4. Precios y pagos',
-    body: 'Todos los precios están expresados en pesos dominicanos (RD$) e incluyen ITBIS del 18% conforme a la Ley 11-92. Aceptamos tarjeta de crédito/débito Visa y Mastercard procesada por AZUL (Banco Popular) con verificación 3D Secure, y pago contra entrega en efectivo. ContactGo no almacena datos de tarjetas de crédito.'
+    body: 'Todos los precios están expresados en pesos dominicanos (RD$) e incluyen ITBIS del 18% conforme a la Ley 11-92. Aceptamos tarjeta de crédito/débito Visa y Mastercard procesada por AZUL (Banco Popular) con verificación 3D Secure. ContactGo no almacena datos de tarjetas de crédito.'
   },
   {
     title: '5. Envíos y entregas',
