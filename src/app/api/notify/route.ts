@@ -339,7 +339,7 @@ export async function POST(req: NextRequest) {
           metodo_pago: order.metodo_pago,
         })
       }).then(r => r.json())
-        .then(d => console.log('[notify] WA:', d?.success ? '✅ enviado' : d))
+        .catch(() => {})
         .catch(e => console.error('[notify] WA error:', e))
     }
 

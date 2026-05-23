@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
         }),
       })
       const data = await res.json()
-      console.log('[WA/oficial]', { ok: res.ok, status: res.status })
+
       if (res.ok) return NextResponse.json({ success: true, via: 'meta-api' })
     }
 
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       const adminMsg = `🛍️ NUEVO PEDIDO ContactGo!%0A📦 %23${pedidoNum}%0A👤 ${encodeURIComponent(nombre)}%0A💰 ${totalFmt}%0A${encodeURIComponent(metodo)}`
       const callUrl  = `https://api.callmebot.com/whatsapp.php?phone=${ADMIN_PHONE}&text=${adminMsg}&apikey=${CALLMEBOT_API}`
       const cbRes = await fetch(callUrl)
-      console.log('[WA/callmebot]', { status: cbRes.status })
+
       return NextResponse.json({ success: true, via: 'callmebot' })
     }
 

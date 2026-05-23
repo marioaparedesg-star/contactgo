@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { useCartStore } from '@/lib/cart-store'
+import Image from 'next/image'
 import { ShoppingCart, ArrowRight, X, Droplets, Eye, Package } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -99,7 +100,7 @@ export default function SugeridosPage() {
                   <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
                     <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
                       {p.imagen_url
-                        ? <img src={p.imagen_url} alt={p.nombre} className="w-full h-full object-contain p-1" />
+                        ? <Image src={p.imagen_url} alt={p.nombre} width={120} height={120} className="w-full h-full object-contain p-1" />
                         : <Eye className="w-6 h-6 text-gray-300" />}
                     </div>
                     <div className="flex-1 min-w-0">

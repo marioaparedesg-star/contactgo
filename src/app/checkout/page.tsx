@@ -10,6 +10,7 @@ import { useCartStore } from '@/lib/cart-store'
 import { createClient } from '@/lib/supabase'
 import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
 import toast from 'react-hot-toast'
+import Image from 'next/image'
 import { Shield, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, MapPin, User, Phone, Mail } from 'lucide-react'
 
 const schema = z.object({
@@ -467,8 +468,8 @@ export default function CheckoutPage() {
                             <p className="text-xs text-gray-500 mt-0.5">Procesado por AZUL · Banco Popular</p>
                           </div>
                           <div className="flex items-center gap-1 shrink-0">
-                            <img src="/visa-blue.png" alt="Visa" className="h-4 object-contain" />
-                            <img src="/mastercard.png" alt="MC" className="h-5 object-contain" />
+                            <img src="/visa-blue.png" alt="Visa" width={40} height={16} className="h-4 object-contain" />
+                            <img src="/mastercard.png" alt="MC" width={50} height={20} className="h-5 object-contain" />
                           </div>
                         </button>
                       </div>
@@ -487,20 +488,20 @@ export default function CheckoutPage() {
                     {/* Logos seguridad */}
                     <div className="flex items-center gap-2 flex-wrap p-3 bg-gray-50 rounded-xl border border-gray-100">
                       <span className="text-[10px] text-gray-400 font-semibold">Pago seguro:</span>
-                      <img src="/visa-blue.png" alt="Visa" className="h-3.5 object-contain" />
-                      <img src="/mastercard.png" alt="Mastercard" className="h-4 object-contain" />
+                      <img src="/visa-blue.png" alt="Visa" width={40} height={14} className="h-3.5 object-contain" />
+                      <img src="/mastercard.png" alt="Mastercard" width={50} height={16} className="h-4 object-contain" />
                       <span className="text-[9px] bg-blue-700 text-white px-1.5 py-0.5 rounded font-bold">Verified by VISA</span>
-                      <img src="/mastercard-id-check.png" alt="Mastercard ID Check" className="h-5 object-contain" />
+                      <img src="/mastercard-id-check.png" alt="Mastercard ID Check" width={60} height={20} className="h-5 object-contain" />
                       <span className="text-[9px] bg-green-600 text-white px-1.5 py-0.5 rounded font-bold">🔒 SSL</span>
                     </div>
 
                     {/* TOTAL + MÉTODO */}
                     {/* Trust Badges AZUL — requerido por Visa/Mastercard */}
               <div className="flex items-center justify-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 mt-2">
-                <img src="/visa-blue.png" alt="Visa" className="h-5 object-contain" />
-                <img src="/mastercard.png" alt="Mastercard" className="h-5 object-contain" />
-                <img src="/visa-secure.png" alt="Visa Secure" className="h-5 object-contain" />
-                <img src="/mastercard-id-check.png" alt="Mastercard ID Check" className="h-6 object-contain" />
+                <img src="/visa-blue.png" alt="Visa" width={40} height={20} className="h-5 object-contain" />
+                <img src="/mastercard.png" alt="Mastercard" width={50} height={20} className="h-5 object-contain" />
+                <img src="/visa-secure.png" alt="Visa Secure" width={50} height={20} className="h-5 object-contain" />
+                <img src="/mastercard-id-check.png" alt="Mastercard ID Check" width={60} height={24} className="h-6 object-contain" />
               </div>
 
               <div className={`rounded-xl p-4 flex items-center justify-between ${metodoPago === 'tarjeta' ? 'bg-blue-50 border border-blue-100' : 'bg-primary-50 border border-primary-100'}`}>
@@ -578,7 +579,7 @@ export default function CheckoutPage() {
                   {items.map((item, idx) => (
                     <div key={idx} className="flex gap-3 items-start">
                       {item.product.imagen_url && (
-                        <img src={item.product.imagen_url} alt="" className="w-10 h-10 object-contain rounded-lg bg-gray-50 shrink-0 border border-gray-100" />
+                        <Image src={item.product.imagen_url||"/placeholder-lens.png"} alt="" width={40} height={40} className="w-10 h-10 object-contain rounded-lg bg-gray-50 shrink-0 border border-gray-100" />
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start gap-1">

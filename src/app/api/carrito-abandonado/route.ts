@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
       await getSb().from('abandoned_carts').update({ email_sent: true }).eq('id', cart.id)
 
       sent++
-      console.log(`[carrito-abandonado] Email sent to ${cart.cliente_email}`)
+
     } catch (e) {
       console.error(`[carrito-abandonado] Error sending to ${cart.cliente_email}:`, e)
     }

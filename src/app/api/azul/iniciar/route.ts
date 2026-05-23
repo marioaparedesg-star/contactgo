@@ -97,11 +97,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Log para AZUL
-    console.log('[AZUL/iniciar]', {
-      order_id, orderNumber, amount, itbis, currency: CURRENCY,
-      environment: AZUL_ENV, hash_generated: !!AUTH_KEY,
-      timestamp: new Date().toISOString()
-    })
+
 
     return NextResponse.json({ url: AZUL_URL, fields })
   } catch (err: any) {

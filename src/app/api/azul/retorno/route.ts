@@ -31,11 +31,7 @@ export async function GET(req: NextRequest) {
   const azulOrderId      = p.get('AzulOrderId')      ?? ''  // ID interno AZUL
   const resultado        = p.get('resultado')        ?? ''  // nuestro param prefijado
 
-  console.log('[AZUL/retorno] RECIBIDO:', {
-    orderNumber, isoCode, responseCode, responseMessage,
-    authCode: authCode ? '***' + authCode.slice(-4) : 'none',
-    rrn, azulOrderId, resultado, amount
-  })
+  if (process.env.NODE_ENV !== 'production') console.log('[AZUL/retorno] recibido:', {orderNumber, isoCode, resultado})
 
   // ── Determinar si fue APROBADO ──────────────────────────────────────────────
   // IsoCode="00" es el indicador oficial de AZUL para aprobación
@@ -59,7 +55,7 @@ export async function GET(req: NextRequest) {
         console.error('[AZUL/retorno] orden no encontrada:', orderNumber, findErr?.message)
       } else {
         orderId = order.id
-        console.log('[AZUL/retorno] orden encontrada:', orderId, '| pago_estado actual:', order.pago_estado)
+
 
         if (esAprobado) {
           // ── Obtener próximo NCF ──────────────────────────────────────────
@@ -67,7 +63,7 @@ export async function GET(req: NextRequest) {
           try {
             const { data: ncfData, error: ncfErr } = await sb.rpc('get_next_ncf', { p_serie: 'E02' })
             if (ncfErr) console.error('[AZUL/retorno] NCF error:', ncfErr.message)
-            else { ncf = ncfData as string; console.log('[AZUL/retorno] NCF asignado:', ncf) }
+            else { ncf = ncfData as string }
           } catch (e) { console.error('[AZUL/retorno] NCF excepción:', e) }
 
           // ── Guardar TODOS los datos de AZUL + NCF en la orden ───────────
@@ -88,9 +84,9 @@ export async function GET(req: NextRequest) {
           if (updateErr) {
             console.error('[AZUL/retorno] ERROR actualizando orden:', updateErr.message)
           } else {
-            console.log('[AZUL/retorno] ✅ orden actualizada pago_estado=pagado, ncf:', ncf)
+
             // El notify lo dispara el cliente desde /confirmacion (más confiable en Vercel)
-            console.log('[AZUL/retorno] ✅ pago registrado, notify lo dispara el cliente')
+
           }
         } else {
           // Pago declinado — registrar el intento
@@ -99,14 +95,14 @@ export async function GET(req: NextRequest) {
             azul_order_number:  orderNumber,
             azul_response_code: isoCode || responseCode || null,
           }).eq('id', orderId)
-          console.log('[AZUL/retorno] ⚠️ pago declinado, isoCode:', isoCode, 'responseMessage:', responseMessage)
+
         }
       }
     } catch (e) {
       console.error('[AZUL/retorno] excepción:', e)
     }
   } else {
-    console.warn('[AZUL/retorno] sin OrderNumber en querystring')
+
   }
 
   // ── Redirigir a /confirmacion ───────────────────────────────────────────────

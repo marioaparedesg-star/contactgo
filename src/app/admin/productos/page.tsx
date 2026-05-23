@@ -4,6 +4,7 @@ import AdminNav from '@/components/admin/AdminNav'
 import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 import { Plus, Edit, Trash2, Search, Eye, AlertTriangle, Download, Upload, X } from 'lucide-react'
+import Image from 'next/image'
 import toast from 'react-hot-toast'
 
 const TIPOS = ['esferico','torico','multifocal','color','solucion','gota'] as const
@@ -158,7 +159,7 @@ export default function AdminProductos() {
                         <td className="px-4 py-3"><span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-400">{p.sku??'—'}</span></td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
-                            {p.imagen_url ? <img src={p.imagen_url} className="w-8 h-8 rounded-lg object-cover" alt="" /> : <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center"><Eye className="w-3 h-3 text-gray-400" /></div>}
+                            {p.imagen_url ? <Image src={p.imagen_url} width={32} height={32} className="w-8 h-8 rounded-lg object-cover" alt="" /> : <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center"><Eye className="w-3 h-3 text-gray-400" /></div>}
                             <span className="font-medium text-gray-900 text-xs">{p.nombre}</span>
                           </div>
                         </td>
