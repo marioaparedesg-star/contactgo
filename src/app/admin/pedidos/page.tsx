@@ -29,7 +29,10 @@ export default function PedidosPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    sb.from('orders').select('*').order('fecha', {ascending: false})
+    sb.from('orders').select('*')
+      .not('pago_estado', 'eq', 'declinado')
+      .not('numero_orden', 'like', 'CG-TEST%')
+      .order('created_at', {ascending: false})
       .then(({data}) => { setPedidos(data??[]); setLoading(false) })
   }, [])
 

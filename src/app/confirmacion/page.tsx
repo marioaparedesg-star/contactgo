@@ -100,22 +100,35 @@ function ConfirmacionContent() {
         </div>
         <div className="relative">
           <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-            <CheckCircle className="w-9 h-9 text-white" />
+            {resultado === 'declinado'
+              ? <span className="text-4xl">⚠️</span>
+              : <CheckCircle className="w-9 h-9 text-white" />}
           </div>
           {resultado === 'declinado' ? (
-          <h1 className="text-2xl font-black text-white mb-1">⚠️ Pago no procesado</h1>
-        ) : (
-          <h1 className="text-2xl font-black text-white mb-1">¡Pedido confirmado!</h1>
-        )}
-          <p className="text-green-100 text-sm mb-4">Gracias por comprar en ContactGo</p>
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur rounded-xl px-5 py-2.5">
-            <span className="text-white/70 text-sm">Pedido</span>
-            <span className="text-white font-black text-lg tracking-wider">#{pedidoId}</span>
-          </div>
+            <>
+              <h1 className="text-2xl font-black text-white mb-1">Pago no procesado</h1>
+              <p className="text-green-100 text-sm mb-4">Tu tarjeta fue declinada. Por favor intenta con otra tarjeta.</p>
+              <a href="/checkout" className="inline-flex items-center gap-2 bg-white text-green-700 font-bold rounded-xl px-5 py-2.5 text-sm hover:bg-green-50 transition">
+                🔄 Reintentar pago
+              </a>
+            </>
+          ) : (
+            <>
+              <h1 className="text-2xl font-black text-white mb-1">¡Pedido confirmado!</h1>
+              <p className="text-green-100 text-sm mb-4">Gracias por comprar en ContactGo</p>
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur rounded-xl px-5 py-2.5">
+                <span className="text-white/70 text-sm">Pedido</span>
+                <span className="text-white font-black text-lg tracking-wider">#{pedidoId}</span>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       <div className="max-w-lg mx-auto px-4 -mt-6">
+
+        {/* Timeline estado — solo en aprobado */}
+        {resultado !== 'declinado' && <>
 
         {/* Timeline estado */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
@@ -273,6 +286,7 @@ function ConfirmacionContent() {
           </Link>
         </div>
 
+      </>}
       </div>
     </div>
   )
