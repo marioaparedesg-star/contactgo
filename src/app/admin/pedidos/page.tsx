@@ -24,7 +24,7 @@ export default function PedidosPage() {
   const [filtroEstado, setFiltroEstado] = useState('todos')
   const [filtroPago, setFiltroPago] = useState('todos')
   const [loading, setLoading] = useState(true)
-  const [notifying, setNotifying] = useState(false)
+
 
   useEffect(()=>{
     sb.from('orders').select('*')
@@ -47,21 +47,15 @@ export default function PedidosPage() {
     setPedidos(ps=>ps.map(p=>p.id===orderId?{...p,estado}:p))
     if (selected?.id===orderId) setSelected((s:any)=>({...s,estado}))
     toast.success(`Estado → ${estado}`)
+    // Notificar al cliente automáticamente
+    fetch('/api/notify',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({order_id:orderId, evento:'estado_cambio', nuevo_estado:estado})
+    }).then(r=>r.ok&&toast.success('Cliente notificado ✉️',{duration:2000,icon:'📧'}))
+      .catch(()=>{})
   }
 
-  const notificarCliente = async () => {
-    if (!selected) return
-    setNotifying(true)
-    try {
-      const r = await fetch('/api/notify',{
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({order_id:selected.id, evento:'estado_cambio', nuevo_estado:selected.estado})
-      })
-      if (r.ok) toast.success('Notificación enviada al cliente ✅')
-      else toast.error('Error al enviar notificación')
-    } catch { toast.error('Error de red') }
-    setNotifying(false)
-  }
+
 
   const printOrder = () => {
     if (!selected) return
@@ -238,10 +232,9 @@ export default function PedidosPage() {
 
                 {/* Acciones */}
                 <div className="flex gap-2 flex-wrap">
-                  <button onClick={notificarCliente} disabled={notifying}
-                    className="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
-                    <Bell className="w-3.5 h-3.5"/>{notifying?'Enviando...':'Notificar cliente'}
-                  </button>
+                  <div className="flex-1 flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 rounded-xl px-3 py-2">
+                    <Bell className="w-3.5 h-3.5"/>Cliente notificado al cambiar estado
+                  </div>
                   <button onClick={()=>window.open(`https://wa.me/${selected.cliente_telefono?.replace(/\D/g,'')}?text=Hola+${encodeURIComponent(selected.cliente_nombre?.split(' ')[0]??'')}+tu+pedido+%23${selected.numero_orden??selected.id.slice(-8)}+está+${selected.estado}`,'_blank')}
                     className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700">
                     <MessageCircle className="w-3.5 h-3.5"/>WA

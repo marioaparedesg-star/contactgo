@@ -70,6 +70,18 @@ export default function SuscripcionesPage() {
 
   const activas   = subs.filter(s => s.activa && !s.cancelada).length
   const pausadas  = subs.filter(s => !s.activa && !s.cancelada).length
+
+  // Proyección mensual de facturación de suscripciones activas
+  const FRECUENCIA_MESES: Record<string,number> = { '15_dias':2, mensual:1, bimestral:0.5, trimestral:0.333 }
+  const proyeccionMensual = subs.filter(s=>s.activa&&!s.cancelada).reduce((total,s)=>{
+    const its = parseItems(s.items)
+    const subtotal = its.reduce((st:number,i:any)=>st+(Number(i.precio??0)*Number(i.cantidad??1)),0)
+    const descuento = s.descuento_pct ? subtotal*(s.descuento_pct/100) : 0
+    const valorEnvio = (subtotal-descuento)
+    const vecesAlMes = FRECUENCIA_MESES[s.frecuencia]??1
+    return total + valorEnvio*vecesAlMes
+  },0)
+
   const proximas7 = subs.filter(s => {
     if (!s.proximo_envio || !s.activa) return false
     const diff = new Date(s.proximo_envio).getTime() - Date.now()
@@ -97,6 +109,7 @@ export default function SuscripcionesPage() {
               { label: 'Pausadas',        value: pausadas,          color: 'bg-amber-500',  key: 'pausadas' },
               { label: 'Total',           value: subs.length,       color: 'bg-blue-500',   key: 'todas' },
               { label: 'Próx. 7 días',    value: proximas7,         color: 'bg-purple-500', key: 'proximas' },
+              { label: 'MRR estimado',     value: `RD$${Math.round(proyeccionMensual).toLocaleString()}`, color: 'bg-emerald-500', key: 'mrr' },
             ].map(k => (
               <button key={k.key}
                 onClick={() => setFiltro(filtro === k.key ? 'todas' : k.key)}

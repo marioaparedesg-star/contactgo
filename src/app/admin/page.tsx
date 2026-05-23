@@ -25,14 +25,14 @@ async function getData() {
     { data: subs },
     { data: recentOrders },
   ] = await Promise.all([
-    sb.from('orders').select('total,fecha,estado').order('fecha', { ascending: false }),
+    sb.from('orders').select('total,fecha,estado').not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%').order('fecha', { ascending: false }),
     sb.from('order_items').select('nombre,cantidad,subtotal,precio'),
-    sb.from('orders').select('*', { count: 'exact', head: true }).eq('estado', 'pendiente'),
+    sb.from('orders').select('*', { count: 'exact', head: true }).eq('estado', 'pendiente').not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%'),
     sb.from('profiles').select('*', { count: 'exact', head: true }),
     sb.from('products').select('nombre,stock,marca').eq('activo', true).lte('stock', 3).gt('stock', 0).order('stock'),
     sb.from('products').select('nombre,marca').eq('activo', true).eq('stock', 0),
     sb.from('subscriptions').select('activa').eq('activa', true),
-    sb.from('orders').select('id,cliente_nombre,total,estado,fecha,metodo_pago').order('fecha', { ascending: false }).limit(7),
+    sb.from('orders').select('id,cliente_nombre,total,estado,fecha,metodo_pago').not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%').order('fecha', { ascending: false }).limit(7),
   ])
 
   const orders = allOrders ?? []

@@ -44,7 +44,6 @@ export default function CuponesPage() {
       uso_maximo: form.limite_usos ? parseInt(form.limite_usos) : null,
       limite_usos: form.limite_usos ? parseInt(form.limite_usos) : null,
       valido_hasta: form.fecha_expira || null,
-      fecha_expira: form.fecha_expira || null,
       activo: true,
       usos_actuales: 0,
     }).select().single()
