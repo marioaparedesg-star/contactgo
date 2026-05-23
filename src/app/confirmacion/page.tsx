@@ -43,10 +43,19 @@ function ConfirmacionContent() {
   const resultado = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('resultado') : null
 
   useEffect(() => {
-    // Limpiar carrito cuando AZUL aprueba
-    // El notify y pago_estado=pagado los maneja /api/azul/retorno server-side
     if (origen === 'azul' && resultado === 'aprobado') {
+      // 1. Limpiar carrito
       clearCart()
+      // 2. Disparar notify desde el cliente — más confiable que server→server en Vercel
+      //    Solo si tenemos orderId (viene en el querystring desde /api/azul/retorno)
+      const oid = new URLSearchParams(window.location.search).get('orden')
+      if (oid) {
+        fetch('/api/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id: oid, evento: 'nuevo_pedido' })
+        }).catch(e => console.error('[confirmacion] notify error:', e))
+      }
     }
   }, [origen, resultado])
 

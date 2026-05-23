@@ -89,12 +89,8 @@ export async function GET(req: NextRequest) {
             console.error('[AZUL/retorno] ERROR actualizando orden:', updateErr.message)
           } else {
             console.log('[AZUL/retorno] ✅ orden actualizada pago_estado=pagado, ncf:', ncf)
-            // Notificar por email
-            fetch(`${BASE}/api/notify`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ order_id: orderId, evento: 'nuevo_pedido' })
-            }).catch(e => console.error('[AZUL/retorno] notify error:', e))
+            // El notify lo dispara el cliente desde /confirmacion (más confiable en Vercel)
+            console.log('[AZUL/retorno] ✅ pago registrado, notify lo dispara el cliente')
           }
         } else {
           // Pago declinado — registrar el intento
