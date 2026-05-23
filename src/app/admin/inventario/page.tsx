@@ -58,7 +58,11 @@ export default function InventarioPage() {
     if (val===undefined||val===item.stock) return
     setGuardando(key)
     await sb.from('product_inventory').update({stock:val,updated_at:new Date().toISOString()}).eq('id',item.id)
-    setInventario(prev=>({...prev,[item.product_id]:prev[item.product_id].map(i=>i.id===item.id?{...i,stock:val}:i)}))
+    const newInv = prev[item.product_id].map(i=>i.id===item.id?{...i,stock:val}:i)
+    setInventario(prev=>({...prev,[item.product_id]:newInv}))
+    // Actualizar stock total del producto en la lista
+    const nuevoTotal = newInv.reduce((s,i)=>s+i.stock,0)
+    setProductos(ps=>ps.map(p=>p.id===item.product_id?{...p,stock:nuevoTotal}:p))
     setEditando(prev=>{const n={...prev};delete n[key];return n})
     const sphLabel = `SPH ${item.sph>0?'+':''}${item.sph}${item.cyl!=null?` CYL ${item.cyl}`:''}`
     toast.success(`${sphLabel} → ${val}u ✓`)
@@ -77,10 +81,14 @@ export default function InventarioPage() {
       const val=editando[key]
       if (val!==undefined) await sb.from('product_inventory').update({stock:val,updated_at:new Date().toISOString()}).eq('id',item.id)
     }
-    setInventario(prev=>({...prev,[pid]:prev[pid].map(i=>{
+    const newInvAll = (inventario[pid]??[]).map(i=>{
       const key=`${pid}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`
       const v=editando[key]; return v!==undefined?{...i,stock:v}:i
-    })}))
+    })
+    setInventario(prev=>({...prev,[pid]:newInvAll}))
+    // Actualizar stock total en lista de productos
+    const totalAll = newInvAll.reduce((s,i)=>s+i.stock,0)
+    setProductos(ps=>ps.map(p=>p.id===pid?{...p,stock:totalAll}:p))
     setEditando(prev=>{const n={...prev};its.forEach(i=>{const k=`${pid}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`; delete n[k]});return n})
     toast.success(`${its.length} dioptrías guardadas ✓`)
     setGuardando(null)
