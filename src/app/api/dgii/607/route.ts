@@ -2,6 +2,7 @@
 // Genera el archivo 607 (Ventas) en formato DGII
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
 
 function getSb() {
   return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
@@ -10,6 +11,17 @@ function getSb() {
 const RNC_EMPRESA = process.env.DGII_RNC ?? '000000000'
 
 export async function GET(req: NextRequest) {
+  // Auth: solo admins
+  try {
+    const sbServer = createServerSupabaseClient()
+    const { data: { user } } = await sbServer.auth.getUser()
+    if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    const { data: profile } = await sbServer.from('profiles').select('role').eq('id', user.id).single()
+    if (profile?.role !== 'admin') return NextResponse.json({ error: 'Acceso denegado' }, { status: 403 })
+  } catch {
+    return NextResponse.json({ error: 'Error de autenticación' }, { status: 401 })
+  }
+
   const mes     = req.nextUrl.searchParams.get('mes')
   const formato = req.nextUrl.searchParams.get('formato') ?? 'txt'
 

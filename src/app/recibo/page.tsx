@@ -21,7 +21,7 @@ function ReciboContent() {
       // Datos de ejemplo para TEST
       setOrder({
         id: 'TEST-001',
-        numero_orden: 'CG-2026-TEST',
+        numero_orden: params.get('orden') ?? '—',
         cliente_nombre: 'Cliente de Prueba',
         cliente_email: 'cliente@ejemplo.com',
         cliente_telefono: '(809) 000-0000',

@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const auth    = req.headers.get('authorization') ?? ''
   const qToken  = req.nextUrl.searchParams.get('token') ?? ''
   // Token desde variable de entorno (más seguro) con fallback al token actual
-  const token   = process.env.AZUL_LOGS_TOKEN ?? 'contactgo2026azul'
+  const token   = process.env.AZUL_LOGS_TOKEN ?? ''
 
   const isAuthorized = token && (
     auth === `Bearer ${token}` || qToken === token
