@@ -59,16 +59,26 @@ export default function AdminNav() {
   const [stockAlerts, setStockAlerts] = useState(0)
 
   useEffect(() => {
-    // Pedidos que necesitan atención = estado pendiente o confirmado (aún no en preparación)
-    sb.from('orders').select('*', { count: 'exact', head: true })
-      .in('estado', ['pendiente', 'confirmado'])
-      .not('pago_estado', 'eq', 'declinado')
-      .not('numero_orden', 'like', 'CG-TEST%')
-      .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-      .then(({ count }) => setPendientes(count ?? 0))
+    // Si estamos en /admin/pedidos, marcar como vistos y no mostrar badge
+    const enPedidos = pathname === '/admin/pedidos'
+    if (enPedidos) {
+      // Guardar timestamp de última visita para calcular nuevos desde entonces
+      localStorage.setItem('admin_pedidos_last_seen', new Date().toISOString())
+      setPendientes(0)
+    } else {
+      // Contar pedidos creados DESPUÉS de la última visita a pedidos
+      const lastSeen = localStorage.getItem('admin_pedidos_last_seen')
+      const desde = lastSeen ?? new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+      sb.from('orders').select('*', { count: 'exact', head: true })
+        .in('estado', ['pendiente', 'confirmado'])
+        .not('pago_estado', 'eq', 'declinado')
+        .not('numero_orden', 'like', 'CG-TEST%')
+        .gte('created_at', desde)
+        .then(({ count }) => setPendientes(count ?? 0))
+    }
     sb.from('products').select('*', { count: 'exact', head: true }).eq('activo', true).lte('stock', 3)
       .then(({ count }) => setStockAlerts(count ?? 0))
-  }, [])
+  }, [pathname])
 
   const getBadge = (key: string | null) => {
     if (key === 'pendientes') return pendientes
