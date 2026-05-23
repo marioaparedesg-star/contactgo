@@ -35,6 +35,7 @@ export default function SuscripcionesPage() {
   useEffect(() => {
     sb.from('subscriptions')
       .select('*')
+      .eq('cancelada', false)          // nunca mostrar canceladas
       .order('created_at', { ascending: false })
       .then(({ data, error }) => {
         if (error) console.error('Error cargando suscripciones:', error)
@@ -63,8 +64,9 @@ export default function SuscripcionesPage() {
   }
 
   const filtradas = subs.filter(s => {
-    if (filtro === 'activas') return s.activa && !s.cancelada
-    if (filtro === 'pausadas') return !s.activa && !s.cancelada
+    if (s.cancelada) return false                           // nunca mostrar canceladas
+    if (filtro === 'activas')  return s.activa
+    if (filtro === 'pausadas') return !s.activa
     return true
   })
 
