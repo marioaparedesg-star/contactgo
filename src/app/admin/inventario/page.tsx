@@ -1,13 +1,19 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Search, Save, ChevronDown, ChevronRight, Package, Eye, EyeOff, History, Download } from 'lucide-react'
+import { Search, Save, ChevronDown, ChevronRight, Package, Eye, EyeOff,
+         History, Download, Archive, ArchiveRestore, AlertTriangle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const sb = createClient()
-type Producto = { id:string; nombre:string; tipo:string; marca:string; stock:number; activo:boolean; precio:number; stock_minimo:number }
+
+type Producto = {
+  id:string; nombre:string; tipo:string; marca:string
+  stock:number; activo:boolean; archivado:boolean; precio:number; stock_minimo:number
+}
 type InvItem = { id:string; product_id:string; sph:number; cyl?:number; stock:number }
 
+const TIPOS_CON_DIOPTRÍAS = ['esferico', 'color']
 const TIPO_META: Record<string,{label:string;color:string;bg:string}> = {
   esferico:   {label:'Esférico',   color:'#1d4ed8',bg:'#eff6ff'},
   color:      {label:'Color',      color:'#be185d',bg:'#fdf2f8'},
@@ -27,12 +33,14 @@ export default function InventarioPage() {
   const [loading,    setLoading]    = useState(true)
   const [guardando,  setGuardando]  = useState<string|null>(null)
   const [soloProblemas, setSoloProblemas] = useState(false)
+  const [mostrarArchivados, setMostrarArchivados] = useState(false)
   const [historial,  setHistorial]  = useState<any[]>([])
   const [showHistorial, setShowHistorial] = useState(false)
   const [umbral, setUmbral] = useState(3)
+  const [stockEdit, setStockEdit] = useState<Record<string,number>>({}) // para productos sin dioptrías
 
   useEffect(()=>{
-    sb.from('products').select('id,nombre,tipo,marca,stock,activo,precio,stock_minimo')
+    sb.from('products').select('id,nombre,tipo,marca,stock,activo,archivado,precio,stock_minimo')
       .order('tipo').order('nombre')
       .then(({data})=>{ setProductos(data??[]); setLoading(false) })
   },[])
@@ -46,12 +54,10 @@ export default function InventarioPage() {
   const toggle = async (p:Producto) => {
     if (expandido===p.id) { setExpandido(null); return }
     setExpandido(p.id)
-    await cargarInventario(p.id)
+    if (TIPOS_CON_DIOPTRÍAS.includes(p.tipo)) await cargarInventario(p.id)
   }
 
-  const setEdit = (pid:string, key:string, v:number) =>
-    setEditando(prev=>({...prev,[`${pid}-${key}`]:v}))
-
+  // Guardar stock de item con dioptría
   const guardarItem = async (item:InvItem) => {
     const key = `${item.product_id}-${item.sph}${item.cyl!=null?`-${item.cyl}`:''}`
     const val = editando[key]
@@ -60,17 +66,16 @@ export default function InventarioPage() {
     await sb.from('product_inventory').update({stock:val,updated_at:new Date().toISOString()}).eq('id',item.id)
     setInventario(prev=>{
       const newInv = (prev[item.product_id]??[]).map(i=>i.id===item.id?{...i,stock:val}:i)
-      const nuevoTotalInner = newInv.reduce((s,i)=>s+i.stock,0)
-      setProductos(ps=>ps.map(p=>p.id===item.product_id?{...p,stock:nuevoTotalInner}:p))
+      const nuevoTotal = newInv.reduce((s,i)=>s+i.stock,0)
+      setProductos(ps=>ps.map(p=>p.id===item.product_id?{...p,stock:nuevoTotal}:p))
       return {...prev,[item.product_id]:newInv}
     })
-
     setEditando(prev=>{const n={...prev};delete n[key];return n})
-    const sphLabel = `SPH ${item.sph>0?'+':''}${item.sph}${item.cyl!=null?` CYL ${item.cyl}`:''}`
-    toast.success(`${sphLabel} → ${val}u ✓`)
+    toast.success(`SPH ${item.sph>0?'+':''}${item.sph} → ${val}u ✓`)
     setGuardando(null)
   }
 
+  // Guardar todos los cambios de un producto con dioptrías
   const guardarTodos = async (pid:string) => {
     const its = (inventario[pid]??[]).filter(i=>{
       const key=`${pid}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`
@@ -83,41 +88,78 @@ export default function InventarioPage() {
       const val=editando[key]
       if (val!==undefined) await sb.from('product_inventory').update({stock:val,updated_at:new Date().toISOString()}).eq('id',item.id)
     }
-    const newInvAll = (inventario[pid]??[]).map(i=>{
-      const key=`${pid}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`
-      const v=editando[key]; return v!==undefined?{...i,stock:v}:i
+    setInventario(prev=>{
+      const newInvAll = (prev[pid]??[]).map(i=>{
+        const key=`${pid}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`
+        const v=editando[key]; return v!==undefined?{...i,stock:v}:i
+      })
+      const totalAll = newInvAll.reduce((s,i)=>s+i.stock,0)
+      setProductos(ps=>ps.map(p=>p.id===pid?{...p,stock:totalAll}:p))
+      return {...prev,[pid]:newInvAll}
     })
-    setInventario(prev=>({...prev,[pid]:newInvAll}))
-    // Actualizar stock total en lista de productos
-    const totalAll = newInvAll.reduce((s,i)=>s+i.stock,0)
-    setProductos(ps=>ps.map(p=>p.id===pid?{...p,stock:totalAll}:p))
     setEditando(prev=>{const n={...prev};its.forEach(i=>{const k=`${pid}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`; delete n[k]});return n})
     toast.success(`${its.length} dioptrías guardadas ✓`)
     setGuardando(null)
   }
 
+  // Guardar stock directo (productos sin dioptrías)
+  const guardarStockDirecto = async (pid:string) => {
+    const val = stockEdit[pid]
+    if (val===undefined) return
+    setGuardando(pid)
+    await sb.from('products').update({stock:val}).eq('id',pid)
+    setProductos(ps=>ps.map(p=>p.id===pid?{...p,stock:val}:p))
+    setStockEdit(prev=>{const n={...prev};delete n[pid];return n})
+    toast.success(`Stock actualizado → ${val}u ✓`)
+    setGuardando(null)
+  }
+
+  // Archivar / desarchivar producto
+  const toggleArchivado = async (p:Producto) => {
+    const nuevoEstado = !p.archivado
+    const update: any = {
+      archivado: nuevoEstado,
+      activo: nuevoEstado ? false : true,
+    }
+    if (nuevoEstado) {
+      update.archivado_en = new Date().toISOString()
+      update.archivado_razon = 'stock_agotado'
+    } else {
+      update.archivado_en = null
+      update.archivado_razon = null
+    }
+    await sb.from('products').update(update).eq('id',p.id)
+    setProductos(ps=>ps.map(pr=>pr.id===p.id?{...pr,...update}:pr))
+    toast.success(nuevoEstado ? `${p.nombre} archivado` : `${p.nombre} restaurado`)
+  }
+
   const verHistorial = async () => {
-    const {data} = await sb.from('inventory_log').select('*').order('created_at',{ascending:false}).limit(50)
+    const {data} = await sb.from('inventory_log').select('*').order('created_at',{ascending:false}).limit(60)
     setHistorial(data??[])
     setShowHistorial(true)
   }
 
-  const exportarExcel = () => {
-    const filas: {producto:string;marca:string;tipo:string;sph:any;cyl:any;stock:number}[] = []
-    productos.forEach(p=>{
+  const exportarCSV = () => {
+    const filas: any[] = []
+    productos.filter(p=>!p.archivado).forEach(p=>{
       const its = inventario[p.id]??[]
-      if (its.length===0) { filas.push({producto:p.nombre,marca:p.marca,tipo:p.tipo,sph:'—',cyl:'—',stock:p.stock}); return }
-      its.forEach(i=>filas.push({producto:p.nombre,marca:p.marca,tipo:p.tipo,sph:i.sph,cyl:i.cyl??'',stock:i.stock}))
+      if (its.length===0) {
+        filas.push({producto:p.nombre,marca:p.marca,tipo:p.tipo,sph:'—',cyl:'—',stock:p.stock})
+      } else {
+        its.forEach(i=>filas.push({producto:p.nombre,marca:p.marca,tipo:p.tipo,sph:i.sph,cyl:i.cyl??'',stock:i.stock}))
+      }
     })
     const csv = ['Producto,Marca,Tipo,SPH,CYL,Stock',...filas.map(r=>Object.values(r).join(','))].join('\n')
-    const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'})
-    const a = document.createElement('a'); a.href=URL.createObjectURL(blob)
+    const a = document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}))
     a.download=`inventario_${new Date().toISOString().slice(0,10)}.csv`; a.click()
   }
 
   const filtrados = productos.filter(p=>{
+    if (!mostrarArchivados && p.archivado) return false
+    if (mostrarArchivados && !p.archivado) return false
     if (tipoFiltro!=='todos'&&p.tipo!==tipoFiltro) return false
-    if (busqueda&&!p.nombre.toLowerCase().includes(busqueda.toLowerCase())&&!p.marca.toLowerCase().includes(busqueda.toLowerCase())) return false
+    if (busqueda&&!p.nombre.toLowerCase().includes(busqueda.toLowerCase())&&
+        !p.marca.toLowerCase().includes(busqueda.toLowerCase())) return false
     if (soloProblemas) {
       const its = inventario[p.id]??[]
       if (its.length>0) return its.some(i=>(editando[`${p.id}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`]??i.stock)<=umbral)
@@ -126,16 +168,16 @@ export default function InventarioPage() {
     return true
   })
 
-  const statsGlobal = {
-    agotadas: productos.reduce((s,p)=>{
-      const its=inventario[p.id]??[]
-      return s+(its.length>0?its.filter(i=>i.stock===0).length:(p.stock===0?1:0))
-    },0),
-    bajas: productos.reduce((s,p)=>{
-      const its=inventario[p.id]??[]
-      return s+(its.length>0?its.filter(i=>i.stock>0&&i.stock<=umbral).length:(p.stock>0&&p.stock<=umbral?1:0))
-    },0),
-  }
+  const activos = productos.filter(p=>!p.archivado)
+  const archivados = productos.filter(p=>p.archivado)
+  const agotadasTotal = activos.reduce((s,p)=>{
+    const its=inventario[p.id]??[]
+    return s+(its.length>0?its.filter(i=>i.stock===0).length:(p.stock===0?1:0))
+  },0)
+  const bajasTotal = activos.reduce((s,p)=>{
+    const its=inventario[p.id]??[]
+    return s+(its.length>0?its.filter(i=>i.stock>0&&i.stock<=umbral).length:(p.stock>0&&p.stock<=umbral?1:0))
+  },0)
 
   if (loading) return (
     <div className="flex items-center justify-center h-64">
@@ -148,19 +190,22 @@ export default function InventarioPage() {
 
   return (
     <div className="space-y-5 pb-10">
+
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Inventario</h1>
-          <div className="flex items-center gap-3 mt-1">
-            {statsGlobal.agotadas>0&&<span className="text-xs font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">{statsGlobal.agotadas} agotadas</span>}
-            {statsGlobal.bajas>0&&<span className="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">{statsGlobal.bajas} stock bajo</span>}
+          <div className="flex items-center gap-3 mt-1 flex-wrap">
+            <span className="text-xs text-gray-500">{activos.length} activos · {archivados.length} archivados</span>
+            {agotadasTotal>0&&<span className="text-xs font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">{agotadasTotal} agotadas</span>}
+            {bajasTotal>0&&<span className="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">{bajasTotal} stock bajo</span>}
           </div>
         </div>
         <div className="flex gap-2 flex-wrap">
           <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-white border border-gray-200 rounded-xl px-3 py-2">
-            <span>Umbral:</span>
-            <input type="number" min="1" max="10" value={umbral} onChange={e=>setUmbral(parseInt(e.target.value)||3)}
+            <span>Alerta:</span>
+            <input type="number" min="1" max="10" value={umbral}
+              onChange={e=>setUmbral(parseInt(e.target.value)||3)}
               className="w-8 text-center font-bold text-gray-700 border-0 outline-none bg-transparent"/>
             <span>u</span>
           </div>
@@ -168,27 +213,38 @@ export default function InventarioPage() {
             className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50">
             <History className="w-3.5 h-3.5"/>Historial
           </button>
-          <button onClick={exportarExcel}
+          <button onClick={exportarCSV}
             className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50">
-            <Download className="w-3.5 h-3.5"/>Exportar CSV
+            <Download className="w-3.5 h-3.5"/>CSV
           </button>
           <button onClick={()=>setSoloProblemas(p=>!p)}
-            className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border transition-colors ${soloProblemas?'bg-red-50 border-red-200 text-red-700':'bg-white border-gray-200 text-gray-600 hover:border-gray-300'}`}>
+            className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border transition-colors ${soloProblemas?'bg-red-50 border-red-200 text-red-700':'bg-white border-gray-200 text-gray-600'}`}>
             {soloProblemas?<EyeOff className="w-3.5 h-3.5"/>:<Eye className="w-3.5 h-3.5"/>}
-            {soloProblemas?'Ver todos':'Solo problemas'}
+            Problemas
           </button>
         </div>
+      </div>
+
+      {/* Tab activos / archivados */}
+      <div className="flex gap-2">
+        <button onClick={()=>setMostrarArchivados(false)}
+          className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${!mostrarArchivados?'bg-gray-900 text-white':'bg-white border border-gray-200 text-gray-600'}`}>
+          Activos ({activos.length})
+        </button>
+        <button onClick={()=>setMostrarArchivados(true)}
+          className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${mostrarArchivados?'bg-gray-900 text-white':'bg-white border border-gray-200 text-gray-600'}`}>
+          <Archive className="w-3.5 h-3.5 inline mr-1.5"/>Archivados ({archivados.length})
+        </button>
       </div>
 
       {/* Filtros */}
       <div className="flex gap-2 flex-wrap items-center">
         <div className="relative flex-1 min-w-48">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400"/>
-          <input type="text" placeholder="Buscar producto o marca..."
-            value={busqueda} onChange={e=>setBusqueda(e.target.value)}
+          <input placeholder="Buscar producto o marca..." value={busqueda} onChange={e=>setBusqueda(e.target.value)}
             className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white"/>
         </div>
-        {[['todos','Todos'],['esferico','Esféricos'],['color','Color'],['torico','Tóricos'],['multifocal','Multifocales'],['solucion','Soluciones']].map(([v,l])=>(
+        {[['todos','Todos'],['esferico','Esféricos'],['color','Color'],['torico','Tóricos'],['multifocal','Multifocales'],['solucion','Soluciones'],['gota','Gotas']].map(([v,l])=>(
           <button key={v} onClick={()=>setTipoFiltro(v)}
             className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${tipoFiltro===v?'bg-gray-900 text-white shadow-sm':'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'}`}>
             {l}
@@ -201,19 +257,29 @@ export default function InventarioPage() {
         {filtrados.length===0&&(
           <div className="text-center py-12 text-gray-400">
             <Package className="w-10 h-10 mx-auto mb-3 opacity-30"/>
-            <p className="text-sm">No hay productos que coincidan</p>
+            <p className="text-sm">{mostrarArchivados?'Sin productos archivados':'No hay productos que coincidan'}</p>
           </div>
         )}
         {filtrados.map(p=>{
           const meta = TIPO_META[p.tipo]??{label:p.tipo,color:'#6b7280',bg:'#f9fafb'}
           const abierto = expandido===p.id
+          const tieneDioptrias = TIPOS_CON_DIOPTRÍAS.includes(p.tipo)
           const its = inventario[p.id]??[]
-          const pendientes = its.filter(i=>{const k=`${p.id}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`; return editando[k]!==undefined}).length
+          const pendientes = its.filter(i=>{
+            const k=`${p.id}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`
+            return editando[k]!==undefined
+          }).length
           const agotadas  = its.filter(i=>(editando[`${p.id}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`]??i.stock)===0).length
-          const bajas     = its.filter(i=>{const s=editando[`${p.id}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`]??i.stock; return s>0&&s<=umbral}).length
+          const bajas     = its.filter(i=>{
+            const s=editando[`${p.id}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`]??i.stock
+            return s>0&&s<=umbral
+          }).length
+          const stockActual = tieneDioptrias
+            ? its.reduce((s,i)=>s+(editando[`${p.id}-${i.sph}${i.cyl!=null?`-${i.cyl}`:''}`]??i.stock),0)
+            : (stockEdit[p.id]??p.stock)
 
           return (
-            <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div key={p.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${p.archivado?'opacity-70 border-gray-200':'border-gray-100'}`}>
               <button onClick={()=>toggle(p)}
                 className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-gray-50/80">
                 <span className="shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg"
@@ -222,47 +288,74 @@ export default function InventarioPage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-semibold text-gray-900 text-sm truncate">{p.nombre}</span>
                     <span className="text-xs text-gray-400">{p.marca}</span>
+                    {p.archivado&&<span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Archivado</span>}
                   </div>
-                  {abierto&&its.length>0&&(
+                  {abierto&&tieneDioptrias&&its.length>0&&(
                     <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-[11px] text-gray-400">{its.length} dioptrías</span>
+                      <span className="text-[11px] text-gray-400">{its.length} dioptrías · {stockActual}u total</span>
                       {agotadas>0&&<span className="text-[11px] font-semibold text-red-500">{agotadas} agotadas</span>}
-                      {bajas>0&&<span className="text-[11px] font-semibold text-amber-500">{bajas} bajo umbral</span>}
+                      {bajas>0&&<span className="text-[11px] font-semibold text-amber-500">{bajas} bajas</span>}
                     </div>
                   )}
                 </div>
-                {/* Alertas compactas cuando cerrado */}
-                {!abierto&&its.length>0&&(agotadas>0||bajas>0)&&(
-                  <div className="flex gap-1.5">
-                    {agotadas>0&&<span className="text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">{agotadas} agotadas</span>}
-                    {bajas>0&&<span className="text-[10px] font-bold bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full">{bajas} bajas</span>}
-                  </div>
-                )}
-                {/* Stock general si no tiene product_inventory */}
-                {!abierto&&its.length===0&&(
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${p.stock===0?'bg-red-100 text-red-600':p.stock<=umbral?'bg-amber-100 text-amber-600':'bg-green-100 text-green-700'}`}>
-                    {p.stock} u
-                  </span>
-                )}
-                {pendientes>0&&(
-                  <button onClick={e=>{e.stopPropagation();guardarTodos(p.id)}} disabled={guardando===p.id}
-                    className="flex items-center gap-1.5 bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors shrink-0">
-                    <Save className="w-3 h-3"/>Guardar {pendientes}
+
+                {/* Acciones rápidas */}
+                <div className="flex items-center gap-2 shrink-0">
+                  {/* Stock badge / edit para productos SIN dioptrías */}
+                  {!tieneDioptrias&&abierto&&(
+                    <div className="flex items-center gap-1.5" onClick={e=>e.stopPropagation()}>
+                      <input type="number" min="0" value={stockEdit[p.id]??p.stock}
+                        onChange={e=>setStockEdit(prev=>({...prev,[p.id]:parseInt(e.target.value)||0}))}
+                        onBlur={()=>guardarStockDirecto(p.id)}
+                        onKeyDown={e=>e.key==='Enter'&&guardarStockDirecto(p.id)}
+                        className="w-16 text-center text-sm font-bold border border-gray-200 rounded-lg py-1 focus:outline-none focus:ring-2 focus:ring-primary-400"/>
+                      <span className="text-xs text-gray-400">u</span>
+                    </div>
+                  )}
+                  {!tieneDioptrias&&!abierto&&(
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${p.stock===0?'bg-red-100 text-red-600':p.stock<=umbral?'bg-amber-100 text-amber-600':'bg-green-100 text-green-700'}`}>
+                      {p.stock}u
+                    </span>
+                  )}
+                  {tieneDioptrias&&!abierto&&(
+                    <div className="flex items-center gap-1.5">
+                      {agotadas>0&&<span className="text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">{agotadas} agot.</span>}
+                      {bajas>0&&<span className="text-[10px] font-bold bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full">{bajas} bajas</span>}
+                      {agotadas===0&&bajas===0&&<span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">{p.stock}u</span>}
+                    </div>
+                  )}
+
+                  {/* Guardar dioptrías pendientes */}
+                  {pendientes>0&&(
+                    <button onClick={e=>{e.stopPropagation();guardarTodos(p.id)}} disabled={guardando===p.id}
+                      className="flex items-center gap-1.5 bg-primary-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg">
+                      <Save className="w-3 h-3"/>Guardar {pendientes}
+                    </button>
+                  )}
+
+                  {/* Archivar / restaurar */}
+                  <button onClick={e=>{e.stopPropagation();toggleArchivado(p)}}
+                    title={p.archivado?'Restaurar producto':'Archivar producto'}
+                    className={`p-1.5 rounded-lg border transition-colors ${p.archivado?'bg-green-50 border-green-200 text-green-600 hover:bg-green-100':'bg-gray-50 border-gray-200 text-gray-400 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200'}`}>
+                    {p.archivado?<ArchiveRestore className="w-3.5 h-3.5"/>:<Archive className="w-3.5 h-3.5"/>}
                   </button>
-                )}
-                {abierto?<ChevronDown className="w-4 h-4 text-gray-400 shrink-0"/>:<ChevronRight className="w-4 h-4 text-gray-400 shrink-0"/>}
+
+                  {abierto?<ChevronDown className="w-4 h-4 text-gray-400"/>:<ChevronRight className="w-4 h-4 text-gray-400"/>}
+                </div>
               </button>
 
-              {abierto&&(
+              {/* Panel expandido — dioptrías */}
+              {abierto&&tieneDioptrias&&(
                 <div className="border-t border-gray-100 px-4 py-4 bg-gray-50/50">
                   {its.length===0?(
                     <div className="text-center py-3">
-                      <p className="text-sm text-gray-400 mb-2">Sin dioptrías registradas</p>
-                      <p className="text-xs text-gray-300">Stock general: <span className="font-bold text-gray-500">{p.stock} unidades</span></p>
+                      <AlertTriangle className="w-5 h-5 text-amber-400 mx-auto mb-1.5"/>
+                      <p className="text-sm text-gray-500 font-medium">Sin dioptrías registradas</p>
+                      <p className="text-xs text-gray-400 mt-0.5">Agrega filas en Supabase → product_inventory</p>
                     </div>
                   ):(
                     <>
-                      <div className="grid gap-1.5" style={{gridTemplateColumns:'repeat(auto-fill,minmax(72px,1fr))'}}>
+                      <div className="grid gap-1.5" style={{gridTemplateColumns:'repeat(auto-fill,minmax(76px,1fr))'}}>
                         {its.map(item=>{
                           const key=`${p.id}-${item.sph}${item.cyl!=null?`-${item.cyl}`:''}`
                           const val=editando[key]??item.stock
@@ -274,7 +367,7 @@ export default function InventarioPage() {
                             <div key={item.id} className={`border rounded-xl p-2 text-center transition-all ${bgClass}`}>
                               <p className="text-[10px] font-bold text-gray-500 mb-1 leading-none">{sphLabel}</p>
                               <input type="number" min="0" max="999" value={val}
-                                onChange={e=>setEdit(p.id,`${item.sph}${item.cyl!=null?`-${item.cyl}`:''}`,Math.max(0,parseInt(e.target.value)||0))}
+                                onChange={e=>setEditando(prev=>({...prev,[key]:Math.max(0,parseInt(e.target.value)||0)}))}
                                 onBlur={()=>guardarItem(item)}
                                 onKeyDown={e=>e.key==='Enter'&&guardarItem(item)}
                                 className={`w-full text-center text-sm font-bold bg-transparent border-0 outline-none focus:ring-1 focus:ring-primary-400 rounded ${textClass}`}/>
@@ -284,10 +377,39 @@ export default function InventarioPage() {
                         })}
                       </div>
                       <p className="text-[11px] text-gray-400 mt-3 text-center">
-                        Edita el número y presiona Enter · Rojo = agotado · Amarillo = bajo umbral ({umbral}u)
+                        Edita → Enter o blur para guardar · Total: {stockActual}u
                       </p>
                     </>
                   )}
+                </div>
+              )}
+
+              {/* Panel expandido — producto sin dioptrías */}
+              {abierto&&!tieneDioptrias&&(
+                <div className="border-t border-gray-100 px-4 py-4 bg-gray-50/50">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-gray-600 mb-1">Stock disponible</p>
+                      <div className="flex items-center gap-2">
+                        <input type="number" min="0" value={stockEdit[p.id]??p.stock}
+                          onChange={e=>setStockEdit(prev=>({...prev,[p.id]:parseInt(e.target.value)||0}))}
+                          onBlur={()=>guardarStockDirecto(p.id)}
+                          onKeyDown={e=>e.key==='Enter'&&guardarStockDirecto(p.id)}
+                          className="w-24 text-center text-lg font-black border-2 border-gray-200 rounded-xl py-2 focus:outline-none focus:ring-2 focus:ring-primary-400"/>
+                        <span className="text-sm text-gray-500">unidades</span>
+                        {guardando===p.id&&<div className="w-4 h-4 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"/>}
+                      </div>
+                      <p className="text-[11px] text-gray-400 mt-1">Presiona Enter para guardar</p>
+                    </div>
+                    <div className={`w-16 h-16 rounded-2xl flex flex-col items-center justify-center ${(stockEdit[p.id]??p.stock)===0?'bg-red-100':(stockEdit[p.id]??p.stock)<=umbral?'bg-amber-100':'bg-green-100'}`}>
+                      <span className={`text-xl font-black ${(stockEdit[p.id]??p.stock)===0?'text-red-600':(stockEdit[p.id]??p.stock)<=umbral?'text-amber-600':'text-green-700'}`}>
+                        {stockEdit[p.id]??p.stock}
+                      </span>
+                      <span className={`text-[10px] font-bold ${(stockEdit[p.id]??p.stock)===0?'text-red-500':(stockEdit[p.id]??p.stock)<=umbral?'text-amber-500':'text-green-600'}`}>
+                        {(stockEdit[p.id]??p.stock)===0?'Agotado':(stockEdit[p.id]??p.stock)<=umbral?'Bajo':'OK'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -324,6 +446,7 @@ export default function InventarioPage() {
           </div>
         </div>
       )}
+
     </div>
   )
 }
