@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import AdminNav from '@/components/admin/AdminNav'
 import { Users, Plus, Trash2, Shield, Eye, EyeOff, Check, X, Mail, Phone, Building2, Crown } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -86,9 +85,8 @@ export default function ConfiguracionPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav />
-      <main className="flex-1 overflow-auto pb-24">
+    <div className="w-full">
+        <div>
         <div className="max-w-4xl mx-auto p-4 md:p-8">
 
           <div className="flex items-center justify-between mb-8">
@@ -178,7 +176,7 @@ export default function ConfiguracionPage() {
             )}
           </div>
         </div>
-      </main>
+        </div>
 
       {/* Modal crear usuario */}
       {showForm && (
