@@ -1,28 +1,44 @@
 "use client"
 import { fmtSph, fmtReceta } from '@/lib/sph-utils'
-
-import { useState } from 'react'
 import { useCartStore } from '@/lib/cart-store'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye } from 'lucide-react'
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye, Tag, Shield, Truck, RotateCcw, ChevronRight } from 'lucide-react'
+import { useState } from 'react'
+
+const CUPONES: Record<string,number> = { 'BIENVENIDO10': 0.10, 'CONTACTGO15': 0.15 }
 
 export default function CartPage() {
-  const [zona, setZona] = useState('')
-  const { items, removeItem, updateQty, subtotal, total, clearCart } = useCartStore()
-  const sub = subtotal()
-  const tot = total()
+  const { items, removeItem, updateQty, subtotal, clearCart } = useCartStore()
+  const [cupon, setCupon] = useState('')
+  const [descuento, setDescuento] = useState(0)
+  const [cuponOk, setCuponOk] = useState(false)
+  const [cuponErr, setCuponErr] = useState('')
+
+  const sub  = subtotal()
+  const envio = sub >= 8000 ? 0 : 200
+  const tot  = sub + envio - descuento
+
+  const aplicarCupon = () => {
+    const code = cupon.trim().toUpperCase()
+    const pct  = CUPONES[code]
+    if (!pct) { setCuponErr('Código inválido'); setCuponOk(false); return }
+    setDescuento(Math.round(sub * pct))
+    setCuponOk(true); setCuponErr('')
+  }
 
   if (items.length === 0) return (
     <>
       <Navbar />
-      <main id="main-content" className="pb-20 max-w-2xl mx-auto px-4 py-20 text-center">
-        <ShoppingBag className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-        <h2 className="font-display text-2xl font-bold text-gray-900 mb-2">Tu carrito está vacío</h2>
-        <p className="text-gray-500 mb-6">Explora nuestro catálogo y encuentra los lentes perfectos para ti.</p>
-        <Link href="/catalogo" className="btn-primary inline-flex items-center gap-2">
+      <main className="max-w-2xl mx-auto px-4 py-24 text-center">
+        <div className="w-24 h-24 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+          <ShoppingBag className="w-12 h-12 text-gray-300" />
+        </div>
+        <h2 className="text-2xl font-black text-gray-900 mb-2">Tu carrito está vacío</h2>
+        <p className="text-gray-500 mb-8">Explora nuestro catálogo y encuentra los lentes perfectos para ti.</p>
+        <Link href="/catalogo" className="btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-base">
           Ver catálogo <ArrowRight className="w-4 h-4" />
         </Link>
       </main>
@@ -33,118 +49,203 @@ export default function CartPage() {
   return (
     <>
       <Navbar />
-      <main className="pb-20 max-w-6xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-7">
-          <h1 className="font-display text-2xl font-bold text-gray-900">
-            Tu carrito ({items.reduce((s, i) => s + i.cantidad, 0)} items)
-          </h1>
-          <button onClick={clearCart} className="text-sm text-red-500 hover:text-red-600 font-medium">
+      <main className="max-w-5xl mx-auto px-4 py-8 pb-32 md:pb-8">
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-black text-gray-900">Tu carrito</h1>
+            <p className="text-sm text-gray-400 mt-0.5">{items.length} {items.length === 1 ? 'producto' : 'productos'}</p>
+          </div>
+          <button onClick={clearCart} className="text-xs text-red-400 hover:text-red-600 font-medium transition-colors">
             Vaciar carrito
           </button>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-4">
-            {items.map((item, idx) => (
-              <div key={`${item.product.id}-${item.sph}-${idx}`}
-                className="card p-4 flex gap-4">
-                <div className="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
-                  {item.product.imagen_url
-                    ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={80} height={80} className="object-contain p-1" />
-                    : <Eye className="w-8 h-8 text-gray-200" />
-                  }
-                </div>
-                <div className="flex-1 min-w-0">
-                  {(item.product as any).marca && (
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{(item.product as any).marca}</p>
-                  )}
-                  <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
+        <div className="grid lg:grid-cols-5 gap-6">
 
-                  {/* Receta */}
-                  {((item as any).sph != null || (item as any).color || (item as any).ojo) && (
-                    <p className="text-xs font-mono text-blue-700 bg-blue-50 px-2 py-0.5 rounded-lg mt-1 inline-block">
-                      {fmtReceta(item)}
-                    </p>
-                  )}
+          {/* Items */}
+          <div className="lg:col-span-3 space-y-3">
+            {items.map((item, idx) => {
+              const receta = fmtReceta(item)
+              const precioItem = Number((item as any).precio_final ?? item.product.precio)
+              const ojoLabel = (item as any).ojo === 'OD' ? '👁 Ojo Derecho' : (item as any).ojo === 'OS' ? '👁 Ojo Izquierdo' : null
+              return (
+                <div key={`${item.product.id}-${item.sph}-${(item as any).ojo}-${idx}`}
+                  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4">
+                  {/* Imagen */}
+                  <div className="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
+                    {item.product.imagen_url
+                      ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={80} height={80} className="object-contain p-1" />
+                      : <Eye className="w-8 h-8 text-gray-200" />
+                    }
+                  </div>
 
-                  <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                    {(item.product as any).tipo && (
-                      <span className="text-[10px] bg-primary-50 text-primary-700 font-semibold px-2 py-0.5 rounded-full">
-                        {(item.product as any).tipo === 'esferico' ? 'Esférico' : (item.product as any).tipo === 'torico' ? 'Tórico' : (item.product as any).tipo === 'multifocal' ? 'Multifocal' : (item.product as any).tipo === 'color' ? 'Color' : (item.product as any).tipo === 'solucion' ? 'Solución' : 'Gotas'}
+                  {/* Detalle */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        {(item.product as any).marca && (
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{(item.product as any).marca}</p>
+                        )}
+                        <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
+                      </div>
+                      <button onClick={() => removeItem(item.product.id, item.sph)}
+                        className="text-gray-300 hover:text-red-500 transition-colors p-1 shrink-0">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    {/* Ojo badge */}
+                    {ojoLabel && (
+                      <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 ${
+                        (item as any).ojo === 'OD' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+                      }`}>
+                        {ojoLabel}
                       </span>
                     )}
-                  </div>
 
-                  <p className="text-primary-600 font-black mt-2 text-base">
-                    RD${(item.product.precio * item.cantidad).toLocaleString()}
-                  </p>
+                    {/* Receta */}
+                    {receta && (
+                      <div className="flex items-center gap-1.5 mt-1.5 bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1.5">
+                        <span className="text-blue-400 text-xs">Rx</span>
+                        <p className="text-xs font-mono font-bold text-blue-800">{receta}</p>
+                      </div>
+                    )}
 
-                  <div className="flex items-center gap-2 mt-2">
-                    <button onClick={() => updateQty(item.product.id, item.cantidad - 1, item.sph)}
-                      className="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-100">
-                      <Minus className="w-3 h-3" />
-                    </button>
-                    <span className="w-8 text-center text-sm font-semibold">{item.cantidad}</span>
-                    <button onClick={() => updateQty(item.product.id, item.cantidad + 1, item.sph)}
-                      className="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-100">
-                      <Plus className="w-3 h-3" />
-                    </button>
-                    <button onClick={() => removeItem(item.product.id, item.sph)}
-                      className="ml-2 w-7 h-7 text-red-400 hover:text-red-500 hover:bg-red-50 rounded-lg flex items-center justify-center">
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                    {/* Suscripción */}
+                    {(item as any).suscripcion && (
+                      <span className="inline-block text-[10px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full mt-1">
+                        📦 Suscripción {(item as any).suscripcion}
+                      </span>
+                    )}
+
+                    {/* Precio + cantidad */}
+                    <div className="flex items-center justify-between mt-3">
+                      <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                        <button onClick={() => updateQty(item.product.id, item.cantidad - 1, item.sph)}
+                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 text-gray-600 font-bold transition-colors">
+                          <Minus className="w-3 h-3" />
+                        </button>
+                        <span className="w-8 text-center text-sm font-bold text-gray-900">{item.cantidad}</span>
+                        <button onClick={() => updateQty(item.product.id, item.cantidad + 1, item.sph)}
+                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 text-gray-600 font-bold transition-colors">
+                          <Plus className="w-3 h-3" />
+                        </button>
+                      </div>
+                      <p className="font-black text-gray-900 text-base">
+                        RD${(precioItem * item.cantidad).toLocaleString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
+
+            {/* Trust badges */}
+            <div className="grid grid-cols-3 gap-2 pt-2">
+              {[
+                { icon: Shield, text: '100% Original' },
+                { icon: Truck,  text: 'Entrega 24-48h' },
+                { icon: RotateCcw, text: 'Devolución 48h' },
+              ].map(b => (
+                <div key={b.text} className="flex items-center gap-1.5 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                  <b.icon className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                  <span className="text-[11px] text-gray-500 font-medium">{b.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="card p-5 h-fit sticky top-20">
-            <h3 className="font-semibold text-gray-900 mb-4">Resumen del pedido</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between text-gray-600">
-                <span>Subtotal</span>
-                <span>RD${sub.toLocaleString()}</span>
+          {/* Resumen */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-20 space-y-4">
+              <h3 className="font-black text-gray-900">Resumen</h3>
+
+              {/* Cupón */}
+              <div>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Tag className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
+                    <input value={cupon} onChange={e => setCupon(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && aplicarCupon()}
+                      placeholder="Código de descuento"
+                      className="w-full pl-9 pr-3 py-2.5 border-2 border-gray-200 rounded-xl text-xs focus:outline-none focus:border-primary-500 transition-colors" />
+                  </div>
+                  <button onClick={aplicarCupon}
+                    className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors">
+                    Usar
+                  </button>
+                </div>
+                {cuponOk && <p className="text-green-600 text-xs mt-1.5 font-semibold">✅ Cupón aplicado</p>}
+                {cuponErr && <p className="text-red-500 text-xs mt-1.5">{cuponErr}</p>}
               </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between text-gray-600">
-                  <span>Zona de envío</span>
+              {/* Totales */}
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-gray-500">
+                  <span>Subtotal</span>
+                  <span>RD${sub.toLocaleString()}</span>
                 </div>
-
-                <select onChange={e => setZona(e.target.value)} value={zona}
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-primary-200">
-                  <option value="">Selecciona tu zona</option>
-                  <option value="sd">Santo Domingo</option>
-                  <option value="interior">Interior del país</option>
-                </select>
-
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-500">
                   <span>Envío</span>
-                  <span className={sub >= 6000 ? 'text-green-600 font-semibold' : ''}>
-                    {sub >= 6000 ? '¡Gratis! 🎉' : zona === 'sd' ? 'RD$200' : zona === 'interior' ? 'RD$350' : 'Selecciona zona'}
+                  <span className={envio === 0 ? 'text-green-600 font-semibold' : ''}>
+                    {envio === 0 ? '🎁 ¡Gratis!' : `RD$${envio}`}
                   </span>
                 </div>
+                {descuento > 0 && (
+                  <div className="flex justify-between text-green-600 font-bold">
+                    <span>Descuento</span>
+                    <span>-RD${descuento.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="border-t-2 border-gray-100 pt-3 flex justify-between items-baseline">
+                  <span className="font-black text-gray-900">Total</span>
+                  <span className="font-black text-2xl text-primary-600">RD${tot.toLocaleString()}</span>
+                </div>
               </div>
 
-              {/* ITBIS 18% incluido — Ley 11-92 */}
-              <div className="flex justify-between text-gray-500 text-xs">
-                <span>ITBIS incluido (18%)</span>
-                <span>RD${Math.round(tot * 18 / 118).toLocaleString()}</span>
-              </div>
+              {/* Envío gratis hint */}
+              {envio > 0 && (
+                <div className="bg-amber-50 rounded-xl p-3 text-center">
+                  <p className="text-xs text-amber-700">
+                    ¡Agrega <strong>RD${(8000 - sub).toLocaleString()}</strong> más y el envío es <strong>gratis</strong>! 🚀
+                  </p>
+                  <div className="mt-2 bg-amber-200/50 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-amber-500 h-full rounded-full transition-all"
+                      style={{ width: `${Math.min(100, (sub/8000)*100)}%` }} />
+                  </div>
+                </div>
+              )}
 
-              <div className="border-t border-gray-100 pt-3 flex justify-between font-bold text-gray-900 text-base">
-                <span>Total</span>
-                <span>RD${tot.toLocaleString()}</span>
-              </div>
+              <Link href="/checkout"
+                className="w-full btn-primary flex items-center justify-center gap-2 py-4 text-base font-black rounded-2xl">
+                Proceder al pago <ChevronRight className="w-5 h-5" />
+              </Link>
+
+              <p className="text-center text-[11px] text-gray-400">
+                🔒 Pago seguro con AZUL · Banco Popular
+              </p>
             </div>
-
-            <Link href="/checkout" className="btn-primary w-full mt-5 flex items-center justify-center gap-2 py-3.5">
-              Proceder al pago <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
+
       </main>
+
+      {/* Sticky móvil */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <p className="text-xs text-gray-500">{items.length} productos</p>
+            <p className="font-black text-primary-600 text-lg">RD${tot.toLocaleString()}</p>
+          </div>
+          <Link href="/checkout"
+            className="btn-primary flex items-center gap-2 px-6 py-3 font-bold text-sm">
+            Pagar <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+
       <Footer />
     </>
   )

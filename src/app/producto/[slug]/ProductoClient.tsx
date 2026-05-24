@@ -74,16 +74,27 @@ const ALL_AXIS = Array.from({ length: 180 }, (_, i) => i + 1)
 const ALL_ADD  = ['+1.00','+1.25','+1.50','+1.75','+2.00','+2.25','+2.50','+2.75','+3.00']
 
 function EyeSelector({ eye, onChange }: { eye: string; onChange: (v: string) => void }) {
+  const opts = [
+    {val:'OD',   emoji:'👁', label:'Ojo Derecho',   sub:'OD'},
+    {val:'OS',   emoji:'👁', label:'Ojo Izquierdo', sub:'OS'},
+    {val:'AMBOS',emoji:'👀', label:'Ambos ojos',    sub:'OD + OS'},
+  ]
   return (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-2">Ojo <span className="text-red-500">*</span></label>
+      <label className="block text-sm font-semibold text-gray-700 mb-2">
+        ¿Para qué ojo? <span className="text-red-500">*</span>
+      </label>
       <div className="grid grid-cols-3 gap-2">
-        {[{val:'OD',label:'Ojo Derecho'},{val:'OS',label:'Ojo Izquierdo'},{val:'AMBOS',label:'Ambos ojos'}].map(o => (
+        {opts.map(o => (
           <button key={o.val} onClick={() => onChange(o.val)}
-            className={`py-2 px-1 rounded-xl border text-xs font-semibold transition-all ${
-              eye === o.val ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-gray-700 border-gray-200 hover:border-primary-400'
+            className={`py-2.5 px-2 rounded-xl border-2 text-center transition-all ${
+              eye === o.val
+                ? 'bg-primary-600 text-white border-primary-600 shadow-sm shadow-primary-200'
+                : 'bg-white text-gray-700 border-gray-200 hover:border-primary-300'
             }`}>
-            {o.label}
+            <div className="text-base mb-0.5">{o.emoji}</div>
+            <p className="text-[10px] font-black">{o.sub}</p>
+            <p className={`text-[9px] ${eye === o.val ? 'text-white/80' : 'text-gray-400'}`}>{o.label}</p>
           </button>
         ))}
       </div>
@@ -478,14 +489,14 @@ export default function ProductoClient({ product, variants }: Props) {
 
 
             <div className="flex flex-col gap-2">
-              <button onClick={handleAdd} disabled={product.stock === 0}
-                className="btn-primary flex items-center justify-center gap-2 py-3.5 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed">
-                <ShoppingCart className="w-4 h-4" />
-                {product.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
-              </button>
               <button onClick={handleBuyNow} disabled={product.stock === 0}
-                className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.99] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-50">
-                Comprar ahora →
+                className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-md shadow-primary-200 disabled:opacity-40 disabled:cursor-not-allowed">
+                {product.stock === 0 ? 'Sin stock' : <>Comprar ahora · RD${price.toLocaleString()} →</>}
+              </button>
+              <button onClick={handleAdd} disabled={product.stock === 0}
+                className="w-full bg-white border-2 border-primary-600 hover:bg-primary-50 active:scale-[0.99] text-primary-600 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                <ShoppingCart className="w-4 h-4" />
+                Agregar al carrito
               </button>
             </div>
           </div>
@@ -498,19 +509,23 @@ export default function ProductoClient({ product, variants }: Props) {
 
       {/* Sticky CTA móvil */}
       {product.stock > 0 && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 flex items-center gap-3 shadow-lg">
-          <div className="flex-1">
-            <p className="text-xs text-gray-500 truncate">{product.nombre}</p>
-            <p className="font-black text-primary-600 text-lg">RD${price.toLocaleString()}</p>
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 px-4 py-3 shadow-xl">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-gray-400 truncate">{product.nombre}</p>
+            </div>
+            <p className="font-black text-primary-600 text-lg shrink-0">RD${price.toLocaleString()}</p>
           </div>
-          <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer"
-            className="bg-green-500 text-white px-3 py-3 rounded-xl text-sm font-bold flex items-center gap-1 shrink-0">
-            💬
-          </a>
-          <button onClick={handleAdd}
-            className="btn-primary flex-1 py-3 text-sm font-bold flex items-center justify-center gap-2">
-            <ShoppingCart className="w-4 h-4" /> Agregar al carrito
-          </button>
+          <div className="flex gap-2">
+            <button onClick={handleAdd}
+              className="flex-none bg-white border-2 border-primary-600 text-primary-600 font-bold px-4 py-3 rounded-xl flex items-center gap-1 text-sm">
+              <ShoppingCart className="w-4 h-4" />
+            </button>
+            <button onClick={handleBuyNow}
+              className="flex-1 btn-primary py-3 text-sm font-black flex items-center justify-center gap-2">
+              Comprar ahora →
+            </button>
+          </div>
         </div>
       )}
 
