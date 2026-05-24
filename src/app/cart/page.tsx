@@ -1,4 +1,5 @@
 "use client"
+import { fmtSph, fmtReceta } from '@/lib/sph-utils'
 
 import { useState } from 'react'
 import { useCartStore } from '@/lib/cart-store'
@@ -58,6 +59,13 @@ export default function CartPage() {
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{(item.product as any).marca}</p>
                   )}
                   <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
+
+                  {/* Receta */}
+                  {((item as any).sph != null || (item as any).color || (item as any).ojo) && (
+                    <p className="text-xs font-mono text-blue-700 bg-blue-50 px-2 py-0.5 rounded-lg mt-1 inline-block">
+                      {fmtReceta(item)}
+                    </p>
+                  )}
 
                   <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                     {(item.product as any).tipo && (

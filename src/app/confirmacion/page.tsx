@@ -17,10 +17,7 @@ const METODO_LABEL: Record<string, string> = {
   tarjeta: '💳 Tarjeta de crédito/débito (AZUL)',
 }
 
-function fmtSph(v: any) {
-  if (v == null) return null
-  return parseFloat(v) > 0 ? `+${v}` : String(v)
-}
+import { fmtSph, fmtReceta } from '@/lib/sph-utils'
 
 function ConfirmacionContent() {
   const params  = useSearchParams()
