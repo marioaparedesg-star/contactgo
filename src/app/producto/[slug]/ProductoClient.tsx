@@ -121,6 +121,14 @@ export default function ProductoClient({ product, variants }: Props) {
   const addItem = useCartStore(s => s.addItem)
 
   const [eye,   setEye]   = useState('AMBOS')
+  // Receta ojo derecho (OD) y ojo izquierdo (OS)
+  const [sphOD, setSphOD] = useState('')
+  const [cylOD, setCylOD] = useState('')
+  const [axisOD,setAxisOD]= useState('')
+  const [sphOS, setSphOS] = useState('')
+  const [cylOS, setCylOS] = useState('')
+  const [axisOS,setAxisOS]= useState('')
+  // Para un solo ojo o cuando ambos tienen igual receta
   const [sph,   setSph]   = useState('')
   const [cyl,   setCyl]   = useState('')
   const [axis,  setAxis]  = useState('')
@@ -128,6 +136,7 @@ export default function ProductoClient({ product, variants }: Props) {
   const [color, setColor] = useState('')
   const [size,  setSize]  = useState('')
   const [qty,   setQty]   = useState(1)
+  const [mismaSph, setMismaSph] = useState(false) // ambos ojos misma receta
   const [price, setPrice] = useState(product.precio ?? 0)
   const [suscripcion, setSuscripcion] = useState<string | null>(null)
 
@@ -154,24 +163,48 @@ export default function ProductoClient({ product, variants }: Props) {
   }, [size, product.precio, sku, suscripcion])
 
   const handleAdd = (): boolean => {
-    if (isLente && !isColor && !sph)               { toast.error('Selecciona una graduación (SPH)'); return false }
-    if (isColor && !color)                          { toast.error('Selecciona un color'); return false }
-    if (isToric && !cyl)                            { toast.error('Selecciona el cilindro (CYL)'); return false }
-    if (isToric && !axis)                           { toast.error('Selecciona el eje (AXIS)'); return false }
-    if (isMulti && !add)                            { toast.error('Selecciona la adición (ADD)'); return false }
-    if (isSolucion && sizes.length > 1 && !size)    { toast.error('Selecciona el tamaño'); return false }
-    addItem(product, {
-      suscripcion: suscripcion ?? undefined,
-      cantidad: qty,
-      sph:       sph   ? parseFloat(sph)  : undefined,
-      cyl:       cyl   ? parseFloat(cyl)  : undefined,
-      axis:      axis  ? parseInt(axis)   : undefined,
-      add_power: add   || undefined,
-      color:     color || undefined,
-      ojo:       isLente ? eye : undefined,
-      size:      size  || undefined,
-    } as any)
-    toast.success('Agregado al carrito ✓')
+    if (isColor && !color) { toast.error('Selecciona un color'); return false }
+    if (isSolucion && sizes.length > 1 && !size) { toast.error('Selecciona el tamaño'); return false }
+
+    if (isLente && !isColor) {
+      if (eye === 'AMBOS') {
+        // Validar ambos ojos
+        if (mismaSph) {
+          // Misma receta ambos ojos
+          if (!sph)  { toast.error('Selecciona la graduación SPH'); return false }
+          if (isToric && !cyl)  { toast.error('Selecciona el cilindro CYL'); return false }
+          if (isToric && !axis) { toast.error('Selecciona el eje AXIS'); return false }
+          // Agregar OD
+          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:'OD', size:size||undefined } as any)
+          // Agregar OS (misma receta)
+          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:'OS', size:size||undefined } as any)
+        } else {
+          // Receta diferente por ojo
+          if (!sphOD && !sphOS) { toast.error('Ingresa la receta de al menos un ojo'); return false }
+          if (sphOD) {
+            if (isToric && !cylOD)  { toast.error('Falta el CYL del ojo derecho'); return false }
+            if (isToric && !axisOD) { toast.error('Falta el AXIS del ojo derecho'); return false }
+            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOD), cyl:cylOD?parseFloat(cylOD):undefined, axis:axisOD?parseInt(axisOD):undefined, add_power:add||undefined, ojo:'OD', size:size||undefined } as any)
+          }
+          if (sphOS) {
+            if (isToric && !cylOS)  { toast.error('Falta el CYL del ojo izquierdo'); return false }
+            if (isToric && !axisOS) { toast.error('Falta el AXIS del ojo izquierdo'); return false }
+            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOS), cyl:cylOS?parseFloat(cylOS):undefined, axis:axisOS?parseInt(axisOS):undefined, add_power:add||undefined, ojo:'OS', size:size||undefined } as any)
+          }
+        }
+      } else {
+        // Un solo ojo (OD o OS)
+        if (!sph) { toast.error('Selecciona la graduación SPH'); return false }
+        if (isToric && !cyl)  { toast.error('Selecciona el cilindro CYL'); return false }
+        if (isToric && !axis) { toast.error('Selecciona el eje AXIS'); return false }
+        addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:eye, size:size||undefined } as any)
+      }
+    } else {
+      // Solución, gota, color
+      addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, color:color||undefined, size:size||undefined } as any)
+    }
+
+    toast.success(eye === 'AMBOS' && isLente && !isColor ? 'Agregado para ambos ojos ✓' : 'Agregado al carrito ✓')
     return true
   }
 
@@ -275,29 +308,74 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {isLente && !isColor && <EyeSelector eye={eye} onChange={setEye} />}
 
-            {isLente && (() => {
+            {isLente && !isColor && (() => {
               const sphOpts = product.sph_disponibles?.length
-                ? [...product.sph_disponibles].sort((a,b) => Number(a)-Number(b))
+                ? [...product.sph_disponibles].sort((a:any,b:any) => Number(a)-Number(b))
                 : ALL_SPH
-              return (
-                <SelectField label="Graduación (SPH)" value={sph} options={sphOpts} required
-                  onChange={setSph} format={v => Number(v) > 0 ? `+${Number(v).toFixed(2)}` : Number(v) === 0 ? 'Plano' : Number(v).toFixed(2)} />
-              )
-            })()}
+              const fmtSph = (v:any) => Number(v) > 0 ? `+${Number(v).toFixed(2)}` : Number(v) === 0 ? 'Plano (0.00)' : Number(v).toFixed(2)
 
-            {isToric && (() => {
-              const cylOpts = product.cyl_disponibles?.length
-                ? [...product.cyl_disponibles].sort((a,b) => Number(a)-Number(b))
-                : ALL_CYL
-              const axisOpts = product.axis_disponibles?.length
-                ? [...product.axis_disponibles].sort((a,b) => Number(a)-Number(b))
-                : ALL_AXIS
-              return (<>
-                <SelectField label="Cilindro (CYL)" value={cyl} options={cylOpts} required onChange={setCyl}
-                  format={v => Number(v).toFixed(2)} />
-                <SelectField label="Eje (AXIS)" value={axis} options={axisOpts} required onChange={setAxis}
-                  format={v => String(v).padStart(3,'0') + '°'} />
-              </>)
+              const cylOpts = product.cyl_disponibles?.length ? [...product.cyl_disponibles].sort((a:any,b:any)=>Number(a)-Number(b)) : ALL_CYL
+              const axisOpts = product.axis_disponibles?.length ? [...product.axis_disponibles].sort((a:any,b:any)=>Number(a)-Number(b)) : ALL_AXIS
+
+              if (eye === 'AMBOS') {
+                return (
+                  <div className="space-y-3">
+                    {/* Toggle misma receta */}
+                    <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-3 py-2.5">
+                      <input type="checkbox" id="mismaSph" checked={mismaSph} onChange={e=>setMismaSph(e.target.checked)}
+                        className="w-4 h-4 accent-primary-600"/>
+                      <label htmlFor="mismaSph" className="text-xs text-blue-700 font-semibold cursor-pointer">
+                        Ambos ojos tienen la misma receta
+                      </label>
+                    </div>
+
+                    {mismaSph ? (
+                      /* Misma receta para ambos */
+                      <div className="bg-gray-50 rounded-xl p-3 space-y-3">
+                        <p className="text-xs font-bold text-gray-500 uppercase">Receta (OD + OS igual)</p>
+                        <SelectField label="SPH" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
+                        {isToric && <>
+                          <SelectField label="CYL" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
+                          <SelectField label="AXIS" value={axis} options={axisOpts} required onChange={setAxis} format={v=>String(v).padStart(3,'0')+'°'}/>
+                        </>}
+                      </div>
+                    ) : (
+                      /* Receta diferente por ojo */
+                      <div className="grid grid-cols-2 gap-3">
+                        {/* OD */}
+                        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
+                          <p className="text-xs font-bold text-blue-700">👁 Ojo Derecho (OD)</p>
+                          <SelectField label="SPH" value={sphOD} options={sphOpts} onChange={setSphOD} format={fmtSph}/>
+                          {isToric && <>
+                            <SelectField label="CYL" value={cylOD} options={cylOpts} onChange={setCylOD} format={v=>Number(v).toFixed(2)}/>
+                            <SelectField label="AXIS" value={axisOD} options={axisOpts} onChange={setAxisOD} format={v=>String(v).padStart(3,'0')+'°'}/>
+                          </>}
+                        </div>
+                        {/* OS */}
+                        <div className="bg-green-50 border border-green-200 rounded-xl p-3 space-y-2">
+                          <p className="text-xs font-bold text-green-700">👁 Ojo Izquierdo (OS)</p>
+                          <SelectField label="SPH" value={sphOS} options={sphOpts} onChange={setSphOS} format={fmtSph}/>
+                          {isToric && <>
+                            <SelectField label="CYL" value={cylOS} options={cylOpts} onChange={setCylOS} format={v=>Number(v).toFixed(2)}/>
+                            <SelectField label="AXIS" value={axisOS} options={axisOpts} onChange={setAxisOS} format={v=>String(v).padStart(3,'0')+'°'}/>
+                          </>}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              }
+
+              // Un solo ojo (OD o OS)
+              return (
+                <div className="space-y-3">
+                  <SelectField label="Graduación (SPH)" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
+                  {isToric && <>
+                    <SelectField label="Cilindro (CYL)" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
+                    <SelectField label="Eje (AXIS)" value={axis} options={axisOpts} required onChange={setAxis} format={v=>String(v).padStart(3,'0')+'°'}/>
+                  </>}
+                </div>
+              )
             })()}
 
             {isMulti && (() => {

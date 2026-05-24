@@ -35,18 +35,25 @@ export const useCartStore = create<CartStore>()(
       addItem: (product, opts = {}) => {
         const { cantidad = 1, sph, cyl, axis, add_power, color, ojo, size, precio_override, suscripcion } = opts
         set(state => {
-          // If ojo is specified (OD/OI from prescription), always add as separate item
-          const existing = ojo ? null : state.items.find(
+          // Buscar item existente para actualizar cantidad
+          // Para OD/OS específico: busca por ojo también
+          const existing = state.items.find(
             i => i.product.id === product.id &&
                  i.sph === sph &&
                  i.color === color &&
                  (i as any).ojo === ojo &&
-                 (i as any).size === size
+                 (i as any).size === size &&
+                 (i as any).cyl === cyl &&
+                 (i as any).axis === axis
           )
           if (existing) {
             return {
               items: state.items.map(i =>
-                i.product.id === product.id && i.sph === sph && i.color === color
+                i.product.id === product.id &&
+                i.sph === sph &&
+                i.color === color &&
+                (i as any).ojo === ojo &&
+                (i as any).size === size
                   ? { ...i, cantidad: i.cantidad + cantidad }
                   : i
               )
