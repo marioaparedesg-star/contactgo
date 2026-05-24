@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import AdminNav from '@/components/admin/AdminNav'
 import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 import { Plus, Edit, Trash2, Search, Eye, AlertTriangle, Download, Upload, X } from 'lucide-react'
@@ -110,9 +109,8 @@ export default function AdminProductos() {
   const TIPO_COLOR: Record<string, string> = { esferico:'bg-blue-50 text-blue-700',torico:'bg-purple-50 text-purple-700',multifocal:'bg-indigo-50 text-indigo-700',color:'bg-pink-50 text-pink-700',solucion:'bg-cyan-50 text-cyan-700',gota:'bg-teal-50 text-teal-700' }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav />
-      <main className="flex-1 p-6 md:p-8 overflow-auto">
+    <div className="w-full pb-10">
+
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-7 flex-wrap gap-3">
             <div>
@@ -188,7 +186,6 @@ export default function AdminProductos() {
             </div>
           </div>
         </div>
-      </main>
 
       {showForm && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">

@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import AdminNav from '@/components/admin/AdminNav'
 import { Plus, Tag, Trash2, X, Check, Copy } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -73,10 +72,7 @@ export default function CuponesPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav />
-      <main className="flex-1 overflow-auto pb-24">
-        <div className="max-w-5xl mx-auto p-4 md:p-8">
+    <div className="max-w-5xl mx-auto">
 
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -220,8 +216,6 @@ export default function CuponesPage() {
               </div>
             )}
           </div>
-        </div>
-      </main>
     </div>
   )
 }

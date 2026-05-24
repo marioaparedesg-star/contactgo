@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import AdminNav from '@/components/admin/AdminNav'
 import { X, MessageCircle, Pause, Play, XCircle, ChevronDown, ChevronUp, Repeat, Calendar, Phone, MapPin } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -91,10 +90,7 @@ export default function SuscripcionesPage() {
   }).length
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav />
-      <main className="flex-1 overflow-auto pb-24">
-        <div className="max-w-6xl mx-auto p-4 md:p-8">
+    <div className="max-w-6xl mx-auto">
 
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
@@ -278,8 +274,6 @@ export default function SuscripcionesPage() {
               })}
             </div>
           )}
-        </div>
-      </main>
     </div>
   )
 }

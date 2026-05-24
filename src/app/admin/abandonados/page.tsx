@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
-import AdminNav from '@/components/admin/AdminNav'
 import { createClient } from '@/lib/supabase'
 import { RefreshCw, MessageSquare, Search, ShoppingBag } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -44,10 +43,7 @@ export default function AdminAbandonados() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav />
-      <main className="flex-1 overflow-auto pt-16 pb-24 md:pt-0 md:pb-0">
-        <div className="max-w-7xl mx-auto p-4 md:p-8">
+    <div className="max-w-7xl mx-auto">
 
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -149,8 +145,6 @@ export default function AdminAbandonados() {
               </table>
             </div>
           </div>
-        </div>
-      </main>
     </div>
   )
 }

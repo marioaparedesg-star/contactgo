@@ -1,301 +1,298 @@
-import { createServerSupabaseClient } from '@/lib/supabase-server'
-import { redirect } from 'next/navigation'
-import AdminNav from '@/components/admin/AdminNav'
-import { ShoppingBag, Clock, DollarSign, Users, AlertTriangle, TrendingUp, Package, Repeat, ArrowRight, CheckCircle, Truck } from 'lucide-react'
-import Link from 'next/link'
+'use client'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
+import {
+  TrendingUp, ShoppingBag, Users, RefreshCw,
+  Package, Truck, CheckCircle, Clock, CreditCard,
+  ArrowRight, AlertTriangle
+} from 'lucide-react'
 
-export const revalidate = 0
+const sb = createClient()
 
-const DIAS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
-
-async function getData() {
-  const sb = createServerSupabaseClient()
-  const now = new Date()
-  const hoy = now.toISOString().split('T')[0]
-  const mesStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
-  const semanaStart = new Date(Date.now() - 7*24*60*60*1000).toISOString()
-
-  const [
-    { data: allOrders },
-    { data: items },
-    { count: pendientes },
-    { count: clientes },
-    { data: stockBajo },
-    { data: sinStock },
-    { data: subs },
-    { data: recentOrders },
-  ] = await Promise.all([
-    sb.from('orders').select('total,fecha,estado').not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%').order('fecha', { ascending: false }),
-    sb.from('order_items').select('nombre,cantidad,subtotal,precio'),
-    sb.from('orders').select('*', { count: 'exact', head: true }).eq('estado', 'pendiente').not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%'),
-    sb.from('profiles').select('*', { count: 'exact', head: true }),
-    sb.from('products').select('nombre,stock,marca').eq('activo', true).lte('stock', 3).gt('stock', 0).order('stock'),
-    sb.from('products').select('nombre,marca').eq('activo', true).eq('stock', 0),
-    sb.from('subscriptions').select('activa').eq('activa', true),
-    sb.from('orders').select('id,cliente_nombre,total,estado,fecha,metodo_pago').not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%').order('fecha', { ascending: false }).limit(7),
-  ])
-
-  const orders = allOrders ?? []
-
-  // KPIs
-  const ventasHoy     = orders.filter(o => o.fecha?.startsWith(hoy)).reduce((s, o) => s + (o.total ?? 0), 0)
-  const ventasSemana  = orders.filter(o => o.fecha >= semanaStart).reduce((s, o) => s + (o.total ?? 0), 0)
-  const ventasMes     = orders.filter(o => o.fecha >= mesStart).reduce((s, o) => s + (o.total ?? 0), 0)
-  const pedidosMes    = orders.filter(o => o.fecha >= mesStart).length
-  const ticket        = orders.length ? Math.round(orders.reduce((s,o) => s+(o.total??0),0) / orders.length) : 0
-  const entregados    = orders.filter(o => o.estado === 'entregado').length
-  const conversion    = orders.length ? Math.round((entregados / orders.length) * 100) : 0
-
-  // Gráfica 7 días
-  const chart: { dia: string; ventas: number; label: string }[] = []
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(Date.now() - i*24*60*60*1000)
-    const key = d.toISOString().split('T')[0]
-    const ventas = orders.filter(o => o.fecha?.startsWith(key)).reduce((s,o) => s+(o.total??0),0)
-    chart.push({ dia: key, ventas, label: DIAS[d.getDay()] })
-  }
-  const maxVentas = Math.max(...chart.map(c => c.ventas), 1)
-
-  // Top productos
-  const agg: Record<string, { nombre: string; unidades: number; revenue: number }> = {}
-  ;(items ?? []).forEach((i: any) => {
-    if (!agg[i.nombre]) agg[i.nombre] = { nombre: i.nombre, unidades: 0, revenue: 0 }
-    agg[i.nombre].unidades += i.cantidad ?? 1
-    agg[i.nombre].revenue += i.subtotal ?? ((i.precio ?? 0) * (i.cantidad ?? 1))
-  })
-  const topProducts = Object.values(agg).sort((a,b) => b.revenue - a.revenue).slice(0, 5)
-
-  return {
-    ventasHoy, ventasSemana, ventasMes, pedidosMes, ticket, conversion,
-    pendientes: pendientes ?? 0,
-    clientes: clientes ?? 0,
-    suscripciones: subs?.length ?? 0,
-    stockBajo: stockBajo ?? [],
-    sinStock: sinStock ?? [],
-    chart, maxVentas,
-    topProducts,
-    recentOrders: recentOrders ?? [],
-    totalPedidos: orders.length,
-  }
+const ESTADO_COLOR: Record<string,string> = {
+  pendiente:  'bg-amber-100 text-amber-700',
+  confirmado: 'bg-blue-100 text-blue-700',
+  preparando: 'bg-purple-100 text-purple-700',
+  enviado:    'bg-indigo-100 text-indigo-700',
+  entregado:  'bg-green-100 text-green-700',
+  cancelado:  'bg-red-100 text-red-700',
 }
 
-const ESTADO_CFG: Record<string, { cls: string; label: string }> = {
-  pendiente:  { cls: 'bg-amber-100 text-amber-700',   label: 'Pendiente'  },
-  confirmado: { cls: 'bg-blue-100 text-blue-700',     label: 'Confirmado' },
-  preparando: { cls: 'bg-purple-100 text-purple-700', label: 'Preparando' },
-  enviado:    { cls: 'bg-indigo-100 text-indigo-700', label: 'Enviado'    },
-  entregado:  { cls: 'bg-green-100 text-green-700',   label: 'Entregado'  },
-  cancelado:  { cls: 'bg-red-100 text-red-700',       label: 'Cancelado'  },
-}
+export default function AdminDashboard() {
+  const router = useRouter()
+  const [data, setData]       = useState<any>(null)
+  const [recent, setRecent]   = useState<any[]>([])
+  const [top, setTop]         = useState<any[]>([])
+  const [stock, setStock]     = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [updated, setUpdated] = useState(new Date())
 
-export default async function AdminDashboard() {
-  const sb = createServerSupabaseClient()
-  const { data: { user } } = await sb.auth.getUser()
-  if (!user) redirect('/admin/login')
-  const { data: profile } = await sb.from('profiles').select('role').eq('id', user.id).single()
-  if (profile?.role !== 'admin') redirect('/')
+  const fmt = (n:number) => `RD$${Math.round(n).toLocaleString('es-DO')}`
+  const hoy = new Date().toLocaleDateString('es-DO',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
 
-  const d = await getData()
+  const cargar = async () => {
+    setLoading(true)
+    const since30 = new Date(Date.now()-30*24*3600*1000).toISOString()
+    const since7  = new Date(Date.now()-7*24*3600*1000).toISOString()
+    const since1  = new Date(new Date().setHours(0,0,0,0)).toISOString()
+
+    const [all, today7, ord7, ordRecent, items, stockLow] = await Promise.all([
+      sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
+        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .gte('fecha',since30),
+      sb.from('orders').select('id,total,estado,fecha')
+        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .gte('fecha',since1),
+      sb.from('orders').select('id,total,estado,fecha')
+        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .gte('fecha',since7),
+      sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
+        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .order('created_at',{ascending:false}).limit(8),
+      sb.from('order_items').select('nombre,cantidad,precio').limit(600),
+      sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
+    ])
+
+    const ords    = all.data ?? []
+    const ords7   = ord7.data ?? []
+    const ordsHoy = today7.data ?? []
+
+    const ventas30  = ords.reduce((s,o)=>s+Number(o.total??0),0)
+    const ventas7   = ords7.reduce((s,o)=>s+Number(o.total??0),0)
+    const ventasHoy = ordsHoy.reduce((s,o)=>s+Number(o.total??0),0)
+    const tickets   = ords.length > 0 ? ventas30/ords.length : 0
+    const entregados = ords.filter(o=>o.estado==='entregado').length
+    const conversion = ords.length > 0 ? Math.round((entregados/ords.length)*100) : 0
+
+    const agg: Record<string,{nombre:string,u:number,rev:number}> = {}
+    ;(items.data??[]).forEach((i:any)=>{
+      if(!agg[i.nombre]) agg[i.nombre]={nombre:i.nombre,u:0,rev:0}
+      agg[i.nombre].u   += Number(i.cantidad??1)
+      agg[i.nombre].rev += Number(i.precio??0)*Number(i.cantidad??1)
+    })
+    const topProds = Object.values(agg).sort((a,b)=>b.u-a.u).slice(0,5)
+
+    const { count: clientes } = await sb.from('profiles').select('*',{count:'exact',head:true}).eq('role','customer')
+
+    setData({ ventas30, ventas7, ventasHoy, tickets, entregados, conversion, pedidos30:ords.length, pedidos7:ords7.length, clientes: clientes??0 })
+    setRecent(ordRecent.data??[])
+    setTop(topProds)
+    setStock(stockLow.data??[])
+    setUpdated(new Date())
+    setLoading(false)
+  }
+
+  useEffect(()=>{ cargar() },[])
+
+  // Mini bar chart 7 días
+  const [bars, setBars] = useState<{d:string,v:number}[]>([])
+  useEffect(()=>{
+    if (!data) return
+    const dias = Array.from({length:7},(_,i)=>{
+      const d = new Date(Date.now()-(6-i)*86400000)
+      return { d: d.toLocaleDateString('es-DO',{weekday:'short'}), v: 0, date: d.toDateString() }
+    })
+    sb.from('orders').select('total,fecha')
+      .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+      .gte('fecha',new Date(Date.now()-7*86400000).toISOString())
+      .then(({data:o})=>{
+        ;(o??[]).forEach((ord:any)=>{
+          const od = new Date(ord.fecha).toDateString()
+          const bar = dias.find(d=>d.date===od)
+          if (bar) bar.v += Number(ord.total??0)
+        })
+        setBars(dias.map(d=>({d:d.d,v:d.v})))
+      })
+  },[data])
+
+  const maxBar = Math.max(...bars.map(b=>b.v),1)
+
+  if (loading) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"/>
+    </div>
+  )
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav />
-      <main className="flex-1 overflow-auto pt-16 pb-24 md:pt-0 md:pb-0">
-        <div className="max-w-7xl mx-auto p-4 md:p-8">
+    <div className="space-y-6 pb-10">
 
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-2xl font-black text-gray-900">Dashboard</h1>
-              <p className="text-gray-400 text-sm mt-0.5">
-                {new Date().toLocaleDateString('es-DO', { weekday:'long', day:'numeric', month:'long', year:'numeric' })}
-              </p>
-            </div>
-            <Link href="/admin/pedidos"
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors">
-              Ver pedidos <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Alerta pendientes */}
-          {d.pendientes > 0 && (
-            <Link href="/admin/pedidos" className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 mb-6 hover:bg-amber-100 transition-colors">
-              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
-              <p className="text-sm font-semibold text-amber-700">
-                <span className="font-black">{d.pendientes}</span> pedido{d.pendientes > 1 ? 's' : ''} pendiente{d.pendientes > 1 ? 's' : ''} de confirmar
-              </p>
-              <ArrowRight className="w-4 h-4 text-amber-500 ml-auto" />
-            </Link>
-          )}
-
-          {/* Alerta stock */}
-          {(d.sinStock.length > 0 || d.stockBajo.length > 0) && (
-            <Link href="/admin/inventario" className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-2xl px-5 py-4 mb-6 hover:bg-red-100 transition-colors">
-              <Package className="w-5 h-5 text-red-500 shrink-0" />
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-red-700">
-                  {d.sinStock.length > 0 && <span><span className="font-black">{d.sinStock.length}</span> sin stock · </span>}
-                  {d.stockBajo.length > 0 && <span><span className="font-black">{d.stockBajo.length}</span> con stock crítico (≤3)</span>}
-                </p>
-                {d.stockBajo.length > 0 && (
-                  <p className="text-xs text-red-500 mt-0.5">{d.stockBajo.slice(0,3).map((p:any) => `${p.nombre} (${p.stock})`).join(' · ')}</p>
-                )}
-              </div>
-              <ArrowRight className="w-4 h-4 text-red-400" />
-            </Link>
-          )}
-
-          {/* KPIs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            {[
-              { label: 'Ventas hoy',      value: `RD$${d.ventasHoy.toLocaleString()}`,    icon: TrendingUp,  color: 'bg-primary-500', sub: `${d.recentOrders.filter((o:any) => o.fecha?.startsWith(new Date().toISOString().split('T')[0])).length} pedido(s)` },
-              { label: 'Ventas del mes',  value: `RD$${d.ventasMes.toLocaleString()}`,    icon: DollarSign,  color: 'bg-blue-500',    sub: `${d.pedidosMes} pedidos` },
-              { label: 'Ticket promedio', value: `RD$${d.ticket.toLocaleString()}`,        icon: ShoppingBag, color: 'bg-purple-500',  sub: `${d.totalPedidos} pedidos totales` },
-              { label: 'Suscripciones',   value: d.suscripciones,                          icon: Repeat,      color: 'bg-green-500',   sub: 'activas', href: '/admin/suscripciones' },
-            ].map(k => (
-              <Link key={k.label} href={(k as any).href ?? '/admin/pedidos'}
-                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${k.color}`}>
-                  <k.icon className="w-5 h-5 text-white" />
-                </div>
-                <p className="text-2xl font-black text-gray-900">{k.value}</p>
-                <p className="text-sm font-semibold text-gray-500 mt-0.5">{k.label}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{k.sub}</p>
-              </Link>
-            ))}
-          </div>
-
-          {/* Stats secundarios */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            {[
-              { label: 'Clientes',    value: d.clientes,    icon: Users,        color: 'text-purple-600 bg-purple-50' },
-              { label: 'Entregados',  value: d.recentOrders.filter((o:any) => o.estado === 'entregado').length,   icon: CheckCircle,  color: 'text-green-600 bg-green-50' },
-              { label: 'Conversión',  value: `${d.conversion}%`, icon: TrendingUp, color: 'text-blue-600 bg-blue-50' },
-            ].map(s => (
-              <div key={s.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${s.color}`}>
-                  <s.icon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xl font-black text-gray-900">{s.value}</p>
-                  <p className="text-xs text-gray-500 font-medium">{s.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-6">
-            {/* Gráfica ventas 7 días */}
-            <div className="md:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <div className="flex items-center justify-between mb-1">
-                <p className="font-bold text-gray-900">Ventas últimos 7 días</p>
-                <p className="text-xs text-gray-400">RD$</p>
-              </div>
-              <p className="text-3xl font-black text-primary-600 mb-4">RD${d.ventasSemana.toLocaleString()}</p>
-              <div className="flex items-end gap-2 h-28">
-                {d.chart.map((c, i) => {
-                  const pct = Math.max((c.ventas / d.maxVentas) * 100, 3)
-                  const isToday = i === 6
-                  return (
-                    <div key={c.dia} className="flex-1 flex flex-col items-center gap-1 group relative">
-                      {c.ventas > 0 && (
-                        <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
-                          RD${c.ventas.toLocaleString()}
-                        </div>
-                      )}
-                      <div className="w-full flex flex-col justify-end" style={{ height: '90px' }}>
-                        <div
-                          className={`w-full rounded-t-lg transition-all ${isToday ? 'bg-primary-500' : 'bg-primary-200 hover:bg-primary-300'}`}
-                          style={{ height: `${pct}%` }}
-                        />
-                      </div>
-                      <span className={`text-[10px] font-semibold ${isToday ? 'text-primary-600' : 'text-gray-400'}`}>{c.label}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Top productos */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Package className="w-4 h-4 text-primary-600" />
-                <p className="font-bold text-gray-900">Productos top</p>
-              </div>
-              {d.topProducts.length === 0 ? (
-                <p className="text-sm text-gray-400 text-center py-8">Sin ventas registradas</p>
-              ) : (
-                <div className="space-y-3">
-                  {d.topProducts.map((p, i) => {
-                    const pct = Math.round((p.revenue / d.topProducts[0].revenue) * 100)
-                    return (
-                      <div key={p.nombre}>
-                        <div className="flex items-center justify-between mb-1">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${i === 0 ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-500'}`}>
-                              {i+1}
-                            </span>
-                            <p className="text-xs font-semibold text-gray-900 truncate">{p.nombre}</p>
-                          </div>
-                          <p className="text-xs font-bold text-gray-500 shrink-0 ml-1">{p.unidades}u</p>
-                        </div>
-                        <div className="w-full bg-gray-100 rounded-full h-1.5">
-                          <div className="bg-primary-400 h-1.5 rounded-full" style={{ width: `${pct}%` }} />
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Pedidos recientes */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="font-bold text-gray-900">Pedidos recientes</h2>
-              <Link href="/admin/pedidos" className="text-sm text-primary-600 font-semibold hover:text-primary-700 flex items-center gap-1">
-                Ver todos <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50 border-b border-gray-100">
-                  <tr>
-                    {['#','Cliente','Total','Método','Estado','Fecha'].map(h => (
-                      <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {d.recentOrders.length === 0 ? (
-                    <tr><td colSpan={6} className="text-center py-10 text-gray-400">Sin pedidos aún</td></tr>
-                  ) : d.recentOrders.map((o: any) => {
-                    const cfg = ESTADO_CFG[o.estado] ?? ESTADO_CFG.pendiente
-                    return (
-                      <tr key={o.id} className="hover:bg-gray-50/80 transition-colors">
-                        <td className="px-4 py-3">
-                          <span className="font-mono text-xs font-bold text-gray-400">#{o.id.slice(0,6).toUpperCase()}</span>
-                        </td>
-                        <td className="px-4 py-3 font-semibold text-gray-900">{o.cliente_nombre ?? '—'}</td>
-                        <td className="px-4 py-3 font-bold text-gray-900">RD${(o.total ?? 0).toLocaleString()}</td>
-                        <td className="px-4 py-3 text-gray-500 text-xs capitalize">{(o.metodo_pago ?? '—').replace('_',' ')}</td>
-                        <td className="px-4 py-3">
-                          <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${cfg.cls}`}>{cfg.label}</span>
-                        </td>
-                        <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
-                          {new Date(o.fecha).toLocaleDateString('es-DO', { day:'numeric', month:'short' })}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-black text-gray-900">Dashboard</h1>
+          <p className="text-sm text-gray-400 mt-0.5 capitalize">{hoy}</p>
         </div>
-      </main>
+        <div className="flex gap-2">
+          <button onClick={cargar} disabled={loading}
+            className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50">
+            <RefreshCw className={`w-3.5 h-3.5 ${loading?'animate-spin':''}`}/>Actualizar
+          </button>
+          <button onClick={()=>router.push('/admin/pedidos')}
+            className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl bg-primary-600 text-white hover:bg-primary-700">
+            Ver pedidos <ArrowRight className="w-3.5 h-3.5"/>
+          </button>
+        </div>
+      </div>
+
+      {/* KPIs principales */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { icon:TrendingUp,  label:'Ventas hoy',    val:fmt(data?.ventasHoy??0),  sub:`${data?.pedidos30??0} pedidos total`,  color:'text-green-600',  bg:'bg-green-50' },
+          { icon:ShoppingBag, label:'Ventas 30 días', val:fmt(data?.ventas30??0),  sub:`${data?.pedidos30??0} pedidos`,         color:'text-blue-600',   bg:'bg-blue-50'  },
+          { icon:CreditCard,  label:'Ticket promedio',val:fmt(data?.tickets??0),   sub:'por pedido',                            color:'text-purple-600', bg:'bg-purple-50'},
+          { icon:Users,       label:'Clientes',       val:String(data?.clientes??0),sub:'registrados',                         color:'text-indigo-600', bg:'bg-indigo-50'},
+        ].map(({icon:Icon,label,val,sub,color,bg})=>(
+          <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center mb-4`}>
+              <Icon className={`w-5 h-5 ${color}`}/>
+            </div>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{label}</p>
+            <p className="text-2xl font-black text-gray-900 mt-1">{val}</p>
+            <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Fila de métricas secundarias */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
+          <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center shrink-0">
+            <Clock className="w-5 h-5 text-amber-600"/>
+          </div>
+          <div>
+            <p className="text-xl font-black text-gray-900">{data?.pedidos7??0}</p>
+            <p className="text-xs text-gray-400">Pedidos esta semana</p>
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
+          <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center shrink-0">
+            <CheckCircle className="w-5 h-5 text-green-600"/>
+          </div>
+          <div>
+            <p className="text-xl font-black text-gray-900">{data?.entregados??0}</p>
+            <p className="text-xs text-gray-400">Entregados total</p>
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
+          <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center shrink-0">
+            <TrendingUp className="w-5 h-5 text-purple-600"/>
+          </div>
+          <div>
+            <p className="text-xl font-black text-gray-900">{data?.conversion??0}%</p>
+            <p className="text-xs text-gray-400">Tasa entrega</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Gráfica + Top productos */}
+      <div className="grid lg:grid-cols-5 gap-4">
+
+        {/* Gráfica 7 días */}
+        <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="font-bold text-gray-900 text-sm">Ventas últimos 7 días</h2>
+            <span className="text-xs text-gray-400">RD$</span>
+          </div>
+          <p className="text-2xl font-black text-primary-600 mb-5">{fmt(data?.ventas7??0)}</p>
+          <div className="flex items-end gap-2 h-28">
+            {bars.map((b,i)=>(
+              <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
+                <div className="w-full rounded-t-lg transition-all"
+                  style={{
+                    height: `${Math.max(4, Math.round((b.v/maxBar)*100))}%`,
+                    background: b.v>0 ? '#16a34a' : '#e5e7eb'
+                  }}/>
+                <span className="text-[10px] text-gray-400 capitalize">{b.d}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Top productos */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 text-sm mb-4">Top productos</h2>
+          <div className="space-y-3">
+            {top.slice(0,5).map((p,i)=>(
+              <div key={p.nombre} className="flex items-center gap-3">
+                <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold flex items-center justify-center shrink-0">{i+1}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-gray-800 truncate">{p.nombre}</p>
+                  <div className="mt-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-primary-500 rounded-full" style={{width:`${Math.round((p.u/Math.max(...top.map(t=>t.u)))*100)}%`}}/>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-gray-700 shrink-0">{p.u}u</span>
+              </div>
+            ))}
+            {top.length===0&&<p className="text-xs text-gray-400 text-center py-4">Sin datos aún</p>}
+          </div>
+        </div>
+      </div>
+
+      {/* Pedidos recientes + Alertas stock */}
+      <div className="grid lg:grid-cols-5 gap-4">
+
+        {/* Pedidos recientes */}
+        <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-gray-900 text-sm">Pedidos recientes</h2>
+            <button onClick={()=>router.push('/admin/pedidos')}
+              className="text-xs text-primary-600 font-semibold flex items-center gap-1 hover:underline">
+              Ver todos <ArrowRight className="w-3 h-3"/>
+            </button>
+          </div>
+          {recent.length===0 ? (
+            <p className="text-xs text-gray-400 text-center py-6">Sin pedidos aún</p>
+          ) : (
+            <div className="space-y-2">
+              {recent.map(p=>(
+                <div key={p.id} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
+                  <div className="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
+                    {p.metodo_pago==='tarjeta' ? <CreditCard className="w-4 h-4 text-gray-500"/> : <Truck className="w-4 h-4 text-gray-500"/>}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-gray-900 truncate">{p.cliente_nombre}</p>
+                    <p className="text-[11px] text-gray-400">#{(p.numero_orden??p.id.slice(-8)).toUpperCase()} · {new Date(p.created_at).toLocaleDateString('es-DO')}</p>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${ESTADO_COLOR[p.estado]??'bg-gray-100 text-gray-600'}`}>{p.estado}</span>
+                  <span className="text-xs font-black text-gray-900 shrink-0">RD${Math.round(p.total??0).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Alertas stock */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-gray-900 text-sm">Alertas de stock</h2>
+            <button onClick={()=>router.push('/admin/inventario')}
+              className="text-xs text-primary-600 font-semibold flex items-center gap-1 hover:underline">
+              Inventario <ArrowRight className="w-3 h-3"/>
+            </button>
+          </div>
+          {stock.length===0 ? (
+            <div className="text-center py-6">
+              <CheckCircle className="w-8 h-8 text-green-400 mx-auto mb-2"/>
+              <p className="text-xs text-gray-400">Todo el stock está bien</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {stock.slice(0,6).map(p=>(
+                <div key={p.nombre} className="flex items-center gap-2 py-1.5 border-b border-gray-50 last:border-0">
+                  <AlertTriangle className={`w-3.5 h-3.5 shrink-0 ${p.stock===0?'text-red-500':'text-amber-500'}`}/>
+                  <p className="text-xs text-gray-700 flex-1 truncate">{p.nombre}</p>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${p.stock===0?'bg-red-100 text-red-700':'bg-amber-100 text-amber-700'}`}>
+                    {p.stock===0?'Agotado':`${p.stock}u`}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
     </div>
   )
 }
