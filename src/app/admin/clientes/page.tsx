@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import AdminNav from '@/components/admin/AdminNav'
 import { Search, Users, ShoppingBag, Mail, Phone, X, ChevronRight, Calendar, TrendingUp } from 'lucide-react'
 
 export default function ClientesPage() {
@@ -61,10 +60,8 @@ export default function ClientesPage() {
   const totalLTV = clientes.reduce((s,c)=>s+(statsMap[c.id]?.ltv??0),0)
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav/>
-      <main className="flex-1 overflow-auto pb-24">
-        <div className="max-w-7xl mx-auto p-4 md:p-8">
+    <div className="max-w-7xl mx-auto w-full">
+<div className="max-w-7xl mx-auto p-4 md:p-8">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-black text-gray-900">Clientes</h1>
@@ -180,7 +177,6 @@ export default function ClientesPage() {
             )}
           </div>
         </div>
-      </main>
     </div>
   )
 }

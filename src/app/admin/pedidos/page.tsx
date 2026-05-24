@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import AdminNav from '@/components/admin/AdminNav'
 import { Search, X, Printer, MessageCircle, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -89,10 +88,8 @@ export default function PedidosPage() {
   const METODO_LABEL: Record<string,string> = {tarjeta:'💳 AZUL', contra_entrega:'💵 Contra entrega'}
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminNav/>
-      <main className="flex-1 overflow-auto pb-24">
-        <div className="max-w-7xl mx-auto p-4 md:p-6">
+    <div className="max-w-7xl mx-auto w-full">
+<div className="max-w-7xl mx-auto p-4 md:p-6">
 
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">Pedidos</h1>
@@ -257,7 +254,6 @@ export default function PedidosPage() {
             )}
           </div>
         </div>
-      </main>
     </div>
   )
 }
