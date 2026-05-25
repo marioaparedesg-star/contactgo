@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { CheckCircle, Package, MapPin, CreditCard, MessageCircle, ChevronRight, XCircle } from 'lucide-react'
 import { fmtSph } from '@/lib/sph-utils'
+import { trackEcommerce } from '@/lib/analytics'
 
 const PASOS = [
   { key: 'pendiente',  label: 'Recibido',   icon: '📋' },
@@ -75,6 +76,26 @@ function ConfirmacionContent() {
     ]).then(([{ data: o }, { data: i }]) => {
       if (!o) { router.push('/'); return }
       setOrder(o); setItems(i ?? []); setLoading(false)
+      // GA4 + Meta Pixel: evento purchase (solo cuando es aprobado y primera vez)
+      if (o && origen === 'azul' && resultado === 'aprobado') {
+        const alreadyTracked = sessionStorage.getItem(`tracked_${orderId}`)
+        if (!alreadyTracked) {
+          sessionStorage.setItem(`tracked_${orderId}`, '1')
+          trackEcommerce('purchase', {
+            transaction_id: o.numero_orden ?? orderId ?? '',
+            value: Number(o.total ?? 0),
+            currency: 'DOP',
+            items: (i ?? []).map((item: any) => ({
+              item_id:       item.product_id ?? item.id,
+              item_name:     item.nombre ?? '',
+              item_brand:    item.marca ?? '',
+              item_category: item.tipo ?? '',
+              price:         Number(item.precio ?? 0),
+              quantity:      Number(item.cantidad ?? 1),
+            })),
+          })
+        }
+      }
     })
   }, [orderId])
 
