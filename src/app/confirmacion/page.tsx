@@ -123,10 +123,10 @@ function ConfirmacionContent() {
 
   // ── PEDIDO CONFIRMADO ──────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-gray-50 pb-24">
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-green-500 to-emerald-600 px-4 pt-12 pb-20 text-center relative overflow-hidden">
+      <div className="bg-gradient-to-br from-green-500 to-emerald-600 px-4 pt-12 pb-24 text-center relative overflow-hidden">
         {/* Confetti */}
         {dots && (
           <div className="absolute inset-0 pointer-events-none">
@@ -150,7 +150,7 @@ function ConfirmacionContent() {
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-4 -mt-8 space-y-4">
+      <div className="max-w-lg mx-auto px-4 -mt-10 space-y-4 relative z-10">
 
         {/* Tiempo de entrega — card destacada */}
         <div className={`rounded-2xl p-4 text-center border shadow-sm ${hasTorico ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-100'}`}>
