@@ -245,8 +245,11 @@ export default function CuentaPage() {
         })
         const data = await res.json()
         if (!res.ok || !data.ok || !data.receta) {
-          alert(data.error ?? 'No se pudo leer la receta. Asegúrate de que la imagen sea clara, bien iluminada y muestre los valores OD/OI, SPH, CYL y EJE.')
+          // Mostrar error sin alert() — dejar que el usuario ingrese manualmente
+          console.error('OCR error:', data.error)
           setAnalizandoIA(false)
+          // Abrir formulario manual automáticamente
+          setAgregandoReceta(true)
           return
         }
 
