@@ -8,7 +8,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { analyzePrescription } from '@/lib/prescription'
 import { createClient } from '@/lib/supabase'
 import { useCartStore } from '@/lib/cart-store'
-import { Eye, Search, RotateCcw, ShoppingCart, ChevronRight, CheckCircle, AlertTriangle, Info, Shield } from 'lucide-react'
+import { Eye, Search, RotateCcw, ShoppingCart, ChevronRight, CheckCircle, AlertTriangle, Info, Shield, Camera, Upload } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const SPH_VALS = [-20,-19.5,-19,-18.5,-18,-17.5,-17,-16.5,-16,-15.5,-15,-14.5,-14,-13.5,-13,-12.5,
@@ -46,6 +46,10 @@ export default function RecetaPage() {
   const [loading,setLoading]=useState(false)
   const [done,setDone]=useState(false)
   const [showConsent,setShowConsent]=useState(true)
+  const [imgPreview,setImgPreview]=useState<string|null>(null)
+  const [ocrLoading,setOcrLoading]=useState(false)
+  const [ocrError,setOcrError]=useState<string|null>(null)
+  const [ocrConfianza,setOcrConfianza]=useState<string|null>(null)
   const addItem=useCartStore(s=>s.addItem)
 
   const fmtSph=(v:string)=>v===''?'':parseFloat(v)>0?`+${parseFloat(v).toFixed(2)}`:parseFloat(v).toFixed(2)
@@ -55,6 +59,65 @@ export default function RecetaPage() {
   const resetear=()=>{
     set_od_sph('');set_od_cyl('');set_od_ax('');set_oi_sph('');set_oi_cyl('');set_oi_ax('');set_add('');set_igual(false)
     setResult(null);setAllProducts({esferico:[],torico:[],multifocal:[]});setActiveTab('');setDone(false)
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Preview
+    const reader = new FileReader()
+    reader.onload = (ev) => setImgPreview(ev.target?.result as string)
+    reader.readAsDataURL(file)
+
+    // Convert to base64 for API
+    const toBase64 = (f: File): Promise<string> =>
+      new Promise((res, rej) => {
+        const r = new FileReader()
+        r.onload = () => res((r.result as string).split(',')[1])
+        r.onerror = rej
+        r.readAsDataURL(f)
+      })
+
+    try {
+      setOcrLoading(true)
+      setOcrError(null)
+      setOcrConfianza(null)
+
+      const base64 = await toBase64(file)
+      const mimeType = file.type || 'image/jpeg'
+
+      const res = await fetch('/api/ocr-receta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64, mimeType }),
+      })
+      const data = await res.json()
+
+      if (!res.ok || !data.receta) {
+        setOcrError(data.error ?? 'No se pudo leer la receta. Toma la foto con buena iluminación.')
+        return
+      }
+
+      const rx = data.receta
+      // Rellenar campos OD
+      if (rx.od_sph !== null && rx.od_sph !== undefined) set_od_sph(String(rx.od_sph))
+      if (rx.od_cyl !== null && rx.od_cyl !== undefined) set_od_cyl(String(rx.od_cyl))
+      if (rx.od_axis !== null && rx.od_axis !== undefined) set_od_ax(String(rx.od_axis))
+      // Rellenar campos OI
+      if (rx.oi_sph !== null && rx.oi_sph !== undefined) set_oi_sph(String(rx.oi_sph))
+      if (rx.oi_cyl !== null && rx.oi_cyl !== undefined) set_oi_cyl(String(rx.oi_cyl))
+      if (rx.oi_axis !== null && rx.oi_axis !== undefined) set_oi_ax(String(rx.oi_axis))
+      // Adición
+      if (rx.add_power !== null && rx.add_power !== undefined) set_add(String(Math.abs(rx.add_power)))
+
+      setOcrConfianza(rx.confianza ?? null)
+      toast.success('¡Receta leída! Verifica los valores antes de continuar.')
+    } catch {
+      setOcrError('Error de conexión. Intenta de nuevo.')
+    } finally {
+      setOcrLoading(false)
+    }
   }
 
   const calcular=async()=>{
@@ -172,6 +235,63 @@ export default function RecetaPage() {
             </div>
 
             <div className="p-6 space-y-7">
+
+              {/* ── SUBIR FOTO DE RECETA ──────────────────────────────── */}
+              <div className={`rounded-2xl border-2 border-dashed transition-all ${ocrLoading ? 'border-primary-300 bg-primary-50' : 'border-gray-200 bg-gray-50 hover:border-primary-300 hover:bg-primary-50/30'}`}>
+                <label htmlFor="receta-upload" className="block cursor-pointer">
+                  <input id="receta-upload" type="file" accept="image/*" capture="environment"
+                    className="hidden" onChange={handleImageUpload} disabled={ocrLoading}/>
+
+                  {!imgPreview ? (
+                    <div className="flex flex-col items-center justify-center py-7 px-4 text-center">
+                      <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-3">
+                        <svg className="w-7 h-7 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                      <p className="font-black text-gray-900 text-sm mb-1">📷 Sube una foto de tu receta</p>
+                      <p className="text-xs text-gray-500 mb-3 max-w-xs">Toma una foto o sube una imagen clara de tu receta óptica — la leemos automáticamente</p>
+                      <span className="bg-primary-600 text-white text-xs font-bold px-4 py-2 rounded-xl">
+                        Seleccionar imagen
+                      </span>
+                      <p className="text-[10px] text-gray-400 mt-2">JPG, PNG, HEIC · máx 10MB</p>
+                    </div>
+                  ) : (
+                    <div className="p-3">
+                      <div className="relative rounded-xl overflow-hidden" style={{maxHeight:180}}>
+                        <img src={imgPreview} alt="Receta" className="w-full object-contain bg-white" style={{maxHeight:180}}/>
+                        {ocrLoading && (
+                          <div className="absolute inset-0 bg-primary-600/80 flex flex-col items-center justify-center gap-2">
+                            <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin"/>
+                            <p className="text-white text-xs font-bold">Leyendo receta...</p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between mt-2">
+                        <p className="text-xs text-gray-500">
+                          {ocrLoading ? 'Analizando...' : ocrConfianza ? `Confianza: ${ocrConfianza === 'alta' ? '✅ Alta' : ocrConfianza === 'media' ? '⚠️ Media — verifica' : '❌ Baja — verifica'}` : 'Imagen cargada'}
+                        </p>
+                        <span className="text-xs text-primary-600 font-semibold underline">Cambiar foto</span>
+                      </div>
+                    </div>
+                  )}
+                </label>
+              </div>
+
+              {/* Error OCR */}
+              {ocrError && (
+                <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5"/>
+                  <p className="text-xs text-red-700">{ocrError}</p>
+                </div>
+              )}
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-200"/>
+                <p className="text-xs text-gray-400 font-medium">o ingresa manualmente</p>
+                <div className="flex-1 h-px bg-gray-200"/>
+              </div>
 
               {/* OJO DERECHO */}
               <div>
