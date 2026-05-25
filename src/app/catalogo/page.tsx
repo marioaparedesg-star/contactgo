@@ -152,8 +152,7 @@ export default async function CatalogoPage({ searchParams }: Props) {
           duracionActiva={sp.duracion ?? ''}
           ordenActivo={sp.orden ?? 'nombre'}
           ordenes={ORDENES}
-          buildUrl={buildUrl}
-          currentParams={currentParams}
+          q={sp.q ?? ''}
         />
 
         {/* Grid productos */}
