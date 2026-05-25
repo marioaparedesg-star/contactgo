@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import CatalogoFiltros from '@/components/shop/CatalogoFiltros'
 
 const TIPO_META: Record<string, { title: string; description: string }> = {
   esferico:  { title: 'Lentes de Contacto Esféricos RD | Miopía e Hipermetropía — ContactGo', description: 'Compra lentes de contacto esféricos en República Dominicana. Acuvue, Air Optix, Biofinity para miopía e hipermetropía. Envío 24-48h.' },
@@ -142,77 +143,18 @@ export default async function CatalogoPage({ searchParams }: Props) {
           </div>
         </form>
 
-        {/* Filtros tipo */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-hide">
-          {TIPOS.map(t => (
-            <a key={t.value} href={buildUrl(currentParams, { tipo: t.value || undefined, q: sp.q, orden: sp.orden })}
-              className={"shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors " +
-                ((sp.tipo ?? '') === t.value ? 'bg-primary-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-primary-300')}>
-              {t.label}
-            </a>
-          ))}
-        </div>
-
-        {/* Filtro por marca — combinable con tipo */}
-        {marcas.length > 0 && (
-          <div className="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-hide">
-            <a href={buildUrl(currentParams, { marca: undefined })}
-              className={"shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border " +
-                (!sp.marca ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400')}>
-              Todas las marcas
-            </a>
-            {marcas.map(m => (
-              <a key={m} href={buildUrl(currentParams, { marca: m })}
-                className={"shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border " +
-                  (sp.marca === m ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400')}>
-                {m}
-              </a>
-            ))}
-          </div>
-        )}
-
-        {/* Filtro duración */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-hide">
-          <a href={buildUrl(currentParams, { duracion: undefined })}
-            className={"shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border " +
-              (!sp.duracion ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400')}>
-            Toda duración
-          </a>
-          {[{ v: '1', l: 'Diarios' }, { v: '14', l: 'Quincenales' }, { v: '30', l: 'Mensuales' }].map(d => (
-            <a key={d.v} href={buildUrl(currentParams, { duracion: d.v })}
-              className={"shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border " +
-                (sp.duracion === d.v ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400')}>
-              {d.l}
-            </a>
-          ))}
-        </div>
-
-        {/* Fila: marca activa + ordenamiento */}
-        <div className="flex items-center gap-3 mb-4 flex-wrap">
-          {/* Marca activa */}
-          {sp.marca && (
-            <div className="flex items-center gap-2">
-              <span className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-semibold">{sp.marca}</span>
-              <a href={buildUrl(currentParams, { marca: undefined })} className="text-gray-400 hover:text-red-500 text-sm font-bold">✕</a>
-            </div>
-          )}
-
-          {/* Ordenamiento */}
-          <div className="ml-auto flex items-center gap-2">
-            <span className="text-xs text-gray-400 font-medium hidden sm:block">Ordenar:</span>
-            <div className="flex gap-1 flex-wrap">
-              {ORDENES.map(o => (
-                <a key={o.value} href={buildUrl(currentParams, { orden: o.value })}
-                  className={"px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors border " +
-                    ((sp.orden ?? 'nombre') === o.value
-                      ? 'bg-gray-900 text-white border-gray-900'
-                      : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400')}>
-                  {o.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* ── Filtros ─────────────────────────────────────────────────── */}
+        <CatalogoFiltros
+          tipos={TIPOS}
+          marcas={marcas}
+          tipoActivo={sp.tipo ?? ''}
+          marcaActiva={sp.marca ?? ''}
+          duracionActiva={sp.duracion ?? ''}
+          ordenActivo={sp.orden ?? 'nombre'}
+          ordenes={ORDENES}
+          buildUrl={buildUrl}
+          currentParams={currentParams}
+        />
 
         {/* Grid productos */}
         {products.length > 0 ? (
