@@ -238,32 +238,32 @@ export default function CuentaPage() {
         const base64 = dataUrl.split(',')[1]
         const mediaType = file.type || 'image/jpeg'
 
-        const res = await fetch('/api/analizar-receta', {
+        const res = await fetch('/api/ocr-receta', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imagen_base64: base64, media_type: mediaType }),
+          body: JSON.stringify({ image: base64, mimeType: mediaType }),
         })
         const data = await res.json()
-        if (!res.ok || !data.es_receta_valida) {
-          alert('No se pudo leer la receta. Asegúrate de que la imagen sea clara y muestre los valores SPH, CYL y EJE.')
+        if (!res.ok || !data.ok || !data.receta) {
+          alert(data.error ?? 'No se pudo leer la receta. Asegúrate de que la imagen sea clara, bien iluminada y muestre los valores OD/OI, SPH, CYL y EJE.')
           setAnalizandoIA(false)
           return
         }
 
-        setRecetaAnalizada(data)
-        // Pre-llenar el formulario con los datos extraídos
+        const rx = data.receta
+        setRecetaAnalizada(rx)
+        // Pre-llenar formulario con valores leídos
         setRecetaForm(f => ({
           ...f,
-          od_sph:  data.od_sph  != null ? String(data.od_sph)  : f.od_sph,
-          od_cyl:  data.od_cyl  != null ? String(data.od_cyl)  : f.od_cyl,
-          od_axis: data.od_axis != null ? String(data.od_axis) : f.od_axis,
-          oi_sph:  data.oi_sph  != null ? String(data.oi_sph)  : f.oi_sph,
-          oi_cyl:  data.oi_cyl  != null ? String(data.oi_cyl)  : f.oi_cyl,
-          oi_axis: data.oi_axis != null ? String(data.oi_axis) : f.oi_axis,
-          od_add:  data.add_power != null ? String(data.add_power) : f.od_add,
-          diagnostico: data.diagnostico ?? f.diagnostico,
+          od_sph:  rx.od_sph  != null ? String(rx.od_sph)  : f.od_sph,
+          od_cyl:  rx.od_cyl  != null ? String(rx.od_cyl)  : f.od_cyl,
+          od_axis: rx.od_axis != null ? String(rx.od_axis) : f.od_axis,
+          oi_sph:  rx.oi_sph  != null ? String(rx.oi_sph)  : f.oi_sph,
+          oi_cyl:  rx.oi_cyl  != null ? String(rx.oi_cyl)  : f.oi_cyl,
+          oi_axis: rx.oi_axis != null ? String(rx.oi_axis) : f.oi_axis,
+          od_add:  rx.add_power != null ? String(Math.abs(rx.add_power)) : f.od_add,
+          diagnostico: rx.diagnostico ?? f.diagnostico,
         }))
-        if (data.fecha_emision) setFechaEmisionForm(data.fecha_emision)
         setAnalizandoIA(false)
         setAgregandoReceta(true)
       }
