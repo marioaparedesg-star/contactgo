@@ -69,7 +69,7 @@ export default function CartPage() {
             {items.map((item, idx) => {
               const receta = fmtReceta(item)
               const precioItem = Number((item as any).precio_final ?? item.product.precio)
-              const ojoLabel = (item as any).ojo === 'OD' ? '👁 Ojo Derecho' : (item as any).ojo === 'OS' ? '👁 Ojo Izquierdo' : null
+              const ojoLabel = (item as any).ojo === 'OD' ? '👁 Ojo Derecho' : (item as any).ojo === 'OI' ? '👁 Ojo Izquierdo (OI)' : null
               return (
                 <div key={`${item.product.id}-${item.sph}-${(item as any).ojo}-${idx}`}
                   className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4">

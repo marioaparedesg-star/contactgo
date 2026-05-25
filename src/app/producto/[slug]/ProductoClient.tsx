@@ -76,7 +76,7 @@ const ALL_ADD  = ['+1.00','+1.25','+1.50','+1.75','+2.00','+2.25','+2.50','+2.75
 function EyeSelector({ eye, onChange }: { eye: string; onChange: (v: string) => void }) {
   const opts = [
     {val:'OD',   emoji:'👁', label:'Ojo Derecho',   sub:'OD'},
-    {val:'OS',   emoji:'👁', label:'Ojo Izquierdo', sub:'OS'},
+    {val:'OI',   emoji:'👁', label:'Ojo Izquierdo', sub:'OI'},
     {val:'AMBOS',emoji:'👀', label:'Ambos ojos',    sub:'OD + OS'},
   ]
   return (
@@ -200,7 +200,7 @@ export default function ProductoClient({ product, variants }: Props) {
           if (sphOS) {
             if (isToric && !cylOS)  { toast.error('Falta el CYL del ojo izquierdo'); return false }
             if (isToric && !axisOS) { toast.error('Falta el AXIS del ojo izquierdo'); return false }
-            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOS), cyl:cylOS?parseFloat(cylOS):undefined, axis:axisOS?parseInt(axisOS):undefined, add_power:add||undefined, ojo:'OS', size:size||undefined } as any)
+            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOS), cyl:cylOS?parseFloat(cylOS):undefined, axis:axisOS?parseInt(axisOS):undefined, add_power:add||undefined, ojo:'OI', size:size||undefined } as any)
           }
         }
       } else {
@@ -343,7 +343,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     {mismaSph ? (
                       /* Misma receta para ambos */
                       <div className="bg-gray-50 rounded-xl p-3 space-y-3">
-                        <p className="text-xs font-bold text-gray-500 uppercase">Receta (OD + OS igual)</p>
+                        <p className="text-xs font-bold text-gray-500 uppercase">Receta (OD + OI igual)</p>
                         <SelectField label="SPH" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
                         {isToric && <>
                           <SelectField label="CYL" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
@@ -364,7 +364,7 @@ export default function ProductoClient({ product, variants }: Props) {
                         </div>
                         {/* OS */}
                         <div className="bg-green-50 border border-green-200 rounded-xl p-3 space-y-2">
-                          <p className="text-xs font-bold text-green-700">👁 Ojo Izquierdo (OS)</p>
+                          <p className="text-xs font-bold text-green-700">👁 Ojo Izquierdo (OI)</p>
                           <SelectField label="SPH" value={sphOS} options={sphOpts} onChange={setSphOS} format={fmtSph}/>
                           {isToric && <>
                             <SelectField label="CYL" value={cylOS} options={cylOpts} onChange={setCylOS} format={v=>Number(v).toFixed(2)}/>

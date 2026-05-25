@@ -14,6 +14,6 @@ export function fmtReceta(item: any): string {
   if (item.axis != null) parts.push(`${String(item.axis).padStart(3,'0')}°`)
   if (item.add_power) parts.push(`ADD ${item.add_power}`)
   if (item.color) parts.push(item.color)
-  if (item.ojo) parts.push(item.ojo === 'OD' ? '👁 OD' : item.ojo === 'OS' ? '👁 OS' : '👁 Ambos')
+  if (item.ojo) parts.push(item.ojo === 'OD' ? '👁 OD' : item.ojo === 'OI' ? '👁 OI' : '👁 Ambos')
   return parts.join(' · ')
 }

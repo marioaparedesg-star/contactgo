@@ -27,7 +27,7 @@ function formatRecetaItem(item: any): string {
 function ojoLabel(ojo: string | null): string | null {
   if (!ojo) return null
   if (ojo === 'OD') return '👁 Ojo Derecho'
-  if (ojo === 'OS') return '👁 Ojo Izquierdo'
+  if (ojo === 'OI') return '👁 Ojo Izquierdo'
   return null
 }
 
