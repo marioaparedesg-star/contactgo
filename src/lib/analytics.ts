@@ -1,4 +1,5 @@
 // ── Tracking de ecommerce para GA4 + Meta Pixel ──
+// Meta Pixel ID: 1516674003159165
 
 declare global {
   interface Window {
