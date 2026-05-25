@@ -68,7 +68,7 @@ const ORDENES = [
 
 async function getProducts(tipo?: string, marca?: string, q?: string, orden?: string, duracion?: string): Promise<Product[]> {
   const sb = createServerSupabaseClient()
-  let query = sb.from('products').select('*').eq('activo', true)
+  let query = sb.from('products').select('*').eq('activo', true).or('archivado.is.null,archivado.eq.false')
   if (tipo)     query = query.eq('tipo', tipo)
   if (marca)    query = query.ilike('marca', '%' + marca + '%')
   if (q)        query = query.ilike('nombre', '%' + q + '%')
