@@ -15,28 +15,39 @@ interface Props {
 }
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const tipo = (await Promise.resolve(searchParams)).tipo ?? ''
+  const sp = await Promise.resolve(searchParams)
+  const tipo  = sp.tipo  ?? ''
+  const marca = sp.marca ?? ''
+  const orden = sp.orden ?? ''
+  const duracion = sp.duracion ?? ''
+  const q = sp.q ?? ''
+
+  // ── Canonical: solo tipo limpio, sin marca/orden/duracion/q ─────────────
+  // Cualquier combinación de parámetros apunta a la URL canónica del tipo
+  const BASE = 'https://www.contactgo.net'
+  const canonical = tipo ? `${BASE}/catalogo?tipo=${tipo}` : `${BASE}/catalogo`
+
+  // ── noindex para URLs con combinaciones de parámetros ──────────────────
+  // Solo se indexan las páginas "limpias": /catalogo y /catalogo?tipo=X
+  const hasExtraParams = marca || orden || duracion || q
+  const robots = hasExtraParams ? 'noindex,follow' : 'index,follow'
+
   const meta = TIPO_META[tipo]
-  if (meta) {
-    const staticRoute: Record<string, string> = {
-      esferico: 'esfericos', torico: 'toricos', multifocal: 'multifocales',
-      color: 'color', solucion: 'soluciones',
-    }
-    const canonical = staticRoute[tipo]
-      ? `https://contactgo.net/${staticRoute[tipo]}`
-      : `https://contactgo.net/catalogo${tipo ? '?tipo=' + tipo : ''}`
-    return {
-      title: meta.title,
-      description: meta.description,
-      alternates: { canonical },
-      openGraph: { title: meta.title, description: meta.description, url: canonical, locale: 'es_DO', siteName: 'ContactGo' },
-    }
-  }
+  const title = meta?.title ?? 'Catálogo de Lentes de Contacto | ContactGo República Dominicana'
+  const description = meta?.description ?? 'Catálogo completo de lentes de contacto en RD. Esféricos, tóricos, multifocales y de colores. Acuvue, Air Optix, Biofinity. Envío 24-48h.'
+
   return {
-    title: 'Catálogo de Lentes de Contacto | ContactGo República Dominicana',
-    description: 'Catálogo completo de lentes de contacto en RD. Esféricos, tóricos, multifocales y de colores. Acuvue, Air Optix, Biofinity. Envío 24-48h.',
-    alternates: { canonical: 'https://www.contactgo.net/catalogo' },
-    openGraph: { title: 'Catálogo — Lentes de Contacto RD', description: 'Todas las marcas premium con entrega a domicilio.', url: 'https://www.contactgo.net/catalogo', locale: 'es_DO', siteName: 'ContactGo' },
+    title,
+    description,
+    robots,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      locale: 'es_DO',
+      siteName: 'ContactGo',
+    },
   }
 }
 
