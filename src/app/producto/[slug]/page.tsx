@@ -18,7 +18,7 @@ export async function generateMetadata(
   const data = await getProduct(slug)
   if (!data) return { title: 'Producto no encontrado' }
 
-  const url = `https://contactgo.net/producto/${slug}`
+  const url = `https://www.contactgo.net/producto/${slug}`
   const desc = data.descripcion
     ? data.descripcion.slice(0, 155)
     : `${data.nombre} — Compra ${data.nombre} en ContactGo República Dominicana. Entrega en 24-48h. ${data.marca ? 'Marca: ' + data.marca + '.' : ''}`
@@ -62,7 +62,7 @@ export default async function ProductoPage(
   const productSchema: any = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "@id": `https://contactgo.net/producto/${product.slug}#product`,
+    "@id": `https://www.contactgo.net/producto/${product.slug}#product`,
     "name": product.nombre,
     "description": product.descripcion ?? `${product.nombre} disponible en ContactGo República Dominicana.`,
     "image": product.imagen_url ?? "https://www.contactgo.net/icon-512.png",

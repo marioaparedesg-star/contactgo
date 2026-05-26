@@ -55,6 +55,14 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // www redirect — 301 permanente (fix 307 temporal)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'contactgo.net' }],
+        destination: 'https://www.contactgo.net/:path*',
+        permanent: true,
+      },
+      // Slugs rotos → slugs correctos
       {
         source: '/producto/acuvue-oasys-lentes-contacto-silicona-hidrogel-dominicana',
         destination: '/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana',
@@ -65,6 +73,14 @@ const nextConfig = {
         destination: '/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana',
         permanent: true,
       },
+      // Aliases de rutas
+      { source: '/login',          destination: '/cuenta', permanent: true },
+      { source: '/carrito',        destination: '/cart',   permanent: true },
+      { source: '/signin',         destination: '/cuenta', permanent: true },
+      { source: '/iniciar-sesion', destination: '/cuenta', permanent: true },
+      { source: '/register',       destination: '/cuenta', permanent: true },
+      { source: '/registro',       destination: '/cuenta', permanent: true },
+      { source: '/blog/como-leer-tu-receta', destination: '/blog/como-leer-receta-optica-rd', permanent: true },
     ];
   },
   async headers() {
@@ -83,20 +99,6 @@ const nextConfig = {
     ]
   },
 }
-
-nextConfig.redirects = async () => [
-  { source: '/login',           destination: '/cuenta', permanent: true },
-  { source: '/carrito',          destination: '/cart',   permanent: true },
-  { source: '/signin',          destination: '/cuenta', permanent: true },
-  { source: '/iniciar-sesion',  destination: '/cuenta', permanent: true },
-  { source: '/register',        destination: '/cuenta', permanent: true },
-  { source: '/registro',        destination: '/cuenta', permanent: true },
-  {
-    source: '/blog/como-leer-tu-receta',
-    destination: '/blog/como-leer-receta-optica-rd',
-    permanent: true,
-  },
-]
 
 // Sentry — wrapper oficial del wizard
 const { withSentryConfig } = require("@sentry/nextjs");
