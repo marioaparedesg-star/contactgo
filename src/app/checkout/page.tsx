@@ -683,7 +683,12 @@ export default function CheckoutPage() {
                       <span>Descuento</span><span>-RD${descuento.toLocaleString()}</span>
                     </div>
                   )}
-                  <div className="border-t-2 border-gray-100 pt-3 flex justify-between">
+                  {/* ITBIS desglose — precio incluye 18% */}
+                  <div className="flex justify-between text-xs text-gray-400 border-t border-dashed border-gray-100 pt-2">
+                    <span>ITBIS incluido (18%)</span>
+                    <span>RD${Math.round((sub - descuento) * 18 / 118).toLocaleString()}</span>
+                  </div>
+                  <div className="pt-1 flex justify-between">
                     <span className="font-black text-gray-900">Total</span>
                     <span className="font-black text-xl text-primary-600">RD${totalFinal.toLocaleString()}</span>
                   </div>

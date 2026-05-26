@@ -265,6 +265,17 @@ function ConfirmacionContent() {
                 <span>Envío</span>
                 <span>{order.envio > 0 ? `RD$${order.envio?.toLocaleString()}` : '🎁 Gratis'}</span>
               </div>
+              {/* ITBIS incluido */}
+              {(() => {
+                const base = (order.total ?? 0) - (order.envio ?? 0) - (order.descuento ?? 0)
+                const itbis = Math.round(base * 18 / 118)
+                return (
+                  <div className="flex justify-between text-xs text-gray-400">
+                    <span>ITBIS incluido (18%)</span>
+                    <span>RD${itbis.toLocaleString()}</span>
+                  </div>
+                )
+              })()}
               <div className="flex justify-between font-black text-gray-900 text-base border-t border-gray-100 pt-2">
                 <span>Total pagado</span>
                 <span className="text-green-600">RD${order.total?.toLocaleString()}</span>

@@ -40,10 +40,8 @@ export async function POST(req: NextRequest) {
 
     const totalNum = Number(total)
     const amount   = String(Math.round(totalNum * 100)).padStart(3, '0')
-    // ITBIS: en el ejemplo oficial de AZUL sandbox usan "000"
-    // En producción calcular 18/118 del total
-    const isProduction = process.env.AZUL_ENV === 'production'
-    const itbisNum = isProduction ? Math.round((totalNum * 18 / 118) * 100) : 0
+    // ITBIS 18% incluido en el precio (Opción A — precio final incluye ITBIS)
+    const itbisNum = Math.round((totalNum * 18 / 118) * 100)
     const itbis    = String(itbisNum).padStart(3, '0')
 
     // Usar la URL exacta del cliente (incluye orden=ID) para que el hash coincida
