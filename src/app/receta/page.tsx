@@ -95,7 +95,7 @@ export default function RecetaPage() {
       const data = await res.json()
 
       if (!res.ok || !data.receta) {
-        setOcrError((data.error ?? 'No se pudo leer la receta.') + ' Ingresa los valores manualmente abajo.')
+        setOcrError((data.error ?? 'No se pudo leer la receta. Ingresa los valores manualmente.'))
         return
       }
 
@@ -114,7 +114,7 @@ export default function RecetaPage() {
       setOcrConfianza(rx.confianza ?? null)
       toast.success('¡Receta leída! Verifica los valores antes de continuar.')
     } catch {
-      setOcrError('Error de conexión. Ingresa los valores manualmente abajo.')
+      setOcrError('Error de conexión. Ingresa los valores manualmente.')
     } finally {
       setOcrLoading(false)
     }
