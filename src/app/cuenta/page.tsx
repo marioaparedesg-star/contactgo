@@ -230,13 +230,22 @@ export default function CuentaPage() {
       reader.onload = (e) => setRecetaImagenPreview(e.target?.result as string)
       reader.readAsDataURL(file)
 
-      // Convertir a base64 para la API
-      const b64Reader = new FileReader()
-      b64Reader.readAsDataURL(file)
-      b64Reader.onload = async (e) => {
-        const dataUrl = e.target?.result as string
-        const base64 = dataUrl.split(',')[1]
-        const mediaType = file.type || 'image/jpeg'
+      // Redimensionar a max 1024px y convertir a base64
+      const imgEl = new Image()
+      const objUrl = URL.createObjectURL(file)
+      imgEl.onload = async () => {
+        const MAX = 1024
+        let w = imgEl.width, h = imgEl.height
+        if (w > MAX || h > MAX) {
+          if (w > h) { h = Math.round(h * MAX / w); w = MAX }
+          else       { w = Math.round(w * MAX / h); h = MAX }
+        }
+        const cv = document.createElement('canvas')
+        cv.width = w; cv.height = h
+        cv.getContext('2d')!.drawImage(imgEl, 0, 0, w, h)
+        URL.revokeObjectURL(objUrl)
+        const base64 = cv.toDataURL('image/jpeg', 0.85).split(',')[1]
+        const mediaType = 'image/jpeg'
 
         const res = await fetch('/api/ocr-receta', {
           method: 'POST',

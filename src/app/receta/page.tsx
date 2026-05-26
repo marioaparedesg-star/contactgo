@@ -70,13 +70,28 @@ export default function RecetaPage() {
     reader.onload = (ev) => setImgPreview(ev.target?.result as string)
     reader.readAsDataURL(file)
 
-    // Convert to base64 for API
-    const toBase64 = (f: File): Promise<string> =>
+    // Resize image to max 1024px and convert to JPEG base64 for API
+    const resizeImage = (f: File): Promise<{base64: string, mimeType: string}> =>
       new Promise((res, rej) => {
-        const r = new FileReader()
-        r.onload = () => res((r.result as string).split(',')[1])
-        r.onerror = rej
-        r.readAsDataURL(f)
+        const img = new Image()
+        const url = URL.createObjectURL(f)
+        img.onload = () => {
+          const MAX = 1024
+          let w = img.width, h = img.height
+          if (w > MAX || h > MAX) {
+            if (w > h) { h = Math.round(h * MAX / w); w = MAX }
+            else       { w = Math.round(w * MAX / h); h = MAX }
+          }
+          const canvas = document.createElement('canvas')
+          canvas.width = w; canvas.height = h
+          const ctx = canvas.getContext('2d')!
+          ctx.drawImage(img, 0, 0, w, h)
+          URL.revokeObjectURL(url)
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
+          res({ base64: dataUrl.split(',')[1], mimeType: 'image/jpeg' })
+        }
+        img.onerror = rej
+        img.src = url
       })
 
     try {
@@ -84,8 +99,7 @@ export default function RecetaPage() {
       setOcrError(null)
       setOcrConfianza(null)
 
-      const base64 = await toBase64(file)
-      const mimeType = file.type || 'image/jpeg'
+      const { base64, mimeType } = await resizeImage(file)
 
       const res = await fetch('/api/ocr-receta', {
         method: 'POST',
