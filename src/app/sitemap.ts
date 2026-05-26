@@ -55,7 +55,7 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/privacidad',                                  priority: 0.40, changeFrequency: 'yearly'  },
   ].map(p => ({
     url: p.url,
-    lastModified: now,
+    lastModified: new Date('2026-05-26'), // fixed date — no cambia en cada request
     changeFrequency: p.changeFrequency as any,
     priority: p.priority,
   }))

@@ -53,6 +53,20 @@ const nextConfig = {
       { protocol: 'https', hostname: '*.supabase.co' },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/producto/acuvue-oasys-lentes-contacto-silicona-hidrogel-dominicana',
+        destination: '/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana',
+        permanent: true,
+      },
+      {
+        source: '/producto/1-day-acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana',
+        destination: '/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       { source: '/(.*)', headers: securityHeaders },

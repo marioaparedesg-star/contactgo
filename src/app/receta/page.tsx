@@ -73,7 +73,7 @@ export default function RecetaPage() {
     // Resize image to max 1024px and convert to JPEG base64 for API
     const resizeImage = (f: File): Promise<{base64: string, mimeType: string}> =>
       new Promise((res, rej) => {
-        const img = new Image()
+        const img = new (window.Image)()
         const url = URL.createObjectURL(f)
         img.onload = () => {
           const MAX = 1024

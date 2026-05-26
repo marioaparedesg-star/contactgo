@@ -34,7 +34,7 @@ export async function generateMetadata(
       images: data.imagen_url ? [{ url: data.imagen_url }] : [],
       locale: 'es_DO',
       siteName: 'ContactGo',
-      type: 'website' as const, // Next.js solo soporta 'website' en el type, el og:type product se inyecta via JSON-LD
+      type: 'website' as const,
     },
     twitter: {
       card: 'summary_large_image',
@@ -69,10 +69,10 @@ export default async function ProductoPage(
     "sku": product.id,
     "mpn": product.sku ? String(product.sku) : `CG-${String(product.id).slice(0,8).toUpperCase()}`,
     "category": product.tipo,
-    "url": `https://contactgo.net/producto/${product.slug}`,
+    "url": `https://www.contactgo.net/producto/${product.slug}`,
     "offers": {
       "@type": "Offer",
-      "url": `https://contactgo.net/producto/${product.slug}`,
+      "url": `https://www.contactgo.net/producto/${product.slug}`,
       "priceCurrency": "DOP",
       "price": String(product.precio ?? 0),
       "priceValidUntil": "2026-12-31",
@@ -128,7 +128,7 @@ export default async function ProductoPage(
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net" },
       { "@type": "ListItem", "position": 2, "name": "Catálogo", "item": "https://www.contactgo.net/catalogo" },
-      { "@type": "ListItem", "position": 3, "name": product.nombre, "item": `https://contactgo.net/producto/${product.slug}` }
+      { "@type": "ListItem", "position": 3, "name": product.nombre, "item": `https://www.contactgo.net/producto/${product.slug}` }
     ]
   }
 

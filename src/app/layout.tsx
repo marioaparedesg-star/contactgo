@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     description: 'Compra lentes de contacto en RD con envío en 24-48h. Acuvue, Air Optix, FreshLook y más marcas premium.',
     url: 'https://www.contactgo.net',
     siteName: 'ContactGo',
-    images: [{ url: '/og-1200x630.svg', width: 1200, height: 630, alt: 'ContactGo — Lentes de Contacto RD' }],
+    images: [{ url: '/og-1200x630.png', width: 1200, height: 630, alt: 'ContactGo — Lentes de Contacto RD' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ContactGo — Lentes de Contacto RD',
     description: 'Lentes de contacto con envío en 24-48h en República Dominicana.',
-    images: ['https://www.contactgo.net/og-1200x630.svg'],
+    images: ['https://www.contactgo.net/og-1200x630.png'],
   },
 }
 
@@ -55,11 +55,11 @@ export const metadata: Metadata = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": ["Organization", "LocalBusiness"],
-  "@id": "https://contactgo.net/#organization",
+  "@id": "https://www.contactgo.net/#organization",
   "name": "ContactGo",
   "url": "https://www.contactgo.net",
-  "logo": "https://www.contactgo.net/og-1200x630.svg",
-  "image": "https://www.contactgo.net/og-1200x630.svg",
+  "logo": "https://www.contactgo.net/og-1200x630.png",
+  "image": "https://www.contactgo.net/og-1200x630.png",
   "description": "Tienda online especializada en lentes de contacto y soluciones oftálmicas en República Dominicana. Entrega a domicilio en 24-48 horas.",
   "telephone": "+18294728328",
   "email": "info@contactgo.net",
@@ -88,7 +88,7 @@ const websiteSchema = {
   "url": "https://www.contactgo.net",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://contactgo.net/catalogo?q={search_term_string}",
+    "target": "https://www.contactgo.net/catalogo?q={search_term_string}",
     "query-input": "required name=search_term_string"
   }
 }
@@ -99,30 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="google-site-verification" content="lESKC-PqCyerfH9lDLzKi1em3nnRvh7LwKXKuPOmn1k" />
         
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": "ContactGo",
-          "url": "https://www.contactgo.net",
-          "logo": "https://contactgo.net/logo.png",
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+1-829-472-8328",
-            "contactType": "customer service",
-            "availableLanguage": "Spanish",
-            "contactOption": "TollFree"
-          },
-          "sameAs": [
-            "https://www.instagram.com/contactgord",
-            "https://www.facebook.com/contactgord"
-          ],
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "DO",
-            "addressRegion": "Distrito Nacional",
-            "addressLocality": "Santo Domingo"
-          }
-        })}} />
+
         <meta name="facebook-domain-verification" content="521fb5uvf0p1bbtgc59jz9j7fumekg" />
         <meta name="theme-color" content="#16a34a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
