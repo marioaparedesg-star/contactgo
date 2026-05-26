@@ -31,16 +31,17 @@ export async function generateMetadata(
       title: data.nombre,
       description: desc,
       url,
-      images: data.imagen_url ? [{ url: data.imagen_url }] : [],
+      images: data.imagen_url ? [{ url: data.imagen_url, width: 800, height: 800, alt: data.nombre }] : [{ url: 'https://www.contactgo.net/og-1200x630.png', width: 1200, height: 630 }],
       locale: 'es_DO',
       siteName: 'ContactGo',
-      type: 'website' as const,
+      type: 'website' as const, // Next.js Metadata type
+      // og:type product se maneja via JSON-LD Product schema
     },
     twitter: {
       card: 'summary_large_image',
       title: data.nombre,
       description: desc,
-      images: data.imagen_url ? [data.imagen_url] : ['/icon-512.png'],
+      images: data.imagen_url ? [data.imagen_url] : ['https://www.contactgo.net/og-1200x630.png'],
     },
   }
 }

@@ -52,7 +52,7 @@ const SCHEMA_ORG = {
       "url": "https://contactgo.net",
       "description": "Lentes de contacto originales con entrega en 24-48h en República Dominicana.",
       "priceRange": "RD$800 – RD$18,000",
-      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "6", "bestRating": "5" }
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "34", "bestRating": "5" }
     },
     {
       "@type": "FAQPage",

@@ -443,7 +443,7 @@ export default function CheckoutPage() {
                                 <div className="mt-2 rounded-lg overflow-hidden">
                                   <img
                                     src={`https://maps.googleapis.com/maps/api/staticmap?center=${addr.lat},${addr.lng}&zoom=16&size=600x100&scale=2&markers=color:green%7C${addr.lat},${addr.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`}
-                                    alt="Mapa" className="w-full object-cover" style={{height:80}}
+                                    alt="Mapa de ubicación de entrega" className="w-full object-cover" style={{height:80}}
                                   />
                                 </div>
                               )}

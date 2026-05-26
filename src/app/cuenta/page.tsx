@@ -1226,7 +1226,7 @@ export default function CuentaPage() {
                     <div className="border-t border-gray-50">
                       <img
                         src={`https://maps.googleapis.com/maps/api/staticmap?center=${d.lat},${d.lng}&zoom=16&size=600x120&scale=2&markers=color:green%7C${d.lat},${d.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`}
-                        alt="Mapa"
+                        alt="Mapa de ubicación de entrega"
                         className="w-full object-cover"
                         style={{height:100}}
                       />
