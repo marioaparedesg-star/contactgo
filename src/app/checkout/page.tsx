@@ -502,140 +502,96 @@ export default function CheckoutPage() {
                 </div>
 
                 {step === 3 && (
-                  <div className="px-5 pb-5 border-t border-gray-50 pt-4 space-y-3">
+                  <div className="px-5 pb-6 border-t border-gray-100 pt-5 space-y-4">
 
-                    {/* Resumen info cliente */}
-                    <div className="bg-gray-50 rounded-xl p-3.5 space-y-1.5 text-sm">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <User className="w-3.5 h-3.5 shrink-0 text-gray-400" />
-                        <span className="font-semibold">{getValues('nombre')}</span>
-                        <span className="text-gray-400">·</span>
-                        <span className="text-gray-500">{getValues('telefono')}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-500">
-                        <MapPin className="w-3.5 h-3.5 shrink-0 text-gray-400" />
-                        <span className="text-sm">{getValues('direccion')}, {getValues('ciudad')}</span>
-                      </div>
-                    </div>
-
-                    {/* MÉTODO DE PAGO */}
-                    <div>
-                      <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Método de pago</p>
-                      <div className="grid grid-cols-1 gap-2">
-
-                        
-
-                        {/* Tarjeta AZUL */}
-                        <button type="button"
-                          
-                          className={`flex items-center gap-3 p-3.5 rounded-xl border-2 text-left transition-all w-full ${
-                            metodoPago === 'tarjeta'
-                              ? 'border-blue-500 bg-blue-50 shadow-sm'
-                              : 'border-gray-200 bg-white hover:border-blue-200'
-                          }`}>
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-                            metodoPago === 'tarjeta' ? 'border-blue-600' : 'border-gray-300'
-                          }`}>
-                            {metodoPago === 'tarjeta' && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"/>}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-bold text-gray-900 text-sm">Tarjeta de crédito / débito</p>
-                            <p className="text-xs text-gray-500 mt-0.5">Procesado por AZUL · Banco Popular</p>
-                          </div>
-                          <div className="flex items-center gap-1 shrink-0">
-                            <img src="/visa-blue.png" alt="Visa" width={40} height={16} className="h-4 object-contain" />
-                            <img src="/mastercard.png" alt="MC" width={50} height={20} className="h-5 object-contain" />
-                          </div>
-                        </button>
-                      </div>
-
-                      {/* Aviso tarjeta */}
-                      {metodoPago === 'tarjeta' && (
-                        <div className="mt-2 flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-xl p-3">
-                          <span className="shrink-0">🔒</span>
-                          <p className="text-xs text-blue-800 leading-relaxed">
-                            Al confirmar serás redirigido al portal seguro de <strong>AZUL (Banco Popular)</strong> para ingresar los datos de tu tarjeta. ContactGo <strong>no almacena</strong> datos de tarjetas.
-                          </p>
+                    {/* Resumen cliente */}
+                    <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 bg-primary-100 rounded-xl flex items-center justify-center shrink-0">
+                          <User className="w-4 h-4 text-primary-600" />
                         </div>
-                      )}
-                    </div>
-
-                    {/* Logos seguridad */}
-                    <div className="flex items-center gap-2 flex-wrap p-3 bg-gray-50 rounded-xl border border-gray-100">
-                      <span className="text-[10px] text-gray-400 font-semibold">Pago seguro:</span>
-                      <img src="/visa-blue.png" alt="Visa" width={40} height={14} className="h-3.5 object-contain" />
-                      <img src="/mastercard.png" alt="Mastercard" width={50} height={16} className="h-4 object-contain" />
-                      <span className="text-[9px] bg-blue-700 text-white px-1.5 py-0.5 rounded font-bold">Verified by VISA</span>
-                      <img src="/mastercard-id-check.png" alt="Mastercard ID Check" width={60} height={20} className="h-5 object-contain" />
-                      <span className="text-[9px] bg-green-600 text-white px-1.5 py-0.5 rounded font-bold">🔒 SSL</span>
-                    </div>
-
-                    {/* TOTAL + MÉTODO */}
-                    {/* Trust Badges AZUL — requerido por Visa/Mastercard */}
-              <div className="flex items-center justify-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 mt-2">
-                <img src="/visa-blue.png" alt="Visa" width={40} height={20} className="h-5 object-contain" />
-                <img src="/mastercard.png" alt="Mastercard" width={50} height={20} className="h-5 object-contain" />
-                <img src="/visa-secure.png" alt="Visa Secure" width={50} height={20} className="h-5 object-contain" />
-                <img src="/mastercard-id-check.png" alt="Mastercard ID Check" width={60} height={24} className="h-6 object-contain" />
-              </div>
-
-              <div className={`rounded-xl p-4 flex items-center justify-between ${metodoPago === 'tarjeta' ? 'bg-blue-50 border border-blue-100' : 'bg-primary-50 border border-primary-100'}`}>
-                      <div>
-                        <p className={`text-xs font-bold uppercase tracking-wider ${metodoPago === 'tarjeta' ? 'text-blue-600' : 'text-primary-600'}`}>Total a pagar</p>
-                        <p className={`text-2xl font-black ${metodoPago === 'tarjeta' ? 'text-blue-700' : 'text-primary-700'}`}>RD${totalFinal.toLocaleString()}</p>
+                        <div>
+                          <p className="font-bold text-gray-900 text-sm">{getValues('nombre')}</p>
+                          <p className="text-xs text-gray-400">{getValues('telefono')}</p>
+                        </div>
                       </div>
-                      <div className={`text-right text-xs font-semibold ${metodoPago === 'tarjeta' ? 'text-blue-600' : 'text-primary-600'}`}>
-                        {metodoPago === 'tarjeta' ? (
-                          <><p>💳 Tarjeta</p><p className="font-normal text-gray-400">Portal AZUL</p></>
-                        ) : (
-                          <><p>💵 Efectivo</p><p className="font-normal text-gray-400">Al recibir</p></>
-                        )}
+                      <div className="flex items-start gap-2.5 pl-0.5">
+                        <div className="w-8 h-8 bg-green-50 rounded-xl flex items-center justify-center shrink-0">
+                          <MapPin className="w-4 h-4 text-green-500" />
+                        </div>
+                        <p className="text-sm text-gray-600 pt-1.5">{getValues('direccion')}, {getValues('ciudad')}</p>
+                      </div>
+                    </div>
+
+                    {/* Método de pago */}
+                    <div className="bg-white border-2 border-blue-200 rounded-2xl p-4">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center shrink-0">
+                          <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"/>
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-bold text-gray-900 text-sm">Tarjeta de crédito / débito</p>
+                          <p className="text-xs text-gray-400">Procesado por AZUL · Banco Popular</p>
+                        </div>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <img src="/visa-blue.png" alt="Visa" width={36} height={14} className="h-4 object-contain" />
+                          <img src="/mastercard.png" alt="Mastercard" width={44} height={18} className="h-5 object-contain" />
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-2 bg-blue-50 rounded-xl px-3 py-2.5">
+                        <span className="text-sm shrink-0">🔒</span>
+                        <p className="text-xs text-blue-700 leading-relaxed">
+                          Serás redirigido al portal seguro de <strong>AZUL (Banco Popular)</strong>. ContactGo <strong>no almacena</strong> datos de tarjetas.
+                        </p>
                       </div>
                     </div>
 
                     {/* T&C */}
                     <div className="flex items-start gap-3 cursor-pointer" onClick={() => setAceptaTerminos(!aceptaTerminos)}>
-                      <div className={`w-5 h-5 rounded border-2 shrink-0 mt-0.5 flex items-center justify-center transition-all ${aceptaTerminos ? 'bg-primary-600 border-primary-600' : 'border-gray-300 hover:border-primary-400'}`}>
+                      <div className={`w-5 h-5 rounded-lg border-2 shrink-0 mt-0.5 flex items-center justify-center transition-all ${aceptaTerminos ? 'bg-primary-600 border-primary-600' : 'border-gray-300 hover:border-primary-400'}`}>
                         {aceptaTerminos && <Check className="w-3 h-3 text-white" />}
                       </div>
-                      <span className="text-xs text-gray-500 leading-relaxed select-none">
+                      <p className="text-xs text-gray-500 leading-relaxed select-none">
                         He leído y acepto los{' '}
-                        <a href="/terminos" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 underline font-semibold">Términos y Condiciones</a>
+                        <a href="/terminos" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 font-semibold hover:underline">Términos y Condiciones</a>
                         {' '}y la{' '}
-                        <a href="/privacidad" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 underline font-semibold">Política de Privacidad</a>
-                        {' '}de ContactGo
-                      </span>
+                        <a href="/privacidad" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 font-semibold hover:underline">Política de Privacidad</a>
+                      </p>
                     </div>
 
-                    {/* Botón principal — cambia según método */}
+                    {/* Botón pagar */}
                     <button
                       onClick={handleSubmit(data => {
                         if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones para continuar'); return }
                         createOrder(data)
                       })}
                       disabled={loading || !aceptaTerminos}
-                      className={`w-full active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg ${
-                        metodoPago === 'tarjeta'
-                          ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-200'
-                          : 'bg-green-600 hover:bg-green-700 shadow-green-200'
-                      }`}>
+                      className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2.5 transition-all text-base shadow-lg shadow-blue-200">
                       {loading ? (
-                        <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        {metodoPago === 'tarjeta' ? 'Conectando con AZUL...' : 'Procesando pedido...'}</>
-                      ) : metodoPago === 'tarjeta' ? (
-                        <><span>Pagar con tarjeta · RD${totalFinal.toLocaleString()}</span><ChevronRight className="w-5 h-5" /></>
+                        <>
+                          <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Conectando con AZUL...
+                        </>
                       ) : (
-                        <><span>Confirmar pedido · RD${totalFinal.toLocaleString()}</span><ChevronRight className="w-5 h-5" /></>
+                        <>
+                          <span>💳 Pagar · RD${totalFinal.toLocaleString()}</span>
+                          <ChevronRight className="w-5 h-5" />
+                        </>
                       )}
                     </button>
 
-                    <div className="flex items-center justify-center gap-5 pt-1">
-                      {[{ icon: Lock, t:'Pago seguro' },{ icon: Shield, t:'100% original' },{ icon: Truck, t:'24-48h' },{ icon: RotateCcw, t:'48h' }].map(b => (
-                        <div key={b.t} className="flex items-center gap-1 text-[10px] text-gray-400">
-                          <b.icon className="w-3 h-3" />{b.t}
-                        </div>
-                      ))}
+                    {/* Trust badges — solo 1 fila limpia */}
+                    <div className="flex items-center justify-center gap-4 pt-1">
+                      <img src="/visa-blue.png" alt="Visa" width={36} height={14} className="h-4 object-contain opacity-60" />
+                      <img src="/mastercard.png" alt="Mastercard" width={44} height={18} className="h-5 object-contain opacity-60" />
+                      <img src="/visa-secure.png" alt="Visa Secure" width={44} height={18} className="h-5 object-contain opacity-60" />
+                      <img src="/mastercard-id-check.png" alt="Mastercard ID Check" width={52} height={20} className="h-5 object-contain opacity-60" />
                     </div>
+
+                    <p className="text-center text-[11px] text-gray-400">
+                      🔒 Pago 100% seguro · SSL · 3D Secure · ContactGo no almacena datos de tarjetas
+                    </p>
+
                   </div>
                 )}
               </div>
