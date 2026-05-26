@@ -76,8 +76,14 @@ Responde SOLO con JSON válido, sin markdown ni texto extra:
 
     if (!res.ok) {
       const err = await res.text()
-      console.error('[ocr-receta] Gemini error:', res.status, err)
-      return NextResponse.json({ error: 'Error del servicio. Ingresa los valores manualmente.' }, { status: 502 })
+      console.error('[ocr-receta] Gemini error:', res.status, err.slice(0, 500))
+      // Parse Gemini error for better message
+      let geminiMsg = 'Error del servicio.'
+      try {
+        const errJson = JSON.parse(err)
+        geminiMsg = errJson?.error?.message ?? geminiMsg
+      } catch {}
+      return NextResponse.json({ error: geminiMsg + ' Ingresa los valores manualmente.' }, { status: 502 })
     }
 
     const data = await res.json()
