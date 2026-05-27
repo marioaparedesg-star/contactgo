@@ -15,7 +15,7 @@ const AZUL_URL      = AZUL_ENV === 'production'
 
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get('secret')
-  if (secret !== (process.env.CRON_SECRET ?? 'contactgo2026')) {
+  if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 
