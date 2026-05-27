@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ProductoClient from './ProductoClient'
+export const revalidate = 300
 
 async function getProduct(slug: string) {
   const sb = createServerSupabaseClient()
@@ -9,6 +10,24 @@ async function getProduct(slug: string) {
     .select('*, reviews:product_reviews(rating, comment, user_name, created_at)')
     .eq('slug', slug).single()
   return data
+}
+
+
+export async function generateStaticParams() {
+  // Pre-renderizar los productos más visitados en build time
+  const { createClient } = await import('@supabase/supabase-js')
+  const sb = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  )
+  const { data } = await sb
+    .from('products')
+    .select('slug')
+    .eq('activo', true)
+    .gt('stock', 0)
+    .limit(20) // Pre-renderizar top 20 productos
+  return (data ?? []).map(p => ({ slug: p.slug }))
 }
 
 export async function generateMetadata(

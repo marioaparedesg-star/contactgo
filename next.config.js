@@ -38,6 +38,8 @@ const securityHeaders = [
 
 const nextConfig = {
   poweredByHeader: false,
+  output: 'standalone', // Reduce cold start time en Vercel
+  compress: true,
   experimental: {
     instrumentationHook: true,
     optimizePackageImports: ['lucide-react', '@supabase/supabase-js'],
@@ -46,7 +48,11 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
   images: {
-    unoptimized: true,
+    // Next.js Image Optimization habilitado — WebP/AVIF automático
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [390, 640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    minimumCacheTTL: 3600, // 1 hora de caché de imágenes optimizadas
     remotePatterns: [
       { protocol: 'https', hostname: 'atendbjolicwcsqfyiyh.supabase.co' },
       { protocol: 'https', hostname: 'www.contactgo.net' },
