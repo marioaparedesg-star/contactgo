@@ -26,7 +26,7 @@ export default function PedidosPage() {
 
 
   useEffect(()=>{
-    sb.from('orders').select('id,numero_orden,estado,pago_estado,total,metodo_pago,cliente_nombre,cliente_email,cliente_telefono,direccion_texto,created_at,ncf,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,pagado_en,lat,lng,notas').order('created_at', { ascending: false }).limit(200)
+    sb.from('orders').select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,direccion_texto,ciudad,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin').order('created_at', { ascending: false }).limit(200)
       .not('pago_estado','eq','declinado')
       .not('numero_orden','like','CG-TEST%')
       .order('created_at',{ascending:false})
