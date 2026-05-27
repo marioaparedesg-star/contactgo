@@ -36,7 +36,7 @@ export default function PedidosPage() {
   const abrirPedido = async (p:any) => {
     setSelected(p)
     if (!items[p.id]) {
-      const {data} = await sb.from('order_items').select('*').eq('order_id',p.id)
+      const {data} = await sb.from('order_items').select('id,order_id,product_id,cantidad,precio_unitario,sph,cyl,axis,add_power,color,ojo,suscripcion,products(nombre,tipo)').eq('order_id',p.id)
       setItems(i=>({...i,[p.id]:data??[]}))
     }
   }

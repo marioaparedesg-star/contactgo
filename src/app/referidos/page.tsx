@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import Navbar from '@/components/ui/Navbar'
@@ -9,9 +10,9 @@ import toast from 'react-hot-toast'
 export default function ReferidosPage() {
   const [user, setUser] = useState<any>(null)
   const [copiado, setCopiado] = useState(false)
-  const sb = createClient()
 
   useEffect(() => {
+    const sb = createClient()
     sb.auth.getUser().then(({ data }) => setUser(data.user))
   }, [])
 

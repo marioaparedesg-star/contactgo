@@ -13,7 +13,7 @@ export default function ClientesPage() {
   const [statsMap, setStatsMap]   = useState<Record<string,{total:number,ltv:number}>>({})
 
   useEffect(()=>{
-    sb.from('profiles').select('*').eq('role','customer').order('created_at',{ascending:false})
+    sb.from('profiles').select('id,nombre,email,telefono,created_at,activo').eq('role','customer').order('created_at',{ascending:false})
       .then(async ({data})=>{
         const cs = data??[]
         setClientes(cs)

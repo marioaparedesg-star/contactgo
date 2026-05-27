@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.contactgo.net'),
   title: 'ContactGo — Lentes de Contacto RD',
   manifest: '/manifest.json',
-  themeColor: '#16a34a',
+
+
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -48,6 +49,10 @@ export const metadata: Metadata = {
     description: 'Lentes de contacto con envío en 24-48h en República Dominicana.',
     images: ['https://www.contactgo.net/og-1200x630.png'],
   },
+}
+
+export const viewport = {
+  themeColor: '#16a34a',
 }
 
 

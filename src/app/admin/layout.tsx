@@ -1,31 +1,48 @@
-'use client'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+export const dynamic = 'force-dynamic'
+
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { createServerClient } from '@supabase/ssr'
 import AdminNav from '@/components/admin/AdminNav'
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const router   = useRouter()
-  const [checking, setChecking] = useState(true)
+// Server Component — auth verificado ANTES de renderizar
+// La página de login está excluida del matcher de middleware,
+// por lo que este layout NUNCA recibe requests de /admin/login
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const cookieStore = cookies()
 
-  useEffect(() => {
-    if (pathname === '/admin/login') { setChecking(false); return }
-    const sb = createClient()
-    sb.auth.getUser().then(({ data: { user } }) => {
-      if (!user) router.replace('/admin/login')
-      else setChecking(false)
-    })
-  }, [pathname, router])
-
-  if (pathname === '/admin/login') return <>{children}</>
-
-  if (checking) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
-    </div>
+  const sb = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return cookieStore.getAll() },
+        setAll() {}, // Server Component: no setea cookies en este contexto
+      },
+    }
   )
+
+  const { data: { user } } = await sb.auth.getUser()
+
+  // Sin sesión → redirect al login (server-side, no flash de contenido)
+  if (!user) {
+    redirect('/admin/login')
+  }
+
+  // Verificar rol admin en profiles
+  const { data: profile } = await sb
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (!profile || profile.role !== 'admin') {
+    redirect('/admin/login')
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50">
