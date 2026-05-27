@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Rate limiting simple (Edge Runtime)
+// Rate limiting en Edge Runtime
+// NOTA: En Edge Runtime (middleware), solo se puede usar in-memory
+// Para rate limiting distribuido real, usar /api routes con applyRateLimit() de rate-limit.ts
+// Cloudflare Rate Limiting rules son la primera línea de defensa perimetral
 const rateMap = new Map<string, { count: number; reset: number }>()
 function rateLimit(key: string, limit: number, windowMs = 60_000): boolean {
   const now = Date.now()
