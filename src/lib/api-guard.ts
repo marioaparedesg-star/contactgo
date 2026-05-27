@@ -1,9 +1,13 @@
-// Utilidad de seguridad reutilizable para todos los API routes
+/**
+ * Utilidad de seguridad reutilizable para API routes
+ * Rate limiting: in-memory por instancia (fallback)
+ * Para rate limiting distribuido real, usar applyRateLimit() de rate-limit.ts
+ */
 import { NextRequest, NextResponse } from 'next/server'
 
 const ALLOWED_ORIGINS = ['https://contactgo.net', 'https://www.contactgo.net']
 
-// Rate limiting en memoria (Edge-compatible)
+// Rate limiting en memoria (fallback por instancia)
 const rateMap = new Map<string, { count: number; reset: number }>()
 
 export function rateLimit(key: string, limit: number, windowMs = 60_000): boolean {
@@ -18,33 +22,33 @@ export function rateLimit(key: string, limit: number, windowMs = 60_000): boolea
   return true
 }
 
-// Guard completo: retorna NextResponse si hay error, null si todo OK
 export function guardRequest(
   req: NextRequest,
   opts: { limitPerMin?: number; requireOrigin?: boolean } = {}
 ): NextResponse | null {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    ?? req.headers.get('x-real-ip')
+    ?? 'unknown'
   const origin = req.headers.get('origin') ?? ''
   const { limitPerMin = 30, requireOrigin = true } = opts
 
-  // Validar origin solo cuando hay origin header presente
   if (requireOrigin && origin && !ALLOWED_ORIGINS.includes(origin)) {
     return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
   }
 
-  // Rate limit
   const path = new URL(req.url).pathname
   if (!rateLimit(`${ip}:${path}`, limitPerMin)) {
     return NextResponse.json(
-      { error: 'Too many requests. Intenta en un momento.' },
+      { error: 'Demasiadas solicitudes. Intenta en un momento.' },
       { status: 429, headers: { 'Retry-After': '60' } }
     )
   }
 
-  return null // Todo OK
+  return null
 }
 
-// Obtener IP del request
 export function getIP(req: NextRequest): string {
-  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    ?? req.headers.get('x-real-ip')
+    ?? 'unknown'
 }

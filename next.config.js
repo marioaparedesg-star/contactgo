@@ -4,7 +4,7 @@
 const csp = [
   "default-src 'self'",
   // Scripts: self + GTM + Meta Pixel + inline (Next.js necesita unsafe-inline)
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://maps.gstatic.com",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://maps.gstatic.com",
   // Estilos: self + inline (Tailwind genera estilos inline)
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com https://maps.googleapis.com",
   // Fuentes
@@ -15,6 +15,7 @@ const csp = [
   "connect-src 'self' https://atendbjolicwcsqfyiyh.supabase.co wss://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pruebas.azul.com.do https://pagos.azul.com.do https://api.resend.com https://e.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://*.googleapis.com https://www.facebook.com https://connect.facebook.net",
   // Frames: AZUL necesita poder renderizar en frame para su portal de pago
   "frame-src 'self' https://pruebas.azul.com.do https://pagos.azul.com.do https://www.googletagmanager.com",
+  "frame-ancestors 'self'",
   // Forms: puede hacer POST a AZUL
   "form-action 'self' https://pruebas.azul.com.do https://pagos.azul.com.do",
   // Media

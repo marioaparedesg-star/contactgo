@@ -1,178 +1,118 @@
-// GET /api/azul-test?secret=xxx
-// Endpoint de prueba AZUL: crea una orden real en DB y lanza el formulario hacia sandbox
+// GET /api/azul-test — solo disponible en sandbox
 import { NextRequest, NextResponse } from 'next/server'
-import { createHmac } from 'crypto'
 import { createClient } from '@supabase/supabase-js'
 
-const BASE          = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-const MERCHANT_ID   = process.env.AZUL_MERCHANT_ID   ?? '39038540035'
-const MERCHANT_NAME = process.env.AZUL_MERCHANT_NAME ?? 'ContactGo'
-const AUTH_KEY      = process.env.AZUL_AUTH_KEY      ?? ''
-const AZUL_ENV      = process.env.AZUL_ENV           ?? 'sandbox'
-const AZUL_URL      = AZUL_ENV === 'production'
+const AZUL_ENV       = process.env.AZUL_ENV ?? 'sandbox'
+const AZUL_URL       = AZUL_ENV === 'production'
   ? 'https://pagos.azul.com.do/PaymentPage/Default.aspx'
   : 'https://pruebas.azul.com.do/PaymentPage/'
+const BASE           = 'https://www.contactgo.net'
+const MERCHANT_ID    = process.env.AZUL_MERCHANT_ID    ?? '39038540035'
+const MERCHANT_NAME  = process.env.AZUL_MERCHANT_NAME  ?? 'ContactGo'
+const AUTH_KEY       = process.env.AZUL_AUTH_KEY       ?? ''
+
+function getSb() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  )
+}
 
 export async function GET(req: NextRequest) {
+  // Bloquear completamente en producción
+  if (AZUL_ENV === 'production') {
+    return NextResponse.json({ error: 'No disponible en producción' }, { status: 404 })
+  }
+
+  // Verificar secret
   const secret = req.nextUrl.searchParams.get('secret')
   if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 
-  const sb = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  const simular = req.nextUrl.searchParams.get('simular')
 
-  const simular = req.nextUrl.searchParams.get('simular') // ?simular=retorno para simular retorno sin pasar por AZUL
-
-  // ── Simular retorno AZUL directo (sin pasar por portal) ─────────────────────
+  // Simular retorno aprobado
   if (simular === 'retorno') {
     const orderNum = req.nextUrl.searchParams.get('order') ?? ''
-    if (!orderNum) return NextResponse.json({ error: 'Falta ?order=CG-xxx' })
-    
-    // Construir URL igual a como la devolvería AZUL
-    const retornoUrl = new URL(`${BASE}/api/azul/retorno`)
-    retornoUrl.searchParams.set('resultado',        'aprobado')
-    retornoUrl.searchParams.set('OrderNumber',      orderNum)
-    retornoUrl.searchParams.set('Amount',           '100000')
-    retornoUrl.searchParams.set('AuthorizationCode','SIMTEST')
-    retornoUrl.searchParams.set('DateTime',         new Date().toISOString())
-    retornoUrl.searchParams.set('ResponseCode',     'ISO8583')
-    retornoUrl.searchParams.set('IsoCode',          '00')
-    retornoUrl.searchParams.set('ResponseMessage',  'APROBADA')
-    retornoUrl.searchParams.set('ErrorDescription', '')
-    retornoUrl.searchParams.set('RRN',              `SIM${Date.now()}`)
-    retornoUrl.searchParams.set('AzulOrderId',      `AZUL${Date.now()}`)
-    
-    return NextResponse.redirect(retornoUrl.toString())
+    const params = new URLSearchParams({
+      OrderNumber:       orderNum,
+      Amount:            '95000',
+      AuthorizationCode: 'SIMTEST',
+      DateTime:          new Date().toISOString().replace(/\D/g, '').slice(0, 14),
+      ResponseCode:      'ISO8583',
+      IsoCode:           '00',
+      ResponseMessage:   'APROBADA',
+      ErrorDescription:  '',
+      RRN:               `SIM${Date.now()}`,
+      AzulOrderId:       `SIM${Date.now()}`,
+    })
+    return NextResponse.redirect(`${BASE}/api/azul/retorno?${params}`)
   }
 
-  // ── Crear una orden de prueba real en Supabase ────────────────────────────
-  const orderNum = `CG-TEST${Date.now().toString().slice(-8)}`
-  const totalNum  = 1000  // RD$10.00 (mínimo para prueba)
-  const amount    = String(Math.round(totalNum * 100)).padStart(3, '0')
-  const itbis     = '000'  // sandbox: siempre 000
+  // Crear orden de prueba y redirigir a AZUL sandbox
+  const { createHmac } = await import('crypto')
+  const orderNum   = `CG-TEST${Date.now().toString().slice(-8)}`
+  const amount     = '95000'
+  const itbis      = '14517'
+  const approvedUrl = `${BASE}/api/azul/retorno?resultado=aprobado`
+  const declinedUrl = `${BASE}/api/azul/retorno?resultado=declinado`
+  const cancelUrl   = `${BASE}/checkout`
 
-  const { data: order, error: orderErr } = await sb.from('orders').insert({
-    cliente_nombre:  'Prueba AZUL Sandbox',
-    cliente_email:   'test@contactgo.net',
-    cliente_telefono:'8095550000',
-    direccion_texto: 'Dirección de prueba, Santo Domingo',
-    estado:          'pendiente',
-    subtotal:        totalNum,
-    envio:           0,
-    total:           totalNum,
-    metodo_pago:     'tarjeta',
-    pago_estado:     'pendiente',
-    numero_orden:    orderNum,
-    ciudad:          'Santo Domingo',
-  }).select().single()
-
-  if (orderErr || !order) {
-    return NextResponse.json({ error: 'No se pudo crear orden de prueba', detail: orderErr?.message })
-  }
-
-  // ── Calcular AuthHash (igual que preparar/route.ts — UTF-8) ──────────────
-  const MERCHANT_TYPE  = 'ECommerce'
-  const CURRENCY       = '$'
-  const approvedUrl    = `${BASE}/api/azul/retorno?resultado=aprobado`
-  const declinedUrl    = `${BASE}/api/azul/retorno?resultado=declinado`
-  const cancelUrl      = `${BASE}/checkout`
-  const useCustom1 = '1', label1 = 'No. Orden', value1 = orderNum
-  const useCustom2 = '0', label2 = '', value2 = ''
+  const sb = getSb()
+  await sb.from('orders').insert({
+    numero_orden:     orderNum,
+    cliente_nombre:   'TEST SANDBOX',
+    cliente_email:    'test@sandbox.com',
+    total:            950,
+    subtotal:         950,
+    envio:            0,
+    estado:           'pendiente',
+    metodo_pago:      'tarjeta',
+    pago_estado:      'pendiente',
+    items_count:      1,
+  })
 
   const raw = [
-    MERCHANT_ID, MERCHANT_NAME, MERCHANT_TYPE, CURRENCY,
-    orderNum, amount, itbis,
-    approvedUrl, declinedUrl, cancelUrl,
-    useCustom1, label1, value1,
-    useCustom2, label2, value2,
-    AUTH_KEY
+    MERCHANT_ID, MERCHANT_NAME, 'ECommerce', '$', orderNum,
+    amount, itbis, approvedUrl, declinedUrl, cancelUrl,
+    '1', 'No. Orden', orderNum, '0', '', '', AUTH_KEY,
   ].join('')
 
-  let authHash = 'REQUIRES_AUTH_KEY'
-  if (AUTH_KEY) {
-    authHash = createHmac('sha512', AUTH_KEY).update(raw, 'utf8').digest('hex')
+  const authHash = createHmac('sha512', AUTH_KEY).update(raw, 'utf8').digest('hex')
+
+  const fields: Record<string, string> = {
+    MerchantId: MERCHANT_ID, TrxType: 'Sale', MerchantName: MERCHANT_NAME,
+    MerchantType: 'ECommerce', CurrencyCode: '$', OrderNumber: orderNum,
+    Amount: amount, ITBIS: itbis, ApprovedUrl: approvedUrl,
+    DeclinedUrl: declinedUrl, CancelUrl: cancelUrl,
+    UseCustomField1: '1', CustomField1Label: 'No. Orden', CustomField1Value: orderNum,
+    UseCustomField2: '0', CustomField2Label: '', CustomField2Value: '',
+    ShowTransactionResult: '0', Locale: 'ES', AuthHash: authHash,
   }
 
-  const simRetornoUrl = `${BASE}/api/azul-test?secret=${secret}&simular=retorno&order=${orderNum}`
+  const simUrl = `${BASE}/api/azul-test?secret=${secret}&simular=retorno&order=${orderNum}`
 
-  const html = `<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>ContactGo — Prueba AZUL</title>
-  <style>
-    body{font-family:Arial,sans-serif;max-width:680px;margin:40px auto;padding:20px;background:#f9fafb;}
-    .card{background:white;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin-bottom:16px;}
-    h2{color:#1d4ed8;margin-bottom:8px;}
-    table{width:100%;border-collapse:collapse;font-size:12px;}
-    td{padding:5px 10px;border-bottom:1px solid #f0f0f0;}
-    td:first-child{font-weight:700;color:#555;width:180px;}
-    .btn{display:block;text-align:center;padding:12px 24px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;border:none;text-decoration:none;}
-    .btn-azul{background:#1d4ed8;color:white;}
-    .btn-sim{background:#059669;color:white;}
-    .badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;}
-    .sandbox{background:#fef3c7;color:#92400e;}
-    pre{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px;font-size:10px;overflow:auto;max-height:200px;}
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h2>🔵 ContactGo — Prueba AZUL <span class="badge sandbox">${AZUL_ENV.toUpperCase()}</span></h2>
-    <p style="color:#6b7280;font-size:13px;">Orden de prueba creada: <strong>${orderNum}</strong> | ID: <code>${order.id.slice(0,8)}...</code></p>
-    
-    <table>
-      <tr><td>MerchantID</td><td>${MERCHANT_ID}</td></tr>
-      <tr><td>MerchantName</td><td>${MERCHANT_NAME}</td></tr>
-      <tr><td>OrderNumber</td><td>${orderNum}</td></tr>
-      <tr><td>Amount</td><td>${amount} → RD$${totalNum.toLocaleString()}</td></tr>
-      <tr><td>ITBIS</td><td>${itbis} (exento / sandbox)</td></tr>
-      <tr><td>ApprovedUrl</td><td style="font-size:10px">${approvedUrl}</td></tr>
-      <tr><td>AuthHash</td><td style="font-size:9px;word-break:break-all">${authHash.slice(0,50)}...</td></tr>
-      <tr><td>AUTH_KEY</td><td>${AUTH_KEY ? '✅ configurada (' + AUTH_KEY.slice(0,6) + '...)' : '❌ NO configurada'}</td></tr>
-    </table>
-
-    <form action="${AZUL_URL}" method="post">
-      <input type="hidden" name="MerchantId"        value="${MERCHANT_ID}">
-      <input type="hidden" name="TrxType"           value="Sale">
-      <input type="hidden" name="MerchantName"      value="${MERCHANT_NAME}">
-      <input type="hidden" name="MerchantType"      value="${MERCHANT_TYPE}">
-      <input type="hidden" name="CurrencyCode"      value="${CURRENCY}">
-      <input type="hidden" name="OrderNumber"       value="${orderNum}">
-      <input type="hidden" name="Amount"            value="${amount}">
-      <input type="hidden" name="ITBIS"             value="${itbis}">
-      <input type="hidden" name="ApprovedUrl"       value="${approvedUrl}">
-      <input type="hidden" name="DeclinedUrl"       value="${declinedUrl}">
-      <input type="hidden" name="CancelUrl"         value="${cancelUrl}">
-      <input type="hidden" name="UseCustomField1"   value="${useCustom1}">
-      <input type="hidden" name="CustomField1Label" value="${label1}">
-      <input type="hidden" name="CustomField1Value" value="${value1}">
-      <input type="hidden" name="UseCustomField2"   value="${useCustom2}">
-      <input type="hidden" name="CustomField2Label" value="${label2}">
-      <input type="hidden" name="CustomField2Value" value="${value2}">
-      <input type="hidden" name="ShowTransactionResult" value="0">
-      <input type="hidden" name="Locale"            value="ES">
-      <input type="hidden" name="AuthHash"          value="${authHash}">
-      <button type="submit" class="btn btn-azul">🔵 Probar con portal AZUL sandbox →</button>
-    </form>
-
-    <a href="${simRetornoUrl}" class="btn btn-sim" style="margin-top:8px;">
-      ✅ Simular retorno APROBADO (sin portal AZUL)
-    </a>
-  </div>
-
-  <div class="card">
-    <h3 style="font-size:14px;color:#374151;margin:0 0 8px">Tarjetas de prueba AZUL sandbox</h3>
-    <table>
-      <tr><td>Visa aprobada</td><td><code>4005520000000129</code> | Exp: 12/26 | CVV: 132</td></tr>
-      <tr><td>MC aprobada</td><td><code>5413330089010005</code> | Exp: 12/26 | CVV: 123</td></tr>
-      <tr><td>Visa declinada</td><td><code>4532819739091745</code></td></tr>
-    </table>
-  </div>
-</body>
-</html>`
-
-  return new Response(html, { headers: { 'Content-Type': 'text/html' } })
+  return new NextResponse(`<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>AZUL Sandbox Test — ContactGo</title>
+<style>body{font-family:monospace;padding:2rem;background:#0f172a;color:#e2e8f0}
+.card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:1.5rem;max-width:600px}
+h2{color:#38bdf8;margin:0 0 1rem}p{margin:0.25rem 0;font-size:0.85rem}
+.btn{display:inline-block;padding:.75rem 1.5rem;border-radius:6px;border:none;cursor:pointer;font-weight:700;margin:.5rem .5rem 0 0;font-size:1rem}
+.green{background:#16a34a;color:#fff}.blue{background:#2563eb;color:#fff}
+form{display:inline}</style></head>
+<body><div class="card"><h2>🧪 AZUL Sandbox — ${MERCHANT_NAME}</h2>
+<p>Order: <strong>${orderNum}</strong></p>
+<p>Amount: RD$950.00 | ITBIS: RD$145.17</p>
+<p>Env: <strong>${AZUL_ENV}</strong></p>
+<hr style="border-color:#334155;margin:1rem 0">
+<a href="${simUrl}" class="btn green">✅ Simular retorno APROBADO</a>
+<form method="POST" action="${AZUL_URL}">
+${Object.entries(fields).map(([k,v]) => `<input type="hidden" name="${k}" value="${v}">`).join('')}
+<button type="submit" class="btn blue">🔵 Portal AZUL sandbox →</button>
+</form>
+</div></body></html>`, {
+    headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  })
 }
