@@ -41,8 +41,10 @@ async function extractParams(req: NextRequest): Promise<URLSearchParams> {
 
 /**
  * Valida el AuthHash de la respuesta de AZUL.
- * Construcción: MERCHANT_ID + OrderNumber + Amount + ITBIS + ResponseCode + IsoCode + AuthorizationCode + RRN + AzulOrderId + AUTH_KEY
- * (según documentación AZUL Payment Page v3)
+ * Construcción EXACTA según documentación oficial AZUL (pág. 8):
+ *   OrderNumber + Amount + AuthorizationCode + DateTime + ResponseCode
+ *   + ISOCode + ResponseMessage + ErrorDescription + RRN + AuthKey
+ * Encoding: UTF-16LE (según ejemplo PHP oficial en pág. 9)
  */
 function validateResponseHash(
   p: URLSearchParams,
@@ -50,27 +52,34 @@ function validateResponseHash(
 ): boolean {
   if (!AUTH_KEY || !returnedHash) return false
   try {
-    // Campos en el orden que especifica AZUL para la respuesta
-    const raw = [
-      MERCHANT_ID,
-      p.get('OrderNumber')       ?? '',
-      p.get('Amount')            ?? '',
-      p.get('ITBIS')             ?? '',
-      p.get('ResponseCode')      ?? '',
-      p.get('IsoCode')           ?? '',
-      p.get('AuthorizationCode') ?? '',
-      p.get('DateTime')          ?? '',
-      p.get('ErrorDescription')  ?? '',
-      p.get('ResponseMessage')   ?? '',
-      p.get('RRN')               ?? '',
-      p.get('AzulOrderId')       ?? '',
-      AUTH_KEY,
+    // Orden exacto según spec AZUL — NO incluye MerchantId, ITBIS ni AzulOrderId
+    const rawStr = [
+      p.get('OrderNumber')       ?? '',  // 1
+      p.get('Amount')            ?? '',  // 2
+      p.get('AuthorizationCode') ?? '',  // 3
+      p.get('DateTime')          ?? '',  // 4
+      p.get('ResponseCode')      ?? '',  // 5
+      p.get('IsoCode')           ?? '',  // 6 — AZUL llama "ISOCode" en docs, devuelve "IsoCode"
+      p.get('ResponseMessage')   ?? '',  // 7
+      p.get('ErrorDescription')  ?? '',  // 8
+      p.get('RRN')               ?? '',  // 9
+      AUTH_KEY,                          // 10 — authKey al final (no viaja en el POST)
     ].join('')
 
+    // Encoding UTF-16LE requerido — validado contra ejemplo oficial AZUL (pág. 43)
+    const rawBuffer = Buffer.from(rawStr, 'utf16le')
     const computed = createHmac('sha512', AUTH_KEY)
-      .update(raw, 'utf8').digest('hex')
+      .update(rawBuffer).digest('hex')
 
-    return computed.toLowerCase() === returnedHash.toLowerCase()
+    const match = computed.toLowerCase() === returnedHash.toLowerCase()
+    if (!match && process.env.NODE_ENV !== 'production') {
+      console.warn('[AZUL/retorno] hash mismatch debug:', {
+        rawStr: rawStr.slice(0, 80) + '...',
+        computedPrefix: computed.slice(0, 20),
+        receivedPrefix: returnedHash.slice(0, 20),
+      })
+    }
+    return match
   } catch (_) {
     return false
   }
