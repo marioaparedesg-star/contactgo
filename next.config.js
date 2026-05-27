@@ -38,6 +38,15 @@ const securityHeaders = [
 
 const nextConfig = {
   poweredByHeader: false,
+  eslint: {
+    // ESLint runs in CI (GitHub Actions). Not in Vercel build.
+    // This prevents existing legacy warnings from blocking production deploys.
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // TypeScript errors are caught in CI typecheck step
+    ignoreBuildErrors: false, // Keep TS errors blocking (they're real bugs)
+  },
   output: 'standalone', // Reduce cold start time en Vercel
   compress: true,
   experimental: {

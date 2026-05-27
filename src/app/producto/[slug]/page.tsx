@@ -15,19 +15,27 @@ async function getProduct(slug: string) {
 
 export async function generateStaticParams() {
   // Pre-renderizar los productos más visitados en build time
-  const { createClient } = await import('@supabase/supabase-js')
-  const sb = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  )
-  const { data } = await sb
-    .from('products')
-    .select('slug')
-    .eq('activo', true)
-    .gt('stock', 0)
-    .limit(20) // Pre-renderizar top 20 productos
-  return (data ?? []).map(p => ({ slug: p.slug }))
+  // Graceful fallback si env vars no están disponibles (build local sin .env.local)
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return []
+  }
+  try {
+    const { createClient } = await import('@supabase/supabase-js')
+    const sb = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    )
+    const { data } = await sb
+      .from('products')
+      .select('slug')
+      .eq('activo', true)
+      .gt('stock', 0)
+      .limit(20) // Pre-renderizar top 20 productos en build
+    return (data ?? []).map((p: { slug: string }) => ({ slug: p.slug }))
+  } catch {
+    return [] // Fallback: ISR renderizará en el primer request
+  }
 }
 
 export async function generateMetadata(
