@@ -39,7 +39,7 @@ export default async function AlconPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {(productos??[]).map((p:any) => (
               <Link key={p.id} href={`/producto/${p.id}`} className="bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-shadow">
-                {p.imagen_url && <div className="aspect-square mb-3 flex items-center justify-center"><Image src={p.imagen_url} alt={p.nombre} width={120} height={120} className="object-contain" /></div>}
+                {p.imagen_url && <div className="aspect-square mb-3 flex items-center justify-center"><Image src={p.imagen_url} unoptimized alt={p.nombre} width={120} height={120} className="object-contain" /></div>}
                 <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">{TIPO[p.tipo]??p.tipo}</span>
                 <p className="font-semibold text-gray-900 text-sm mt-2 leading-tight">{p.nombre}</p>
                 <p className="font-bold text-gray-900 mt-1">RD${p.precio?.toLocaleString()}</p>

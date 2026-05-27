@@ -138,7 +138,7 @@ export default async function MarcaPage({ params }: { params: { marca: string } 
                   className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md hover:border-primary-200 transition-all group">
                   {p.imagen_url ? (
                     <div className="aspect-square bg-gray-50 rounded-xl mb-3 overflow-hidden flex items-center justify-center">
-                      <Image src={p.imagen_url} alt={p.nombre} width={120} height={120} className="object-contain p-2" />
+                      <Image src={p.imagen_url} unoptimized alt={p.nombre} width={120} height={120} className="object-contain p-2" />
                     </div>
                   ) : (
                     <div className="aspect-square bg-gray-50 rounded-xl mb-3 flex items-center justify-center">

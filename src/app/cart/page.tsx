@@ -76,7 +76,7 @@ export default function CartPage() {
                   {/* Imagen */}
                   <div className="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
                     {item.product.imagen_url
-                      ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={80} height={80} className="object-contain p-1" />
+                      ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={80} height={80} className="object-contain p-1" unoptimized />
                       : <Eye className="w-8 h-8 text-gray-200" />
                     }
                   </div>

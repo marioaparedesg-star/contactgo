@@ -51,7 +51,7 @@ export default function CrossSelling({ tipo, currentId }: { tipo: string; curren
             <Link href={`/producto/${p.slug}`}>
               <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2">
                 {p.imagen_url
-                  ? <Image src={p.imagen_url} alt={p.nombre} fill className="object-contain p-2" sizes="160px" />
+                  ? <Image src={p.imagen_url} alt={p.nombre} fill className="object-contain p-2" sizes="160px" unoptimized />
                   : <div className="w-full h-full flex items-center justify-center text-3xl">💧</div>
                 }
               </div>

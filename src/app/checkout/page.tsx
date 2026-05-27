@@ -610,7 +610,7 @@ export default function CheckoutPage() {
                   {items.map((item, idx) => (
                     <div key={idx} className="flex gap-3 items-start">
                       {item.product.imagen_url && (
-                        <Image src={item.product.imagen_url||"/placeholder-lens.png"} alt="" width={40} height={40} className="w-10 h-10 object-contain rounded-lg bg-gray-50 shrink-0 border border-gray-100" />
+                        <Image src={item.product.imagen_url||"/placeholder-lens.png"} alt="" width={40} height={40} className="w-10 h-10 object-contain rounded-lg bg-gray-50 shrink-0 border border-gray-100" unoptimized />
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start gap-1">

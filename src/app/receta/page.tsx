@@ -466,7 +466,7 @@ export default function RecetaPage() {
                         <div key={p.id} className="border border-gray-100 rounded-2xl p-3 hover:border-primary-200 hover:-translate-y-0.5 transition-all">
                           <Link href={`/producto/${p.slug}`}>
                             <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2">
-                              {p.imagen_url?<Image src={p.imagen_url} alt={p.nombre} fill className="object-contain p-2" sizes="160px"/>:<div className="w-full h-full flex items-center justify-center text-2xl">👁️</div>}
+                              {p.imagen_url?<Image src={p.imagen_url} unoptimized alt={p.nombre} fill className="object-contain p-2" sizes="160px"/>:<div className="w-full h-full flex items-center justify-center text-2xl">👁️</div>}
                             </div>
                             <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide mb-0.5">{p.marca??'ContactGo'}</p>
                             <p className="font-semibold text-gray-900 text-xs leading-snug line-clamp-2 mb-1">{p.nombre}</p>
