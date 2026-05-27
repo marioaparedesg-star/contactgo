@@ -182,8 +182,8 @@ export default function CheckoutPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           order_number: orderNum, 
-          total: totalFinal,
-          approved_url: approvedUrl  // URL exacta para el hash
+          // total omitido — el backend lo obtiene de Supabase por seguridad
+          approved_url: approvedUrl
         })
       })
       if (!preRes.ok) {
