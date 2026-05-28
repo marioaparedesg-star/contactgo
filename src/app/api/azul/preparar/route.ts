@@ -6,6 +6,8 @@ import { createClient } from '@supabase/supabase-js'
 const BASE          = 'https://www.contactgo.net'
 const MERCHANT_ID   = process.env.AZUL_MERCHANT_ID    ?? '39038540035'
 const MERCHANT_NAME = process.env.AZUL_MERCHANT_NAME  ?? 'ContactGo'
+const LOGO_URL      = process.env.AZUL_LOGO_URL
+  ?? 'https://www.contactgo.net/icon-192.png'
 const MERCHANT_TYPE = 'ECommerce'
 const CURRENCY      = '$'
 const AUTH_KEY      = process.env.AZUL_AUTH_KEY ?? ''
@@ -130,6 +132,9 @@ export async function POST(req: NextRequest) {
       ShowTransactionResult: '0',
       Locale:            'ES',
       AuthHash:          authHash,
+      // Branding visual — NO forman parte del AuthHash
+      // Documentación oficial AZUL: sección "Diseño personalizable"
+      LogoImageUrl:      LOGO_URL,
     }
 
     if (process.env.NODE_ENV !== 'production') console.log('[AZUL/preparar] OK:', {
