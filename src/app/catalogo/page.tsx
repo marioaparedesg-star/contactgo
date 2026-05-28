@@ -56,6 +56,7 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import ProductCard from '@/components/shop/ProductCard'
+import ViewItemListTracker from '@/components/analytics/ViewItemListTracker'
 import type { Product } from '@/types'
 
 export const revalidate = 30
@@ -167,6 +168,12 @@ export default async function CatalogoPage({ searchParams }: Props) {
         />
 
         {/* Grid productos */}
+        {/* Analytics: view_item_list */}
+        <ViewItemListTracker
+          items={products.map(p => ({ id: p.id, nombre: p.nombre, marca: p.marca, tipo: p.tipo, precio: p.precio }))}
+          listName={sp.tipo ? `Catálogo — ${sp.tipo}` : 'Catálogo'}
+        />
+
         {products.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {products.map(p => <ProductCard key={p.id} product={p} />)}
