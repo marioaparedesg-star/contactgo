@@ -606,71 +606,132 @@ export default function CuentaPage() {
   // ──────────────────────────────────── APP SCREEN ──────────────────────────
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-4 py-4 sticky top-0 z-10">
+      {/* Header premium */}
+      <div className="bg-white border-b border-gray-100 px-4 py-3 sticky top-0 z-20 backdrop-blur-sm">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-primary-500 rounded-2xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">{(perfil?.nombre || user.email)[0].toUpperCase()}</span>
+            {tab !== '' && (
+              <button onClick={() => setTab('')}
+                className="w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors mr-1">
+                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+            )}
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-sm shadow-primary-200">
+              <span className="text-white font-black text-base">{(perfil?.nombre || user.email)[0].toUpperCase()}</span>
             </div>
             <div>
-              <p className="font-bold text-gray-900">{perfil?.nombre || 'Mi cuenta'}</p>
-              <p className="text-xs text-gray-500">{user.email}</p>
+              <p className="font-bold text-gray-900 text-sm leading-tight">{perfil?.nombre || 'Mi cuenta'}</p>
+              <p className="text-[11px] text-gray-400 leading-tight">{user.email}</p>
             </div>
           </div>
           <button onClick={cerrarSesion}
-            className="flex items-center gap-1 text-sm text-gray-400 hover:text-red-500 transition-colors px-3 py-2 rounded-xl hover:bg-red-50">
-            <LogOut className="w-4 h-4" /> Salir
+            className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors px-3 py-2 rounded-xl hover:bg-red-50 font-medium">
+            <LogOut className="w-3.5 h-3.5" /> Salir
           </button>
         </div>
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-4">
-        {/* Menú vertical app-friendly — se oculta cuando hay tab activo */}
+        {/* Dashboard premium — menú principal */}
         {tab === '' ? (
-          <div className="space-y-2 mb-4">
-            {[
-              {id:'pedidos',      label:'Pedidos',      desc:'Historial y seguimiento',  icon:Package,     color:'bg-blue-50 text-blue-600'},
-              {id:'suscripciones',label:'Suscripciones',desc:'Entregas automáticas',      icon:Repeat,      color:'bg-purple-50 text-purple-600'},
-              {id:'recetas',      label:'Mis Recetas',  desc:'Prescripciones guardadas',  icon:FileText,    color:'bg-teal-50 text-teal-600'},
-              {id:'pagos',        label:'Métodos de pago',desc:'Tarjetas guardadas',      icon:CreditCard,  color:'bg-green-50 text-green-600'},
-              {id:'perfil',       label:'Mi Perfil',    desc:'Nombre, email, teléfono',   icon:User,        color:'bg-orange-50 text-orange-600'},
-              {id:'direcciones',  label:'Direcciones',  desc:'Dirección de entrega',      icon:MapPin,      color:'bg-pink-50 text-pink-600'},
-              {id:'seguridad',    label:'Seguridad',    desc:'Contraseña y Face ID',      icon:ShieldCheck, color:'bg-indigo-50 text-indigo-600'},
-            ].map(t => (
-              <button key={t.id} onClick={() => setTab(t.id)}
-                className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-gray-200 hover:shadow-sm transition-all text-left">
-                <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 ${t.color}`}>
-                  <t.icon className="w-5 h-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-gray-900 text-sm">{t.label}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{t.desc}</p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
-              </button>
-            ))}
-            <button onClick={cerrarSesion}
-              className="w-full bg-white border border-red-100 rounded-2xl p-4 flex items-center gap-4 hover:bg-red-50 transition-all text-left mt-2">
-              <div className="w-11 h-11 rounded-2xl bg-red-50 flex items-center justify-center shrink-0">
-                <LogOut className="w-5 h-5 text-red-500" />
+          <div className="space-y-3 mb-4 pt-2">
+            {/* Stats rápidas */}
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              <div className="bg-white rounded-2xl border border-gray-100 p-3 text-center">
+                <p className="text-xl font-black text-gray-900">{pedidos.filter(p => p.pago_estado==='pagado').length}</p>
+                <p className="text-[10px] text-gray-400 font-medium mt-0.5">Pedidos</p>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-3 text-center">
+                <p className="text-xl font-black text-primary-600">{suscripciones.filter(s => s.activa).length}</p>
+                <p className="text-[10px] text-gray-400 font-medium mt-0.5">Suscripciones</p>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-3 text-center">
+                <p className="text-xl font-black text-gray-900">{recetas.length}</p>
+                <p className="text-[10px] text-gray-400 font-medium mt-0.5">Recetas</p>
+              </div>
+            </div>
+
+            {/* Suscripción activa — highlight card si existe */}
+            {suscripciones.filter(s => s.activa).length > 0 && (() => {
+              const s = suscripciones.find(s => s.activa)!
+              const proxDias = s.proximo_envio ? Math.ceil((new Date(s.proximo_envio).getTime() - Date.now()) / 86400000) : null
+              return (
+                <button onClick={() => setTab('suscripciones')}
+                  className="w-full bg-gradient-to-r from-primary-600 to-emerald-600 rounded-2xl p-4 text-left text-white shadow-md shadow-primary-100 hover:shadow-lg transition-all">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary-200">Suscripción activa</span>
+                    <span className="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-full font-bold">-{s.descuento_pct}%</span>
+                  </div>
+                  <p className="font-bold text-base leading-tight">
+                    {({'15_dias':'Cada 15 días','mensual':'Mensual','trimestral':'Cada 3 meses'} as any)[s.frecuencia] ?? s.frecuencia}
+                  </p>
+                  {proxDias != null && (
+                    <p className="text-xs text-primary-100 mt-1.5 flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                      Próxima entrega {proxDias === 0 ? 'hoy' : `en ${proxDias} día${proxDias !== 1 ? 's' : ''}`}
+                    </p>
+                  )}
+                </button>
+              )
+            })()}
+
+            {/* Grid de acciones principales */}
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                {id:'pedidos',       label:'Pedidos',         desc:'Historial',              icon:Package,     grad:'from-blue-50 to-blue-50',     iconBg:'bg-blue-100 text-blue-600'},
+                {id:'suscripciones', label:'Suscripciones',   desc:'Entregas automáticas',   icon:Repeat,      grad:'from-violet-50 to-violet-50', iconBg:'bg-violet-100 text-violet-600'},
+                {id:'recetas',       label:'Mis Recetas',     desc:'Prescripciones',         icon:FileText,    grad:'from-teal-50 to-teal-50',     iconBg:'bg-teal-100 text-teal-600'},
+                {id:'pagos',         label:'Métodos de pago', desc:'Tarjetas',               icon:CreditCard,  grad:'from-emerald-50 to-emerald-50',iconBg:'bg-emerald-100 text-emerald-600'},
+              ].map(t => (
+                <button key={t.id} onClick={() => setTab(t.id)}
+                  className={`bg-gradient-to-br ${t.grad} border border-white rounded-2xl p-4 text-left hover:shadow-md transition-all active:scale-[0.98]`}>
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${t.iconBg}`}>
+                    <t.icon className="w-4.5 h-4.5" />
+                  </div>
+                  <p className="font-bold text-gray-900 text-sm leading-tight">{t.label}</p>
+                  <p className="text-[10px] text-gray-400 mt-0.5">{t.desc}</p>
+                </button>
+              ))}
+            </div>
+
+            {/* Fila secundaria */}
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                {id:'perfil',      label:'Mi Perfil',   desc:'Datos personales',  icon:User,        iconBg:'bg-orange-100 text-orange-600'},
+                {id:'direcciones', label:'Direcciones', desc:'Puntos de entrega', icon:MapPin,      iconBg:'bg-pink-100 text-pink-600'},
+              ].map(t => (
+                <button key={t.id} onClick={() => setTab(t.id)}
+                  className="bg-white border border-gray-100 rounded-2xl p-4 text-left hover:border-gray-200 hover:shadow-sm transition-all active:scale-[0.98]">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${t.iconBg}`}>
+                    <t.icon className="w-4.5 h-4.5" />
+                  </div>
+                  <p className="font-bold text-gray-900 text-sm leading-tight">{t.label}</p>
+                  <p className="text-[10px] text-gray-400 mt-0.5">{t.desc}</p>
+                </button>
+              ))}
+            </div>
+
+            {/* Seguridad */}
+            <button onClick={() => setTab('seguridad')}
+              className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-3 hover:border-gray-200 hover:shadow-sm transition-all">
+              <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-4.5 h-4.5" />
               </div>
               <div className="flex-1">
-                <p className="font-bold text-red-500 text-sm">Cerrar sesión</p>
-                <p className="text-xs text-gray-400 mt-0.5">{user.email}</p>
+                <p className="font-bold text-gray-900 text-sm">Seguridad</p>
+                <p className="text-[10px] text-gray-400">Contraseña y autenticación</p>
               </div>
+              <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+            </button>
+
+            <button onClick={cerrarSesion}
+              className="w-full border border-red-100 rounded-2xl p-3.5 flex items-center justify-center gap-2 text-red-500 hover:bg-red-50 transition-all text-sm font-semibold">
+              <LogOut className="w-4 h-4" /> Cerrar sesión
             </button>
           </div>
-        ) : (
-          /* Botón volver al menú */
-          <button onClick={() => setTab('')}
-            className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-800 mb-4 transition-colors">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Menú
-          </button>
-        )}
+        ) : null}
 
         {/* TAB: PEDIDOS */}
         {tab==='pedidos' && (
@@ -710,61 +771,125 @@ export default function CuentaPage() {
 
         {/* TAB: SUSCRIPCIONES */}
         {tab==='suscripciones' && (
-          <div className="space-y-3">
+          <div className="space-y-3 pt-1">
+            {/* Encabezado de sección */}
+            <div className="mb-2">
+              <h2 className="font-black text-gray-900 text-lg">Suscripciones</h2>
+              <p className="text-xs text-gray-400 mt-0.5">Entregas automáticas con descuento garantizado</p>
+            </div>
+
             {suscripciones.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
-                <Repeat className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-                <p className="text-gray-500 font-medium">No tienes suscripciones activas</p>
-                <p className="text-xs text-gray-400 mt-1">Al comprar activa la opción "suscripción" para recibir tus lentes automáticamente</p>
-                <a href="/catalogo" className="mt-4 inline-block bg-primary-600 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors">Ver catálogo</a>
+              <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-10 text-center">
+                <div className="w-14 h-14 bg-violet-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Repeat className="w-7 h-7 text-violet-400" />
+                </div>
+                <p className="font-bold text-gray-800 mb-1">Sin suscripciones aún</p>
+                <p className="text-xs text-gray-400 leading-relaxed max-w-xs mx-auto">
+                  Activa la suscripción al comprar y recibe tus lentes automáticamente con hasta 15% de descuento.
+                </p>
+                <a href="/catalogo"
+                  className="mt-5 inline-flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-primary-700 transition-colors">
+                  Ver catálogo →
+                </a>
               </div>
             ) : suscripciones.map(s => {
               let items: any[] = []
               try { items = typeof s.items === 'string' ? JSON.parse(s.items) : (s.items ?? []) } catch {}
-              const proxDias = s.proximo_envio ? Math.ceil((new Date(s.proximo_envio).getTime() - Date.now()) / (1000*60*60*24)) : null
-              const FREQ: Record<string,string> = { '15_dias':'Cada 15 días', mensual:'Mensual', bimestral:'Bimestral', trimestral:'Trimestral' }
+              const proxDias = s.proximo_envio ? Math.ceil((new Date(s.proximo_envio).getTime() - Date.now()) / 86400000) : null
+              const FREQ: Record<string,string> = { '15_dias':'Cada 15 días', mensual:'Mensual', bimestral:'Bimestral', trimestral:'Cada 3 meses'}
+              const totalBruto = items.reduce((a: number, i: any) => a + (i.precio ?? 0) * (i.cantidad ?? 1), 0)
+              const totalDesc  = Math.round(totalBruto * (1 - (s.descuento_pct ?? 0) / 100))
+              const ahorro     = totalBruto - totalDesc
+              const urgente    = proxDias != null && proxDias <= 3
+
               return (
-                <div key={s.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${s.activa ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                          {s.activa ? 'Activa' : 'Pausada'}
+                <div key={s.id} className={`rounded-2xl border overflow-hidden shadow-sm transition-all ${s.activa ? 'bg-white border-gray-100' : 'bg-gray-50 border-gray-200 opacity-70'}`}>
+
+                  {/* Banda superior de estado */}
+                  <div className={`px-4 py-2 flex items-center justify-between ${s.activa ? 'bg-gradient-to-r from-primary-600 to-emerald-600' : 'bg-gray-200'}`}>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-1.5 h-1.5 rounded-full ${s.activa ? 'bg-white animate-pulse' : 'bg-gray-400'}`} />
+                      <span className="text-xs font-bold text-white/90">
+                        {s.activa ? 'Suscripción activa' : 'Pausada'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded-full">
+                        {FREQ[s.frecuencia] ?? s.frecuencia}
+                      </span>
+                      {s.descuento_pct > 0 && (
+                        <span className="text-[10px] font-bold bg-white text-primary-700 px-2 py-0.5 rounded-full">
+                          -{s.descuento_pct}% OFF
                         </span>
-                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">{FREQ[s.frecuencia] ?? s.frecuencia}</span>
-                        {s.descuento_pct > 0 && <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">-{s.descuento_pct}%</span>}
-                      </div>
+                      )}
                     </div>
                   </div>
-                  <div className="space-y-2 mb-3">
-                    {items.map((item: any, i: number) => (
-                      <div key={i} className="bg-gray-50 rounded-xl p-3">
-                        <p className="font-semibold text-gray-900 text-sm">{item.nombre}</p>
-                        {item.sph != null && (
-                          <p className="text-xs font-mono text-blue-600 mt-0.5">
-                            SPH: {parseFloat(item.sph) > 0 ? '+' : ''}{item.sph}
-                            {item.cyl ? ` · CYL: ${item.cyl}` : ''}
-                            {item.color ? ` · ${item.color}` : ''}
-                            {item.ojo ? ` · ${item.ojo}` : ''}
+
+                  <div className="p-4">
+                    {/* Productos */}
+                    <div className="space-y-2 mb-3">
+                      {items.map((item: any, i: number) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0 text-sm">👁</div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-bold text-gray-900 text-sm leading-tight">{item.nombre}{item.size ? ` · ${item.size}` : ''}</p>
+                            {(item.sph != null || item.ojo) && (
+                              <p className="text-[10px] font-mono text-blue-600 mt-0.5">
+                                {[item.sph!=null?`SPH ${parseFloat(item.sph)>0?'+':''}${item.sph}`:null,item.cyl?`CYL ${item.cyl}`:null,item.ojo].filter(Boolean).join(' · ')}
+                              </p>
+                            )}
+                            {item.color && <p className="text-[10px] text-gray-400 mt-0.5">Color: {item.color}</p>}
+                          </div>
+                          <p className="text-xs font-bold text-gray-700 shrink-0">×{item.cantidad}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Precio + ahorro */}
+                    <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between mb-3">
+                      <div>
+                        <p className="text-xs text-gray-400">Precio por entrega</p>
+                        <div className="flex items-baseline gap-1.5 mt-0.5">
+                          <span className="font-black text-gray-900">RD${totalDesc.toLocaleString()}</span>
+                          {ahorro > 0 && <span className="text-[10px] text-gray-400 line-through">RD${totalBruto.toLocaleString()}</span>}
+                        </div>
+                      </div>
+                      {ahorro > 0 && (
+                        <div className="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1.5 rounded-xl text-right">
+                          <p className="text-[10px] font-medium">Ahorras</p>
+                          <p>RD${ahorro.toLocaleString()}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Próxima entrega */}
+                    {s.proximo_envio && (
+                      <div className={`flex items-center gap-2 rounded-xl px-3 py-2.5 mb-3 ${urgente ? 'bg-amber-50 border border-amber-100' : 'bg-blue-50'}`}>
+                        <Calendar className={`w-3.5 h-3.5 shrink-0 ${urgente ? 'text-amber-600' : 'text-blue-500'}`} />
+                        <div className="flex-1">
+                          <p className={`text-[10px] font-semibold ${urgente ? 'text-amber-600' : 'text-blue-500'}`}>Próxima entrega</p>
+                          <p className={`text-xs font-bold ${urgente ? 'text-amber-800' : 'text-blue-800'}`}>
+                            {new Date(s.proximo_envio).toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}
                           </p>
-                        )}
-                        <p className="text-xs text-gray-400 mt-0.5">Cantidad: {item.cantidad} · RD${(item.precio * item.cantidad).toLocaleString()}</p>
+                        </div>
+                        <span className={`text-[10px] font-black px-2 py-1 rounded-lg ${urgente ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
+                          {proxDias === 0 ? 'Hoy' : proxDias === 1 ? 'Mañana' : `${proxDias} días`}
+                        </span>
                       </div>
-                    ))}
+                    )}
+
+                    {s.direccion_texto && (
+                      <p className="text-[10px] text-gray-400 flex items-center gap-1 mb-3">
+                        <MapPin className="w-3 h-3" />{s.direccion_texto}
+                      </p>
+                    )}
+
+                    {/* Cancelar */}
+                    <button onClick={() => { setCancelandoSub(s); setMotivoCancel('') }}
+                      className="w-full border border-gray-200 text-gray-400 hover:border-red-200 hover:text-red-500 hover:bg-red-50 rounded-xl py-2.5 text-xs font-semibold transition-all flex items-center justify-center gap-1.5">
+                      <X className="w-3.5 h-3.5" /> Cancelar suscripción
+                    </button>
                   </div>
-                  {s.proximo_envio && (
-                    <div className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium mb-2 ${proxDias != null && proxDias <= 3 ? 'bg-red-50 text-red-700' : proxDias != null && proxDias <= 7 ? 'bg-amber-50 text-amber-700' : 'bg-gray-50 text-gray-600'}`}>
-                      <Calendar className="w-3.5 h-3.5" />
-                      Próximo envío: {new Date(s.proximo_envio).toLocaleDateString('es-DO',{day:'numeric',month:'long'})}
-                      {proxDias != null && proxDias >= 0 && <span className="ml-auto font-semibold">{proxDias === 0 ? 'Hoy' : `en ${proxDias} días`}</span>}
-                    </div>
-                  )}
-                  {s.direccion_texto && <p className="text-xs text-gray-400">📍 {s.direccion_texto}</p>}
-                  {/* Botón cancelar */}
-                  <button onClick={() => { setCancelandoSub(s); setMotivoCancel('') }}
-                    className="mt-3 w-full border border-red-200 text-red-500 hover:bg-red-50 rounded-xl py-2.5 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5">
-                    <X className="w-3.5 h-3.5" /> Cancelar suscripción
-                  </button>
                 </div>
               )
             })}
@@ -1051,53 +1176,87 @@ export default function CuentaPage() {
 
         {/* TAB: PAGOS */}
         {tab==='pagos' && (
-          <div className="space-y-3">
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-800">
-              <p className="font-semibold mb-1">Solo guardamos referencia</p>
-              <p>Últimos 4 dígitos y titular. Nunca el número completo.</p>
+          <div className="space-y-3 pt-1">
+            <div className="mb-2">
+              <h2 className="font-black text-gray-900 text-lg">Métodos de pago</h2>
+              <p className="text-xs text-gray-400 mt-0.5">Referencia de tus tarjetas — nunca guardamos el número completo</p>
             </div>
-            {pagos.length===0 && (
-              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
-                <CreditCard className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-                <p className="text-gray-500 font-medium">No tienes tarjetas guardadas</p>
+
+            {/* Security badge */}
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-4 flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-5 h-5 text-green-400" />
+              </div>
+              <div>
+                <p className="text-white font-bold text-sm">Pago 100% seguro</p>
+                <p className="text-gray-400 text-[10px] mt-0.5">Procesado por AZUL · Banco Popular · Cifrado SHA-512</p>
+              </div>
+              <div className="ml-auto flex gap-1">
+                <span className="text-[9px] bg-white/10 text-gray-300 px-1.5 py-0.5 rounded font-bold">VISA</span>
+                <span className="text-[9px] bg-white/10 text-gray-300 px-1.5 py-0.5 rounded font-bold">MC</span>
+              </div>
+            </div>
+
+            {pagos.length===0 && !agregandoPago && (
+              <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-8 text-center">
+                <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <CreditCard className="w-6 h-6 text-gray-300" />
+                </div>
+                <p className="font-bold text-gray-700 text-sm">Sin tarjetas guardadas</p>
+                <p className="text-xs text-gray-400 mt-1">Agrega una referencia para identificar tu tarjeta</p>
               </div>
             )}
+
             {pagos.map(p => (
-              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
-                    <CreditCard className="w-5 h-5 text-white" />
+              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                {/* Card visual */}
+                <div className="bg-gradient-to-r from-gray-900 to-gray-700 px-4 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex gap-0.5">
+                      {[0,1,2,3].map(i => <div key={i} className="w-5 h-1.5 bg-white/30 rounded-full" />)}
+                      <span className="text-white font-bold text-sm ml-2">{p.ultimos4}</span>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">XXXX XXXX XXXX {p.ultimos4}</p>
-                    <p className="text-xs text-gray-400">{p.titular} · Vence {p.vencimiento}</p>
-                  </div>
+                  <button onClick={() => eliminarPago(p.id)} className="text-white/40 hover:text-red-400 transition-colors">
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <button onClick={() => eliminarPago(p.id)} className="text-gray-300 hover:text-red-500 p-1"><Trash2 className="w-4 h-4" /></button>
+                <div className="px-4 py-2.5 flex items-center justify-between">
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">{p.titular}</p>
+                    <p className="text-[10px] text-gray-400">Vence {p.vencimiento}</p>
+                  </div>
+                  <span className="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-lg font-bold">Activa</span>
+                </div>
               </div>
             ))}
+
             {agregandoPago ? (
-              <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
+              <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-5 space-y-3">
+                <p className="font-bold text-gray-900 text-sm mb-1">Agregar referencia de tarjeta</p>
                 <input value={pagoForm.titular} onChange={e => setPagoForm(f => ({...f,titular:e.target.value}))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
                   placeholder="Nombre del titular" />
                 <input value={pagoForm.ultimos4} onChange={e => setPagoForm(f => ({...f,ultimos4:e.target.value.slice(0,4)}))}
                   maxLength={4} inputMode="numeric"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-mono tracking-widest"
                   placeholder="Últimos 4 dígitos" />
                 <input value={pagoForm.vencimiento} onChange={e => setPagoForm(f => ({...f,vencimiento:e.target.value}))}
                   maxLength={5}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
                   placeholder="MM/AA" />
-                <div className="flex gap-2">
-                  <button onClick={guardarPago} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar</button>
-                  <button onClick={() => setAgregandoPago(false)} className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
+                <div className="flex gap-2 pt-1">
+                  <button onClick={guardarPago} className="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-xl text-sm font-bold transition-colors">Guardar</button>
+                  <button onClick={() => setAgregandoPago(false)} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 py-3 rounded-xl text-sm font-semibold transition-colors">Cancelar</button>
                 </div>
               </div>
             ) : (
               <button onClick={() => setAgregandoPago(true)}
-                className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors">
-                <Plus className="w-5 h-5" /> Agregar tarjeta
+                className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2.5 text-gray-400 hover:border-primary-300 hover:text-primary-600 transition-all group">
+                <div className="w-6 h-6 rounded-lg bg-gray-100 group-hover:bg-primary-100 flex items-center justify-center transition-colors">
+                  <Plus className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-sm font-semibold">Agregar tarjeta</span>
               </button>
             )}
           </div>

@@ -653,10 +653,18 @@ export default function CheckoutPage() {
 
             {/* RIGHT — resumen sticky */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl border-2 border-gray-100 sticky top-20 overflow-hidden">
-                <div className="p-5 border-b border-gray-50 bg-gray-50">
-                  <p className="font-black text-gray-900 text-sm">Resumen del pedido</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{items.length} {items.length===1?'producto':'productos'}</p>
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm sticky top-20 overflow-hidden">
+                {/* Header */}
+                <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                  <div>
+                    <p className="font-black text-gray-900 text-sm">Resumen del pedido</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{items.length} {items.length===1?'producto':'productos'}</p>
+                  </div>
+                  {items.some(i => (i as any).suscripcion) && (
+                    <span className="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold flex items-center gap-1">
+                      🔄 Con suscripción
+                    </span>
+                  )}
                 </div>
 
                 {/* Items */}
@@ -750,7 +758,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Totales */}
-                <div className="p-4 space-y-2">
+                <div className="p-4 space-y-1.5">
                   {/* Descuento por suscripción */}
                   {items.some(i => (i as any).suscripcion) && (() => {
                     const ahorro = items.reduce((acc, i) => {
@@ -760,40 +768,53 @@ export default function CheckoutPage() {
                       return acc + (orig - fin) * i.cantidad
                     }, 0)
                     return ahorro > 0 ? (
-                      <div className="flex justify-between text-xs text-green-700 font-bold bg-green-50 rounded-lg px-2 py-1.5">
-                        <span>🔄 Descuento suscripción</span>
-                        <span>−RD${Math.round(ahorro).toLocaleString()}</span>
+                      <div className="flex justify-between text-xs font-bold mb-2 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-xl px-3 py-2">
+                        <span className="text-green-700 flex items-center gap-1">🔄 Ahorro suscripción</span>
+                        <span className="text-green-700">−RD${Math.round(ahorro).toLocaleString()}</span>
                       </div>
                     ) : null
                   })()}
+
                   <div className="flex justify-between text-sm text-gray-500">
-                    <span>Subtotal</span><span>RD${sub.toLocaleString()}</span>
+                    <span>Subtotal</span>
+                    <span className="font-medium text-gray-700">RD${sub.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>Envío</span>
-                    <span className={envio===0 ? 'text-green-600 font-semibold' : ''}>
-                      {envio===0 ? '🎁 Gratis' : `RD$${envio}`}
+                    <span className={envio===0 ? 'text-green-600 font-bold' : 'font-medium text-gray-700'}>
+                      {envio===0 ? '✓ Gratis' : `RD$${envio}`}
                     </span>
                   </div>
                   {descuento > 0 && (
                     <div className="flex justify-between text-sm text-green-600 font-bold">
-                      <span>Descuento</span><span>-RD${descuento.toLocaleString()}</span>
+                      <span>Cupón</span><span>−RD${descuento.toLocaleString()}</span>
                     </div>
                   )}
-                  {/* ITBIS desglose — precio incluye 18% */}
-                  <div className="flex justify-between text-xs text-gray-400 border-t border-dashed border-gray-100 pt-2">
+                  <div className="flex justify-between text-[11px] text-gray-400 pt-1 border-t border-dashed border-gray-100">
                     <span>ITBIS incluido (18%)</span>
                     <span>RD${Math.round((sub - descuento) * 18 / 118).toLocaleString()}</span>
                   </div>
-                  <div className="pt-1 flex justify-between">
+
+                  {/* Total destacado */}
+                  <div className="bg-gray-50 rounded-xl px-3 py-3 flex justify-between items-center mt-1">
                     <span className="font-black text-gray-900">Total</span>
-                    <span className="font-black text-xl text-primary-600">RD${totalFinal.toLocaleString()}</span>
+                    <span className="font-black text-2xl text-primary-600">RD${totalFinal.toLocaleString()}</span>
                   </div>
-                  {envio > 0 && (
-                    <div className="bg-amber-50 rounded-lg px-3 py-2 text-[10px] text-amber-700 text-center">
+
+                  {envio > 0 && sub > 0 && (
+                    <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2 text-[10px] text-amber-700 text-center font-medium">
                       Agrega <strong>RD${(8000-sub).toLocaleString()}</strong> más para envío gratis 🚀
                     </div>
                   )}
+
+                  {/* Trust badges */}
+                  <div className="flex items-center justify-center gap-3 pt-2 border-t border-gray-50">
+                    <span className="text-[9px] text-gray-400 flex items-center gap-1">🔒 SSL</span>
+                    <span className="text-[9px] text-gray-400">·</span>
+                    <span className="text-[9px] text-gray-400 flex items-center gap-1">🏦 AZUL</span>
+                    <span className="text-[9px] text-gray-400">·</span>
+                    <span className="text-[9px] text-gray-400 flex items-center gap-1">✓ 3D Secure</span>
+                  </div>
                 </div>
               </div>
             </div>
