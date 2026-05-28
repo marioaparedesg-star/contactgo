@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Plus, Tag, Trash2, X, Check, Copy } from 'lucide-react'
@@ -18,6 +19,7 @@ interface Cupon {
 
 export default function CuponesPage() {
   const sb = createClient()
+  
   const [cupones, setCupones] = useState<Cupon[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)

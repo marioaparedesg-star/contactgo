@@ -1,10 +1,12 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Search, Users, ShoppingBag, Mail, Phone, X, ChevronRight, Calendar, TrendingUp } from 'lucide-react'
 
 export default function ClientesPage() {
   const sb = createClient()
+  
   const [clientes, setClientes]   = useState<any[]>([])
   const [pedidos,  setPedidos]    = useState<Record<string,any[]>>({})
   const [selected, setSelected]   = useState<any>(null)

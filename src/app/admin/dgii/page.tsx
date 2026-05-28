@@ -1,13 +1,14 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { FileText, Download, Plus, Trash2, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const sb = createClient()
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 
 export default function AdminDGII() {
+  const sb = createClient()
   const now   = new Date()
   const [mes,  setMes]    = useState(`${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}`)
   const [datos,setDatos]  = useState<any>(null)

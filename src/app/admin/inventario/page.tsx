@@ -1,11 +1,11 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Search, Save, ChevronDown, ChevronRight, Package, Eye, EyeOff,
          History, Download, Archive, ArchiveRestore, AlertTriangle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const sb = createClient()
 
 type Producto = {
   id:string; nombre:string; tipo:string; marca:string
@@ -24,6 +24,7 @@ const TIPO_META: Record<string,{label:string;color:string;bg:string}> = {
 }
 
 export default function InventarioPage() {
+  const sb = createClient()
   const [productos,  setProductos]  = useState<Producto[]>([])
   const [inventario, setInventario] = useState<Record<string,InvItem[]>>({})
   const [expandido,  setExpandido]  = useState<string|null>(null)

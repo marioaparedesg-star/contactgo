@@ -1,11 +1,12 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { TrendingUp, ShoppingBag, Users, DollarSign, RefreshCw, CreditCard, Truck } from 'lucide-react'
 
-const sb = createClient()
 
 export default function ReportesPage() {
+  const sb = createClient()
   const [kpis, setKpis]       = useState<any>(null)
   const [top,  setTop]        = useState<any[]>([])
   const [recent, setRecent]   = useState<any[]>([])

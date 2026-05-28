@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { X, MessageCircle, Pause, Play, XCircle, ChevronDown, ChevronUp, Repeat, Calendar, Phone, MapPin } from 'lucide-react'
@@ -26,6 +27,7 @@ function parseItems(raw: any): any[] {
 
 export default function SuscripcionesPage() {
   const sb = createClient()
+  
   const [subs, setSubs] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [filtro, setFiltro] = useState('todas')

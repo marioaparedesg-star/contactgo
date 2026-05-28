@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -8,7 +9,6 @@ import {
   ArrowRight, AlertTriangle
 } from 'lucide-react'
 
-const sb = createClient()
 
 const ESTADO_COLOR: Record<string,string> = {
   pendiente:  'bg-amber-100 text-amber-700',
@@ -20,6 +20,7 @@ const ESTADO_COLOR: Record<string,string> = {
 }
 
 export default function AdminDashboard() {
+  const sb = createClient()
   const router = useRouter()
   const [data, setData]       = useState<any>(null)
   const [recent, setRecent]   = useState<any[]>([])

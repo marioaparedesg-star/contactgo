@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Search, X, Printer, MessageCircle, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation } from 'lucide-react'
@@ -16,6 +17,7 @@ const ESTADO_ICON: Record<string,any> = {
 
 export default function PedidosPage() {
   const sb = createClient()
+  
   const [pedidos, setPedidos] = useState<any[]>([])
   const [items, setItems] = useState<Record<string,any[]>>({})
   const [selected, setSelected] = useState<any>(null)
