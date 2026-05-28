@@ -10,6 +10,7 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { useCartStore } from '@/lib/cart-store'
+import { trackEcommerce } from '@/lib/analytics'
 import type { Product } from '@/types'
 import toast from 'react-hot-toast'
 import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
@@ -150,6 +151,20 @@ export default function ProductoClient({ product, variants }: Props) {
   const isToric    = tipo === 'torico'
   const isMulti    = tipo === 'multifocal'
 
+  // ── Analytics: view_item al cargar el producto ──────────────────────────
+  useEffect(() => {
+    trackEcommerce('view_item', {
+      items: [{
+        item_id:       product.id,
+        item_name:     product.nombre,
+        item_brand:    product.marca ?? '',
+        item_category: product.tipo  ?? '',
+        price:         product.precio ?? 0,
+        quantity:      1,
+      }],
+    })
+  }, [product.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     let base = product.precio
     if (size) {
@@ -204,6 +219,18 @@ export default function ProductoClient({ product, variants }: Props) {
     }
 
     toast.success(eye === 'AMBOS' && isLente && !isColor ? 'Agregado para ambos ojos ✓' : 'Agregado al carrito ✓')
+    // Analytics: add_to_cart
+    trackEcommerce('add_to_cart', {
+      items: [{
+        item_id:       product.id,
+        item_name:     product.nombre,
+        item_brand:    product.marca ?? '',
+        item_category: product.tipo  ?? '',
+        price,
+        quantity:      qty,
+      }],
+      value: price * qty,
+    })
     return true
   }
 
@@ -225,10 +252,14 @@ export default function ProductoClient({ product, variants }: Props) {
         <div className="grid md:grid-cols-[1fr_1.1fr] gap-6 lg:gap-12 xl:gap-16 items-start">
           {/* Imagen — sticky en desktop */}
           <div className="md:sticky md:top-20">
-            <div className="rounded-2xl overflow-hidden bg-white border border-gray-100 aspect-square flex items-center justify-center shadow-sm">
+            <div className="group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 aspect-square flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-300 relative">
+              {/* Badge original */}
+              <span className="absolute top-3 right-3 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full z-10 flex items-center gap-1 leading-none">
+                ✓ 100% Original
+              </span>
               {product.imagen_url ? (
-                <Image src={product.imagen_url} alt={product.nombre} width={420} height={420}
-                  className="object-contain p-10" priority unoptimized />
+                <Image src={product.imagen_url} alt={product.nombre} width={480} height={480}
+                  className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-out" priority unoptimized />
               ) : (
                 <Eye className="w-20 h-20 text-gray-200" />
               )}
@@ -272,13 +303,20 @@ export default function ProductoClient({ product, variants }: Props) {
                   {product.contenido && `${product.contenido} · `}{product.reemplazo}
                 </p>
               </div>
-              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-                product.stock === 0 ? 'bg-red-100 text-red-600' :
-                product.stock <= 5 ? 'bg-orange-100 text-orange-600' :
-                'bg-green-100 text-green-700'
-              }`}>
-                {product.stock === 0 ? 'Sin stock' : product.stock <= 5 ? `¡Solo ${product.stock} en stock!` : 'En stock ✓'}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-bold px-2.5 py-1.5 rounded-full flex items-center gap-1.5 ${
+                  product.stock === 0   ? 'bg-red-50 text-red-600 border border-red-100' :
+                  product.stock <= 3    ? 'bg-red-50 text-red-600 border border-red-100 animate-pulse' :
+                  product.stock <= 8    ? 'bg-orange-50 text-orange-600 border border-orange-100' :
+                  'bg-green-50 text-green-700 border border-green-100'
+                }`}>
+                  <span className="w-1.5 h-1.5 rounded-full inline-block bg-current opacity-70" />
+                  {product.stock === 0  ? 'Sin stock' :
+                   product.stock <= 3   ? `¡Últimas ${product.stock} unidades!` :
+                   product.stock <= 8   ? `Pocas unidades — ${product.stock} disponibles` :
+                   'En stock · Envío hoy'}
+                </span>
+              </div>
             </div>
 
             {/* Aviso entrega tóricos */}
@@ -462,7 +500,15 @@ export default function ProductoClient({ product, variants }: Props) {
 
             <SuscripcionSelector
               value={suscripcion}
-              onChange={setSuscripcion}
+              onChange={(val, descPct) => {
+                setSuscripcion(val)
+                // Analytics: subscription_selected
+                if (val) {
+                  import('@/lib/analytics').then(({ trackSubscriptionSelected }) => {
+                    trackSubscriptionSelected(product.id, product.nombre, val, descPct ?? 0, price)
+                  })
+                }
+              }}
               precio={product.precio}
               tipo={tipo}
             />

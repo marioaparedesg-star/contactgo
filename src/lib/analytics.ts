@@ -79,3 +79,38 @@ export function trackSearch(term: string, results: number) {
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({ event: 'search', search_term: term, results_count: results })
 }
+
+// Evento de suscripción seleccionada
+export function trackSubscriptionSelected(
+  productId: string,
+  productName: string,
+  frecuencia: string,
+  descuentoPct: number,
+  precio: number
+) {
+  if (typeof window === 'undefined') return
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({
+    event: 'subscription_selected',
+    subscription_frequency: frecuencia,
+    subscription_discount_pct: descuentoPct,
+    ecommerce: {
+      currency: 'DOP',
+      value: precio,
+      items: [{
+        item_id: productId,
+        item_name: productName,
+        item_variant: `suscripcion_${frecuencia}`,
+        discount: descuentoPct,
+        price: precio,
+        quantity: 1,
+      }],
+    },
+  })
+  if (window.fbq) {
+    window.fbq('trackCustom', 'SubscriptionSelected', {
+      frequency: frecuencia,
+      discount_pct: descuentoPct,
+    })
+  }
+}
