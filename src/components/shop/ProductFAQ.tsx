@@ -50,23 +50,36 @@ const FAQS_GENERAL = [
 export default function ProductFAQ({ tipo, nombre }: { tipo: string; nombre: string }) {
   const [open, setOpen] = useState<number | null>(null)
   const faqs = [...(FAQS_BY_TYPE[tipo] ?? []), ...FAQS_GENERAL]
+  if (!faqs.length) return null
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-8 border-t border-gray-100">
-      <h3 className="font-display text-lg md:text-xl font-bold text-gray-900 mb-4">
-        Preguntas frecuentes sobre {nombre}
-      </h3>
+    <section className="max-w-6xl mx-auto px-4 pb-10 border-t border-gray-100 pt-10">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-8 h-8 rounded-xl bg-primary-100 flex items-center justify-center shrink-0">
+          <span className="text-sm">❓</span>
+        </div>
+        <div>
+          <h3 className="font-bold text-gray-900 text-lg">Preguntas frecuentes</h3>
+          <p className="text-xs text-gray-400">Sobre {nombre}</p>
+        </div>
+      </div>
       <div className="space-y-2">
         {faqs.map((faq, i) => (
-          <div key={i} className="border border-gray-100 rounded-2xl overflow-hidden bg-white">
+          <div key={i}
+            className={`border rounded-2xl overflow-hidden transition-colors ${open === i ? 'border-primary-200 bg-primary-50/30' : 'border-gray-100 bg-white hover:border-gray-200'}`}>
             <button
               onClick={() => setOpen(open === i ? null : i)}
-              className="w-full flex items-center justify-between p-4 text-left font-semibold text-gray-900 text-sm hover:bg-gray-50 transition-colors">
-              {faq.q}
-              <ChevronRight className={`w-4 h-4 text-gray-400 shrink-0 ml-2 transition-transform ${open === i ? 'rotate-90' : ''}`} />
+              className="w-full flex items-center justify-between px-5 py-4 text-left gap-3">
+              <span className={`font-semibold text-sm leading-snug transition-colors ${open === i ? 'text-primary-700' : 'text-gray-900'}`}>
+                {faq.q}
+              </span>
+              <ChevronRight className={`w-4 h-4 shrink-0 transition-all duration-200 ${open === i ? 'rotate-90 text-primary-500' : 'text-gray-300'}`} />
             </button>
             {open === i && (
-              <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+              <div className="px-5 pb-5">
+                <div className="w-full h-px bg-primary-100 mb-3" />
+                <p className="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+              </div>
             )}
           </div>
         ))}

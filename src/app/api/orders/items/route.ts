@@ -24,10 +24,12 @@ export async function POST(req: NextRequest) {
 
     const payload = items.map((i: any) => ({
       order_id,
-      product_id: i.product_id,
-      nombre:     i.nombre,
-      precio:     Number(i.precio),
-      cantidad:   Number(i.cantidad),
+      product_id:      i.product_id,
+      nombre:          i.nombre,
+      precio:          Number(i.precio),
+      precio_original: i.precio_original != null ? Number(i.precio_original) : Number(i.precio),
+      descuento_pct:   i.descuento_pct   != null ? Number(i.descuento_pct)   : 0,
+      cantidad:        Number(i.cantidad),
       // subtotal es columna GENERADA en Postgres (precio * cantidad) — NO insertar
       sph:        i.sph        != null ? Number(i.sph)        : null,
       cyl:        i.cyl        != null ? Number(i.cyl)        : null,
@@ -36,6 +38,7 @@ export async function POST(req: NextRequest) {
       color:      i.color      ?? null,
       ojo:        i.ojo        ?? null,
       size:       i.size       ?? null,
+      suscripcion: i.suscripcion ?? null,
     }))
 
     const { error } = await sb.from('order_items').insert(payload)

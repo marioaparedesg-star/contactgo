@@ -222,7 +222,7 @@ export default function ProductoClient({ product, variants }: Props) {
           <span className="text-gray-600 font-medium truncate max-w-xs">{product.nombre}</span>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-10 items-start">
+        <div className="grid md:grid-cols-[1fr_1.1fr] gap-6 lg:gap-12 xl:gap-16 items-start">
           {/* Imagen — sticky en desktop */}
           <div className="md:sticky md:top-20">
             <div className="rounded-2xl overflow-hidden bg-white border border-gray-100 aspect-square flex items-center justify-center shadow-sm">
@@ -440,20 +440,20 @@ export default function ProductoClient({ product, variants }: Props) {
             )}
 
             {product.curva_base && (
-              <div className="border border-gray-100 rounded-xl overflow-hidden">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-4 py-2 bg-gray-50">
-                  Especificaciones técnicas
+              <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4 py-3 border-b border-gray-100">
+                  Especificaciones
                 </p>
-                <div className="divide-y divide-gray-50">
+                <div className="grid grid-cols-2 gap-px bg-gray-100">
                   {[
-                    ['Curva base', product.curva_base],
-                    ['Diámetro',   product.diametro && product.diametro + ' mm'],
-                    ['Reemplazo',  product.reemplazo],
-                    ['Contenido',  product.contenido],
+                    ['📐 Curva base', product.curva_base],
+                    ['⭕ Diámetro',   product.diametro && product.diametro + ' mm'],
+                    ['🔄 Reemplazo',  product.reemplazo],
+                    ['📦 Contenido',  product.contenido],
                   ].filter(([,v]) => v).map(([k,v]) => (
-                    <div key={String(k)} className="flex justify-between px-4 py-2.5">
-                      <span className="text-xs text-gray-500">{k}</span>
-                      <span className="text-xs font-semibold text-gray-900">{v}</span>
+                    <div key={String(k)} className="bg-white px-4 py-3">
+                      <p className="text-[10px] text-gray-400 font-medium">{String(k).replace(/^[^ ]+ /,'')}</p>
+                      <p className="text-sm font-bold text-gray-900 mt-0.5">{v}</p>
                     </div>
                   ))}
                 </div>
@@ -476,16 +476,41 @@ export default function ProductoClient({ product, variants }: Props) {
 
 
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
+              {/* Precio resumen antes de CTA */}
+              <div className="flex items-baseline gap-3">
+                <span className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</span>
+                {suscripcion && precioBase > price && (
+                  <>
+                    <span className="text-base text-gray-400 line-through">RD${precioBase.toLocaleString()}</span>
+                    <span className="text-xs font-black text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                      -{Math.round((1 - price/precioBase)*100)}% OFF
+                    </span>
+                  </>
+                )}
+              </div>
               <button onClick={handleBuyNow} disabled={product.stock === 0}
-                className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-md shadow-primary-200 disabled:opacity-40 disabled:cursor-not-allowed">
-                {product.stock === 0 ? 'Sin stock' : <>Comprar ahora · RD${price.toLocaleString()} →</>}
+                className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-primary-200/60 disabled:opacity-40 disabled:cursor-not-allowed">
+                {product.stock === 0 ? '— Sin stock —' : (
+                  <span className="flex items-center gap-2">
+                    Comprar ahora
+                    <span className="opacity-80 text-sm font-bold">→</span>
+                  </span>
+                )}
               </button>
               <button onClick={handleAdd} disabled={product.stock === 0}
-                className="w-full bg-white border-2 border-primary-600 hover:bg-primary-50 active:scale-[0.99] text-primary-600 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                className="w-full bg-white border-2 border-gray-200 hover:border-primary-400 hover:bg-primary-50 active:scale-[0.98] text-gray-700 hover:text-primary-700 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-40 disabled:cursor-not-allowed">
                 <ShoppingCart className="w-4 h-4" />
                 Agregar al carrito
               </button>
+              {/* Trust micro-badges */}
+              <div className="flex items-center justify-center gap-4 pt-1">
+                <span className="text-[10px] text-gray-400 flex items-center gap-1">🔒 Pago seguro</span>
+                <span className="text-[10px] text-gray-400">·</span>
+                <span className="text-[10px] text-gray-400 flex items-center gap-1">🚀 Envío RD</span>
+                <span className="text-[10px] text-gray-400">·</span>
+                <span className="text-[10px] text-gray-400 flex items-center gap-1">↩ Devoluciones</span>
+              </div>
             </div>
           </div>
         </div>
