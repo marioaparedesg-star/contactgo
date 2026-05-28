@@ -1,5 +1,5 @@
 'use client'
-import { descuentoPct, labelFrecuencia, proxEnvio } from '@/lib/subscription-utils'
+import { descuentoPct, labelFrecuencia, labelDescuento, proxEnvio } from '@/lib/subscription-utils'
 import { trackEcommerce } from '@/lib/analytics'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -684,7 +684,24 @@ export default function CheckoutPage() {
                           {(item as any).axis && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">{(item as any).axis}°</span>}
                           {(item as any).add_power && <span className="text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded font-mono font-bold">ADD {(item as any).add_power}</span>}
                           {(item as any).color && <span className="text-[9px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded font-bold">{(item as any).color}</span>}
+                          {/* Tamaño / variante */}
+                          {(item as any).size && (
+                            <span className="text-[9px] bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded font-bold">
+                              📦 {(item as any).size}
+                            </span>
+                          )}
                         </div>
+                        {/* Suscripción */}
+                        {(item as any).suscripcion && (
+                          <div className="mt-1 bg-green-50 border border-green-100 rounded-lg px-2 py-1">
+                            <p className="text-[9px] font-black text-green-700 leading-tight">
+                              🔄 Suscripción · {labelFrecuencia((item as any).suscripcion)}
+                            </p>
+                            <p className="text-[9px] text-green-600 leading-tight">
+                              {labelDescuento((item as any).suscripcion)} · Cancela cuando quieras
+                            </p>
+                          </div>
+                        )}
                         <div className="flex justify-between items-center mt-1.5">
                           <div className="flex items-center gap-1">
                             <button onClick={() => updateItem(idx, Math.max(1, item.cantidad - 1))}
@@ -693,7 +710,18 @@ export default function CheckoutPage() {
                             <button onClick={() => updateItem(idx, item.cantidad + 1)}
                               className="w-5 h-5 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs transition-colors">+</button>
                           </div>
-                          <span className="text-xs font-bold text-gray-900">RD${(Number((item as any).precio_final ?? item.product.precio)*item.cantidad).toLocaleString()}</span>
+                          <div className="text-right">
+                            {/* Precio original tachado si hay descuento */}
+                            {(item as any).suscripcion && (item as any).precio_original &&
+                             (item as any).precio_original > (item as any).precio_final && (
+                              <p className="text-[9px] text-gray-400 line-through leading-none">
+                                RD${((item as any).precio_original * item.cantidad).toLocaleString()}
+                              </p>
+                            )}
+                            <span className="text-xs font-bold text-gray-900">
+                              RD${(Number((item as any).precio_final ?? item.product.precio)*item.cantidad).toLocaleString()}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -723,6 +751,21 @@ export default function CheckoutPage() {
 
                 {/* Totales */}
                 <div className="p-4 space-y-2">
+                  {/* Descuento por suscripción */}
+                  {items.some(i => (i as any).suscripcion) && (() => {
+                    const ahorro = items.reduce((acc, i) => {
+                      if (!(i as any).suscripcion) return acc
+                      const orig = (i as any).precio_original ?? i.product.precio
+                      const fin  = (i as any).precio_final    ?? i.product.precio
+                      return acc + (orig - fin) * i.cantidad
+                    }, 0)
+                    return ahorro > 0 ? (
+                      <div className="flex justify-between text-xs text-green-700 font-bold bg-green-50 rounded-lg px-2 py-1.5">
+                        <span>🔄 Descuento suscripción</span>
+                        <span>−RD${Math.round(ahorro).toLocaleString()}</span>
+                      </div>
+                    ) : null
+                  })()}
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>Subtotal</span><span>RD${sub.toLocaleString()}</span>
                   </div>
