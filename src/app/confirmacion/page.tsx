@@ -342,7 +342,7 @@ function ConfirmacionContent() {
             <Package className="w-5 h-5" /> Seguir mi pedido
           </Link>
           {orderId && (
-            <a href={`/recibo?orden=${orderId}`} target="_blank" rel="noopener noreferrer"
+            <a href={order?.public_token ? `/recibo?token=${order.public_token}` : `/recibo?orden=${orderId}`} target="_blank" rel="noopener noreferrer"
               className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm">
               🖨️ Ver comprobante de pago
             </a>

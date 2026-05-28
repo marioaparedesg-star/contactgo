@@ -205,7 +205,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
 
   <!-- BOTONES CTA -->
   <tr><td style="padding:20px 32px;text-align:center;">
-    <a href="${BASE_URL}/recibo?orden=${order.id}" 
+    <a href="${BASE_URL}/recibo?token=${order.public_token}" 
        style="display:inline-block;background:#0d6efd;color:#fff;text-decoration:none;font-weight:700;font-size:13px;padding:11px 24px;border-radius:8px;margin:0 6px 8px;">
       🧾 Ver comprobante completo
     </a>
