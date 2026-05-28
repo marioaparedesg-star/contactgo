@@ -1,5 +1,6 @@
 'use client'
 import { labelFrecuencia, labelDescuento } from '@/lib/subscription-utils'
+import { trackEcommerce } from '@/lib/analytics'
 import { fmtSph, fmtReceta } from '@/lib/sph-utils'
 import { useCartStore } from '@/lib/cart-store'
 import Navbar from '@/components/ui/Navbar'
@@ -91,7 +92,12 @@ export default function CartPage() {
                         )}
                         <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
                       </div>
-                      <button onClick={() => removeItem(item.product.id, item.sph)}
+                      <button onClick={() => {
+                        trackEcommerce('remove_from_cart', {
+                          items: [{ item_id: item.product.id, item_name: item.product.nombre, price: (item as any).precio_final ?? item.product.precio, quantity: item.cantidad }],
+                        })
+                        removeItem(item.product.id, item.sph)
+                      }}
                         className="text-gray-300 hover:text-red-500 transition-colors p-1 shrink-0">
                         <Trash2 className="w-4 h-4" />
                       </button>

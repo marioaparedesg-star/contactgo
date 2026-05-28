@@ -12,8 +12,37 @@ export const metadata: Metadata = {
 }
 
 export default function AutorPage() {
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Equipo Editorial ContactGo",
+    "url": "https://www.contactgo.net/autor/equipo-contactgo",
+    "description": "Especialistas en salud ocular y lentes de contacto con experiencia en República Dominicana.",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "ContactGo",
+      "url": "https://www.contactgo.net"
+    },
+    "knowsAbout": [
+      "Lentes de contacto",
+      "Salud ocular",
+      "Optometría",
+      "Astigmatismo",
+      "Lentes multifocales",
+      "Prescripción óptica"
+    ],
+    "hasCredential": {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "Especialización en Optometría y Contactología"
+    }
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
       <Navbar />
       <main id="main-content" className="max-w-2xl mx-auto px-4 py-12 pb-24">
         <div className="mb-6">

@@ -99,6 +99,17 @@ function ReciboContent() {
       setOrder(orderData)
       setItems(its ?? [])
       setLoading(false)
+      // Analytics: receipt_viewed
+      if (typeof window !== 'undefined') {
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: 'receipt_viewed',
+          order_id: orderData.id,
+          numero_orden: orderData.numero_orden,
+          pago_estado: orderData.pago_estado,
+          via_token: Boolean(token),
+        })
+      }
     }
 
     load()
