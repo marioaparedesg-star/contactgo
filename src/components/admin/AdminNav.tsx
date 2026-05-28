@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingBag, Package, Users, BarChart2,
   Repeat, ShoppingCart, TrendingUp, Tag, Settings, ChevronLeft,
-  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText
+  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText, Scan
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -24,6 +24,7 @@ const NAV_SECTIONS = [
     items: [
       { href: '/admin/productos',     icon: Package,         label: 'Productos',      badge: null },
       { href: '/admin/inventario',    icon: BarChart2,       label: 'Inventario',     badge: 'stock' },
+      { href: '/admin/inventario/escaner', icon: Scan,         label: '⚡ Escáner',      badge: null },
       { href: '/admin/cupones',       icon: Tag,             label: 'Cupones',        badge: null },
     ]
   },

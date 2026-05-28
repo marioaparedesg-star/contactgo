@@ -224,6 +224,12 @@ export default function InventarioPage() {
             {soloProblemas?<EyeOff className="w-3.5 h-3.5"/>:<Eye className="w-3.5 h-3.5"/>}
             Problemas
           </button>
+          {/* ⚡ Escáner */}
+          <Link href="/admin/inventario/escaner"
+            className="flex items-center gap-1.5 text-xs font-black px-3 py-2 rounded-xl bg-gray-900 hover:bg-gray-700 text-white transition-colors">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m0 14v1M4 12h1m14 0h1m-2.222-6.364-.707.707M6.929 17.071l-.707.707m0-11.314.707.707m10.606 10.606.707.707M9 12a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z"/></svg>
+            Escáner
+          </Link>
         </div>
       </div>
 
