@@ -68,7 +68,7 @@ export default function PedidosPage() {
     <p><b>Email:</b> ${selected.cliente_email??'—'} | <b>Dirección:</b> ${selected.direccion_texto??'—'}</p>
     <p><b>Pago:</b> ${selected.metodo_pago?.replace('_',' ')} | <b>Estado pago:</b> ${selected.pago_estado} ${selected.ncf?`| <b>NCF:</b> ${selected.ncf}`:''}</p>
     <table><tr><th>Producto</th><th>Receta</th><th>Cant.</th><th>Precio</th></tr>
-    ${its.map((i:any)=>`<tr><td>${i.nombre}</td><td>${[i.sph!=null?`SPH ${Number(i.sph)>0?'+':''}${Number(i.sph)>0?Number(i.sph).toFixed(2):i.sph}`:null,i.cyl?`CYL ${i.cyl}`:null,i.axis?`${i.axis}°`:null].filter(Boolean).join(' ')}</td><td>${i.cantidad}</td><td>RD$${i.precio?.toLocaleString()}</td></tr>`).join('')}
+    ${its.map((i:any)=>`<tr><td>${i.nombre}${i.size?` (${i.size})`:''}${i.suscripcion?` 🔄${({'15_dias':'15d','mensual':'Mensual','trimestral':'3m'} as any)[i.suscripcion]||i.suscripcion}`:''}</td><td>${[i.sph!=null?`SPH ${Number(i.sph)>0?'+':''}${Number(i.sph)>0?Number(i.sph).toFixed(2):i.sph}`:null,i.cyl?`CYL ${i.cyl}`:null,i.axis?`${i.axis}°`:null].filter(Boolean).join(' ')}</td><td>${i.cantidad}</td><td>RD$${i.precio?.toLocaleString()}${i.precio_original&&i.precio_original>i.precio?` <s>RD$${i.precio_original?.toLocaleString()}</s>`:''}</td></tr>`).join('')}
     <tr><td colspan="3" style="text-align:right" class="total">Total</td><td class="total">RD$${selected.total?.toLocaleString()}</td></tr></table>
     <script>window.print();window.close();</script></body></html>`
     const w = window.open('','_blank'); w?.document.write(html); w?.document.close()

@@ -1,4 +1,5 @@
 'use client'
+import { descuentoPct, labelFrecuencia, proxEnvio } from '@/lib/subscription-utils'
 import { trackEcommerce } from '@/lib/analytics'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -161,17 +162,70 @@ export default function CheckoutPage() {
       // 2. Guardar items — crítico: verificar que se guardan
       const itemsRes = await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ order_id: order.id, items: items.map(i => ({
-          order_id: order.id, product_id: i.product.id, nombre: i.product.nombre,
-          precio: Number((i as any).precio_final ?? i.product.precio), cantidad: i.cantidad,
-          sph: i.sph != null ? Number(i.sph) : null, cyl: i.cyl != null ? Number(i.cyl) : null,
-          add_power: i.add_power ? parseFloat(String(i.add_power).replace('+','')) : null,
-          axis: (i as any).axis != null ? Number((i as any).axis) : null,
-          color: (i as any).color ?? null, ojo: (i as any).ojo ?? null,
+          order_id:        order.id,
+          product_id:      i.product.id,
+          nombre:          i.product.nombre,
+          precio:          Number((i as any).precio_final  ?? i.product.precio),
+          precio_original: Number((i as any).precio_original ?? i.product.precio),
+          descuento_pct:   descuentoPct((i as any).suscripcion ?? null),
+          cantidad:        i.cantidad,
+          sph:     i.sph != null              ? Number(i.sph)                                 : null,
+          cyl:     i.cyl != null              ? Number(i.cyl)                                 : null,
+          add_power: i.add_power              ? parseFloat(String(i.add_power).replace('+','')) : null,
+          axis:    (i as any).axis != null    ? Number((i as any).axis)                       : null,
+          color:   (i as any).color           ?? null,
+          ojo:     (i as any).ojo             ?? null,
+          size:    (i as any).size            ?? null,
+          suscripcion: (i as any).suscripcion ?? null,
         })) }) })
       if (!itemsRes.ok) {
         const itemsErr = await itemsRes.text().catch(() => 'unknown')
         console.error('[checkout] order_items FAILED:', itemsErr)
         // No bloqueamos el pago, pero lo logueamos
+      }
+
+      // 2b. Crear registro de suscripción si algún item tiene frecuencia
+      const itemsConSubs = items.filter(i => (i as any).suscripcion)
+      if (itemsConSubs.length > 0 && user?.id) {
+        // Agrupa por frecuencia (puede haber ítems con distintas frecuencias)
+        const frecuenciasPorItem = itemsConSubs.map(i => ({
+          frecuencia:  (i as any).suscripcion as string,
+          items_snap:  [{
+            product_id: i.product.id,
+            nombre:     i.product.nombre,
+            cantidad:   i.cantidad,
+            precio:     Number((i as any).precio_final ?? i.product.precio),
+            size:       (i as any).size ?? null,
+            ojo:        (i as any).ojo  ?? null,
+            sph:        i.sph ?? null,
+            cyl:        i.cyl ?? null,
+          }],
+          descuento_pct: descuentoPct((i as any).suscripcion),
+        }))
+
+        // Agrupar por frecuencia para crear un sub por frecuencia
+        const byFreq: Record<string, typeof frecuenciasPorItem[0]> = {}
+        frecuenciasPorItem.forEach(x => {
+          if (!byFreq[x.frecuencia]) byFreq[x.frecuencia] = { ...x, items_snap: [] }
+          byFreq[x.frecuencia].items_snap.push(...x.items_snap)
+        })
+
+        for (const [frecuencia, grp] of Object.entries(byFreq)) {
+          const proximo = proxEnvio(frecuencia)
+          await sb.from('subscriptions').insert({
+            user_id:           user.id,
+            cliente_nombre:    data.nombre,
+            cliente_email:     data.email,
+            cliente_telefono:  data.telefono,
+            direccion_texto:   `${data.direccion}, ${data.ciudad}`,
+            items:             grp.items_snap,
+            frecuencia,
+            descuento_pct:     grp.descuento_pct,
+            proximo_envio:     proximo.toISOString().split('T')[0],
+            activa:            false,   // se activa cuando el pago es confirmado
+            order_id_origen:   order.id,
+          })
+        }
       }
 
       // 3. Preparar AZUL con el order.id real — el hash se calcula con la URL final correcta

@@ -119,8 +119,9 @@ export interface CartItem {
   color?: string | null
   ojo?: string | null
   size?: string | null
-  precio_final?: number | null
-  suscripcion?: string | null
+  precio_final?: number | null    // precio con descuento de suscripción aplicado
+  precio_original?: number | null // precio sin descuento (para mostrar tachado)
+  suscripcion?: string | null     // '15_dias' | 'mensual' | 'trimestral' | null
 }
 
 // Análisis de receta

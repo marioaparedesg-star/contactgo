@@ -12,7 +12,8 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { useCartStore } from '@/lib/cart-store'
 import type { Product } from '@/types'
 import toast from 'react-hot-toast'
-import SuscripcionSelector, { DESCUENTOS } from '@/components/shop/SuscripcionSelector'
+import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
+import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES } from '@/lib/subscription-utils'
 
 const TIPO_LABELS: Record<string, string> = {
   esferico: 'Esférico', torico: 'Tórico', multifocal: 'Multifocal',
@@ -45,22 +46,7 @@ const COLOR_CSS: Record<string, string> = {
   'Turquesa':        '#0891B2',
 }
 
-const SOLUTION_SIZES: Record<string, string[]> = {
-  'RENU-MULTI': ['60ml','120ml','355ml'],
-  'OPTI-MULTI': ['90ml','120ml','300ml'],
-  'PRO-60ML':   ['60ml'],
-  'DRE-80ML':   ['80ml'],
-  'SPR-FOAM':   ['Frasco único'],
-}
-
-const SOLUTION_PRICES: Record<string, Record<string, number>> = {
-  'RENU-MULTI': { '60ml':562,'120ml':655,'355ml':1353 },
-  'OPTI-MULTI': { '90ml':450,'120ml':700,'300ml':1250 },
-  'PRO-60ML':   { '60ml':419 },
-  'PRO-350ML':  { '350ml':869 },
-  'DRE-80ML':   { '80ml':333 },
-  'SPR-FOAM':   { 'Frasco único':350 },
-}
+// SOLUTION_SIZES y SOLUTION_PRICES importados desde @/lib/subscription-utils
 
 const ALL_SPH = [
   -20,-19.5,-19,-18.5,-18,-17.5,-17,-16.5,-16,-15.5,-15,-14.5,-14,-13.5,-13,-12.5,
@@ -149,6 +135,7 @@ export default function ProductoClient({ product, variants }: Props) {
   const [qty,   setQty]   = useState(1)
   const [mismaSph, setMismaSph] = useState(false) // ambos ojos misma receta
   const [price, setPrice] = useState(product.precio ?? 0)
+  const [precioBase, setPrecioBase] = useState(product.precio ?? 0) // precio con size, sin descuento suscripción
   const [suscripcion, setSuscripcion] = useState<string | null>(null)
 
   const tipo       = product.tipo ?? ''
@@ -169,6 +156,7 @@ export default function ProductoClient({ product, variants }: Props) {
       const prices = SOLUTION_PRICES[sku]
       if (prices?.[size]) base = prices[size]
     }
+    setPrecioBase(base) // precio base con size, sin descuento
     const desc = suscripcion ? DESCUENTOS[suscripcion] ?? 0 : 0
     setPrice(Math.round(base * (1 - desc)))
   }, [size, product.precio, sku, suscripcion])
@@ -186,21 +174,21 @@ export default function ProductoClient({ product, variants }: Props) {
           if (isToric && !cyl)  { toast.error('Selecciona el cilindro CYL'); return false }
           if (isToric && !axis) { toast.error('Selecciona el eje AXIS'); return false }
           // Agregar OD
-          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:'OD', size:size||undefined } as any)
+          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
           // Agregar OS (misma receta)
-          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:'OS', size:size||undefined } as any)
+          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:'OS', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
         } else {
           // Receta diferente por ojo
           if (!sphOD && !sphOS) { toast.error('Ingresa la receta de al menos un ojo'); return false }
           if (sphOD) {
             if (isToric && !cylOD)  { toast.error('Falta el CYL del ojo derecho'); return false }
             if (isToric && !axisOD) { toast.error('Falta el AXIS del ojo derecho'); return false }
-            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOD), cyl:cylOD?parseFloat(cylOD):undefined, axis:axisOD?parseInt(axisOD):undefined, add_power:add||undefined, ojo:'OD', size:size||undefined } as any)
+            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOD), cyl:cylOD?parseFloat(cylOD):undefined, axis:axisOD?parseInt(axisOD):undefined, add_power:add||undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
           }
           if (sphOS) {
             if (isToric && !cylOS)  { toast.error('Falta el CYL del ojo izquierdo'); return false }
             if (isToric && !axisOS) { toast.error('Falta el AXIS del ojo izquierdo'); return false }
-            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOS), cyl:cylOS?parseFloat(cylOS):undefined, axis:axisOS?parseInt(axisOS):undefined, add_power:add||undefined, ojo:'OI', size:size||undefined } as any)
+            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOS), cyl:cylOS?parseFloat(cylOS):undefined, axis:axisOS?parseInt(axisOS):undefined, add_power:add||undefined, ojo:'OI', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
           }
         }
       } else {
@@ -208,11 +196,11 @@ export default function ProductoClient({ product, variants }: Props) {
         if (!sph) { toast.error('Selecciona la graduación SPH'); return false }
         if (isToric && !cyl)  { toast.error('Selecciona el cilindro CYL'); return false }
         if (isToric && !axis) { toast.error('Selecciona el eje AXIS'); return false }
-        addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:eye, size:size||undefined } as any)
+        addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:eye, size:size||undefined, precio_override:price, precio_original:precioBase } as any)
       }
     } else {
       // Solución, gota, color
-      addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, color:color||undefined, size:size||undefined } as any)
+      addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, color:color||undefined, size:size||undefined, precio_override:price, precio_original:precioBase } as any)
     }
 
     toast.success(eye === 'AMBOS' && isLente && !isColor ? 'Agregado para ambos ojos ✓' : 'Agregado al carrito ✓')

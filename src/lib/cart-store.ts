@@ -15,6 +15,7 @@ interface CartStore {
     ojo?: string | null
     size?: string | null
     precio_override?: number | null
+    precio_original?: number | null   // precio antes del descuento de suscripción
     suscripcion?: string | null
   }) => void
   removeItem: (productId: string, sph?: number | null) => void
@@ -33,7 +34,7 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       addItem: (product, opts = {}) => {
-        const { cantidad = 1, sph, cyl, axis, add_power, color, ojo, size, precio_override, suscripcion } = opts
+        const { cantidad = 1, sph, cyl, axis, add_power, color, ojo, size, precio_override, precio_original, suscripcion } = opts
         set(state => {
           // Buscar item existente para actualizar cantidad
           // Para OD/OS específico: busca por ojo también
@@ -71,7 +72,8 @@ export const useCartStore = create<CartStore>()(
               ojo,
               size,
               suscripcion,
-              precio_final: precio_override ?? product.precio,
+              precio_final:    precio_override ?? product.precio,
+              precio_original: precio_original ?? product.precio,
             } as any]
           }
         })

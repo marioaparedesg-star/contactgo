@@ -223,6 +223,22 @@ async function handleReturn(req: NextRequest) {
           if (updateErr) {
             console.error('[AZUL/retorno] ERROR actualizando orden:', updateErr.message)
           }
+          // Activar suscripciones pendientes de esta orden
+          if (!updateErr) {
+            await sb.from('subscriptions')
+              .update({ activa: true })
+              .eq('order_id_origen', orderId)
+              .eq('activa', false)
+              .is('cancelada', false)
+            // Marcar orden con flag de suscripción
+            await sb.from('orders')
+              .update({ tiene_suscripcion: true })
+              .eq('id', orderId)
+              .in('id', (
+                await sb.from('subscriptions').select('order_id_origen').eq('order_id_origen', orderId).then(r => [orderId])
+              ).filter(Boolean))
+          }
+
           // El notify lo dispara el cliente desde /confirmacion (más confiable en Vercel)
 
         } else {

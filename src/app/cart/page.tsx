@@ -1,4 +1,5 @@
-"use client"
+'use client'
+import { labelFrecuencia, labelDescuento } from '@/lib/subscription-utils'
 import { fmtSph, fmtReceta } from '@/lib/sph-utils'
 import { useCartStore } from '@/lib/cart-store'
 import Navbar from '@/components/ui/Navbar'
@@ -115,11 +116,22 @@ export default function CartPage() {
 
                     {/* Suscripción */}
                     {(item as any).suscripcion && (
-                      <span className="inline-block text-[10px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full mt-1">
-                        📦 Suscripción {(item as any).suscripcion}
-                      </span>
+                      <div className="mt-1.5 space-y-0.5">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full">
+                          🔄 Suscripción · {labelFrecuencia((item as any).suscripcion)}
+                        </span>
+                        <p className="text-[10px] text-green-600 font-semibold">
+                          {labelDescuento((item as any).suscripcion)} aplicado · Cancela cuando quieras
+                        </p>
+                      </div>
                     )}
 
+                    {/* Precio original tachado si hay suscripción */}
+                    {(item as any).suscripcion && (item as any).precio_original && (item as any).precio_original > precioItem && (
+                      <p className="text-xs text-gray-400 line-through mt-1">
+                        RD${(item as any).precio_original.toLocaleString()}
+                      </p>
+                    )}
                     {/* Precio + cantidad */}
                     <div className="flex items-center justify-between mt-3">
                       <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">

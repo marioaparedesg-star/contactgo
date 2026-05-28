@@ -1,17 +1,12 @@
 'use client'
+import { DESCUENTOS } from '@/lib/subscription-utils'
 
 const OPCIONES = [
-  { val: null,         label: 'Compra única',     badge: '',          desc: 'Sin compromiso',              color: 'gray'   },
-  { val: '15_dias',   label: 'Cada 15 días',     badge: '5% OFF',    desc: 'Para lentes diarios',         color: 'blue'   },
-  { val: 'mensual',   label: 'Mensual',           badge: '10% OFF',   desc: 'Lentes mensuales y quincenales', color: 'primary'},
-  { val: 'trimestral',label: 'Cada 3 meses',      badge: '15% OFF',   desc: 'Soluciones y gotas',          color: 'green'  },
+  { val: null,          label: 'Compra única',     badge: '',         desc: 'Sin compromiso',                 color: 'gray'   },
+  { val: '15_dias',    label: 'Cada 15 días',     badge: '5% OFF',   desc: 'Para lentes diarios',            color: 'blue'   },
+  { val: 'mensual',    label: 'Mensual',           badge: '10% OFF',  desc: 'Lentes mensuales y quincenales', color: 'primary'},
+  { val: 'trimestral', label: 'Cada 3 meses',      badge: '15% OFF',  desc: 'Soluciones y gotas',             color: 'green'  },
 ]
-
-const DESCUENTOS: Record<string, number> = {
-  '15_dias': 0.05,
-  'mensual': 0.10,
-  'trimestral': 0.15,
-}
 
 interface Props {
   value: string | null
@@ -83,4 +78,3 @@ export default function SuscripcionSelector({ value, onChange, precio, tipo }: P
   )
 }
 
-export { DESCUENTOS }
