@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: 'Lentes Sugeridos para tu Receta | ContactGo RD',
   description: 'Resultados personalizados basados en tu prescripción óptica. Lentes de contacto compatibles con tu graduación con entrega en RD.',
   alternates: { canonical: 'https://www.contactgo.net/sugeridos' },
