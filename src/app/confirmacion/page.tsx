@@ -70,12 +70,22 @@ function ConfirmacionContent() {
   useEffect(() => {
     if (!orderId) { setTimeout(() => router.push('/'), 1500); return }
     const sb = createClient()
-    Promise.all([
-      sb.from('orders').select('*').eq('id', orderId).single(),
-      sb.from('order_items').select('*').eq('order_id', orderId),
-    ]).then(([{ data: o }, { data: i }]) => {
-      if (!o) { router.push('/'); return }
-      setOrder(o); setItems(i ?? []); setLoading(false)
+    let attempts = 0
+    const maxAttempts = 5  // hasta 10 segundos de espera
+
+    const loadOrder = () => {
+      Promise.all([
+        sb.from('orders').select('*').eq('id', orderId).single(),
+        sb.from('order_items').select('*').eq('order_id', orderId),
+      ]).then(([{ data: o }, { data: i }]) => {
+        if (!o) { router.push('/'); return }
+        // Si viene de AZUL y aún pendiente, reintentar (retorno puede tardar)
+        if (origen === 'azul' && resultado === 'aprobado' && o.pago_estado === 'pendiente' && attempts < maxAttempts) {
+          attempts++
+          setTimeout(loadOrder, 2000)
+          return
+        }
+        setOrder(o); setItems(i ?? []); setLoading(false)
       // GA4 + Meta Pixel: evento purchase (solo cuando es aprobado y primera vez)
       if (o && origen === 'azul' && resultado === 'aprobado') {
         const alreadyTracked = sessionStorage.getItem(`tracked_${orderId}`)
@@ -96,8 +106,10 @@ function ConfirmacionContent() {
           })
         }
       }
-    })
-  }, [orderId])
+      })
+    }
+    loadOrder()
+  }, [orderId, origen, resultado])
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -300,8 +312,12 @@ function ConfirmacionContent() {
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider">Pago</p>
             </div>
             <p className="font-bold text-gray-900 text-sm">Tarjeta AZUL</p>
-            <span className="inline-block mt-1.5 text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700">
-              ✓ Aprobado
+            <span className={`inline-block mt-1.5 text-xs font-bold px-2 py-0.5 rounded-full ${
+              order.pago_estado === 'pagado'
+                ? 'bg-green-100 text-green-700'
+                : 'bg-amber-100 text-amber-700'
+            }`}>
+              {order.pago_estado === 'pagado' ? '✓ Aprobado' : '⏳ Procesando...'}
             </span>
           </div>
         </div>

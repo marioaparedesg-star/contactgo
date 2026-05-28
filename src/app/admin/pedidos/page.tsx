@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase'
 import { Search, X, Printer, MessageCircle, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const ESTADOS = ['pendiente','confirmado','preparando','enviado','entregado','cancelado']
+const ESTADOS = ['activos','todos','pendiente','confirmado','preparando','enviado','entregado','cancelado']
 const ESTADO_COLOR: Record<string,string> = {
   pendiente:'bg-amber-50 text-amber-700 border-amber-200', confirmado:'bg-blue-50 text-blue-700 border-blue-200',
   preparando:'bg-purple-50 text-purple-700 border-purple-200', enviado:'bg-indigo-50 text-indigo-700 border-indigo-200',
@@ -20,7 +20,7 @@ export default function PedidosPage() {
   const [items, setItems] = useState<Record<string,any[]>>({})
   const [selected, setSelected] = useState<any>(null)
   const [search, setSearch] = useState('')
-  const [filtroEstado, setFiltroEstado] = useState('todos')
+  const [filtroEstado, setFiltroEstado] = useState('activos')
   const [filtroPago, setFiltroPago] = useState('todos')
   const [loading, setLoading] = useState(true)
 
@@ -75,7 +75,8 @@ export default function PedidosPage() {
   }
 
   const filtrados = pedidos.filter(p=>{
-    if (filtroEstado!=='todos' && p.estado!==filtroEstado) return false
+    if (filtroEstado==='activos' && (p.estado==='cancelado' || p.pago_estado==='declinado')) return false
+    if (filtroEstado!=='todos' && filtroEstado!=='activos' && p.estado!==filtroEstado) return false
     if (filtroPago!=='todos' && p.metodo_pago!==filtroPago) return false
     if (!search) return true
     const q = search.toLowerCase()
@@ -106,7 +107,11 @@ export default function PedidosPage() {
             <select value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}
               className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-400">
               <option value="todos">Todos los estados</option>
-              {ESTADOS.map(e=><option key={e} value={e}>{e.charAt(0).toUpperCase()+e.slice(1)}</option>)}
+              {ESTADOS.map(e=><option key={e} value={e}>{
+              e==='activos'?'Activos (sin cancelados)':
+              e==='todos'?'Todos los pedidos':
+              e.charAt(0).toUpperCase()+e.slice(1)
+            }</option>)}
             </select>
             <select value={filtroPago} onChange={e=>setFiltroPago(e.target.value)}
               className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-400">

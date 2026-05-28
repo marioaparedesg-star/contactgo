@@ -226,14 +226,15 @@ async function handleReturn(req: NextRequest) {
           // El notify lo dispara el cliente desde /confirmacion (más confiable en Vercel)
 
         } else {
-          // Pago declinado — registrar el intento
+          // Pago declinado — registrar el intento y cancelar la orden
           await sb.from('orders').update({
             pago_estado:        'declinado',
+            estado:             'cancelado',  // No mostrar como pedido activo en admin
             azul_order_number:  orderNumber,
             azul_response_code: isoCode || responseCode || null,
           }).eq('id', orderId)
 
-          console.log('[AZUL/retorno] declinado:', { orderNumber, isoCode, responseCode })
+          console.log('[AZUL/retorno] declinado → cancelado:', { orderNumber, isoCode, responseCode })
         }
       }
     } catch (e) {

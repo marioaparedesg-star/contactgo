@@ -53,12 +53,7 @@ function ReciboContent() {
     })
   }, [orderId])
 
-  useEffect(() => {
-    if (!loading && order) {
-      const timer = setTimeout(() => window.print(), 1200)
-      return () => clearTimeout(timer)
-    }
-  }, [loading, order])
+  // Auto-print eliminado — el usuario decide cuándo imprimir (botón disponible)
 
   if (loading) return (
     <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh',fontFamily:'Arial,sans-serif'}}>
