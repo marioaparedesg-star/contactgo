@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase'
 import { Search, Save, ChevronDown, ChevronRight, Package, Eye, EyeOff,
          History, Download, Archive, ArchiveRestore, AlertTriangle } from 'lucide-react'
 import toast from 'react-hot-toast'
+import Link from 'next/link'
 
 
 type Producto = {
