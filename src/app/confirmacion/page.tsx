@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { CheckCircle, Package, MapPin, CreditCard, MessageCircle, ChevronRight, XCircle } from 'lucide-react'
 import { fmtSph } from '@/lib/sph-utils'
 import { trackEcommerce } from '@/lib/analytics'
+import GoogleCustomerReviewsOptIn from '@/components/trust/GoogleCustomerReviews'
 
 const PASOS = [
   { key: 'pendiente',  label: 'Recibido',   icon: '📋' },

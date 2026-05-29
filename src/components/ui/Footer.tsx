@@ -1,3 +1,5 @@
+'use client'
+import GoogleSellerRatingBadge from '@/components/trust/GoogleSellerRatingBadge'
 import Link from 'next/link'
 
 export default function Footer() {
@@ -112,6 +114,11 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* Google Seller Rating — inline, discreto */}
+        <div className="border-t border-gray-800 pt-4 flex items-center justify-center min-h-[32px]">
+          <GoogleSellerRatingBadge />
         </div>
 
         {/* Pagos + copyright en una sola fila */}
