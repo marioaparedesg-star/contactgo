@@ -336,6 +336,23 @@ function ConfirmacionContent() {
           </div>
         )}
 
+        {/* Google Customer Reviews Opt-In — solo cuando pago confirmado */}
+        {(order.pago_estado === 'pagado' ||
+          (order.metodo_pago === 'contra_entrega' && order.estado === 'confirmado')) &&
+         order.cliente_email && order.numero_orden && (() => {
+           const dias = order.metodo_pago === 'contra_entrega' ? 2 : 1
+           const d = new Date(); d.setDate(d.getDate() + dias)
+           const isoFecha = d.toISOString().split('T')[0]
+           return (
+             <GoogleCustomerReviewsOptIn
+               orderId={order.numero_orden}
+               email={order.cliente_email}
+               estimatedDeliveryDate={isoFecha}
+             />
+           )
+         })()
+        }
+
         {/* Acciones */}
         <div className="space-y-3 pt-1">
           <Link href="/cuenta"
