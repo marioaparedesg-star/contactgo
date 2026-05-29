@@ -5,11 +5,8 @@ export default async function sitemap() {
 
   const { data: products } = await sb.from('products').select('slug, id, updated_at').eq('activo', true)
 
-  let blogs: any[] | null = null
-  try {
-    const { data } = await sb.from('blog_posts').select('slug, updated_at').eq('activo', true)
-    blogs = data
-  } catch { blogs = null }
+  // Blog: artículos son rutas estáticas Next.js, no tabla blog_posts (no existe en DB)
+  const blogs: null = null
 
   const now = new Date()
 

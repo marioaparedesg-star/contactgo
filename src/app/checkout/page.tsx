@@ -26,7 +26,7 @@ type FormData = z.infer<typeof schema>
 const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata',
   'Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad']
 
-const CUPONES: Record<string,number> = { 'BIENVENIDO10': 0.10, 'CONTACTGO15': 0.15 }
+
 
 // AZUL disponible solo cuando hay AUTH_KEY configurada
 const AZUL_READY = Boolean(process.env.NEXT_PUBLIC_AZUL_READY)
@@ -100,13 +100,48 @@ export default function CheckoutPage() {
     })
   }, [items, router])
 
-  const aplicarCupon = () => {
+  const aplicarCupon = async () => {
     const code = cupon.trim().toUpperCase()
-    if (CUPONES[code]) {
-      setDescuento(Math.round(sub * CUPONES[code]))
+    if (!code) return
+    try {
+      // Validar contra DB — nunca en client-side
+      const sb = createClient()
+      const { data, error } = await sb
+        .from('coupons')
+        .select('codigo, descuento_pct, activo, fecha_inicio, fecha_fin, uso_actual, uso_maximo')
+        .eq('codigo', code)
+        .eq('activo', true)
+        .single()
+
+      if (error || !data) {
+        toast.error('Cupón inválido o expirado')
+        return
+      }
+
+      // Verificar vigencia
+      const now = new Date()
+      if (data.fecha_fin && new Date(data.fecha_fin) < now) {
+        toast.error('Cupón expirado')
+        return
+      }
+      if (data.fecha_inicio && new Date(data.fecha_inicio) > now) {
+        toast.error('Cupón aún no está disponible')
+        return
+      }
+
+      // Verificar límite de uso
+      if (data.uso_maximo !== null && data.uso_actual >= data.uso_maximo) {
+        toast.error('Cupón agotado')
+        return
+      }
+
+      const pct = Number(data.descuento_pct) / 100
+      setDescuento(Math.round(sub * pct))
       setCuponAplicado(true)
-      toast.success('Cupón aplicado: ' + Math.round(CUPONES[code]*100) + '% off')
-    } else { toast.error('Cupón inválido') }
+      toast.success(`Cupón aplicado: ${data.descuento_pct}% off`)
+    } catch {
+      toast.error('Error al validar cupón')
+    }
   }
 
   const saveDisclaimer = async (dData: DisclaimerData, userId?: string) => {

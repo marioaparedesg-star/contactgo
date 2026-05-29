@@ -56,6 +56,7 @@ export function middleware(req: NextRequest) {
     '/api/recompra': 5,
     '/api/analizar-receta': 10,
     '/api/ocr-receta': 10,
+    '/api/validate-coupon': 20,
   }
   for (const [path, limit] of Object.entries(rateLimits)) {
     if (pathname.startsWith(path)) {

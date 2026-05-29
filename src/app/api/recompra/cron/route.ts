@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
-const FROM = process.env.RESEND_FROM ?? 'ContactGo <onboarding@resend.dev>'
+const FROM = process.env.RESEND_FROM ?? 'ContactGo <info@contactgo.net>'
 
 function emailTemplate(
   nombre: string, producto: string, dias: number,
