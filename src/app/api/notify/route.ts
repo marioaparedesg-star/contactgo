@@ -1,6 +1,7 @@
 import { guardRequest, getIP } from '@/lib/api-guard'
 // ============================================================
 // ContactGo — API: Notificaciones de pedidos
+import { getEntregaTextoEmail } from '@/lib/delivery-times'
 // Envía email al cliente + email al admin cuando cambia estado
 // POST /api/notify  { order_id, evento: 'nuevo_pedido' | 'estado_cambio', nuevo_estado? }
 // ============================================================
@@ -48,6 +49,12 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
   const subtotalSinITBIS = subtotalConITBIS - itbis
   const fecha       = new Date(order.created_at ?? Date.now())
     .toLocaleDateString('es-DO', { day:'2-digit', month:'long', year:'numeric' })
+
+  // Tiempo de entrega (puede haber ítems de diferentes categorías — usar el más largo)
+  const tiposItems = [...new Set(items.map((i: any) => i.tipo).filter(Boolean))]
+  const entregaTexto = tiposItems.length
+    ? getEntregaTextoEmail(tiposItems.includes('torico') ? 'torico' : tiposItems.includes('multifocal') ? 'multifocal' : tiposItems[0])
+    : 'Entrega estimada: 24 horas laborables.'
 
   const metodoPagoLabel = order.metodo_pago === 'tarjeta'
     ? '💳 Tarjeta de crédito/débito (AZUL)'
@@ -118,6 +125,16 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
       ${isNuevo ? 'Hemos recibido tu pedido y estamos procesándolo. A continuación tu comprobante completo.' : estadoMsg}
     </p>
   </td></tr>
+
+  <!-- TIEMPO DE ENTREGA ESTIMADO -->
+  ${isNuevo ? `<tr><td style="padding:16px 32px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;">
+      <tr><td>
+        <p style="margin:0;font-size:11px;font-weight:700;color:#92400e;">⏱️ TIEMPO DE ENTREGA ESTIMADO</p>
+        <p style="margin:4px 0 0;font-size:13px;color:#78350f;">${entregaTexto}</p>
+      </td></tr>
+    </table>
+  </td></tr>` : ''}
 
   <!-- DATOS CLIENTE Y ENTREGA -->
   <tr><td style="padding:16px 32px 0;">

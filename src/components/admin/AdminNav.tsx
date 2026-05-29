@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingBag, Package, Users, BarChart2,
   Repeat, ShoppingCart, TrendingUp, Tag, Settings, ChevronLeft,
-  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText, Scan
+  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText, Scan, AlertTriangle, CheckCircle
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -26,6 +26,8 @@ const NAV_SECTIONS = [
       { href: '/admin/inventario',    icon: BarChart2,       label: 'Inventario',     badge: 'stock' },
       { href: '/admin/inventario/escaner', icon: Scan,         label: '⚡ Escáner',      badge: null },
       { href: '/admin/cupones',       icon: Tag,             label: 'Cupones',        badge: null },
+      { href: '/admin/reabastecimiento', icon: AlertTriangle, label: '⚠️ Reabasto',     badge: null },
+      { href: '/admin/auditoria',      icon: CheckCircle,    label: '🔍 Auditoría',    badge: null },
     ]
   },
   {

@@ -9,6 +9,7 @@ import { z } from 'zod'
 import Navbar from '@/components/ui/Navbar'
 import { useCartStore } from '@/lib/cart-store'
 import { createClient } from '@/lib/supabase'
+import EntregaBadge from '@/components/shop/EntregaBadge'
 import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
 import toast from 'react-hot-toast'
 import Image from 'next/image'
@@ -751,6 +752,7 @@ export default function CheckoutPage() {
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                           </button>
                         </div>
+                        <EntregaBadge tipo={(item.product as any).tipo ?? 'esferico'} nombre={item.product.nombre} variant="checkout" />
                         <div className="flex flex-wrap gap-1 mt-1">
                           {(item as any).ojo && (item as any).ojo !== 'AMBOS' && (
                             <span className={`text-[9px] font-black px-1.5 py-0.5 rounded ${(item as any).ojo === 'OD' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>

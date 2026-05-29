@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getEntrega } from '@/lib/delivery-times'
 import ProductoClient from './ProductoClient'
 export const revalidate = 300
 
@@ -106,6 +107,8 @@ export default async function ProductoPage(
     ? reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length
     : null
 
+  const entregaInfo = getEntrega(product.tipo, product.nombre)
+
   // ── Product Schema ──────────────────────────────────────────
   const productSchema: any = {
     "@context": "https://schema.org",
@@ -117,6 +120,8 @@ export default async function ProductoPage(
     "brand": { "@type": "Brand", "name": product.marca ?? "ContactGo" },
     "sku": product.id,
     "mpn": product.sku ? String(product.sku) : `CG-${String(product.id).slice(0,8).toUpperCase()}`,
+    ...((product as any).gtin ? { "gtin": String((product as any).gtin) } : {}),
+    ...((product as any).ean  ? { "gtin13": String((product as any).ean) } : {}),
     "category": product.tipo,
     "url": `https://www.contactgo.net/producto/${product.slug}`,
     "offers": {
@@ -137,7 +142,7 @@ export default async function ProductoPage(
         "deliveryTime": {
           "@type": "ShippingDeliveryTime",
           "handlingTime": { "@type": "QuantitativeValue", "minValue": "0", "maxValue": "1", "unitCode": "DAY" },
-          "transitTime": { "@type": "QuantitativeValue", "minValue": "1", "maxValue": "2", "unitCode": "DAY" }
+          "transitTime": { "@type": "QuantitativeValue", "minValue": String(entregaInfo.dias_min), "maxValue": String(entregaInfo.dias_max), "unitCode": "DAY" }
         }
       },
       "hasMerchantReturnPolicy": {

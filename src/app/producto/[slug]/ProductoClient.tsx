@@ -14,6 +14,8 @@ import { trackEcommerce } from '@/lib/analytics'
 import type { Product } from '@/types'
 import toast from 'react-hot-toast'
 import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
+import EntregaBadge from '@/components/shop/EntregaBadge'
+import { getEntrega } from '@/lib/delivery-times'
 import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES } from '@/lib/subscription-utils'
 
 const TIPO_LABELS: Record<string, string> = {
@@ -140,6 +142,7 @@ export default function ProductoClient({ product, variants }: Props) {
   const [suscripcion, setSuscripcion] = useState<string | null>(null)
 
   const tipo       = product.tipo ?? ''
+  const getEntregaInfo = getEntrega(tipo, product.nombre)
   const sku        = product.sku ?? ''
   const colors     = (product as any).colores_disponibles ?? []
   const sizes      = SOLUTION_SIZES[sku]  ?? []
@@ -339,16 +342,8 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             </div>
 
-            {/* Aviso entrega tóricos */}
-            {product.tipo === 'torico' && (
-              <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 flex items-start gap-2">
-                <span className="text-amber-500 shrink-0 mt-0.5">⏱️</span>
-                <div>
-                  <p className="text-amber-800 font-bold text-xs">Tiempo de entrega: 20-30 días</p>
-                  <p className="text-amber-600 text-[10px] mt-0.5 leading-relaxed">Los lentes tóricos para astigmatismo se fabrican a medida según tu graduación exacta (SPH, CYL y EJE). El tiempo de entrega es mayor al habitual.</p>
-                </div>
-              </div>
-            )}
+            {/* Tiempo de entrega — dinámico por categoría */}
+            <EntregaBadge tipo={product.tipo} nombre={product.nombre} variant="pdp" />
             {isLente && (
               <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex items-start gap-2">
                 <span className="text-blue-500 shrink-0 mt-0.5">⚕️</span>
@@ -504,24 +499,37 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
 
-            {product.curva_base && (
+            {(product.curva_base || product.material || (product as any).fabricante_nombre) && (
               <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4 py-3 border-b border-gray-100">
-                  Especificaciones
+                  Especificaciones clínicas
                 </p>
                 <div className="grid grid-cols-2 gap-px bg-gray-100">
                   {[
-                    ['📐 Curva base', product.curva_base],
-                    ['⭕ Diámetro',   product.diametro && product.diametro + ' mm'],
-                    ['🔄 Reemplazo',  product.reemplazo],
-                    ['📦 Contenido',  product.contenido],
+                    ['📐 Curva base',         product.curva_base],
+                    ['⭕ Diámetro',            product.diametro ? product.diametro + (String(product.diametro).includes('mm') ? '' : ' mm') : null],
+                    ['🔄 Reemplazo',           product.reemplazo],
+                    ['📦 Contenido',           product.contenido],
+                    ['🧪 Material',            product.material],
+                    ['💧 Contenido de agua',   (product as any).agua ? (product as any).agua + (String((product as any).agua).includes('%') ? '' : '%') : null],
+                    ['🌬️ Transmisión O₂',     (product as any).oxígeno ?? (product as any).oxigeno],
+                    ['🕐 Horas de uso',        (product as any).horas_uso],
+                    ['📋 Uso recomendado',     (product as any).uso_recomendado],
+                    ['🏭 Fabricante',          (product as any).fabricante_nombre],
+                    ['🌍 País de origen',      (product as any).pais_origen],
+                    ['🛡️ Protección UV',      (product as any).proteccion_uv ? 'Clase II (bloques ≥99% UV-B y ≥95% UV-A)' : null],
                   ].filter(([,v]) => v).map(([k,v]) => (
                     <div key={String(k)} className="bg-white px-4 py-3">
                       <p className="text-[10px] text-gray-400 font-medium">{String(k).replace(/^[^ ]+ /,'')}</p>
-                      <p className="text-sm font-bold text-gray-900 mt-0.5">{v}</p>
+                      <p className="text-sm font-bold text-gray-900 mt-0.5">{String(v)}</p>
                     </div>
                   ))}
                 </div>
+                {!(product.curva_base || product.material) && (
+                  <div className="bg-white px-4 py-3">
+                    <p className="text-xs text-gray-400">Consultar especificaciones con tu optómetra.</p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -576,13 +584,21 @@ export default function ProductoClient({ product, variants }: Props) {
                 <ShoppingCart className="w-4 h-4" />
                 {sinVariante ? 'Consultar disponibilidad' : 'Agregar al carrito'}
               </button>
-              {/* Trust micro-badges */}
-              <div className="flex items-center justify-center gap-4 pt-1">
-                <span className="text-[10px] text-gray-400 flex items-center gap-1">🔒 Pago seguro</span>
-                <span className="text-[10px] text-gray-400">·</span>
-                <span className="text-[10px] text-gray-400 flex items-center gap-1">🚀 Envío RD</span>
-                <span className="text-[10px] text-gray-400">·</span>
-                <span className="text-[10px] text-gray-400 flex items-center gap-1">↩ Devoluciones</span>
+              {/* Trust badges — FASE 11 */}
+              <div className="grid grid-cols-3 gap-2 mt-1">
+                {[
+                  { icon:'🚀', label:'Entrega rápida',    show: !getEntregaInfo.especial },
+                  { icon:'✅', label:'Producto original',  show: true },
+                  { icon:'🏭', label:'Garantía fabricante',show: true },
+                  { icon:'🔒', label:'Compra segura',      show: true },
+                  { icon:'🛡️', label:'Pago protegido',    show: true },
+                  { icon:'↩',  label:'Devoluciones',       show: true },
+                ].filter(b => b.show).slice(0, 6).map(b => (
+                  <div key={b.label} className="flex items-center gap-1.5 bg-gray-50 rounded-xl px-2 py-2">
+                    <span className="text-sm">{b.icon}</span>
+                    <span className="text-[9px] font-bold text-gray-600 leading-tight">{b.label}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

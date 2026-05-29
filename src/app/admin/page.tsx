@@ -79,7 +79,16 @@ export default function AdminDashboard() {
 
     const { count: clientes } = await sb.from('profiles').select('*',{count:'exact',head:true}).eq('role','customer')
 
-    setData({ ventas30, ventas7, ventasHoy, tickets, entregados, conversion, pedidos30:ords.length, pedidos7:ords7.length, clientes: clientes??0 })
+    // FASE 9: KPIs de inventario
+    const { data: invStats } = await sb.from('v_stock_disponible').select('stock,stock_minimo,stock_critico,alerta_stock,precio,tipo')
+    const invAll = invStats ?? []
+    const invAgotados   = invAll.filter((p:any) => p.alerta_stock === 'agotado').length
+    const invCriticos   = invAll.filter((p:any) => p.alerta_stock === 'critico').length
+    const invBajoMin    = invAll.filter((p:any) => p.alerta_stock === 'bajo_minimo').length
+    const invValorTotal = invAll.reduce((s:number, p:any) => s + Number(p.stock??0) * Number(p.precio??0), 0)
+
+    setData({ ventas30, ventas7, ventasHoy, tickets, entregados, conversion, pedidos30:ords.length, pedidos7:ords7.length, clientes: clientes??0,
+      invAgotados, invCriticos, invBajoMin, invValorTotal, invTotal: invAll.length })
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
@@ -146,6 +155,7 @@ export default function AdminDashboard() {
           { icon:ShoppingBag, label:'Ventas 30 días', val:fmt(data?.ventas30??0),  sub:`${data?.pedidos30??0} pedidos`,         color:'text-blue-600',   bg:'bg-blue-50'  },
           { icon:CreditCard,  label:'Ticket promedio',val:fmt(data?.tickets??0),   sub:'por pedido',                            color:'text-purple-600', bg:'bg-purple-50'},
           { icon:Users,       label:'Clientes',       val:String(data?.clientes??0),sub:'registrados',                         color:'text-indigo-600', bg:'bg-indigo-50'},
+          { icon:Package,     label:'Productos activos',val:String((data as any)?.invTotal??0),sub:'en catálogo',              color:'text-gray-600',   bg:'bg-gray-50'   },
         ].map(({icon:Icon,label,val,sub,color,bg})=>(
           <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center mb-4`}>

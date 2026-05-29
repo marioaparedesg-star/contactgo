@@ -1,4 +1,5 @@
 'use client'
+import EntregaBadge from '@/components/shop/EntregaBadge'
 import { labelFrecuencia, labelDescuento } from '@/lib/subscription-utils'
 import { trackEcommerce } from '@/lib/analytics'
 import { fmtSph, fmtReceta } from '@/lib/sph-utils'
@@ -91,6 +92,9 @@ export default function CartPage() {
                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{(item.product as any).marca}</p>
                         )}
                         <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
+                        <div className="mt-1">
+                          <EntregaBadge tipo={(item.product as any).tipo ?? 'esferico'} nombre={item.product.nombre} variant="cart" />
+                        </div>
                       </div>
                       <button onClick={() => {
                         trackEcommerce('remove_from_cart', {
