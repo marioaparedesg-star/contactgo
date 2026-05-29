@@ -80,7 +80,7 @@ export default function AdminDashboard() {
     const { count: clientes } = await sb.from('profiles').select('*',{count:'exact',head:true}).eq('role','customer')
 
     // FASE 9: KPIs de inventario
-    const { data: invStats } = await sb.from('v_stock_disponible').select('stock,stock_minimo,stock_critico,alerta_stock,precio,tipo')
+    const { data: invStats } = await sb.from('v_stock_disponible').select('id,nombre,tipo,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock,precio')
     const invAll = invStats ?? []
     const invAgotados   = invAll.filter((p:any) => p.alerta_stock === 'agotado').length
     const invCriticos   = invAll.filter((p:any) => p.alerta_stock === 'critico').length
@@ -156,6 +156,7 @@ export default function AdminDashboard() {
           { icon:CreditCard,  label:'Ticket promedio',val:fmt(data?.tickets??0),   sub:'por pedido',                            color:'text-purple-600', bg:'bg-purple-50'},
           { icon:Users,       label:'Clientes',       val:String(data?.clientes??0),sub:'registrados',                         color:'text-indigo-600', bg:'bg-indigo-50'},
           { icon:Package,     label:'Productos activos',val:String((data as any)?.invTotal??0),sub:'en catálogo',              color:'text-gray-600',   bg:'bg-gray-50'   },
+          { icon:AlertTriangle,label:'Bajo mínimo',      val:String(((data as any)?.invCriticos??0)+((data as any)?.invBajoMin??0)),sub:'requieren atención', color:'text-amber-600',  bg:'bg-amber-50'  },
         ].map(({icon:Icon,label,val,sub,color,bg})=>(
           <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center mb-4`}>

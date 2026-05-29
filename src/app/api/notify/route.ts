@@ -51,7 +51,8 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
     .toLocaleDateString('es-DO', { day:'2-digit', month:'long', year:'numeric' })
 
   // Tiempo de entrega (puede haber ítems de diferentes categorías — usar el más largo)
-  const tiposItems = [...new Set(items.map((i: any) => i.tipo).filter(Boolean))]
+  // tipo viene del join con products (order_items no tiene columna tipo directa)
+  const tiposItems = [...new Set(items.map((i: any) => i.tipo ?? i.products?.tipo).filter(Boolean))]
   const entregaTexto = tiposItems.length
     ? getEntregaTextoEmail(tiposItems.includes('torico') ? 'torico' : tiposItems.includes('multifocal') ? 'multifocal' : tiposItems[0])
     : 'Entrega estimada: 24 horas laborables.'
@@ -322,7 +323,9 @@ export async function POST(req: NextRequest) {
     const { data: order } = await getSb().from('orders').select('*').eq('id', order_id).single()
     if (!order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 })
 
-    const { data: items } = await getSb().from('order_items').select('*').eq('order_id', order_id)
+    const { data: items } = await getSb().from('order_items')
+      .select('*, products(tipo)')
+      .eq('order_id', order_id)
     const itemsList = items ?? []
 
     const pedidoId = order.id.slice(-8).toUpperCase()
