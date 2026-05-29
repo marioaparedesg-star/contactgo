@@ -45,7 +45,8 @@ export const useCartStore = create<CartStore>()(
                  (i as any).ojo === ojo &&
                  (i as any).size === size &&
                  (i as any).cyl === cyl &&
-                 (i as any).axis === axis
+                 (i as any).axis === axis &&
+                 (i as any).add_power === add_power
           )
           if (existing) {
             return {
@@ -54,7 +55,10 @@ export const useCartStore = create<CartStore>()(
                 i.sph === sph &&
                 i.color === color &&
                 (i as any).ojo === ojo &&
-                (i as any).size === size
+                (i as any).size === size &&
+                (i as any).cyl === cyl &&
+                (i as any).axis === axis &&
+                (i as any).add_power === add_power
                   ? { ...i, cantidad: i.cantidad + cantidad }
                   : i
               )

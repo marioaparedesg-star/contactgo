@@ -15,11 +15,12 @@ import Image from 'next/image'
 import { Shield, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, MapPin, User, Phone, Mail } from 'lucide-react'
 
 const schema = z.object({
-  nombre:    z.string().min(3, 'Nombre requerido'),
-  email:     z.string().email('Email inválido'),
-  telefono:  z.string().min(10, 'Teléfono requerido'),
-  direccion: z.string().min(5, 'Dirección requerida'),
-  ciudad:    z.string().min(2, 'Ciudad requerida'),
+  nombre:               z.string().min(3, 'Nombre requerido'),
+  email:                z.string().email('Email inválido'),
+  telefono:             z.string().min(10, 'Teléfono requerido'),
+  direccion:            z.string().min(5, 'Dirección requerida'),
+  ciudad:               z.string().min(2, 'Ciudad requerida'),
+  ciudadPersonalizada:  z.string().optional(),
 })
 type FormData = z.infer<typeof schema>
 
@@ -72,7 +73,7 @@ export default function CheckoutPage() {
   const envio = sub >= 8000 ? 0 : 200
   const totalFinal = sub + envio - descuento
 
-  const { register, handleSubmit, getValues, setValue, trigger, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, getValues, setValue, trigger, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema)
   })
 
@@ -176,7 +177,7 @@ export default function CheckoutPage() {
       const { data: order, error } = await sb.from('orders').insert({
         user_id: user?.id ?? null,
         cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
-        direccion_texto: `${data.direccion}, ${data.ciudad}`,
+        direccion_texto: `${data.direccion}, ${data.ciudad === 'Otra ciudad' && data.ciudadPersonalizada ? data.ciudadPersonalizada : data.ciudad}`,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
         metodo_pago: 'tarjeta', pago_estado: 'pendiente',
         numero_orden: orderNum,
@@ -193,6 +194,11 @@ export default function CheckoutPage() {
         setLoading(false)
         return
       }
+      // Marcar carrito como recuperado (usuario completó el checkout)
+      try {
+        const email = data.email
+        if (email) createClient().from('abandoned_carts').update({ recuperado: true }).eq('email', email).then(() => {})
+      } catch { /* silencioso */ }
 
       // 2. Guardar items — crítico: verificar que se guardan
       const itemsRes = await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
@@ -334,6 +340,26 @@ export default function CheckoutPage() {
     if (step === 1) {
       const ok = await trigger(['nombre','email','telefono'])
       if (!ok) return
+      // Registrar carrito como potencialmente abandonado (si no completa el pago)
+      try {
+        const sb2 = createClient()
+        const vals = getValues()
+        if (vals.email && items.length > 0) {
+          await sb2.from('abandoned_carts').upsert({
+            email:         vals.email,
+            nombre:        vals.nombre ?? null,
+            telefono:      vals.telefono ?? null,
+            items_snapshot: JSON.stringify(items.map(i => ({
+              id: i.product.id, nombre: i.product.nombre,
+              precio: (i as any).precio_final ?? i.product.precio,
+              cantidad: i.cantidad, sph: i.sph ?? null,
+            }))),
+            total_estimado: totalFinal,
+            recuperado:     false,
+            updated_at:     new Date().toISOString(),
+          }, { onConflict: 'email', ignoreDuplicates: false })
+        }
+      } catch { /* no bloquear flujo si falla */ }
       if (!isLoggedIn) { setShowAuthModal(true); return }
       setStep(2)
     } else if (step === 2) {
@@ -559,6 +585,13 @@ export default function CheckoutPage() {
                           <option value="">Selecciona tu ciudad</option>
                           {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
+                        {watch('ciudad') === 'Otra ciudad' && (
+                          <input
+                            {...register('ciudadPersonalizada')}
+                            placeholder="Escribe tu ciudad *"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors mt-2"
+                          />
+                        )}
                         {errors.ciudad && <p className="text-red-500 text-xs">⚠️ {errors.ciudad.message}</p>}
                         {isLoggedIn && (
                           <a href="/cuenta" className="text-xs text-primary-600 font-semibold flex items-center gap-1">

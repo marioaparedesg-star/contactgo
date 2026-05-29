@@ -40,18 +40,21 @@ export default function AdminDashboard() {
 
     const [all, today7, ord7, ordRecent, items, stockLow] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
-        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .in('pago_estado',['pagado','contra_entrega']).not('numero_orden','like','CG-TEST%')
         .gte('fecha',since30),
       sb.from('orders').select('id,total,estado,fecha')
-        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .in('pago_estado',['pagado','contra_entrega']).not('numero_orden','like','CG-TEST%')
         .gte('fecha',since1),
       sb.from('orders').select('id,total,estado,fecha')
-        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .in('pago_estado',['pagado','contra_entrega']).not('numero_orden','like','CG-TEST%')
         .gte('fecha',since7),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
         .order('created_at',{ascending:false}).limit(8),
-      sb.from('order_items').select('nombre,cantidad,precio').limit(600),
+      sb.from('order_items')
+        .select('nombre,cantidad,precio,order_id,orders!inner(pago_estado)')
+        .eq('orders.pago_estado','pagado')
+        .limit(600),
       sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
     ])
 

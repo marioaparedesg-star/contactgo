@@ -9,6 +9,22 @@ async function getProduct(slug: string) {
   const { data } = await sb.from('products')
     .select('*, reviews:product_reviews(rating, comment, user_name, created_at)')
     .eq('slug', slug).single()
+  if (!data) return null
+
+  // Cargar dioptrías con stock real > 0 desde product_inventory
+  const { data: inv } = await sb.from('product_inventory')
+    .select('sph, cyl, axis, add_power, color, stock, bc, dia')
+    .eq('product_id', data.id)
+    .gt('stock', 0)
+    .order('sph', { ascending: true })
+
+  // Sobreescribir sph_disponibles con las dioptrías que tienen stock real
+  if (inv && inv.length > 0) {
+    const sphs = [...new Set(inv.map((i: any) => i.sph).filter(Boolean))].sort((a,b) => a-b)
+    data.sph_disponibles      = sphs
+    data.inventory_disponible = inv  // todas las variantes con stock
+  }
+
   return data
 }
 

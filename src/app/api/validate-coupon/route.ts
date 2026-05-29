@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   if (guardErr) return guardErr
 
   try {
-    const { codigo, subtotal } = await req.json()
+    const { codigo, subtotal, email } = await req.json()
     if (!codigo || typeof subtotal !== 'number') {
       return NextResponse.json({ error: 'codigo y subtotal requeridos' }, { status: 400 })
     }
@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     const { data, error } = await getSb().rpc('validate_coupon', {
       p_codigo:   codigo.trim().toUpperCase(),
       p_subtotal: subtotal,
+      p_email:    email ?? null,
     })
 
     if (error) {

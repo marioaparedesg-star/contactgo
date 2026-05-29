@@ -12,7 +12,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: ['Googlebot', 'Googlebot-Image'],
         allow: ['/api/feed/google', '/'],
-        disallow: ['/admin', '/checkout', '/cart', '/cuenta', '/confirmacion', '/azul-retorno'],
+        disallow: ['/checkout', '/cart', '/cuenta', '/confirmacion', '/azul-retorno'],
       },
       // Bloquear bots de IA para training (pero permitir indexación en buscadores IA)
       {
@@ -23,7 +23,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: 'Google-Extended',
         allow: '/',
-        disallow: ['/admin', '/checkout', '/cart', '/cuenta', '/api/'],
+        disallow: ['/checkout', '/cart', '/cuenta', '/api/'],
       },
     ],
     host: 'https://www.contactgo.net',

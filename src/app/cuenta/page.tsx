@@ -160,14 +160,29 @@ export default function CuentaPage() {
       setAuthChecked(true)
       if (user) {
         setUser(user)
-        sb.from('profiles').select('*').eq('id', user.id).single().then(({ data }) => {
-          if (data) { setPerfil(data); setForm({ nombre: data.nombre || '', telefono: data.telefono || '' }); setProfileLat(data.lat ?? null); setProfileLng(data.lng ?? null); setProfileAddr(data.direccion_completa ?? null) }
+        // Cargar datos en paralelo con manejo de error individual
+        Promise.allSettled([
+          sb.from('profiles').select('*').eq('id', user.id).single(),
+          sb.from('orders').select('*').eq('user_id', user.id).order('fecha', { ascending: false }),
+          sb.from('addresses').select('*').eq('user_id', user.id).order('created_at'),
+          sb.from('prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
+          sb.from('payment_methods').select('*').eq('user_id', user.id).order('created_at'),
+          sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
+        ]).then(([rPerfil, rOrdenes, rDirs, rRecetas, rPagos, rSubs]) => {
+          if (rPerfil.status === 'fulfilled' && rPerfil.value.data) {
+            const d = rPerfil.value.data
+            setPerfil(d)
+            setForm({ nombre: d.nombre || '', telefono: d.telefono || '' })
+            setProfileLat(d.lat ?? null)
+            setProfileLng(d.lng ?? null)
+            setProfileAddr(d.direccion_completa ?? null)
+          }
+          if (rOrdenes.status === 'fulfilled')  setPedidos(rOrdenes.value.data || [])
+          if (rDirs.status === 'fulfilled')     setDirecciones(rDirs.value.data || [])
+          if (rRecetas.status === 'fulfilled')  setRecetas(rRecetas.value.data || [])
+          if (rPagos.status === 'fulfilled')    setPagos(rPagos.value.data || [])
+          if (rSubs.status === 'fulfilled')     setSuscripciones(rSubs.value.data || [])
         })
-        sb.from('orders').select('*').eq('user_id', user.id).order('fecha', { ascending: false }).then(({ data }) => setPedidos(data || []))
-        sb.from('addresses').select('*').eq('user_id', user.id).order('created_at').then(({ data }) => setDirecciones(data || []))
-        sb.from('prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).then(({ data }) => setRecetas(data || []))
-        sb.from('payment_methods').select('*').eq('user_id', user.id).order('created_at').then(({ data }) => setPagos(data || []))
-        sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).then(({ data }) => setSuscripciones(data || []))
       }
     })
   }, [])
