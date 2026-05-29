@@ -15,18 +15,21 @@ export async function POST(req: NextRequest) {
     const { subscription_id, motivo, confirmar_pedido = false } = await req.json()
     if (!subscription_id) return NextResponse.json({ error: 'subscription_id requerido' }, { status: 400 })
 
-    // Verificar sesión del usuario — este endpoint requiere autenticación
+    // Auth check PRIMERO — antes de cualquier query a DB
     const sbServer = createServerSupabaseClient()
     const { data: { user } } = await sbServer.auth.getUser()
+    if (!user) return NextResponse.json({ error: 'Sesión requerida' }, { status: 401 })
 
+    // Verificar rol
+    const { data: profile } = await sbServer.from('profiles').select('role').eq('id', user.id).single()
+    const isAdmin = profile?.role === 'admin'
+
+    // Buscar suscripción
     const { data: sub } = await getSb().from('subscriptions').select('*').eq('id', subscription_id).single()
     if (!sub) return NextResponse.json({ error: 'No encontrada' }, { status: 404 })
     if (sub.cancelada) return NextResponse.json({ error: 'Ya cancelada' }, { status: 400 })
 
-    // Verificar que el usuario es el dueño de la suscripción o es admin
-    if (!user) return NextResponse.json({ error: 'Sesión requerida' }, { status: 401 })
-    const { data: profile } = await sbServer.from('profiles').select('role').eq('id', user.id).single()
-    const isAdmin = profile?.role === 'admin'
+    // Verificar que el usuario es el dueño o es admin
     if (!isAdmin && sub.user_id !== user.id) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
     }
