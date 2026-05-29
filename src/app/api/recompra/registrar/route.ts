@@ -73,6 +73,8 @@ export async function POST(req: NextRequest) {
           valido_hasta: r.fecha_estimada_fin.slice(0, 10),
           fecha_expira: r.fecha_estimada_fin.slice(0, 10),
           usos_actuales: 0,
+          // BUG-07 FIX: vincular cupón al email del destinatario
+          email_requerido: r.cliente_email ?? null,
         })
       }
     }
