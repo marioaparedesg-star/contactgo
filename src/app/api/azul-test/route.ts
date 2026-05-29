@@ -21,8 +21,10 @@ function getSb() {
 
 export async function GET(req: NextRequest) {
   // Bloquear completamente en producción
-  if (AZUL_ENV === 'production') {
-    return NextResponse.json({ error: 'No disponible en producción' }, { status: 404 })
+  // Bloquear en cualquier deploy de Vercel (NODE_ENV=production)
+  // Independiente del valor de AZUL_ENV (puede ser sandbox mientras esperamos credenciales)
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
   // Verificar secret
