@@ -40,20 +40,20 @@ export default function AdminDashboard() {
 
     const [all, today7, ord7, ordRecent, items, stockLow] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
-        .in('pago_estado',['pagado','contra_entrega']).not('numero_orden','like','CG-TEST%')
+        .or('pago_estado.eq.pagado,metodo_pago.eq.contra_entrega').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
         .gte('fecha',since30),
       sb.from('orders').select('id,total,estado,fecha')
-        .in('pago_estado',['pagado','contra_entrega']).not('numero_orden','like','CG-TEST%')
+        .or('pago_estado.eq.pagado,metodo_pago.eq.contra_entrega').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
         .gte('fecha',since1),
       sb.from('orders').select('id,total,estado,fecha')
-        .in('pago_estado',['pagado','contra_entrega']).not('numero_orden','like','CG-TEST%')
+        .or('pago_estado.eq.pagado,metodo_pago.eq.contra_entrega').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
         .gte('fecha',since7),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
         .order('created_at',{ascending:false}).limit(8),
       sb.from('order_items')
-        .select('nombre,cantidad,precio,order_id,orders!inner(pago_estado)')
-        .eq('orders.pago_estado','pagado')
+        .select('nombre,cantidad,precio,order_id,orders!inner(pago_estado,metodo_pago)')
+        .or('orders.pago_estado.eq.pagado,orders.metodo_pago.eq.contra_entrega')
         .limit(600),
       sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
     ])
@@ -98,7 +98,7 @@ export default function AdminDashboard() {
       return { d: d.toLocaleDateString('es-DO',{weekday:'short'}), v: 0, date: d.toDateString() }
     })
     sb.from('orders').select('total,fecha')
-      .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+      .or('pago_estado.eq.pagado,metodo_pago.eq.contra_entrega').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
       .gte('fecha',new Date(Date.now()-7*86400000).toISOString())
       .then(({data:o})=>{
         ;(o??[]).forEach((ord:any)=>{

@@ -60,12 +60,14 @@ export async function POST(req: NextRequest) {
     // Generar pedido si aplica
     let pedidoGenerado = null
     if (confirmar_pedido && proxEnvio && diasRestantes !== null && diasRestantes <= 7 && diasRestantes >= 0) {
+      const subOrderNum = `CG-${Date.now().toString().slice(-8)}`
       const { data: order } = await getSb().from('orders').insert({
         user_id: sub.user_id, cliente_nombre: sub.cliente_nombre,
         cliente_email: sub.cliente_email, cliente_telefono: sub.cliente_telefono,
         direccion_texto: sub.direccion_texto, estado: 'pendiente',
         subtotal: totalConDescuento, envio: 0, descuento: totalBruto - totalConDescuento,
         total: totalConDescuento, metodo_pago: 'tarjeta', pago_estado: 'pendiente',
+        numero_orden: subOrderNum,
         notas_admin: `Auto-generado al cancelar suscripción #${subscription_id.slice(0,8).toUpperCase()}`,
       }).select().single()
 

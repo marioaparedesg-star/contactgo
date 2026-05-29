@@ -346,9 +346,11 @@ export default function ProductoClient({ product, variants }: Props) {
             {isLente && !isColor && <EyeSelector eye={eye} onChange={setEye} />}
 
             {isLente && !isColor && (() => {
+              // Si no hay variantes reales en inventario, no mostrar opciones falsas
+              const tieneVariantes = (product as any).tiene_variantes_reales !== false
               const sphOpts = product.sph_disponibles?.length
                 ? [...product.sph_disponibles].sort((a:any,b:any) => Number(a)-Number(b))
-                : ALL_SPH
+                : tieneVariantes ? ALL_SPH : []
               const fmtSph = (v:any) => Number(v) > 0 ? `+${Number(v).toFixed(2)}` : Number(v) === 0 ? 'Plano (0.00)' : Number(v).toFixed(2)
 
               const cylOpts = product.cyl_disponibles?.length ? [...product.cyl_disponibles].sort((a:any,b:any)=>Number(a)-Number(b)) : ALL_CYL
@@ -370,7 +372,12 @@ export default function ProductoClient({ product, variants }: Props) {
                       /* Misma receta para ambos */
                       <div className="bg-gray-50 rounded-xl p-3 space-y-3">
                         <p className="text-xs font-bold text-gray-500 uppercase">Receta (OD + OI igual)</p>
-                        <SelectField label="SPH" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
+                        {sphOpts.length === 0
+                          ? <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-800">
+                              📞 Para esta graduación contáctanos por WhatsApp o llena el formulario de receta y te cotizamos.
+                            </div>
+                          : <SelectField label="SPH" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
+                        }
                         {isToric && <>
                           <SelectField label="CYL" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
                           <SelectField label="AXIS" value={axis} options={axisOpts} required onChange={setAxis} format={v=>String(v).padStart(3,'0')+'°'}/>

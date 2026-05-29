@@ -21,8 +21,13 @@ async function getProduct(slug: string) {
   // Sobreescribir sph_disponibles con las dioptrías que tienen stock real
   if (inv && inv.length > 0) {
     const sphs = [...new Set(inv.map((i: any) => i.sph).filter(Boolean))].sort((a,b) => a-b)
-    data.sph_disponibles      = sphs
-    data.inventory_disponible = inv  // todas las variantes con stock
+    data.sph_disponibles         = sphs
+    data.inventory_disponible    = inv
+    data.tiene_variantes_reales  = true
+  } else {
+    // Sin variantes en product_inventory — marcar para que el PDP muestre aviso
+    data.tiene_variantes_reales  = false
+    data.sph_disponibles         = []  // vacío para forzar modo consulta
   }
 
   return data
