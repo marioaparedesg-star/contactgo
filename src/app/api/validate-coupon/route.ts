@@ -23,12 +23,13 @@ export async function POST(req: NextRequest) {
 
     const { data, error } = await getSb().rpc('validate_coupon', {
       p_codigo:   codigo.trim().toUpperCase(),
-      p_subtotal: subtotal,
-      p_email:    email ?? null,
+      p_subtotal: Number(subtotal),
+      p_email:    (email as string | null) ?? null,
     })
 
     if (error) {
-      return NextResponse.json({ error: 'Error validando cupón' }, { status: 500 })
+      console.error('[validate-coupon] RPC error:', error)
+      return NextResponse.json({ error: 'Error validando cupón', detail: error.message }, { status: 500 })
     }
 
     const result = Array.isArray(data) ? data[0] : data
