@@ -34,6 +34,8 @@ export default function CrossSelling({ tipo, currentId }: { tipo: string; curren
     : tipo === 'solucion' ? 'Añade lubricación extra'
     : 'Completa tu kit de lentes'
 
+  if (!products.length) return null
+
   return (
     <section className="max-w-6xl mx-auto px-4 pb-10 border-t border-gray-100 pt-10">
       <div className="flex items-center justify-between mb-4">

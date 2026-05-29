@@ -1,6 +1,8 @@
-import { guardRequest, getIP } from '@/lib/api-guard'
+import { guardRequest } from '@/lib/api-guard'
+import { requireAdmin } from '@/lib/admin-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 
@@ -8,16 +10,26 @@ export async function POST(req: NextRequest) {
   // Seguridad: origin + rate limit
   const guardErr = guardRequest(req, { limitPerMin: 10 })
   if (guardErr) return guardErr
-  const ip = getIP(req)
-
 
   try {
     const { subscription_id, motivo, confirmar_pedido = false } = await req.json()
     if (!subscription_id) return NextResponse.json({ error: 'subscription_id requerido' }, { status: 400 })
 
+    // Verificar sesión del usuario — este endpoint requiere autenticación
+    const sbServer = createServerSupabaseClient()
+    const { data: { user } } = await sbServer.auth.getUser()
+
     const { data: sub } = await getSb().from('subscriptions').select('*').eq('id', subscription_id).single()
     if (!sub) return NextResponse.json({ error: 'No encontrada' }, { status: 404 })
     if (sub.cancelada) return NextResponse.json({ error: 'Ya cancelada' }, { status: 400 })
+
+    // Verificar que el usuario es el dueño de la suscripción o es admin
+    if (!user) return NextResponse.json({ error: 'Sesión requerida' }, { status: 401 })
+    const { data: profile } = await sbServer.from('profiles').select('role').eq('id', user.id).single()
+    const isAdmin = profile?.role === 'admin'
+    if (!isAdmin && sub.user_id !== user.id) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+    }
 
     const hoy = new Date(); hoy.setHours(0,0,0,0)
     const proxEnvio = sub.proximo_envio ? new Date(sub.proximo_envio) : null

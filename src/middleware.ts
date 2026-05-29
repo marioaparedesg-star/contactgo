@@ -35,7 +35,26 @@ export function middleware(req: NextRequest) {
   }
 
   // ══════════════════════════════════════════════════════════
-  // 2. APIs de AZUL — origin check
+  // 2. /admin/* — verificar cookie de sesión de Supabase
+  //    Si no hay cookie de auth → redirect al login (server-side)
+  // ══════════════════════════════════════════════════════════
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login' && !pathname.startsWith('/admin/login')) {
+    // Supabase SSR guarda la sesión en una cookie con este patrón
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+    const projectRef  = supabaseUrl.replace('https://', '').split('.')[0] // ej: atendbjolicwcsqfyiyh
+    const authCookie  = req.cookies.get(`sb-${projectRef}-auth-token`)
+      ?? req.cookies.get('sb-access-token')
+      ?? req.cookies.get('supabase-auth-token')
+
+    if (!authCookie?.value) {
+      const loginUrl = new URL('/admin/login', req.url)
+      loginUrl.searchParams.set('next', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // 3. APIs de AZUL — origin check
   // ══════════════════════════════════════════════════════════
   if (pathname.startsWith('/api/azul')) {
     if (origin && !ALLOWED_ORIGINS.includes(origin)) {
@@ -47,7 +66,7 @@ export function middleware(req: NextRequest) {
   }
 
   // ══════════════════════════════════════════════════════════
-  // 3. Rate limiting en endpoints sensibles
+  // 4. Rate limiting en endpoints sensibles
   // ══════════════════════════════════════════════════════════
   const rateLimits: Record<string, number> = {
     '/api/orders': 20,
@@ -71,7 +90,7 @@ export function middleware(req: NextRequest) {
   }
 
   // ══════════════════════════════════════════════════════════
-  // 4. noindex headers en rutas privadas
+  // 5. noindex headers en rutas privadas
   // ══════════════════════════════════════════════════════════
   const res = NextResponse.next()
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/')) {

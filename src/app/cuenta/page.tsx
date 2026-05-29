@@ -98,7 +98,14 @@ export default function CuentaPage() {
   const [motivoCancel, setMotivoCancel] = useState('')
   const [cancelLoading, setCancelLoading] = useState(false)
   const [loadingPedido, setLoadingPedido] = useState(false)
-  const [tab, setTab]         = useState('')
+  const [tab, setTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '')
+      const validTabs = ['perfil','pedidos','suscripciones','recetas','direcciones','pagos']
+      if (validTabs.includes(hash)) return hash
+    }
+    return ''
+  })
   const [editando, setEditando] = useState(false)
   const [form, setForm]       = useState({ nombre: '', telefono: '' })
   const [direcciones, setDirecciones] = useState<any[]>([])
