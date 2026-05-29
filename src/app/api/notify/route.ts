@@ -299,6 +299,7 @@ export async function POST(req: NextRequest) {
     if (!process.env.RESEND_API_KEY) return NextResponse.json({ error: 'RESEND_API_KEY no configurado' }, { status: 500 })
 
     const resend = new Resend(process.env.RESEND_API_KEY)
+    const sbAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
     // Obtener orden + items
     const { data: order } = await getSb().from('orders').select('*').eq('id', order_id).single()
@@ -314,14 +315,32 @@ export async function POST(req: NextRequest) {
       ? `✅ Pedido #${pedidoId} recibido — ContactGo`
       : `📦 Tu pedido #${pedidoId} · ${estadoLabel} — ContactGo`
 
-    // Email al cliente
+    // Email al cliente + log de entrega
     if (order.cliente_email) {
-      await resend.emails.send({
-        from: FROM_EMAIL,
-        to: order.cliente_email,
-        subject,
-        html: emailCliente(order, itemsList, evento, nuevo_estado),
-      })
+      let resendId: string | undefined
+      let emailError: string | undefined
+      try {
+        const { data: sent, error: sendErr } = await resend.emails.send({
+          from: FROM_EMAIL,
+          to: order.cliente_email,
+          subject,
+          html: emailCliente(order, itemsList, evento, nuevo_estado),
+        })
+        resendId = sent?.id
+        if (sendErr) emailError = sendErr.message
+      } catch (e: any) {
+        emailError = e?.message ?? 'Error desconocido'
+      }
+      // Registrar en email_log para auditoría
+      await sbAdmin.from('email_log').insert({
+        order_id:    order_id,
+        tipo:        evento === 'nuevo_pedido' ? 'confirmacion_orden' : 'actualizacion_estado',
+        destinatario: order.cliente_email,
+        asunto:      subject,
+        resend_id:   resendId ?? null,
+        enviado:     !emailError,
+        error_msg:   emailError ?? null,
+      }).then(() => {})
     }
 
     // WhatsApp al cliente — solo para pedidos nuevos

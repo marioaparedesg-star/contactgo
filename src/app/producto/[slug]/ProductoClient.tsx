@@ -151,6 +151,26 @@ export default function ProductoClient({ product, variants }: Props) {
   const isToric    = tipo === 'torico'
   const isMulti    = tipo === 'multifocal'
 
+  // Verificar si la combinación seleccionada tiene stock real en product_inventory
+  // Evita que se vendan variantes (SPH+CYL+AXIS) que no existen en inventario
+  const inventario = (product as any).inventory_disponible as any[] ?? []
+  const varianteSeleccionadaTieneStock = (): boolean => {
+    if (!isLente || isColor || !inventario.length) return true // no aplica
+    const sphNum  = sph  ? parseFloat(sph)  : null
+    const cylNum  = cyl  ? parseFloat(cyl)  : null
+    const axisNum = axis ? parseInt(axis)   : null
+    const addVal  = add  || null
+    if (sphNum === null) return true // aún no seleccionó SPH — botón habilitado (SelectField lo bloquea)
+    return inventario.some((v: any) => {
+      const sphMatch  = Math.abs(Number(v.sph) - sphNum) < 0.001
+      const cylMatch  = cylNum  === null ? v.cyl  == null : (v.cyl  != null && Math.abs(Number(v.cyl) - cylNum) < 0.001)
+      const axisMatch = axisNum === null ? v.axis == null : (v.axis != null && v.axis === axisNum)
+      const addMatch  = addVal  === null ? v.add_power == null : v.add_power === addVal
+      return sphMatch && cylMatch && axisMatch && addMatch
+    })
+  }
+  const sinVariante = isLente && !isColor && sph !== '' && !varianteSeleccionadaTieneStock()
+
   // ── Analytics: view_item al cargar el producto ──────────────────────────
   useEffect(() => {
     trackEcommerce('view_item', {
@@ -542,19 +562,19 @@ export default function ProductoClient({ product, variants }: Props) {
                   </>
                 )}
               </div>
-              <button onClick={handleBuyNow} disabled={product.stock === 0}
+              <button onClick={handleBuyNow} disabled={product.stock === 0 || sinVariante}
                 className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-primary-200/60 disabled:opacity-40 disabled:cursor-not-allowed">
-                {product.stock === 0 ? '— Sin stock —' : (
+                {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Consultar disponibilidad —' : (
                   <span className="flex items-center gap-2">
                     Comprar ahora
                     <span className="opacity-80 text-sm font-bold">→</span>
                   </span>
                 )}
               </button>
-              <button onClick={handleAdd} disabled={product.stock === 0}
+              <button onClick={handleAdd} disabled={product.stock === 0 || sinVariante}
                 className="w-full bg-white border-2 border-gray-200 hover:border-primary-400 hover:bg-primary-50 active:scale-[0.98] text-gray-700 hover:text-primary-700 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-40 disabled:cursor-not-allowed">
                 <ShoppingCart className="w-4 h-4" />
-                Agregar al carrito
+                {sinVariante ? 'Consultar disponibilidad' : 'Agregar al carrito'}
               </button>
               {/* Trust micro-badges */}
               <div className="flex items-center justify-center gap-4 pt-1">

@@ -179,8 +179,10 @@ export default function CheckoutPage() {
         cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
         direccion_texto: `${data.direccion}, ${data.ciudad === 'Otra ciudad' && data.ciudadPersonalizada ? data.ciudadPersonalizada : data.ciudad}`,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
-        metodo_pago: 'tarjeta', pago_estado: 'pendiente',
+        descuento, metodo_pago: 'tarjeta', pago_estado: 'pendiente',
         numero_orden: orderNum,
+        cupon_aplicado: cuponAplicado && cupon.trim() ? cupon.trim().toUpperCase() : null,
+        cupon_descuento: cuponAplicado && descuento > 0 ? descuento : null,
         disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
         // Coordenadas de la dirección seleccionada
         ...(() => {

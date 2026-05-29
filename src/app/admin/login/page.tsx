@@ -15,10 +15,22 @@ export default function AdminLogin() {
   const login = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    const sb = createClient()
-    const { error } = await sb.auth.signInWithPassword({ email, password: pass })
-    if (error) { setMsg('Credenciales incorrectas'); setLoading(false); return }
-    router.push('/admin')
+    setMsg('')
+    try {
+      const sb = createClient()
+      const { error } = await sb.auth.signInWithPassword({ email, password: pass })
+      if (error) {
+        setMsg(error.message.includes('Invalid') ? 'Credenciales incorrectas' : error.message)
+        setLoading(false)
+        return
+      }
+      // Hard navigation: fuerza recarga completa para que el middleware
+      // lea la cookie recién seteada (sb-{ref}-auth-token o .0 chunked)
+      window.location.href = '/admin'
+    } catch (err: any) {
+      setMsg('Error inesperado. Intenta de nuevo.')
+      setLoading(false)
+    }
   }
 
   const sendMagicLink = async () => {

@@ -10,7 +10,12 @@ export async function GET() {
     .from('products').select('*').eq('activo', true).gt('stock', 0).order('nombre')
 
   const items = (products ?? []).map(p => {
-    const slug = p.slug ?? p.id
+    // Sanitizar slug: remover caracteres no-ASCII que causan 404 en Next.js
+    const rawSlug = p.slug ?? p.id
+    const slug = rawSlug
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quitar diacríticos
+      .replace(/[^a-z0-9\-]/gi, '-')                    // no-ASCII → guión
+      .replace(/-+/g, '-')                               // guiones dobles → uno
     const tipo = p.tipo === 'esferico' ? 'Lentes Esféricos' : p.tipo === 'torico' ? 'Lentes Tóricos' :
                  p.tipo === 'multifocal' ? 'Lentes Multifocales' : p.tipo === 'color' ? 'Lentes de Color' :
                  p.tipo === 'solucion' ? 'Solución para Lentes' : 'Lentes de Contacto'

@@ -42,7 +42,11 @@ export function middleware(req: NextRequest) {
     // Supabase SSR guarda la sesión en una cookie con este patrón
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
     const projectRef  = supabaseUrl.replace('https://', '').split('.')[0] // ej: atendbjolicwcsqfyiyh
-    const authCookie  = req.cookies.get(`sb-${projectRef}-auth-token`)
+    // @supabase/ssr 0.4.x puede guardar la sesión como cookie única (key)
+    // o como chunks (key.0, key.1…) cuando el valor supera 3180 bytes
+    const cookieBase   = `sb-${projectRef}-auth-token`
+    const authCookie   = req.cookies.get(cookieBase)          // sin chunks
+      ?? req.cookies.get(`${cookieBase}.0`)                   // primer chunk
       ?? req.cookies.get('sb-access-token')
       ?? req.cookies.get('supabase-auth-token')
 
