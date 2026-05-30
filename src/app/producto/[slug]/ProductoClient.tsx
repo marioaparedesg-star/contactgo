@@ -204,6 +204,8 @@ export default function ProductoClient({ product, variants }: Props) {
     if (isSolucion && sizes.length > 1 && !size) { toast.error('Selecciona el tamaño'); return false }
 
     if (isLente && !isColor) {
+      // Validar ADD obligatorio para multifocales
+      if (isMulti && !add) { toast.error('Selecciona la adición ADD'); return false }
       if (eye === 'AMBOS') {
         // Validar ambos ojos
         if (mismaSph) {

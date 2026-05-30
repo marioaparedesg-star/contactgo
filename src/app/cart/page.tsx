@@ -12,7 +12,7 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye, Tag, Shield, Truck, 
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-const CUPONES: Record<string,number> = { 'BIENVENIDO10': 0.10, 'CONTACTGO15': 0.15 }
+
 
 export default function CartPage() {
   const { items, removeItem, updateQty, addItem, subtotal, clearCart } = useCartStore()
@@ -44,12 +44,29 @@ export default function CartPage() {
   const envio = sub >= 8000 ? 0 : 200
   const tot  = sub + envio - descuento
 
-  const aplicarCupon = () => {
+  const aplicarCupon = async () => {
     const code = cupon.trim().toUpperCase()
-    const pct  = CUPONES[code]
-    if (!pct) { setCuponErr('Código inválido'); setCuponOk(false); return }
-    setDescuento(Math.round(sub * pct))
-    setCuponOk(true); setCuponErr('')
+    if (!code) return
+    try {
+      const res = await fetch('/api/validate-coupon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ codigo: code, subtotal: sub }),
+      })
+      const result = await res.json()
+      if (!result.valido) {
+        setCuponErr(result.mensaje ?? 'Cupón no válido')
+        setCuponOk(false)
+        setDescuento(0)
+        return
+      }
+      setDescuento(result.descuento)
+      setCuponOk(true)
+      setCuponErr('')
+      toast.success(result.mensaje ?? 'Cupón aplicado ✓')
+    } catch {
+      setCuponErr('Error al validar')
+    }
   }
 
   if (items.length === 0) return (

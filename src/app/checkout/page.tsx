@@ -106,41 +106,22 @@ export default function CheckoutPage() {
     const code = cupon.trim().toUpperCase()
     if (!code) return
     try {
-      // Validar contra DB — nunca en client-side
-      const sb = createClient()
-      const { data, error } = await sb
-        .from('coupons')
-        .select('codigo, descuento_pct, activo, fecha_inicio, fecha_fin, uso_actual, uso_maximo')
-        .eq('codigo', code)
-        .eq('activo', true)
-        .single()
-
-      if (error || !data) {
-        toast.error('Cupón inválido o expirado')
+      const email = getValues('email') ?? ''
+      const res = await fetch('/api/validate-coupon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ codigo: code, subtotal: sub, email: email || undefined }),
+      })
+      const result = await res.json()
+      if (!result.valido) {
+        toast.error(result.mensaje ?? 'Cupón no válido')
+        setCuponAplicado(false)
+        setDescuento(0)
         return
       }
-
-      // Verificar vigencia
-      const now = new Date()
-      if (data.fecha_fin && new Date(data.fecha_fin) < now) {
-        toast.error('Cupón expirado')
-        return
-      }
-      if (data.fecha_inicio && new Date(data.fecha_inicio) > now) {
-        toast.error('Cupón aún no está disponible')
-        return
-      }
-
-      // Verificar límite de uso
-      if (data.uso_maximo !== null && data.uso_actual >= data.uso_maximo) {
-        toast.error('Cupón agotado')
-        return
-      }
-
-      const pct = Number(data.descuento_pct) / 100
-      setDescuento(Math.round(sub * pct))
+      setDescuento(result.descuento)
       setCuponAplicado(true)
-      toast.success(`Cupón aplicado: ${data.descuento_pct}% off`)
+      toast.success(result.mensaje ?? 'Cupón aplicado ✓')
     } catch {
       toast.error('Error al validar cupón')
     }
