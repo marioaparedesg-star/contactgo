@@ -15,6 +15,7 @@ import type { Product } from '@/types'
 import toast from 'react-hot-toast'
 import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
 import EntregaBadge from '@/components/shop/EntregaBadge'
+import InlineCrossSell from '@/components/shop/InlineCrossSell'
 import { getEntrega } from '@/lib/delivery-times'
 import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES } from '@/lib/subscription-utils'
 
@@ -64,15 +65,16 @@ const ALL_ADD  = ['+1.00','+1.25','+1.50','+1.75','+2.00','+2.25','+2.50','+2.75
 
 function EyeSelector({ eye, onChange }: { eye: string; onChange: (v: string) => void }) {
   const opts = [
-    {val:'OD',   emoji:'👁', label:'Ojo Derecho',   sub:'OD'},
-    {val:'OI',   emoji:'👁', label:'Ojo Izquierdo', sub:'OI'},
-    {val:'AMBOS',emoji:'👀', label:'Ambos ojos',    sub:'OD + OS'},
+    {val:'OD',   emoji:'👁', label:'Ojo derecho', hint:'Solo OD'},
+    {val:'OI',   emoji:'👁', label:'Ojo izquierdo',hint:'Solo OI'},
+    {val:'AMBOS',emoji:'👀', label:'Ambos ojos',  hint:'Más común'},
   ]
   return (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-2">
+      <label className="block text-sm font-semibold text-gray-700 mb-1">
         ¿Para qué ojo? <span className="text-red-500">*</span>
       </label>
+      <p className="text-[10px] text-gray-400 mb-2">La mayoría compra para ambos ojos</p>
       <div className="grid grid-cols-3 gap-2">
         {opts.map(o => (
           <button key={o.val} onClick={() => onChange(o.val)}
@@ -82,8 +84,8 @@ function EyeSelector({ eye, onChange }: { eye: string; onChange: (v: string) => 
                 : 'bg-white text-gray-700 border-gray-200 hover:border-primary-300'
             }`}>
             <div className="text-base mb-0.5">{o.emoji}</div>
-            <p className="text-[10px] font-black">{o.sub}</p>
-            <p className={`text-[9px] ${eye === o.val ? 'text-white/80' : 'text-gray-400'}`}>{o.label}</p>
+            <p className="text-[10px] font-black leading-tight">{o.label}</p>
+            <p className={`text-[9px] mt-0.5 ${eye === o.val ? 'text-white/70' : 'text-primary-400 font-medium'}`}>{o.hint}</p>
           </button>
         ))}
       </div>
@@ -97,16 +99,64 @@ function SelectField({ label, value, options, onChange, required, format }: {
 }) {
   return (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-2">
+      <label className="block text-sm font-semibold text-gray-700 mb-1.5">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <select value={value} onChange={e => onChange(e.target.value)}
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white">
-        <option value="">-- Selecciona {label.toLowerCase()} --</option>
+        className={`w-full border-2 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none transition-colors bg-white ${
+          value ? 'border-primary-400 text-gray-900' : 'border-gray-200 text-gray-400'
+        }`}>
+        <option value="">Selecciona {label.toLowerCase()}</option>
         {options.map(o => (
           <option key={o} value={String(o)}>{format ? format(o) : String(o)}</option>
         ))}
       </select>
+    </div>
+  )
+}
+
+
+function WhyBlock({ tipo, proteccion_uv }: { tipo: string; proteccion_uv?: boolean }) {
+  type BenefitSet = { title: string; bullets: string[] }
+  const BENEFITS: Record<string, BenefitSet> = {
+    esferico:   {
+      title: '¿Por qué elegir este lente?',
+      bullets: ['Alta comodidad durante todo el día','Hidratación avanzada — ojos frescos','Visión nítida y estable','Calidad original garantizada'],
+    },
+    torico:     {
+      title: '¿Por qué elegir este lente?',
+      bullets: ['Corrige astigmatismo con precisión','Diseño estabilizado — no rota','Ideal para graduaciones exactas','Fabricado a medida para tu receta'],
+    },
+    multifocal: {
+      title: '¿Por qué elegir este lente?',
+      bullets: ['Ve de cerca, lejos y distancia media','Sin gafas para presbicia','Transición suave entre distancias','Adaptas en 1-2 semanas'],
+    },
+    color:      {
+      title: '¿Por qué elegir este lente?',
+      bullets: ['Cambia o intensifica tu color de ojos','Cómodo para uso diario o especial','Colores naturales y vibrantes','Con o sin graduación óptica'],
+    },
+    solucion:   {
+      title: '¿Por qué usar esta solución?',
+      bullets: ['Limpieza profunda diaria','Conserva y desinfecta tus lentes','Compatible con todos los tipos','Fórmula suave para ojos sensibles'],
+    },
+    gota:       {
+      title: '¿Por qué usar estas gotas?',
+      bullets: ['Alivio inmediato del ojo seco','Compatible con lentes de contacto','Sin conservantes (formato monodosis)','Para uso durante el día'],
+    },
+  }
+  const b = BENEFITS[tipo] ?? BENEFITS.esferico
+  const bullets = proteccion_uv ? b.bullets.map((bl, i) => i === 3 ? 'Protección UV Clase II incluida' : bl) : b.bullets
+  return (
+    <div className="bg-gradient-to-br from-primary-50 to-green-50 border border-primary-100 rounded-2xl p-4">
+      <p className="text-xs font-black text-primary-700 uppercase tracking-wide mb-3">{b.title}</p>
+      <ul className="space-y-1.5">
+        {bullets.map(bullet => (
+          <li key={bullet} className="flex items-start gap-2 text-sm text-gray-700">
+            <span className="text-green-500 shrink-0 mt-0.5 font-bold">✓</span>
+            <span className="font-medium">{bullet}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -274,17 +324,17 @@ export default function ProductoClient({ product, variants }: Props) {
           <span className="text-gray-600 font-medium truncate max-w-xs">{product.nombre}</span>
         </div>
 
-        <div className="grid md:grid-cols-[1fr_1.1fr] gap-6 lg:gap-12 xl:gap-16 items-start">
+        <div className="grid md:grid-cols-[1.1fr_1fr] gap-6 lg:gap-10 items-start">
           {/* Imagen — sticky en desktop */}
           <div className="md:sticky md:top-20">
-            <div className="group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 aspect-square flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-300 relative">
+            <div className="group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 aspect-[5/4] flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-300 relative">
               {/* Badge original */}
               <span className="absolute top-3 right-3 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full z-10 flex items-center gap-1 leading-none">
                 ✓ 100% Original
               </span>
               {product.imagen_url ? (
-                <Image src={product.imagen_url} alt={product.nombre} width={480} height={480}
-                  className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-out" priority unoptimized />
+                <Image src={product.imagen_url} alt={product.nombre} width={560} height={480}
+                  className="object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out" priority unoptimized />
               ) : (
                 <Eye className="w-20 h-20 text-gray-200" />
               )}
@@ -321,31 +371,40 @@ export default function ProductoClient({ product, variants }: Props) {
               </h1>
             </div>
 
-            <div className="flex items-baseline justify-between flex-wrap gap-2">
-              <div>
-                <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  {product.contenido && `${product.contenido} · `}{product.reemplazo}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className={`text-xs font-bold px-2.5 py-1.5 rounded-full flex items-center gap-1.5 ${
-                  product.stock === 0   ? 'bg-red-50 text-red-600 border border-red-100' :
-                  product.stock <= 3    ? 'bg-red-50 text-red-600 border border-red-100 animate-pulse' :
-                  product.stock <= 8    ? 'bg-orange-50 text-orange-600 border border-orange-100' :
-                  'bg-green-50 text-green-700 border border-green-100'
+            {/* P1: Precio + disponibilidad + indicador tipo — sin scroll */}
+            <div className="space-y-2">
+              <div className="flex items-baseline justify-between flex-wrap gap-2">
+                <div>
+                  <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
+                  {product.contenido && (
+                    <p className="text-xs text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>
+                  )}
+                </div>
+                {/* Indicador tipo: disponibilidad visual */}
+                <span className={`text-xs font-bold px-2.5 py-1.5 rounded-full flex items-center gap-1.5 border ${
+                  product.stock === 0 ? 'bg-red-50 text-red-600 border-red-100' :
+                  getEntregaInfo.especial && tipo === 'torico'    ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                  getEntregaInfo.especial && tipo === 'multifocal'? 'bg-amber-50 text-amber-700 border-amber-100' :
+                  product.stock <= 3  ? 'bg-red-50 text-red-600 border-red-100 animate-pulse' :
+                  product.stock <= 8  ? 'bg-orange-50 text-orange-600 border-orange-100' :
+                  'bg-green-50 text-green-700 border-green-100'
                 }`}>
                   <span className="w-1.5 h-1.5 rounded-full inline-block bg-current opacity-70" />
-                  {product.stock === 0  ? 'Sin stock' :
-                   product.stock <= 3   ? `¡Últimas ${product.stock} unidades!` :
-                   product.stock <= 8   ? `Pocas unidades — ${product.stock} disponibles` :
-                   'En stock · Envío hoy'}
+                  {product.stock === 0         ? 'Sin stock' :
+                   tipo === 'torico'            ? '🔵 Pedido personalizado' :
+                   tipo === 'multifocal'        ? '🟡 Fabricación especial' :
+                   product.stock <= 3           ? `¡Últimas ${product.stock}!` :
+                   product.stock <= 8           ? `Pocas unidades` :
+                   '✅ Disponible'}
                 </span>
               </div>
+              {/* P1: Tiempo entrega justo debajo del precio */}
+              <p className={`text-xs font-semibold flex items-center gap-1.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
+                {getEntregaInfo.icono} {getEntregaInfo.detalle}
+              </p>
             </div>
 
-            {/* Tiempo de entrega — dinámico por categoría */}
-            <EntregaBadge tipo={product.tipo} nombre={product.nombre} variant="pdp" />
+
             {isLente && (
               <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex items-start gap-2">
                 <span className="text-blue-500 shrink-0 mt-0.5">⚕️</span>
@@ -357,7 +416,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
 
             {product.descripcion && (
-              <p className="text-gray-500 text-xs leading-relaxed line-clamp-4">{product.descripcion}</p>
+              <p className="text-gray-500 text-sm leading-relaxed">{product.descripcion}</p>
             )}
 
             {isLente && !isColor && <EyeSelector eye={eye} onChange={setEye} />}
@@ -516,6 +575,9 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
 
+            {/* P2: ¿Por qué elegir este lente? */}
+            <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
+
             {(product.curva_base || product.material || (product as any).fabricante_nombre) && (
               <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4 py-3 border-b border-gray-100">
@@ -550,6 +612,11 @@ export default function ProductoClient({ product, variants }: Props) {
                   </div>
                 )}
               </div>
+            )}
+
+            {/* P4: Cross-sell inline — solución compatible si es lente */}
+            {['esferico','torico','multifocal','color'].includes(tipo) && (
+              <InlineCrossSell tipo={tipo} currentId={product.id} />
             )}
 
             <SuscripcionSelector
@@ -603,20 +670,19 @@ export default function ProductoClient({ product, variants }: Props) {
                 <ShoppingCart className="w-4 h-4" />
                 {sinVariante ? 'Consultar disponibilidad' : 'Agregar al carrito'}
               </button>
-              {/* Trust badges — FASE 11 */}
-              <div className="grid grid-cols-3 gap-2 mt-1">
+              {/* Trust strip P3 */}
+              <div className="border-t border-gray-100 pt-3 mt-1 space-y-1.5">
                 {[
-                  { icon:'🚀', label:'Entrega rápida',    show: !getEntregaInfo.especial },
-                  { icon:'✅', label:'Producto original',  show: true },
-                  { icon:'🏭', label:'Garantía fabricante',show: true },
-                  { icon:'🔒', label:'Compra segura',      show: true },
-                  { icon:'🛡️', label:'Pago protegido',    show: true },
-                  { icon:'↩',  label:'Devoluciones',       show: true },
-                ].filter(b => b.show).slice(0, 6).map(b => (
-                  <div key={b.label} className="flex items-center gap-1.5 bg-gray-50 rounded-xl px-2 py-2">
-                    <span className="text-sm">{b.icon}</span>
-                    <span className="text-[9px] font-bold text-gray-600 leading-tight">{b.label}</span>
-                  </div>
+                  '✅ Producto 100% original garantizado',
+                  '🔒 Pago seguro — AZUL Banco Popular',
+                  '🏭 Garantía directa del fabricante',
+                  '💬 Soporte por WhatsApp 24/7',
+                  '🚚 Entrega en toda República Dominicana',
+                ].map(t => (
+                  <p key={t} className="text-[11px] text-gray-500 font-medium flex items-center gap-1.5">
+                    <span>{t.slice(0,2)}</span>
+                    <span>{t.slice(3)}</span>
+                  </p>
                 ))}
               </div>
             </div>
@@ -628,22 +694,25 @@ export default function ProductoClient({ product, variants }: Props) {
       <CrossSelling tipo={product.tipo} currentId={product.id} />
       <ProductFAQ tipo={product.tipo} nombre={product.nombre} />
 
-      {/* Sticky CTA móvil */}
+      {/* P6 Mobile: sticky CTA con precio, entrega y CTA amplios */}
       {product.stock > 0 && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 px-4 py-3 shadow-xl">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-400 truncate">{product.nombre}</p>
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 px-4 pt-3 pb-4 shadow-xl safe-area-pb">
+          <div className="flex items-center justify-between mb-2.5">
+            <div className="min-w-0 flex-1 mr-3">
+              <p className="text-[11px] text-gray-400 truncate leading-none">{product.nombre}</p>
+              <p className={`text-[10px] font-semibold mt-0.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
+                {getEntregaInfo.icono} {getEntregaInfo.etiqueta}
+              </p>
             </div>
-            <p className="font-black text-primary-600 text-lg shrink-0">RD${price.toLocaleString()}</p>
+            <p className="font-black text-primary-600 text-xl shrink-0">RD${price.toLocaleString()}</p>
           </div>
           <div className="flex gap-2">
-            <button onClick={handleAdd}
-              className="flex-none bg-white border-2 border-primary-600 text-primary-600 font-bold px-4 py-3 rounded-xl flex items-center gap-1 text-sm">
+            <button onClick={handleAdd} disabled={sinVariante}
+              className="flex-none bg-white border-2 border-primary-600 text-primary-600 font-bold px-4 py-3.5 rounded-2xl flex items-center gap-1 text-sm active:scale-95 transition-transform disabled:opacity-40">
               <ShoppingCart className="w-4 h-4" />
             </button>
-            <button onClick={handleBuyNow}
-              className="flex-1 btn-primary py-3 text-sm font-black flex items-center justify-center gap-2">
+            <button onClick={handleBuyNow} disabled={sinVariante}
+              className="flex-1 btn-primary py-3.5 text-base font-black flex items-center justify-center gap-2 active:scale-95 transition-transform disabled:opacity-40 rounded-2xl">
               Comprar ahora →
             </button>
           </div>
