@@ -19,16 +19,21 @@ import type { Product } from '@/types'
 
 export const revalidate = 60
 
-async function getFeaturedProducts(): Promise<Product[]> {
+async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount: number }> {
   const sb = createServerSupabaseClient()
-  const { data } = await sb.from('products')
-    .select('*')
-    .eq('activo', true)
-    .gt('stock', 0)
-    .in('tipo', ['esferico','torico','multifocal','color'])
-    .order('nombre', { ascending: true })
-    .limit(8)
-  return data ?? []
+  const [{ data }, { count }] = await Promise.all([
+    sb.from('products')
+      .select('*')
+      .eq('activo', true)
+      .gt('stock', 0)
+      .in('tipo', ['esferico','torico','multifocal','color'])
+      .order('nombre', { ascending: true })
+      .limit(8),
+    sb.from('orders')
+      .select('*', { count: 'exact', head: true })
+      .or('pago_estado.eq.pagado,metodo_pago.eq.contra_entrega')
+  ])
+  return { products: data ?? [], ordersCount: count ?? 0 }
 }
 
 const SCHEMA_ORG = {
@@ -67,7 +72,7 @@ const SCHEMA_ORG = {
 }
 
 export default async function HomePage() {
-  const featured = await getFeaturedProducts()
+  const { products: featured, ordersCount } = await getFeaturedProducts()
 
   return (
     <>
@@ -85,7 +90,7 @@ export default async function HomePage() {
               {[
                 { icon: Truck,    title: 'Envío 24–48h',     desc: 'A todo el país',              color: 'text-blue-600',   bg: 'bg-blue-50' },
                 { icon: Shield,   title: '100% Originales',  desc: 'Distribuidores autorizados',  color: 'text-green-600',  bg: 'bg-green-50' },
-                { icon: Star,     title: '60+ pedidos',  desc: 'Entregados en RD',          color: 'text-amber-500',  bg: 'bg-amber-50' },
+                { icon: Star,     title: `${ordersCount > 0 ? ordersCount + '+' : '60+'} pedidos`,  desc: 'Entregados en RD',          color: 'text-amber-500',  bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Soporte 24/7',     desc: 'WhatsApp y email',            color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
                 <div key={title} className="flex items-center gap-3">
@@ -222,7 +227,7 @@ export default async function HomePage() {
           </div>
           {featured.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {featured.map(p => <ProductCard key={p.id} product={p} />)}
+              {featured.map((p, idx) => <ProductCard key={p.id} product={p} isBestseller={idx < 3} />)}
             </div>
           ) : (
             <div className="text-center py-16 text-gray-400">Cargando productos...</div>

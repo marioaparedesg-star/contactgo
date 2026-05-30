@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     .select('*')
     .gte('updated_at', hace4h)
     .lte('updated_at', hace2h)
-    .eq('recovered', false)
+    .eq('recuperado', false)
     .not('cliente_email', 'is', null)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

@@ -487,15 +487,30 @@ export default function ProductoClient({ product, variants }: Props) {
             )}
 
             {!isGota && (
-              <div className="flex items-center gap-3">
-                <p className="text-sm font-semibold text-gray-700">Cantidad</p>
-                <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
-                  <button onClick={() => setQty(q => Math.max(1,q-1))}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">-</button>
-                  <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
-                  <button onClick={() => setQty(q => Math.min(product.stock,q+1))}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">+</button>
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <p className="text-sm font-semibold text-gray-700">Cantidad</p>
+                  <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                    <button onClick={() => setQty(q => Math.max(1,q-1))}
+                      className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">-</button>
+                    <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
+                    <button onClick={() => setQty(q => Math.min(product.stock,q+1))}
+                      className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">+</button>
+                  </div>
                 </div>
+                {isLente && !isColor && product.stock >= 2 && (
+                  <button onClick={() => setQty(2)}
+                    className={`w-full text-left flex items-center justify-between rounded-xl px-3 py-2.5 border transition-all text-xs
+                      ${qty === 2
+                        ? 'bg-primary-50 border-primary-400 text-primary-700'
+                        : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-primary-200 hover:bg-primary-50/50'
+                      }`}>
+                    <span className="font-bold">📦 Pack 2 cajas</span>
+                    <span className={`font-black text-sm ${qty === 2 ? 'text-primary-700' : 'text-green-700'}`}>
+                      RD${Math.round(precioBase * 2 * 0.95).toLocaleString()} <span className="text-[10px] font-bold bg-green-500 text-white px-1.5 py-0.5 rounded-full ml-1">5% OFF</span>
+                    </span>
+                  </button>
+                )}
               </div>
             )}
 
@@ -518,6 +533,8 @@ export default function ProductoClient({ product, variants }: Props) {
                     ['🏭 Fabricante',          (product as any).fabricante_nombre],
                     ['🌍 País de origen',      (product as any).pais_origen],
                     ['🛡️ Protección UV',      (product as any).proteccion_uv ? 'Clase II (bloques ≥99% UV-B y ≥95% UV-A)' : null],
+                    ['🔢 EAN / GTIN',          (product as any).ean ?? (product as any).gtin ?? null],
+                    ['🏷️ SKU fabricante',       (product as any).codigo_fabricante ?? null],
                   ].filter(([,v]) => v).map(([k,v]) => (
                     <div key={String(k)} className="bg-white px-4 py-3">
                       <p className="text-[10px] text-gray-400 font-medium">{String(k).replace(/^[^ ]+ /,'')}</p>

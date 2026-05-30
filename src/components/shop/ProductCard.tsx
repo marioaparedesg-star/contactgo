@@ -9,7 +9,7 @@ import { useCartStore } from '@/lib/cart-store'
 import { trackEcommerce } from '@/lib/analytics'
 import toast from 'react-hot-toast'
 
-interface Props { product: Product }
+interface Props { product: Product; isBestseller?: boolean }
 
 const TIPO_BADGE: Record<string, { label: string; color: string }> = {
   esferico:   { label: 'Esférico',   color: 'bg-blue-100 text-blue-700' },
@@ -23,7 +23,7 @@ const TIPO_BADGE: Record<string, { label: string; color: string }> = {
 // Calcula días totales de uso por caja
 
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, isBestseller }: Props) {
   const addItem = useCartStore(s => s.addItem)
   const needsRx = ['esferico','torico','multifocal'].includes(product.tipo ?? '')
   const [isFav, setIsFav] = React.useState(false)
@@ -100,8 +100,13 @@ export default function ProductCard({ product }: Props) {
           </div>
         )}
 
-        {/* Badge tipo */}
-        <div className="absolute top-2 left-2 pointer-events-none">
+        {/* Badge tipo + bestseller */}
+        <div className="absolute top-2 left-2 pointer-events-none flex flex-col gap-1">
+          {isBestseller && (
+            <span className="badge text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-amber-500 text-white">
+              🔥 Más vendido
+            </span>
+          )}
           {badge && (
             <span className={`badge text-[10px] px-1.5 py-0.5 rounded-full font-medium ${badge.color}`}>
               {badge.label}

@@ -200,7 +200,7 @@ export default function CheckoutPage() {
       // Marcar carrito como recuperado (usuario completó el checkout)
       try {
         const email = data.email
-        if (email) createClient().from('abandoned_carts').update({ recuperado: true }).eq('email', email).then(() => {})
+        if (email) createClient().from('abandoned_carts').update({ recuperado: true }).eq('cliente_email', email).then(() => {})
       } catch { /* silencioso */ }
 
       // 2. Guardar items — crítico: verificar que se guardan
@@ -349,18 +349,18 @@ export default function CheckoutPage() {
         const vals = getValues()
         if (vals.email && items.length > 0) {
           await sb2.from('abandoned_carts').upsert({
-            email:         vals.email,
-            nombre:        vals.nombre ?? null,
-            telefono:      vals.telefono ?? null,
-            items_snapshot: JSON.stringify(items.map(i => ({
+            cliente_email:    vals.email,
+            cliente_nombre:   vals.nombre ?? null,
+            cliente_telefono: vals.telefono ?? null,
+            items:            JSON.stringify(items.map(i => ({
               id: i.product.id, nombre: i.product.nombre,
               precio: (i as any).precio_final ?? i.product.precio,
               cantidad: i.cantidad, sph: i.sph ?? null,
             }))),
-            total_estimado: totalFinal,
-            recuperado:     false,
-            updated_at:     new Date().toISOString(),
-          }, { onConflict: 'email', ignoreDuplicates: false })
+            total:            totalFinal,
+            recuperado:       false,
+            updated_at:       new Date().toISOString(),
+          }, { onConflict: 'cliente_email', ignoreDuplicates: false })
         }
       } catch { /* no bloquear flujo si falla */ }
       if (!isLoggedIn) { setShowAuthModal(true); return }

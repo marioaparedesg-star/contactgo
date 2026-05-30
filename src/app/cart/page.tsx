@@ -9,14 +9,34 @@ import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye, Tag, Shield, Truck, RotateCcw, ChevronRight } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 const CUPONES: Record<string,number> = { 'BIENVENIDO10': 0.10, 'CONTACTGO15': 0.15 }
 
 export default function CartPage() {
-  const { items, removeItem, updateQty, subtotal, clearCart } = useCartStore()
+  const { items, removeItem, updateQty, addItem, subtotal, clearCart } = useCartStore()
   const [cupon, setCupon] = useState('')
   const [descuento, setDescuento] = useState(0)
+  const [solucionSugerida, setSolucionSugerida] = useState<any>(null)
+
+  // Cargar solución sugerida si no hay solución en el carrito
+  useEffect(() => {
+    const tieneSolucion = items.some((i: any) =>
+      (i.product as any)?.tipo === 'solucion' || (i.product as any)?.tipo === 'gota'
+    )
+    const tieneELente = items.some((i: any) =>
+      ['esferico','torico','multifocal','color'].includes((i.product as any)?.tipo ?? '')
+    )
+    if (!tieneSolucion && tieneELente && items.length > 0) {
+      fetch('/api/cross-selling?tipos=solucion&exclude=&limit=1')
+        .then(r => r.json())
+        .then(d => setSolucionSugerida(d.products?.[0] ?? null))
+        .catch(() => {})
+    } else {
+      setSolucionSugerida(null)
+    }
+  }, [items])
   const [cuponOk, setCuponOk] = useState(false)
   const [cuponErr, setCuponErr] = useState('')
 
@@ -236,6 +256,34 @@ export default function CartPage() {
                   <div className="mt-2 bg-amber-200/50 rounded-full h-1.5 overflow-hidden">
                     <div className="bg-amber-500 h-full rounded-full transition-all"
                       style={{ width: `${Math.min(100, (sub/8000)*100)}%` }} />
+                  </div>
+                </div>
+              )}
+
+              {/* Cross-sell: solución si no la tienen */}
+              {solucionSugerida && (
+                <div className="bg-blue-50 border border-blue-100 rounded-2xl p-3">
+                  <p className="text-[10px] font-black text-blue-600 uppercase tracking-wide mb-2">
+                    💧 Completa tu kit de lentes
+                  </p>
+                  <div className="flex items-center gap-3">
+                    {solucionSugerida.imagen_url && (
+                      <img src={solucionSugerida.imagen_url} alt={solucionSugerida.nombre}
+                        className="w-10 h-10 object-contain rounded-lg bg-white border border-blue-100" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-gray-900 truncate">{solucionSugerida.nombre}</p>
+                      <p className="text-sm font-black text-primary-600">RD${Number(solucionSugerida.precio).toLocaleString()}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        addItem(solucionSugerida)
+                        setSolucionSugerida(null)
+                        toast.success('Solución añadida ✓')
+                      }}
+                      className="shrink-0 bg-primary-600 hover:bg-primary-700 text-white text-[10px] font-black px-3 py-2 rounded-xl transition-colors">
+                      + Agregar
+                    </button>
                   </div>
                 </div>
               )}

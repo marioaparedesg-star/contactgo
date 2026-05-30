@@ -3,6 +3,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
+import { getEntrega } from '@/lib/delivery-times'
 import { CheckCircle, Package, MapPin, CreditCard, MessageCircle, ChevronRight, XCircle } from 'lucide-react'
 import { fmtSph } from '@/lib/sph-utils'
 import { trackEcommerce } from '@/lib/analytics'
@@ -126,7 +127,19 @@ function ConfirmacionContent() {
   const pedidoId   = (order.numero_orden ?? order.id.slice(-8)).toUpperCase()
   const stepIdx    = PASOS.findIndex(s => s.key === order.estado)
   const curStep    = Math.max(stepIdx, 0)
-  const hasTorico  = items.some((i: any) => i.tipo === 'torico' || i.nombre?.toLowerCase().includes('toric'))
+  // Detectar el tipo más restrictivo en el pedido (mayor tiempo de entrega)
+  // Detección por nombre (order_items no tiene columna tipo — usar nombre del producto)
+  const tieneXR     = items.some((i: any) => /\bxr\b/i.test(i.nombre ?? ''))
+  const tieneTorico = items.some((i: any) =>
+    /t[oó]ric/i.test(i.nombre ?? '') || /astigmat/i.test(i.nombre ?? ''))
+  const tieneMF     = items.some((i: any) =>
+    /multifocal/i.test(i.nombre ?? '') || /presbic/i.test(i.nombre ?? '') || /presbyop/i.test(i.nombre ?? ''))
+  const tieneColor  = items.some((i: any) =>
+    /color/i.test(i.nombre ?? '') || /colores/i.test(i.nombre ?? ''))
+  // Tipo dominante: el de mayor tiempo de entrega
+  const tipoDominante = tieneXR || tieneTorico ? 'torico' : tieneMF ? 'multifocal' : tieneColor ? 'color' : 'esferico'
+  const entregaInfo = getEntrega(tipoDominante, tieneXR ? 'XR' : '')
+  const hasTorico = tieneXR || tieneTorico // mantener para compatibilidad visual
   const waMsg      = encodeURIComponent(`Hola ContactGo 👋 quiero consultar sobre mi pedido #${pedidoId}`)
   const waNumber   = '18294728328'
 
@@ -187,14 +200,18 @@ function ConfirmacionContent() {
       <div className="max-w-lg mx-auto px-4 -mt-10 space-y-4 relative z-10 pb-8">
 
         {/* Tiempo de entrega — card destacada */}
-        <div className={`rounded-2xl p-4 text-center border shadow-sm ${hasTorico ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-100'}`}>
-          <p className={`text-2xl font-black mb-0.5 ${hasTorico ? 'text-amber-700' : 'text-green-600'}`}>
-            {hasTorico ? '20–30 días' : '24–48 horas'}
+        {/* Tiempo de entrega dinámico por categoría */}
+        <div className={`rounded-2xl p-4 text-center border shadow-sm ${entregaInfo.especial ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-100'}`}>
+          <p className={`font-black text-sm uppercase tracking-wide mb-1 ${entregaInfo.especial ? 'text-amber-500' : 'text-green-500'}`}>
+            {entregaInfo.icono} {entregaInfo.especial ? 'Fabricación especial' : 'Envío rápido'}
           </p>
-          <p className={`text-sm font-medium ${hasTorico ? 'text-amber-600' : 'text-gray-500'}`}>
-            {hasTorico
-              ? '⏱️ Tus lentes se fabrican a medida · requieren más tiempo'
-              : '🚀 Tu pedido llegará pronto a tu puerta'}
+          <p className={`text-2xl font-black mb-0.5 ${entregaInfo.especial ? 'text-amber-700' : 'text-green-600'}`}>
+            {entregaInfo.dias_min === entregaInfo.dias_max
+              ? `${entregaInfo.dias_min} día${entregaInfo.dias_min > 1 ? 's' : ''}`
+              : `${entregaInfo.dias_min}–${entregaInfo.dias_max} días`} laborables
+          </p>
+          <p className={`text-xs font-medium ${entregaInfo.especial ? 'text-amber-600' : 'text-gray-500'}`}>
+            {entregaInfo.detalle}
           </p>
         </div>
 
@@ -375,8 +392,23 @@ function ConfirmacionContent() {
           </Link>
         </div>
 
+        {/* Upsell post-compra: solución si no pidió una */}
+        {!items.some((i:any) => /soluc/i.test(i.nombre ?? '') || /renu/i.test(i.nombre ?? '') || /opti.free/i.test(i.nombre ?? '') || /prolub/i.test(i.nombre ?? '')) &&
+         items.some((i:any) => /acuvue|air optix|biofinity|clariti|proclear|bausch/i.test(i.nombre ?? '')) && (
+          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+            <p className="font-bold text-blue-800 text-sm mb-1">💧 ¿Ya tienes tu solución?</p>
+            <p className="text-xs text-blue-600 mb-3">
+              Tus lentes necesitan solución multipropósito para limpieza diaria y almacenamiento.
+            </p>
+            <Link href="/catalogo?tipo=solucion"
+              className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors">
+              Ver soluciones <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        )}
+
         {/* Nota médica */}
-        {items.some((i:any) => i.tipo === 'esferico' || i.tipo === 'torico' || i.tipo === 'multifocal') && (
+        {items.some((i:any) => /acuvue|air optix|biofinity|clariti|proclear|bausch/i.test(i.nombre ?? '')) && (
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
             <p className="text-xs text-amber-700 leading-relaxed">
               <strong>Recordatorio:</strong> Los lentes de contacto son dispositivos médicos. Consulta a tu optometrista si presentas molestias, enrojecimiento o visión borrosa con los lentes puestos.
