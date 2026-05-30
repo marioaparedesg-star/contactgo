@@ -1,0 +1,144 @@
+'use client'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase'
+import Link from 'next/link'
+import { Lock, CheckCircle, AlertCircle } from 'lucide-react'
+import type { Metadata } from 'next'
+
+function ResetContent() {
+  const params  = useSearchParams()
+  const router  = useRouter()
+  const [mode, setMode]       = useState<'request' | 'update'>('request')
+  const [email, setEmail]     = useState('')
+  const [pass, setPass]       = useState('')
+  const [pass2, setPass2]     = useState('')
+  const [loading, setLoading] = useState(false)
+  const [msg, setMsg]         = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
+
+  // Si viene con access_token en el hash (retorno de email de reset)
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash.includes('access_token') || hash.includes('type=recovery')) {
+      setMode('update')
+      // Procesar el token del hash
+      const sb = createClient()
+      sb.auth.getSession().then(({ data }) => {
+        if (data.session) setMode('update')
+      })
+    }
+  }, [])
+
+  const sendReset = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+    setLoading(true); setMsg(null)
+    const sb = createClient()
+    const { error } = await sb.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/cuenta/reset-password`,
+    })
+    if (error) {
+      setMsg({ type: 'err', text: error.message })
+    } else {
+      setMsg({ type: 'ok', text: 'Revisa tu correo. Te enviamos un enlace para restablecer tu contraseña.' })
+    }
+    setLoading(false)
+  }
+
+  const updatePass = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (pass.length < 8) { setMsg({ type: 'err', text: 'La contraseña debe tener al menos 8 caracteres.' }); return }
+    if (pass !== pass2)  { setMsg({ type: 'err', text: 'Las contraseñas no coinciden.' }); return }
+    setLoading(true); setMsg(null)
+    const sb = createClient()
+    const { error } = await sb.auth.updateUser({ password: pass })
+    if (error) {
+      setMsg({ type: 'err', text: error.message })
+    } else {
+      setMsg({ type: 'ok', text: '¡Contraseña actualizada! Redirigiendo...' })
+      setTimeout(() => router.push('/cuenta'), 2000)
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 pb-24">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-4">
+            <Lock className="w-7 h-7 text-primary-600" />
+          </div>
+          <h1 className="text-xl font-black text-gray-900">
+            {mode === 'request' ? 'Recuperar contraseña' : 'Nueva contraseña'}
+          </h1>
+          <p className="text-sm text-gray-500 mt-1 text-center">
+            {mode === 'request'
+              ? 'Ingresa tu correo y te enviaremos un enlace.'
+              : 'Elige tu nueva contraseña.'}
+          </p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+          {msg && (
+            <div className={`flex items-start gap-2 p-3 rounded-xl text-sm ${msg.type === 'ok' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+              {msg.type === 'ok' ? <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" /> : <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />}
+              {msg.text}
+            </div>
+          )}
+
+          {mode === 'request' ? (
+            <form onSubmit={sendReset} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Correo electrónico</label>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
+                  placeholder="tu@correo.com"
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+              </div>
+              <button type="submit" disabled={loading}
+                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-2xl text-sm transition-colors disabled:opacity-60">
+                {loading ? 'Enviando...' : 'Enviar enlace de recuperación'}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={updatePass} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Nueva contraseña</label>
+                <input type="password" value={pass} onChange={e => setPass(e.target.value)} required minLength={8}
+                  placeholder="Mínimo 8 caracteres"
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Confirmar contraseña</label>
+                <input type="password" value={pass2} onChange={e => setPass2(e.target.value)} required
+                  placeholder="Repite la contraseña"
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+              </div>
+              <button type="submit" disabled={loading}
+                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-2xl text-sm transition-colors disabled:opacity-60">
+                {loading ? 'Guardando...' : 'Cambiar contraseña'}
+              </button>
+            </form>
+          )}
+
+          <p className="text-center text-xs text-gray-400">
+            <Link href="/cuenta" className="text-primary-600 hover:underline font-medium">
+              ← Volver a mi cuenta
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <ResetContent />
+    </Suspense>
+  )
+}
