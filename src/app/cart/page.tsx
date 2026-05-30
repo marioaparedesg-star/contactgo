@@ -15,9 +15,9 @@ import toast from 'react-hot-toast'
 
 
 export default function CartPage() {
-  const { items, removeItem, updateQty, addItem, subtotal, clearCart } = useCartStore()
-  const [cupon, setCupon] = useState('')
-  const [descuento, setDescuento] = useState(0)
+  const { items, removeItem, updateQty, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+  const [cuponInput, setCuponInput] = useState(cuponCodigo ?? '')
+  const [descuento,  setDescuento]  = useState(cuponDescuento)
   const [solucionSugerida, setSolucionSugerida] = useState<any>(null)
 
   // Cargar solución sugerida si no hay solución en el carrito
@@ -45,7 +45,7 @@ export default function CartPage() {
   const tot  = sub + envio - descuento
 
   const aplicarCupon = async () => {
-    const code = cupon.trim().toUpperCase()
+    const code = cuponInput.trim().toUpperCase()
     if (!code) return
     try {
       const res = await fetch('/api/validate-coupon', {
@@ -58,9 +58,11 @@ export default function CartPage() {
         setCuponErr(result.mensaje ?? 'Cupón no válido')
         setCuponOk(false)
         setDescuento(0)
+        setCupon(null, 0)           // limpiar store
         return
       }
       setDescuento(result.descuento)
+      setCupon(code, result.descuento)  // persistir en store → checkout lo leerá
       setCuponOk(true)
       setCuponErr('')
       toast.success(result.mensaje ?? 'Cupón aplicado ✓')
@@ -226,7 +228,7 @@ export default function CartPage() {
                 <div className="flex gap-2">
                   <div className="relative flex-1">
                     <Tag className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
-                    <input value={cupon} onChange={e => setCupon(e.target.value)}
+                    <input value={cuponInput} onChange={e => setCuponInput(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && aplicarCupon()}
                       placeholder="Código de descuento"
                       className="w-full pl-9 pr-3 py-2.5 border-2 border-gray-200 rounded-xl text-xs focus:outline-none focus:border-primary-500 transition-colors" />

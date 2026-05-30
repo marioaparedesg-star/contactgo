@@ -47,11 +47,12 @@ export default function CheckoutPage() {
     } catch {}
   }, [])
   const router = useRouter()
-  const { items, subtotal, total, clearCart, updateItem, removeByIndex } = useCartStore()
+  const { items, subtotal, total, clearCart, updateItem, removeByIndex, cuponCodigo, cuponDescuento, clearCupon } = useCartStore()
   const [loading, setLoading] = useState(false)
-  const [cupon, setCupon] = useState('')
-  const [cuponAplicado, setCuponAplicado] = useState(false)
-  const [descuento, setDescuento] = useState(0)
+  // Cupón: pre-poblar desde el cart-store (el usuario lo aplicó en el carrito)
+  const [cupon, setCupon] = useState(() => cuponCodigo ?? '')
+  const [cuponAplicado, setCuponAplicado] = useState(() => !!cuponCodigo)
+  const [descuento, setDescuento] = useState(() => cuponDescuento)
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
   const [showDisclaimer, setShowDisclaimer] = useState(false)
@@ -789,24 +790,36 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
-                {/* Cupón */}
+                {/* Cupón — si viene del carrito, mostrar banner; si no, input */}
                 <div className="p-4 border-b border-gray-50">
-                  <div className="flex gap-2">
-                    <div className="relative flex-1">
-                      <Tag className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
-                      <input value={cupon} onChange={e => setCupon(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && aplicarCupon()}
-                        placeholder="Código de cupón"
-                        className="w-full pl-8 pr-3 py-2.5 border-2 border-gray-200 rounded-xl text-xs focus:outline-none focus:border-primary-500 transition-colors" />
+                  {cuponAplicado ? (
+                    <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2.5">
+                      <div className="flex items-center gap-2">
+                        <Check className="w-4 h-4 text-green-600 shrink-0" />
+                        <div>
+                          <p className="text-xs font-bold text-green-700">Cupón aplicado</p>
+                          <p className="text-[11px] text-green-600 font-mono">{cupon.toUpperCase()}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-black text-green-700">−RD${descuento.toLocaleString()}</span>
+                        <button onClick={() => { setCupon(''); setCuponAplicado(false); setDescuento(0); clearCupon() }}
+                          className="text-gray-400 hover:text-red-500 text-xs">✕</button>
+                      </div>
                     </div>
-                    <button onClick={aplicarCupon} className="bg-gray-900 hover:bg-gray-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors">
-                      Usar
-                    </button>
-                  </div>
-                  {cuponAplicado && (
-                    <p className="text-green-600 text-xs mt-1.5 font-semibold flex items-center gap-1">
-                      <Check className="w-3 h-3" /> Cupón aplicado correctamente
-                    </p>
+                  ) : (
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <Tag className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
+                        <input value={cupon} onChange={e => setCupon(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && aplicarCupon()}
+                          placeholder="Código de cupón"
+                          className="w-full pl-8 pr-3 py-2.5 border-2 border-gray-200 rounded-xl text-xs focus:outline-none focus:border-primary-500 transition-colors" />
+                      </div>
+                      <button onClick={aplicarCupon} className="bg-gray-900 hover:bg-gray-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors">
+                        Usar
+                      </button>
+                    </div>
                   )}
                 </div>
 

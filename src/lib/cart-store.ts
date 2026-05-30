@@ -5,6 +5,10 @@ import type { CartItem, Product } from '@/types'
 
 interface CartStore {
   items: CartItem[]
+  cuponCodigo:  string | null   // código del cupón aplicado en carrito
+  cuponDescuento: number        // monto de descuento (RD$)
+  setCupon: (codigo: string | null, descuento: number) => void
+  clearCupon: () => void
   addItem: (product: Product, opts?: {
     cantidad?: number
     sph?: number | null
@@ -32,6 +36,11 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      cuponCodigo:    null,
+      cuponDescuento: 0,
+
+      setCupon: (codigo, descuento) => set({ cuponCodigo: codigo, cuponDescuento: descuento }),
+      clearCupon: () => set({ cuponCodigo: null, cuponDescuento: 0 }),
 
       addItem: (product, opts = {}) => {
         const { cantidad = 1, sph, cyl, axis, add_power, color, ojo, size, precio_override, precio_original, suscripcion } = opts

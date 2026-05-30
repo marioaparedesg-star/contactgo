@@ -244,10 +244,14 @@ export default function ProductoClient({ product, variants }: Props) {
       const prices = SOLUTION_PRICES[sku]
       if (prices?.[size]) base = prices[size]
     }
-    setPrecioBase(base) // precio base con size, sin descuento
-    const desc = suscripcion ? DESCUENTOS[suscripcion] ?? 0 : 0
-    setPrice(Math.round(base * (1 - desc)))
-  }, [size, product.precio, sku, suscripcion])
+    setPrecioBase(base) // precio base con size, sin descuento de suscripción ni pack
+    const descSub  = suscripcion ? DESCUENTOS[suscripcion] ?? 0 : 0
+    // Pack 2 cajas: 5% real — se aplica sobre el precio unitario
+    const descPack = (qty === 2 && isLente && !isColor) ? 0.05 : 0
+    // Composición de descuentos: primero suscripción, luego pack
+    const descTotal = 1 - (1 - descSub) * (1 - descPack)
+    setPrice(Math.round(base * (1 - descTotal)))
+  }, [size, product.precio, sku, suscripcion, qty, isLente, isColor])
 
   const handleAdd = (): boolean => {
     if (isColor && !color) { toast.error('Selecciona un color'); return false }
