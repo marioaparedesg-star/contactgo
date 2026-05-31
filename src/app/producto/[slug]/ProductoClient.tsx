@@ -470,7 +470,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 <p className="text-xs font-bold text-blue-700">🔵 Lente fabricado a medida para tu astigmatismo</p>
                 <p className="text-[11px] text-blue-600 leading-relaxed">
                   Los tóricos se fabrican con tu graduación exacta. Tiempo de producción: <strong>25–30 días</strong>.
-                  Necesitas SPH, CYL y AXIS de tu receta actualizada.
+                  Necesitas la <strong>Esfera</strong>, el <strong>Cilindro</strong> y el <strong>Eje</strong> de tu receta actualizada.
                 </p>
                 <a href="/receta" className="text-[11px] text-blue-700 font-semibold underline">
                   ¿No tienes tu receta? Podemos ayudarte →
