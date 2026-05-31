@@ -42,7 +42,7 @@ export default function InlineCrossSell({ tipo, currentId }: { tipo: string; cur
       <Link href={`/producto/${product.slug}`} className="shrink-0">
         {product.imagen_url
           ? <Image src={product.imagen_url} alt={product.nombre} width={44} height={44}
-              className="object-contain rounded-xl bg-white border border-gray-100" unoptimized />
+              className="object-contain rounded-xl bg-white border border-gray-100" sizes="44px" unoptimized />
           : <div className="w-11 h-11 bg-white rounded-xl border border-gray-100 flex items-center justify-center text-lg">💧</div>
         }
       </Link>

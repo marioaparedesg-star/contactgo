@@ -3,7 +3,6 @@ export const revalidate = 3600
 import type { Metadata } from 'next'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -213,7 +212,6 @@ export default function AyudaPage() {
         </div>
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }

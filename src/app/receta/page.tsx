@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { analyzePrescription } from '@/lib/prescription'
 import { createClient } from '@/lib/supabase'
 import { useCartStore } from '@/lib/cart-store'
@@ -609,7 +608,6 @@ export default function RecetaPage() {
 
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }

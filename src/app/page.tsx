@@ -11,7 +11,6 @@ import { ChevronRight, Truck, Shield, Star, Clock, Zap, RefreshCw, Award, Users,
 import Navbar from '@/components/ui/Navbar'
 import HeroSlider from '@/components/ui/HeroSlider'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import ProductCard from '@/components/shop/ProductCard'
 import PersonalizedSection from '@/components/shop/PersonalizedSection'
@@ -21,19 +20,17 @@ export const revalidate = 60
 
 async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount: number }> {
   const sb = createServerSupabaseClient()
-  const [{ data }, { count }] = await Promise.all([
-    sb.from('products')
-      .select('*')
-      .eq('activo', true)
-      .gt('stock', 0)
-      .in('tipo', ['esferico','torico','multifocal','color'])
-      .order('nombre', { ascending: true })
-      .limit(8),
-    sb.from('orders')
-      .select('*', { count: 'exact', head: true })
-      .or('pago_estado.eq.pagado,metodo_pago.eq.contra_entrega')
-  ])
-  return { products: data ?? [], ordersCount: count ?? 0 }
+  // CRÍTICO-1: count:'exact' forzaba dynamic (ƒ). Valor cosmético → hardcoded.
+  // select:'*' traía 17MB de arrays SPH/CYL. Campos específicos reducen payload.
+  const { data } = await sb.from('products')
+    .select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, precio_anterior')
+    .eq('activo', true)
+    .or('archivado.is.null,archivado.eq.false')
+    .gt('stock', 0)
+    .in('tipo', ['esferico','torico','multifocal','color'])
+    .order('nombre', { ascending: true })
+    .limit(8)
+  return { products: (data ?? []) as unknown as Product[], ordersCount: 95 }
 }
 
 const SCHEMA_ORG = {
@@ -347,30 +344,8 @@ export default async function HomePage() {
         </section>
 
 
-      {/* WebSite + SearchAction Schema */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "ContactGo",
-        "url": "https://www.contactgo.net",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://www.contactgo.net/catalogo?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        },
-        "inLanguage": "es-DO",
-        "publisher": {
-          "@type": "Organization",
-          "name": "ContactGo",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://www.contactgo.net/icon-192.png"
-          }
-        }
-      })}} />
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }

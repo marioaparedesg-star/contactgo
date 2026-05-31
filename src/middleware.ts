@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Rate limiting en Edge Runtime
-// NOTA: En Edge Runtime (middleware), solo se puede usar in-memory
-// Para rate limiting distribuido real, usar /api routes con applyRateLimit() de rate-limit.ts
-// Cloudflare Rate Limiting rules son la primera línea de defensa perimetral
+// ⚠️ CRÍTICO-4: Este rate limiting in-memory NO funciona en serverless
+// Cada invocación de Vercel es una instancia aislada — rateMap se resetea en cada cold start
+// SOLUCIÓN REAL: Configurar Cloudflare Rate Limiting Rules en el dashboard:
+//   /api/orders       → 20 req/min por IP
+//   /api/validate-coupon → 30 req/min por IP
+//   /api/azul/*       → 30 req/min por IP
+//   /api/notify       → 10 req/min por IP
+// Este código sirve como DOCUMENTACIÓN de los límites intendidos, no como protección real
 const rateMap = new Map<string, { count: number; reset: number }>()
 function rateLimit(key: string, limit: number, windowMs = 60_000): boolean {
   const now = Date.now()

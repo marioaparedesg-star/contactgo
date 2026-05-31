@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import ProductCard from '@/components/shop/ProductCard'
 
 // canonical agregado
@@ -39,7 +38,8 @@ const SEO_LINKS = [
 export default async function LentesContactoPage() {
   const sb = createServerSupabaseClient()
   const { data: products } = await sb.from('products')
-    .select('*').eq('activo', true).gt('stock', 0)
+    .select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado')
+    .eq('activo', true).gt('stock', 0)
     .in('tipo', ['esferico','torico','multifocal','color'])
     .order('nombre').limit(12)
 
@@ -75,7 +75,7 @@ export default async function LentesContactoPage() {
         <section className="max-w-7xl mx-auto px-4 py-10">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Lentes más populares en RD</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {(products ?? []).map(p => <ProductCard key={p.id} product={p} />)}
+            {((products ?? []) as unknown as any[]).map(p => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
 
@@ -101,7 +101,6 @@ export default async function LentesContactoPage() {
         </section>
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }

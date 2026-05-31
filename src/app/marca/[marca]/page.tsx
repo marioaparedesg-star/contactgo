@@ -2,7 +2,6 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { notFound } from 'next/navigation'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Eye } from 'lucide-react'
@@ -216,7 +215,6 @@ export default async function MarcaPage({ params }: { params: { marca: string } 
 
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }

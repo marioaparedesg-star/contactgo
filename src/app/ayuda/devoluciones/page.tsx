@@ -15,7 +15,6 @@ export const metadata: Metadata = {
 
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
 
 export default function DevolucionesPage() {
   return (
@@ -52,7 +51,6 @@ export default function DevolucionesPage() {
         </div>
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }

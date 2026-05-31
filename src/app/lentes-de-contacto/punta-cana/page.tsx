@@ -28,7 +28,7 @@ const faqs = [
 
 export default async function Page() {
   const sb = createServerSupabaseClient()
-  const { data: products } = await sb.from('products').select('*')
+  const { data: products } = await sb.from('products').select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado')
     .eq('activo', true).gt('stock', 0)
     .in('tipo', ['esferico','torico','multifocal','color'])
     .order('nombre').limit(8)

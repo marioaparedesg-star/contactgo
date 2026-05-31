@@ -58,9 +58,14 @@ const nextConfig = {
   images: {
     // Next.js Image Optimization habilitado — WebP/AVIF automático
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [390, 640, 750, 828, 1080, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256],
-    minimumCacheTTL: 3600, // 1 hora de caché de imágenes optimizadas
+    // CRÍTICO-2: deviceSizes reducidos de 7 a 4 (-43% optimizaciones)
+    // RD es mobile-first (390px) con pantallas hasta 1200px
+    deviceSizes: [390, 640, 828, 1200],
+    imageSizes: [32, 64, 128, 256],
+    // CRÍTICO-2: TTL de 30 días — imágenes Supabase son estáticas (versionadas con -v2, -v3)
+    // Antes: 3600 (1 hora) → quota agotada en 2 días
+    // Ahora: 2592000 (30 días) → 36 PDPs × 4 sizes × 2 formatos = 288 optimizaciones/mes total
+    minimumCacheTTL: 2592000,
     remotePatterns: [
       { protocol: 'https', hostname: 'atendbjolicwcsqfyiyh.supabase.co' },
       { protocol: 'https', hostname: 'www.contactgo.net' },
@@ -109,6 +114,42 @@ const nextConfig = {
         source: '/admin/login',
         headers: [
           { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate' },
+        ],
+      },
+      // CRÍTICO-3: CDN-Cache-Control para Cloudflare — permite caché edge en páginas ISR
+      // Cloudflare respeta CDN-Cache-Control sobre Cache-Control
+      // PDPs: ISR 300s → CDN cachea 300s, revalida sin bloquear
+      {
+        source: '/producto/:slug',
+        headers: [
+          { key: 'CDN-Cache-Control', value: 'public, s-maxage=300, stale-while-revalidate=600' },
+        ],
+      },
+      // Catálogo e home: ISR 60s → CDN cachea 60s
+      {
+        source: '/',
+        headers: [
+          { key: 'CDN-Cache-Control', value: 'public, s-maxage=60, stale-while-revalidate=120' },
+        ],
+      },
+      {
+        source: '/catalogo',
+        headers: [
+          { key: 'CDN-Cache-Control', value: 'public, s-maxage=60, stale-while-revalidate=120' },
+        ],
+      },
+      // Blog: estático → cachea 24h
+      {
+        source: '/blog/:path*',
+        headers: [
+          { key: 'CDN-Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=3600' },
+        ],
+      },
+      // Páginas SEO de lentes de contacto: ISR → cachea 5min
+      {
+        source: '/lentes-de-contacto/:path*',
+        headers: [
+          { key: 'CDN-Cache-Control', value: 'public, s-maxage=300, stale-while-revalidate=600' },
         ],
       },
     ]

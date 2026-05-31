@@ -8,7 +8,6 @@ import CrossSelling from '@/components/shop/CrossSelling'
 import ProductFAQ from '@/components/shop/ProductFAQ'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { useCartStore } from '@/lib/cart-store'
 import { trackEcommerce } from '@/lib/analytics'
 import type { Product } from '@/types'
@@ -338,7 +337,7 @@ export default function ProductoClient({ product, variants }: Props) {
               </span>
               {product.imagen_url ? (
                 <Image src={product.imagen_url} alt={product.nombre} width={560} height={480}
-                  className="object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out" priority unoptimized />
+                  className="object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out" priority sizes="(max-width: 768px) 100vw, 560px" />
               ) : (
                 <Eye className="w-20 h-20 text-gray-200" />
               )}
@@ -724,7 +723,6 @@ export default function ProductoClient({ product, variants }: Props) {
       )}
 
       <Footer />
-      <WhatsAppButton />
     </>
   )
 }
