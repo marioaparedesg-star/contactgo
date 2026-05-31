@@ -853,6 +853,24 @@ export default function CheckoutPage() {
                       {envio===0 ? '✓ Gratis' : `RD$${envio}`}
                     </span>
                   </div>
+                  {/* MEJORA-12: Fecha estimada de entrega en checkout */}
+                  {items.length > 0 && (() => {
+                    const hasToric    = items.some(i => (i as any).product?.tipo === 'torico')
+                    const hasMulti    = items.some(i => (i as any).product?.tipo === 'multifocal')
+                    const now         = new Date()
+                    const addDays     = (d: Date, n: number) => { const r = new Date(d); r.setDate(r.getDate() + n); return r }
+                    const fmtDate     = (d: Date) => d.toLocaleDateString('es-DO', { weekday: 'short', day: 'numeric', month: 'short' })
+                    const dias        = hasToric ? 30 : hasMulti ? 10 : 2
+                    const fechaMin    = fmtDate(addDays(now, dias === 30 ? 25 : dias === 10 ? 5 : 1))
+                    const fechaMax    = fmtDate(addDays(now, dias))
+                    const label       = dias === 30 ? '25–30 días (fabricación especial)' : dias === 10 ? '5–10 días' : '24–48 horas'
+                    return (
+                      <div className={`flex justify-between text-xs rounded-lg px-2 py-1.5 ${hasToric ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'}`}>
+                        <span className="font-semibold">📅 Entrega estimada</span>
+                        <span className="font-bold">{fechaMin}{dias > 2 ? ` – ${fechaMax}` : ''}</span>
+                      </div>
+                    )
+                  })()}
                   {descuento > 0 && (
                     <div className="flex justify-between text-sm text-green-600 font-bold">
                       <span>Cupón</span><span>−RD${descuento.toLocaleString()}</span>

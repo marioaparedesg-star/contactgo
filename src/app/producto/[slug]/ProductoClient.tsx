@@ -96,20 +96,56 @@ function SelectField({ label, value, options, onChange, required, format }: {
   label: string; value: string; options: (string|number)[]; required?: boolean
   onChange: (v: string) => void; format?: (v: string|number) => string
 }) {
+  // MEJORA-11: Para listas grandes (SPH con 70+ opciones), input de búsqueda rápida
+  const [search, setSearch] = useState('')
+  const isLargeList = options.length > 12
+  const filtered = isLargeList && search.trim()
+    ? options.filter(o => {
+        const s = String(o)
+        const q = search.trim().replace(',', '.')
+        return s.startsWith(q) || s.startsWith('-'+q) || s.startsWith('+'+q) ||
+               (q.startsWith('-') && s.startsWith(q))
+      })
+    : options
+
   return (
     <div>
       <label className="block text-sm font-semibold text-gray-700 mb-1.5">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <select value={value} onChange={e => onChange(e.target.value)}
-        className={`w-full border-2 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none transition-colors bg-white ${
-          value ? 'border-primary-400 text-gray-900' : 'border-gray-200 text-gray-400'
-        }`}>
-        <option value="">Selecciona {label.toLowerCase()}</option>
-        {options.map(o => (
-          <option key={o} value={String(o)}>{format ? format(o) : String(o)}</option>
-        ))}
-      </select>
+      {isLargeList && (
+        <input
+          type="text" inputMode="decimal"
+          placeholder={`Escribe tu ${label} (ej: -3.25)`}
+          value={search}
+          onChange={e => {
+            setSearch(e.target.value)
+            const q = e.target.value.trim().replace(',', '.')
+            const exact = options.find(o => String(o) === q)
+            if (exact !== undefined) onChange(String(exact))
+          }}
+          className="w-full border-2 rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none transition-colors bg-white border-gray-200 focus:border-primary-400 mb-1 placeholder:text-gray-300"
+        />
+      )}
+      {(!isLargeList || filtered.length > 0 || !search.trim()) && (
+        <select value={value} onChange={e => { onChange(e.target.value); setSearch('') }}
+          className={`w-full border-2 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none transition-colors bg-white ${
+            value ? 'border-primary-400 text-gray-900' : 'border-gray-200 text-gray-400'
+          }`}>
+          <option value="">Selecciona {label.toLowerCase()}</option>
+          {filtered.map(o => (
+            <option key={o} value={String(o)}>{format ? format(o) : String(o)}</option>
+          ))}
+        </select>
+      )}
+      {isLargeList && search.trim() && filtered.length === 0 && (
+        <p className="text-[11px] text-red-500 mt-1">
+          Graduación no disponible.{' '}
+          <a href="https://wa.me/18294728328" className="underline font-semibold">
+            Consúltanos por WhatsApp
+          </a>.
+        </p>
+      )}
     </div>
   )
 }
@@ -423,6 +459,19 @@ export default function ProductoClient({ product, variants }: Props) {
               </p>
             </div>
 
+            {/* MEJORA-13: Banner explicativo exclusivo para tóricos */}
+            {isToric && (
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-1">
+                <p className="text-xs font-bold text-blue-700">🔵 Lente fabricado a medida para tu astigmatismo</p>
+                <p className="text-[11px] text-blue-600 leading-relaxed">
+                  Los tóricos se fabrican con tu graduación exacta. Tiempo de producción: <strong>25–30 días</strong>.
+                  Necesitas SPH, CYL y AXIS de tu receta actualizada.
+                </p>
+                <a href="/receta" className="text-[11px] text-blue-700 font-semibold underline">
+                  ¿No tienes tu receta? Podemos ayudarte →
+                </a>
+              </div>
+            )}
 
             {isLente && (
               <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex items-start gap-2">
@@ -522,7 +571,26 @@ export default function ProductoClient({ product, variants }: Props) {
                 ? product.add_disponibles
                 : ALL_ADD
               return (
-                <SelectField label="Adición (ADD)" value={add} options={addOpts} required onChange={setAdd} />
+                <div className="space-y-2">
+                  {/* MEJORA-14: Explicación visual de ADD */}
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+                    <p className="text-xs font-bold text-amber-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
+                    <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                      {[
+                        { range: '+0.75–+1.25', label: 'Presbicia leve', color: 'bg-green-100 text-green-700' },
+                        { range: '+1.50–+2.00', label: 'Presbicia media', color: 'bg-yellow-100 text-yellow-700' },
+                        { range: '+2.25–+3.00', label: 'Presbicia alta',  color: 'bg-orange-100 text-orange-700' },
+                      ].map(({ range, label, color }) => (
+                        <div key={range} className={`${color} rounded-lg px-1.5 py-1.5`}>
+                          <p className="font-black text-[9px]">{range}</p>
+                          <p className="leading-tight font-medium">{label}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-amber-600 mt-1.5">La ADD aparece en tu receta como "Add" o "Near Add".</p>
+                  </div>
+                  <SelectField label="Adición (ADD)" value={add} options={addOpts} required onChange={setAdd} />
+                </div>
               )
             })()}
 

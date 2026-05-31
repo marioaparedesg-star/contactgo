@@ -2,10 +2,10 @@
 import { DESCUENTOS } from '@/lib/subscription-utils'
 
 const OPCIONES = [
-  { val: null,          label: 'Compra única',     badge: '',         desc: 'Sin compromiso',                 color: 'gray'   },
-  { val: '15_dias',    label: 'Cada 15 días',     badge: '5% OFF',   desc: 'Para lentes diarios',            color: 'blue'   },
-  { val: 'mensual',    label: 'Mensual',           badge: '10% OFF',  desc: 'Lentes mensuales y quincenales', color: 'primary'},
-  { val: 'trimestral', label: 'Cada 3 meses',      badge: '15% OFF',  desc: 'Soluciones y gotas',             color: 'green'  },
+  { val: null,          label: 'Compra única',     badge: '',         desc: 'Sin compromiso',                     color: 'gray'   },
+  { val: '15_dias',    label: 'Cada 15 días',     badge: '5% OFF',   desc: 'Recibes una caja cada 15 días',  color: 'blue'   },
+  { val: 'mensual',    label: 'Mensual',           badge: '10% OFF',  desc: 'Una caja al mes — el más popular',color: 'primary'},
+  { val: 'trimestral', label: 'Cada 3 meses',      badge: '15% OFF',  desc: 'Mayor ahorro — ideal soluciones', color: 'green'  },
 ]
 
 interface Props {
