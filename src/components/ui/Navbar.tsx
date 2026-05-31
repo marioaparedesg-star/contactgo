@@ -42,6 +42,12 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-2" role="navigation" aria-label="Acciones de usuario">
+          {/* MEJORA-10: Teléfono clickeable visible en desktop */}
+          <a href="tel:+18294728328"
+            className="hidden lg:flex items-center gap-1.5 text-[12px] text-gray-500 hover:text-primary-600 transition-colors font-medium px-2">
+            <span>📞</span>
+            <span>(829) 472-8328</span>
+          </a>
           <Link href="/cart" className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors"
             aria-label={itemCount > 0 ? `Carrito — ${itemCount} producto${itemCount !== 1 ? 's' : ''}` : 'Carrito de compras'}>
             <ShoppingCart className="w-5 h-5 text-gray-700" aria-hidden="true" />

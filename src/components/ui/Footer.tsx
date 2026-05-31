@@ -11,9 +11,14 @@ export default function Footer() {
 
         {/* Fila superior: logo + redes sociales */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-0.5">
             <span className="text-white font-bold text-base tracking-tight">ContactGo</span>
-            <span className="text-gray-700 text-xs">· RD</span>
+            {/* MEJORA-7: Ubicación física visible */}
+            <span className="text-gray-500 text-[10px]">Santo Domingo, República Dominicana</span>
+            {/* MEJORA-10: Teléfono clickeable visible */}
+            <a href="tel:+18294728328" className="text-green-400 text-[11px] font-semibold hover:text-green-300 transition-colors">
+              📞 (829) 472-8328
+            </a>
           </div>
           <div className="flex items-center gap-2">
             <a href="https://www.instagram.com/contactgord" aria-label="ContactGo en Instagram"
@@ -123,9 +128,15 @@ export default function Footer() {
 
         {/* Pagos + copyright en una sola fila */}
         <div className="border-t border-gray-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[11px] text-gray-700 order-2 sm:order-1">
-            © {new Date().getFullYear()} ContactGo — República Dominicana
-          </p>
+          <div className="flex flex-col gap-0.5 order-2 sm:order-1">
+            <p className="text-[11px] text-gray-700">
+              © {new Date().getFullYear()} ContactGo — República Dominicana
+            </p>
+            {/* MEJORA-6: Razón social y RNC — credibilidad legal */}
+            <p className="text-[10px] text-gray-800">
+              ContactGo SRL · RNC: 1-32-30854-5 · Santo Domingo, DO
+            </p>
+          </div>
           <div className="flex items-center gap-2 order-1 sm:order-2">
             <img src="/visa-blue.png" alt="Visa" width="38" height="12" className="h-4 opacity-50 object-contain" />
             <img src="/mastercard.png" alt="Mastercard" width="24" height="19" className="h-4 opacity-60 object-contain" />
