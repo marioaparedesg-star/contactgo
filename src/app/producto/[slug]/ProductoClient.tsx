@@ -96,61 +96,27 @@ function SelectField({ label, value, options, onChange, required, format }: {
   label: string; value: string; options: (string|number)[]; required?: boolean
   onChange: (v: string) => void; format?: (v: string|number) => string
 }) {
-  // MEJORA-11: Para listas grandes (SPH con 70+ opciones), input de búsqueda rápida
-  const [search, setSearch] = useState('')
-  const isLargeList = options.length > 12
-  const filtered = isLargeList && search.trim()
-    ? options.filter(o => {
-        const s = String(o)
-        const q = search.trim().replace(',', '.')
-        return s.startsWith(q) || s.startsWith('-'+q) || s.startsWith('+'+q) ||
-               (q.startsWith('-') && s.startsWith(q))
-      })
-    : options
-
   return (
     <div>
       <label className="block text-sm font-semibold text-gray-700 mb-0.5">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      {/* Hint contextual por tipo de campo */}
-      {label.includes('Esfera')   && <p className="text-[10px] text-gray-400 mb-1.5">Tu graduación principal (ej: -3.25 o +1.50)</p>}
-      {label.includes('Cilindro') && <p className="text-[10px] text-gray-400 mb-1.5">Corrección del astigmatismo (ej: -0.75)</p>}
-      {label.includes('Eje')      && <p className="text-[10px] text-gray-400 mb-1.5">Orientación del astigmatismo (ej: 180)</p>}
-      {label.includes('Adición')  && <p className="text-[10px] text-gray-400 mb-1.5">Para lectura o visión cercana (solo si tienes presbicia)</p>}
-      {isLargeList && (
-        <input
-          type="text" inputMode="decimal"
-          placeholder={`Escribe tu ${label} (ej: -3.25)`}
-          value={search}
-          onChange={e => {
-            setSearch(e.target.value)
-            const q = e.target.value.trim().replace(',', '.')
-            const exact = options.find(o => String(o) === q)
-            if (exact !== undefined) onChange(String(exact))
-          }}
-          className="w-full border-2 rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none transition-colors bg-white border-gray-200 focus:border-primary-400 mb-1 placeholder:text-gray-300"
-        />
-      )}
-      {(!isLargeList || filtered.length > 0 || !search.trim()) && (
-        <select value={value} onChange={e => { onChange(e.target.value); setSearch('') }}
-          className={`w-full border-2 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none transition-colors bg-white ${
-            value ? 'border-primary-400 text-gray-900' : 'border-gray-200 text-gray-400'
-          }`}>
-          <option value="">Selecciona {label.toLowerCase()}</option>
-          {filtered.map(o => (
-            <option key={o} value={String(o)}>{format ? format(o) : String(o)}</option>
-          ))}
-        </select>
-      )}
-      {isLargeList && search.trim() && filtered.length === 0 && (
-        <p className="text-[11px] text-red-500 mt-1">
-          Graduación no disponible.{' '}
-          <a href="https://wa.me/18294728328" className="underline font-semibold">
-            Consúltanos por WhatsApp
-          </a>.
-        </p>
-      )}
+      {label.includes('Esfera')   && <p className="text-[10px] text-gray-400 mb-1.5">Tu graduación principal · Ej: -3.25 o +1.50</p>}
+      {label.includes('Cilindro') && <p className="text-[10px] text-gray-400 mb-1.5">Corrección del astigmatismo · Ej: -0.75</p>}
+      {label.includes('Eje')      && <p className="text-[10px] text-gray-400 mb-1.5">Orientación del astigmatismo · Ej: 90 o 180</p>}
+      {label.includes('Adición')  && <p className="text-[10px] text-gray-400 mb-1.5">Graduación para lectura · Ej: +1.50 o +2.00</p>}
+      <select
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        className={`w-full border-2 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none transition-colors bg-white ${
+          value ? 'border-primary-400 text-gray-900' : 'border-gray-200 text-gray-400'
+        }`}
+      >
+        <option value="">Selecciona</option>
+        {options.map(o => (
+          <option key={o} value={String(o)}>{format ? format(o) : String(o)}</option>
+        ))}
+      </select>
     </div>
   )
 }
