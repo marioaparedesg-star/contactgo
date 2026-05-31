@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 import { useCartStore } from '@/lib/cart-store'
 import { trackEcommerce } from '@/lib/analytics'
+import { getEntrega } from '@/lib/delivery-times'
 import toast from 'react-hot-toast'
 
 interface Props { product: Product; isBestseller?: boolean }
@@ -84,6 +85,12 @@ export default function ProductCard({ product, isBestseller }: Props) {
             {(product as any).dias_uso === 1 ? 'Diario' : (product as any).dias_uso === 14 ? 'Quincenal' : 'Mensual'}
           </span>
         )}
+        {/* MEJORA-1: Aviso entrega especial para tóricos y multifocales */}
+        {(product.tipo === 'torico' || product.tipo === 'multifocal') && (
+          <span className="absolute bottom-2 right-2 z-10 text-[9px] font-bold bg-amber-500 text-white px-1.5 py-0.5 rounded-md leading-tight">
+            ⏱ 25-30 días
+          </span>
+        )}
 
         {product.imagen_url ? (
           <Image
@@ -143,15 +150,25 @@ export default function ProductCard({ product, isBestseller }: Props) {
           {product.nombre}
         </h3>
 
-        {/* Stock real */}
-        <p className="text-[10px] font-semibold">
-          {product.stock === 0
-            ? <span className="text-red-500">Sin stock</span>
-            : product.stock <= 4
-              ? <span className="text-orange-700">¡Solo {product.stock} disponibles!</span>
-              : <span className="text-green-700">✅ En stock</span>
-          }
-        </p>
+        {/* Stock real + duración en meses MEJORA-4 */}
+        <div className="flex items-center justify-between gap-1">
+          <p className="text-[10px] font-semibold">
+            {product.stock === 0
+              ? <span className="text-red-500">Sin stock</span>
+              : product.stock <= 4
+                ? <span className="text-orange-700">¡Solo {product.stock}!</span>
+                : <span className="text-green-700">✅ En stock</span>
+            }
+          </p>
+          {/* Duración en meses por caja */}
+          {product.tipo && ['esferico','torico','multifocal','color'].includes(product.tipo) && (product as any).dias_uso && (
+            <span className="text-[9px] text-gray-400 font-medium whitespace-nowrap">
+              {(product as any).dias_uso === 1  ? '30u = 1 mes'  :
+               (product as any).dias_uso === 14 ? '6u = 3 meses' :
+               (product as any).dias_uso === 30 ? '6u = 6 meses' : null}
+            </span>
+          )}
+        </div>
 
         {/* Precio + precio/día */}
         <div className="mt-auto pt-1.5 flex flex-col gap-2">
