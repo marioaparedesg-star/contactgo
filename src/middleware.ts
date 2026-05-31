@@ -54,7 +54,12 @@ export function middleware(req: NextRequest) {
       ?? req.cookies.get('sb-access-token')
       ?? req.cookies.get('supabase-auth-token')
 
-    if (!authCookie?.value) {
+    const cookieValue = authCookie?.value ?? ''
+    // Validar que la cookie tiene estructura de JWT real (3 segmentos base64 separados por .)
+    // Un JWT falso como "FAKE_TOKEN" no tiene el formato correcto
+    const isValidJwtShape = cookieValue.split('.').length === 3 &&
+      cookieValue.startsWith('eyJ')
+    if (!cookieValue || !isValidJwtShape) {
       const loginUrl = new URL('/admin/login', req.url)
       loginUrl.searchParams.set('next', pathname)
       return NextResponse.redirect(loginUrl)
