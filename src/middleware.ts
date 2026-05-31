@@ -55,11 +55,26 @@ export function middleware(req: NextRequest) {
       ?? req.cookies.get('supabase-auth-token')
 
     const cookieValue = authCookie?.value ?? ''
-    // Validar que la cookie tiene estructura de JWT real (3 segmentos base64 separados por .)
-    // Un JWT falso como "FAKE_TOKEN" no tiene el formato correcto
-    const isValidJwtShape = cookieValue.split('.').length === 3 &&
-      cookieValue.startsWith('eyJ')
+    // Validar estructura JWT: 3 segmentos base64 y prefijo correcto
+    const parts = cookieValue.split('.')
+    const isValidJwtShape = parts.length === 3 && cookieValue.startsWith('eyJ')
     if (!cookieValue || !isValidJwtShape) {
+      const loginUrl = new URL('/admin/login', req.url)
+      loginUrl.searchParams.set('next', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+    // Validar que el payload JWT no esté expirado (sin verificar firma — eso lo hace Supabase)
+    // Previene que tokens vencidos pasen el middleware aunque tengan shape válida
+    try {
+      const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString())
+      const now = Math.floor(Date.now() / 1000)
+      if (!payload.exp || payload.exp < now) {
+        const loginUrl = new URL('/admin/login', req.url)
+        loginUrl.searchParams.set('next', pathname)
+        return NextResponse.redirect(loginUrl)
+      }
+    } catch {
+      // Payload no parseable → rechazar
       const loginUrl = new URL('/admin/login', req.url)
       loginUrl.searchParams.set('next', pathname)
       return NextResponse.redirect(loginUrl)
