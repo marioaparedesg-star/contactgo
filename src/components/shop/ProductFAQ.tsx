@@ -10,9 +10,9 @@ const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
     { q: '¿Los lentes son para miopía e hipermetropía?', a: 'Sí, los lentes esféricos corrigen tanto miopía (valores negativos) como hipermetropía (valores positivos). Los valores van del -12.00 al +8.00 según el producto.' },
   ],
   torico: [
-    { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos se fabrican a medida según tu graduación específica (SPH, CYL y EJE). Este proceso toma 20-30 días, a diferencia de los esféricos que enviamos desde inventario.' },
+    { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos se fabrican a medida según tu graduación específica (Esfera, Cilindro y Eje). Este proceso toma 20-30 días, a diferencia de los esféricos que enviamos desde inventario.' },
     { q: '¿Qué diferencia hay entre lentes tóricos y esféricos?', a: 'Los lentes tóricos tienen una curvatura especial que corrige el astigmatismo. Tienen un diseño estabilizado para que no roten con el parpadeo, manteniendo la visión nítida.' },
-    { q: '¿Qué información de mi receta necesito?', a: 'Para lentes tóricos necesitas SPH (graduación esférica), CYL (cilindro) y AXIS (eje). Estos tres valores son obligatorios.' },
+    { q: '¿Qué información de mi receta necesito?', a: 'Para lentes tóricos necesitas la Esfera, el Cilindro y el Eje de tu receta. Estos tres valores son obligatorios y aparecen en cualquier receta óptica.' },
     { q: '¿Puedo usar lentes tóricos si tengo astigmatismo leve?', a: 'Sí, los lentes tóricos están disponibles desde -0.75 de cilindro. Para astigmatismo leve suelen ser muy efectivos.' },
   ],
   multifocal: [

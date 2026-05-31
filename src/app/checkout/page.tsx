@@ -743,10 +743,10 @@ export default function CheckoutPage() {
                               {(item as any).ojo === 'OD' ? '👁 OD' : '👁 OI'}
                             </span>
                           )}
-                          {item.sph != null && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">SPH {Number(item.sph)>0?`+${Number(item.sph).toFixed(2)}`:Number(item.sph).toFixed(2)}</span>}
-                          {(item as any).cyl != null && (item as any).cyl !== 0 && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">CYL {Number((item as any).cyl).toFixed(2)}</span>}
+                          {item.sph != null && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">Esf. {Number(item.sph)>0?`+${Number(item.sph).toFixed(2)}`:Number(item.sph).toFixed(2)}</span>}
+                          {(item as any).cyl != null && (item as any).cyl !== 0 && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">Cil. {Number((item as any).cyl).toFixed(2)}</span>}
                           {(item as any).axis && <span className="text-[9px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">{(item as any).axis}°</span>}
-                          {(item as any).add_power && <span className="text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded font-mono font-bold">ADD {(item as any).add_power}</span>}
+                          {(item as any).add_power && <span className="text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded font-mono font-bold">Ad. {(item as any).add_power}</span>}
                           {(item as any).color && <span className="text-[9px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded font-bold">{(item as any).color}</span>}
                           {/* Tamaño / variante */}
                           {(item as any).size && (

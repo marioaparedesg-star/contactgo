@@ -65,10 +65,10 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
   const itemsRows = items.map(i => {
     const sph = i.sph != null ? (Number(i.sph) > 0 ? `+${Number(i.sph).toFixed(2)}` : Number(i.sph).toFixed(2)) : null
     const receta = [
-      sph ? `SPH ${sph}` : null,
-      i.cyl && i.cyl !== 0 ? `CYL ${Number(i.cyl).toFixed(2)}` : null,
+      sph ? `Esfera ${sph}` : null,
+      i.cyl && i.cyl !== 0 ? `Cil. ${Number(i.cyl).toFixed(2)}` : null,
       i.axis ? `${i.axis}°` : null,
-      i.add_power ? `ADD ${i.add_power}` : null,
+      i.add_power ? `Ad. ${i.add_power}` : null,
       i.color ? i.color : null,
     ].filter(Boolean).join(' · ')
     const ojoLabel = i.ojo === 'OD' ? '👁 Ojo Derecho' : i.ojo === 'OI' ? '👁 Ojo Izquierdo' : null
@@ -292,7 +292,7 @@ function emailAdmin(order: any, items: any[], evento: string, nuevoEstado?: stri
     ${items.length > 0 ? `
     <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;">
     <p style="font-weight:600;font-size:12px;color:#6b7280;margin:0 0 8px;">PRODUCTOS</p>
-    ${items.map(i => `<p style="margin:2px 0;font-size:13px;"><strong>${i.nombre}</strong>${i.sph != null ? ` · Grad:${i.sph > 0 ? '+' : ''}${i.sph}` : ''}${i.cyl ? ` CYL:${i.cyl}` : ''}${i.color ? ` ${i.color}` : ''}${i.ojo ? ` ${i.ojo}` : ''} × ${i.cantidad}</p>`).join('')}
+    ${items.map(i => `<p style="margin:2px 0;font-size:13px;"><strong>${i.nombre}</strong>${i.sph != null ? ` · Esf:${i.sph > 0 ? '+' : ''}${i.sph}` : ''}${i.cyl ? ` Cil:${i.cyl}` : ''}${i.color ? ` ${i.color}` : ''}${i.ojo ? ` ${i.ojo}` : ''} × ${i.cantidad}</p>`).join('')}
     ` : ''}
 
     <div style="margin-top:16px;text-align:center;">

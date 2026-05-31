@@ -857,7 +857,7 @@ export default function CuentaPage() {
                             <p className="font-bold text-gray-900 text-sm leading-tight">{item.nombre}{item.size ? ` · ${item.size}` : ''}</p>
                             {(item.sph != null || item.ojo) && (
                               <p className="text-[10px] font-mono text-blue-600 mt-0.5">
-                                {[item.sph!=null?`SPH ${parseFloat(item.sph)>0?'+':''}${item.sph}`:null,item.cyl?`CYL ${item.cyl}`:null,item.ojo].filter(Boolean).join(' · ')}
+                                {[item.sph!=null?`Esf. ${parseFloat(item.sph)>0?'+':''}${item.sph}`:null,item.cyl?`Cil. ${item.cyl}`:null,item.ojo].filter(Boolean).join(' · ')}
                               </p>
                             )}
                             {item.color && <p className="text-[10px] text-gray-400 mt-0.5">Color: {item.color}</p>}
@@ -1036,10 +1036,10 @@ export default function CuentaPage() {
                       <div key={String(label)} className="bg-gray-50 rounded-xl p-3">
                         <p className="text-xs font-bold text-gray-500 mb-1.5">{label}</p>
                         <div className="space-y-1 text-xs font-mono">
-                          {sph && <p><span className="text-gray-400">SPH </span><span className="font-bold text-gray-800">{Number(sph) > 0 ? '+' : ''}{sph}</span></p>}
-                          {cyl && <p><span className="text-gray-400">CYL </span><span className="font-bold text-gray-800">{cyl}</span></p>}
-                          {axis && <p><span className="text-gray-400">EJE </span><span className="font-bold text-gray-800">{String(axis).padStart(3,'0')}°</span></p>}
-                          {add && <p><span className="text-gray-400">ADD </span><span className="font-bold text-gray-800">{add}</span></p>}
+                          {sph && <p><span className="text-gray-400">Esfera </span><span className="font-bold text-gray-800">{Number(sph) > 0 ? '+' : ''}{sph}</span></p>}
+                          {cyl && <p><span className="text-gray-400">Cil. </span><span className="font-bold text-gray-800">{cyl}</span></p>}
+                          {axis && <p><span className="text-gray-400">Eje </span><span className="font-bold text-gray-800">{String(axis).padStart(3,'0')}°</span></p>}
+                          {add && <p><span className="text-gray-400">Ad. </span><span className="font-bold text-gray-800">{add}</span></p>}
                         </div>
                       </div>
                     ))}
@@ -1071,7 +1071,7 @@ export default function CuentaPage() {
                     <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold ml-auto">IA</span>
                   </div>
                   <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-                    Toma una foto clara de tu receta óptica y la IA leerá automáticamente SPH, CYL, EJE y te recomendará los lentes ideales.
+                    Toma una foto clara de tu receta óptica y la IA leerá automáticamente la Esfera, Cilindro, Eje y Adición, y te recomendará los lentes ideales.
                   </p>
                   <label className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-xl py-5 cursor-pointer transition-all
                     ${analizandoIA ? 'border-blue-400 bg-blue-50' : 'border-blue-200 hover:border-blue-400 hover:bg-blue-50/50'}`}>
@@ -1101,10 +1101,10 @@ export default function CuentaPage() {
                     <div className="mt-3 bg-white rounded-xl p-3 border border-green-100">
                       <p className="text-xs font-bold text-gray-500 uppercase mb-2">Valores detectados</p>
                       <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                        {recetaAnalizada.od_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD SPH: <b>{recetaAnalizada.od_sph > 0 ? '+' : ''}{recetaAnalizada.od_sph}</b></span>}
-                        {recetaAnalizada.od_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD CYL: <b>{recetaAnalizada.od_cyl}</b></span>}
-                        {recetaAnalizada.oi_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI SPH: <b>{recetaAnalizada.oi_sph > 0 ? '+' : ''}{recetaAnalizada.oi_sph}</b></span>}
-                        {recetaAnalizada.oi_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI CYL: <b>{recetaAnalizada.oi_cyl}</b></span>}
+                        {recetaAnalizada.od_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD Esf: <b>{recetaAnalizada.od_sph > 0 ? '+' : ''}{recetaAnalizada.od_sph}</b></span>}
+                        {recetaAnalizada.od_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD Cil: <b>{recetaAnalizada.od_cyl}</b></span>}
+                        {recetaAnalizada.oi_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI Esf: <b>{recetaAnalizada.oi_sph > 0 ? '+' : ''}{recetaAnalizada.oi_sph}</b></span>}
+                        {recetaAnalizada.oi_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI Cil: <b>{recetaAnalizada.oi_cyl}</b></span>}
                         {recetaAnalizada.add_power != null && <span className="bg-purple-50 rounded-lg px-2 py-1 col-span-2">ADD: <b>+{recetaAnalizada.add_power}</b></span>}
                       </div>
                       {recetaAnalizada.notas && <p className="text-xs text-amber-600 mt-2 italic">💡 {recetaAnalizada.notas}</p>}
@@ -1156,15 +1156,20 @@ export default function CuentaPage() {
                   <div key={side}>
                     <p className="text-xs font-bold text-gray-500 uppercase mb-2">{label}</p>
                     <div className="grid grid-cols-2 gap-2">
-                      {['SPH','CYL','EJE','ADD'].map((field,i) => {
-                        const keys = ['sph','cyl','axis','add']
-                        const k = side+'_'+keys[i]
+                      {[
+                          { label: 'Esfera (SPH)', key: 'sph', ph: '-2.50',  hint: 'Tu graduación principal' },
+                          { label: 'Cilindro (CYL)', key: 'cyl', ph: '-0.75', hint: 'Astigmatismo' },
+                          { label: 'Eje (AXIS)', key: 'axis', ph: '180',    hint: 'Orientación' },
+                          { label: 'Adición (ADD)', key: 'add', ph: '+1.50', hint: 'Para lectura' },
+                        ].map(({ label: fieldLabel, key: fieldKey, ph, hint }) => {
+                        const k = side+'_'+fieldKey
                         return (
-                          <div key={field}>
-                            <p className="text-xs text-gray-400 mb-1">{field}</p>
+                          <div key={fieldKey}>
+                            <p className="text-xs text-gray-500 font-semibold mb-0.5">{fieldLabel}</p>
+                            <p className="text-[9px] text-gray-400 mb-1">{hint}</p>
                             <input value={(recetaForm as any)[k]} onChange={e => setRecetaForm(f => ({...f,[k]:e.target.value}))}
                               className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                              placeholder={field==='SPH'?'-2.50':field==='CYL'?'-0.75':field==='EJE'?'180':'+1.50'} />
+                              placeholder={ph} />
                           </div>
                         )
                       })}

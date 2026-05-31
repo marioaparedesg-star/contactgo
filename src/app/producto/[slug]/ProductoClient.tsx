@@ -110,9 +110,14 @@ function SelectField({ label, value, options, onChange, required, format }: {
 
   return (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+      <label className="block text-sm font-semibold text-gray-700 mb-0.5">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
+      {/* Hint contextual por tipo de campo */}
+      {label.includes('Esfera')   && <p className="text-[10px] text-gray-400 mb-1.5">Tu graduación principal (ej: -3.25 o +1.50)</p>}
+      {label.includes('Cilindro') && <p className="text-[10px] text-gray-400 mb-1.5">Corrección del astigmatismo (ej: -0.75)</p>}
+      {label.includes('Eje')      && <p className="text-[10px] text-gray-400 mb-1.5">Orientación del astigmatismo (ej: 180)</p>}
+      {label.includes('Adición')  && <p className="text-[10px] text-gray-400 mb-1.5">Para lectura o visión cercana (solo si tienes presbicia)</p>}
       {isLargeList && (
         <input
           type="text" inputMode="decimal"
@@ -520,11 +525,11 @@ export default function ProductoClient({ product, variants }: Props) {
                           ? <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-800">
                               📞 Para esta graduación contáctanos por WhatsApp o llena el formulario de receta y te cotizamos.
                             </div>
-                          : <SelectField label="SPH" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
+                          : <SelectField label="Esfera (SPH)" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
                         }
                         {isToric && <>
-                          <SelectField label="CYL" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
-                          <SelectField label="AXIS" value={axis} options={axisOpts} required onChange={setAxis} format={v=>String(v).padStart(3,'0')+'°'}/>
+                          <SelectField label="Cilindro (CYL)" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
+                          <SelectField label="Eje (AXIS)" value={axis} options={axisOpts} required onChange={setAxis} format={v=>String(v).padStart(3,'0')+'°'}/>
                         </>}
                       </div>
                     ) : (
@@ -533,19 +538,19 @@ export default function ProductoClient({ product, variants }: Props) {
                         {/* OD */}
                         <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
                           <p className="text-xs font-bold text-blue-700">👁 Ojo Derecho (OD)</p>
-                          <SelectField label="SPH" value={sphOD} options={sphOpts} onChange={setSphOD} format={fmtSph}/>
+                          <SelectField label="Esfera (SPH)" value={sphOD} options={sphOpts} onChange={setSphOD} format={fmtSph}/>
                           {isToric && <>
-                            <SelectField label="CYL" value={cylOD} options={cylOpts} onChange={setCylOD} format={v=>Number(v).toFixed(2)}/>
-                            <SelectField label="AXIS" value={axisOD} options={axisOpts} onChange={setAxisOD} format={v=>String(v).padStart(3,'0')+'°'}/>
+                            <SelectField label="Cilindro (CYL)" value={cylOD} options={cylOpts} onChange={setCylOD} format={v=>Number(v).toFixed(2)}/>
+                            <SelectField label="Eje (AXIS)" value={axisOD} options={axisOpts} onChange={setAxisOD} format={v=>String(v).padStart(3,'0')+'°'}/>
                           </>}
                         </div>
                         {/* OS */}
                         <div className="bg-green-50 border border-green-200 rounded-xl p-3 space-y-2">
                           <p className="text-xs font-bold text-green-700">👁 Ojo Izquierdo (OI)</p>
-                          <SelectField label="SPH" value={sphOS} options={sphOpts} onChange={setSphOS} format={fmtSph}/>
+                          <SelectField label="Esfera (SPH)" value={sphOS} options={sphOpts} onChange={setSphOS} format={fmtSph}/>
                           {isToric && <>
-                            <SelectField label="CYL" value={cylOS} options={cylOpts} onChange={setCylOS} format={v=>Number(v).toFixed(2)}/>
-                            <SelectField label="AXIS" value={axisOS} options={axisOpts} onChange={setAxisOS} format={v=>String(v).padStart(3,'0')+'°'}/>
+                            <SelectField label="Cilindro (CYL)" value={cylOS} options={cylOpts} onChange={setCylOS} format={v=>Number(v).toFixed(2)}/>
+                            <SelectField label="Eje (AXIS)" value={axisOS} options={axisOpts} onChange={setAxisOS} format={v=>String(v).padStart(3,'0')+'°'}/>
                           </>}
                         </div>
                       </div>
@@ -557,7 +562,7 @@ export default function ProductoClient({ product, variants }: Props) {
               // Un solo ojo (OD o OS)
               return (
                 <div className="space-y-3">
-                  <SelectField label="Graduación (SPH)" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
+                  <SelectField label="Esfera (SPH)" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
                   {isToric && <>
                     <SelectField label="Cilindro (CYL)" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
                     <SelectField label="Eje (AXIS)" value={axis} options={axisOpts} required onChange={setAxis} format={v=>String(v).padStart(3,'0')+'°'}/>

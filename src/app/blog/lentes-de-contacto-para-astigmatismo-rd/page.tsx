@@ -74,7 +74,7 @@ export default function Page() {
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">¿Cuánto tiempo tardan en llegar los lentes tóricos?</h2>
             <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5">
-              <p className="text-sm text-amber-800">⏱️ <strong>Importante:</strong> Los lentes tóricos se fabrican a medida según tu graduación específica (SPH, CYL y AXIS). Por eso el tiempo de entrega es de <strong>20-30 días</strong>, a diferencia de los esféricos que enviamos en 24-48 horas desde nuestro inventario. Vale la pena la espera — obtendrás el lente exacto para tu graduación.</p>
+              <p className="text-sm text-amber-800">⏱️ <strong>Importante:</strong> Los lentes tóricos se fabrican a medida según tu graduación específica (Esfera, Cilindro y Eje). Por eso el tiempo de entrega es de <strong>20-30 días</strong>, a diferencia de los esféricos que enviamos en 24-48 horas desde nuestro inventario. Vale la pena la espera — obtendrás el lente exacto para tu graduación.</p>
             </div>
           </div>
 

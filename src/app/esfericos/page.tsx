@@ -16,7 +16,7 @@ export const revalidate = 60
 
 const faqs = [
   { q: '¿Qué son los lentes de contacto esféricos?', a: 'Son lentes diseñados para corregir miopía (dificultad para ver de lejos) e hipermetropía (dificultad para ver de cerca). Se identifican por tener solo el valor SPH en la receta, sin CYL ni AXIS.' },
-  { q: '¿Cómo sé si necesito lentes esféricos?', a: 'Si tu receta óptica tiene solo un valor SPH (positivo o negativo) sin CYL, necesitas lentes esféricos. Si tienes CYL también, necesitas lentes tóricos para astigmatismo.' },
+  { q: '¿Cómo sé si necesito lentes esféricos?', a: 'Si tu receta óptica tiene solo un valor de Esfera (positivo o negativo) sin Cilindro, necesitas lentes esféricos. Si tienes Cilindro también, necesitas lentes tóricos.' },
   { q: '¿Cuánto duran los lentes esféricos?', a: 'Depende del tipo: los diarios se descartan cada día, los quincenales duran 2 semanas y los mensuales duran 30 días. Nunca uses un lente más tiempo del indicado.' },
   { q: '¿Cuál es la diferencia entre ACUVUE y Biofinity?', a: 'Ambas son marcas premium de silicona hidrogel. ACUVUE (J&J) es la marca más vendida del mundo, con tecnología UV Block. Biofinity (CooperVision) destaca por su hidratación natural sin aditivos.' },
 ]
@@ -55,7 +55,7 @@ export default async function Page() {
           <p>Los lentes de contacto esféricos son el tipo más común en el mundo. Están diseñados para corregir dos de los problemas de visión más frecuentes: <strong>miopía</strong> (no ves bien de lejos) e <strong>hipermetropía</strong> (no ves bien de cerca). En República Dominicana, millones de personas los usan a diario.</p>
           <p>En ContactGo manejamos la selección más completa de lentes esféricos disponible en RD: desde los populares <strong>ACUVUE® 1-DAY MOIST®</strong> (diarios desechables) hasta los cómodos <strong>Biofinity®</strong> mensuales de CooperVision. Todos son productos 100% originales de distribuidores autorizados.</p>
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo elegir el lente esférico correcto?</h3>
-          <p>Para elegir tu lente, necesitas saber tu valor <strong>SPH</strong> (esfera) de la receta óptica. Este valor puede ser negativo (miopía) o positivo (hipermetropía). Si tu receta también tiene <strong>CYL</strong> (cilindro), necesitas <Link href="/toricos" className="text-primary-600 font-semibold">lentes tóricos para astigmatismo</Link>.</p>
+          <p>Para elegir tu lente, necesitas saber el valor de <strong>Esfera</strong> de tu receta óptica. Este valor puede ser negativo (miopía) o positivo (hipermetropía). Si tu receta también tiene <strong>Cilindro</strong>, necesitas <Link href="/toricos" className="text-primary-600 font-semibold">lentes tóricos para astigmatismo</Link>.</p>
           <p>Los factores más importantes al elegir son: duración (diario, quincenal o mensual), material (silicona hidrogel para mayor transpirabilidad) y marca. Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> para encontrar el lente exacto para ti.</p>
         </section>
 

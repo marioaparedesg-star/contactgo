@@ -19,11 +19,12 @@ const PASOS = [
 
 function formatRecetaItem(item: any): string {
   const parts: string[] = []
-  if (item.sph != null) parts.push(`SPH ${fmtSph(item.sph)}`)
-  if (item.cyl != null) parts.push(`CYL ${parseFloat(item.cyl).toFixed(2)}`)
-  if (item.axis != null) parts.push(`EJE ${String(item.axis).padStart(3,'0')}°`)
-  if (item.add_power) parts.push(`ADD ${item.add_power}`)
-  if (item.color) parts.push(item.color)
+  // Terminología dominicana: Esfera, Cilindro, Eje, Adición
+  if (item.sph != null)   parts.push(`Esfera ${fmtSph(item.sph)}`)
+  if (item.cyl != null)   parts.push(`Cil. ${parseFloat(item.cyl).toFixed(2)}`)
+  if (item.axis != null)  parts.push(`Eje ${String(item.axis).padStart(3,'0')}°`)
+  if (item.add_power)     parts.push(`Ad. ${item.add_power}`)
+  if (item.color)         parts.push(item.color)
   return parts.join(' · ')
 }
 

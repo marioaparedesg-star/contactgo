@@ -410,10 +410,10 @@ export default function RecetaPage() {
               {/* Resumen receta */}
               <div className="mt-4 bg-white/60 rounded-2xl p-4 grid grid-cols-4 gap-3 text-center">
                 {[
-                  {label:'SPH OD',val:od_sph?fmtSph(od_sph):'—'},
-                  {label:'SPH OI',val:oi_sph?fmtSph(oi_sph):'—'},
-                  {label:'CYL',val:od_cyl&&od_cyl!=='0.00'?od_cyl:'—'},
-                  {label:'ADD',val:add?`+${parseFloat(add).toFixed(2)}`:'—'},
+                  {label:'Esfera OD',val:od_sph?fmtSph(od_sph):'—'},
+                  {label:'Esfera OI',val:oi_sph?fmtSph(oi_sph):'—'},
+                  {label:'Cilindro',val:od_cyl&&od_cyl!=='0.00'?od_cyl:'—'},
+                  {label:'Adición',val:add?`+${parseFloat(add).toFixed(2)}`:'—'},
                 ].map(i=>(
                   <div key={i.label}>
                     <p className="text-xs text-gray-500 mb-0.5">{i.label}</p>
@@ -455,7 +455,7 @@ export default function RecetaPage() {
                 {activeTab==='torico'&&(
                   <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-3 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5"/>
-                    <p className="text-xs text-amber-700"><strong>Entrega 20-30 días</strong> — Los lentes tóricos se fabrican a medida según tu SPH + CYL + AXIS exactos.</p>
+                    <p className="text-xs text-amber-700"><strong>Entrega 20-30 días</strong> — Los lentes tóricos se fabrican a medida según tu Esfera + Cilindro + Eje exactos.</p>
                   </div>
                 )}
                 {(allProducts[activeTab]??[]).length>0?(
