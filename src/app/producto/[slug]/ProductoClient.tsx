@@ -337,16 +337,19 @@ export default function ProductoClient({ product, variants }: Props) {
         <div className="grid md:grid-cols-[1.1fr_1fr] gap-6 lg:gap-10 items-start">
           {/* Imagen — sticky en desktop */}
           <div className="md:sticky md:top-20">
-            <div className="group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 aspect-[5/4] flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-300 relative">
+            <div className="group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 aspect-[5/4] shadow-sm hover:shadow-md transition-shadow duration-300 relative">
               {/* Badge original */}
               <span className="absolute top-3 right-3 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full z-10 flex items-center gap-1 leading-none">
                 ✓ 100% Original
               </span>
               {product.imagen_url ? (
-                <Image src={product.imagen_url} alt={product.nombre} width={560} height={480}
-                  className="object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out" priority sizes="(max-width: 768px) 100vw, 560px" />
+                <Image src={product.imagen_url} alt={product.nombre}
+                  fill unoptimized priority
+                  className="object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out" />
               ) : (
-                <Eye className="w-20 h-20 text-gray-200" />
+                <div className="w-full h-full flex items-center justify-center">
+                  <Eye className="w-20 h-20 text-gray-200" />
+                </div>
               )}
             </div>
             {/* Trust strip — visible en móvil y desktop */}
