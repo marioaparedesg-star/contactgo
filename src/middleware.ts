@@ -55,26 +55,23 @@ export function middleware(req: NextRequest) {
       ?? req.cookies.get('supabase-auth-token')
 
     const cookieValue = authCookie?.value ?? ''
-    // Validar estructura JWT: 3 segmentos base64 y prefijo correcto
-    const parts = cookieValue.split('.')
-    const isValidJwtShape = parts.length === 3 && cookieValue.startsWith('eyJ')
-    if (!cookieValue || !isValidJwtShape) {
+    if (!cookieValue) {
       const loginUrl = new URL('/admin/login', req.url)
       loginUrl.searchParams.set('next', pathname)
       return NextResponse.redirect(loginUrl)
     }
-    // Validar que el payload JWT no esté expirado (sin verificar firma — eso lo hace Supabase)
-    // Previene que tokens vencidos pasen el middleware aunque tengan shape válida
+    // @supabase/ssr v0.4+ guarda la sesión como base64(JSON), NO como JWT puro.
+    // La cookie contiene: base64({ access_token: "eyJ...", expires_at: N, ... })
+    // Hay que decodificar el JSON para extraer el access_token y validar expiración.
     try {
+      const sessionJson = JSON.parse(Buffer.from(cookieValue, 'base64').toString())
+      const accessToken = sessionJson?.access_token ?? ''
+      const parts = accessToken.split('.')
+      if (parts.length !== 3 || !accessToken.startsWith('eyJ')) throw new Error('invalid')
       const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString())
       const now = Math.floor(Date.now() / 1000)
-      if (!payload.exp || payload.exp < now) {
-        const loginUrl = new URL('/admin/login', req.url)
-        loginUrl.searchParams.set('next', pathname)
-        return NextResponse.redirect(loginUrl)
-      }
+      if (!payload.exp || payload.exp < now) throw new Error('expired')
     } catch {
-      // Payload no parseable → rechazar
       const loginUrl = new URL('/admin/login', req.url)
       loginUrl.searchParams.set('next', pathname)
       return NextResponse.redirect(loginUrl)
