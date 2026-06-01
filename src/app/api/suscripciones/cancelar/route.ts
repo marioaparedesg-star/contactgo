@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
           order_id: order.id, product_id: i.product_id ?? null,
           nombre: i.nombre, precio: Number(i.precio ?? 0), cantidad: Number(i.cantidad ?? 1),
           sph: i.sph != null ? Number(i.sph) : null, cyl: i.cyl != null ? Number(i.cyl) : null,
-          add_power: i.add_power ? Number(i.add_power) : null, axis: i.axis != null ? Number(i.axis) : null,
+          add_power: i.add_power ?? null, axis: i.axis != null ? Number(i.axis) : null,
           color: i.color ?? null, ojo: i.ojo ?? null,
         })))
         pedidoGenerado = order.id

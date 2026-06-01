@@ -197,7 +197,7 @@ export default function CheckoutPage() {
           cantidad:        i.cantidad,
           sph:     i.sph != null              ? Number(i.sph)                                 : null,
           cyl:     i.cyl != null              ? Number(i.cyl)                                 : null,
-          add_power: i.add_power              ? parseFloat(String(i.add_power).replace('+','')) : null,
+          add_power: i.add_power              ?? null,  // texto normalizado: 'LOW'/'MID'/'HIGH' o '1.5'
           axis:    (i as any).axis != null    ? Number((i as any).axis)                       : null,
           color:   (i as any).color           ?? null,
           ojo:     (i as any).ojo             ?? null,

@@ -92,6 +92,30 @@ function EyeSelector({ eye, onChange }: { eye: string; onChange: (v: string) => 
   )
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// normalizeAdd: separa la clave interna del label descriptivo visible al cliente
+//
+//   Visible (add_disponibles)          → Clave interna (product_inventory / BD)
+//   "LOW (+0.75 a +1.50)"              → "LOW"
+//   "MID (+1.75 a +2.25)"              → "MID"
+//   "HIGH (+2.50 a +3.00)"             → "HIGH"
+//   "Low (+0.75 a +1.25)"              → "LOW"   ← capitalización variable
+//   "LOW (+1.25)"                       → "LOW"
+//   "MED (+2.00)"                       → "MED"
+//   "+1.50"                             → "+1.50" ← ADD numérico sin cambio
+//   "+2.50"                             → "+2.50"
+//
+// Regla: extraer el primer token alfanumérico + signo antes del primer espacio o '('
+// ─────────────────────────────────────────────────────────────────────────────
+function normalizeAdd(label: string): string {
+  if (!label) return label
+  // ADD numérico como "+1.50" — mantener exactamente
+  if (/^[+-]?\d/.test(label.trim())) return label.trim()
+  // ADD categórico como "LOW (+0.75 a +1.50)" → "LOW"
+  const match = label.trim().match(/^([A-Za-z]+)/)
+  return match ? match[1].toUpperCase() : label.trim()
+}
+
 function SelectField({ label, value, options, onChange, required, format }: {
   label: string; value: string; options: (string|number)[]; required?: boolean
   onChange: (v: string) => void; format?: (v: string|number) => string
@@ -220,7 +244,8 @@ export default function ProductoClient({ product, variants }: Props) {
     const sphNum  = sph  ? parseFloat(sph)  : null
     const cylNum  = cyl  ? parseFloat(cyl)  : null
     const axisNum = axis ? parseInt(axis)   : null
-    const addVal  = add  || null
+    // normalizeAdd: "LOW (+0.75 a +1.50)" → "LOW" para comparar con product_inventory.add_power
+    const addVal  = add ? normalizeAdd(add) : null
     if (sphNum === null) return true // aún no seleccionó SPH — botón habilitado (SelectField lo bloquea)
     return inventario.some((v: any) => {
       const sphMatch  = Math.abs(Number(v.sph) - sphNum) < 0.001
@@ -276,21 +301,21 @@ export default function ProductoClient({ product, variants }: Props) {
           if (isToric && !cyl)  { toast.error('Selecciona el cilindro CYL'); return false }
           if (isToric && !axis) { toast.error('Selecciona el eje AXIS'); return false }
           // Agregar OD
-          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
+          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
           // Agregar OS (misma receta)
-          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:'OS', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
+          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OS', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
         } else {
           // Receta diferente por ojo
           if (!sphOD && !sphOS) { toast.error('Ingresa la receta de al menos un ojo'); return false }
           if (sphOD) {
             if (isToric && !cylOD)  { toast.error('Falta el CYL del ojo derecho'); return false }
             if (isToric && !axisOD) { toast.error('Falta el AXIS del ojo derecho'); return false }
-            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOD), cyl:cylOD?parseFloat(cylOD):undefined, axis:axisOD?parseInt(axisOD):undefined, add_power:add||undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
+            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOD), cyl:cylOD?parseFloat(cylOD):undefined, axis:axisOD?parseInt(axisOD):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
           }
           if (sphOS) {
             if (isToric && !cylOS)  { toast.error('Falta el CYL del ojo izquierdo'); return false }
             if (isToric && !axisOS) { toast.error('Falta el AXIS del ojo izquierdo'); return false }
-            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOS), cyl:cylOS?parseFloat(cylOS):undefined, axis:axisOS?parseInt(axisOS):undefined, add_power:add||undefined, ojo:'OI', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
+            addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOS), cyl:cylOS?parseFloat(cylOS):undefined, axis:axisOS?parseInt(axisOS):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OI', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
           }
         }
       } else {
@@ -298,7 +323,7 @@ export default function ProductoClient({ product, variants }: Props) {
         if (!sph) { toast.error('Selecciona la graduación SPH'); return false }
         if (isToric && !cyl)  { toast.error('Selecciona el cilindro CYL'); return false }
         if (isToric && !axis) { toast.error('Selecciona el eje AXIS'); return false }
-        addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add||undefined, ojo:eye, size:size||undefined, precio_override:price, precio_original:precioBase } as any)
+        addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add?normalizeAdd(add):undefined, ojo:eye, size:size||undefined, precio_override:price, precio_original:precioBase } as any)
       }
     } else {
       // Solución, gota, color

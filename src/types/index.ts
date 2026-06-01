@@ -83,7 +83,7 @@ export interface OrderItem {
   sph: number | null
   cyl: number | null
   axis: number | null
-  add_power: number | null
+  add_power: string | null  // texto: 'LOW'/'MID'/'HIGH' o '1.5' para ADD numérico
   products?: Product
 }
 
