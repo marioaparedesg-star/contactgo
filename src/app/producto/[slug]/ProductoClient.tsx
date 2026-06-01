@@ -212,7 +212,9 @@ export default function ProductoClient({ product, variants }: Props) {
 
   // Verificar si la combinación seleccionada tiene stock real en product_inventory
   // Evita que se vendan variantes (SPH+CYL+AXIS) que no existen en inventario
-  const inventario = (product as any).inventory_disponible as any[] ?? []
+  // stock_map: combos con stock > 0 — solo para habilitar/deshabilitar botón
+  // Separado de sph_disponibles (que siempre contiene el rango oficial completo)
+  const inventario = (product as any).stock_map as any[] ?? []
   const varianteSeleccionadaTieneStock = (): boolean => {
     if (!isLente || isColor || !inventario.length) return true // no aplica
     const sphNum  = sph  ? parseFloat(sph)  : null
@@ -466,8 +468,14 @@ export default function ProductoClient({ product, variants }: Props) {
             {isLente && !isColor && (() => {
               // Si no hay variantes reales en inventario, no mostrar opciones falsas
               const tieneVariantes = (product as any).tiene_variantes_reales !== false
+              // Parámetros oficiales del fabricante — nunca filtrar por stock aquí.
+              // 0.00 (plano) es médicamente válido: Number(0) es falsy pero es una graduación real.
+              // Nunca usar filter(Boolean) sobre valores ópticos.
               const sphOpts = product.sph_disponibles?.length
-                ? [...product.sph_disponibles].sort((a:any,b:any) => Number(a)-Number(b))
+                ? [...product.sph_disponibles]
+                    .map(Number)
+                    .filter(v => !isNaN(v))  // solo eliminar NaN, nunca 0
+                    .sort((a, b) => a - b)
                 : tieneVariantes ? ALL_SPH : []
               const fmtSph = (v:any) => Number(v) > 0 ? `+${Number(v).toFixed(2)}` : Number(v) === 0 ? 'Plano (0.00)' : Number(v).toFixed(2)
 

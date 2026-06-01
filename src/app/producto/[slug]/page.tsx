@@ -5,6 +5,26 @@ import { getEntrega } from '@/lib/delivery-times'
 import ProductoClient from './ProductoClient'
 export const revalidate = 300
 
+// ═══════════════════════════════════════════════════════════════════
+// ARQUITECTURA: Separación definitiva de responsabilidades
+//
+//  products.*_disponibles  → parámetros OFICIALES del fabricante
+//                            Siempre completos. Nunca truncados.
+//                            Son la fuente de verdad para los selectores.
+//
+//  product_inventory       → stock por combinación específica (logística)
+//                            Solo responde: ¿hay unidades de esta combo?
+//                            NUNCA determina qué opciones mostrar.
+//
+//  Selectores: siempre muestran el rango oficial completo del producto.
+//  Botón "Comprar": desactivado solo si la combinación seleccionada
+//                   no tiene stock en ese momento.
+//
+//  Errores eliminados:
+//   - filter(Boolean): 0.00 (plano) es un valor óptico válido, no falsy
+//   - Truncado a 1000 filas: la RPC get_stock_map usa SELECT DISTINCT
+//     y devuelve todas las combos sin límite implícito
+// ═══════════════════════════════════════════════════════════════════
 async function getProduct(slug: string) {
   const sb = createServerSupabaseClient()
   const { data } = await sb.from('products')
@@ -12,24 +32,30 @@ async function getProduct(slug: string) {
     .eq('slug', slug).single()
   if (!data) return null
 
-  // Cargar dioptrías con stock real > 0 desde product_inventory
-  const { data: inv } = await sb.from('product_inventory')
-    .select('sph, cyl, axis, add_power, color, stock, bc, dia')
-    .eq('product_id', data.id)
-    .gt('stock', 0)
-    .order('sph', { ascending: true })
+  // ── CAPA 1: Parámetros oficiales ────────────────────────────────
+  // Vienen directamente de products.*_disponibles.
+  // No se modifican. No se filtran. No se sobreescriben con inventario.
+  // El plano 0.00, los positivos, los negativos — todos son válidos.
 
-  // Sobreescribir sph_disponibles con las dioptrías que tienen stock real
-  if (inv && inv.length > 0) {
-    const sphs = [...new Set(inv.map((i: any) => i.sph).filter(Boolean))].sort((a,b) => a-b)
-    data.sph_disponibles         = sphs
-    data.inventory_disponible    = inv
-    data.tiene_variantes_reales  = true
-  } else {
-    // Sin variantes en product_inventory — marcar para que el PDP muestre aviso
-    data.tiene_variantes_reales  = false
-    data.sph_disponibles         = []  // vacío para forzar modo consulta
-  }
+  // ── CAPA 2: Mapa de stock (solo para validar botón "Comprar") ───
+  // RPC get_stock_map: SELECT DISTINCT sph, cyl, axis, add_power, color
+  //   WHERE product_id = X AND stock > 0
+  // Sin limit implícito. Sin truncado. Sin order (no se necesita).
+  const { data: stockMap } = await sb.rpc('get_stock_map', {
+    p_product_id: data.id
+  })
+
+  // tiene_variantes_reales: ¿hay al menos una combinación con stock?
+  // false → PDP muestra aviso "consultar por WhatsApp"
+  data.tiene_variantes_reales = !!(stockMap && stockMap.length > 0)
+
+  // stock_map: array de combos con stock para varianteSeleccionadaTieneStock()
+  // El Client Component lo usa SOLO para habilitar/deshabilitar el botón
+  data.stock_map = stockMap ?? []
+
+  // CRÍTICO: sph_disponibles, cyl_disponibles, axis_disponibles, add_disponibles
+  // se pasan SIN modificar — contienen los rangos oficiales del fabricante
+  // auditados contra IFUs oficiales (migración auditoria_parametros_opticos_correctos)
 
   return data
 }
