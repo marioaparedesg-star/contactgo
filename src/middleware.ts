@@ -54,24 +54,12 @@ export function middleware(req: NextRequest) {
       ?? req.cookies.get('sb-access-token')
       ?? req.cookies.get('supabase-auth-token')
 
+    // @supabase/ssr v0.4 almacena la sesión como JSON en texto plano (no JWT puro)
+    // posiblemente dividido en chunks (.0, .1…). Intentar parsear aquí es frágil.
+    // El admin layout ya valida con sb.auth.getUser() — aquí solo bloqueamos
+    // requests sin cookie alguna (visitantes no autenticados).
     const cookieValue = authCookie?.value ?? ''
     if (!cookieValue) {
-      const loginUrl = new URL('/admin/login', req.url)
-      loginUrl.searchParams.set('next', pathname)
-      return NextResponse.redirect(loginUrl)
-    }
-    // @supabase/ssr v0.4+ guarda la sesión como base64(JSON), NO como JWT puro.
-    // La cookie contiene: base64({ access_token: "eyJ...", expires_at: N, ... })
-    // Hay que decodificar el JSON para extraer el access_token y validar expiración.
-    try {
-      const sessionJson = JSON.parse(Buffer.from(cookieValue, 'base64').toString())
-      const accessToken = sessionJson?.access_token ?? ''
-      const parts = accessToken.split('.')
-      if (parts.length !== 3 || !accessToken.startsWith('eyJ')) throw new Error('invalid')
-      const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString())
-      const now = Math.floor(Date.now() / 1000)
-      if (!payload.exp || payload.exp < now) throw new Error('expired')
-    } catch {
       const loginUrl = new URL('/admin/login', req.url)
       loginUrl.searchParams.set('next', pathname)
       return NextResponse.redirect(loginUrl)
