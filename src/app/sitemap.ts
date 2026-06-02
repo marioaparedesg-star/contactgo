@@ -38,6 +38,8 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/blog/como-poner-lentes-de-contacto',      priority: 0.75, changeFrequency: 'monthly' as const },
   { url: 'https://www.contactgo.net/blog/tipos-de-lentes-de-contacto',          priority: 0.75, changeFrequency: 'monthly' as const },
   { url: 'https://www.contactgo.net/blog/como-leer-receta-optica-rd',            priority: 0.72, changeFrequency: 'monthly' },
+  { url: 'https://www.contactgo.net/blog/dormir-con-lentes-contacto',             priority: 0.70, changeFrequency: 'monthly' },
+  { url: 'https://www.contactgo.net/blog/como-leer-tu-receta',                    priority: 0.68, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo', priority: 0.85, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/lentes-de-contacto/santiago',      priority: 0.85, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/lentes-de-contacto/punta-cana',    priority: 0.80, changeFrequency: 'monthly' },

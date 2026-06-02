@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description: '¿Tu hijo puede usar lentes de contacto? Descubre la edad recomendada, los mejores tipos para jóvenes y cómo hacer la transición segura en República Dominicana.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd' },
   openGraph: {
+    images: [{ url: 'https://www.contactgo.net/og-image.jpg', width: 1200, height: 630 }],
     title: 'Lentes de contacto para adolescentes en RD — ¿Cuándo empezar?',
     description: 'Guía para padres: edad, tipos de lentes y consejos para que tu hijo use lentes de contacto de forma segura en RD.',
     url: 'https://www.contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd',

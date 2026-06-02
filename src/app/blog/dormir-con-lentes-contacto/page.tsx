@@ -7,7 +7,7 @@ export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: '¿Puedo Dormir con Lentes de Contacto? Riesgos Reales | ContactGo RD',
-  description: 'Descubre por qué dormir con lentes de contacto es peligroso para tus ojos, los síntomas de alerta y qué hacer si lo hiciste accidentalmente. Guía de optometría para RD.',
+  description: 'Descubre por qué dormir con lentes de contacto es peligroso para tus ojos, los síntomas de alerta y qué hacer si lo hiciste accidentalmente. Guía de...',
   alternates: { canonical: 'https://www.contactgo.net/blog/dormir-con-lentes-contacto' },
   openGraph: {
     title: '¿Puedo Dormir con Lentes de Contacto? Riesgos Reales',

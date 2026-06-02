@@ -5,9 +5,10 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: '¿Cuánto cuestan los lentes de contacto en República Dominicana? — ContactGo',
-  description: 'Guía de precios de lentes de contacto en RD 2026. Compara Acuvue, Air Optix, Biofinity vs ópticas físicas. Descubre por qué comprar online es hasta 40% más barato.',
+  description: 'Guía de precios de lentes de contacto en RD 2026. Compara Acuvue, Air Optix, Biofinity vs ópticas físicas. Descubre por qué comprar online es hasta 40% más...',
   alternates: { canonical: 'https://www.contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd' },
   openGraph: {
+    images: [{ url: 'https://www.contactgo.net/og-image.jpg', width: 1200, height: 630 }],
     title: '¿Cuánto cuestan los lentes de contacto en RD? Guía de precios 2026',
     description: 'Compara precios de lentes de contacto en ópticas vs online en República Dominicana.',
     url: 'https://www.contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd',

@@ -5,9 +5,10 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Cómo leer tu receta óptica para lentes de contacto — Guía visual RD',
-  description: 'Aprende a leer tu receta óptica en República Dominicana. Qué significa SPH, CYL, AXIS, ADD y BC. Guía paso a paso para entender tu graduación y comprar los lentes correctos.',
+  description: 'Aprende a leer tu receta óptica en República Dominicana. Qué significa SPH, CYL, AXIS, ADD y BC. Guía paso a paso para entender tu graduación y comprar los...',
   alternates: { canonical: 'https://www.contactgo.net/blog/como-leer-receta-optica-rd' },
   openGraph: {
+    images: [{ url: 'https://www.contactgo.net/og-image.jpg', width: 1200, height: 630 }],
     title: 'Cómo leer tu receta óptica — Guía para comprar lentes de contacto en RD',
     description: 'Guía visual para entender tu receta óptica: SPH, CYL, AXIS, ADD y BC explicados en español.',
     url: 'https://www.contactgo.net/blog/como-leer-receta-optica-rd',

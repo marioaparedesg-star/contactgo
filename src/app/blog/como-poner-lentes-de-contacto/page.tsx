@@ -7,6 +7,7 @@ import Link from 'next/link'
 // canonical
 export const metadata = {
   openGraph: {
+    images: [{ url: 'https://www.contactgo.net/og-image.jpg', width: 1200, height: 630 }],
     title: 'Cómo Ponerse los Lentes de Contacto Paso a Paso',
     url: 'https://www.contactgo.net/blog/como-poner-lentes-de-contacto',
     siteName: 'ContactGo',

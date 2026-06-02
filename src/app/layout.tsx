@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.contactgo.net'),
-  title: 'ContactGo — Lentes de Contacto RD',
+  title: 'ContactGo | Lentes de Contacto en RD',
   manifest: '/manifest.json',
 
 
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
     shortcut: '/favicon.ico',
   },
-  description: 'Compra lentes de contacto en República Dominicana con envío en 24-48h. Acuvue, Air Optix, FreshLook, Biofinity. Lentes para miopía, astigmatismo y multifocales. Entrega a domicilio en Santo Domingo, Santiago y todo RD.',
+  description: 'Compra lentes de contacto originales en RD. Acuvue, Air Optix, Biofinity y más. Envío 24-48h a Santo Domingo, Santiago y todo el país. Tóricos, multifocales y color.',
   authors: [{ name: 'ContactGo', url: 'https://www.contactgo.net' }],
   creator: 'ContactGo',
   publisher: 'ContactGo',
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ContactGo — Lentes de Contacto RD',
+    title: 'ContactGo | Lentes de Contacto en RD',
     description: 'Lentes de contacto con envío en 24-48h en República Dominicana.',
     images: ['https://www.contactgo.net/og-1200x630.png'],
   },

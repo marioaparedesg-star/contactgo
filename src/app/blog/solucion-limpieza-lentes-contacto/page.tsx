@@ -7,6 +7,7 @@ import Link from 'next/link'
 // canonical
 export const metadata = {
   openGraph: {
+    images: [{ url: 'https://www.contactgo.net/og-image.jpg', width: 1200, height: 630 }],
     title: 'Soluciones para Limpiar Lentes de Contacto',
     url: 'https://www.contactgo.net/blog/solucion-limpieza-lentes-contacto',
     siteName: 'ContactGo',
