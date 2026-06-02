@@ -648,10 +648,26 @@ export default function CuentaPage() {
               <p className="text-[11px] text-gray-400 leading-tight">{user.email}</p>
             </div>
           </div>
-          <button onClick={cerrarSesion}
-            className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors px-3 py-2 rounded-xl hover:bg-red-50 font-medium">
-            <LogOut className="w-3.5 h-3.5" /> Salir
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Volver a la tienda — visible siempre */}
+            <a href="/catalogo"
+              className="hidden sm:flex items-center gap-1.5 text-xs text-gray-500 hover:text-primary-600 transition-colors px-3 py-2 rounded-xl hover:bg-primary-50 font-medium border border-gray-200 hover:border-primary-200">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+              </svg>
+              Tienda
+            </a>
+            <a href="/" className="sm:hidden flex items-center justify-center w-8 h-8 rounded-xl bg-gray-100 hover:bg-primary-50 transition-colors">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                <polyline strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </a>
+            <button onClick={cerrarSesion}
+              className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors px-3 py-2 rounded-xl hover:bg-red-50 font-medium">
+              <LogOut className="w-3.5 h-3.5" /> Salir
+            </button>
+          </div>
         </div>
       </div>
 
