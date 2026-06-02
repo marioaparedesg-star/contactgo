@@ -104,10 +104,10 @@ export default function CartPage() {
           </button>
         </div>
 
-        <div className="grid lg:grid-cols-5 gap-6">
+        <div className="grid md:grid-cols-5 gap-6">
 
           {/* Items */}
-          <div className="lg:col-span-3 space-y-3">
+          <div className="md:col-span-3 space-y-3">
             {items.map((item, idx) => {
               const receta = fmtReceta(item)
               const precioItem = Number((item as any).precio_final ?? item.product.precio)
@@ -219,7 +219,7 @@ export default function CartPage() {
           </div>
 
           {/* Resumen */}
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2 md:sticky md:top-4 md:self-start">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-20 space-y-4">
               <h3 className="font-black text-gray-900">Resumen</h3>
 

@@ -458,7 +458,7 @@ export default function CheckoutPage() {
                       <label htmlFor="nombre" className="sr-only">Nombre completo</label>
                       <input id="nombre" {...register('nombre')} placeholder="Nombre completo" autoComplete="name"
                         aria-label="Nombre completo"
-                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
                       {errors.nombre && <p className="text-red-500 text-xs mt-1 flex items-center gap-1">⚠️ {errors.nombre.message}</p>}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -467,7 +467,7 @@ export default function CheckoutPage() {
                         <label htmlFor="email" className="sr-only">Email</label>
                         <input id="email" {...register('email')} type="email" placeholder="Email" autoComplete="email"
                           aria-label="Correo electrónico"
-                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
                         {errors.email && <p className="text-red-500 text-xs mt-1">⚠️ {errors.email.message}</p>}
                       </div>
                       <div className="relative">
@@ -475,7 +475,7 @@ export default function CheckoutPage() {
                         <label htmlFor="telefono" className="sr-only">Teléfono</label>
                         <input id="telefono" {...register('telefono')} type="tel" placeholder="WhatsApp / Teléfono" autoComplete="tel"
                           aria-label="Número de teléfono"
-                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
                         {errors.telefono && <p className="text-red-500 text-xs mt-1">⚠️ {errors.telefono.message}</p>}
                       </div>
                     </div>
@@ -564,11 +564,11 @@ export default function CheckoutPage() {
                           <label htmlFor="direccion" className="sr-only">Dirección</label>
                           <input id="direccion" {...register('direccion')} placeholder="Calle, número, sector, referencias" autoComplete="street-address"
                             aria-label="Dirección de entrega"
-                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors" />
+                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
                           {errors.direccion && <p className="text-red-500 text-xs mt-1">⚠️ {errors.direccion.message}</p>}
                         </div>
                         <select {...register('ciudad')}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 bg-white transition-colors">
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 bg-white transition-colors">
                           <option value="">Selecciona tu ciudad</option>
                           {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>

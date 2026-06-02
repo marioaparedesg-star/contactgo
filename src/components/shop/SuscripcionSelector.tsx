@@ -40,7 +40,7 @@ export default function SuscripcionSelector({ value, onChange, precio, tipo }: P
           Ahorra hasta 15%
         </span>
       </label>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 [&>*]:min-w-0">
         {OPCIONES.map(o => {
           const active = value === o.val
           const pDesc  = precioConDesc(o.val)
@@ -56,7 +56,7 @@ export default function SuscripcionSelector({ value, onChange, precio, tipo }: P
                   {o.badge}
                 </span>
               )}
-              <p className={`text-xs font-bold ${active ? 'text-primary-700' : 'text-gray-700'}`}>
+              <p className={`text-xs font-bold truncate ${active ? 'text-primary-700' : 'text-gray-700'}`}>
                 {o.label}
               </p>
               <p className="text-[10px] text-gray-400 mt-0.5 leading-tight">{o.desc}</p>
