@@ -56,7 +56,10 @@ export default function AdminNav() {
   const pathname  = usePathname()
   const router    = useRouter()
   const sb        = createClient()
-  const [collapsed, setCollapsed] = useState(false)
+  // En tablet (md: pero no lg:) el sidebar arranca colapsado para maximizar espacio
+  const [collapsed, setCollapsed] = useState(
+    typeof window !== 'undefined' && window.innerWidth < 1024 && window.innerWidth >= 768
+  )
   const [mobileOpen, setMobileOpen] = useState(false)
   const [pendientes, setPendientes] = useState(0)
   const [stockAlerts, setStockAlerts] = useState(0)

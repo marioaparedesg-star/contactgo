@@ -369,7 +369,7 @@ export default function CheckoutPage() {
       )}
       {showAuthModal && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6">
+          <div className="bg-white rounded-2xl w-full max-w-sm md:max-w-md shadow-2xl p-6">
             <h2 className="font-bold text-gray-900 text-lg mb-1">Necesitas una cuenta</h2>
             <p className="text-sm text-gray-500 mb-5">Para rastrear tu pedido y guardar tu historial</p>
             <div className="flex bg-gray-100 rounded-xl p-1 mb-5">
@@ -427,7 +427,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="max-w-5xl mx-auto px-4 pt-6">
-          <div className="grid lg:grid-cols-5 gap-6 items-start">
+          <div className="grid md:grid-cols-5 gap-6 items-start">
 
             {/* LEFT */}
             <div className="lg:col-span-3 space-y-3">

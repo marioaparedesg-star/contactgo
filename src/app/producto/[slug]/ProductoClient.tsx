@@ -132,7 +132,7 @@ function SelectField({ label, value, options, onChange, required, format }: {
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
-        className={`w-full border-2 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none transition-colors bg-white ${
+        className={`w-full border-2 rounded-xl px-4 py-3 min-h-[44px] text-sm font-medium focus:outline-none transition-colors bg-white ${
           value ? 'border-primary-400 text-gray-900' : 'border-gray-200 text-gray-400'
         }`}
       >
@@ -351,7 +351,7 @@ export default function ProductoClient({ product, variants }: Props) {
   return (
     <>
       <Navbar />
-      <main className="max-w-6xl mx-auto px-4 pt-4 pb-32 md:pb-8">
+      <main className="max-w-6xl mx-auto px-4 pt-4 pb-32 md:pb-12">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
           <button onClick={() => router.back()} className="hover:text-primary-600 transition-colors flex items-center gap-1">
@@ -536,7 +536,7 @@ export default function ProductoClient({ product, variants }: Props) {
                       </div>
                     ) : (
                       /* Receta diferente por ojo */
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                         {/* OD */}
                         <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
                           <p className="text-xs font-bold text-blue-700">👁 Ojo Derecho (OD)</p>
