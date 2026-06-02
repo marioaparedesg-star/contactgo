@@ -576,7 +576,7 @@ export default function CheckoutPage() {
                           <input
                             {...register('ciudadPersonalizada')}
                             placeholder="Escribe tu ciudad *"
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors mt-2"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors mt-2"
                           />
                         )}
                         {errors.ciudad && <p className="text-red-500 text-xs">⚠️ {errors.ciudad.message}</p>}

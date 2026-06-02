@@ -217,7 +217,7 @@ export default function LocationPicker({ initialLat, initialLng, initialAddress,
             onChange={e => setSearch(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && searchAddress()}
             placeholder="Buscar calle, sector, lugar..."
-            className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white"
+            className="w-full pl-9 pr-3 py-2.5 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white"
           />
         </div>
         <button onClick={searchAddress}
@@ -234,7 +234,7 @@ export default function LocationPicker({ initialLat, initialLng, initialAddress,
 
       {/* Mapa */}
       <div className="relative rounded-2xl overflow-hidden border border-gray-200 shadow-sm bg-gray-100"
-        style={{ height: 300 }}>
+        style={{ height: 'clamp(220px, 40vh, 320px)' }}>
         {loading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 z-10">
             <Loader2 className="w-7 h-7 text-primary-600 animate-spin" />

@@ -147,7 +147,7 @@ export default function HeroSlider() {
   return (
     <section
       aria-label="Hero — ContactGo lentes de contacto"
-      className="relative overflow-hidden select-none"
+      className="relative overflow-hidden select-none min-h-[480px] md:min-h-0"
       style={bgStyle}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
