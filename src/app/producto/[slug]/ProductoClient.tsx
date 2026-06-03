@@ -130,29 +130,43 @@ function ToricWizard({ productName }: { productName: string }) {
   )
 }
 
+/**
+ * EyeSelector v2 — Fase 2 CRO
+ * Fusiona "¿para qué ojo?" con la cantidad implícita.
+ * OD = 1 caja · OI = 1 caja · AMBOS = 2 cajas (compra más común)
+ * Elimina el spinner +/− redundante y el pack de 2 botones separados.
+ * El precio se calcula afuera a partir del `eye` seleccionado.
+ */
 function EyeSelector({ eye, onChange }: { eye: string; onChange: (v: string) => void }) {
   const opts = [
-    {val:'OD',   emoji:'👁', label:'Ojo derecho', hint:'Solo OD'},
-    {val:'OI',   emoji:'👁', label:'Ojo izquierdo',hint:'Solo OI'},
-    {val:'AMBOS',emoji:'👀', label:'Ambos ojos',  hint:'Más común'},
+    { val:'OD',    label:'Solo ojo\nderecho',  sub:'1 caja',  badge:''               },
+    { val:'OI',    label:'Solo ojo\nizquierdo', sub:'1 caja',  badge:''               },
+    { val:'AMBOS', label:'Ambos\nojos',         sub:'2 cajas', badge:'✓ Más común'    },
   ]
   return (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-1">
+      <label className="block text-xs font-semibold text-gray-600 mb-1.5">
         ¿Para qué ojo? <span className="text-red-500">*</span>
       </label>
-      <p className="text-[10px] text-gray-400 mb-2">La mayoría compra para ambos ojos</p>
       <div className="grid grid-cols-3 gap-2">
         {opts.map(o => (
           <button key={o.val} onClick={() => onChange(o.val)}
-            className={`py-2.5 px-2 rounded-xl border-2 text-center transition-all ${
+            className={`relative py-2.5 px-1.5 rounded-xl border-2 text-center transition-all ${
               eye === o.val
                 ? 'bg-primary-600 text-white border-primary-600 shadow-sm shadow-primary-200'
                 : 'bg-white text-gray-700 border-gray-200 hover:border-primary-300'
             }`}>
-            <div className="text-base mb-0.5">{o.emoji}</div>
-            <p className="text-[10px] font-black leading-tight">{o.label}</p>
-            <p className={`text-[9px] mt-0.5 ${eye === o.val ? 'text-white/70' : 'text-primary-400 font-medium'}`}>{o.hint}</p>
+            {o.badge && (
+              <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] font-black bg-green-500 text-white px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                {o.badge}
+              </span>
+            )}
+            <p className={`text-[11px] font-bold leading-tight whitespace-pre-line ${eye === o.val ? 'text-white' : 'text-gray-800'}`}>
+              {o.label}
+            </p>
+            <p className={`text-[10px] mt-0.5 font-medium ${eye === o.val ? 'text-white/80' : 'text-gray-400'}`}>
+              {o.sub}
+            </p>
           </button>
         ))}
       </div>
@@ -317,6 +331,11 @@ export default function ProductoClient({ product, variants }: Props) {
   const addItem = useCartStore(s => s.addItem)
 
   const [eye,   setEye]   = useState('AMBOS')
+  // Sincronizar qty con eye: AMBOS = 2 cajas (con 5% OFF), OD/OI = 1 caja
+  const handleEyeChange = (newEye: string) => {
+    setEye(newEye)
+    if (isLente && !isColor) setQty(newEye === 'AMBOS' ? 2 : 1)
+  }
   // Receta ojo derecho (OD) y ojo izquierdo (OS)
   const [sphOD, setSphOD] = useState('')
   const [cylOD, setCylOD] = useState('')
@@ -538,18 +557,10 @@ export default function ProductoClient({ product, variants }: Props) {
               En móvil: order-1 (aparece PRIMERO = arriba del todo)
               ═══════════════════════════════════════════ */}
           <div className="flex flex-col gap-4 order-1 md:order-2">
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs font-bold text-primary-600 uppercase tracking-wide">{product.marca}</span>
-                {product.tipo && (
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">
-                    {TIPO_LABELS[product.tipo]}
-                  </span>
-                )}
-              </div>
-              <h1 className="font-display text-xl md:text-2xl font-bold text-gray-900 leading-tight">
-                {product.nombre}
-              </h1>
+            {/* Nombre comprimido pre-CTA — solo marca + nombre en 1 línea */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-bold text-primary-600 uppercase tracking-wide">{product.marca}</span>
+              <span className="text-sm font-semibold text-gray-700 leading-tight">{product.nombre}</span>
             </div>
 
             {/* P1: Precio + disponibilidad + indicador tipo — sin scroll */}
@@ -621,13 +632,8 @@ export default function ProductoClient({ product, variants }: Props) {
               })()}
             </div>
 
-            {/* WIZARD TÓRICO — Dos rutas claras: foto o manual */}
-            {isToric && (
-              <ToricWizard productName={product.nombre} />
-            )}
-
             {/* ── SECCIÓN 2: Selectores de receta ── */}
-            {isLente && !isColor && <EyeSelector eye={eye} onChange={setEye} />}
+            {isLente && !isColor && <EyeSelector eye={eye} onChange={handleEyeChange} />}
 
             {isLente && !isColor && (() => {
               // Si no hay variantes reales en inventario, no mostrar opciones falsas
@@ -717,26 +723,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 ? product.add_disponibles
                 : ALL_ADD
               return (
-                <div className="space-y-2">
-                  {/* MEJORA-14: Explicación visual de ADD */}
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-                    <p className="text-xs font-bold text-amber-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
-                    <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
-                      {[
-                        { range: '+0.75–+1.25', label: 'Presbicia leve', color: 'bg-green-100 text-green-700' },
-                        { range: '+1.50–+2.00', label: 'Presbicia media', color: 'bg-yellow-100 text-yellow-700' },
-                        { range: '+2.25–+3.00', label: 'Presbicia alta',  color: 'bg-orange-100 text-orange-700' },
-                      ].map(({ range, label, color }) => (
-                        <div key={range} className={`${color} rounded-lg px-1.5 py-1.5`}>
-                          <p className="font-black text-[9px]">{range}</p>
-                          <p className="leading-tight font-medium">{label}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-[10px] text-amber-600 mt-1.5">La ADD aparece en tu receta como "Add" o "Near Add".</p>
-                  </div>
-                  <SelectField label="Adición (ADD)" value={add} options={addOpts} required onChange={setAdd} />
-                </div>
+                <SelectField label="Adición (ADD)" value={add} options={addOpts} required onChange={setAdd} />
               )
             })()}
 
@@ -780,48 +767,18 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
 
-            {!isGota && (
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <p className="text-sm font-semibold text-gray-700">Cantidad</p>
-                  <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
-                    <button onClick={() => setQty(q => Math.max(1,q-1))}
-                      className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">-</button>
-                    <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
-                    <button onClick={() => setQty(q => Math.min(product.stock,q+1))}
-                      className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">+</button>
-                  </div>
+            {/* Cantidad controlada por EyeSelector (OD/OI=1, AMBOS=2) — no hay spinner */}
+            {/* Para soluciones/gotas sí mostramos el spinner */}
+            {(isSolucion || isGota) && (
+              <div className="flex items-center gap-3">
+                <p className="text-xs font-semibold text-gray-600">Cantidad</p>
+                <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                  <button onClick={() => setQty(q => Math.max(1,q-1))}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">-</button>
+                  <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
+                  <button onClick={() => setQty(q => Math.min(product.stock,q+1))}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">+</button>
                 </div>
-                {isLente && !isColor && product.stock >= 2 && (
-                  <div className="space-y-1.5">
-                    {/* Opción 1 caja */}
-                    <button onClick={() => setQty(1)}
-                      className={`w-full text-left flex items-center justify-between rounded-xl px-3 py-2.5 border transition-all text-xs ${
-                        qty === 1
-                          ? 'bg-white border-gray-300 text-gray-700'
-                          : 'bg-gray-50 border-gray-200 text-gray-500'
-                      }`}>
-                      <span className="font-medium">1 caja — Solo 1 ojo</span>
-                      <span className="font-bold text-gray-700">RD${precioBase.toLocaleString()}</span>
-                    </button>
-                    {/* Opción 2 cajas — destacada como "compra más común" */}
-                    <button onClick={() => setQty(2)}
-                      className={`w-full text-left flex items-center justify-between rounded-xl px-3 py-2.5 border-2 transition-all text-xs relative ${
-                        qty === 2
-                          ? 'bg-primary-50 border-primary-500 text-primary-700 shadow-sm'
-                          : 'bg-green-50 border-green-200 text-green-800 hover:border-green-400'
-                      }`}>
-                      <span className="absolute -top-2 left-3 text-[9px] font-black bg-green-500 text-white px-2 py-0.5 rounded-full">
-                        ✓ Compra más común
-                      </span>
-                      <span className="font-bold mt-0.5">2 cajas — OD + OI</span>
-                      <div className="text-right">
-                        <span className="font-black text-sm block">RD${Math.round(precioBase * 2 * 0.95).toLocaleString()}</span>
-                        <span className="text-[9px] font-bold bg-green-500 text-white px-1.5 py-0.5 rounded-full">5% OFF</span>
-                      </div>
-                    </button>
-                  </div>
-                )}
               </div>
             )}
 
@@ -903,6 +860,36 @@ export default function ProductoClient({ product, variants }: Props) {
 
               {/* ── SECCIÓN 4: Beneficios — después del CTA ── */}
               <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
+
+              {/* h1 completo para SEO y para usuarios que quieren leer más */}
+              <h1 className="font-display text-xl font-bold text-gray-900 leading-tight sr-only md:not-sr-only md:text-xl">
+                {product.nombre}
+              </h1>
+
+              {/* ToricWizard — información de ayuda, no bloquea la compra */}
+              {isToric && (
+                <ToricWizard productName={product.nombre} />
+              )}
+
+              {/* Explicación ADD — informativa, post-decisión */}
+              {isMulti && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+                  <p className="text-xs font-bold text-amber-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
+                  <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                    {[
+                      { range: '+0.75–+1.25', label: 'Presbicia leve',  color: 'bg-green-100 text-green-700' },
+                      { range: '+1.50–+2.00', label: 'Presbicia media', color: 'bg-yellow-100 text-yellow-700' },
+                      { range: '+2.25–+3.00', label: 'Presbicia alta',  color: 'bg-orange-100 text-orange-700' },
+                    ].map(({ range, label, color }) => (
+                      <div key={range} className={`${color} rounded-lg px-1.5 py-1.5`}>
+                        <p className="font-black text-[9px]">{range}</p>
+                        <p className="leading-tight font-medium">{label}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-amber-600 mt-1.5">La ADD aparece en tu receta como "Add" o "Near Add".</p>
+                </div>
+              )}
 
               {/* Descripción — ya compró o está a punto, aquí es contexto, no fricción */}
               {product.descripcion && (
