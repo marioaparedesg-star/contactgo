@@ -112,3 +112,13 @@
 
 /* Contraste mejorado para textos grises claros */
 .text-gray-400 { color: #6b7280 !important; } /* sube de gray-400 a gray-500 equivalente */
+
+/* ── Safe Area para iPhone con notch (iPhone X, 11, 12, 13, 14, 15 Pro/Max) ──
+   viewportFit: cover en layout.tsx activa el soporte de env(safe-area-inset-*)
+   Los sticky CTAs usan .safe-area-pb para no quedar tapados por la barra de gestos */
+.safe-area-pb {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.safe-area-pt {
+  padding-top: env(safe-area-inset-top);
+}

@@ -56,6 +56,8 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  // Necesario para que env(safe-area-inset-bottom) funcione en iPhone notch
+  viewportFit: 'cover' as const,
 }
 
 

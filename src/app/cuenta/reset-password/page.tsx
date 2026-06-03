@@ -120,11 +120,14 @@ function ResetContent() {
             </form>
           )}
 
-          <p className="text-center text-xs text-gray-400">
+          <div className="flex items-center justify-between text-xs text-gray-400">
             <Link href="/cuenta" className="text-primary-600 hover:underline font-medium">
-              ← Volver a mi cuenta
+              ← Mi cuenta
             </Link>
-          </p>
+            <a href="/" className="text-gray-400 hover:text-primary-600 transition-colors font-medium">
+              Tienda →
+            </a>
+          </div>
         </div>
       </div>
     </div>

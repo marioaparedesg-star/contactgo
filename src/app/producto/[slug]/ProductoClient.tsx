@@ -536,7 +536,7 @@ export default function ProductoClient({ product, variants }: Props) {
                       </div>
                     ) : (
                       /* Receta diferente por ojo */
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {/* OD */}
                         <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
                           <p className="text-xs font-bold text-blue-700">👁 Ojo Derecho (OD)</p>
