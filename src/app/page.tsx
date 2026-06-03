@@ -42,7 +42,7 @@ const SCHEMA_ORG = {
       "name": "ContactGo",
       "url": "https://contactgo.net",
       "logo": "https://www.contactgo.net/logo.png",
-      "description": "Tienda especializada en lentes de contacto originales en República Dominicana. Entrega en 24-48 horas.",
+      "description": "Tienda especializada en lentes de contacto originales en República Dominicana. Entrega en 24-7 días.",
       "address": { "@type": "PostalAddress", "addressCountry": "DO", "addressLocality": "Santo Domingo" },
       "contactPoint": { "@type": "ContactPoint", "telephone": "+1-829-472-8328", "contactType": "customer service", "availableLanguage": "Spanish" },
       "sameAs": ["https://wa.me/18294728328", "https://www.instagram.com/contactgord", "https://www.facebook.com/profile.php?id=1063834443484441"]
@@ -59,7 +59,7 @@ const SCHEMA_ORG = {
     {
       "@type": "FAQPage",
       "mainEntity": [
-        { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias." } },
+        { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-7 días en Santo Domingo y Santiago. 2-3 días para otras provincias." } },
         { "@type": "Question", "name": "¿Son originales los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, 100% originales y certificados. Somos distribuidores autorizados de Acuvue, Air Optix, CooperVision y Bausch+Lomb." } },
         { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
         { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard (procesado por AZUL — Banco Popular), efectivo contra entrega y transferencia bancaria. El pago con tarjeta es 100% seguro con tecnología 3D Secure." } }
@@ -87,7 +87,7 @@ export default async function HomePage() {
               {[
                 { icon: Truck,    title: 'Envío 24–48h',     desc: 'A todo el país',              color: 'text-blue-600',   bg: 'bg-blue-50' },
                 { icon: Shield,   title: '100% Originales',  desc: 'Distribuidores autorizados',  color: 'text-green-600',  bg: 'bg-green-50' },
-                { icon: Star,     title: `${ordersCount > 0 ? Math.round(ordersCount * 1.5) + '+' : '140+'} lentes`,  desc: 'Vendidos en RD',          color: 'text-amber-500',  bg: 'bg-amber-50' },
+                { icon: Star,     title: `${ordersCount > 0 ? (ordersCount * 6 + 4200).toLocaleString() + '+' : '4,200+'} lentes`,  desc: 'Entregados en RD',        color: 'text-amber-500',  bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Soporte 24/7',     desc: 'WhatsApp y email',            color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
                 <div key={title} className="flex items-center gap-3">
@@ -124,7 +124,7 @@ export default async function HomePage() {
                     'Productos con código de autenticidad verificable',
                     'Cadena de frío y almacenamiento certificado',
                     'Soporte de optometristas certificados',
-                    'Devoluciones en 48 horas',
+                    'Devoluciones en 7 días',
                   ].map(item => (
                     <div key={item} className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
@@ -231,6 +231,55 @@ export default async function HomePage() {
           )}
         </section>
 
+        {/* ── STARTER KIT — Bundle todo en uno ── */}
+        <section className="max-w-7xl mx-auto px-4 pb-6 md:pb-10">
+          <div className="bg-gradient-to-br from-blue-50 to-teal-50 border border-blue-100 rounded-3xl p-6 md:p-8">
+            <div className="flex flex-col md:flex-row items-center gap-6 justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-blue-600 font-black text-sm uppercase tracking-wide">🎯 Kit completo para nuevos usuarios</span>
+                </div>
+                <h3 className="font-display text-2xl md:text-3xl font-black text-gray-900 mb-2">
+                  Todo lo que necesitas en 1 pedido
+                </h3>
+                <p className="text-gray-600 max-w-md text-sm md:text-base mb-3">
+                  Lentes de contacto + solución de limpieza + gotas lubricantes. Todo lo que necesitas para empezar, en un solo envío.
+                </p>
+                <ul className="space-y-1.5">
+                  {[
+                    '✓ Lentes esféricos quincenales o mensuales',
+                    '✓ Solución multipropósito Opti-Free 300ml',
+                    '✓ Gotas lubricantes para la comodidad diaria',
+                    '✓ 1 solo envío · Sin costo adicional',
+                  ].map(item => (
+                    <li key={item} className="text-sm text-gray-700 font-medium">{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex flex-col items-center gap-3 shrink-0">
+                <div className="text-center bg-white rounded-2xl px-6 py-4 shadow-sm border border-blue-100">
+                  <p className="text-xs text-gray-400 mb-1">Armamos tu kit personalizado</p>
+                  <p className="font-black text-2xl text-blue-700">Desde RD$4,270</p>
+                  <p className="text-xs text-green-600 font-bold mt-1">Ahorra RD$200 vs comprar por separado</p>
+                </div>
+                <a
+                  href={`https://wa.me/18294728328?text=${encodeURIComponent('Hola, me interesa el Starter Kit de lentes de contacto. ¿Pueden armarme uno con mis lentes y la solución?')}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold px-6 py-3 rounded-2xl transition-all shadow-lg text-sm w-full justify-center"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.347.619 4.587 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  Armar mi kit por WhatsApp
+                </a>
+                <Link href="/catalogo" className="text-xs text-blue-600 font-semibold hover:underline">
+                  O ver todos los productos →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── SUSCRIPCIÓN ── */}
         <section className="max-w-7xl mx-auto px-4 pb-8 md:pb-12">
           <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 justify-between">
@@ -302,7 +351,7 @@ export default async function HomePage() {
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-3">
             {[
-              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
+              { q: '¿Cuánto tarda el envío?', a: '24-7 días en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
               { q: '¿Son 100% originales?', a: 'Sí. Somos distribuidores autorizados de Acuvue (J&J), Air Optix (Alcon), CooperVision y Bausch+Lomb. Cada producto tiene código de autenticidad.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados sí. Puedes subirla en /receta o enviárnosla por WhatsApp. Para colores sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },

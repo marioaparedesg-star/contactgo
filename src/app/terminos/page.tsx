@@ -31,11 +31,11 @@ const secciones = [
   },
   {
     title: '5. Envíos y entregas',
-    body: 'Realizamos entregas en toda la República Dominicana. Costo de envío: RD$200 en Santo Domingo, RD$350 en el interior del país. Envío gratuito en pedidos superiores a RD$6,000. Tiempo estimado: 24-48 horas en Santo Domingo, 48-72 horas en otras provincias. Los lentes tóricos requieren 20-30 días por fabricación a medida. Los tiempos son estimados y pueden variar por factores externos ajenos a ContactGo.'
+    body: 'Realizamos entregas en toda la República Dominicana. Costo de envío: RD$200 en Santo Domingo, RD$350 en el interior del país. Envío gratuito en pedidos superiores a RD$6,000. Tiempo estimado: 24-7 días en Santo Domingo, 48-72 horas en otras provincias. Los lentes tóricos requieren 20-30 días por fabricación a medida. Los tiempos son estimados y pueden variar por factores externos ajenos a ContactGo.'
   },
   {
     title: '6. Devoluciones y reembolsos',
-    body: 'Aceptamos devoluciones dentro de las 48 horas desde la recepción del pedido, siempre que el producto esté en su empaque original sellado y sin abrir. No se aceptan devoluciones de lentes abiertos por razones de higiene y seguridad médica. Los reembolsos se procesan en 3-5 días hábiles por el mismo método de pago original. Para iniciar una devolución: info@contactgo.net o WhatsApp (829) 472-8328.'
+    body: 'Aceptamos devoluciones dentro de las 7 días desde la recepción del pedido, siempre que el producto esté en su empaque original sellado y sin abrir. No se aceptan devoluciones de lentes abiertos por razones de higiene y seguridad médica. Los reembolsos se procesan en 3-5 días hábiles por el mismo método de pago original. Para iniciar una devolución: info@contactgo.net o WhatsApp (829) 472-8328.'
   },
   {
     title: '7. Responsabilidad médica',

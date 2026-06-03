@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Política de Devoluciones — ContactGo',
-  description: 'Política de devoluciones de ContactGo. 48 horas para devolver productos sellados y sin abrir. Reembolso por el mismo método de pago.',
+  description: 'Política de devoluciones de ContactGo. 7 días para devolver productos sellados y sin abrir. Reembolso por el mismo método de pago.',
   alternates: { canonical: 'https://www.contactgo.net/devoluciones' },
 }
 
@@ -25,7 +25,7 @@ export default function DevolucionesPage() {
           <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5">
             <h2 className="font-bold text-primary-800 text-lg mb-2">Resumen rápido</h2>
             <ul className="space-y-1 text-sm text-primary-700">
-              <li>⏱ <strong>Plazo:</strong> 48 horas desde la recepción del pedido</li>
+              <li>⏱ <strong>Plazo:</strong> 7 días desde la recepción del pedido</li>
               <li>📦 <strong>Condición:</strong> Producto sellado, sin abrir y en empaque original</li>
               <li>💳 <strong>Reembolso:</strong> Por el mismo método de pago en 3-5 días hábiles</li>
               <li>📞 <strong>Contacto:</strong> WhatsApp (829) 472-8328 o info@contactgo.net</li>
@@ -34,7 +34,7 @@ export default function DevolucionesPage() {
 
           <section>
             <h2 className="font-bold text-gray-900 text-xl mb-3">¿Cuándo puedo devolver un producto?</h2>
-            <p>Aceptamos devoluciones dentro de las <strong>48 horas</strong> siguientes a la recepción de tu pedido, siempre que el producto esté en las siguientes condiciones:</p>
+            <p>Aceptamos devoluciones dentro de las <strong>7 días</strong> siguientes a la recepción de tu pedido, siempre que el producto esté en las siguientes condiciones:</p>
             <ul className="mt-3 space-y-2 text-sm list-disc list-inside">
               <li>Empaque original sellado y sin abrir</li>
               <li>Sin signos de uso, daño o alteración</li>
@@ -54,7 +54,7 @@ export default function DevolucionesPage() {
           <section>
             <h2 className="font-bold text-gray-900 text-xl mb-3">¿Cómo iniciar una devolución?</h2>
             <ol className="space-y-3 text-sm list-decimal list-inside">
-              <li>Contáctanos por WhatsApp al (829) 472-8328 o escríbenos a info@contactgo.net dentro de las 48 horas</li>
+              <li>Contáctanos por WhatsApp al (829) 472-8328 o escríbenos a info@contactgo.net dentro de las 7 días</li>
               <li>Indica tu número de pedido y el motivo de la devolución</li>
               <li>Te indicaremos la dirección para enviar el producto</li>
               <li>Una vez recibido y verificado, procesamos el reembolso en 3-5 días hábiles</li>
