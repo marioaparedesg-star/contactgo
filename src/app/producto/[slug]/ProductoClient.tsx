@@ -192,6 +192,54 @@ function WhyBlock({ tipo, proteccion_uv }: { tipo: string; proteccion_uv?: boole
   )
 }
 
+/** Especificaciones clínicas — colapsadas por defecto en móvil */
+function SpecsAcordeon({ product }: { product: Product & Record<string,any> }) {
+  const [open, setOpen] = useState(false)
+  const rows = [
+    ['📐 Curva base',       product.curva_base],
+    ['⭕ Diámetro',          product.diametro ? product.diametro + (String(product.diametro).includes('mm') ? '' : ' mm') : null],
+    ['🔄 Reemplazo',         product.reemplazo],
+    ['📦 Contenido',         product.contenido],
+    ['🧪 Material',          product.material],
+    ['💧 Agua',              (product as any).agua ? (product as any).agua + (String((product as any).agua).includes('%') ? '' : '%') : null],
+    ['🌬️ O₂',              (product as any).oxígeno ?? (product as any).oxigeno],
+    ['🕐 Horas uso',         (product as any).horas_uso],
+    ['🏭 Fabricante',        (product as any).fabricante_nombre],
+    ['🌍 País',              (product as any).pais_origen],
+    ['🛡️ UV',               (product as any).proteccion_uv ? 'Clase II UV-A y UV-B' : null],
+    ['🔢 EAN',               (product as any).ean ?? (product as any).gtin ?? null],
+  ].filter(([,v]) => v) as [string,string][]
+
+  if (rows.length === 0) return null
+
+  return (
+    <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-100 transition-colors"
+      >
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+          Especificaciones clínicas
+        </p>
+        <svg className={`w-4 h-4 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
+          fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="grid grid-cols-2 gap-px bg-gray-100 border-t border-gray-100">
+          {rows.map(([k,v]) => (
+            <div key={k} className="bg-white px-4 py-3">
+              <p className="text-[10px] text-gray-400 font-medium">{k.replace(/^[^ ]+ /,'')}</p>
+              <p className="text-sm font-bold text-gray-900 mt-0.5">{v}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 interface Props {
   product: Product & Record<string, any>
   variants: any[]
@@ -362,11 +410,33 @@ export default function ProductoClient({ product, variants }: Props) {
           <span className="text-gray-600 font-medium truncate max-w-xs">{product.nombre}</span>
         </div>
 
+        {/*
+          ─────────────────────────────────────────────────────────────────────
+          NUEVA ESTRUCTURA PDP — optimizada para conversión
+          MÓVIL:   Detalle (nombre+precio+CTA) PRIMERO → Imagen DESPUÉS
+          DESKTOP: Grid 2 columnas: imagen izq (sticky) | detalle der
+          ─────────────────────────────────────────────────────────────────────
+          SECCIÓN 1 — Above the fold: nombre, precio, ahorro, fecha, disponibilidad
+          SECCIÓN 2 — Selectores de receta (SPH/CYL/AXIS/ADD/color/tamaño)
+          SECCIÓN 3 — CTAs: Comprar ahora + Agregar + WA + Trust
+          SECCIÓN 4 — Suscripción + Pack (beneficios extra)
+          SECCIÓN 5 — WhyBlock + Especificaciones (colapsable) + Cross-sell
+          ─────────────────────────────────────────────────────────────────────
+        */}
+
+        {/*
+          MOBILE-FIRST: el panel de detalle va ANTES de la imagen en el DOM.
+          En desktop se muestra como grid de 2 columnas con imagen a la izquierda.
+          Esto elimina el scroll de ~400px en iPhone antes de ver el precio.
+        */}
         <div className="grid md:grid-cols-[1.1fr_1fr] gap-6 lg:gap-10 items-start">
-          {/* Imagen — sticky en desktop */}
-          <div className="md:sticky md:top-20">
+
+          {/* ═══════════════════════════════════════════
+              COLUMNA IZQUIERDA — Imagen (desktop sticky)
+              En móvil: order-2 (aparece DESPUÉS del detalle)
+              ═══════════════════════════════════════════ */}
+          <div className="md:sticky md:top-20 order-2 md:order-1">
             <div className="group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 aspect-[5/4] shadow-sm hover:shadow-md transition-shadow duration-300 relative">
-              {/* Badge original */}
               <span className="absolute top-3 right-3 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full z-10 flex items-center gap-1 leading-none">
                 ✓ 100% Original
               </span>
@@ -380,11 +450,11 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               )}
             </div>
-            {/* Trust strip — visible en móvil y desktop */}
-            <div className="grid grid-cols-2 gap-2 mt-3">
+            {/* Trust badges bajo la imagen — solo desktop (en móvil van inline) */}
+            <div className="hidden md:grid grid-cols-2 gap-2 mt-3">
               {[
                 { icon:'✅', text:'100% Original' },
-                { icon:'🚚', text:'Entrega 24-48h' },
+                { icon:'🚚', text:'Entrega rápida' },
                 { icon:'💳', text:'Pago seguro AZUL' },
                 { icon:'↩️', text:'48h devolución' },
               ].map(b => (
@@ -396,8 +466,11 @@ export default function ProductoClient({ product, variants }: Props) {
             </div>
           </div>
 
-          {/* Detalle */}
-          <div className="flex flex-col gap-4">
+          {/* ═══════════════════════════════════════════
+              COLUMNA DERECHA — Detalle + Selectores + CTA
+              En móvil: order-1 (aparece PRIMERO = arriba del todo)
+              ═══════════════════════════════════════════ */}
+          <div className="flex flex-col gap-4 order-1 md:order-2">
             <div>
               <div className="flex items-center gap-2 mb-1.5">
                 <span className="text-xs font-bold text-primary-600 uppercase tracking-wide">{product.marca}</span>
@@ -506,20 +579,27 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
 
-            {isLente && (
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex items-start gap-2">
-                <span className="text-blue-500 shrink-0 mt-0.5">⚕️</span>
-                <p className="text-xs text-blue-700 leading-snug">
-                  <strong>Dispositivo médico.</strong> Requiere prescripción óptica vigente. Al comprar confirmas que cuentas con una receta actualizada y aceptarás las condiciones de uso seguro.
-                </p>
-              </div>
-            )}
-
-
+            {/* Descripción — bajo el precio, discreta */}
             {product.descripcion && (
               <p className="text-gray-500 text-sm leading-relaxed">{product.descripcion}</p>
             )}
 
+            {/* Trust badges MÓVIL — solo visibles en mobile, aquí abajo del precio */}
+            <div className="md:hidden grid grid-cols-2 gap-2">
+              {[
+                { icon:'✅', text:'100% Original' },
+                { icon:'🚚', text:'Entrega rápida' },
+                { icon:'💳', text:'Pago seguro AZUL' },
+                { icon:'↩️', text:'48h devolución' },
+              ].map(b => (
+                <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                  <span className="text-sm">{b.icon}</span>
+                  <span className="text-xs text-gray-600 font-medium">{b.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* ── SECCIÓN 2: Selectores de receta ── */}
             {isLente && !isColor && <EyeSelector eye={eye} onChange={setEye} />}
 
             {isLente && !isColor && (() => {
@@ -701,55 +781,16 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
 
-            {/* P2: ¿Por qué elegir este lente? */}
-            <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
+            {/* ── SECCIÓN 3: CTAs principales ─────────────────────────────
+                Orden nuevo: Suscripción → Precio final → Comprar → Agregar → WA
+                WhyBlock y Specs BAJAN debajo del CTA (no distraen antes de comprar)
+                ───────────────────────────────────────────────────────────────── */}
 
-            {(product.curva_base || product.material || (product as any).fabricante_nombre) && (
-              <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4 py-3 border-b border-gray-100">
-                  Especificaciones clínicas
-                </p>
-                <div className="grid grid-cols-2 gap-px bg-gray-100">
-                  {[
-                    ['📐 Curva base',         product.curva_base],
-                    ['⭕ Diámetro',            product.diametro ? product.diametro + (String(product.diametro).includes('mm') ? '' : ' mm') : null],
-                    ['🔄 Reemplazo',           product.reemplazo],
-                    ['📦 Contenido',           product.contenido],
-                    ['🧪 Material',            product.material],
-                    ['💧 Contenido de agua',   (product as any).agua ? (product as any).agua + (String((product as any).agua).includes('%') ? '' : '%') : null],
-                    ['🌬️ Transmisión O₂',     (product as any).oxígeno ?? (product as any).oxigeno],
-                    ['🕐 Horas de uso',        (product as any).horas_uso],
-                    ['📋 Uso recomendado',     (product as any).uso_recomendado],
-                    ['🏭 Fabricante',          (product as any).fabricante_nombre],
-                    ['🌍 País de origen',      (product as any).pais_origen],
-                    ['🛡️ Protección UV',      (product as any).proteccion_uv ? 'Clase II (bloques ≥99% UV-B y ≥95% UV-A)' : null],
-                    ['🔢 EAN / GTIN',          (product as any).ean ?? (product as any).gtin ?? null],
-                    ['🏷️ SKU fabricante',       (product as any).codigo_fabricante ?? null],
-                  ].filter(([,v]) => v).map(([k,v]) => (
-                    <div key={String(k)} className="bg-white px-4 py-3">
-                      <p className="text-[10px] text-gray-400 font-medium">{String(k).replace(/^[^ ]+ /,'')}</p>
-                      <p className="text-sm font-bold text-gray-900 mt-0.5">{String(v)}</p>
-                    </div>
-                  ))}
-                </div>
-                {!(product.curva_base || product.material) && (
-                  <div className="bg-white px-4 py-3">
-                    <p className="text-xs text-gray-400">Consultar especificaciones con tu optómetra.</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* P4: Cross-sell inline — solución compatible si es lente */}
-            {['esferico','torico','multifocal','color'].includes(tipo) && (
-              <InlineCrossSell tipo={tipo} currentId={product.id} />
-            )}
-
+            {/* Suscripción — justo antes del CTA para que el precio del CTA refleje el descuento */}
             <SuscripcionSelector
               value={suscripcion}
               onChange={(val, descPct) => {
                 setSuscripcion(val)
-                // Analytics: subscription_selected
                 if (val) {
                   import('@/lib/analytics').then(({ trackSubscriptionSelected }) => {
                     trackSubscriptionSelected(product.id, product.nombre, val, descPct ?? 0, price)
@@ -760,17 +801,21 @@ export default function ProductoClient({ product, variants }: Props) {
               tipo={tipo}
             />
 
-            {['esferico','torico','multifocal'].includes(tipo) && (
-              <div className="flex gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                <span>Consulta siempre con un profesional de la salud visual antes de comprar lentes de contacto.</span>
+            {/* Cross-sell inline — antes del CTA pero después de suscripción */}
+            {['esferico','torico','multifocal','color'].includes(tipo) && (
+              <InlineCrossSell tipo={tipo} currentId={product.id} />
+            )}
+
+            {/* Disclaimer médico — justo antes del botón de compra, no al principio */}
+            {isLente && (
+              <div className="flex gap-2 p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-500">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-gray-400" />
+                <span>Dispositivo médico. Requiere prescripción vigente. Al comprar confirmas que cuentas con receta actualizada.</span>
               </div>
             )}
 
-
-
             <div className="flex flex-col gap-2.5">
-              {/* Precio resumen antes de CTA */}
+              {/* Precio resumen antes de CTA — con descuento de suscripción visible */}
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</span>
                 {suscripcion && precioBase > price && (
@@ -838,7 +883,16 @@ export default function ProductoClient({ product, variants }: Props) {
                   </p>
                 ))}
               </div>
+
+              {/* ── SECCIÓN 4: Beneficios — después del CTA ── */}
+              <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
             </div>
+
+            {/* ── SECCIÓN 5: Especificaciones clínicas colapsables ── */}
+            {(product.curva_base || product.material || (product as any).fabricante_nombre) && (
+              <SpecsAcordeon product={product} />
+            )}
+
           </div>
         </div>
       </main>
