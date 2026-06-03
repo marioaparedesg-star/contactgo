@@ -279,20 +279,24 @@ export default function CartPage() {
                 </div>
               )}
 
-              {/* Cross-sell: solución si no la tienen */}
+              {/* Cross-sell: solución si no la tienen — Bundle destacado */}
               {solucionSugerida && (
-                <div className="bg-blue-50 border border-blue-100 rounded-2xl p-3">
-                  <p className="text-[10px] font-black text-blue-600 uppercase tracking-wide mb-2">
-                    💧 Completa tu kit de lentes
+                <div className="bg-gradient-to-br from-blue-50 to-primary-50 border border-primary-100 rounded-2xl p-3">
+                  <p className="text-[10px] font-black text-primary-700 uppercase tracking-wide mb-1.5">
+                    💧 Agrega tu solución de limpieza
                   </p>
+                  <p className="text-[10px] text-gray-500 mb-2">Los lentes quincenales y mensuales requieren solución cada uso.</p>
                   <div className="flex items-center gap-3">
                     {solucionSugerida.imagen_url && (
                       <img src={solucionSugerida.imagen_url} alt={solucionSugerida.nombre}
-                        className="w-10 h-10 object-contain rounded-lg bg-white border border-blue-100" />
+                        className="w-10 h-10 object-contain rounded-lg bg-white border border-blue-100 shrink-0" />
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-bold text-gray-900 truncate">{solucionSugerida.nombre}</p>
-                      <p className="text-sm font-black text-primary-600">RD${Number(solucionSugerida.precio).toLocaleString()}</p>
+                      <div className="flex items-center gap-1.5">
+                        <p className="text-sm font-black text-primary-600">RD${Number(solucionSugerida.precio).toLocaleString()}</p>
+                        <span className="text-[9px] text-green-600 font-bold bg-green-50 px-1 py-0.5 rounded">Envío gratis</span>
+                      </div>
                     </div>
                     <button
                       onClick={() => {
@@ -300,7 +304,7 @@ export default function CartPage() {
                         setSolucionSugerida(null)
                         toast.success('Solución añadida ✓')
                       }}
-                      className="shrink-0 bg-primary-600 hover:bg-primary-700 text-white text-[10px] font-black px-3 py-2 rounded-xl transition-colors">
+                      className="shrink-0 bg-primary-600 hover:bg-primary-700 text-white text-[10px] font-black px-3 py-2 rounded-xl transition-colors active:scale-95">
                       + Agregar
                     </button>
                   </div>

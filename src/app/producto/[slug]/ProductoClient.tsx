@@ -15,7 +15,8 @@ import toast from 'react-hot-toast'
 import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
 import EntregaBadge from '@/components/shop/EntregaBadge'
 import InlineCrossSell from '@/components/shop/InlineCrossSell'
-import { getEntrega } from '@/lib/delivery-times'
+import RecetaGuiaTorico from '@/components/shop/RecetaGuiaTorico'
+import { getEntrega, getFechaEntrega } from '@/lib/delivery-times'
 import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES } from '@/lib/subscription-utils'
 
 const TIPO_LABELS: Record<string, string> = {
@@ -419,7 +420,22 @@ export default function ProductoClient({ product, variants }: Props) {
                   {product.contenido && (
                     <p className="text-xs text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>
                   )}
-                  {/* MEJORA-2: Comparativa de ahorro vs. óptica */}
+                  {/* Precio por mes — hace el precio más accesible */}
+                  {isLente && precioBase > 0 && (() => {
+                    const reemplazo = product.reemplazo?.toLowerCase() ?? ''
+                    let meses = 0
+                    if (reemplazo.includes('diario') || reemplazo.includes('daily')) meses = 1
+                    else if (reemplazo.includes('quincenal') || reemplazo.includes('15')) meses = 3
+                    else if (reemplazo.includes('mensual') || reemplazo.includes('month')) meses = 6
+                    if (meses <= 0) return null
+                    const porMes = Math.round(price / meses)
+                    return (
+                      <p className="text-[11px] text-gray-500 mt-0.5">
+                        ≈ <span className="font-bold text-gray-700">RD${porMes.toLocaleString()}/mes</span>
+                      </p>
+                    )
+                  })()}
+                  {/* Ahorro vs óptica — tamaño aumentado para mayor visibilidad */}
                   {isLente && precioBase > 0 && (() => {
                     const factores: Record<string,number> = {esferico:1.55,torico:1.60,multifocal:1.65,color:1.40}
                     const factor = factores[tipo] ?? 1.5
@@ -427,9 +443,9 @@ export default function ProductoClient({ product, variants }: Props) {
                     const ahorro      = precioOptica - precioBase
                     if (ahorro <= 0) return null
                     return (
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <span className="text-[10px] text-gray-400 line-through">En óptica: RD${precioOptica.toLocaleString()}</span>
-                        <span className="text-[10px] font-black text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full border border-green-200">
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <span className="text-xs text-gray-400 line-through">En óptica: RD${precioOptica.toLocaleString()}</span>
+                        <span className="text-xs font-black text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
                           Ahorras RD${ahorro.toLocaleString()}
                         </span>
                       </div>
@@ -454,22 +470,38 @@ export default function ProductoClient({ product, variants }: Props) {
                    '✅ Disponible'}
                 </span>
               </div>
-              {/* P1: Tiempo entrega justo debajo del precio */}
-              <p className={`text-xs font-semibold flex items-center gap-1.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
-                {getEntregaInfo.icono} {getEntregaInfo.detalle}
-              </p>
+              {/* Fecha exacta de entrega — más convincente que "24 horas" */}
+              {(() => {
+                const fechaInfo = getFechaEntrega(tipo, product.nombre)
+                return (
+                  <p className={`text-xs font-semibold flex items-center gap-1.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
+                    {getEntregaInfo.icono} {fechaInfo.texto}
+                  </p>
+                )
+              })()}
             </div>
 
-            {/* MEJORA-13: Banner explicativo exclusivo para tóricos */}
+            {/* Banner explicativo exclusivo para tóricos — con botón de ayuda real */}
             {isToric && (
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-1">
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
                 <p className="text-xs font-bold text-blue-700">🔵 Lente fabricado a medida para tu astigmatismo</p>
                 <p className="text-[11px] text-blue-600 leading-relaxed">
                   Los tóricos se fabrican con tu graduación exacta. Tiempo de producción: <strong>25–30 días</strong>.
                   Necesitas la <strong>Esfera</strong>, el <strong>Cilindro</strong> y el <strong>Eje</strong> de tu receta actualizada.
                 </p>
-                <a href="/receta" className="text-[11px] text-blue-700 font-semibold underline">
-                  ¿No tienes tu receta? Podemos ayudarte →
+                {/* MEJORA 7: Guía visual inline */}
+                <RecetaGuiaTorico />
+                {/* MEJORA 4: Botón enviar foto de receta por WhatsApp */}
+                <a
+                  href={`https://wa.me/18294728328?text=${encodeURIComponent(`Hola, quiero pedir el ${product.nombre} pero necesito ayuda con mi receta. Te la envío por aquí.`)}`}
+                  target="_blank"
+                  rel="noopener"
+                  className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-2.5 rounded-xl text-xs transition-colors active:scale-95 mt-1"
+                >
+                  <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  📸 Envíanos foto de tu receta — nosotros la configuramos
                 </a>
               </div>
             )}
@@ -765,16 +797,31 @@ export default function ProductoClient({ product, variants }: Props) {
                 {sinVariante ? 'Consultar disponibilidad' : 'Agregar al carrito'}
               </button>
 
-              {/* MEJORA-5: WhatsApp contextual con pregunta pre-cargada del producto */}
-              <a
-                href={`https://wa.me/18294728328?text=${encodeURIComponent(`Hola, tengo una pregunta sobre el ${product.nombre}`)}`}
-                target="_blank" rel="noopener"
-                className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-2.5 rounded-xl text-sm transition-colors active:scale-95">
-                <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                Consultar por WhatsApp
-              </a>
+              {/* WhatsApp con mensaje contextual según tipo de producto */}
+              {(() => {
+                const msgMap: Record<string,string> = {
+                  torico:     `Hola, quiero información sobre el ${product.nombre} para astigmatismo. Tengo mi receta y necesito ayuda para elegir la graduación correcta.`,
+                  multifocal: `Hola, tengo presbicia y me interesa el ${product.nombre}. ¿Pueden orientarme?`,
+                  color:      `Hola, me interesa el ${product.nombre}. ¿Qué colores tienen disponibles y cómo se ven en el ojo?`,
+                  esferico:   `Hola, tengo una pregunta sobre el ${product.nombre}.`,
+                  solucion:   `Hola, ¿el ${product.nombre} es compatible con mis lentes de contacto?`,
+                  gota:       `Hola, quiero información sobre ${product.nombre}.`,
+                }
+                const msg = msgMap[tipo] ?? `Hola, tengo una pregunta sobre el ${product.nombre}.`
+                return (
+                  <a
+                    href={`https://wa.me/18294728328?text=${encodeURIComponent(msg)}`}
+                    target="_blank" rel="noopener"
+                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-2.5 rounded-xl text-sm transition-colors active:scale-95">
+                    <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    {tipo === 'torico' ? 'Ayuda con mi receta tórica' :
+                     tipo === 'multifocal' ? 'Consultar sobre multifocales' :
+                     'Consultar por WhatsApp'}
+                  </a>
+                )
+              })()}
 
               {/* Trust strip P3 */}
               <div className="border-t border-gray-100 pt-3 mt-1 space-y-1.5">
@@ -807,7 +854,7 @@ export default function ProductoClient({ product, variants }: Props) {
             <div className="min-w-0 flex-1 mr-3">
               <p className="text-[11px] text-gray-400 truncate leading-none">{product.nombre}</p>
               <p className={`text-[10px] font-semibold mt-0.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
-                {getEntregaInfo.icono} {getEntregaInfo.etiqueta}
+                {getEntregaInfo.icono} {getFechaEntrega(tipo, product.nombre).corto}
               </p>
             </div>
             <p className="font-black text-primary-600 text-xl shrink-0">RD${price.toLocaleString()}</p>

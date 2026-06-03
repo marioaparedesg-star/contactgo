@@ -64,8 +64,8 @@ export async function POST(req: NextRequest) {
     <p style="margin:2px 0 0;color:#bbf7d0;font-size:12px;">Lentes de Contacto · República Dominicana</p>
   </td></tr>
   <tr><td style="padding:24px 28px 0;">
-    <h2 style="margin:0;font-size:20px;color:#111;">¡${nombre}, olvidaste algo! 👀</h2>
-    <p style="margin:8px 0 0;font-size:14px;color:#6b7280;">Tienes productos en tu carrito esperándote. Completa tu pedido ahora y recibe un <strong style="color:#16a34a;">5% de descuento</strong>.</p>
+    <h2 style="margin:0;font-size:20px;color:#111;">👋 ${nombre}, dejaste tus lentes en el carrito</h2>
+    <p style="margin:8px 0 0;font-size:14px;color:#6b7280;">Tus lentes siguen disponibles. Completa tu pedido hoy y recibe un <strong style="color:#16a34a;">5% de descuento</strong> extra.</p>
   </td></tr>
   ${itemsHTML ? `
   <tr><td style="padding:16px 28px 0;">
@@ -79,21 +79,33 @@ export async function POST(req: NextRequest) {
   </td></tr>` : ''}
   <tr><td style="padding:16px 28px 0;">
     <div style="background:#f0fdf4;border:2px dashed #16a34a;border-radius:10px;padding:14px;text-align:center;">
-      <p style="margin:0;font-size:12px;color:#6b7280;">Tu cupón de descuento:</p>
+      <p style="margin:0;font-size:12px;color:#6b7280;">Cupón de descuento:</p>
       <p style="margin:6px 0;font-size:24px;font-weight:900;color:#16a34a;letter-spacing:3px;">${cupon}</p>
       <p style="margin:0;font-size:11px;color:#9ca3af;">5% de descuento · Válido 24 horas</p>
     </div>
   </td></tr>
   <tr><td style="padding:20px 28px;text-align:center;">
-    <a href="${BASE}/cart" style="display:inline-block;background:#16a34a;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:13px 32px;border-radius:10px;">
+    <a href="${BASE}/cart" style="display:inline-block;background:#16a34a;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 36px;border-radius:10px;">
       Completar mi pedido →
     </a>
-    <p style="margin:12px 0 0;font-size:12px;color:#9ca3af;">
-      ¿Preguntas? <a href="https://wa.me/18294728328" style="color:#16a34a;">WhatsApp (829) 472-8328</a>
-    </p>
+  </td></tr>
+  <!-- Separador -->
+  <tr><td style="padding:0 28px;">
+    <div style="border-top:1px solid #f3f4f6;margin:4px 0;"></div>
+  </td></tr>
+  <!-- Bloque WhatsApp — canal preferido en RD -->
+  <tr><td style="padding:16px 28px;text-align:center;">
+    <p style="margin:0 0 10px;font-size:13px;color:#374151;font-weight:600;">¿Tienes dudas sobre tu graduación?</p>
+    <a href="https://wa.me/18294728328?text=${encodeURIComponent(`Hola, dejé unos lentes en el carrito y tengo una pregunta antes de completar el pedido.`)}"
+       style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;font-size:13px;padding:11px 24px;border-radius:10px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/48px-WhatsApp.svg.png" width="18" height="18" alt="" style="display:inline-block;vertical-align:middle;">
+      Escríbenos por WhatsApp
+    </a>
+    <p style="margin:8px 0 0;font-size:11px;color:#9ca3af;">Respondemos en minutos · (829) 472-8328</p>
   </td></tr>
   <tr><td style="background:#f9fafb;padding:12px 28px;border-top:1px solid #f3f4f6;text-align:center;">
     <p style="margin:0;font-size:11px;color:#9ca3af;">ContactGo · contactgo.net · Santo Domingo, RD</p>
+    <p style="margin:4px 0 0;font-size:10px;color:#d1d5db;">100% Originales · Distribuidores Autorizados</p>
   </td></tr>
 </table></td></tr></table>
 </body></html>`

@@ -170,24 +170,47 @@ export default function ProductCard({ product, isBestseller }: Props) {
           )}
         </div>
 
-        {/* Precio + precio/día */}
+        {/* Precio + precio/mes + ahorro vs óptica */}
         <div className="mt-auto pt-1.5 flex flex-col gap-2">
           <div>
-            {(product as any).precio_anterior && (product as any).precio_anterior > product.precio ? (
-              <div className="flex items-baseline gap-1.5 flex-wrap">
-                <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
-                <p className="text-xs text-gray-400 line-through">RD${(product as any).precio_anterior.toLocaleString()}</p>
-                <span className="text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded-full">
-                  -{Math.round(((product as any).precio_anterior - product.precio) / (product as any).precio_anterior * 100)}%
-                </span>
-              </div>
-            ) : (
-              <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
-            )}
+            <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
             <div className="flex items-center gap-2 flex-wrap">
               <p className="text-[10px] text-gray-400">{contenidoLabel}</p>
-
             </div>
+            {/* Precio por mes para lentes con ciclo de reemplazo conocido */}
+            {(() => {
+              const tipo = product.tipo ?? ''
+              const precio = product.precio
+              if (!['esferico','torico','multifocal','color'].includes(tipo)) return null
+              const reemplazo = product.reemplazo?.toLowerCase() ?? ''
+              let meses = 0
+              if (reemplazo.includes('diario') || reemplazo.includes('daily')) {
+                meses = 1 // precio ya es por mes (30u)
+              } else if (reemplazo.includes('quincenal') || reemplazo.includes('15')) {
+                meses = 3 // 6 lentes = 3 meses de uso
+              } else if (reemplazo.includes('mensual') || reemplazo.includes('month')) {
+                meses = 6 // 6 lentes = 6 meses
+              }
+              if (meses <= 0) return null
+              const porMes = Math.round(precio / meses)
+              // Ahorro vs óptica
+              const factores: Record<string,number> = {esferico:1.55,torico:1.60,multifocal:1.65,color:1.40}
+              const factor = factores[tipo] ?? 1.5
+              const precioOptica = Math.round(precio * factor / 100) * 100
+              const ahorro = precioOptica - precio
+              return (
+                <div className="mt-1 space-y-0.5">
+                  <p className="text-[10px] text-gray-500">
+                    ≈ <span className="font-bold text-gray-700">RD${porMes.toLocaleString()}/mes</span>
+                  </p>
+                  {ahorro > 0 && (
+                    <p className="text-[10px] font-bold text-green-600">
+                      Ahorras RD${ahorro.toLocaleString()} vs óptica
+                    </p>
+                  )}
+                </div>
+              )
+            })()}
           </div>
 
           <button
