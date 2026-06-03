@@ -557,71 +557,54 @@ export default function ProductoClient({ product, variants }: Props) {
               En móvil: order-1 (aparece PRIMERO = arriba del todo)
               ═══════════════════════════════════════════ */}
           <div className="flex flex-col gap-4 order-1 md:order-2">
-            {/* Nombre comprimido pre-CTA — solo marca + nombre en 1 línea */}
-            <div className="flex items-center gap-2 flex-wrap">
+            {/* Nombre + marca — siempre visible, siempre arriba */}
+            <div>
               <span className="text-xs font-bold text-primary-600 uppercase tracking-wide">{product.marca}</span>
-              <span className="text-sm font-semibold text-gray-700 leading-tight">{product.nombre}</span>
+              <h1 className="font-display text-xl md:text-2xl font-bold text-gray-900 leading-tight mt-1">
+                {product.nombre}
+              </h1>
             </div>
 
-            {/* P1: Precio + disponibilidad + indicador tipo — sin scroll */}
-            <div className="space-y-2">
-              <div className="flex items-baseline justify-between flex-wrap gap-2">
+            {/* PRECIO — nombre → precio → tachado → ahorro → disponibilidad → fecha */}
+            <div className="space-y-1.5">
+              <div className="flex items-start justify-between gap-2 flex-wrap">
                 <div>
                   <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
                   {product.contenido && (
                     <p className="text-xs text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>
                   )}
-                  {/* Precio por mes — hace el precio más accesible */}
-                  {isLente && precioBase > 0 && (() => {
-                    const reemplazo = product.reemplazo?.toLowerCase() ?? ''
-                    let meses = 0
-                    if (reemplazo.includes('diario') || reemplazo.includes('daily')) meses = 1
-                    else if (reemplazo.includes('quincenal') || reemplazo.includes('15')) meses = 3
-                    else if (reemplazo.includes('mensual') || reemplazo.includes('month')) meses = 6
-                    if (meses <= 0) return null
-                    const porMes = Math.round(price / meses)
-                    return (
-                      <p className="text-[11px] text-gray-500 mt-0.5">
-                        ≈ <span className="font-bold text-gray-700">RD${porMes.toLocaleString()}/mes</span>
-                      </p>
-                    )
-                  })()}
-                  {/* Ahorro vs óptica — tamaño aumentado para mayor visibilidad */}
                   {isLente && precioBase > 0 && (() => {
                     const factores: Record<string,number> = {esferico:1.55,torico:1.60,multifocal:1.65,color:1.40}
-                    const factor = factores[tipo] ?? 1.5
-                    const precioOptica = Math.round(precioBase * factor / 100) * 100
-                    const ahorro      = precioOptica - precioBase
+                    const precioOptica = Math.round(precioBase * (factores[tipo] ?? 1.5) / 100) * 100
+                    const ahorro = precioOptica - precioBase
                     if (ahorro <= 0) return null
                     return (
-                      <div className="flex items-center gap-1.5 mt-1.5">
-                        <span className="text-xs text-gray-400 line-through">En óptica: RD${precioOptica.toLocaleString()}</span>
-                        <span className="text-xs font-black text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
-                          Ahorras RD${ahorro.toLocaleString()}
+                      <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                        <span className="text-sm text-gray-400 line-through">RD${precioOptica.toLocaleString()}</span>
+                        <span className="text-sm font-black text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
+                          💰 Ahorras RD${ahorro.toLocaleString()}
                         </span>
                       </div>
                     )
                   })()}
                 </div>
-                {/* Indicador tipo: disponibilidad visual */}
-                <span className={`text-xs font-bold px-2.5 py-1.5 rounded-full flex items-center gap-1.5 border ${
-                  product.stock === 0 ? 'bg-red-50 text-red-600 border-red-100' :
-                  getEntregaInfo.especial && tipo === 'torico'    ? 'bg-blue-50 text-blue-700 border-blue-100' :
-                  getEntregaInfo.especial && tipo === 'multifocal'? 'bg-amber-50 text-amber-700 border-amber-100' :
-                  product.stock <= 3  ? 'bg-red-50 text-red-600 border-red-100 animate-pulse' :
-                  product.stock <= 8  ? 'bg-orange-50 text-orange-600 border-orange-100' :
-                  'bg-green-50 text-green-700 border-green-100'
+                <span className={`text-xs font-bold px-2.5 py-1.5 rounded-full flex items-center gap-1.5 border shrink-0 ${
+                  product.stock === 0                                     ? 'bg-red-50 text-red-600 border-red-100' :
+                  getEntregaInfo.especial && tipo === 'torico'            ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                  getEntregaInfo.especial && tipo === 'multifocal'        ? 'bg-amber-50 text-amber-700 border-amber-100' :
+                  product.stock <= 3                                      ? 'bg-red-50 text-red-600 border-red-100 animate-pulse' :
+                  product.stock <= 8                                      ? 'bg-orange-50 text-orange-600 border-orange-100' :
+                                                                            'bg-green-50 text-green-700 border-green-100'
                 }`}>
                   <span className="w-1.5 h-1.5 rounded-full inline-block bg-current opacity-70" />
-                  {product.stock === 0         ? 'Sin stock' :
-                   tipo === 'torico'            ? '🔵 Pedido personalizado' :
-                   tipo === 'multifocal'        ? '🟡 Fabricación especial' :
-                   product.stock <= 3           ? `¡Últimas ${product.stock}!` :
-                   product.stock <= 8           ? `Pocas unidades` :
-                   '✅ Disponible'}
+                  {product.stock === 0   ? 'Sin stock' :
+                   tipo === 'torico'     ? '🔵 A pedido' :
+                   tipo === 'multifocal' ? '🟡 A fabricar' :
+                   product.stock <= 3   ? `¡Últimas ${product.stock}!` :
+                   product.stock <= 8   ? 'Pocas unidades' :
+                   '🟢 Disponible'}
                 </span>
               </div>
-              {/* Fecha exacta de entrega — más convincente que "24 horas" */}
               {(() => {
                 const fechaInfo = getFechaEntrega(tipo, product.nombre)
                 return (
@@ -767,18 +750,22 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
 
-            {/* Cantidad controlada por EyeSelector (OD/OI=1, AMBOS=2) — no hay spinner */}
-            {/* Para soluciones/gotas sí mostramos el spinner */}
-            {(isSolucion || isGota) && (
+            {/* Cantidad — spinner visible para todos los tipos.
+                EyeSelector pre-selecciona qty (AMBOS=2, OD/OI=1) pero el usuario
+                puede ajustar manualmente para comprar 3, 4 o más cajas. */}
+            {!isGota && (
               <div className="flex items-center gap-3">
                 <p className="text-xs font-semibold text-gray-600">Cantidad</p>
                 <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
                   <button onClick={() => setQty(q => Math.max(1,q-1))}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">-</button>
+                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">−</button>
                   <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
-                  <button onClick={() => setQty(q => Math.min(product.stock,q+1))}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">+</button>
+                  <button onClick={() => setQty(q => Math.min(product.stock, q+1))}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">+</button>
                 </div>
+                {isLente && !isColor && qty >= 2 && (
+                  <span className="text-[10px] text-green-600 font-bold">5% OFF</span>
+                )}
               </div>
             )}
 
@@ -860,11 +847,6 @@ export default function ProductoClient({ product, variants }: Props) {
 
               {/* ── SECCIÓN 4: Beneficios — después del CTA ── */}
               <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
-
-              {/* h1 completo para SEO y para usuarios que quieren leer más */}
-              <h1 className="font-display text-xl font-bold text-gray-900 leading-tight sr-only md:not-sr-only md:text-xl">
-                {product.nombre}
-              </h1>
 
               {/* ToricWizard — información de ayuda, no bloquea la compra */}
               {isToric && (
