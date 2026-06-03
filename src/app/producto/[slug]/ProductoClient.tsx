@@ -517,8 +517,8 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               )}
             </div>
-            {/* Trust badges bajo la imagen — solo desktop (en móvil van inline) */}
-            <div className="hidden md:grid grid-cols-2 gap-2 mt-3">
+            {/* Trust badges bajo la imagen — desktop y móvil */}
+            <div className="grid grid-cols-2 gap-2 mt-3">
               {[
                 { icon:'✅', text:'100% Original' },
                 { icon:'🚚', text:'Entrega rápida' },
@@ -625,26 +625,6 @@ export default function ProductoClient({ product, variants }: Props) {
             {isToric && (
               <ToricWizard productName={product.nombre} />
             )}
-
-            {/* Descripción — bajo el precio, discreta */}
-            {product.descripcion && (
-              <p className="text-gray-500 text-sm leading-relaxed">{product.descripcion}</p>
-            )}
-
-            {/* Trust badges MÓVIL — solo visibles en mobile, aquí abajo del precio */}
-            <div className="md:hidden grid grid-cols-2 gap-2">
-              {[
-                { icon:'✅', text:'100% Original' },
-                { icon:'🚚', text:'Entrega rápida' },
-                { icon:'💳', text:'Pago seguro AZUL' },
-                { icon:'↩️', text:'7 días devolución' },
-              ].map(b => (
-                <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
-                  <span className="text-sm">{b.icon}</span>
-                  <span className="text-xs text-gray-600 font-medium">{b.text}</span>
-                </div>
-              ))}
-            </div>
 
             {/* ── SECCIÓN 2: Selectores de receta ── */}
             {isLente && !isColor && <EyeSelector eye={eye} onChange={setEye} />}
@@ -850,7 +830,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 WhyBlock y Specs BAJAN debajo del CTA (no distraen antes de comprar)
                 ───────────────────────────────────────────────────────────────── */}
 
-            {/* Suscripción — justo antes del CTA para que el precio del CTA refleje el descuento */}
+            {/* Suscripción — justo antes del CTA */}
             <SuscripcionSelector
               value={suscripcion}
               onChange={(val, descPct) => {
@@ -865,32 +845,7 @@ export default function ProductoClient({ product, variants }: Props) {
               tipo={tipo}
             />
 
-            {/* Cross-sell inline — antes del CTA pero después de suscripción */}
-            {['esferico','torico','multifocal','color'].includes(tipo) && (
-              <InlineCrossSell tipo={tipo} currentId={product.id} />
-            )}
-
-            {/* Disclaimer médico — justo antes del botón de compra, no al principio */}
-            {isLente && (
-              <div className="flex gap-2 p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-500">
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-gray-400" />
-                <span>Dispositivo médico. Requiere prescripción vigente. Al comprar confirmas que cuentas con receta actualizada.</span>
-              </div>
-            )}
-
             <div className="flex flex-col gap-2.5">
-              {/* Precio resumen antes de CTA — con descuento de suscripción visible */}
-              <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</span>
-                {suscripcion && precioBase > price && (
-                  <>
-                    <span className="text-base text-gray-400 line-through">RD${precioBase.toLocaleString()}</span>
-                    <span className="text-xs font-black text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                      -{Math.round((1 - price/precioBase)*100)}% OFF
-                    </span>
-                  </>
-                )}
-              </div>
               <button onClick={handleBuyNow} disabled={product.stock === 0 || sinVariante}
                 className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-primary-200/60 disabled:opacity-40 disabled:cursor-not-allowed">
                 {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Consultar disponibilidad —' : (
@@ -932,16 +887,14 @@ export default function ProductoClient({ product, variants }: Props) {
                 )
               })()}
 
-              {/* Trust strip P3 */}
-              <div className="border-t border-gray-100 pt-3 mt-1 space-y-1.5">
+              {/* Trust strip compacto — 3 items esenciales */}
+              <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-100 pt-2.5 mt-0.5">
                 {[
-                  '✅ Producto 100% original garantizado',
-                  '🔒 Pago seguro — AZUL Banco Popular',
-                  '🏭 Garantía directa del fabricante',
-                  '💬 Soporte por WhatsApp 24/7',
-                  '🚚 Entrega en toda República Dominicana',
+                  '✅ 100% Original garantizado',
+                  '🔒 Pago seguro AZUL',
+                  '↩️ 7 días devolución',
                 ].map(t => (
-                  <p key={t} className="text-[11px] text-gray-500 font-medium flex items-center gap-1.5">
+                  <p key={t} className="text-[11px] text-gray-400 font-medium flex items-center gap-1">
                     <span>{t.slice(0,2)}</span>
                     <span>{t.slice(3)}</span>
                   </p>
@@ -950,6 +903,24 @@ export default function ProductoClient({ product, variants }: Props) {
 
               {/* ── SECCIÓN 4: Beneficios — después del CTA ── */}
               <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
+
+              {/* Descripción — ya compró o está a punto, aquí es contexto, no fricción */}
+              {product.descripcion && (
+                <p className="text-gray-500 text-sm leading-relaxed">{product.descripcion}</p>
+              )}
+
+              {/* Cross-sell inline — post-CTA, el cliente ya se comprometió con el precio */}
+              {['esferico','torico','multifocal','color'].includes(tipo) && (
+                <InlineCrossSell tipo={tipo} currentId={product.id} />
+              )}
+
+              {/* Disclaimer médico — post-CTA, actúa como confirmación no como barrera */}
+              {isLente && (
+                <div className="flex gap-2 p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-400">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-gray-300" />
+                  <span>Dispositivo médico. Requiere prescripción vigente.</span>
+                </div>
+              )}
             </div>
 
             {/* ── SECCIÓN 5: Especificaciones clínicas colapsables ── */}
