@@ -486,7 +486,7 @@ export default function ProductoClient({ product, variants }: Props) {
   return (
     <>
       <Navbar />
-      <main className="max-w-6xl mx-auto px-4 pt-4 pb-32 md:pb-12">
+      <main className="max-w-6xl mx-auto px-4 pt-4 pb-20 md:pb-12">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
           <button onClick={() => router.back()} className="hover:text-primary-600 transition-colors flex items-center gap-1">
@@ -541,7 +541,7 @@ export default function ProductoClient({ product, variants }: Props) {
               {[
                 { icon:'✅', text:'100% Original' },
                 { icon:'🚚', text:'Entrega rápida' },
-                { icon:'💳', text:'Pago seguro AZUL' },
+                { icon:'🔒', text:'Pago seguro AZUL' },
                 { icon:'↩️', text:'7 días devolución' },
               ].map(b => (
                 <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
@@ -908,14 +908,19 @@ export default function ProductoClient({ product, variants }: Props) {
       {/* P6 Mobile: sticky CTA con precio, entrega y CTA amplios */}
       {product.stock > 0 && (
         <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 px-4 pt-3 pb-4 shadow-xl safe-area-pb">
-          <div className="flex items-center justify-between mb-2.5">
-            <div className="min-w-0 flex-1 mr-3">
+          <div className="flex items-center justify-between mb-2.5 gap-2">
+            <div className="min-w-0 flex-1">
               <p className="text-[11px] text-gray-400 truncate leading-none">{product.nombre}</p>
               <p className={`text-[10px] font-semibold mt-0.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
                 {getEntregaInfo.icono} {getFechaEntrega(tipo, product.nombre).corto}
               </p>
             </div>
-            <p className="font-black text-primary-600 text-xl shrink-0">RD${price.toLocaleString()}</p>
+            <div className="shrink-0 text-right">
+              <p className="font-black text-primary-600 text-xl leading-none">RD${price.toLocaleString()}</p>
+              {qty >= 2 && isLente && !isColor && (
+                <p className="text-[9px] text-green-600 font-bold">{qty} cajas · 5% OFF</p>
+              )}
+            </div>
           </div>
           <div className="flex gap-2">
             <button onClick={handleAdd} disabled={sinVariante}
