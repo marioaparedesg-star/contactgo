@@ -1,8 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function CookieConsent() {
+  const pathname = usePathname()
   const [show, setShow] = useState(false)
 
   useEffect(() => {
@@ -23,7 +25,8 @@ export default function CookieConsent() {
     setShow(false)
   }
 
-  if (!show) return null
+  // En PDP ocultamos el banner — la sticky bar del PDP ya está ahí
+  if (!show || pathname?.includes('/producto/')) return null
 
   return (
     <div className="fixed bottom-20 md:bottom-0 left-0 right-0 z-[60] bg-white border-t border-gray-200 shadow-2xl">

@@ -40,8 +40,15 @@ function WhatsAppButtonInner() {
     return '¿Necesitas ayuda? 💬'
   }
 
+  // En el PDP, la sticky bar ocupa ~88px en móvil + BottomNav 64px
+  // El botón WA debe subir para no tapar el CTA "Comprar ahora"
+  const isPDP = pathname?.includes('/producto/')
+  const bottomClass = isPDP
+    ? 'fixed bottom-36 md:bottom-6 right-3 md:right-4 z-50 group'
+    : 'fixed bottom-20 md:bottom-6 right-3 md:right-4 z-50 group'
+
   return (
-    <div className="fixed bottom-20 md:bottom-6 right-3 md:right-4 z-50 group">
+    <div className={bottomClass}>
       {/* Tooltip contextual */}
       <div className="absolute bottom-14 right-0 bg-white rounded-2xl rounded-br-sm shadow-lg border border-gray-100 px-3 py-2 w-44 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
         <p className="text-[11px] text-gray-500 font-semibold mb-0.5">ContactGo</p>

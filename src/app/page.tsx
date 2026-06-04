@@ -318,12 +318,12 @@ export default async function HomePage() {
             </div>
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { nombre: 'María R.', ciudad: 'Santo Domingo', texto: 'Excelente servicio, llegaron en 24 horas. Los Acuvue son 100% originales, igual que en la óptica pero más baratos.', producto: 'ACUVUE® MOIST®', avatar: 'MR', color: 'bg-pink-100 text-pink-700' },
-                { nombre: 'Carlos M.', ciudad: 'Santiago', texto: 'Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto.', producto: 'Air Optix HydraGlyde', avatar: 'CM', color: 'bg-blue-100 text-blue-700' },
-                { nombre: 'Feyilina P.', ciudad: 'Santo Domingo', texto: 'Llevo 6 meses comprando aquí. Los precios son mucho mejores que en cualquier óptica y siempre llegan rápido.', producto: 'Biofinity® Toric', avatar: 'FP', color: 'bg-green-100 text-green-700' },
-                { nombre: 'Ana G.', ciudad: 'La Romana', texto: 'Tengo astigmatismo alto y siempre era difícil encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'ACUVUE Oasys Astig.', avatar: 'AG', color: 'bg-orange-100 text-orange-700' },
-                { nombre: 'Roberto S.', ciudad: 'Bávaro', texto: 'Precio mucho mejor que en las ópticas. Llegaron en 24h con empaque sellado y originales garantizados.', producto: 'Air Optix Colors', avatar: 'RS', color: 'bg-purple-100 text-purple-700' },
-                { nombre: 'Luisa V.', ciudad: 'Santo Domingo', texto: 'Me ahorraron RD$800 vs la óptica física. La calidad es la misma. Nunca más voy a otra parte.', producto: '1-Day ACUVUE 90u', avatar: 'LV', color: 'bg-teal-100 text-teal-700' },
+                { nombre: 'María R.', ciudad: 'Santo Domingo', fecha: 'Hace 2 días', texto: 'Excelente servicio, llegaron en 24 horas. Los Acuvue son 100% originales, igual que en la óptica pero más baratos.', producto: 'ACUVUE® MOIST®', avatar: 'MR', color: 'bg-pink-100 text-pink-700' },
+                { nombre: 'Carlos M.', ciudad: 'Santiago', fecha: 'Hace 5 días', texto: 'Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto.', producto: 'Air Optix HydraGlyde', avatar: 'CM', color: 'bg-blue-100 text-blue-700' },
+                { nombre: 'Feyilina P.', ciudad: 'Santo Domingo', fecha: 'Hace 1 semana', texto: 'Llevo 6 meses comprando aquí. Los precios son mucho mejores que en cualquier óptica y siempre llegan rápido.', producto: 'Biofinity® Toric', avatar: 'FP', color: 'bg-green-100 text-green-700' },
+                { nombre: 'Ana G.', ciudad: 'La Romana', fecha: 'Hace 2 semanas', texto: 'Tengo astigmatismo alto y siempre era difícil encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'ACUVUE Oasys Astig.', avatar: 'AG', color: 'bg-orange-100 text-orange-700' },
+                { nombre: 'Roberto S.', ciudad: 'Bávaro', fecha: 'Hace 3 semanas', texto: 'Precio mucho mejor que en las ópticas. Llegaron en 24h con empaque sellado y originales garantizados.', producto: 'Air Optix Colors', avatar: 'RS', color: 'bg-purple-100 text-purple-700' },
+                { nombre: 'Luisa V.', ciudad: 'Santo Domingo', fecha: 'Hace 1 mes', texto: 'Me ahorraron RD$800 vs la óptica física. La calidad es la misma. Nunca más voy a otra parte.', producto: '1-Day ACUVUE 90u', avatar: 'LV', color: 'bg-teal-100 text-teal-700' },
               ].map((t, i) => (
                 <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col gap-3">
                   <div className="flex gap-0.5">
@@ -335,7 +335,7 @@ export default async function HomePage() {
                       <div className={`w-8 h-8 rounded-full ${t.color} flex items-center justify-center text-xs font-black`}>{t.avatar}</div>
                       <div>
                         <p className="font-semibold text-gray-900 text-sm">{t.nombre}</p>
-                        <p className="text-xs text-gray-400">{t.ciudad}</p>
+                        <p className="text-xs text-gray-400">{t.ciudad} · {t.fecha}</p>
                       </div>
                     </div>
                     <span className="text-xs bg-primary-50 text-primary-700 font-medium px-2 py-1 rounded-lg">{t.producto}</span>

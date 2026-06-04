@@ -577,26 +577,26 @@ export default function CuentaPage() {
             {modo==='registro' && (<>
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Nombre</label>
-                <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} required
+                <input type="text" autoComplete="name" value={nombre} onChange={e => setNombre(e.target.value)} required
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="Tu nombre" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Teléfono</label>
-                <input type="tel" value={telefono} onChange={e => setTelefono(e.target.value)}
+                <input type="tel" autoComplete="tel" value={telefono} onChange={e => setTelefono(e.target.value)}
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="809-000-0000" />
               </div>
             </>)}
             <div>
               <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Email</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
+              <input type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} required
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="tu@email.com" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Contraseña</label>
-              <input type="password" value={pass} onChange={e => setPass(e.target.value)} required minLength={6}
+              <input type="password" autoComplete="current-password" value={pass} onChange={e => setPass(e.target.value)} required minLength={6}
                 className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="••••••••" />
             </div>

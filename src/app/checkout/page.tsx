@@ -384,8 +384,8 @@ export default function CheckoutPage() {
                 <input placeholder="Nombre completo" value={authNombre} onChange={e => setAuthNombre(e.target.value)} className="input w-full" />
                 <input placeholder="Teléfono (opcional)" value={authTel} onChange={e => setAuthTel(e.target.value)} className="input w-full" />
               </>}
-              <input type="email" placeholder="Email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="input w-full" />
-              <input type="password" placeholder="Contraseña" value={authPass} onChange={e => setAuthPass(e.target.value)} className="input w-full" />
+              <input type="email" autoComplete="email" placeholder="Email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="input w-full" />
+              <input type="password" autoComplete="current-password" placeholder="Contraseña" value={authPass} onChange={e => setAuthPass(e.target.value)} className="input w-full" />
               {authMsg && <p className="text-red-500 text-xs">{authMsg}</p>}
               <button onClick={handleAuth} disabled={authLoading} className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-60">
                 {authLoading ? 'Procesando...' : authMode === 'register' ? 'Crear cuenta y continuar' : 'Entrar y continuar'}
