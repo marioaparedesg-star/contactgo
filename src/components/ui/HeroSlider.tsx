@@ -149,10 +149,15 @@ export default function HeroSlider() {
       aria-label="Hero — ContactGo lentes de contacto"
       className="relative overflow-hidden select-none min-h-[480px] md:min-h-0"
       style={bgStyle}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
     >
+      {/* Capa de swipe — intercepta el touch PERO los botones la superan con z-index */}
+      <div
+        className="absolute inset-0 z-0"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        aria-hidden="true"
+      />
       {/* Ambient glow */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
@@ -172,7 +177,7 @@ export default function HeroSlider() {
           MOBILE LAYOUT — diseñado específicamente para mobile
           Oculto en ≥md. Arquitectura independiente del desktop.
           ═══════════════════════════════════════════════════════ */}
-      <div className="relative md:hidden px-5 pt-5 pb-4">
+      <div className="relative z-10 md:hidden px-5 pt-5 pb-4">
         <div
           className="transition-all duration-260 ease-out"
           style={{
@@ -281,7 +286,7 @@ export default function HeroSlider() {
       {/* ═══════════════════════════════════════════════════════
           DESKTOP LAYOUT — 2 columnas, desde md en adelante
           ═══════════════════════════════════════════════════════ */}
-      <div className="relative hidden md:block">
+      <div className="relative z-10 hidden md:block">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div
             className="py-10 lg:py-12 transition-all duration-260 ease-out"

@@ -519,9 +519,9 @@ export default function ProductoClient({ product, variants }: Props) {
 
           {/* ═══════════════════════════════════════════
               COLUMNA IZQUIERDA — Imagen (desktop sticky)
-              En móvil: order-2 (aparece DESPUÉS del detalle)
+              En móvil: order-1 (aparece PRIMERO = imagen arriba)
               ═══════════════════════════════════════════ */}
-          <div className="md:sticky md:top-20 order-2 md:order-1">
+          <div className="md:sticky md:top-20 order-1 md:order-1">
             <div className="group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 aspect-[5/4] shadow-sm hover:shadow-md transition-shadow duration-300 relative">
               <span className="absolute top-3 right-3 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full z-10 flex items-center gap-1 leading-none">
                 ✓ 100% Original
@@ -554,9 +554,9 @@ export default function ProductoClient({ product, variants }: Props) {
 
           {/* ═══════════════════════════════════════════
               COLUMNA DERECHA — Detalle + Selectores + CTA
-              En móvil: order-1 (aparece PRIMERO = arriba del todo)
+              En móvil: order-2 (aparece DESPUÉS de la imagen)
               ═══════════════════════════════════════════ */}
-          <div className="flex flex-col gap-4 order-1 md:order-2">
+          <div className="flex flex-col gap-4 order-2 md:order-2">
             {/* Nombre + marca — siempre visible, siempre arriba */}
             <div>
               <span className="text-xs font-bold text-primary-600 uppercase tracking-wide">{product.marca}</span>
@@ -834,13 +834,13 @@ export default function ProductoClient({ product, variants }: Props) {
               {/* Trust strip compacto — 3 items esenciales */}
               <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-100 pt-2.5 mt-0.5">
                 {[
-                  '✅ 100% Original garantizado',
-                  '🔒 Pago seguro AZUL',
-                  '↩️ 7 días devolución',
-                ].map(t => (
-                  <p key={t} className="text-[11px] text-gray-400 font-medium flex items-center gap-1">
-                    <span>{t.slice(0,2)}</span>
-                    <span>{t.slice(3)}</span>
+                  { icon: '✅', text: '100% Original garantizado' },
+                  { icon: '🔒', text: 'Pago seguro AZUL' },
+                  { icon: '↩️', text: '7 días devolución' },
+                ].map(({ icon, text }) => (
+                  <p key={text} className="text-[11px] text-gray-400 font-medium flex items-center gap-1">
+                    <span>{icon}</span>
+                    <span>{text}</span>
                   </p>
                 ))}
               </div>
@@ -908,7 +908,7 @@ export default function ProductoClient({ product, variants }: Props) {
       {/* P6 Mobile: sticky CTA con precio, entrega y CTA amplios */}
       {product.stock > 0 && (
         <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 px-4 pt-3 pb-4 shadow-xl safe-area-pb">
-          <div className="flex items-center justify-between mb-2.5 gap-2">
+          <div className="flex items-center justify-between mb-2.5 gap-2 pr-14">
             <div className="min-w-0 flex-1">
               <p className="text-[11px] text-gray-400 truncate leading-none">{product.nombre}</p>
               <p className={`text-[10px] font-semibold mt-0.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>

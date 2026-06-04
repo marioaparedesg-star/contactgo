@@ -44,7 +44,7 @@ function WhatsAppButtonInner() {
   // El botón WA debe subir para no tapar el CTA "Comprar ahora"
   const isPDP = pathname?.includes('/producto/')
   const bottomClass = isPDP
-    ? 'fixed bottom-36 md:bottom-6 right-3 md:right-4 z-50 group'
+    ? 'fixed bottom-40 md:bottom-6 right-3 md:right-4 z-50 group'
     : 'fixed bottom-20 md:bottom-6 right-3 md:right-4 z-50 group'
 
   return (
@@ -65,7 +65,7 @@ function WhatsAppButtonInner() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"
-        className="relative w-12 h-12 bg-[#25D366] rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform duration-200"
+        className={`relative ${isPDP ? 'w-10 h-10' : 'w-12 h-12'} bg-[#25D366] rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform duration-200`}
       >
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" />
         <svg viewBox="0 0 32 32" className="w-6 h-6 fill-white relative z-10" aria-hidden="true">
