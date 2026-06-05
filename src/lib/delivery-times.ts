@@ -29,14 +29,14 @@ const TIEMPOS: Record<string, EntregaInfo> = {
   },
   multifocal: {
     etiqueta: 'Pedido especial · 5-10 días',
-    detalle:  'Fabricación especial. Entrega estimada de 5 a 10 días laborables.',
+    detalle:  'Fabricado bajo pedido directamente por el distribuidor oficial. Entrega estimada de 5 a 10 días laborables.',
     dias_min: 5, dias_max: 10,
     especial: true,
     icono:    '⚗️',
   },
   torico: {
     etiqueta: 'Fabricación especial · 25-30 días',
-    detalle:  'Fabricación especial. Entrega estimada de 25 a 30 días laborables.',
+    detalle:  'Fabricado a medida por el distribuidor oficial de la marca. Entrega estimada de 25 a 30 días laborables.',
     dias_min: 25, dias_max: 30,
     especial: true,
     icono:    '⏱️',
@@ -67,7 +67,7 @@ export function getEntrega(tipo: string, nombre = ''): EntregaInfo {
   if (esXR(nombre) && (tipo === 'torico' || tipo === 'esferico' || tipo === 'multifocal')) {
     return {
       etiqueta: 'Fabricación bajo pedido · 25-30 días',
-      detalle:  'Fabricación especial bajo pedido. Entrega estimada de 25 a 30 días laborables.',
+      detalle:  'Fabricado bajo pedido directamente por el distribuidor oficial. Entrega estimada de 25 a 30 días laborables.',
       dias_min: 25, dias_max: 30,
       especial: true,
       icono:    '🔬',

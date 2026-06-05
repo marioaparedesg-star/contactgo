@@ -325,7 +325,6 @@ export default function CheckoutPage() {
     if (step === 1) {
       const ok = await trigger(['nombre','email','telefono'])
       if (!ok) return
-      // Registrar carrito como potencialmente abandonado (si no completa el pago)
       try {
         const sb2 = createClient()
         const vals = getValues()
@@ -344,6 +343,11 @@ export default function CheckoutPage() {
             updated_at:       new Date().toISOString(),
           }, { onConflict: 'cliente_email', ignoreDuplicates: false })
         }
+        // Guardar perfil para pre-llenar próxima compra
+        const { data: { user: u } } = await sb2.auth.getUser()
+        if (u && vals.nombre && vals.email) {
+          sb2.from('profiles').upsert({ id: u.id, nombre: vals.nombre, email: vals.email, telefono: vals.telefono ?? null }, { onConflict: 'id' }).then(() => {})
+        }
       } catch { /* no bloquear flujo si falla */ }
       if (!isLoggedIn) { setShowAuthModal(true); return }
       setStep(2)
@@ -351,6 +355,21 @@ export default function CheckoutPage() {
       const ok = await trigger(['direccion','ciudad'])
       if (!ok) return
       if (!disclaimerAceptado) { setShowDisclaimer(true); return }
+      // Guardar dirección principal para pre-llenar próxima compra
+      try {
+        const sb2 = createClient()
+        const { data: { user: u } } = await sb2.auth.getUser()
+        const vals = getValues()
+        if (u && vals.direccion) {
+          const ciudadFinal = vals.ciudad === 'Otra ciudad' && (vals as any).ciudadPersonalizada ? (vals as any).ciudadPersonalizada : vals.ciudad
+          const { data: existing } = await sb2.from('addresses').select('id').eq('user_id', u.id).eq('principal', true).maybeSingle()
+          if (!existing) {
+            sb2.from('addresses').insert({ user_id: u.id, nombre: vals.nombre, direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null, principal: true }).then(() => {})
+          } else {
+            sb2.from('addresses').update({ direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null }).eq('id', existing.id).then(() => {})
+          }
+        }
+      } catch { /* silencioso */ }
       setStep(3)
     }
   }
@@ -668,8 +687,10 @@ export default function CheckoutPage() {
                       <p className="text-xs text-gray-500 leading-relaxed select-none">
                         He leído y acepto los{' '}
                         <a href="/terminos" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 font-semibold hover:underline">Términos y Condiciones</a>
-                        {' '}y la{' '}
+                        {', '}la{' '}
                         <a href="/privacidad" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 font-semibold hover:underline">Política de Privacidad</a>
+                        {' '}y la{' '}
+                        <a href="/politica-receta" target="_blank" onClick={e => e.stopPropagation()} className="text-primary-600 font-semibold hover:underline">Política de Receta</a>
                       </p>
                     </div>
 

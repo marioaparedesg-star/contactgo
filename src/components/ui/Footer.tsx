@@ -74,6 +74,7 @@ export default function Footer() {
                 ['Envíos', '/envios-y-entregas'],
                 ['Devoluciones', '/devoluciones'],
                 ['Mi Receta', '/receta'],
+                ['Política de Receta', '/politica-receta'],
                 ['FAQ', '/faq'],
                 ['Blog', '/blog'],
               ].map(([l, h]) => (
