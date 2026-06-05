@@ -98,7 +98,7 @@ export interface Order {
   envio: number
   descuento: number
   total: number
-  metodo_pago: 'paypal' | 'transferencia' | 'contra_entrega' | null
+  metodo_pago: 'paypal' | 'transferencia' | 'tarjeta' | null
   pago_estado: 'pendiente' | 'verificado' | 'rechazado'
   pago_referencia: string | null
   direccion_texto: string | null

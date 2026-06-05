@@ -1000,7 +1000,7 @@ export default function CuentaPage() {
                   <span className="text-sm text-gray-600">Total a cobrar</span>
                   <span className="font-black text-gray-900 text-lg">RD${cancelConfirm.total_pendiente?.toLocaleString()}</span>
                 </div>
-                <p className="text-xs text-gray-400 text-center">El pedido se procesará como pago contra entrega</p>
+                <p className="text-xs text-gray-400 text-center">Se procesará el cobro con la tarjeta registrada</p>
               </div>
               <div className="px-5 pb-5 space-y-2">
                 <button onClick={() => cancelarSuscripcion(cancelConfirm.sub, true)} disabled={cancelLoading}

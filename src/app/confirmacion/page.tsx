@@ -355,11 +355,9 @@ function ConfirmacionContent() {
         )}
 
         {/* Google Customer Reviews Opt-In — solo cuando pago confirmado */}
-        {(order.pago_estado === 'pagado' ||
-          (order.metodo_pago === 'contra_entrega' && order.estado === 'confirmado')) &&
+        {order.pago_estado === 'pagado' &&
          order.cliente_email && order.numero_orden && (() => {
-           const dias = order.metodo_pago === 'contra_entrega' ? 2 : 1
-           const d = new Date(); d.setDate(d.getDate() + dias)
+           const d = new Date(); d.setDate(d.getDate() + 1)
            const isoFecha = d.toISOString().split('T')[0]
            return (
              <GoogleCustomerReviewsOptIn

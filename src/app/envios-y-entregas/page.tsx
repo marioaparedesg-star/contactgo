@@ -90,10 +90,10 @@ export default function EnviosPage() {
           {/* Métodos de pago */}
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">💳 Métodos de pago</h2>
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-2 gap-4">
               {[
-                { icon: '💵', titulo: 'Contra entrega', desc: 'Pagas en efectivo cuando recibes tu pedido.' },
-                                { icon: '💳', titulo: 'Tarjeta (AZUL)', desc: 'Pago con tarjeta de crédito/débito Visa y Mastercard via AZUL — Banco Popular.' },
+                { icon: '💳', titulo: 'Tarjeta (AZUL)', desc: 'Pago con tarjeta de crédito/débito Visa y Mastercard via AZUL — Banco Popular.' },
+                { icon: '🔒', titulo: 'Pago 100% seguro', desc: 'Tecnología 3D Secure. ContactGo no almacena datos de tu tarjeta.' },
               ].map((m, i) => (
                 <div key={i} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm text-center">
                   <span className="text-3xl mb-2 block">{m.icon}</span>

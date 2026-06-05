@@ -66,7 +66,6 @@ export default function DevolucionesPage() {
             <p>El reembolso se realiza por el mismo método de pago utilizado en la compra:</p>
             <ul className="mt-3 space-y-1 text-sm list-disc list-inside">
               <li><strong>Tarjeta de crédito/débito (AZUL):</strong> 3-5 días hábiles bancarios</li>
-              <li><strong>Contra entrega:</strong> Transferencia bancaria en 1-2 días hábiles</li>
             </ul>
           </section>
 

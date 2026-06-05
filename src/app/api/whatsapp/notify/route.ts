@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     const nombre    = (cliente_nombre ?? 'Cliente').split(' ')[0]
     const pedidoNum = numero_orden ?? (order_id ?? '').substring(0, 8).toUpperCase()
     const totalFmt  = `RD$${Number(total ?? 0).toLocaleString()}`
-    const metodo    = metodo_pago === 'tarjeta' ? '💳 Tarjeta' : '💵 Contra entrega'
+    const metodo    = '💳 Tarjeta AZUL'
 
     // OPCIÓN A: WhatsApp Business API oficial (si tienes token de Meta)
     if (WA_TOKEN && WA_PHONE_ID) {

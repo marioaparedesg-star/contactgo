@@ -23,7 +23,7 @@ const faqs = [
   { q: '¿Cuánto tarda el envío en Santo Domingo?', a: 'Entregamos en 24-48 horas hábiles en toda el área metropolitana de Santo Domingo, incluyendo Santo Domingo Este, Norte y Oeste. Si ordenas antes de las 3pm de lunes a sábado, tu pedido sale el mismo día.' },
   { q: '¿Cuánto cuesta el envío a Santo Domingo?', a: 'El envío a Santo Domingo tiene un costo fijo de RD$200. Es gratuito en pedidos superiores a RD$6,000.' },
   { q: '¿Hacen entregas en todos los sectores de Santo Domingo?', a: 'Sí, cubrimos todos los sectores: Piantini, Naco, Evaristo Morales, Los Prados, Bella Vista, Gazcue, Los Cacicazgos, La Esperilla, El Millón, Los Alcarrizos, Herrera, Villa Mella y más.' },
-  { q: '¿Puedo pagar contra entrega en Santo Domingo?', a: 'Sí. Aceptamos pago en efectivo al recibir el pedido en toda el área de Santo Domingo. También aceptamos tarjeta Visa/Mastercard vía AZUL en el checkout.' },
+  { q: '¿Qué métodos de pago aceptan en Santo Domingo?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
 ]
 
 export default async function Page() {

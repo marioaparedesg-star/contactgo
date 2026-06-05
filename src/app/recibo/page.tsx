@@ -320,7 +320,7 @@ function ReciboContent() {
           <div style={{background:'#f9fafb',border:'1px solid #e5e7eb',borderRadius:'8px',padding:'12px'}}>
             <div style={{fontSize:'9px',fontWeight:'700',color:'#6b7280',textTransform:'uppercase',marginBottom:'6px'}}>Método de pago</div>
             <div style={{fontWeight:'700'}}>
-              {order.metodo_pago === 'tarjeta' ? '💳 Tarjeta AZUL (Banco Popular)' : order.metodo_pago ?? 'Contra entrega'}
+              {'💳 Tarjeta AZUL (Banco Popular)'}
             </div>
             {order.azul_auth_code && (
               <div style={{fontSize:'11px',color:'#666',marginTop:'4px'}}>Auth: <strong>{order.azul_auth_code}</strong></div>

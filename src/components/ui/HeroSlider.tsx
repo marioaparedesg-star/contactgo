@@ -10,7 +10,7 @@ const SLIDES = [
     badge:      '🇩🇴 #1 en lentes de contacto en RD',
     title:      'Tus lentes,\na domicilio.',
     sub:        'Originales y certificados. Entrega en 24h.',
-    subtitle:   'Originales. Certificados. Con soporte de optometristas. Paga con tarjeta o contra entrega.',
+    subtitle:   'Originales. Certificados. Con soporte de optometristas. Pago seguro con tarjeta Visa/Mastercard.',
     cta:        { label: 'Explorar catálogo', href: '/catalogo' },
     cta2:       { label: 'Subir mi receta',   href: '/receta' },
     accent:     '#0d6efd',

@@ -31,8 +31,8 @@ const FAQS = [
   {
     categoria: '💳 Pagos',
     preguntas: [
-      { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos pago contra entrega en efectivo y tarjeta de crédito/débito (Visa y Mastercard vía AZUL — Banco Popular). El pago con tarjeta está disponible en el checkout.' },
-      { q: '¿El pago contra entrega tiene costo extra?', a: 'No, el costo de envío es el mismo independientemente del método de pago (RD$200 en SD, RD$350 en el interior).' },
+      { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular, con tecnología 3D Secure. El pago es 100% seguro y ContactGo no almacena datos de tarjetas.' },
+      { q: '¿Es seguro pagar con tarjeta?', a: 'Sí, totalmente. Eres redirigido al portal oficial de AZUL (Banco Popular). ContactGo nunca ve ni almacena los datos de tu tarjeta.' },
     ]
   },
   {

@@ -23,7 +23,7 @@ const faqs = [
               { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'Entregamos en 48-72 horas hábiles en Punta Cana, Bávaro, Cap Cana y toda la provincia La Altagracia.' },
               { q: '¿Cuánto cuesta el envío a Punta Cana?', a: 'El envío a Punta Cana tiene un costo de RD$350. Es gratuito en pedidos superiores a RD$6,000.' },
               { q: '¿Hacen entregas en Bávaro y Cap Cana?', a: 'Sí. Cubrimos todo el corredor turístico: Punta Cana, Bávaro, Cap Cana, El Cortecito, Uvero Alto y zonas aledañas.' },
-              { q: '¿Puedo pagar contra entrega en Punta Cana?', a: 'Sí. Aceptamos pago en efectivo al recibir. También aceptamos tarjeta Visa/Mastercard vía AZUL en el checkout.' },
+              { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
 ]
 
 export default async function Page() {

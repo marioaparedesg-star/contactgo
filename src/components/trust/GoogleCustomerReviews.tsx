@@ -2,7 +2,7 @@
 /**
  * Google Customer Reviews Opt-In
  * Merchant ID: 5786261428
- * Solo se activa cuando pago_estado = pagado o contra_entrega confirmado.
+ * Solo se activa cuando pago_estado = pagado.
  * Script cargado dinámicamente, sin bloqueo de render.
  */
 import { useEffect } from 'react'

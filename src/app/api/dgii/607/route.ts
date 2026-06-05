@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
     r.monto_facturado,
     r.itbis_facturado,
     '0.00', '0.00', '0.00', '0.00',
-    r.metodo_pago === 'contra_entrega' ? r.monto_facturado : '0.00',
+    '0.00', // efectivo — contra entrega eliminado
     '0.00',
     r.metodo_pago === 'tarjeta'        ? r.monto_facturado : '0.00',
     r.metodo_pago === 'transferencia'  ? r.monto_facturado : '0.00',

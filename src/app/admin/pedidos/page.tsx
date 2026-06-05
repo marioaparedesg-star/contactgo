@@ -88,7 +88,7 @@ export default function PedidosPage() {
            p.id.toLowerCase().includes(q)
   })
 
-  const METODO_LABEL: Record<string,string> = {tarjeta:'💳 AZUL', contra_entrega:'💵 Contra entrega'}
+  const METODO_LABEL: Record<string,string> = {tarjeta:'💳 AZUL'}
 
   return (
     <div className="max-w-7xl mx-auto w-full">

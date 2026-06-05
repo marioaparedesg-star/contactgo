@@ -57,9 +57,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
     ? getEntregaTextoEmail(tiposItems.includes('torico') ? 'torico' : tiposItems.includes('multifocal') ? 'multifocal' : tiposItems[0])
     : 'Entrega estimada: 24 horas laborables.'
 
-  const metodoPagoLabel = order.metodo_pago === 'tarjeta'
-    ? '💳 Tarjeta de crédito/débito (AZUL)'
-    : '💵 Contra entrega — Efectivo'
+  const metodoPagoLabel = '💳 Tarjeta de crédito/débito (AZUL)'
 
   // Fila de cada producto con prescripción completa
   const itemsRows = items.map(i => {
