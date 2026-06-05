@@ -19,9 +19,9 @@ const SLIDES = [
     image:      '/hero-lens-1.png',
     imageAlt:   'Lentes de contacto originales República Dominicana',
     stats:      [
-      { num: '60+',  label: 'pedidos' },
-      { num: '24h',  label: 'entrega SD' },
-      { num: '100%', label: 'originales' },
+      { num: 'DYNAMIC', label: 'lentes entregados' },
+      { num: '24h',     label: 'entrega SD' },
+      { num: '100%',    label: 'originales' },
     ],
     tag: null, precio: null,
   },
@@ -72,7 +72,7 @@ const SLIDES = [
   },
 ]
 
-export default function HeroSlider() {
+export default function HeroSlider({ lentesCount = 4200 }: { lentesCount?: number }) {
   const [current, setCurrent]             = useState(0)
   const [transitioning, setTransitioning] = useState(false)
   const [direction, setDirection]         = useState<'next'|'prev'>('next')
@@ -274,7 +274,7 @@ export default function HeroSlider() {
             <div className="flex justify-center gap-6 mt-3 pt-3 border-t border-white/8">
               {s.stats.map(stat => (
                 <div key={stat.label} className="text-center">
-                  <p className="text-white font-black text-lg leading-tight">{stat.num}</p>
+                <p className="text-white font-black text-lg leading-tight">{stat.num === 'DYNAMIC' ? `${lentesCount.toLocaleString()}+` : stat.num}</p>
                   <p className="text-white/35 text-[9px] uppercase tracking-widest">{stat.label}</p>
                 </div>
               ))}
@@ -331,7 +331,7 @@ export default function HeroSlider() {
                   <div className="flex gap-5">
                     {s.stats.map(stat => (
                       <div key={stat.label} className="flex items-baseline gap-1.5">
-                        <span className="text-white font-black text-xl">{stat.num}</span>
+                        <span className="text-white font-black text-xl">{stat.num === 'DYNAMIC' ? `${lentesCount.toLocaleString()}+` : stat.num}</span>
                         <span className="text-white/40 text-[10px] uppercase tracking-wide">{stat.label}</span>
                       </div>
                     ))}

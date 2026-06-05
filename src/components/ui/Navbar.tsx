@@ -11,8 +11,8 @@ export default function Navbar() {
 
   const links = [
     { href: '/catalogo', label: 'Catálogo' },
-    { href: '/catalogo?tipo=esferico', label: 'Esféricos' },
-    { href: '/catalogo?tipo=torico', label: 'Tóricos' },
+    { href: '/esfericos', label: 'Esféricos' },
+    { href: '/toricos', label: 'Tóricos' },
     { href: '/multifocales', label: 'Multifocales' },
     { href: '/catalogo?tipo=color', label: 'Color' },
     { href: '/catalogo?tipo=solucion', label: 'Soluciones' },

@@ -27,10 +27,10 @@ const MARCAS = [
 ]
 
 const STATS = [
-  { valor: '60+', label: 'Pedidos entregados' },
-  { valor: '41', label: 'Productos disponibles' },
-  { valor: '4', label: 'Marcas autorizadas' },
-  { valor: '24h', label: 'Tiempo de entrega' },
+  { valor: '4,200+', label: 'Lentes entregados' },
+  { valor: '36',     label: 'Productos originales' },
+  { valor: '4',      label: 'Marcas autorizadas' },
+  { valor: '24-48h', label: 'Tiempo de entrega' },
 ]
 
 export default function SobreNosotrosPage() {

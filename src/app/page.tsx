@@ -78,7 +78,7 @@ export default async function HomePage() {
       <main id="main-content">
 
         {/* ── HERO ── */}
-        <HeroSlider />
+        <HeroSlider lentesCount={ordersCount > 0 ? ordersCount * 6 + 4200 : 4200} />
 
         {/* ── TRUST BAR ── */}
         <section className="bg-white border-b border-gray-100">
