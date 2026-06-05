@@ -390,7 +390,9 @@ export default function ProductoClient({ product, variants }: Props) {
       return sphMatch && cylMatch && axisMatch && addMatch
     })
   }
-  const sinVariante = isLente && !isColor && sph !== '' && !varianteSeleccionadaTieneStock()
+  // Tóricos son fabricación especial a medida → siempre mostramos "Agregar"
+  // El cliente gestiona el inventario desde el admin
+  const sinVariante = isLente && !isColor && !isToric && sph !== '' && !varianteSeleccionadaTieneStock()
 
   // ── Analytics: view_item al cargar el producto ──────────────────────────
   useEffect(() => {
