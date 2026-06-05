@@ -199,10 +199,10 @@ export default function HeroSlider() {
             )}
           </div>
 
-          {/* 2. Título */}
-          <h1 className="font-display text-[1.65rem] font-black text-white leading-[1.08] tracking-tight whitespace-pre-line mb-1">
+          {/* 2. Título — heading accesible sin emitir un 2º <h1> literal (el <h1> canónico vive en el bloque desktop). Evita el doble-H1 en el HTML servido. */}
+          <p role="heading" aria-level={1} className="font-display text-[1.65rem] font-black text-white leading-[1.08] tracking-tight whitespace-pre-line mb-1">
             {s.title}
-          </h1>
+          </p>
 
           {/* 3. Subtítulo corto — mobile copy */}
           <p className="text-white/55 text-[13px] leading-snug mb-4">

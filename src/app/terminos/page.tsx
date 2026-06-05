@@ -31,7 +31,7 @@ const secciones = [
   },
   {
     title: '5. Envíos y entregas',
-    body: 'Realizamos entregas en toda la República Dominicana. Costo de envío: RD$200 en Santo Domingo, RD$350 en el interior del país. Envío gratuito en pedidos superiores a RD$6,000. Tiempo estimado: 24-7 días en Santo Domingo, 48-72 horas en otras provincias. Los lentes tóricos requieren 20-30 días por fabricación a medida. Los tiempos son estimados y pueden variar por factores externos ajenos a ContactGo.'
+    body: 'Realizamos entregas en toda la República Dominicana. Costo de envío: RD$200 en Santo Domingo, RD$350 en el interior del país. Envío gratuito en pedidos superiores a RD$6,000. Tiempo estimado: 24-48 horas en Santo Domingo, 48-72 horas en otras provincias. Los lentes tóricos requieren 20-30 días por fabricación a medida. Los tiempos son estimados y pueden variar por factores externos ajenos a ContactGo.'
   },
   {
     title: '6. Devoluciones y reembolsos',
