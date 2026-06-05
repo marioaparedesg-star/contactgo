@@ -390,9 +390,10 @@ export default function ProductoClient({ product, variants }: Props) {
       return sphMatch && cylMatch && axisMatch && addMatch
     })
   }
-  // Tóricos son fabricación especial a medida → siempre mostramos "Agregar"
-  // El cliente gestiona el inventario desde el admin
-  const sinVariante = isLente && !isColor && !isToric && sph !== '' && !varianteSeleccionadaTieneStock()
+  // Tóricos (25-30 días) y multifocales (5-10 días) son fabricación especial a medida
+  // → siempre mostramos "Agregar". El cliente gestiona el inventario desde el admin.
+  // Esféricos y color: mantienen la validación de stock real.
+  const sinVariante = isLente && !isColor && !isToric && !isMulti && sph !== '' && !varianteSeleccionadaTieneStock()
 
   // ── Analytics: view_item al cargar el producto ──────────────────────────
   useEffect(() => {
