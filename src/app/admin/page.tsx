@@ -189,15 +189,16 @@ export default function AdminDashboard() {
             <p className="text-xs text-gray-400">Entregados total</p>
           </div>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-          <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center shrink-0">
-            <TrendingUp className="w-5 h-5 text-purple-600"/>
+        <button onClick={()=>router.push('/admin/calculadora')}
+          className="bg-blue-50 border border-blue-100 rounded-2xl shadow-sm p-4 flex items-center gap-4 hover:bg-blue-100 transition-colors text-left">
+          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+            <span className="text-lg">📊</span>
           </div>
           <div>
-            <p className="text-xl font-black text-gray-900">{data?.conversion??0}%</p>
-            <p className="text-xs text-gray-400">Tasa entrega</p>
+            <p className="text-xl font-black text-blue-700">Calculadora</p>
+            <p className="text-xs text-blue-500">Ver métricas y leads →</p>
           </div>
-        </div>
+        </button>
       </div>
 
       {/* Gráfica + Top productos */}
