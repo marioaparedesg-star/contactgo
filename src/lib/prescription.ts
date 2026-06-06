@@ -92,24 +92,26 @@ function convertEye(eye: EyeRx): ContactRx {
   const F1 = sph           // meridiano esférico
   const F2 = sph + cyl     // meridiano cilíndrico
 
-  // Corregir por vertex distance
+  // SPH: vertex distance + redondear al paso disponible
   const F1c = roundContactStep(vertexCorrect(F1))
-  const F2c = roundContactStep(vertexCorrect(F2))
 
-  // Reconstruir SPH y CYL para el lente de contacto
-  const newSph = F1c
-  const rawCyl = parseFloat((F2c - F1c).toFixed(2))
+  // CYL: vertex en F2 SIN redondear — si redondeamos F2 antes,
+  // acumulamos error que distorsiona el CYL final.
+  // Ej: F2=-8.50 → vertex=-7.713 → redondeo0.5 → -7.50 → CYL=-1.50 (INCORRECTO)
+  //                                sin redondeo → CYL=-1.713 → toricRound → -1.75 (CORRECTO)
+  const F2c_raw = vertexCorrect(F2)
+  const rawCyl  = parseFloat((F2c_raw - F1c).toFixed(2))
 
-  let newCyl: number | null = null
+  let newCyl:  number | null = null
   let newAxis: number | null = eye.axis
 
   if (rawCyl !== 0) {
-    newCyl = roundToToricCyl(rawCyl)
+    newCyl  = roundToToricCyl(rawCyl)
     newAxis = eye.axis != null ? roundToToricAxis(eye.axis) : null
   }
 
   return {
-    sph:  newSph,
+    sph:  F1c,
     cyl:  newCyl,
     axis: newAxis,
     add:  eye.add,
