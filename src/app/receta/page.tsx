@@ -94,7 +94,8 @@ export default function RecetaPage() {
       const json = await res.json()
 
       if (!res.ok || !json.ok) {
-        toast.error(json.error ?? 'No se pudo leer la imagen. Ingresa los valores manualmente.')
+        // Mostrar error descriptivo pero no bloquear — el usuario puede ingresar manualmente
+        setOcrInfo('⚠️ No se pudo leer automáticamente — ingresa los valores manualmente abajo')
         setOcrLoading(false)
         return
       }
@@ -571,36 +572,67 @@ function ConversionResult({ rx, od_input, oi_input }: { rx: ConvertedRx; od_inpu
 }
 
 // ── Sub-componente: Tarjeta de producto ───────────────────────────────────────
-function ProductCard({ product: p, converted, onAddCart }: { product: any; converted: ConvertedRx; onAddCart: any }) {
+function ProductCard({ product: p, converted }: { product: any; converted: ConvertedRx; onAddCart?: any }) {
   const descPct = p.precio_original && p.precio_original > p.precio
     ? Math.round((1 - p.precio / p.precio_original) * 100) : 0
 
+  // Guardar receta en sessionStorage antes de ir al PDP
+  const handleGoToProduct = () => {
+    try {
+      sessionStorage.setItem('cg_rx_pending', JSON.stringify({
+        od: converted.od,
+        oi: converted.oi,
+        tipo: converted.tipo,
+        timestamp: Date.now(),
+      }))
+    } catch { /* silencioso si no hay sessionStorage */ }
+  }
+
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-      <div className="flex gap-4 p-4">
+      <div className="flex gap-3 p-4">
         {p.imagen_url && (
-          <img src={p.imagen_url} alt={p.nombre} className="w-16 h-16 object-contain rounded-xl bg-gray-50 border border-gray-100 shrink-0" />
+          <img src={p.imagen_url} alt={p.nombre} className="w-14 h-14 object-contain rounded-xl bg-gray-50 border border-gray-100 shrink-0" />
         )}
         <div className="flex-1 min-w-0">
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{p.marca}</p>
           <p className="font-bold text-gray-900 text-sm leading-tight">{p.nombre}</p>
-          {p.descripcion_corta && <p className="text-xs text-gray-500 mt-0.5 truncate">{p.descripcion_corta}</p>}
-          <div className="flex items-center gap-2 mt-2">
-            <span className="font-black text-primary-600 text-base">RD${Number(p.precio).toLocaleString()}</span>
+          <div className="flex items-center gap-2 mt-1.5">
+            <span className="font-black text-gray-900 text-base">RD${Number(p.precio).toLocaleString()}</span>
             {descPct > 0 && (
               <>
-                <span className="text-xs text-gray-400 line-through">RD${Number(p.precio_original).toLocaleString()}</span>
+                <span className="text-xs text-gray-300 line-through">RD${Number(p.precio_original).toLocaleString()}</span>
                 <span className="text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded-full">-{descPct}%</span>
               </>
             )}
           </div>
         </div>
       </div>
-      <div className="px-4 pb-4 flex gap-2">
-        <Link href={`/producto/${p.slug}`}
-          className="flex-1 btn-primary py-2.5 text-sm font-bold rounded-xl flex items-center justify-center gap-1.5">
-          <ShoppingCart className="w-4 h-4" />
-          Ver producto
+
+      {/* Parámetros que coinciden */}
+      <div className="px-4 pb-3 flex flex-wrap gap-1.5">
+        {converted.od.sph != null && (
+          <span className="text-[10px] bg-gray-50 border border-gray-200 text-gray-600 font-mono px-2 py-0.5 rounded-lg">
+            OD {converted.od.sph > 0 ? `+${converted.od.sph.toFixed(2)}` : converted.od.sph.toFixed(2)}
+          </span>
+        )}
+        {converted.oi.sph != null && (
+          <span className="text-[10px] bg-gray-50 border border-gray-200 text-gray-600 font-mono px-2 py-0.5 rounded-lg">
+            OI {converted.oi.sph > 0 ? `+${converted.oi.sph.toFixed(2)}` : converted.oi.sph.toFixed(2)}
+          </span>
+        )}
+        {converted.od.cyl != null && converted.od.cyl !== 0 && (
+          <span className="text-[10px] bg-purple-50 border border-purple-200 text-purple-700 font-mono px-2 py-0.5 rounded-lg">
+            CYL {converted.od.cyl.toFixed(2)}
+          </span>
+        )}
+      </div>
+
+      <div className="px-4 pb-4">
+        <Link href={`/producto/${p.slug}`} onClick={handleGoToProduct}
+          className="w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-bold text-sm py-3 rounded-xl transition-colors">
+          <Eye className="w-4 h-4" />
+          Ir al producto con mi receta →
         </Link>
       </div>
     </div>

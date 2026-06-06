@@ -396,6 +396,42 @@ export default function ProductoClient({ product, variants }: Props) {
   const sinVariante = isLente && !isColor && !isToric && !isMulti && sph !== '' && !varianteSeleccionadaTieneStock()
 
   // ── Analytics: view_item al cargar el producto ──────────────────────────
+  // ── Pre-llenar receta desde la calculadora (/receta) ─────────────────────────
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('cg_rx_pending')
+      if (!raw) return
+      const rx = JSON.parse(raw) as {
+        od: { sph: number|null; cyl: number|null; axis: number|null }
+        oi: { sph: number|null; cyl: number|null; axis: number|null }
+        tipo: string
+        timestamp: number
+      }
+      // Solo válido 30 min y solo si el tipo de producto coincide
+      if (Date.now() - rx.timestamp > 30 * 60 * 1000) { sessionStorage.removeItem('cg_rx_pending'); return }
+      if (rx.tipo && rx.tipo !== tipo) return
+
+      // Usar una sola vez — consumir
+      sessionStorage.removeItem('cg_rx_pending')
+
+      // Pre-llenar según el modo de ojo del producto
+      // Lentes con OD/OI separados (modo 'AMBOS')
+      if (rx.od.sph != null) setSphOD(String(rx.od.sph))
+      if (rx.od.cyl != null && rx.od.cyl !== 0) { setCylOD(String(rx.od.cyl)); if (rx.od.axis != null) setAxisOD(String(rx.od.axis)) }
+      if (rx.oi.sph != null) setSphOS(String(rx.oi.sph))
+      if (rx.oi.cyl != null && rx.oi.cyl !== 0) { setCylOS(String(rx.oi.cyl)); if (rx.oi.axis != null) setAxisOS(String(rx.oi.axis)) }
+      // También llenar el selector simple (modo un solo ojo)
+      const sphVal = rx.od.sph ?? rx.oi.sph
+      if (sphVal != null) setSph(String(sphVal))
+      const cylVal = rx.od.cyl ?? rx.oi.cyl
+      if (cylVal != null && cylVal !== 0) { setCyl(String(cylVal)); const axVal = rx.od.axis ?? rx.oi.axis; if (axVal != null) setAxis(String(axVal)) }
+
+      import('react-hot-toast').then(({ default: t }) =>
+        t.success('✓ Receta de tu calculadora aplicada', { duration: 3000, icon: '👁️' })
+      )
+    } catch { /* sessionStorage no disponible */ }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     trackEcommerce('view_item', {
       items: [{
