@@ -1,54 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(req: NextRequest) {
-  let image: string, mimeType: string
-  try {
-    const body = await req.json()
-    image    = body.image
-    mimeType = body.mimeType ?? 'image/jpeg'
-  } catch {
-    return NextResponse.json({ error: 'Body inválido' }, { status: 400 })
-  }
+const OCR_PROMPT = `Eres un optometrista experto en lectura de recetas ópticas. Analiza esta imagen con MÁXIMA precisión.
 
-  if (!image || !mimeType) {
-    return NextResponse.json({ error: 'image y mimeType son requeridos' }, { status: 400 })
-  }
+BUSCA ESTOS CAMPOS (en cualquier idioma — español, inglés, francés, etc.):
+- OD / R / Right / Ojo Derecho → Ojo derecho
+- OI / OS / L / Left / Ojo Izquierdo → Ojo izquierdo
+- SPH / Esfera / Sphere / Sph → Potencia esférica
+- CYL / Cilindro / Cylinder / Cyl → Cilindro (casi siempre negativo)
+- AXIS / Eje / EJE / Ax → Eje del cilindro (0-180, SIN signo)
+- ADD / Adición / Near Add / Reading → Adición para presbicia
+- PD / DIP → Distancia interpupilar (solo informativo)
 
-  const apiKey = process.env.GEMINI_API_KEY
-  if (!apiKey) {
-    console.error('[ocr-receta] GEMINI_API_KEY no configurada')
-    return NextResponse.json({ error: 'Servicio no disponible. Ingresa los valores manualmente.' }, { status: 503 })
-  }
-
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [
-              {
-                inline_data: { mime_type: mimeType, data: image }
-              },
-              {
-                text: `Eres un optometrista experto en República Dominicana. Analiza esta receta óptica y extrae los valores exactos.
-
-CAMPOS A BUSCAR:
-- OD = Ojo Derecho (también "Right", "R", "OD")
-- OI = Ojo Izquierdo (también "Left", "L", "OS")
-- Esfera / SPH: número con signo (+1.50, -2.25, plano=0)
-- Cilindro / CYL: casi siempre negativo (-0.25, -0.75)
-- Eje / AXIS / EJE: número SIN signo (88, 180)
-- Adición / ADD: positivo (+1.50, +2.00)
-- Si un campo está vacío, en blanco o con "—" → null
-
-REGLAS:
-- Esfera positiva siempre lleva signo + (ej: +1.50)
-- Cilindro es negativo (ej: -0.25 no +0.25)
-- Eje nunca lleva signo
-- "esf" o "---" o "—" = null
+REGLAS CRÍTICAS:
+- Esfera positiva SIEMPRE con signo: +1.50, no 1.50
+- Cilindro es NEGATIVO normalmente: -0.75, no +0.75
+- Si aparece "esf", "---", "DS", "plano", "Pl" → sph sin cyl = sin astigmatismo
+- Eje NUNCA tiene signo (90, no +90 ni -90)
+- ADD siempre positivo (+1.50, +2.00)
+- Si un campo está vacío, en blanco o ilegible → null
+- Decimales: siempre con punto (2.25 no 2,25)
 
 Responde SOLO con JSON válido, sin markdown ni texto extra:
 {
@@ -61,47 +31,97 @@ Responde SOLO con JSON válido, sin markdown ni texto extra:
   "add_power": número o null,
   "diagnostico": "miopía" | "hipermetropía" | "astigmatismo" | "miopía con astigmatismo" | "hipermetropía con astigmatismo" | "presbicia" | "sin corrección",
   "confianza": "alta" | "media" | "baja",
-  "notas": "texto si algo es dudoso" | null
+  "idioma_receta": "español" | "inglés" | "francés" | "portugués" | "otro",
+  "notas": "texto si algo es dudoso o importante" | null
 }`
-              }
-            ]
-          }],
-          generationConfig: {
-            temperature: 0.1,
-            maxOutputTokens: 500,
-          }
-        })
-      }
-    )
 
-    if (!res.ok) {
-      const err = await res.text()
-      console.error('[ocr-receta] Gemini error:', res.status, err.slice(0, 500))
-      // Parse Gemini error for better message
-      let geminiMsg = 'Error del servicio.'
-      try {
-        const errJson = JSON.parse(err)
-        geminiMsg = errJson?.error?.message ?? geminiMsg
-      } catch {}
-      return NextResponse.json({ error: geminiMsg + ' Ingresa los valores manualmente.' }, { status: 502 })
+async function callAnthropic(image: string, mimeType: string): Promise<any> {
+  const apiKey = process.env.ANTHROPIC_API_KEY
+  if (!apiKey) throw new Error('ANTHROPIC_API_KEY no configurada')
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-opus-4-6',
+      max_tokens: 800,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: mimeType, data: image } },
+          { type: 'text', text: OCR_PROMPT }
+        ]
+      }]
+    })
+  })
+
+  if (!res.ok) throw new Error(`Anthropic error ${res.status}`)
+  const data = await res.json()
+  const text = data.content?.[0]?.text?.trim() ?? ''
+  const clean = text.replace(/```json|```/g, '').trim()
+  return JSON.parse(clean)
+}
+
+async function callGemini(image: string, mimeType: string): Promise<any> {
+  const apiKey = process.env.GEMINI_API_KEY
+  if (!apiKey) throw new Error('GEMINI_API_KEY no configurada')
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [
+          { inline_data: { mime_type: mimeType, data: image } },
+          { text: OCR_PROMPT }
+        ]}],
+        generationConfig: { temperature: 0.1, maxOutputTokens: 800 }
+      })
     }
+  )
 
-    const data = await res.json()
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? ''
-    const clean = text.replace(/```json|```/g, '').trim()
+  if (!res.ok) throw new Error(`Gemini error ${res.status}`)
+  const data = await res.json()
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? ''
+  const clean = text.replace(/```json|```/g, '').trim()
+  return JSON.parse(clean)
+}
 
-    let receta: any
-    try {
-      receta = JSON.parse(clean)
-    } catch {
-      console.error('[ocr-receta] JSON parse error:', clean)
-      return NextResponse.json({ error: 'No se pudo leer la receta. Asegúrate de que la imagen sea clara.' }, { status: 422 })
-    }
-
-    return NextResponse.json({ ok: true, receta })
-
-  } catch (err: any) {
-    console.error('[ocr-receta]', err)
-    return NextResponse.json({ error: 'Error procesando la imagen.' }, { status: 500 })
+export async function POST(req: NextRequest) {
+  let image: string, mimeType: string
+  try {
+    const body = await req.json()
+    image    = body.image
+    mimeType = body.mimeType ?? 'image/jpeg'
+  } catch {
+    return NextResponse.json({ error: 'Body inválido' }, { status: 400 })
   }
+
+  if (!image) return NextResponse.json({ error: 'image requerido' }, { status: 400 })
+
+  // Intentar Anthropic primero (mejor para visión), luego Gemini
+  const providers = [
+    { name: 'Anthropic', fn: () => callAnthropic(image, mimeType) },
+    { name: 'Gemini',    fn: () => callGemini(image, mimeType) },
+  ]
+
+  for (const provider of providers) {
+    try {
+      const receta = await provider.fn()
+      console.log(`[ocr-receta] OK via ${provider.name}`)
+      return NextResponse.json({ ok: true, receta, provider: provider.name })
+    } catch (err: any) {
+      console.warn(`[ocr-receta] ${provider.name} failed:`, err.message)
+    }
+  }
+
+  return NextResponse.json({
+    error: 'No se pudo leer la receta automáticamente. Por favor ingresa los valores manualmente.',
+    canManual: true
+  }, { status: 503 })
 }

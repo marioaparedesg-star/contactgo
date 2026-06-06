@@ -1,79 +1,75 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import { analyzePrescription } from '@/lib/prescription'
 import { createClient } from '@/lib/supabase'
 import { useCartStore } from '@/lib/cart-store'
-import { Eye, Search, RotateCcw, ShoppingCart, ChevronRight, CheckCircle, AlertTriangle, Info, Shield, Camera, Upload } from 'lucide-react'
+import {
+  convertGlassesToContacts, fmtSph, fmtCyl, fmtAxis, fmtAdd,
+  SPH_GLASSES, CYL_GLASSES, AXIS_VALS, ADD_VALS,
+  type GlassesRx, type ConvertedRx,
+} from '@/lib/prescription'
+import { Eye, Camera, Upload, RotateCcw, ShoppingCart, ChevronRight, Info, AlertTriangle, CheckCircle, Loader2, ArrowRight, Sparkles } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const SPH_VALS = [-20,-19.5,-19,-18.5,-18,-17.5,-17,-16.5,-16,-15.5,-15,-14.5,-14,-13.5,-13,-12.5,
-  -12,-11.5,-11,-10.5,-10,-9.5,-9,-8.5,-8,-7.5,-7,-6.5,-6,-5.75,-5.5,-5.25,-5,
-  -4.75,-4.5,-4.25,-4,-3.75,-3.5,-3.25,-3,-2.75,-2.5,-2.25,-2,-1.75,-1.5,-1.25,
-  -1,-0.75,-0.5,-0.25,0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.25,
-  3.5,3.75,4,4.25,4.5,4.75,5,5.5,6,6.5,7,7.5,8]
-const CYL_VALS = [0,-0.75,-1.25,-1.75,-2.25,-2.75,-3.25,-3.75,-4.25,-4.75,-5.25,-5.75]
-const AXIS_VALS = Array.from({length:18},(_,i)=>(i+1)*10)
-const ADD_OPTS = [
-  {label:'Seleccionar',val:''},
-  {label:'LOW (+1.00)',val:'1.00'},{label:'LOW (+1.25)',val:'1.25'},
-  {label:'MID (+1.50)',val:'1.50'},{label:'MID (+1.75)',val:'1.75'},
-  {label:'HIGH (+2.00)',val:'2.00'},{label:'HIGH (+2.50)',val:'2.50'},{label:'HIGH (+3.00)',val:'3.00'},
-]
+// ── Tipos ──────────────────────────────────────────────────────────────────────
+type Step = 'entrada' | 'resultado' | 'productos'
+type InputMode = 'manual' | 'imagen'
+type Eye = 'od' | 'oi'
 
-const TIPO_CFG = {
-  esferico:   {label:'Lente Esférico',  emoji:'👁️', tag:'Miopía / Hipermetropía', color:{bg:'bg-blue-50',border:'border-blue-200',text:'text-blue-800',badge:'bg-blue-100 text-blue-700',btn:'bg-blue-600 hover:bg-blue-700'}},
-  torico:     {label:'Lente Tórico',    emoji:'🎯', tag:'Astigmatismo',            color:{bg:'bg-purple-50',border:'border-purple-200',text:'text-purple-800',badge:'bg-purple-100 text-purple-700',btn:'bg-purple-600 hover:bg-purple-700'}},
-  multifocal: {label:'Lente Multifocal',emoji:'🔭', tag:'Presbicia',               color:{bg:'bg-amber-50',border:'border-amber-200',text:'text-amber-800',badge:'bg-amber-100 text-amber-700',btn:'bg-amber-600 hover:bg-amber-700'}},
+interface EyeInput { sph: string; cyl: string; axis: string; add: string }
+const EMPTY_EYE: EyeInput = { sph: '', cyl: '', axis: '', add: '' }
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function parseN(v: string): number | null {
+  if (v === '' || v === null || v === undefined) return null
+  const n = parseFloat(v)
+  return isNaN(n) ? null : n
 }
 
+function sph2select(v: string) {
+  if (!v) return ''
+  const n = parseFloat(v)
+  if (isNaN(n)) return ''
+  // Mostrar con signo
+  return n > 0 ? `+${n.toFixed(2)}` : n === 0 ? '0.00' : n.toFixed(2)
+}
+
+function condicionColor(tipo: string) {
+  return tipo === 'torico'
+    ? { bg: 'bg-purple-50', border: 'border-purple-200', badge: 'bg-purple-100 text-purple-700', icon: '🎯' }
+    : tipo === 'multifocal'
+    ? { bg: 'bg-amber-50', border: 'border-amber-200', badge: 'bg-amber-100 text-amber-700', icon: '🔭' }
+    : { bg: 'bg-blue-50', border: 'border-blue-200', badge: 'bg-blue-100 text-blue-700', icon: '👁️' }
+}
+
+// ── Componente principal ───────────────────────────────────────────────────────
 export default function RecetaPage() {
-  const [od_sph,set_od_sph]=useState('')
-  const [od_cyl,set_od_cyl]=useState('')
-  const [od_ax,set_od_ax]=useState('')
-  const [oi_sph,set_oi_sph]=useState('')
-  const [oi_cyl,set_oi_cyl]=useState('')
-  const [oi_ax,set_oi_ax]=useState('')
-  const [add,set_add]=useState('')
-  const [igual,set_igual]=useState(false)
-  const [result,setResult]=useState<any>(null)
-  const [allProducts,setAllProducts]=useState<Record<string,any[]>>({esferico:[],torico:[],multifocal:[]})
-  const [activeTab,setActiveTab]=useState('')
-  const [loading,setLoading]=useState(false)
-  const [done,setDone]=useState(false)
-  const [showConsent,setShowConsent]=useState(true)
-  const [imgPreview,setImgPreview]=useState<string|null>(null)
-  const [ocrLoading,setOcrLoading]=useState(false)
-  const [ocrError,setOcrError]=useState<string|null>(null)
-  const [ocrConfianza,setOcrConfianza]=useState<string|null>(null)
-  const addItem=useCartStore(s=>s.addItem)
+  const [step, setStep] = useState<Step>('entrada')
+  const [inputMode, setInputMode] = useState<InputMode>('manual')
+  const [od, setOd] = useState<EyeInput>(EMPTY_EYE)
+  const [oi, setOi] = useState<EyeInput>(EMPTY_EYE)
+  const [mismaReceta, setMismaReceta] = useState(false)
+  const [converted, setConverted] = useState<ConvertedRx | null>(null)
+  const [products, setProducts] = useState<any[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(false)
+  const [imgPreview, setImgPreview] = useState<string | null>(null)
+  const [ocrLoading, setOcrLoading] = useState(false)
+  const [ocrInfo, setOcrInfo] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const addItem = useCartStore(s => s.addItem)
 
-  const fmtSph=(v:string)=>v===''?'':parseFloat(v)>0?`+${parseFloat(v).toFixed(2)}`:parseFloat(v).toFixed(2)
+  // ── OCR ─────────────────────────────────────────────────────────────────────
+  const handleImage = useCallback(async (file: File) => {
+    setOcrLoading(true)
+    setOcrInfo(null)
+    setImgPreview(URL.createObjectURL(file))
 
-  const copyOD=()=>{set_oi_sph(od_sph);set_oi_cyl(od_cyl);set_oi_ax(od_ax)}
-
-  const resetear=()=>{
-    set_od_sph('');set_od_cyl('');set_od_ax('');set_oi_sph('');set_oi_cyl('');set_oi_ax('');set_add('');set_igual(false)
-    setResult(null);setAllProducts({esferico:[],torico:[],multifocal:[]});setActiveTab('');setDone(false)
-  }
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    // Preview
-    const reader = new FileReader()
-    reader.onload = (ev) => setImgPreview(ev.target?.result as string)
-    reader.readAsDataURL(file)
-
-    // Resize image to max 1024px and convert to JPEG base64 for API
-    const resizeImage = (f: File): Promise<{base64: string, mimeType: string}> =>
-      new Promise((res, rej) => {
-        const img = new (window.Image)()
-        const url = URL.createObjectURL(f)
+    try {
+      // Resize a máx 1024px para no gastar tokens
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const img = new (window as any).Image()
         img.onload = () => {
           const MAX = 1024
           let w = img.width, h = img.height
@@ -83,531 +79,530 @@ export default function RecetaPage() {
           }
           const canvas = document.createElement('canvas')
           canvas.width = w; canvas.height = h
-          const ctx = canvas.getContext('2d')!
-          ctx.drawImage(img, 0, 0, w, h)
-          URL.revokeObjectURL(url)
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
-          res({ base64: dataUrl.split(',')[1], mimeType: 'image/jpeg' })
+          canvas.getContext('2d')!.drawImage(img, 0, 0, w, h)
+          resolve(canvas.toDataURL('image/jpeg', 0.88).split(',')[1])
         }
-        img.onerror = rej
-        img.src = url
+        img.onerror = reject
+        img.src = URL.createObjectURL(file)
       })
-
-    try {
-      setOcrLoading(true)
-      setOcrError(null)
-      setOcrConfianza(null)
-
-      const { base64, mimeType } = await resizeImage(file)
 
       const res = await fetch('/api/ocr-receta', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64, mimeType }),
+        body: JSON.stringify({ image: base64, mimeType: 'image/jpeg' })
       })
-      const data = await res.json()
+      const json = await res.json()
 
-      if (!res.ok || !data.receta) {
-        setOcrError((data.error ?? 'No se pudo leer la receta. Ingresa los valores manualmente.'))
+      if (!res.ok || !json.ok) {
+        toast.error(json.error ?? 'No se pudo leer la imagen. Ingresa los valores manualmente.')
+        setOcrLoading(false)
         return
       }
 
-      const rx = data.receta
-      // Rellenar campos OD
-      if (rx.od_sph !== null && rx.od_sph !== undefined) set_od_sph(String(rx.od_sph))
-      if (rx.od_cyl !== null && rx.od_cyl !== undefined) set_od_cyl(String(rx.od_cyl))
-      if (rx.od_axis !== null && rx.od_axis !== undefined) set_od_ax(String(rx.od_axis))
-      // Rellenar campos OI
-      if (rx.oi_sph !== null && rx.oi_sph !== undefined) set_oi_sph(String(rx.oi_sph))
-      if (rx.oi_cyl !== null && rx.oi_cyl !== undefined) set_oi_cyl(String(rx.oi_cyl))
-      if (rx.oi_axis !== null && rx.oi_axis !== undefined) set_oi_ax(String(rx.oi_axis))
-      // Adición
-      if (rx.add_power !== null && rx.add_power !== undefined) set_add(String(Math.abs(rx.add_power)))
+      const r = json.receta
+      // Llenar formulario
+      if (r.od_sph != null) setOd(prev => ({ ...prev, sph: String(r.od_sph) }))
+      if (r.od_cyl != null) setOd(prev => ({ ...prev, cyl: String(r.od_cyl) }))
+      if (r.od_axis != null) setOd(prev => ({ ...prev, axis: String(r.od_axis) }))
+      if (r.add_power != null) {
+        setOd(prev => ({ ...prev, add: String(r.add_power) }))
+        setOi(prev => ({ ...prev, add: String(r.add_power) }))
+      }
+      if (r.oi_sph != null) setOi(prev => ({ ...prev, sph: String(r.oi_sph) }))
+      if (r.oi_cyl != null) setOi(prev => ({ ...prev, cyl: String(r.oi_cyl) }))
+      if (r.oi_axis != null) setOi(prev => ({ ...prev, axis: String(r.oi_axis) }))
 
-      setOcrConfianza(rx.confianza ?? null)
-      toast.success('¡Receta leída! Verifica los valores antes de continuar.')
-    } catch {
-      setOcrError('Error de conexión. Ingresa los valores manualmente.')
+      const confianza = r.confianza === 'alta' ? '✅ Alta confianza' : r.confianza === 'media' ? '⚠️ Verifica los valores' : '⚠️ Baja confianza — revisa manualmente'
+      setOcrInfo(`${confianza}${r.notas ? ' · ' + r.notas : ''}`)
+      toast.success('Receta leída. Verifica los valores antes de continuar.')
+    } catch (err) {
+      toast.error('Error procesando imagen.')
     } finally {
       setOcrLoading(false)
     }
+  }, [])
+
+  // ── Copiar OD → OI ──────────────────────────────────────────────────────────
+  const handleMismaReceta = (checked: boolean) => {
+    setMismaReceta(checked)
+    if (checked) setOi({ ...od })
   }
 
-  const calcular=async()=>{
-    if(!od_sph&&!oi_sph)return
-    setLoading(true);setDone(false)
-    const rx={od_sph:od_sph?parseFloat(od_sph):null,od_cyl:od_cyl?parseFloat(od_cyl):null,oi_sph:oi_sph?parseFloat(oi_sph):null,oi_cyl:oi_cyl?parseFloat(oi_cyl):null,add_power:add?parseFloat(add):null}
-    const analysis=analyzePrescription(rx)
-    setResult(analysis)
-    const sb=createClient()
-    const sph=rx.od_sph??rx.oi_sph??0
-    // Fetch all 3 types simultaneously
-    const fetched: Record<string,any[]> = {}
-    for(const tipo of ['esferico','torico','multifocal']){
-      let q=sb.from('products').select('*').eq('activo',true).gt('stock',0).eq('tipo',tipo)
-      if(sph!==0)q=q.contains('sph_disponibles',[Number(sph.toFixed(2))])
-      const {data}=await q.limit(4)
-      if(!data||data.length===0){
-        const {data:fb}=await sb.from('products').select('*').eq('activo',true).eq('tipo',tipo).limit(4)
-        fetched[tipo]=fb??[]
-      } else fetched[tipo]=data
+  // ── Calcular ─────────────────────────────────────────────────────────────────
+  const calcular = async () => {
+    const odSph = parseN(od.sph)
+    const oiSph = parseN(oi.sph)
+    if (odSph == null && oiSph == null) {
+      toast.error('Ingresa al menos la esfera (SPH) de un ojo')
+      return
     }
-    setAllProducts(fetched)
-    setActiveTab(analysis.recomendacion)
-    setLoading(false);setDone(true)
-    setTimeout(()=>document.getElementById('res')?.scrollIntoView({behavior:'smooth',block:'start'}),100)
+
+    const rx: GlassesRx = {
+      od: { sph: odSph ?? 0, cyl: parseN(od.cyl), axis: parseN(od.axis), add: parseN(od.add) },
+      oi: { sph: oiSph ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
+    }
+
+    const result = convertGlassesToContacts(rx)
+    setConverted(result)
+    setStep('resultado')
+
+    // Cargar productos reales
+    setLoadingProducts(true)
+    try {
+      const sb = createClient()
+      const { data } = await sb
+        .from('products')
+        .select('id,nombre,marca,tipo,precio,precio_original,imagen_url,slug,descripcion_corta,sph_disponibles')
+        .eq('activo', true)
+        .eq('tipo', result.tipo)
+        .order('precio', { ascending: true })
+
+      // Filtrar por rango de SPH disponible
+      const odSphContact = result.od.sph ?? 0
+      const oiSphContact = result.oi.sph ?? 0
+      const maxSph = Math.max(Math.abs(odSphContact), Math.abs(oiSphContact))
+
+      const filtered = (data ?? []).filter((p: any) => {
+        if (!p.sph_disponibles?.length) return true
+        const sphs = p.sph_disponibles.map(Number)
+        const minAvail = Math.min(...sphs)
+        const maxAvail = Math.max(...sphs)
+        return odSphContact >= minAvail && odSphContact <= maxAvail &&
+               oiSphContact >= minAvail && oiSphContact <= maxAvail
+      })
+
+      setProducts(filtered.length > 0 ? filtered : (data ?? []).slice(0, 6))
+    } catch {
+      setProducts([])
+    } finally {
+      setLoadingProducts(false)
+    }
   }
 
-  const canCalc=od_sph!==''||oi_sph!==''
-  const cfg=result?TIPO_CFG[result.recomendacion as keyof typeof TIPO_CFG]:null
-
-  // Stepper numérico — reemplaza los selects de 80+ opciones
-  const Stepper = ({val, onChange, opts, placeholder='—', disabled=false, ariaLabel}: {val:string, onChange:(v:string)=>void, opts:{label:string,val:string}[], placeholder?:string, disabled?:boolean, ariaLabel?:string}) => {
-    const idx = opts.findIndex(o => o.val === val)
-    const prev = () => { if (disabled) return; const i = idx <= 0 ? opts.length-1 : idx-1; onChange(opts[i].val) }
-    const next = () => { if (disabled) return; const i = idx >= opts.length-1 ? 0 : idx+1; onChange(opts[i].val) }
-    const label = idx >= 0 ? opts[idx].label : placeholder
-    return (
-      <div className={`flex items-center border rounded-xl overflow-hidden ${disabled ? 'opacity-50' : 'border-gray-200'}`}>
-        <button type="button" onClick={prev} disabled={disabled} aria-label={`Disminuir ${ariaLabel}`}
-          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors text-lg font-bold shrink-0 disabled:cursor-not-allowed">
-          −
-        </button>
-        <input
-          type="text"
-          inputMode="decimal"
-          value={val || ''}
-          onChange={(e) => {
-            const v = e.target.value
-            if (v === '' || v === '-') { onChange(''); return }
-            const num = parseFloat(v)
-            if (!isNaN(num)) {
-              const closest = opts.reduce((a, b) => 
-                Math.abs(parseFloat(b.val) - num) < Math.abs(parseFloat(a.val) - num) ? b : a
-              )
-              onChange(closest.val)
-            }
-          }}
-          onBlur={() => { if (!val && opts.length) onChange('') }}
-          placeholder={placeholder}
-          disabled={disabled}
-          aria-label={ariaLabel}
-          className="flex-1 text-center text-sm font-semibold text-gray-900 py-2 px-1 min-w-0 bg-transparent outline-none border-none focus:bg-gray-50 transition-colors"
-        />
-        <button type="button" onClick={next} disabled={disabled} aria-label={`Aumentar ${ariaLabel}`}
-          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors text-lg font-bold shrink-0 disabled:cursor-not-allowed">
-          +
-        </button>
-      </div>
-    )
+  // ── Reset ────────────────────────────────────────────────────────────────────
+  const resetear = () => {
+    setOd(EMPTY_EYE); setOi(EMPTY_EYE); setMismaReceta(false)
+    setConverted(null); setProducts([]); setImgPreview(null)
+    setOcrInfo(null); setStep('entrada')
   }
-  const Select = Stepper // Alias para no cambiar el JSX existente
 
-  const sphOpts=SPH_VALS.map(v=>({label:v>0?`+${v.toFixed(2)}`:v.toFixed(2),val:v.toFixed(2)}))
-  const cylOpts=CYL_VALS.map(v=>({label:v===0?'Sin cilindro':v.toFixed(2),val:v.toFixed(2)}))
-  const axOpts=AXIS_VALS.map(v=>({label:`${v}°`,val:String(v)}))
-
+  // ── Render ────────────────────────────────────────────────────────────────────
   return (
     <>
       <Navbar />
-      <main className="pb-24 min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-gray-50 pb-16">
 
-        {/* HERO */}
-        <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-teal-600 px-4 py-10 md:py-14">
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
-                <Eye className="w-8 h-8 text-white" />
+        {/* Header */}
+        <div className="bg-white border-b border-gray-100">
+          <div className="max-w-2xl mx-auto px-4 py-6 md:py-8">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center">
+                <Eye className="w-5 h-5 text-primary-600" />
               </div>
-            </div>
-            <h1 className="font-display text-2xl md:text-4xl font-black mb-3">Calculadora de lentes de contacto</h1>
-            <p className="text-white/80 text-sm md:text-base max-w-xl mx-auto">Ingresa tu receta y te recomendamos los lentes exactos disponibles en República Dominicana.</p>
-<div className="flex items-center justify-center gap-3 mt-5 flex-wrap">
-              {['Gratis','Sin registro','Resultado inmediato'].map(b=>(
-                <div key={b} className="flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-semibold">
-                  <CheckCircle className="w-3.5 h-3.5"/> {b}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CALCULADORA */}
-        <section className="max-w-3xl mx-auto px-4 -mt-4 relative z-10">
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-
-            {/* Header */}
-            <div className="bg-gray-50 border-b border-gray-100 px-6 py-4 flex items-center justify-between">
               <div>
-                <h2 className="font-bold text-gray-900 text-base">Calculadora de adaptación ContactGo</h2>
-                <p className="text-xs text-gray-500 mt-0.5">Ingrese su receta de anteojos. Los campos con <span className="text-red-500">*</span> son obligatorios.</p>
-              </div>
-              <button onClick={resetear} className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 border border-gray-200 px-3 py-1.5 rounded-xl hover:bg-gray-100 transition-all">
-                <RotateCcw className="w-3.5 h-3.5"/> Reiniciar
-              </button>
-            </div>
-
-            <div className="p-6 space-y-7">
-
-              {/* ── SUBIR FOTO DE RECETA ──────────────────────────────── */}
-              <div className={`rounded-2xl border-2 border-dashed transition-all ${ocrLoading ? 'border-primary-300 bg-primary-50' : 'border-gray-200 bg-gray-50 hover:border-primary-300 hover:bg-primary-50/30'}`}>
-                <label htmlFor="receta-upload" className="block cursor-pointer">
-                  <input id="receta-upload" type="file" accept="image/*" capture="environment"
-                    className="hidden" onChange={handleImageUpload} disabled={ocrLoading}/>
-
-                  {!imgPreview ? (
-                    <div className="flex flex-col items-center justify-center py-7 px-4 text-center">
-                      <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-3">
-                        <svg className="w-7 h-7 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </div>
-                      <p className="font-black text-gray-900 text-sm mb-1">📷 Sube una foto de tu receta</p>
-                      <p className="text-xs text-gray-500 mb-3 max-w-xs">Toma una foto o sube una imagen clara de tu receta óptica — la leemos automáticamente</p>
-                      <span className="bg-primary-600 text-white text-xs font-bold px-4 py-2 rounded-xl">
-                        Seleccionar imagen
-                      </span>
-                      <p className="text-[10px] text-gray-400 mt-2">JPG, PNG, HEIC · máx 10MB</p>
-                    </div>
-                  ) : (
-                    <div className="p-3">
-                      <div className="relative rounded-xl overflow-hidden" style={{maxHeight:180}}>
-                        <img src={imgPreview} alt="Receta" className="w-full object-contain bg-white" style={{maxHeight:180}}/>
-                        {ocrLoading && (
-                          <div className="absolute inset-0 bg-primary-600/80 flex flex-col items-center justify-center gap-2">
-                            <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin"/>
-                            <p className="text-white text-xs font-bold">Leyendo receta...</p>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs text-gray-500">
-                          {ocrLoading ? 'Analizando...' : ocrConfianza ? `Confianza: ${ocrConfianza === 'alta' ? '✅ Alta' : ocrConfianza === 'media' ? '⚠️ Media — verifica' : '❌ Baja — verifica'}` : 'Imagen cargada'}
-                        </p>
-                        <span className="text-xs text-primary-600 font-semibold underline">Cambiar foto</span>
-                      </div>
-                    </div>
-                  )}
-                </label>
-              </div>
-
-              {/* Error OCR */}
-              {ocrError && (
-                <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5"/>
-                  <p className="text-xs text-red-700">{ocrError}</p>
-                </div>
-              )}
-
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-gray-200"/>
-                <p className="text-xs text-gray-400 font-medium">o ingresa manualmente</p>
-                <div className="flex-1 h-px bg-gray-200"/>
-              </div>
-
-              {/* OJO DERECHO */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-7 h-7 bg-primary-600 rounded-full flex items-center justify-center"><span className="text-white text-xs font-black">OD</span></div>
-                  <h3 className="font-bold text-gray-900">Ojo Derecho</h3>
-                  <span className="text-xs text-gray-400">(Right Eye)</span>
-                </div>
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Esfera (SPH) <span className="text-red-500">*</span></label>
-                    <Select val={od_sph} onChange={v=>{set_od_sph(v);if(igual){set_oi_sph(v)}}} opts={sphOpts} placeholder="Seleccionar"/>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Cilindro (CYL)</label>
-                    <Select val={od_cyl} onChange={v=>{set_od_cyl(v);if(igual)set_oi_cyl(v)}} opts={cylOpts}/>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Eje (AXIS)</label>
-                    <Select val={od_ax} onChange={v=>{set_od_ax(v);if(igual)set_oi_ax(v)}} opts={axOpts} disabled={!od_cyl||od_cyl==='0.00'}/>
-                  </div>
-                </div>
-              </div>
-
-              {/* OJO IZQUIERDO */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 bg-teal-600 rounded-full flex items-center justify-center"><span className="text-white text-xs font-black">OI</span></div>
-                    <h3 className="font-bold text-gray-900">Ojo Izquierdo</h3>
-                    <span className="text-xs text-gray-400">(Left Eye)</span>
-                  </div>
-                  <label className="flex items-center gap-2 cursor-pointer select-none">
-                    <input type="checkbox" checked={igual} onChange={e=>{set_igual(e.target.checked);if(e.target.checked)copyOD()}} className="w-4 h-4 accent-primary-600"/>
-                    <span className="text-xs text-gray-600 font-medium">¿Igual que el derecho?</span>
-                  </label>
-                </div>
-                <div className={`grid grid-cols-3 gap-3 transition-opacity ${igual?'opacity-50 pointer-events-none':''}`}>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Esfera (SPH) <span className="text-red-500">*</span></label>
-                    <Select val={oi_sph} onChange={set_oi_sph} opts={sphOpts} disabled={igual}/>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Cilindro (CYL)</label>
-                    <Select val={oi_cyl} onChange={set_oi_cyl} opts={cylOpts} disabled={igual}/>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Eje (AXIS)</label>
-                    <Select val={oi_ax} onChange={set_oi_ax} opts={axOpts} disabled={igual||(!oi_cyl||oi_cyl==='0.00')}/>
-                  </div>
-                </div>
-              </div>
-
-              {/* ADD */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-7 h-7 bg-amber-500 rounded-full flex items-center justify-center"><span className="text-white text-xs font-black">+</span></div>
-                  <h3 className="font-bold text-gray-900">Información adicional</h3>
-                </div>
-                <div className="max-w-[220px]">
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Adición (ADD) <span className="text-gray-400 font-normal">— Solo si tiene presbicia</span></label>
-                  <Select val={add} onChange={set_add} opts={ADD_OPTS.filter(o=>o.val!=='')} placeholder="Seleccionar"/>
-                </div>
-              </div>
-
-              {/* BOTONES */}
-              <div className="flex gap-3 pt-1 border-t border-gray-100">
-                <button onClick={resetear} className="flex items-center gap-2 border-2 border-gray-200 text-gray-600 font-semibold px-5 py-3 rounded-2xl hover:bg-gray-50 transition-all text-sm">
-                  <RotateCcw className="w-4 h-4"/> Reiniciar
-                </button>
-                <button onClick={calcular} disabled={!canCalc||loading}
-                  className={`flex-1 flex items-center justify-center gap-2 font-bold px-6 py-3 rounded-2xl text-sm text-white transition-all shadow-md
-                    ${canCalc&&!loading?'bg-primary-600 hover:bg-primary-700 shadow-primary-200':'bg-gray-300 cursor-not-allowed'}`}>
-                  {loading?<><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"/>Calculando...</>:<><Search className="w-4 h-4"/>Calcular</>}
-                </button>
+                <h1 className="font-display text-xl md:text-2xl font-black text-gray-900">
+                  Calculadora de Lentes de Contacto
+                </h1>
+                <p className="text-xs text-gray-500">Convierte tu receta de gafas a lentes de contacto</p>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* RESULTADOS */}
-        {done&&result&&cfg&&(
-          <section id="res" className="max-w-3xl mx-auto px-4 mt-6 space-y-4">
-
-            {/* Diagnóstico */}
-            <div className={`${cfg.color.bg} ${cfg.color.border} border-2 rounded-3xl p-6`}>
-              <div className="flex items-start gap-4">
-                <div className={`w-14 h-14 rounded-2xl ${cfg.color.badge} flex items-center justify-center text-3xl shrink-0`}>{cfg.emoji}</div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${cfg.color.badge}`}>{cfg.tag}</span>
-                    <span className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2.5 py-1 rounded-full font-semibold"><CheckCircle className="w-3 h-3"/>Diagnóstico completado</span>
-                  </div>
-                  <h3 className={`font-display text-xl font-black ${cfg.color.text} mb-1`}>{cfg.label}</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">{result.descripcion}</p>
-                  {result.condicion.length>0&&(
-                    <div className="flex flex-wrap gap-1.5 mt-3">
-                      {result.condicion.map((c:string)=><span key={c} className="text-xs bg-white/70 text-gray-700 font-medium px-2 py-0.5 rounded-lg border border-white">{c}</span>)}
-                    </div>
-                  )}
-                </div>
-              </div>
-              {/* Resumen receta */}
-              <div className="mt-4 bg-white/60 rounded-2xl p-4 grid grid-cols-4 gap-3 text-center">
-                {[
-                  {label:'Esfera OD',val:od_sph?fmtSph(od_sph):'—'},
-                  {label:'Esfera OI',val:oi_sph?fmtSph(oi_sph):'—'},
-                  {label:'Cilindro',val:od_cyl&&od_cyl!=='0.00'?od_cyl:'—'},
-                  {label:'Adición',val:add?`+${parseFloat(add).toFixed(2)}`:'—'},
-                ].map(i=>(
-                  <div key={i.label}>
-                    <p className="text-xs text-gray-500 mb-0.5">{i.label}</p>
-                    <p className="font-black text-gray-900 text-base">{i.val}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Productos con TABS — 3 tipos */}
-            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-5 border-b border-gray-100">
-                <h3 className="font-display text-lg font-bold text-gray-900 mb-1">Lentes disponibles para tu receta</h3>
-                <p className="text-sm text-gray-500">Selecciona el tipo de lente que prefieres</p>
-              </div>
-              {/* TABS */}
-              <div className="flex border-b border-gray-100">
-                {([
-                  {tipo:'esferico',  label:'Esféricos',   emoji:'👁️', desc:'Miopía / Hipermetropía'},
-                  {tipo:'torico',    label:'Tóricos',     emoji:'🎯', desc:'Astigmatismo'},
-                  {tipo:'multifocal',label:'Multifocales',emoji:'🔭', desc:'Presbicia'},
-                ] as const).map(t=>(
-                  <button key={t.tipo} onClick={()=>setActiveTab(t.tipo)}
-                    className={`flex-1 flex flex-col items-center py-3 px-2 text-center transition-all relative border-b-2 ${activeTab===t.tipo?'border-primary-600 bg-primary-50':'border-transparent hover:bg-gray-50'}`}>
-                    {t.tipo===result.recomendacion&&(
-                      <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-400 rounded-full"/>
-                    )}
-                    <span className="text-lg mb-0.5">{t.emoji}</span>
-                    <span className={`text-xs font-bold ${activeTab===t.tipo?'text-primary-700':'text-gray-600'}`}>{t.label}</span>
-                    <span className="text-[10px] text-gray-400 hidden md:block">{t.desc}</span>
-                    {t.tipo===result.recomendacion&&(
-                      <span className="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full mt-0.5 hidden md:block">Recomendado</span>
-                    )}
-                  </button>
-                ))}
-              </div>
-              {/* Contenido del tab activo */}
-              <div className="p-4">
-                {activeTab==='torico'&&(
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-3 flex items-start gap-2">
-                    <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5"/>
-                    <p className="text-xs text-amber-700"><strong>Entrega 20-30 días</strong> — Los lentes tóricos se fabrican a medida según tu Esfera + Cilindro + Eje exactos.</p>
-                  </div>
-                )}
-                {(allProducts[activeTab]??[]).length>0?(
-                  <>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {(allProducts[activeTab]??[]).map((p:any)=>(
-                        <div key={p.id} className="border border-gray-100 rounded-2xl p-3 hover:border-primary-200 hover:-translate-y-0.5 transition-all">
-                          <Link href={`/producto/${p.slug}`}>
-                            <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2">
-                              {p.imagen_url?<Image src={p.imagen_url} unoptimized alt={p.nombre} fill className="object-contain p-2" sizes="160px"/>:<div className="w-full h-full flex items-center justify-center text-2xl">👁️</div>}
-                            </div>
-                            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide mb-0.5">{p.marca??'ContactGo'}</p>
-                            <p className="font-semibold text-gray-900 text-xs leading-snug line-clamp-2 mb-1">{p.nombre}</p>
-                            <p className="font-black text-primary-600 text-sm">RD${p.precio?.toLocaleString()}</p>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {od_sph&&<span className="text-[9px] bg-green-50 text-green-700 font-bold px-1.5 py-0.5 rounded-md">OD {parseFloat(od_sph)>0?`+${parseFloat(od_sph).toFixed(2)}`:parseFloat(od_sph).toFixed(2)}</span>}
-                              {oi_sph&&<span className="text-[9px] bg-teal-50 text-teal-700 font-bold px-1.5 py-0.5 rounded-md">OI {parseFloat(oi_sph)>0?`+${parseFloat(oi_sph).toFixed(2)}`:parseFloat(oi_sph).toFixed(2)}</span>}
-                            </div>
-                          </Link>
-                          <button onClick={()=>{
-                            // OD
-                            if(od_sph){
-                              addItem(p,{
-                                sph: parseFloat(od_sph),
-                                cyl: od_cyl&&od_cyl!=='0.00'?parseFloat(od_cyl):null,
-                                axis: od_ax?parseInt(od_ax):null,
-                                add_power: add||null,
-                                ojo:'OD',
-                                cantidad:1,
-                              })
-                            }
-                            // OI
-                            if(oi_sph){
-                              addItem(p,{
-                                sph: parseFloat(oi_sph),
-                                cyl: oi_cyl&&oi_cyl!=='0.00'?parseFloat(oi_cyl):null,
-                                axis: oi_ax?parseInt(oi_ax):null,
-                                add_power: add||null,
-                                ojo:'OI',
-                                cantidad:1,
-                              })
-                            }
-                            // If neither OD nor OI has sph (shouldn't happen), add plain
-                            if(!od_sph&&!oi_sph) addItem(p)
-                            toast.success(`${p.nombre} agregado con tu receta ✓`)
-                          }}
-                            className="mt-2 w-full bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1 transition-all">
-                            <ShoppingCart className="w-3 h-3"/>Agregar con mi receta
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-3 text-center">
-                      <Link href={`/catalogo?tipo=${activeTab}`} className="text-sm text-primary-600 font-semibold hover:text-primary-700 flex items-center justify-center gap-1">
-                        Ver todos los lentes {activeTab==='esferico'?'esféricos':activeTab==='torico'?'tóricos':'multifocales'} disponibles <ChevronRight className="w-4 h-4"/>
-                      </Link>
-                    </div>
-                  </>
-                ):(
-                  <div className="text-center py-8 text-gray-400">
-                    <p className="text-sm">Cargando productos...</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-
-
-            {/* CTA WhatsApp */}
-            <div className="bg-gray-900 rounded-3xl p-5 flex flex-col sm:flex-row items-center gap-4 justify-between">
-              <div>
-                <p className="font-bold text-white mb-0.5">¿Necesitas ayuda con tu receta?</p>
-                <p className="text-gray-400 text-xs">Soporte óptico gratis por WhatsApp — respondemos en minutos</p>
-              </div>
-              <a href="https://wa.me/18294728328?text=Hola%20ContactGo%2C%20necesito%20ayuda%20con%20mi%20receta" target="_blank" rel="noopener noreferrer"
-                className="bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-2xl flex items-center gap-2 text-sm shrink-0 hover:bg-[#20ba58] transition-all">
-                <svg viewBox="0 0 32 32" className="w-4 h-4 fill-white"><path d="M16.004 2.667C8.64 2.667 2.667 8.64 2.667 16c0 2.347.619 4.587 1.773 6.56L2.667 29.333l6.907-1.747A13.244 13.244 0 0016.004 29.333c7.363 0 13.333-5.973 13.333-13.333S23.367 2.667 16.004 2.667z"/></svg>
-                Consultar gratis
-              </a>
-            </div>
-          </section>
-        )}
-
-        {/* CONSENTIMIENTO */}
-        <section className="max-w-3xl mx-auto px-4 mt-6">
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-            <button onClick={()=>setShowConsent(!showConsent)} className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors">
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-gray-500"/>
-                <span className="font-semibold text-gray-700 text-sm">Aviso legal y descargo de responsabilidad</span>
-              </div>
-              <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${showConsent?'rotate-90':''}`}/>
-            </button>
-            {showConsent&&(
-              <div className="px-4 pb-4 space-y-3 text-xs text-gray-500 leading-relaxed border-t border-gray-100 pt-4">
-                <p><strong className="text-gray-700">Propósito educativo:</strong> Esta calculadora se proporciona con fines informativos únicamente. Los resultados no constituyen una prescripción médica ni reemplazan la consulta con un profesional de la visión certificado.</p>
-                <p><strong className="text-gray-700">Consulta profesional obligatoria:</strong> La adaptación de lentes de contacto requiere evaluación presencial por un optometrista u oftalmólogo. ContactGo no se dedica a la prescripción médica.</p>
-                <p><strong className="text-gray-700">Responsabilidad:</strong> ContactGo no garantiza que los resultados sean completamente precisos para tu situación. Cada caso clínico es único. Los lentes de contacto son dispositivos médicos — su uso incorrecto puede causar daño ocular. Siga siempre las instrucciones del fabricante.</p>
-                <p><strong className="text-gray-700">Los resultados mostrados</strong> se basan en los parámetros actualmente disponibles en el inventario de ContactGo para República Dominicana.</p>
-                <div className="bg-primary-50 rounded-xl p-3 mt-2">
-                  <label className="flex items-start gap-2 cursor-pointer">
-                    <input type="checkbox" className="mt-0.5 w-4 h-4 accent-primary-600 shrink-0"/>
-                    <span className="text-xs text-primary-800 font-medium">He leído y entiendo el aviso legal. Confirmo que consultaré a un profesional de la visión antes de usar lentes de contacto.</span>
-                  </label>
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* GUÍA RECETA */}
-        <section className="max-w-3xl mx-auto px-4 mt-5">
-          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <Info className="w-4 h-4 text-blue-600"/>
-              <h3 className="font-bold text-blue-900 text-sm">¿Cómo leer mi receta óptica?</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[
-                {sigla:'SPH',desc:'Esfera — tu graduación. Negativo = miopía, positivo = hipermetropía'},
-                {sigla:'CYL',desc:'Cilindro — si tienes astigmatismo. Siempre negativo'},
-                {sigla:'AXIS',desc:'Eje — dirección del astigmatismo. Va de 0° a 180°'},
-                {sigla:'ADD',desc:'Adición — para presbicia. Solo si tienes más de 40 años'},
-              ].map(s=>(
-                <div key={s.sigla} className="bg-white rounded-xl p-3">
-                  <p className="font-black text-primary-600 text-base mb-1">{s.sigla}</p>
-                  <p className="text-xs text-gray-600 leading-snug">{s.desc}</p>
-                </div>
-              ))}
-            </div>
-            <p className="text-xs text-blue-700 mt-3">¿No entiendes tu receta? <Link href="/blog/como-leer-receta-optica-rd" className="font-semibold underline">Lee nuestra guía completa →</Link></p>
-          </div>
-        </section>
-
-        {/* Subir receta por WhatsApp */}
-        <div className="max-w-3xl mx-auto px-4 mt-4">
-          <div className="bg-green-50 border border-green-100 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4">
-            <div className="text-3xl">📋</div>
-            <div className="flex-1 text-center sm:text-left">
-              <p className="font-bold text-gray-900 text-sm mb-1">¿Tienes tu receta en papel o foto?</p>
-              <p className="text-xs text-gray-500">Envíanosla por WhatsApp y un especialista te ayuda a encontrar tus lentes en minutos.</p>
-            </div>
-            <a href="https://wa.me/18294728328?text=Hola%20ContactGo!%20Quiero%20enviar%20mi%20receta%20%C3%B3ptica%20para%20encontrar%20mis%20lentes"
-              target="_blank" rel="noopener noreferrer"
-              className="shrink-0 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#20ba58] transition-colors flex items-center gap-2">
-              📱 Enviar receta
-            </a>
           </div>
         </div>
 
+        <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
+
+          {/* ── PASO 1: Entrada ──────────────────────────────────────────────── */}
+          {step === 'entrada' && (
+            <>
+              {/* Selector modo */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">¿Cómo quieres ingresar tu receta?</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button onClick={() => setInputMode('manual')}
+                    className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 text-sm font-semibold transition-all ${inputMode === 'manual' ? 'border-primary-600 bg-primary-50 text-primary-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                    <Eye className="w-5 h-5" />
+                    Ingreso manual
+                  </button>
+                  <button onClick={() => setInputMode('imagen')}
+                    className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border-2 text-sm font-semibold transition-all ${inputMode === 'imagen' ? 'border-primary-600 bg-primary-50 text-primary-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
+                    <Camera className="w-5 h-5" />
+                    Foto de receta
+                  </button>
+                </div>
+              </div>
+
+              {/* Upload imagen */}
+              {inputMode === 'imagen' && (
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-4">
+                  <div>
+                    <p className="font-bold text-gray-900 text-sm mb-1">Sube una foto de tu receta</p>
+                    <p className="text-xs text-gray-500">Funciona en cualquier idioma · Lee recetas de cualquier óptica del mundo</p>
+                  </div>
+
+                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden"
+                    onChange={e => { const f = e.target.files?.[0]; if (f) handleImage(f) }} />
+
+                  {!imgPreview ? (
+                    <button onClick={() => fileInputRef.current?.click()}
+                      className="w-full border-2 border-dashed border-gray-200 rounded-2xl py-10 flex flex-col items-center gap-3 hover:border-primary-400 hover:bg-primary-50 transition-all group">
+                      <Upload className="w-8 h-8 text-gray-300 group-hover:text-primary-400 transition-colors" />
+                      <div className="text-center">
+                        <p className="font-semibold text-gray-500 text-sm">Toca para subir imagen</p>
+                        <p className="text-xs text-gray-400 mt-1">JPG, PNG, HEIC · Cámara o galería</p>
+                      </div>
+                    </button>
+                  ) : (
+                    <div className="relative">
+                      <img src={imgPreview} alt="Receta" className="w-full rounded-xl object-contain max-h-48 bg-gray-50" />
+                      <button onClick={() => { setImgPreview(null); setOcrInfo(null); if(fileInputRef.current) fileInputRef.current.value = '' }}
+                        className="absolute top-2 right-2 bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs font-semibold text-gray-600 shadow-sm hover:bg-gray-50">
+                        Cambiar
+                      </button>
+                    </div>
+                  )}
+
+                  {ocrLoading && (
+                    <div className="flex items-center gap-3 bg-blue-50 rounded-xl px-4 py-3">
+                      <Loader2 className="w-4 h-4 text-blue-600 animate-spin shrink-0" />
+                      <p className="text-xs text-blue-700 font-medium">Leyendo receta con IA — puede tomar unos segundos...</p>
+                    </div>
+                  )}
+
+                  {ocrInfo && !ocrLoading && (
+                    <div className={`flex items-start gap-2 rounded-xl px-4 py-3 text-xs ${ocrInfo.includes('Alta') ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}`}>
+                      <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                      <span>{ocrInfo}</span>
+                    </div>
+                  )}
+
+                  {imgPreview && !ocrLoading && (
+                    <p className="text-xs text-gray-400 text-center">Verifica los valores detectados en el formulario</p>
+                  )}
+                </div>
+              )}
+
+              {/* Aviso informativo */}
+              <div className="flex items-start gap-3 bg-blue-50 rounded-xl px-4 py-3">
+                <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                <p className="text-xs text-blue-700 leading-relaxed">
+                  <strong>¿Receta de gafas o de lentes de contacto?</strong> Si tienes una receta de gafas, la calculadora aplica automáticamente la corrección de distancia vertex (para graduaciones {'>'} ±4.00D). Si ya tienes una receta de lentes de contacto, ingresa esos valores directamente.
+                </p>
+              </div>
+
+              {/* Formulario OD */}
+              <EyeForm
+                label="👁️ Ojo Derecho (OD)"
+                eye={od}
+                onChange={setOd}
+                colorClass="border-blue-200 bg-blue-50/30"
+              />
+
+              {/* Checkbox misma receta */}
+              <label className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm">
+                <input type="checkbox" checked={mismaReceta} onChange={e => handleMismaReceta(e.target.checked)}
+                  className="w-4 h-4 rounded text-primary-600 cursor-pointer" />
+                <span className="text-sm font-medium text-gray-700">Ambos ojos tienen la misma receta</span>
+              </label>
+
+              {/* Formulario OI */}
+              <EyeForm
+                label="👁️ Ojo Izquierdo (OI)"
+                eye={oi}
+                onChange={setOi}
+                colorClass="border-green-200 bg-green-50/30"
+                disabled={mismaReceta}
+              />
+
+              {/* CTA calcular */}
+              <button onClick={calcular}
+                className="w-full btn-primary py-4 text-base font-black rounded-2xl flex items-center justify-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                Calcular mis lentes de contacto
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </>
+          )}
+
+          {/* ── PASO 2: Resultado ────────────────────────────────────────────── */}
+          {step === 'resultado' && converted && (
+            <>
+              <ConversionResult rx={converted} od_input={od} oi_input={oi} />
+
+              {/* Botones acción */}
+              <div className="flex gap-3">
+                <button onClick={resetear}
+                  className="flex-none flex items-center gap-1.5 bg-white border border-gray-200 text-gray-600 font-semibold px-4 py-3 rounded-xl text-sm hover:bg-gray-50 transition-colors shadow-sm">
+                  <RotateCcw className="w-4 h-4" />
+                  Nueva
+                </button>
+                <button onClick={() => setStep('productos')}
+                  className="flex-1 btn-primary py-3 font-black rounded-xl flex items-center justify-center gap-2">
+                  Ver productos compatibles
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* ── PASO 3: Productos ────────────────────────────────────────────── */}
+          {step === 'productos' && converted && (
+            <>
+              {/* Back */}
+              <button onClick={() => setStep('resultado')}
+                className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors">
+                ← Volver al resultado
+              </button>
+
+              <div className={`rounded-2xl border p-4 ${condicionColor(converted.tipo).bg} ${condicionColor(converted.tipo).border}`}>
+                <p className="font-bold text-gray-900 text-sm">
+                  {condicionColor(converted.tipo).icon} {converted.tipo === 'torico' ? 'Lentes Tóricos' : converted.tipo === 'multifocal' ? 'Lentes Multifocales' : 'Lentes Esféricos'} · {converted.condiciones.join(', ')}
+                </p>
+                <p className="text-xs text-gray-600 mt-1">{converted.descripcion}</p>
+              </div>
+
+              {loadingProducts ? (
+                <div className="flex flex-col items-center gap-3 py-10 text-gray-400">
+                  <Loader2 className="w-6 h-6 animate-spin" />
+                  <p className="text-sm">Buscando productos compatibles...</p>
+                </div>
+              ) : products.length === 0 ? (
+                <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center shadow-sm">
+                  <p className="text-gray-500 text-sm mb-3">No encontramos productos exactos para esta graduación.</p>
+                  <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold text-sm px-5 py-2.5 rounded-xl">
+                    Consultar por WhatsApp →
+                  </a>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {products.map((p: any) => (
+                    <ProductCard key={p.id} product={p} converted={converted} onAddCart={addItem} />
+                  ))}
+                </div>
+              )}
+
+              <button onClick={resetear}
+                className="w-full flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-600 font-semibold py-3 rounded-xl text-sm hover:bg-gray-50 transition-colors shadow-sm">
+                <RotateCcw className="w-4 h-4" />
+                Calcular otra receta
+              </button>
+            </>
+          )}
+
+          {/* Disclaimer médico */}
+          <div className="flex items-start gap-3 bg-gray-100 rounded-xl px-4 py-3">
+            <AlertTriangle className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Esta herramienta es orientativa. Los resultados no reemplazan la prescripción de un profesional de la salud visual. Consulta nuestra{' '}
+              <Link href="/politica-receta" className="underline hover:text-gray-700">Política de Receta</Link>.
+            </p>
+          </div>
+
+        </div>
       </main>
       <Footer />
     </>
+  )
+}
+
+// ── Sub-componente: Formulario por ojo ────────────────────────────────────────
+function EyeForm({ label, eye, onChange, colorClass, disabled }: {
+  label: string
+  eye: EyeInput
+  onChange: (e: EyeInput) => void
+  colorClass: string
+  disabled?: boolean
+}) {
+  const set = (key: keyof EyeInput) => (val: string) => onChange({ ...eye, [key]: val })
+  const hasAstig = eye.cyl !== '' && eye.cyl !== '0'
+  const hasAdd   = eye.add !== ''
+
+  return (
+    <div className={`bg-white rounded-2xl border-2 shadow-sm p-4 space-y-3 ${colorClass} ${disabled ? 'opacity-60 pointer-events-none select-none' : ''}`}>
+      <p className="font-bold text-gray-800 text-sm">{label}</p>
+
+      {/* SPH */}
+      <div>
+        <label className="text-xs font-semibold text-gray-500 mb-1 block">Esfera (SPH) *</label>
+        <p className="text-[10px] text-gray-400 mb-1.5">Graduación principal · Ej: -3.25 o +1.50 o Plano</p>
+        <select value={eye.sph} onChange={e => set('sph')(e.target.value)}
+          className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none">
+          <option value="">— Selecciona —</option>
+          {SPH_GLASSES.map(v => (
+            <option key={v} value={String(v)}>
+              {v === 0 ? 'Plano (0.00)' : v > 0 ? `+${v.toFixed(2)}` : v.toFixed(2)}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* CYL */}
+      <div>
+        <label className="text-xs font-semibold text-gray-500 mb-1 block">Cilindro (CYL)</label>
+        <p className="text-[10px] text-gray-400 mb-1.5">Astigmatismo · Ej: -0.75 · Déjalo vacío si no tienes</p>
+        <select value={eye.cyl} onChange={e => set('cyl')(e.target.value)}
+          className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none">
+          <option value="">— Sin cilindro —</option>
+          {CYL_GLASSES.filter(v => v !== 0).map(v => (
+            <option key={v} value={String(v)}>{v.toFixed(2)}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* AXIS — solo si hay CYL */}
+      {hasAstig && (
+        <div>
+          <label className="text-xs font-semibold text-gray-500 mb-1 block">Eje (AXIS) *</label>
+          <p className="text-[10px] text-gray-400 mb-1.5">Orientación del cilindro · Ej: 90 o 180</p>
+          <select value={eye.axis} onChange={e => set('axis')(e.target.value)}
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none">
+            <option value="">— Selecciona eje —</option>
+            {AXIS_VALS.map(v => (
+              <option key={v} value={String(v)}>{String(v).padStart(3, '0')}°</option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* ADD */}
+      <div>
+        <label className="text-xs font-semibold text-gray-500 mb-1 block">Adición (ADD)</label>
+        <p className="text-[10px] text-gray-400 mb-1.5">Solo para presbicia / multifocal · Ej: +2.00</p>
+        <select value={eye.add} onChange={e => set('add')(e.target.value)}
+          className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none">
+          <option value="">— Sin adición —</option>
+          {ADD_VALS.map(v => (
+            <option key={v} value={String(v)}>+{v.toFixed(2)}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  )
+}
+
+// ── Sub-componente: Resultado de conversión ───────────────────────────────────
+function ConversionResult({ rx, od_input, oi_input }: { rx: ConvertedRx; od_input: EyeInput; oi_input: EyeInput }) {
+  const colors = condicionColor(rx.tipo)
+
+  const RxRow = ({ label, glasses, contact }: { label: string; glasses: string; contact: string }) => (
+    <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+      <span className="text-xs font-semibold text-gray-500 w-16">{label}</span>
+      <div className="flex items-center gap-3 flex-1 justify-end">
+        <span className="text-sm text-gray-400 line-through">{glasses}</span>
+        <ArrowRight className="w-3 h-3 text-gray-300" />
+        <span className="text-sm font-black text-gray-900">{contact}</span>
+      </div>
+    </div>
+  )
+
+  const odSphG = od_input.sph ? (parseFloat(od_input.sph) > 0 ? `+${parseFloat(od_input.sph).toFixed(2)}` : parseFloat(od_input.sph) === 0 ? 'Plano' : parseFloat(od_input.sph).toFixed(2)) : '—'
+  const oiSphG = oi_input.sph ? (parseFloat(oi_input.sph) > 0 ? `+${parseFloat(oi_input.sph).toFixed(2)}` : parseFloat(oi_input.sph) === 0 ? 'Plano' : parseFloat(oi_input.sph).toFixed(2)) : '—'
+
+  return (
+    <div className="space-y-4">
+      {/* Banner tipo */}
+      <div className={`rounded-2xl border-2 p-4 ${colors.bg} ${colors.border}`}>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-2xl">{colors.icon}</span>
+          <div>
+            <p className="font-black text-gray-900 text-base">
+              {rx.tipo === 'torico' ? 'Necesitas lentes TÓRICOS' : rx.tipo === 'multifocal' ? 'Necesitas lentes MULTIFOCALES' : 'Necesitas lentes ESFÉRICOS'}
+            </p>
+            <div className="flex flex-wrap gap-1 mt-1">
+              {rx.condiciones.map(c => (
+                <span key={c} className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${colors.badge}`}>{c}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="text-xs text-gray-600 leading-relaxed">{rx.descripcion}</p>
+      </div>
+
+      {/* Tabla conversión */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+          <p className="text-xs font-bold text-gray-700 uppercase tracking-wide">Conversión de receta</p>
+          {rx.needsVertex && (
+            <span className="text-[10px] bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded-full">Con corrección vertex</span>
+          )}
+        </div>
+
+        <div className="p-4 grid md:grid-cols-2 gap-4">
+          {/* OD */}
+          <div>
+            <p className="text-xs font-bold text-blue-600 mb-2">👁️ OD (Ojo Derecho)</p>
+            <RxRow label="SPH" glasses={odSphG} contact={fmtSph(rx.od.sph)} />
+            {(od_input.cyl || rx.od.cyl) && (
+              <>
+                <RxRow label="CYL" glasses={od_input.cyl ? od_input.cyl : '—'} contact={fmtCyl(rx.od.cyl)} />
+                <RxRow label="AXIS" glasses={od_input.axis ? od_input.axis + '°' : '—'} contact={fmtAxis(rx.od.axis)} />
+              </>
+            )}
+            {rx.od.add && <RxRow label="ADD" glasses={od_input.add ? `+${parseFloat(od_input.add).toFixed(2)}` : '—'} contact={fmtAdd(rx.od.add)} />}
+          </div>
+
+          {/* OI */}
+          <div>
+            <p className="text-xs font-bold text-green-600 mb-2">👁️ OI (Ojo Izquierdo)</p>
+            <RxRow label="SPH" glasses={oiSphG} contact={fmtSph(rx.oi.sph)} />
+            {(oi_input.cyl || rx.oi.cyl) && (
+              <>
+                <RxRow label="CYL" glasses={oi_input.cyl ? oi_input.cyl : '—'} contact={fmtCyl(rx.oi.cyl)} />
+                <RxRow label="AXIS" glasses={oi_input.axis ? oi_input.axis + '°' : '—'} contact={fmtAxis(rx.oi.axis)} />
+              </>
+            )}
+            {rx.oi.add && <RxRow label="ADD" glasses={oi_input.add ? `+${parseFloat(oi_input.add).toFixed(2)}` : '—'} contact={fmtAdd(rx.oi.add)} />}
+          </div>
+        </div>
+
+        {rx.needsVertex && (
+          <div className="px-4 pb-4">
+            <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 flex items-start gap-2">
+              <Info className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-700 leading-relaxed">
+                <strong>Corrección de distancia vertex aplicada.</strong> Las gafas están a ~12mm del ojo, los lentes de contacto directamente sobre la córnea. Para graduaciones superiores a ±4.00D esto cambia el poder efectivo del lente.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Sub-componente: Tarjeta de producto ───────────────────────────────────────
+function ProductCard({ product: p, converted, onAddCart }: { product: any; converted: ConvertedRx; onAddCart: any }) {
+  const descPct = p.precio_original && p.precio_original > p.precio
+    ? Math.round((1 - p.precio / p.precio_original) * 100) : 0
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+      <div className="flex gap-4 p-4">
+        {p.imagen_url && (
+          <img src={p.imagen_url} alt={p.nombre} className="w-16 h-16 object-contain rounded-xl bg-gray-50 border border-gray-100 shrink-0" />
+        )}
+        <div className="flex-1 min-w-0">
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{p.marca}</p>
+          <p className="font-bold text-gray-900 text-sm leading-tight">{p.nombre}</p>
+          {p.descripcion_corta && <p className="text-xs text-gray-500 mt-0.5 truncate">{p.descripcion_corta}</p>}
+          <div className="flex items-center gap-2 mt-2">
+            <span className="font-black text-primary-600 text-base">RD${Number(p.precio).toLocaleString()}</span>
+            {descPct > 0 && (
+              <>
+                <span className="text-xs text-gray-400 line-through">RD${Number(p.precio_original).toLocaleString()}</span>
+                <span className="text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded-full">-{descPct}%</span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="px-4 pb-4 flex gap-2">
+        <Link href={`/producto/${p.slug}`}
+          className="flex-1 btn-primary py-2.5 text-sm font-bold rounded-xl flex items-center justify-center gap-1.5">
+          <ShoppingCart className="w-4 h-4" />
+          Ver producto
+        </Link>
+      </div>
+    </div>
   )
 }
