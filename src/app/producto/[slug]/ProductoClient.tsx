@@ -489,7 +489,7 @@ export default function ProductoClient({ product, variants }: Props) {
   return (
     <>
       <Navbar />
-      <main className="max-w-6xl mx-auto px-4 pt-4 pb-20 md:pb-12">
+      <main className="pdp-main max-w-6xl mx-auto px-4 pt-4 pb-44 md:pb-12">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
           <button onClick={() => router.back()} className="hover:text-primary-600 transition-colors flex items-center gap-1">

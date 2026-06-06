@@ -122,3 +122,9 @@
 .safe-area-pt {
   padding-top: env(safe-area-inset-top);
 }
+/* PDP mobile: espacio para que el sticky CTA no tape el contenido */
+@media (max-width: 767px) {
+  .pdp-main {
+    padding-bottom: max(11rem, calc(10rem + env(safe-area-inset-bottom, 0px)));
+  }
+}
