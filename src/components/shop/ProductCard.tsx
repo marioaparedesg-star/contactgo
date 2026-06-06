@@ -68,10 +68,10 @@ export default function ProductCard({ product, isBestseller }: Props) {
   return (
     <Link
       href={`/producto/${(product as any).slug || product.id}`}
-      className="card group flex flex-col overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-white"
+      className="card group flex flex-col overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:-translate-y-0.5"
     >
       {/* ── Imagen ── */}
-      <div className="relative w-full aspect-square bg-gray-50 overflow-hidden">
+      <div className="relative w-full aspect-square overflow-hidden" style={{ background: "linear-gradient(145deg, #f8fafc, #f0f4f8)" }}>
         {/* Favorito */}
         <button onClick={toggleFav}
           aria-label={isFav ? `Quitar ${product.nombre} de favoritos` : `Agregar ${product.nombre} a favoritos`}
@@ -97,7 +97,7 @@ export default function ProductCard({ product, isBestseller }: Props) {
             src={product.imagen_url} unoptimized
             alt={`${product.nombre}${product.marca ? ' — ' + product.marca : ''} — lente de contacto en República Dominicana`}
             fill
-            className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+            className="object-contain p-4 group-hover:scale-110 transition-transform duration-500 drop-shadow-sm"
             sizes="(max-width: 400px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw"
           />
         ) : (
@@ -180,7 +180,7 @@ export default function ProductCard({ product, isBestseller }: Props) {
               </p>
             )}
             <div className="flex items-center gap-2">
-              <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
+              <p className="text-lg font-black text-gray-900 tracking-tight">RD${product.precio.toLocaleString()}</p>
               {product.precio_anterior && product.precio_anterior > product.precio && (
                 <span className="text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded-full">
                   -{Math.round((1 - product.precio / product.precio_anterior) * 100)}%

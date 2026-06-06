@@ -25,7 +25,7 @@ export default function BottomNav() {
           const active = pathname === tab.href || (tab.href !== '/' && pathname.startsWith(tab.href))
           return (
             <a key={tab.href} href={tab.href}
-              className={"flex flex-col items-center gap-0.5 px-3 py-2 relative " + (active ? "text-primary-600" : "text-gray-400")}>
+              className={"flex flex-col items-center gap-0.5 px-3 py-2 relative " + (active ? (tab.href === "/cart" ? "text-primary-600" : "text-gray-800") : "text-gray-400")}>
               <div className="relative">
                 <Icon className="w-6 h-6" />
                 {tab.badge ? (
@@ -34,8 +34,8 @@ export default function BottomNav() {
                   </span>
                 ) : null}
               </div>
-              <span className={"text-xs font-medium " + (active ? "text-primary-600" : "text-gray-400")}>{tab.label}</span>
-              {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary-600 rounded-full" />}
+              <span className={"text-xs font-medium " + (active ? (tab.href === "/cart" ? "text-primary-600" : "text-gray-800") : "text-gray-400")}>{tab.label}</span>
+              {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gray-800 rounded-full" />}
             </a>
           )
         })}

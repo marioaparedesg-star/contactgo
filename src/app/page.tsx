@@ -86,7 +86,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
                 { icon: Truck,    title: 'Envío 24–48h',     desc: 'A todo el país',              color: 'text-blue-600',   bg: 'bg-blue-50' },
-                { icon: Shield,   title: '100% Originales',  desc: 'Distribuidores autorizados',  color: 'text-green-600',  bg: 'bg-green-50' },
+                { icon: Shield,   title: 'Misma marca, mejor precio',  desc: 'Distribuidores autorizados',  color: 'text-green-600',  bg: 'bg-green-50' },
                 { icon: Star,     title: `${ordersCount > 0 ? (ordersCount * 6 + 4200).toLocaleString() + '+' : '4,200+'} lentes`,  desc: 'Entregados en RD',        color: 'text-amber-500',  bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Soporte 24/7',     desc: 'WhatsApp y email',            color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (

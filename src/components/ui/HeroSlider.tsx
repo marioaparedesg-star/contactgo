@@ -7,12 +7,12 @@ const BASE = 'https://atendbjolicwcsqfyiyh.supabase.co/storage/v1/object/public/
 
 const SLIDES = [
   {
-    badge:      '🇩🇴 #1 en lentes de contacto en RD',
-    title:      'Tus lentes,\na domicilio.',
-    sub:        'Originales y certificados. Entrega en 24h.',
-    subtitle:   'Originales. Certificados. Con soporte de optometristas. Pago seguro con tarjeta Visa/Mastercard.',
-    cta:        { label: 'Explorar catálogo', href: '/catalogo' },
-    cta2:       { label: 'Subir mi receta',   href: '/receta' },
+    badge:      '🇩🇴 Entrega a domicilio en toda RD',
+    title:      'Olvídate de\nla óptica.',
+    sub:        'Tus lentes en tu puerta mañana.',
+    subtitle:   'Los mismos lentes de siempre, entregados en 24h. Sin filas, sin citas, sin salir de casa.',
+    cta:        { label: 'Ver mis lentes', href: '/catalogo' },
+    cta2:       { label: 'Calcular mi receta gratis', href: '/receta' },
     accent:     '#0d6efd',
     bg:         { from: '#020d1e', via: '#021535', to: '#031d4a' },
     glow:       'rgba(13,110,253,0.22)',

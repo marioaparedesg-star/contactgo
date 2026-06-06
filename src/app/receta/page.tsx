@@ -200,14 +200,34 @@ export default function RecetaPage() {
       <Navbar />
       <main className="min-h-screen bg-gray-50 pb-16">
 
-        {/* Hero */}
-        <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-4 py-5 text-center">
-          <h1 className="font-display font-black text-xl flex items-center justify-center gap-2 mb-1">
-            <Eye className="w-5 h-5" /> Calculadora de Lentes de Contacto
+        {/* Hero calculadora — identidad visual propia */}
+        <div className="relative overflow-hidden text-white px-4 py-8 text-center"
+          style={{ background: 'linear-gradient(135deg, #030712 0%, #0f172a 40%, #1e1b4b 100%)' }}>
+          {/* Decoración de fondo */}
+          <div className="absolute inset-0 opacity-10" style={{
+            backgroundImage: 'radial-gradient(circle at 20% 50%, #4f46e5 0%, transparent 50%), radial-gradient(circle at 80% 20%, #16a34a 0%, transparent 40%)'
+          }}/>
+          {/* Badge médico */}
+          <div className="relative inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-[11px] font-bold px-3 py-1.5 rounded-full mb-3">
+            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"/>
+            Herramienta de adaptación óptica · Powered by Gemini AI
+          </div>
+          <h1 className="relative font-display font-black text-2xl md:text-3xl mb-2 tracking-tight">
+            Convierte tu receta<br/>
+            <span style={{ color: '#4ade80' }}>en tus lentes perfectos.</span>
           </h1>
-          <div className="flex items-center justify-center flex-wrap gap-3 mt-1.5">
-            {['✅ Gratis', '⚡ 60 seg', '🤖 IA Gemini', '📦 Inventario real'].map(t => (
-              <span key={t} className="text-[11px] text-primary-100 font-medium">{t}</span>
+          <p className="relative text-white/60 text-sm mb-4">Sube una foto o ingresa los valores · Resultado en 60 segundos</p>
+          <div className="relative flex items-center justify-center flex-wrap gap-3">
+            {[
+              { icon: '✅', text: 'Gratis' },
+              { icon: '⚡', text: '60 segundos' },
+              { icon: '🤖', text: 'IA Gemini' },
+              { icon: '📦', text: 'Stock real' },
+              { icon: '🔒', text: 'Sin registro' },
+            ].map(t => (
+              <span key={t.text} className="text-[11px] text-white/50 font-medium flex items-center gap-1">
+                <span>{t.icon}</span>{t.text}
+              </span>
             ))}
           </div>
         </div>
