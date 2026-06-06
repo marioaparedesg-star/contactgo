@@ -368,6 +368,10 @@ export default function ProductoClient({ product, variants }: Props) {
   const isColor    = tipo === 'color'
   const isToric    = tipo === 'torico'
   const isMulti    = tipo === 'multifocal'
+  // Multifocal tórico: multifocal con CYL disponibles (ej. Proclear Multifocal Toric)
+  const isMultiToric = isMulti && (product.cyl_disponibles?.length ?? 0) > 0
+  // needsToric: cualquier producto que requiere CYL + AXIS
+  const needsToric   = isToric || isMultiToric
 
   // Verificar si la combinación seleccionada tiene stock real en product_inventory
   // Evita que se vendan variantes (SPH+CYL+AXIS) que no existen en inventario
@@ -482,8 +486,8 @@ export default function ProductoClient({ product, variants }: Props) {
           // Receta diferente por ojo
           if (!sphOD && !sphOS) { toast.error('Ingresa la receta de al menos un ojo'); return false }
           if (sphOD) {
-            if (isToric && !cylOD)  { toast.error('Falta el CYL del ojo derecho'); return false }
-            if (isToric && !axisOD) { toast.error('Falta el AXIS del ojo derecho'); return false }
+            if ((isToric || isMultiToric) && !cylOD)  { toast.error('Falta el CYL del ojo derecho'); return false }
+            if ((isToric || isMultiToric) && !axisOD) { toast.error('Falta el AXIS del ojo derecho'); return false }
             addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sphOD), cyl:cylOD?parseFloat(cylOD):undefined, axis:axisOD?parseInt(axisOD):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
           }
           if (sphOS) {
@@ -696,7 +700,7 @@ export default function ProductoClient({ product, variants }: Props) {
                             </div>
                           : <SelectField label="Esfera (SPH)" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
                         }
-                        {isToric && <>
+                        {needsToric && <>
                           <SelectField label="Cilindro (CYL)" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
                           <SelectField label="Eje (AXIS)" value={axis} options={axisOpts} required onChange={setAxis} format={v=>String(v).padStart(3,'0')+'°'}/>
                         </>}
@@ -708,7 +712,7 @@ export default function ProductoClient({ product, variants }: Props) {
                         <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
                           <p className="text-xs font-bold text-blue-700">👁 Ojo Derecho (OD)</p>
                           <SelectField label="Esfera (SPH)" value={sphOD} options={sphOpts} onChange={setSphOD} format={fmtSph}/>
-                          {isToric && <>
+                          {needsToric && <>
                             <SelectField label="Cilindro (CYL)" value={cylOD} options={cylOpts} onChange={setCylOD} format={v=>Number(v).toFixed(2)}/>
                             <SelectField label="Eje (AXIS)" value={axisOD} options={axisOpts} onChange={setAxisOD} format={v=>String(v).padStart(3,'0')+'°'}/>
                           </>}
@@ -717,7 +721,7 @@ export default function ProductoClient({ product, variants }: Props) {
                         <div className="bg-green-50 border border-green-200 rounded-xl p-3 space-y-2">
                           <p className="text-xs font-bold text-green-700">👁 Ojo Izquierdo (OI)</p>
                           <SelectField label="Esfera (SPH)" value={sphOS} options={sphOpts} onChange={setSphOS} format={fmtSph}/>
-                          {isToric && <>
+                          {needsToric && <>
                             <SelectField label="Cilindro (CYL)" value={cylOS} options={cylOpts} onChange={setCylOS} format={v=>Number(v).toFixed(2)}/>
                             <SelectField label="Eje (AXIS)" value={axisOS} options={axisOpts} onChange={setAxisOS} format={v=>String(v).padStart(3,'0')+'°'}/>
                           </>}
@@ -732,7 +736,7 @@ export default function ProductoClient({ product, variants }: Props) {
               return (
                 <div className="space-y-3">
                   <SelectField label="Esfera (SPH)" value={sph} options={sphOpts} required onChange={setSph} format={fmtSph}/>
-                  {isToric && <>
+                  {needsToric && <>
                     <SelectField label="Cilindro (CYL)" value={cyl} options={cylOpts} required onChange={setCyl} format={v=>Number(v).toFixed(2)}/>
                     <SelectField label="Eje (AXIS)" value={axis} options={axisOpts} required onChange={setAxis} format={v=>String(v).padStart(3,'0')+'°'}/>
                   </>}

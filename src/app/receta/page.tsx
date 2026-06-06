@@ -90,11 +90,12 @@ export default function RecetaPage() {
       const res = await fetch('/api/receta/recomendar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0 })
+        body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0 })
       })
       const json = await res.json()
       setProducts(json.productos ?? [])
       setTotalDisp(json.total ?? 0)
+      if (json.nota) toast(json.nota, { duration: 4000, icon: '💡' })
     } catch (e) {
       console.error('[recomendar]', e)
       setProducts([])
@@ -140,7 +141,7 @@ export default function RecetaPage() {
 
   const buildWA = (r: ConvertedRx) => {
     const fmtEye = (l: string, e: any) => `${l}: SPH ${fmtV(e.sph)}${e.cyl ? ` / CYL ${fmtCyl(e.cyl)}` : ''}${e.axis ? ` / EJE ${fmtAxis(e.axis)}` : ''}${e.add ? ` / ADD +${e.add.toFixed(2)}` : ''}`
-    return encodeURIComponent(`Hola ContactGo, necesito ayuda con mi receta:\n\n${fmtEye('OD', r.od)}\n${fmtEye('OI', r.oi)}\n\nTipo: ${r.tipo.toUpperCase()}`)
+    return encodeURIComponent(`Hola ContactGo, necesito ayuda con mi receta:\n\n${fmtEye('OD', r.od)}\n${fmtEye('OI', r.oi)}\n\nTipo: ${r.tipo === 'multifocal_torico' ? 'MULTIFOCAL TÓRICO' : r.tipo.toUpperCase()}`)
   }
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -272,7 +273,7 @@ export default function RecetaPage() {
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <p className="font-black text-gray-900 text-base">
-                      {result.tipo === 'torico' ? '🎯 Lentes Tóricos' : result.tipo === 'multifocal' ? '🔭 Lentes Multifocales' : '👁️ Lentes Esféricos'}
+                      {result.tipo === 'torico' ? '🎯 Lentes Tóricos' : result.tipo === 'multifocal_torico' ? '🎯🔭 Lentes Multifocales Tóricos' : result.tipo === 'multifocal' ? '🔭 Lentes Multifocales' : '👁️ Lentes Esféricos'}
                     </p>
                     {totalDisp > 3 && <p className="text-xs text-gray-500">{totalDisp} lentes disponibles · mostrando los mejores 3</p>}
                   </div>
@@ -375,7 +376,7 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
       <div className="flex items-center gap-2 mb-3">
         <span className="text-2xl">{tipoCfg.icon}</span>
         <div>
-          <p className="font-black text-gray-900 text-base">{r.tipo === 'torico' ? 'Lentes Tóricos' : r.tipo === 'multifocal' ? 'Lentes Multifocales' : 'Lentes Esféricos'}</p>
+          <p className="font-black text-gray-900 text-base">{r.tipo === 'torico' ? 'Lentes Tóricos' : r.tipo === 'multifocal_torico' ? 'Multifocal Tórico (Presbicia + Astigmatismo)' : r.tipo === 'multifocal' ? 'Lentes Multifocales' : 'Lentes Esféricos'}</p>
           <div className="flex flex-wrap gap-1 mt-0.5">{r.condiciones.map(c => <span key={c} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/60 text-gray-600">{c}</span>)}</div>
         </div>
       </div>

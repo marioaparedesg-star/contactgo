@@ -27,7 +27,7 @@ export interface ConvertedRx {
   od: ContactRx
   oi: ContactRx
   needsVertex: boolean   // true si la corrección vertex cambió algo
-  tipo: 'esferico' | 'torico' | 'multifocal'
+  tipo: 'esferico' | 'torico' | 'multifocal' | 'multifocal_torico' | 'multifocal_torico' | 'color'
   condiciones: string[]
   descripcion: string
 }
@@ -145,7 +145,10 @@ export function convertGlassesToContacts(rx: GlassesRx): ConvertedRx {
   let tipo: ConvertedRx['tipo'] = 'esferico'
   let descripcion = ''
 
-  if (allAdd.length > 0) {
+  if (allAdd.length > 0 && allCyl.length > 0) {
+    tipo = 'multifocal_torico'
+    descripcion = 'Tu receta tiene presbicia Y astigmatismo. Necesitas lentes multifocales tóricos. El Proclear® Multifocal Toric corrige ambas condiciones simultáneamente.'
+  } else if (allAdd.length > 0) {
     tipo = 'multifocal'
     descripcion = 'Tu receta incluye adición (ADD), lo que indica presbicia. Necesitas lentes multifocales que corrijan tanto la visión de lejos como de cerca.'
   } else if (allCyl.length > 0) {
