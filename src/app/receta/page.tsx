@@ -20,7 +20,7 @@ interface EyeInput { sph: string; cyl: string; axis: string; add: string }
 const EMPTY: EyeInput = { sph: '', cyl: '', axis: '', add: '' }
 const parseN = (v: string) => { if (!v) return null; const n = parseFloat(v); return isNaN(n) ? null : n }
 const fmtV = (v: number | null) => v == null ? '—' : v === 0 ? 'Plano' : v > 0 ? `+${v.toFixed(2)}` : v.toFixed(2)
-const OPTICA_MULT = 1.75
+const OPTICA_MULT = 1.12
 
 function getComplejidad(rx: ConvertedRx) {
   const sMax = Math.max(Math.abs(rx.od.sph ?? 0), Math.abs(rx.oi.sph ?? 0))
@@ -502,12 +502,13 @@ function FallbackProductos({ result, buildWA }: { result: ConvertedRx; buildWA: 
 function AhorroCard({ precio }: { precio: number }) {
   const optica = Math.round(precio * OPTICA_MULT)
   const ahorro = optica - precio
+  const pctAhorro = Math.round((ahorro/optica)*100)
   const ahorroAnual = ahorro * 24
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
       <p className="font-bold text-gray-900 text-sm mb-3">💰 Tu ahorro comprando en ContactGo</p>
       <div className="grid grid-cols-3 gap-2 mb-3">
-        {[{l:'Óptica local',v:`RD$${optica.toLocaleString()}`,c:'text-gray-400 line-through',s:'precio estimado'},{l:'ContactGo',v:`RD$${precio.toLocaleString()}`,c:'text-primary-600',s:'precio oficial'},{l:'Ahorras',v:`RD$${ahorro.toLocaleString()}`,c:'text-green-600 font-black',s:`RD$${ahorroAnual.toLocaleString()}/año`}].map(({l,v,c,s})=>(
+        {[{l:'Precio óptica',v:`RD$${optica.toLocaleString()}`,c:'text-gray-400 line-through',s:`estimado +${OPTICA_MULT*100-100|0}% aprox`},{l:'ContactGo',v:`RD$${precio.toLocaleString()}`,c:'text-primary-600',s:'precio oficial'},{l:'Ahorras',v:`RD$${ahorro.toLocaleString()}`,c:'text-green-600 font-black',s:`RD$${ahorroAnual.toLocaleString()}/año`}].map(({l,v,c,s})=>(
           <div key={l} className="bg-gray-50 rounded-xl p-2.5 text-center">
             <p className="text-[10px] text-gray-500">{l}</p>
             <p className={`font-black text-sm mt-0.5 ${c}`}>{v}</p>

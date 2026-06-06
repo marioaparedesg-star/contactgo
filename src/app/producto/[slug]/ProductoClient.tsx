@@ -617,15 +617,18 @@ export default function ProductoClient({ product, variants }: Props) {
                     <p className="text-xs text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>
                   )}
                   {isLente && precioBase > 0 && (() => {
-                    const factores: Record<string,number> = {esferico:1.55,torico:1.60,multifocal:1.65,color:1.40}
-                    const precioOptica = Math.round(precioBase * (factores[tipo] ?? 1.5) / 100) * 100
+                    // Usar precio_anterior de DB (12% sobre precio ContactGo)
+                    const precioOptica = product.precio_anterior
+                      ? Number(product.precio_anterior)
+                      : Math.round(precioBase * 1.12 / 100) * 100
                     const ahorro = precioOptica - precioBase
+                    const pct = Math.round((ahorro / precioOptica) * 100)
                     if (ahorro <= 0) return null
                     return (
                       <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                        <span className="text-sm text-gray-400 line-through">RD${precioOptica.toLocaleString()}</span>
+                        <span className="text-sm text-gray-400 line-through">RD${precioOptica.toLocaleString()} en óptica</span>
                         <span className="text-sm font-black text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
-                          💰 Ahorras RD${ahorro.toLocaleString()}
+                          💰 -{pct}% vs óptica
                         </span>
                       </div>
                     )

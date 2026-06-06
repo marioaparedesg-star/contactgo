@@ -1,8 +1,8 @@
 'use client'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import NextImage from 'next/image'
 import { ShoppingCart, User, Menu, X } from 'lucide-react'
-import { useState } from 'react'
 import { useCartStore } from '@/lib/cart-store'
 
 export default function Navbar() {
@@ -19,8 +19,15 @@ export default function Navbar() {
     { href: '/receta', label: 'Mi Receta' },
   ]
 
+
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 10)
+    window.addEventListener('scroll', fn, { passive: true })
+    return () => window.removeEventListener('scroll', fn)
+  }, [])
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm" role="banner">
+    <header className={`sticky top-0 z-50 bg-white border-b border-gray-100 transition-shadow duration-200 ${scrolled ? "shadow-md" : "shadow-sm"}`} role="banner">
       {/* Skip to main — accesibilidad teclado */}
       <a href="#main-content" className="skip-link">Ir al contenido principal</a>
 

@@ -173,22 +173,21 @@ export default function ProductCard({ product, isBestseller }: Props) {
         {/* Precio + ahorro vs óptica */}
         <div className="mt-auto pt-1.5 flex flex-col gap-2">
           <div>
-            <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
+            {/* Precio anterior (óptica) tachado */}
+            {product.precio_anterior && product.precio_anterior > product.precio && (
+              <p className="text-[11px] text-gray-400 line-through leading-none mb-0.5">
+                RD${Number(product.precio_anterior).toLocaleString()} en óptica
+              </p>
+            )}
+            <div className="flex items-center gap-2">
+              <p className="text-base font-bold text-gray-900">RD${product.precio.toLocaleString()}</p>
+              {product.precio_anterior && product.precio_anterior > product.precio && (
+                <span className="text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded-full">
+                  -{Math.round((1 - product.precio / product.precio_anterior) * 100)}%
+                </span>
+              )}
+            </div>
             <p className="text-[10px] text-gray-400">{contenidoLabel}</p>
-            {/* Ahorro vs óptica — sin precio por mes */}
-            {(() => {
-              const tipo = product.tipo ?? ''
-              if (!['esferico','torico','multifocal','color'].includes(tipo)) return null
-              const factores: Record<string,number> = {esferico:1.55,torico:1.60,multifocal:1.65,color:1.40}
-              const precioOptica = Math.round(product.precio * (factores[tipo] ?? 1.5) / 100) * 100
-              const ahorro = precioOptica - product.precio
-              if (ahorro <= 0) return null
-              return (
-                <p className="text-[10px] font-bold text-green-600 mt-1">
-                  💰 Ahorras RD${ahorro.toLocaleString()} vs óptica
-                </p>
-              )
-            })()}
           </div>
           <button
             onClick={handleAdd}
