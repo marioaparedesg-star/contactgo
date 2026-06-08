@@ -836,21 +836,36 @@ export default function ProductoClient({ product, variants }: Props) {
             />
 
             <div className="flex flex-col gap-2.5">
-              <button onClick={handleBuyNow} disabled={product.stock === 0 || sinVariante}
+              {/* AGREGAR AL CARRITO = CTA principal verde (Amazon/Warby Parker style) */}
+              <button onClick={handleAdd} disabled={product.stock === 0 || sinVariante}
                 className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-primary-200/60 disabled:opacity-40 disabled:cursor-not-allowed">
-                {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Consultar disponibilidad —' : (
-                  <span className="flex items-center gap-2">
-                    Comprar ahora
-                    <span className="opacity-80 text-sm font-bold">→</span>
-                  </span>
+                <ShoppingCart className="w-4 h-4" />
+                {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Consultar disponibilidad —' : 'Agregar al carrito'}
+              </button>
+              {/* COMPRAR AHORA = CTA secundario oscuro */}
+              <button onClick={handleBuyNow} disabled={product.stock === 0 || sinVariante}
+                className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Consultar —' : (
+                  <span className="flex items-center gap-2">Comprar ahora <span className="opacity-70">→</span></span>
                 )}
               </button>
-              <button onClick={handleAdd} disabled={product.stock === 0 || sinVariante}
-                className="w-full bg-white border-2 border-gray-200 hover:border-primary-400 hover:bg-primary-50 active:scale-[0.98] text-gray-700 hover:text-primary-700 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-40 disabled:cursor-not-allowed">
-                <ShoppingCart className="w-4 h-4" />
-                {sinVariante ? 'Consultar disponibilidad' : 'Agregar al carrito'}
-              </button>
 
+              {/* WhatsApp abajo */}
+              {/* Trust strip compacto — 3 items esenciales */}
+              <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-100 pt-2.5 mt-0.5">
+                {[
+                  { icon: '✅', text: '100% Original garantizado' },
+                  { icon: '🔒', text: 'Pago seguro AZUL' },
+                  { icon: '↩️', text: '7 días devolución' },
+                ].map(({ icon, text }) => (
+                  <p key={text} className="text-[11px] text-gray-400 font-medium flex items-center gap-1">
+                    <span>{icon}</span>
+                    <span>{text}</span>
+                  </p>
+                ))}
+              </div>
+
+              {/* WhatsApp — después de trust strip */}
               {/* WhatsApp con mensaje contextual según tipo de producto */}
               {(() => {
                 const msgMap: Record<string,string> = {
@@ -876,20 +891,6 @@ export default function ProductoClient({ product, variants }: Props) {
                   </a>
                 )
               })()}
-
-              {/* Trust strip compacto — 3 items esenciales */}
-              <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-100 pt-2.5 mt-0.5">
-                {[
-                  { icon: '✅', text: '100% Original garantizado' },
-                  { icon: '🔒', text: 'Pago seguro AZUL' },
-                  { icon: '↩️', text: '7 días devolución' },
-                ].map(({ icon, text }) => (
-                  <p key={text} className="text-[11px] text-gray-400 font-medium flex items-center gap-1">
-                    <span>{icon}</span>
-                    <span>{text}</span>
-                  </p>
-                ))}
-              </div>
 
               {/* ── SECCIÓN 4: Beneficios — después del CTA ── */}
               <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
@@ -947,7 +948,7 @@ export default function ProductoClient({ product, variants }: Props) {
         </div>
       </main>
 
-      <Reviews productId={product.id} />
+      <Reviews productId={product.id} initialReviews={(product as any).reviews ?? []} />
       <CrossSelling tipo={product.tipo} currentId={product.id} />
       <ProductFAQ tipo={product.tipo} nombre={product.nombre} />
 

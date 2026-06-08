@@ -1,11 +1,6 @@
 'use client'
-import { DESCUENTOS } from '@/lib/subscription-utils'
+import { DESCUENTOS, FRECUENCIAS } from '@/lib/subscription-utils'
 
-/**
- * Versión compacta — 1 sola fila en lugar de grid 2×2.
- * Objetivo: reducir altura visual antes del CTA al mínimo.
- * Un <select> nativo ocupa ~44px en mobile vs 4 botones que ocupan ~160px.
- */
 interface Props {
   value: string | null
   onChange: (val: string | null, descuento: number) => void
@@ -14,10 +9,10 @@ interface Props {
 }
 
 const OPCIONES = [
-  { val: null,         label: 'Compra única',  pct: 0    },
-  { val: '15_dias',    label: 'Cada 15 días',  pct: 0.05 },
-  { val: 'mensual',    label: 'Mensual',        pct: 0.10 },
-  { val: 'trimestral', label: 'Cada 3 meses',  pct: 0.15 },
+  { val: null,         label: 'Una vez',     sublabel: 'Sin compromiso', pct: 0,    badge: null,         icon: '🛍️' },
+  { val: '15_dias',    label: 'Quincenal',   sublabel: 'Cada 15 días',  pct: 0.05, badge: '5% OFF',     icon: '📦' },
+  { val: 'mensual',    label: 'Mensual',     sublabel: 'Cada 30 días',  pct: 0.10, badge: '10% OFF',    icon: '⭐', popular: true },
+  { val: 'trimestral', label: 'Trimestral',  sublabel: 'Cada 3 meses',  pct: 0.15, badge: '15% OFF',    icon: '💎' },
 ]
 
 export default function SuscripcionSelector({ value, onChange, precio, tipo }: Props) {
@@ -27,44 +22,67 @@ export default function SuscripcionSelector({ value, onChange, precio, tipo }: P
   if (!isLente && !isSolucion && !isGota) return null
 
   const precioConDesc = (pct: number) => Math.round(precio * (1 - pct))
-  const selectedPct   = OPCIONES.find(o => o.val === value)?.pct ?? 0
   const ahorroAnual   = Math.round(precio * 0.10 * 12)
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label htmlFor="suscripcion-sel" className="text-xs font-semibold text-gray-700">
-          Frecuencia de entrega
-        </label>
+        <label className="text-xs font-semibold text-gray-700">Frecuencia de entrega</label>
         {isLente && (
-          <span className="text-[10px] font-bold text-green-700">
+          <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
             Ahorra hasta RD${ahorroAnual.toLocaleString()}/año
           </span>
         )}
       </div>
 
-      {/* Select nativo — mínima altura, máxima compatibilidad */}
-      <select
-        id="suscripcion-sel"
-        value={value ?? ''}
-        onChange={e => {
-          const val = e.target.value === '' ? null : e.target.value
-          const pct = OPCIONES.find(o => o.val === val)?.pct ?? 0
-          onChange(val, pct * precio)
-        }}
-        className="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold text-gray-800 bg-white focus:border-primary-500 focus:outline-none transition-colors appearance-none"
-        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center' }}
-      >
-        {OPCIONES.map(o => (
-          <option key={String(o.val)} value={o.val ?? ''}>
-            {o.label}{o.pct > 0 ? ` — ${Math.round(o.pct * 100)}% OFF · RD$${precioConDesc(o.pct).toLocaleString()}` : ` — RD$${precio.toLocaleString()}`}
-          </option>
-        ))}
-      </select>
+      {/* Cards visuales — Warby Parker style */}
+      <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+        {OPCIONES.map(op => {
+          const selected = value === op.val
+          const precioFinal = precioConDesc(op.pct)
+          return (
+            <button
+              key={String(op.val)}
+              type="button"
+              onClick={() => onChange(op.val, op.pct * precio)}
+              className={`relative flex flex-col items-center justify-center text-center py-2.5 px-1 rounded-xl border-2 transition-all duration-150 min-h-[72px] ${
+                selected
+                  ? 'border-primary-500 bg-primary-50 shadow-sm shadow-primary-100'
+                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              {/* Badge "Más popular" */}
+              {op.popular && (
+                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[8px] font-black bg-amber-400 text-white px-2 py-0.5 rounded-full whitespace-nowrap leading-tight">
+                  ★ Popular
+                </span>
+              )}
+              {/* OFF badge */}
+              {op.badge && (
+                <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full mb-1 ${
+                  selected ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600'
+                }`}>
+                  {op.badge}
+                </span>
+              )}
+              <p className={`text-[11px] font-black leading-tight ${selected ? 'text-primary-700' : 'text-gray-800'}`}>
+                {op.label}
+              </p>
+              <p className={`text-[9px] mt-0.5 ${selected ? 'text-primary-500' : 'text-gray-400'}`}>
+                {op.sublabel}
+              </p>
+              <p className={`text-[10px] font-black mt-1 ${selected ? 'text-primary-700' : 'text-gray-600'}`}>
+                RD${precioFinal.toLocaleString()}
+              </p>
+            </button>
+          )
+        })}
+      </div>
 
       {value && (
-        <p className="text-[10px] text-green-600 font-semibold">
-          ✓ Envío automático. Aviso previo por WhatsApp. Cancela cuando quieras.
+        <p className="text-[10px] text-green-600 font-semibold flex items-center gap-1">
+          <span>✓</span>
+          Envío automático · Aviso previo por WhatsApp · Cancela cuando quieras
         </p>
       )}
     </div>

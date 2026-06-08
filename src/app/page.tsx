@@ -80,6 +80,26 @@ export default async function HomePage() {
         {/* ── HERO ── */}
         <HeroSlider lentesCount={ordersCount > 0 ? ordersCount * 6 + 4200 : 4200} />
 
+        {/* ── Stats reales — prueba social ────────────────────────────────── */}
+        <section className="bg-white border-b border-gray-100 py-5 px-4">
+          <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            {[
+              { num: '4.7★', label: 'Calificación promedio', sub: '94 reseñas verificadas' },
+              { num: '36',   label: 'Productos originales',  sub: 'Marcas líderes mundiales' },
+              { num: '24h',  label: 'Entrega a domicilio',   sub: 'Santo Domingo · Santiago' },
+              { num: '🔒',   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD' },
+            ].map(({ num, label, sub }) => (
+              <div key={label} className="space-y-0.5">
+                <p className="font-black text-2xl text-gray-900 tracking-tight">{num}</p>
+                <p className="text-xs font-bold text-gray-700">{label}</p>
+                <p className="text-[10px] text-gray-400">{sub}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+
+
         {/* ── TRUST BAR ── */}
         <section className="bg-white border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
