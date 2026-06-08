@@ -972,13 +972,15 @@ export default function ProductoClient({ product, variants }: Props) {
             </div>
           </div>
           <div className="flex gap-2">
+            {/* Agregar al carrito = primario verde en mobile — consistente con desktop */}
             <button onClick={handleAdd} disabled={sinVariante}
-              className="flex-none bg-white border-2 border-primary-600 text-primary-600 font-bold px-4 py-3.5 rounded-2xl flex items-center gap-1 text-sm active:scale-95 transition-transform disabled:opacity-40">
+              className="flex-1 btn-primary py-3.5 text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition-transform disabled:opacity-40 rounded-2xl">
               <ShoppingCart className="w-4 h-4" />
+              Agregar
             </button>
             <button onClick={handleBuyNow} disabled={sinVariante}
-              className="flex-1 btn-primary py-3.5 text-base font-black flex items-center justify-center gap-2 active:scale-95 transition-transform disabled:opacity-40 rounded-2xl">
-              Comprar ahora →
+              className="flex-none bg-gray-900 text-white font-bold px-4 py-3.5 rounded-2xl flex items-center gap-1 text-sm active:scale-95 transition-transform disabled:opacity-40">
+              →
             </button>
           </div>
         </div>
