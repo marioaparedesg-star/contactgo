@@ -24,7 +24,7 @@ export default async function Page() {
   const sb = createServerSupabaseClient()
   const { data: soluciones } = await sb.from('products').select('*').eq('activo', true).eq('tipo', 'solucion').order('nombre')
   const { data: gotas } = await sb.from('products').select('*').eq('activo', true).eq('tipo', 'gota').order('nombre')
-  const products = [...(soluciones ?? []), ...(gotas ?? [])]
+  // Mantenemos listas separadas para mostrarlas en secciones distintas
 
   return (
     <>
@@ -39,9 +39,41 @@ export default async function Page() {
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Soluciones y Gotas para Lentes en RD</h1>
           <p className="text-teal-100 text-lg max-w-xl mx-auto">ReNu, Opti-Free, Systane, Refresh y más. Todo para el cuidado y confort de tus lentes de contacto.</p>
         </section>
-        <section className="max-w-7xl mx-auto px-4 py-10">
+        {/* ── Soluciones Multipropósito ─────────────────────────────────── */}
+        <section className="max-w-7xl mx-auto px-4 pt-10 pb-6">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
+              <span className="text-lg">🧴</span>
+            </div>
+            <div>
+              <h2 className="font-display font-bold text-gray-900 text-lg">Soluciones Multipropósito</h2>
+              <p className="text-xs text-gray-500">Limpieza, desinfección y almacenamiento de lentes</p>
+            </div>
+            <span className="ml-auto text-xs font-bold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100">
+              {(soluciones ?? []).length} productos
+            </span>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {products.map(p => <ProductCard key={p.id} product={p as any} />)}
+            {(soluciones ?? []).map(p => <ProductCard key={p.id} product={p as any} />)}
+          </div>
+        </section>
+
+        {/* ── Gotas Lubricantes ─────────────────────────────────────────── */}
+        <section className="max-w-7xl mx-auto px-4 pt-4 pb-10 border-t border-gray-100">
+          <div className="flex items-center gap-3 mb-5 mt-6">
+            <div className="w-9 h-9 rounded-xl bg-teal-100 flex items-center justify-center shrink-0">
+              <span className="text-lg">💧</span>
+            </div>
+            <div>
+              <h2 className="font-display font-bold text-gray-900 text-lg">Gotas Lubricantes</h2>
+              <p className="text-xs text-gray-500">Para ojos secos y confort durante todo el día</p>
+            </div>
+            <span className="ml-auto text-xs font-bold bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full border border-teal-100">
+              {(gotas ?? []).length} productos
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            {(gotas ?? []).map(p => <ProductCard key={p.id} product={p as any} />)}
           </div>
         </section>
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
