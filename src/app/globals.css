@@ -366,3 +366,31 @@ nav a:hover, .nav-link:hover {
   font-weight: 900;
   font-variant-numeric: tabular-nums;
 }
+
+/* ── Desktop Wide Screen — 1440p / 2K / 4K ─────────────────────────────────
+   Usamos max-w-screen-xl (1280px) en los contenedores principales
+   para evitar que el contenido se vea demasiado estrecho en monitores amplios
+   ────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 1440px) {
+  /* Catálogo: 4 columnas en desktop, 5 en wide */
+  .catalog-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  /* Hero: texto más grande en pantallas anchas */
+  .hero-title {
+    font-size: 3.5rem;
+  }
+
+  /* Padding lateral adicional para respirar */
+  .px-wide {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  /* 4K — limitar ancho máximo del contenido central */
+  .max-w-screen-xl { max-width: 1400px; }
+  body { font-size: 16.5px; }
+}

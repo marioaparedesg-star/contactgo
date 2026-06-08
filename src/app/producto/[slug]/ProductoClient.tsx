@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ShoppingCart, ArrowLeft, Eye, AlertCircle } from 'lucide-react'
 import Reviews from '@/components/ui/Reviews'
+import FrequentlyBoughtTogether from '@/components/shop/FrequentlyBoughtTogether'
 import CrossSelling from '@/components/shop/CrossSelling'
 import ProductFAQ from '@/components/shop/ProductFAQ'
 import Navbar from '@/components/ui/Navbar'
@@ -529,7 +530,7 @@ export default function ProductoClient({ product, variants }: Props) {
   return (
     <>
       <Navbar />
-      <main className="pdp-main max-w-6xl mx-auto px-4 pt-4 pb-44 md:pb-12">
+      <main className="pdp-main max-w-screen-xl mx-auto px-4 pt-4 pb-44 md:pb-12">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
           <button onClick={() => router.back()} className="hover:text-primary-600 transition-colors flex items-center gap-1">
@@ -948,6 +949,7 @@ export default function ProductoClient({ product, variants }: Props) {
         </div>
       </main>
 
+      <FrequentlyBoughtTogether productId={product.id} tipo={tipo} precio={product.precio} />
       <Reviews productId={product.id} initialReviews={(product as any).reviews ?? []} />
       <CrossSelling tipo={product.tipo} currentId={product.id} />
       <ProductFAQ tipo={product.tipo} nombre={product.nombre} />
