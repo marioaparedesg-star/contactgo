@@ -15,7 +15,7 @@ export default function Navbar() {
     { href: '/toricos', label: 'Tóricos' },
     { href: '/multifocales', label: 'Multifocales' },
     { href: '/catalogo?tipo=color', label: 'Color' },
-    { href: '/catalogo?tipo=solucion', label: 'Soluciones' },
+    { href: '/soluciones', label: 'Soluciones' },
     { href: '/receta', label: 'Mi Receta' },
   ]
 
