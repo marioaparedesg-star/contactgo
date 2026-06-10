@@ -28,7 +28,7 @@ export const revalidate = 300
 async function getProduct(slug: string) {
   const sb = createServerSupabaseClient()
   const { data } = await sb.from('products')
-    .select('*, reviews:product_reviews(rating, comment, user_name, created_at)')
+    .select('*, reviews:product_reviews(id, rating, comment, user_name, ciudad, verified, approved, created_at)')
     .eq('slug', slug).single()
   if (!data) return null
 
@@ -128,7 +128,10 @@ export default async function ProductoPage(
   const product = await getProduct(slug)
   if (!product) notFound()
 
-  const reviews = product.reviews ?? []
+  const reviews = (product.reviews ?? []).filter((r: any) =>
+    r.approved !== false   // incluye: approved=true y approved=null (legacy)
+    && (r.comment ?? '').trim() !== ''  // solo reviews con texto
+  )
   const avgRating = reviews.length
     ? reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length
     : null
@@ -191,7 +194,7 @@ export default async function ProductoPage(
     productSchema.aggregateRating = {
       "@type": "AggregateRating",
       "ratingValue": String((avgRatingReal ?? 5).toFixed(1)), // siempre string
-      "reviewCount": String(reviews.length),                  // siempre string
+      "reviewCount": String(reviews.length), // solo reviews aprobadas con texto                  // siempre string
       "bestRating": "5",
       "worstRating": "1"
     }
