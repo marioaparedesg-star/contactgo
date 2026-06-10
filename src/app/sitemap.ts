@@ -24,6 +24,7 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/marca/alcon',                                 priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/marca/bausch-lomb',                           priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/marca/coopervision',                          priority: 0.85, changeFrequency: 'weekly'  },
+    { url: 'https://www.contactgo.net/faq',  priority: 0.65, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/blog',                                        priority: 0.75, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/blog/primeros-pasos-lentes-contacto-rd',      priority: 0.70, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd', priority: 0.75, changeFrequency: 'monthly' },
