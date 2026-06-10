@@ -35,36 +35,12 @@ async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount
 
 const SCHEMA_ORG = {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://www.contactgo.net/#org",
-      "name": "ContactGo",
-      "url": "https://contactgo.net",
-      "logo": "https://www.contactgo.net/logo.png",
-      "description": "Tienda especializada en lentes de contacto originales en República Dominicana. Entrega en 24-48 horas.",
-      "address": { "@type": "PostalAddress", "addressCountry": "DO", "addressLocality": "Santo Domingo" },
-      "contactPoint": { "@type": "ContactPoint", "telephone": "+1-829-472-8328", "contactType": "customer service", "availableLanguage": "Spanish" },
-      "sameAs": ["https://wa.me/18294728328", "https://www.instagram.com/contactgord", "https://www.facebook.com/profile.php?id=1063834443484441"]
-    },
-    {
-      "@type": "Store",
-      "@id": "https://www.contactgo.net/#store",
-      "name": "ContactGo",
-      "url": "https://contactgo.net",
-      "description": "Lentes de contacto originales con entrega en 24-48h en República Dominicana.",
-      "priceRange": "RD$800 – RD$18,000",
-      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "34", "bestRating": "5" }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias." } },
-        { "@type": "Question", "name": "¿Son originales los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, 100% originales y certificados. Somos distribuidores autorizados de Acuvue, Air Optix, CooperVision y Bausch+Lomb." } },
-        { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
-        { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure. ContactGo no almacena datos de tarjetas." } }
-      ]
-    }
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias." } },
+    { "@type": "Question", "name": "¿Son originales los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, 100% originales y certificados. Somos distribuidores autorizados de Acuvue, Air Optix, CooperVision y Bausch+Lomb." } },
+    { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
+    { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
   ]
 }
 

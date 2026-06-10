@@ -101,7 +101,7 @@ export async function generateMetadata(
   return {
     title: `${data.nombre} | ContactGo República Dominicana`,
     description: desc,
-    alternates: { canonical: url },
+    alternates: { canonical: url.startsWith("https://www.") ? url : url.replace("https://", "https://www.") },
     openGraph: {
       title: data.nombre,
       description: desc,
@@ -148,7 +148,6 @@ export default async function ProductoPage(
     "mpn": product.sku ? String(product.sku) : `CG-${String(product.id).slice(0,8).toUpperCase()}`,
     ...((product as any).gtin ? { "gtin": String((product as any).gtin) } : {}),
     ...((product as any).ean  ? { "gtin13": String((product as any).ean) } : {}),
-    "category": product.tipo,
     "url": `https://www.contactgo.net/producto/${product.slug}`,
     "offers": {
       "@type": "Offer",
@@ -185,20 +184,34 @@ export default async function ProductoPage(
 
   // ── Agregar Reviews si existen ──────────────────────────────
   if (reviews.length > 0) {
+    const reviewsConTexto = reviews.filter((r: any) => r.comment || r.texto || r.comentario)
+    const avgRatingReal = reviewsConTexto.length > 0
+      ? reviewsConTexto.reduce((s: number, r: any) => s + (r.rating ?? r.estrellas ?? 5), 0) / reviewsConTexto.length
+      : avgRating
     productSchema.aggregateRating = {
       "@type": "AggregateRating",
-      "ratingValue": avgRating?.toFixed(1),
-      "reviewCount": reviews.length,
+      "ratingValue": String((avgRatingReal ?? 5).toFixed(1)), // siempre string
+      "reviewCount": String(reviews.length),                  // siempre string
       "bestRating": "5",
       "worstRating": "1"
     }
-    productSchema.review = reviews.slice(0, 5).map((r: any) => ({
-      "@type": "Review",
-      "author": { "@type": "Person", "name": r.user_name ?? "Cliente verificado" },
-      "datePublished": r.created_at?.slice(0, 10),
-      "reviewRating": { "@type": "Rating", "ratingValue": r.rating },
-      "reviewBody": r.comment ?? ""
-    }))
+    productSchema.review = reviews
+      .filter((r: any) => r.comment || r.texto || r.comentario) // solo reviews con texto
+      .slice(0, 5)
+      .map((r: any) => ({
+        "@type": "Review",
+        "author": { "@type": "Person", "name": r.user_name ?? r.nombre ?? "Cliente verificado" },
+        "datePublished": r.created_at?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": String(r.rating ?? r.estrellas ?? 5), // string, no number
+          "bestRating": "5",
+          "worstRating": "1"
+        },
+        "reviewBody": (r.comment ?? r.texto ?? r.comentario ?? "").trim()
+      }))
+    // Si después de filtrar no hay reviews con texto, eliminar el array
+    if (productSchema.review.length === 0) delete productSchema.review
   }
 
   // ── Breadcrumb Schema ───────────────────────────────────────
