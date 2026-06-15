@@ -111,7 +111,7 @@ export default function CartPage() {
             {items.map((item, idx) => {
               const receta = fmtReceta(item)
               const precioItem = Number((item as any).precio_final ?? item.product.precio)
-              const ojoLabel = (item as any).ojo === 'OD' ? '👁 Ojo Derecho' : (item as any).ojo === 'OI' ? '👁 Ojo Izquierdo (OI)' : null
+              // ojoLabel legacy — reemplazado por nuevo bloque ojo_mode abajo
               return (
                 <div key={`${item.product.id}-${item.sph}-${(item as any).ojo}-${idx}`}
                   className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4">
@@ -146,22 +146,38 @@ export default function CartPage() {
                       </button>
                     </div>
 
-                    {/* Ojo badge */}
-                    {ojoLabel && (
-                      <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 ${
-                        (item as any).ojo === 'OD' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
-                      }`}>
-                        {ojoLabel}
-                      </span>
-                    )}
-
-                    {/* Receta */}
-                    {receta && (
-                      <div className="flex items-center gap-1.5 mt-1.5 bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1.5">
-                        <span className="text-blue-400 text-xs">Rx</span>
-                        <p className="text-xs font-mono font-bold text-blue-800">{receta}</p>
-                      </div>
-                    )}
+                    {/* Ojo + Receta — nuevo formato single-item */}
+                    {(item as any).ojo_mode && (() => {
+                      const mode = (item as any).ojo_mode
+                      const misma = (item as any).misma_receta !== false
+                      return (
+                        <div className="mt-1.5 space-y-1">
+                          {/* Badge de ojo */}
+                          <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            mode === 'AMBOS' ? 'bg-primary-100 text-primary-700' :
+                            mode === 'OD'    ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+                          }`}>
+                            {mode === 'AMBOS' ? '👀 Ambos ojos' : mode === 'OD' ? '👁 Ojo derecho' : '👁 Ojo izquierdo'}
+                          </span>
+                          {/* Receta */}
+                          {mode === 'AMBOS' && !misma ? (
+                            <div className="bg-gray-50 border border-gray-100 rounded-lg px-2.5 py-1.5 text-[10px] font-mono font-bold text-gray-700 space-y-0.5">
+                              {(item as any).sph_od && <p>OD: SPH {(item as any).sph_od}{(item as any).cyl_od ? ` / CYL ${(item as any).cyl_od}` : ''}{(item as any).axis_od ? ` / AXIS ${(item as any).axis_od}°` : ''}</p>}
+                              {(item as any).sph_oi && <p>OI: SPH {(item as any).sph_oi}{(item as any).cyl_oi ? ` / CYL ${(item as any).cyl_oi}` : ''}{(item as any).axis_oi ? ` / AXIS ${(item as any).axis_oi}°` : ''}</p>}
+                            </div>
+                          ) : item.sph != null ? (
+                            <div className="bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1.5">
+                              <p className="text-[10px] font-mono font-bold text-blue-800">
+                                SPH {Number(item.sph) > 0 ? '+' : ''}{Number(item.sph).toFixed(2)}
+                                {item.cyl  != null ? ` / CYL ${Number(item.cyl).toFixed(2)}`  : ''}
+                                {(item as any).axis != null ? ` / AXIS ${(item as any).axis}°` : ''}
+                                {item.add_power ? ` / ADD ${item.add_power}` : ''}
+                              </p>
+                            </div>
+                          ) : null}
+                        </div>
+                      )
+                    })()}
 
                     {/* Suscripción */}
                     {(item as any).suscripcion && (

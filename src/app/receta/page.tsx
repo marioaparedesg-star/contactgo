@@ -171,10 +171,10 @@ export default function RecetaPage() {
     }
     const odSph = result.od.sph ?? 0; const oiSph = result.oi.sph ?? 0
     if (Math.abs(odSph - oiSph) < 0.01) {
-      addItem(prod as Product, { sph: odSph, ojo: 'AMBOS', cantidad: 2 })
+      addItem(prod as Product, { sph: odSph, ojo_mode: 'AMBOS', misma_receta: true, cantidad: 2 })
     } else {
-      addItem(prod as Product, { sph: odSph, ojo: 'OD', cantidad: 1 })
-      addItem(prod as Product, { sph: oiSph, ojo: 'OI', cantidad: 1 })
+      addItem(prod as Product, { sph: odSph, ojo_mode: 'OD', cantidad: 1 })
+      addItem(prod as Product, { sph: oiSph, ojo_mode: 'OI', cantidad: 1 })
     }
     setCartAdded(product.id)
     trackEvento('add_to_cart', { tipo_receta: result.tipo, producto_slug: product.slug })

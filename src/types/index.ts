@@ -112,16 +112,29 @@ export interface Order {
 export interface CartItem {
   product: Product
   cantidad: number
+  // ── Modo de compra ────────────────────────────────────
+  ojo_mode: 'AMBOS' | 'OD' | 'OI' | null  // reemplaza 'ojo' legacy
+  misma_receta?: boolean          // solo aplica cuando ojo_mode='AMBOS'
+  // ── Receta única (OD solo, OI solo, o AMBOS+mismaReceta) ──
   sph?: number | null
   cyl?: number | null
   axis?: number | null
   add_power?: string | null
+  // ── Receta diferente por ojo (AMBOS+mismaReceta=false) ────
+  sph_od?: number | null
+  sph_oi?: number | null
+  cyl_od?: number | null
+  cyl_oi?: number | null
+  axis_od?: number | null
+  axis_oi?: number | null
+  // ── Otros ─────────────────────────────────────────────
   color?: string | null
-  ojo?: string | null
   size?: string | null
-  precio_final?: number | null    // precio con descuento de suscripción aplicado
-  precio_original?: number | null // precio sin descuento (para mostrar tachado)
-  suscripcion?: string | null     // '15_dias' | 'mensual' | 'trimestral' | null
+  precio_final?: number | null
+  precio_original?: number | null
+  suscripcion?: string | null
+  // Legacy — no usar en nuevo código
+  ojo?: string | null
 }
 
 // Análisis de receta

@@ -195,13 +195,23 @@ export default function CheckoutPage() {
           precio_original: Number((i as any).precio_original ?? i.product.precio),
           descuento_pct:   descuentoPct((i as any).suscripcion ?? null),
           cantidad:        i.cantidad,
-          sph:     i.sph != null              ? Number(i.sph)                                 : null,
-          cyl:     i.cyl != null              ? Number(i.cyl)                                 : null,
-          add_power: i.add_power              ?? null,  // texto normalizado: 'LOW'/'MID'/'HIGH' o '1.5'
-          axis:    (i as any).axis != null    ? Number((i as any).axis)                       : null,
-          color:   (i as any).color           ?? null,
-          ojo:     (i as any).ojo             ?? null,
-          size:    (i as any).size            ?? null,
+          // ── Receta unificada (nuevo modelo) ──────────────────────
+          ojo_mode:      (i as any).ojo_mode   ?? null,
+          misma_receta:  (i as any).misma_receta ?? null,
+          sph:     i.sph     != null ? Number(i.sph)  : null,
+          cyl:     i.cyl     != null ? Number(i.cyl)  : null,
+          axis:    (i as any).axis   != null ? Number((i as any).axis) : null,
+          add_power: i.add_power ?? null,
+          sph_od:  (i as any).sph_od  != null ? Number((i as any).sph_od)  : null,
+          sph_oi:  (i as any).sph_oi  != null ? Number((i as any).sph_oi)  : null,
+          cyl_od:  (i as any).cyl_od  != null ? Number((i as any).cyl_od)  : null,
+          cyl_oi:  (i as any).cyl_oi  != null ? Number((i as any).cyl_oi)  : null,
+          axis_od: (i as any).axis_od != null ? Number((i as any).axis_od) : null,
+          axis_oi: (i as any).axis_oi != null ? Number((i as any).axis_oi) : null,
+          // ── Otros ────────────────────────────────────────────────
+          color:   (i as any).color  ?? null,
+          ojo:     (i as any).ojo_mode ?? (i as any).ojo ?? null, // legacy compat
+          size:    (i as any).size   ?? null,
           suscripcion: (i as any).suscripcion ?? null,
         })) }) })
       if (!itemsRes.ok) {
