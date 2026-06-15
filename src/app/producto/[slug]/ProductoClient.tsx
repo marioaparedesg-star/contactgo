@@ -479,10 +479,10 @@ export default function ProductoClient({ product, variants }: Props) {
           if (!sph)  { toast.error('Selecciona la graduación SPH'); return false }
           if (isToric && !cyl)  { toast.error('Selecciona el cilindro CYL'); return false }
           if (isToric && !axis) { toast.error('Selecciona el eje AXIS'); return false }
-          // Agregar OD
-          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
+          // Agregar OD (1 caja por ojo = 2 cajas total)
+          addItem(product, { suscripcion:suscripcion??undefined, cantidad:1, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OD', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
           // Agregar OS (misma receta)
-          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OS', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
+          addItem(product, { suscripcion:suscripcion??undefined, cantidad:qty, sph:parseFloat(sph), cyl:cyl?parseFloat(cyl):undefined, axis:axis?parseInt(axis):undefined, add_power:add?normalizeAdd(add):undefined, ojo:'OI', size:size||undefined, precio_override:price, precio_original:precioBase } as any)
         } else {
           // Receta diferente por ojo
           if (!sphOD && !sphOS) { toast.error('Ingresa la receta de al menos un ojo'); return false }

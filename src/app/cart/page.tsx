@@ -15,7 +15,7 @@ import toast from 'react-hot-toast'
 
 
 export default function CartPage() {
-  const { items, removeItem, updateQty, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+  const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
   const [cuponInput, setCuponInput] = useState(cuponCodigo ?? '')
   const [descuento,  setDescuento]  = useState(cuponDescuento)
   const [solucionSugerida, setSolucionSugerida] = useState<any>(null)
@@ -139,7 +139,7 @@ export default function CartPage() {
                         trackEcommerce('remove_from_cart', {
                           items: [{ item_id: item.product.id, item_name: item.product.nombre, price: (item as any).precio_final ?? item.product.precio, quantity: item.cantidad }],
                         })
-                        removeItem(item.product.id, item.sph)
+                        removeByIndex(idx)
                       }}
                         className="text-gray-300 hover:text-red-500 transition-colors p-1 shrink-0">
                         <Trash2 className="w-4 h-4" />
@@ -184,12 +184,12 @@ export default function CartPage() {
                     {/* Precio + cantidad */}
                     <div className="flex items-center justify-between mt-3">
                       <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
-                        <button onClick={() => updateQty(item.product.id, item.cantidad - 1, item.sph)}
+                        <button onClick={() => updateItem(idx, item.cantidad - 1)}
                           className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 text-gray-600 font-bold transition-colors">
                           <Minus className="w-3 h-3" />
                         </button>
                         <span className="w-8 text-center text-sm font-bold text-gray-900">{item.cantidad}</span>
-                        <button onClick={() => updateQty(item.product.id, item.cantidad + 1, item.sph)}
+                        <button onClick={() => updateItem(idx, item.cantidad + 1)}
                           className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 text-gray-600 font-bold transition-colors">
                           <Plus className="w-3 h-3" />
                         </button>

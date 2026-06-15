@@ -22,8 +22,8 @@ interface CartStore {
     precio_original?: number | null   // precio antes del descuento de suscripción
     suscripcion?: string | null
   }) => void
-  removeItem: (productId: string, sph?: number | null) => void
-  updateQty: (productId: string, cantidad: number, sph?: number | null) => void
+  removeItem: (productId: string, sph?: number | null, ojo?: string | null) => void
+  updateQty: (productId: string, cantidad: number, sph?: number | null, ojo?: string | null) => void
   updateItem: (index: number, cantidad: number) => void
   removeByIndex: (index: number) => void
   clearCart: () => void
@@ -92,22 +92,30 @@ export const useCartStore = create<CartStore>()(
         })
       },
 
-      removeItem: (productId, sph) => {
+      removeItem: (productId, sph, ojo) => {
         set(state => ({
-          items: state.items.filter(i => !(i.product.id === productId && i.sph === sph))
+          items: state.items.filter(i => !(
+            i.product.id === productId &&
+            i.sph === sph &&
+            (ojo === undefined || ojo === null || (i as any).ojo === ojo)
+          ))
         }))
       },
 
-      updateQty: (productId, cantidad, sph) => {
-        if (cantidad <= 0) { get().removeItem(productId, sph); return }
+      updateQty: (productId, cantidad, sph, ojo) => {
+        if (cantidad <= 0) { get().removeItem(productId, sph, ojo); return }
         set(state => ({
           items: state.items.map(i =>
-            i.product.id === productId && i.sph === sph ? { ...i, cantidad } : i
+            i.product.id === productId &&
+            i.sph === sph &&
+            ((i as any).ojo === ojo || (!ojo && !(i as any).ojo))
+              ? { ...i, cantidad } : i
           )
         }))
       },
 
       updateItem: (index, cantidad) => {
+        if (cantidad <= 0) { get().removeByIndex(index); return }
         const items = [...get().items]
         if (items[index]) { items[index] = { ...items[index], cantidad }; set({ items }) }
       },
