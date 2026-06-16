@@ -10,7 +10,7 @@ import ProductFAQ from '@/components/shop/ProductFAQ'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import { useCartStore } from '@/lib/cart-store'
-import { trackEcommerce } from '@/lib/analytics'
+import { trackEcommerce, trackBuyNow, trackEyeFlow } from '@/lib/analytics'
 import type { Product } from '@/types'
 import toast from 'react-hot-toast'
 import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
@@ -344,6 +344,18 @@ export default function ProductoClient({ product, variants }: Props) {
   const mismaSph   = eyeFlow.mismaReceta
   const [size,  setSize]  = useState('')
   const [qty,   setQty]   = useState(1)
+  const [qtyWarning, setQtyWarning] = useState<string | null>(null)
+  const handleSetQty = (n: number) => {
+    setQty(n)
+    // Validación inteligente: advertir si parece excesivo (>4 cajas para diarios)
+    if (n > 4 && tipo === 'esferico') {
+      setQtyWarning(`${n} cajas = aproximadamente ${n} meses de supply. ¿Confirmas que es correcto?`)
+    } else if (n > 2 && (tipo === 'torico' || tipo === 'multifocal')) {
+      setQtyWarning(`${n} cajas = aproximadamente ${n * 3} meses de supply para lentes de reemplazo trimestral.`)
+    } else {
+      setQtyWarning(null)
+    }
+  }
   const [price, setPrice] = useState(product.precio ?? 0)
   const [precioBase, setPrecioBase] = useState(product.precio ?? 0) // precio con size, sin descuento suscripción
   const [suscripcion, setSuscripcion] = useState<string | null>(null)
@@ -559,7 +571,10 @@ export default function ProductoClient({ product, variants }: Props) {
     return true
   }
 
-  const handleBuyNow = () => { if (handleAdd()) router.push('/checkout') }
+  const handleBuyNow = () => {
+    trackBuyNow(product.id, product.nombre, price)
+    if (handleAdd()) router.push('/checkout')
+  }
 
   return (
     <>
@@ -713,8 +728,8 @@ export default function ProductoClient({ product, variants }: Props) {
                   onChange={newState => {
                     setEyeFlow(newState)
                     // Sincronizar cantidad según modo de ojo
-                    if (newState.ojoMode === 'AMBOS') setQty(2)
-                    else if (newState.ojoMode) setQty(1)
+                    if (newState.ojoMode === 'AMBOS') handleSetQty(2)
+                    else if (newState.ojoMode) handleSetQty(1)
                   }}
                   needsCyl={needsToric}
                   needsAdd={isMulti}
@@ -756,16 +771,23 @@ export default function ProductoClient({ product, variants }: Props) {
               <div className="flex items-center gap-3">
                 <p className="text-xs font-semibold text-gray-600">Cantidad</p>
                 <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
-                  <button onClick={() => setQty(q => Math.max(1,q-1))}
+                  <button onClick={() => handleSetQty(Math.max(1, qty - 1))}
                     className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">−</button>
                   <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
-                  <button onClick={() => setQty(q => Math.min(product.stock, q+1))}
+                  <button onClick={() => handleSetQty(Math.min(product.stock, qty + 1))}
                     className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">+</button>
                 </div>
                 {isLente && !isColor && qty >= 2 && (
                   <span className="text-[10px] text-green-600 font-bold">5% OFF</span>
                 )}
               </div>
+              {/* Advertencia inteligente — no bloquea, solo informa */}
+              {qtyWarning && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex gap-2 items-start mt-1">
+                  <span className="text-base shrink-0">💡</span>
+                  <p className="text-xs text-amber-700 leading-relaxed">{qtyWarning}</p>
+                </div>
+              )}
             )}
 
             {/* ── SECCIÓN 3: CTAs principales ─────────────────────────────

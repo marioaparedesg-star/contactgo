@@ -1,6 +1,6 @@
 'use client'
 import { descuentoPct, labelFrecuencia, labelDescuento, proxEnvio } from '@/lib/subscription-utils'
-import { trackEcommerce } from '@/lib/analytics'
+import { trackEcommerce, trackCheckoutReviewed, trackAzulRedirect } from '@/lib/analytics'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -146,6 +146,7 @@ export default function CheckoutPage() {
     setDisclaimerAceptado(true)
     setShowDisclaimer(false)
     setStep(3)
+    trackCheckoutReviewed(items.map((i: any) => ({ id: i.product.id, nombre: i.product.nombre, precio: Number(i.precio_final ?? i.product.precio) })), subtotal())
   }
 
   const createOrder = async (data: FormData) => {
@@ -293,7 +294,7 @@ export default function CheckoutPage() {
         form.appendChild(input)
       })
       document.body.appendChild(form)
-      form.submit()
+      trackAzulRedirect(orderNum, tot); form.submit()
       return
     }
 
@@ -381,6 +382,7 @@ export default function CheckoutPage() {
         }
       } catch { /* silencioso */ }
       setStep(3)
+      trackCheckoutReviewed(items.map((i: any) => ({ id: i.product.id, nombre: i.product.nombre, precio: Number(i.precio_final ?? i.product.precio) })), subtotal())
     }
   }
 

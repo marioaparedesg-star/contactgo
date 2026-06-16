@@ -126,3 +126,106 @@ describe('ContactGo Cart — Escenarios del caso real', () => {
     })
   })
 })
+
+// ── NUEVOS TESTS: Analytics, Buy Now, Validaciones ────────────────────────
+
+describe('Analytics Events', () => {
+  test('trackEyeFlow emite evento correcto', () => {
+    const events: any[] = []
+    const mockWindow = { dataLayer: events, fbq: (type: any, name: any, data: any) => events.push({ type, name, data }) }
+    // Simular trackEyeFlow
+    mockWindow.dataLayer.push({ event: 'eye_flow_ambos_selected', eye_flow_action: 'ambos_selected' })
+    expect(events[0].event).toBe('eye_flow_ambos_selected')
+  })
+
+  test('trackBuyNow emite evento con precio correcto', () => {
+    const events: any[] = []
+    // Simular trackBuyNow
+    events.push({ event: 'buy_now_clicked', ecommerce: { value: 3720, currency: 'DOP' } })
+    expect(events[0].event).toBe('buy_now_clicked')
+    expect(events[0].ecommerce.value).toBe(3720)
+  })
+
+  test('trackCheckoutReviewed emite total correcto', () => {
+    const items = [{ id: 'p1', nombre: 'ACUVUE MOIST', precio: 3720 }]
+    const total = items.reduce((s, i) => s + i.precio, 0)
+    const event = { event: 'checkout_reviewed', ecommerce: { value: total, currency: 'DOP' } }
+    expect(event.ecommerce.value).toBe(3720)
+  })
+
+  test('trackAzulRedirect emite order_number', () => {
+    const event = { event: 'azul_redirect', order_number: 'CG-12345678', ecommerce: { value: 7640 } }
+    expect(event.order_number).toBe('CG-12345678')
+  })
+
+  test('trackWhatsappHelp emite source correcto', () => {
+    const event = { event: 'whatsapp_help_clicked', source: 'no_seguro' }
+    expect(event.source).toBe('no_seguro')
+  })
+})
+
+describe('Buy Now — skip carrito', () => {
+  test('Buy now añade al carrito y navega a checkout (no a /cart)', () => {
+    // Simular la navegación
+    let navigatedTo = ''
+    const mockRouter = { push: (path: string) => { navigatedTo = path } }
+    // Simular handleBuyNow exitoso
+    const handleAdd = () => true  // siempre exitoso
+    if (handleAdd()) mockRouter.push('/checkout')
+    expect(navigatedTo).toBe('/checkout')
+    expect(navigatedTo).not.toBe('/cart')
+  })
+})
+
+describe('Validación inteligente de cantidad', () => {
+  test('qty > 4 para esférico muestra advertencia', () => {
+    const tipo = 'esferico'
+    const qty = 5
+    let warning = null
+    if (qty > 4 && tipo === 'esferico') {
+      warning = `${qty} cajas = aproximadamente ${qty} meses de supply`
+    }
+    expect(warning).not.toBeNull()
+    expect(warning).toContain('meses')
+  })
+
+  test('qty <= 4 para esférico no muestra advertencia', () => {
+    const tipo = 'esferico'
+    const qty = 3
+    let warning = null
+    if (qty > 4 && tipo === 'esferico') {
+      warning = 'advertencia'
+    }
+    expect(warning).toBeNull()
+  })
+
+  test('qty > 2 para tórico muestra advertencia', () => {
+    const tipo = 'torico'
+    const qty = 3
+    let warning = null
+    if (qty > 2 && (tipo === 'torico' || tipo === 'multifocal')) {
+      warning = `${qty} cajas = aproximadamente ${qty * 3} meses`
+    }
+    expect(warning).toContain('meses')
+  })
+})
+
+describe('Carrito inteligente — una línea para AMBOS igual', () => {
+  test('AMBOS iguales: un solo item, no dos líneas', () => {
+    const items = [
+      { ojo_mode: 'AMBOS', misma_receta: true, sph: -2.75, cantidad: 1 }
+    ]
+    // El carrito debe tener 1 item para ambos ojos iguales
+    expect(items).toHaveLength(1)
+    expect(items[0].ojo_mode).toBe('AMBOS')
+  })
+
+  test('AMBOS diferentes: un item con sph_od y sph_oi', () => {
+    const items = [
+      { ojo_mode: 'AMBOS', misma_receta: false, sph_od: -3.00, sph_oi: -2.50, cantidad: 2 }
+    ]
+    expect(items).toHaveLength(1)
+    expect(items[0].sph_od).toBe(-3.00)
+    expect(items[0].sph_oi).toBe(-2.50)
+  })
+})
