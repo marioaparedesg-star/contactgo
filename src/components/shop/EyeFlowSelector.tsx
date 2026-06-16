@@ -1,5 +1,5 @@
-import { trackEyeFlow, trackWhatsappHelp } from '@/lib/analytics'
 'use client'
+import { trackEyeFlow, trackWhatsappHelp } from '@/lib/analytics'
 /**
  * EyeFlowSelector — Flujo óptico unificado ContactGo
  * ──────────────────────────────────────────────────

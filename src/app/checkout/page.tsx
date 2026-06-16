@@ -294,7 +294,7 @@ export default function CheckoutPage() {
         form.appendChild(input)
       })
       document.body.appendChild(form)
-      trackAzulRedirect(orderNum, tot); form.submit()
+      trackAzulRedirect(orderNum, totalFinal); form.submit()
       return
     }
 

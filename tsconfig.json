@@ -36,6 +36,9 @@
   ],
   "exclude": [
     "node_modules",
-    "supabase"
+    "supabase",
+    "src/__tests__",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

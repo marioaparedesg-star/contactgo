@@ -781,13 +781,13 @@ export default function ProductoClient({ product, variants }: Props) {
                   <span className="text-[10px] text-green-600 font-bold">5% OFF</span>
                 )}
               </div>
-              {/* Advertencia inteligente — no bloquea, solo informa */}
-              {qtyWarning && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex gap-2 items-start mt-1">
-                  <span className="text-base shrink-0">💡</span>
-                  <p className="text-xs text-amber-700 leading-relaxed">{qtyWarning}</p>
-                </div>
-              )}
+            )}
+            {/* Advertencia inteligente de cantidad — no bloquea */}
+            {qtyWarning && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex gap-2 items-start">
+                <span className="text-base shrink-0">💡</span>
+                <p className="text-xs text-amber-700 leading-relaxed">{qtyWarning}</p>
+              </div>
             )}
 
             {/* ── SECCIÓN 3: CTAs principales ─────────────────────────────
