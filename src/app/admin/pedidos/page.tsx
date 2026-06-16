@@ -70,7 +70,16 @@ export default function PedidosPage() {
     <p><b>Email:</b> ${selected.cliente_email??'—'} | <b>Dirección:</b> ${selected.direccion_texto??'—'}</p>
     <p><b>Pago:</b> ${selected.metodo_pago?.replace('_',' ')} | <b>Estado pago:</b> ${selected.pago_estado} ${selected.ncf?`| <b>NCF:</b> ${selected.ncf}`:''}</p>
     <table><tr><th>Producto</th><th>Receta</th><th>Cant.</th><th>Precio</th></tr>
-    ${its.map((i:any)=>`<tr><td>${i.nombre}${i.size?` (${i.size})`:''}${i.suscripcion?` 🔄${({'15_dias':'15d','mensual':'Mensual','trimestral':'3m'} as any)[i.suscripcion]||i.suscripcion}`:''}</td><td>${[i.sph!=null?`SPH ${Number(i.sph)>0?'+':''}${Number(i.sph)>0?Number(i.sph).toFixed(2):i.sph}`:null,i.cyl?`CYL ${i.cyl}`:null,i.axis?`${i.axis}°`:null].filter(Boolean).join(' ')}</td><td>${i.cantidad}</td><td>RD$${i.precio?.toLocaleString()}${i.precio_original&&i.precio_original>i.precio?` <s>RD$${i.precio_original?.toLocaleString()}</s>`:''}</td></tr>`).join('')}
+    ${its.map((i:any)=>`<tr><td>${i.nombre}${i.size?` (${i.size})`:''}${i.suscripcion?` 🔄${({'15_dias':'15d','mensual':'Mensual','trimestral':'3m'} as any)[i.suscripcion]||i.suscripcion}`:''}</td><td>${[
+              i.ojo_mode==='AMBOS'&&i.sph!=null?`Ambos · SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
+              i.ojo_mode==='AMBOS'&&i.sph_od?`OD:${i.sph_od}`:null,
+              i.ojo_mode==='AMBOS'&&i.sph_oi?`OI:${i.sph_oi}`:null,
+              i.ojo_mode==='OD'&&i.sph!=null?`OD · SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
+              i.ojo_mode==='OI'&&i.sph!=null?`OI · SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
+              (!i.ojo_mode&&i.sph!=null)?`SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
+              i.cyl?`CYL ${i.cyl}`:null,
+              i.axis?`${i.axis}°`:null
+            ].filter(Boolean).join(' ')}</td><td>${i.cantidad}</td><td>RD$${i.precio?.toLocaleString()}${i.precio_original&&i.precio_original>i.precio?` <s>RD$${i.precio_original?.toLocaleString()}</s>`:''}</td></tr>`).join('')}
     <tr><td colspan="3" style="text-align:right" class="total">Total</td><td class="total">RD$${selected.total?.toLocaleString()}</td></tr></table>
     <script>window.print();window.close();</script></body></html>`
     const w = window.open('','_blank'); w?.document.write(html); w?.document.close()
@@ -205,7 +214,17 @@ export default function PedidosPage() {
                             <p className="font-medium text-gray-800 text-xs">{i.nombre}</p>
                             {(i.sph!=null||i.cyl||i.axis) && (
                               <p className="text-[10px] text-blue-600 font-mono">
-                                {[i.sph!=null?`SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,i.cyl?`CYL ${i.cyl}`:null,i.axis?`${i.axis}°`:null,i.ojo].filter(Boolean).join(' · ')}
+                                {(() => {
+                                  const parts = []
+                                  if (i.ojo_mode === 'AMBOS' && i.sph != null) parts.push(`👀 Ambos · SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
+                                  else if (i.ojo_mode === 'AMBOS' && i.sph_od) { parts.push(`OD: ${i.sph_od}`); if (i.sph_oi) parts.push(`OI: ${i.sph_oi}`) }
+                                  else if (i.ojo_mode === 'OD' && i.sph != null) parts.push(`👁 OD · SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
+                                  else if (i.ojo_mode === 'OI' && i.sph != null) parts.push(`👁 OI · SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
+                                  else if (i.sph != null) parts.push(`SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
+                                  if (i.cyl) parts.push(`CYL ${i.cyl}`)
+                                  if (i.axis) parts.push(`${i.axis}°`)
+                                  return parts.filter(Boolean).join(' · ') || '—'
+                                })()}
                               </p>
                             )}
                           </div>

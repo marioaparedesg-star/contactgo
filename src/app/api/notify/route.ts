@@ -62,14 +62,24 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
   // Fila de cada producto con prescripción completa
   const itemsRows = items.map(i => {
     const sph = i.sph != null ? (Number(i.sph) > 0 ? `+${Number(i.sph).toFixed(2)}` : Number(i.sph).toFixed(2)) : null
+    // Para AMBOS con diferente receta
+    const sphOD = i.sph_od != null ? (Number(i.sph_od) > 0 ? `+${Number(i.sph_od).toFixed(2)}` : Number(i.sph_od).toFixed(2)) : null
+    const sphOI = i.sph_oi != null ? (Number(i.sph_oi) > 0 ? `+${Number(i.sph_oi).toFixed(2)}` : Number(i.sph_oi).toFixed(2)) : null
     const receta = [
       sph ? `Esfera ${sph}` : null,
+      sphOD ? `OD: ${sphOD}` : null,
+      sphOI ? `OI: ${sphOI}` : null,
       i.cyl && i.cyl !== 0 ? `Cil. ${Number(i.cyl).toFixed(2)}` : null,
       i.axis ? `${i.axis}°` : null,
       i.add_power ? `Ad. ${i.add_power}` : null,
       i.color ? i.color : null,
     ].filter(Boolean).join(' · ')
-    const ojoLabel = i.ojo === 'OD' ? '👁 Ojo Derecho' : i.ojo === 'OI' ? '👁 Ojo Izquierdo' : null
+    // ojo_mode es el nuevo campo; i.ojo es el legacy para retrocompat
+    const ojoDisplay = i.ojo_mode ?? i.ojo
+    const ojoLabel = ojoDisplay === 'AMBOS' ? '👀 Ambos ojos'
+                   : ojoDisplay === 'OD'    ? '👁 Ojo Derecho'
+                   : ojoDisplay === 'OI'    ? '👁 Ojo Izquierdo'
+                   : null
     const subtotal = (Number(i.precio ?? 0) * Number(i.cantidad ?? 1))
     return `
       <tr>
