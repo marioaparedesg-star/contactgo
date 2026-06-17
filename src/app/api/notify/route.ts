@@ -85,7 +85,8 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
       <tr>
         <td style="padding:10px 0;border-bottom:1px solid #f3f4f6;vertical-align:top;">
           <p style="margin:0;font-weight:700;color:#111;font-size:13px;">${i.nombre}</p>
-          ${ojoLabel ? `<span style="display:inline-block;background:${i.ojo==='OD'?'#dbeafe':'#ccfbf1'};color:${i.ojo==='OD'?'#1d4ed8':'#0f766e'};font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;margin:3px 0;">${ojoLabel}</span>` : ''}
+          ${ojoLabel ? `<span style="display:inline-block;background:${ojoDisplay==='OD'?'#dbeafe':ojoDisplay==='AMBOS'?'#ede9fe':'#ccfbf1'};color:${ojoDisplay==='OD'?'#1d4ed8':ojoDisplay==='AMBOS'?'#6d28d9':'#0f766e'};font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;margin:3px 0;">${ojoLabel}</span>` : ''}
+          ${i.color ? `<span style="display:inline-block;background:#f3e8ff;color:#7c3aed;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;margin:2px 0;">🎨 ${i.color}</span>` : ''}
           ${receta ? `<p style="margin:3px 0 0;color:#4b5563;font-size:11px;font-family:monospace;">${receta}</p>` : ''}
           <p style="margin:3px 0 0;color:#9ca3af;font-size:11px;">Cantidad: ${i.cantidad}</p>
         </td>

@@ -78,7 +78,8 @@ export default function PedidosPage() {
               i.ojo_mode==='OI'&&i.sph!=null?`OI · SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
               (!i.ojo_mode&&i.sph!=null)?`SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
               i.cyl?`CYL ${i.cyl}`:null,
-              i.axis?`${i.axis}°`:null
+              i.axis?`${i.axis}°`:null,
+              i.color?`🎨 ${i.color}`:null
             ].filter(Boolean).join(' ')}</td><td>${i.cantidad}</td><td>RD$${i.precio?.toLocaleString()}${i.precio_original&&i.precio_original>i.precio?` <s>RD$${i.precio_original?.toLocaleString()}</s>`:''}</td></tr>`).join('')}
     <tr><td colspan="3" style="text-align:right" class="total">Total</td><td class="total">RD$${selected.total?.toLocaleString()}</td></tr></table>
     <script>window.print();window.close();</script></body></html>`
