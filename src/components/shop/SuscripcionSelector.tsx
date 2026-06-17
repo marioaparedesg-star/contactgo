@@ -1,5 +1,5 @@
 'use client'
-import { DESCUENTOS, FRECUENCIAS } from '@/lib/subscription-utils'
+import type { Frecuencia } from '@/lib/subscription-utils'
 
 interface Props {
   value: string | null
@@ -8,138 +8,91 @@ interface Props {
   tipo: string
 }
 
-// ── Selector de suscripción
-// LÓGICA: la 1ª entrega es al precio completo.
-// A partir de la 2ª entrega se aplica el descuento automáticamente.
-const OPCIONES = [
-  {
-    val: null,
-    label: 'Compra única',
-    sublabel: 'Sin compromiso',
-    pct: 0,
-    badge: null,
-    icon: '🛍️',
-    nextLabel: null,
-  },
-  {
-    val: '15_dias',
-    label: 'Quincenal',
-    sublabel: 'Cada 15 días',
-    pct: 0.05,
-    badge: '5% OFF próxima',
-    icon: '📦',
-    nextLabel: 'Tu 2ª entrega: −5%',
-  },
-  {
-    val: 'mensual',
-    label: 'Mensual',
-    sublabel: 'Cada 30 días',
-    pct: 0.10,
-    badge: '10% OFF próxima',
-    icon: '⭐',
-    popular: true,
-    nextLabel: 'Tu 2ª entrega: −10%',
-  },
-  {
-    val: 'trimestral',
-    label: 'Trimestral',
-    sublabel: 'Cada 3 meses',
-    pct: 0.15,
-    badge: '15% OFF próxima',
-    icon: '💎',
-    nextLabel: 'Tu 2ª entrega: −15%',
-  },
+type Opcion = {
+  val: string | null
+  label: string
+  sublabel: string
+  icon: string
+  badge?: string
+  popular?: boolean
+  descuento: number
+  puntos: number
+  regalo?: string
+  envioGratis: boolean
+}
+
+const OPCIONES: Opcion[] = [
+  { val: null,         label: 'Única vez',   sublabel: 'Sin compromiso',    icon: '🛍️', descuento: 0,    puntos: 0,   envioGratis: false },
+  { val: 'mensual',    label: 'Mensual',     sublabel: 'Cada 30 días',      icon: '📦', badge: 'Envío gratis', descuento: 0, puntos: 50, envioGratis: true  },
+  { val: 'trimestral', label: 'Trimestral',  sublabel: 'Cada 3 meses',      icon: '⭐', badge: '5% + Envío',   descuento: 0.05, puntos: 150, envioGratis: true, popular: true },
+  { val: 'semestral',  label: 'Semestral',   sublabel: 'Cada 6 meses',      icon: '💎', badge: '8% + Regalo',  descuento: 0.08, puntos: 350, envioGratis: true, regalo: 'Refresh Tears' },
 ]
 
 export default function SuscripcionSelector({ value, onChange, precio, tipo }: Props) {
-  const isLente    = ['esferico','torico','multifocal','color'].includes(tipo)
-  const isSolucion = tipo === 'solucion'
-  const isGota     = tipo === 'gota'
-  if (!isLente && !isSolucion && !isGota) return null
-
-  const precioConDesc = (pct: number) => Math.round(precio * (1 - pct))
-  const ahorroAnual   = Math.round(precio * 0.10 * 12)
+  const isProducto = ['esferico','torico','multifocal','color','solucion','gota'].includes(tipo)
+  if (!isProducto) return null
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-semibold text-gray-700">Frecuencia de entrega</label>
-        {isLente && (
-          <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
-            Ahorra hasta RD${ahorroAnual.toLocaleString()}/año
-          </span>
-        )}
+        <p className="text-xs font-bold text-gray-700">Frecuencia de entrega</p>
+        <span className="text-[10px] font-bold text-primary-700 bg-primary-50 px-2 py-0.5 rounded-full border border-primary-100">
+          Cancela cuando quieras
+        </span>
       </div>
 
-      {/* Selector visual — 4 cards */}
       <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
         {OPCIONES.map(op => {
           const selected = value === op.val
-          const precioSiguiente = precioConDesc(op.pct)
+          const precioDesdeSig = op.descuento > 0 ? Math.round(precio * (1 - op.descuento)) : null
+          const beneficios = [
+            op.envioGratis ? '✓ Envío gratis' : null,
+            op.descuento > 0 ? `✓ ${Math.round(op.descuento*100)}% OFF (2ª+)` : null,
+            op.puntos > 0 ? `✓ ${op.puntos} puntos` : null,
+            op.regalo ? `✓ Regalo: ${op.regalo}` : null,
+          ].filter((b): b is string => !!b)
+
           return (
-            <button
-              key={String(op.val)}
-              type="button"
-              onClick={() => onChange(op.val, op.pct * precio)}
-              className={`relative flex flex-col items-center justify-center text-center py-2.5 px-1 rounded-xl border-2 transition-all duration-150 min-h-[80px] ${
-                selected
-                  ? 'border-primary-500 bg-primary-50 shadow-sm shadow-primary-100'
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
-              }`}
-            >
-              {/* Badge popular */}
+            <button key={String(op.val)} type="button"
+              onClick={() => onChange(op.val, 0)}
+              className={`relative flex flex-col items-start text-left p-2.5 rounded-xl border-2 transition-all min-h-[90px] ${
+                selected ? 'border-primary-500 bg-primary-50 shadow-sm' : 'border-gray-200 bg-white hover:border-gray-300'
+              }`}>
               {op.popular && (
-                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[8px] font-black bg-amber-400 text-white px-2 py-0.5 rounded-full whitespace-nowrap leading-tight">
+                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[8px] font-black bg-amber-400 text-white px-2 py-0.5 rounded-full whitespace-nowrap">
                   ★ Popular
                 </span>
               )}
-
-              {/* Badge de descuento — ahora dice "próxima" */}
               {op.badge && (
-                <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full mb-1 ${
+                <span className={`text-[8px] font-black px-1.5 py-0.5 rounded-full mb-1 self-start ${
                   selected ? 'bg-primary-600 text-white' : 'bg-green-50 text-green-700 border border-green-200'
-                }`}>
-                  {op.badge}
-                </span>
+                }`}>{op.badge}</span>
               )}
-
-              <p className={`text-[11px] font-black leading-tight ${selected ? 'text-primary-700' : 'text-gray-800'}`}>
-                {op.label}
-              </p>
-              <p className={`text-[9px] mt-0.5 ${selected ? 'text-primary-500' : 'text-gray-400'}`}>
-                {op.sublabel}
-              </p>
-
-              {/* Precio actual (1ª entrega: precio completo) */}
+              <p className={`text-[11px] font-black ${selected ? 'text-primary-700' : 'text-gray-900'}`}>{op.label}</p>
+              <p className={`text-[9px] mt-0.5 ${selected ? 'text-primary-400' : 'text-gray-400'}`}>{op.sublabel}</p>
+              <div className="mt-1 space-y-0.5 flex-1">
+                {beneficios.slice(0,2).map((b,i) => (
+                  <p key={i} className="text-[8px] text-green-600 font-semibold leading-tight">{b}</p>
+                ))}
+              </div>
               <p className={`text-[10px] font-black mt-1 ${selected ? 'text-primary-700' : 'text-gray-600'}`}>
                 RD${precio.toLocaleString()}
               </p>
-
-              {/* Precio de próxima entrega (si tiene descuento) */}
-              {op.pct > 0 && (
-                <p className="text-[9px] text-green-600 font-semibold mt-0.5 leading-tight">
-                  Sig. RD${precioSiguiente.toLocaleString()}
-                </p>
+              {precioDesdeSig && (
+                <p className="text-[8px] text-green-600 font-bold">Sig: RD${precioDesdeSig.toLocaleString()}</p>
               )}
             </button>
           )
         })}
       </div>
 
-      {/* Nota explicativa cuando está seleccionado un plan */}
       {value && (
-        <div className="bg-green-50 border border-green-100 rounded-xl px-3 py-2 space-y-0.5">
-          <p className="text-[10px] text-green-700 font-bold">
-            ✓ Primera entrega hoy al precio completo
-          </p>
-          <p className="text-[10px] text-green-600 font-semibold">
-            {value === '15_dias' && '✓ Tu 2ª entrega en 15 días con 5% de descuento'}
-            {value === 'mensual'  && '✓ Tu 2ª entrega en 30 días con 10% de descuento'}
-            {value === 'trimestral' && '✓ Tu 2ª entrega en 90 días con 15% de descuento'}
-          </p>
-          <p className="text-[10px] text-green-500">
-            Aviso previo por WhatsApp · Cancela cuando quieras
-          </p>
+        <div className="bg-green-50 border border-green-100 rounded-xl p-2.5 space-y-0.5">
+          <p className="text-[10px] font-bold text-green-800">✓ Primera entrega hoy — precio completo</p>
+          {value === 'mensual'    && <p className="text-[10px] text-green-700">✓ Envío gratis en cada reposición automática</p>}
+          {value === 'trimestral' && <p className="text-[10px] text-green-700">✓ 2ª entrega: 5% OFF + envío gratis</p>}
+          {value === 'semestral'  && <p className="text-[10px] text-green-700">✓ 2ª entrega: 8% OFF + Refresh Tears incluido</p>}
+          <p className="text-[9px] text-green-500">Aviso por WhatsApp antes de cada envío · Cancela cuando quieras</p>
         </div>
       )}
     </div>

@@ -65,13 +65,15 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
     // Para AMBOS con diferente receta
     const sphOD = i.sph_od != null ? (Number(i.sph_od) > 0 ? `+${Number(i.sph_od).toFixed(2)}` : Number(i.sph_od).toFixed(2)) : null
     const sphOI = i.sph_oi != null ? (Number(i.sph_oi) > 0 ? `+${Number(i.sph_oi).toFixed(2)}` : Number(i.sph_oi).toFixed(2)) : null
+    const subMap: Record<string,string> = {mensual:'📦 Mensual', trimestral:'⭐ Trimestral', semestral:'💎 Semestral', '15_dias':'📦 Quincenal'}
+    const subLabel = i.suscripcion ? (subMap[i.suscripcion] ?? i.suscripcion) : null
     const receta = [
       sph ? `Esfera ${sph}` : null,
       sphOD ? `OD: ${sphOD}` : null,
       sphOI ? `OI: ${sphOI}` : null,
       i.cyl && i.cyl !== 0 ? `Cil. ${Number(i.cyl).toFixed(2)}` : null,
       i.axis ? `${i.axis}°` : null,
-      i.add_power ? `Ad. ${i.add_power}` : null,
+      i.add_power ? `ADD ${i.add_power}` : null,
       i.color ? i.color : null,
     ].filter(Boolean).join(' · ')
     // ojo_mode es el nuevo campo; i.ojo es el legacy para retrocompat
@@ -87,6 +89,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
           <p style="margin:0;font-weight:700;color:#111;font-size:13px;">${i.nombre}</p>
           ${ojoLabel ? `<span style="display:inline-block;background:${ojoDisplay==='OD'?'#dbeafe':ojoDisplay==='AMBOS'?'#ede9fe':'#ccfbf1'};color:${ojoDisplay==='OD'?'#1d4ed8':ojoDisplay==='AMBOS'?'#6d28d9':'#0f766e'};font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;margin:3px 0;">${ojoLabel}</span>` : ''}
           ${i.color ? `<span style="display:inline-block;background:#f3e8ff;color:#7c3aed;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;margin:2px 0;">🎨 ${i.color}</span>` : ''}
+          ${subLabel ? `<span style="display:inline-block;background:#f0fdf4;color:#166534;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;margin:2px 0">${subLabel}</span>` : ''}
           ${receta ? `<p style="margin:3px 0 0;color:#4b5563;font-size:11px;font-family:monospace;">${receta}</p>` : ''}
           <p style="margin:3px 0 0;color:#9ca3af;font-size:11px;">Cantidad: ${i.cantidad}</p>
         </td>

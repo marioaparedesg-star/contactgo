@@ -145,7 +145,7 @@ async function handleReturn(req: NextRequest) {
       // Buscar la orden por numero_orden (AZUL devuelve nuestro OrderNumber)
       const { data: order, error: findErr } = await sb
         .from('orders')
-        .select('id, pago_estado, total')
+        .select('id, pago_estado, total, user_id')
         .eq('numero_orden', orderNumber)
         .single()
 
@@ -219,6 +219,17 @@ async function handleReturn(req: NextRequest) {
             ncf:                ncf,
             ncf_tipo:           'E02',
           }).eq('id', orderId)
+
+            // ── Loyalty: 1 punto por cada RD$10 gastado ───────────────────
+            try {
+              const pts = Math.floor(Number(amountRaw || 0) / 100 / 10)  // AZUL devuelve centavos
+              if (pts > 0 && order.user_id) {
+                await sb.from('loyalty_points').upsert(
+                  { user_id: order.user_id, points: pts, level: 'bronze', total_spent: parseInt(amountRaw||'0',10)/100, orders_count: 1 },
+                  { onConflict: 'user_id', ignoreDuplicates: false }
+                )
+              }
+            } catch { /* loyalty no bloquea el flujo */ }
 
           if (updateErr) {
             console.error('[AZUL/retorno] ERROR actualizando orden:', updateErr.message)

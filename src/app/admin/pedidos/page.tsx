@@ -70,17 +70,30 @@ export default function PedidosPage() {
     <p><b>Email:</b> ${selected.cliente_email??'—'} | <b>Dirección:</b> ${selected.direccion_texto??'—'}</p>
     <p><b>Pago:</b> ${selected.metodo_pago?.replace('_',' ')} | <b>Estado pago:</b> ${selected.pago_estado} ${selected.ncf?`| <b>NCF:</b> ${selected.ncf}`:''}</p>
     <table><tr><th>Producto</th><th>Receta</th><th>Cant.</th><th>Precio</th></tr>
-    ${its.map((i:any)=>`<tr><td>${i.nombre}${i.size?` (${i.size})`:''}${i.suscripcion?` 🔄${({'15_dias':'15d','mensual':'Mensual','trimestral':'3m'} as any)[i.suscripcion]||i.suscripcion}`:''}</td><td>${[
-              i.ojo_mode==='AMBOS'&&i.sph!=null?`Ambos · SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
-              i.ojo_mode==='AMBOS'&&i.sph_od?`OD:${i.sph_od}`:null,
-              i.ojo_mode==='AMBOS'&&i.sph_oi?`OI:${i.sph_oi}`:null,
-              i.ojo_mode==='OD'&&i.sph!=null?`OD · SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
-              i.ojo_mode==='OI'&&i.sph!=null?`OI · SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
-              (!i.ojo_mode&&i.sph!=null)?`SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
-              i.cyl?`CYL ${i.cyl}`:null,
-              i.axis?`${i.axis}°`:null,
-              i.color?`🎨 ${i.color}`:null
-            ].filter(Boolean).join(' ')}</td><td>${i.cantidad}</td><td>RD$${i.precio?.toLocaleString()}${i.precio_original&&i.precio_original>i.precio?` <s>RD$${i.precio_original?.toLocaleString()}</s>`:''}</td></tr>`).join('')}
+    ${its.map((i:any)=>{
+      const subMap={mensual:'📦Mensual',trimestral:'⭐Trim.',semestral:'💎Sem.',['15_dias']:'📦15d'}
+      const subLabel=i.suscripcion?(subMap[i.suscripcion]??i.suscripcion):null
+      const rx=[
+        i.ojo_mode==='AMBOS'&&i.sph!=null?`👀 Ambos SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
+        i.ojo_mode==='AMBOS'&&i.sph_od?`OD:${i.sph_od}`:null,
+        i.ojo_mode==='AMBOS'&&i.sph_oi?`OI:${i.sph_oi}`:null,
+        i.ojo_mode==='OD'&&i.sph!=null?`👁 OD SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
+        i.ojo_mode==='OI'&&i.sph!=null?`👁 OI SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
+        (!i.ojo_mode&&i.sph!=null)?`SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
+        i.cyl?`CYL ${i.cyl}`:null,i.axis?`${i.axis}°`:null,
+        i.add_power?`ADD ${i.add_power}`:null,
+        i.color?`🎨 ${i.color}`:null,
+      ].filter(Boolean).join(' ')
+      return `<tr>
+        <td style="padding:5px 8px;font-size:11px">
+          <strong>${i.nombre}${i.size?` (${i.size})`:''}</strong>
+          ${subLabel?`<span style="font-size:9px;background:#f0fdf4;color:#166534;padding:1px 5px;border-radius:4px;margin-left:4px">${subLabel}</span>`:''}
+        </td>
+        <td style="padding:5px 8px;font-size:10px;font-family:monospace;color:#374151">${rx||'—'}</td>
+        <td style="padding:5px 8px;text-align:center">${i.cantidad}</td>
+        <td style="padding:5px 8px;text-align:right;font-weight:700">RD$${i.precio?.toLocaleString()}${i.precio_original&&i.precio_original>i.precio?` <s style="color:#aaa">RD$${i.precio_original?.toLocaleString()}</s>`:''}</td>
+      </tr>`
+    }).join('')}
     <tr><td colspan="3" style="text-align:right" class="total">Total</td><td class="total">RD$${selected.total?.toLocaleString()}</td></tr></table>
     <script>window.print();window.close();</script></body></html>`
     const w = window.open('','_blank'); w?.document.write(html); w?.document.close()

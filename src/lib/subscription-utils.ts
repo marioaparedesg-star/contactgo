@@ -1,50 +1,45 @@
 /**
- * Utilidades centralizadas de suscripciones — FUENTE DE VERDAD ÚNICA
- * Usada en frontend, checkout y backend.
+ * Suscripciones ContactGo — Modelo de beneficios (no solo descuentos)
+ * Prioridad: LTV > margen puntual
  */
 
-/** Frecuencias disponibles */
 export const FRECUENCIAS = {
-  '15_dias':    { label: 'Cada 15 días',   dias: 15,  descuento: 0.05, badge: '5% OFF'  },
-  'mensual':    { label: 'Mensual',         dias: 30,  descuento: 0.10, badge: '10% OFF' },
-  'trimestral': { label: 'Cada 3 meses',    dias: 90,  descuento: 0.15, badge: '15% OFF' },
+  'mensual':    { label: 'Mensual',    sublabel: 'Cada 30 días',    dias: 30,  descuento: 0.00, badge: 'Envío gratis',  puntos: 50,  regalo: null,            popular: false },
+  'trimestral': { label: 'Trimestral', sublabel: 'Cada 3 meses',    dias: 90,  descuento: 0.05, badge: '5% + Envío',    puntos: 150, regalo: null,            popular: true  },
+  'semestral':  { label: 'Semestral',  sublabel: 'Cada 6 meses',    dias: 180, descuento: 0.08, badge: '8% + Regalo',   puntos: 350, regalo: 'Refresh Tears', popular: false },
 } as const
 
 export type Frecuencia = keyof typeof FRECUENCIAS
 
-/** Descuentos como decimales */
 export const DESCUENTOS: Record<string, number> = {
-  '15_dias':    0.05,
-  'mensual':    0.10,
-  'trimestral': 0.15,
+  'mensual':    0.00,
+  'trimestral': 0.05,
+  'semestral':  0.08,
 }
 
-/** Nombre legible de la frecuencia */
+/** 1ª entrega: siempre precio completo */
+export function descuentoPct(_val: string | null): number { return 0 }
+
+/** Siguientes entregas automáticas */
+export function descuentoPctSiguiente(val: string | null): number {
+  return Math.round((DESCUENTOS[val ?? ''] ?? 0) * 100)
+}
+
 export function labelFrecuencia(val: string | null): string {
   if (!val) return 'Compra única'
   return FRECUENCIAS[val as Frecuencia]?.label ?? val
 }
 
-/** Descuento % legible */
 export function labelDescuento(val: string | null): string {
   if (!val) return ''
-  const pct = Math.round((DESCUENTOS[val] ?? 0) * 100)
-  return pct > 0 ? `${pct}% de descuento` : ''
+  const f = FRECUENCIAS[val as Frecuencia]
+  if (!f) return ''
+  const parts = []
+  if (f.descuento > 0) parts.push(`${Math.round(f.descuento * 100)}% OFF`)
+  if (f.regalo) parts.push(`+ ${f.regalo}`)
+  return parts.join(' ')
 }
 
-/** Porcentaje entero para la 1ª entrega (SIEMPRE 0 — precio completo)
- *  Las entregas automáticas posteriores usarán descuentoPctSiguiente.
- */
-export function descuentoPct(_val: string | null): number {
-  return 0 // 1ª entrega sin descuento — aplica en la 2ª entrega automática
-}
-
-/** Porcentaje para las SIGUIENTES entregas automáticas */
-export function descuentoPctSiguiente(val: string | null): number {
-  return Math.round((DESCUENTOS[val ?? ''] ?? 0) * 100)
-}
-
-/** Calcular próximo envío desde hoy */
 export function proxEnvio(frecuencia: string): Date {
   const dias = FRECUENCIAS[frecuencia as Frecuencia]?.dias ?? 30
   const d = new Date()
@@ -52,20 +47,17 @@ export function proxEnvio(frecuencia: string): Date {
   return d
 }
 
-/** Precio con descuento de suscripción aplicado */
 export function precioConSuscripcion(precioBase: number, frecuencia: string | null): number {
   if (!frecuencia) return precioBase
   const desc = DESCUENTOS[frecuencia] ?? 0
   return Math.round(precioBase * (1 - desc))
 }
 
-/** Precios de soluciones por SKU y tamaño — FUENTE DE VERDAD */
 export const SOLUTION_PRICES: Record<string, Record<string, number>> = {
-  'RENU-MULTI': { '60ml': 562,  '120ml': 655,  '355ml': 1353 },
-  'OPTI-MULTI': { '90ml': 450,  '120ml': 700,  '300ml': 1250 },
-  'PRO-60ML':   { '60ml': 419  },
-  'PRO-350ML':  { '350ml': 869 },
-  'DRE-80ML':   { '80ml': 333  },
+  'RENU-MULTI': { '60ml': 562, '120ml': 655, '355ml': 1353 },
+  'OPTI-MULTI': { '90ml': 450, '120ml': 700, '300ml': 1250 },
+  'PRO-60ML':   { '60ml': 419 },
+  'DRE-80ML':   { '80ml': 333 },
   'SPR-FOAM':   { 'Frasco único': 350 },
 }
 

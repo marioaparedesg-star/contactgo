@@ -237,6 +237,22 @@ export default async function ProductoPage(
   }
 
   // ── Breadcrumb Schema ───────────────────────────────────────
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question',
+        name: `¿Cuánto dura una caja de ${product.nombre}?`,
+        acceptedAnswer: { '@type': 'Answer', text: `${product.nombre} es de reemplazo ${(product.reemplazo||'').toLowerCase()}. ${product.contenido ? `Cada caja contiene ${product.contenido}.` : ''}` } },
+      { '@type': 'Question',
+        name: `¿${product.nombre} tiene protección UV?`,
+        acceptedAnswer: { '@type': 'Answer', text: product.proteccion_uv ? `Sí, ${product.nombre} incluye protección UV.` : `${product.nombre} no incluye protección UV.` } },
+      { '@type': 'Question',
+        name: `¿Dónde comprar ${product.nombre} en República Dominicana?`,
+        acceptedAnswer: { '@type': 'Answer', text: `Puedes comprar ${product.nombre} en ContactGo (contactgo.net), la tienda especializada de lentes de contacto en República Dominicana. Envío a todo el país.` } },
+    ],
+  }
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -250,6 +266,7 @@ export default async function ProductoPage(
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <ProductoClient product={product} variants={[]} />
     </>
