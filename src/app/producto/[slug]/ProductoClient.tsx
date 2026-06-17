@@ -363,17 +363,10 @@ export default function ProductoClient({ product, variants }: Props) {
   const mismaSph   = eyeFlow.mismaReceta
   const [size,  setSize]  = useState('')
   const [qty,   setQty]   = useState(1)
-  const [qtyWarning, setQtyWarning] = useState<string | null>(null)
+  // Sin límite de cantidad — el cliente compra lo que necesite
   const handleSetQty = (n: number) => {
+    if (n < 1) return
     setQty(n)
-    // Validación inteligente: advertir si parece excesivo (>4 cajas para diarios)
-    if (n > 4 && tipo === 'esferico') {
-      setQtyWarning(`${n} cajas = aproximadamente ${n} meses de supply. ¿Confirmas que es correcto?`)
-    } else if (n > 2 && (tipo === 'torico' || tipo === 'multifocal')) {
-      setQtyWarning(`${n} cajas = aproximadamente ${n * 3} meses de supply para lentes de reemplazo trimestral.`)
-    } else {
-      setQtyWarning(null)
-    }
   }
   const [price, setPrice] = useState(product.precio ?? 0)
   const [precioBase, setPrecioBase] = useState(product.precio ?? 0) // precio con size, sin descuento suscripción
@@ -795,7 +788,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   <button onClick={() => handleSetQty(Math.max(1, qty - 1))}
                     className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">−</button>
                   <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
-                  <button onClick={() => handleSetQty(Math.min(product.stock, qty + 1))}
+                  <button onClick={() => handleSetQty(qty + 1)}
                     className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">+</button>
                 </div>
                 {isLente && !isColor && qty >= 2 && (
@@ -804,12 +797,7 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
             {/* Advertencia inteligente de cantidad — no bloquea */}
-            {qtyWarning && (
-              <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex gap-2 items-start">
-                <span className="text-base shrink-0">💡</span>
-                <p className="text-xs text-amber-700 leading-relaxed">{qtyWarning}</p>
-              </div>
-            )}
+
 
             {/* ── SECCIÓN 3: CTAs principales ─────────────────────────────
                 Orden nuevo: Suscripción → Precio final → Comprar → Agregar → WA
