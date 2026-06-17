@@ -106,7 +106,15 @@ export async function generateMetadata(
       title: data.nombre,
       description: desc,
       url,
-      images: data.imagen_url ? [{ url: data.imagen_url, width: 800, height: 800, alt: data.nombre }] : [{ url: 'https://www.contactgo.net/og-1200x630.png', width: 1200, height: 630 }],
+      images: (() => {
+      // Para productos de color: usar la primera imagen de color disponible como OG
+      const colImgs = (data as any).imagenes_por_color as Record<string,string> | undefined
+      const firstColorImg = colImgs && Object.values(colImgs)[0]
+        ? `https://www.contactgo.net${Object.values(colImgs)[0]}`
+        : null
+      const ogImgUrl = firstColorImg ?? data.imagen_url ?? 'https://www.contactgo.net/og-1200x630.png'
+      return [{ url: ogImgUrl, width: 800, height: 800, alt: data.nombre }]
+    })(),
       locale: 'es_DO',
       siteName: 'ContactGo',
       type: 'website' as const, // Next.js Metadata type
@@ -150,6 +158,17 @@ export default async function ProductoPage(
     "sku": product.id,
     "mpn": product.sku ? String(product.sku) : `CG-${String(product.id).slice(0,8).toUpperCase()}`,
     ...((product as any).gtin ? { "gtin": String((product as any).gtin) } : {}),
+    ...((product as any).ean  ? { "gtin13": String((product as any).ean) } : {}),
+    // ── Colores: requerido para Google Shopping y Rich Results ─────────────────
+    ...(product.colores_disponibles?.length
+      ? { "color": product.colores_disponibles.join(", ") }
+      : {}),
+    // ── Imagen con color: primera imagen disponible para el schema ─────────────
+    ...(() => {
+      const colImgs = (product as any).imagenes_por_color as Record<string,string> | undefined
+      if (!colImgs || !Object.values(colImgs)[0]) return {}
+      return { "image": [`https://www.contactgo.net${Object.values(colImgs)[0]}`, product.imagen_url].filter(Boolean) }
+    })(),
     ...((product as any).ean  ? { "gtin13": String((product as any).ean) } : {}),
     "url": `https://www.contactgo.net/producto/${product.slug}`,
     "offers": {

@@ -402,25 +402,32 @@ export default function ProductoClient({ product, variants }: Props) {
   // Separado de sph_disponibles (que siempre contiene el rango oficial completo)
   const inventario = (product as any).stock_map as any[] ?? []
   const varianteSeleccionadaTieneStock = (): boolean => {
-    if (!isLente || isColor || !inventario.length) return true // no aplica
+    if (!isLente || !inventario.length) return true // solo excluye no-lentes
     const sphNum  = sph  ? parseFloat(sph)  : null
     const cylNum  = cyl  ? parseFloat(cyl)  : null
     const axisNum = axis ? parseInt(axis)   : null
-    // normalizeAdd: "LOW (+0.75 a +1.50)" → "LOW" para comparar con product_inventory.add_power
     const addVal  = add ? normalizeAdd(add) : null
-    if (sphNum === null) return true // aún no seleccionó SPH — botón habilitado (SelectField lo bloquea)
+    if (sphNum === null) return true // SPH no seleccionado aún → habilitado
     return inventario.some((v: any) => {
       const sphMatch  = Math.abs(Number(v.sph) - sphNum) < 0.001
       const cylMatch  = cylNum  === null ? v.cyl  == null : (v.cyl  != null && Math.abs(Number(v.cyl) - cylNum) < 0.001)
       const axisMatch = axisNum === null ? v.axis == null : (v.axis != null && v.axis === axisNum)
       const addMatch  = addVal  === null ? v.add_power == null : v.add_power === addVal
-      return sphMatch && cylMatch && axisMatch && addMatch
+      // ── NUEVO: validar color para lentes de color ──────────────────────
+      // Si hay color seleccionado, buscar variante con ese color específico
+      // Si no hay color seleccionado aún, cualquier variante del SPH habilita el botón
+      const colorMatch = !isColor || !color || v.color === color || !v.color
+      return sphMatch && cylMatch && axisMatch && addMatch && colorMatch && (v.stock ?? 1) > 0
     })
   }
   // Tóricos (25-30 días) y multifocales (5-10 días) son fabricación especial a medida
   // → siempre mostramos "Agregar". El cliente gestiona el inventario desde el admin.
   // Esféricos y color: mantienen la validación de stock real.
-  const sinVariante = isLente && !isColor && !isToric && !isMulti && sph !== '' && !varianteSeleccionadaTieneStock()
+  // Color: ahora también se valida el stock. Si color+SPH agotado → sinVariante=true → botón 'Agotado'
+  // Excepción: tórico y multifocal son fabricación especial (siempre habilitados)
+  const sinVariante = isLente && !isToric && !isMulti && sph !== '' && (
+    isColor ? (!!color && !varianteSeleccionadaTieneStock()) : !varianteSeleccionadaTieneStock()
+  )
 
   // ── Analytics: view_item al cargar el producto ──────────────────────────
   // ── Pre-llenar receta desde la calculadora (/receta) ─────────────────────────
@@ -829,12 +836,12 @@ export default function ProductoClient({ product, variants }: Props) {
               <button onClick={handleAdd} disabled={product.stock === 0 || sinVariante}
                 className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-primary-200/60 disabled:opacity-40 disabled:cursor-not-allowed">
                 <ShoppingCart className="w-4 h-4" />
-                {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Consultar disponibilidad —' : 'Agregar al carrito'}
+                {product.stock === 0 ? '— Sin stock —' : sinVariante ? (isColor ? '— Color agotado en esa graduación —' : '— Consultar disponibilidad —') : 'Agregar al carrito'}
               </button>
               {/* COMPRAR AHORA = CTA secundario oscuro */}
               <button onClick={handleBuyNow} disabled={product.stock === 0 || sinVariante}
                 className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-40 disabled:cursor-not-allowed">
-                {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Consultar —' : (
+                {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Agotado —' : (
                   <span className="flex items-center gap-2">Comprar ahora <span className="opacity-70">→</span></span>
                 )}
               </button>
