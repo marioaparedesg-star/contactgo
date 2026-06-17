@@ -681,6 +681,12 @@ export default function CheckoutPage() {
                               <p className="text-sm font-bold text-gray-900 leading-tight">{item.product.nombre}</p>
                               <p className="text-sm font-black text-gray-900 shrink-0">RD${(precio * item.cantidad).toLocaleString()}</p>
                             </div>
+                            {/* ── Color del lente (si aplica) ── */}
+                            {(item as any).color && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                                🎨 {(item as any).color}
+                              </span>
+                            )}
                             {mode && (
                               <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                                 mode === 'AMBOS' ? 'bg-primary-100 text-primary-700' :
