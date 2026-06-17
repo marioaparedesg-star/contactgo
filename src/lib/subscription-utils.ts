@@ -32,8 +32,15 @@ export function labelDescuento(val: string | null): string {
   return pct > 0 ? `${pct}% de descuento` : ''
 }
 
-/** Porcentaje entero (para DB) */
-export function descuentoPct(val: string | null): number {
+/** Porcentaje entero para la 1ª entrega (SIEMPRE 0 — precio completo)
+ *  Las entregas automáticas posteriores usarán descuentoPctSiguiente.
+ */
+export function descuentoPct(_val: string | null): number {
+  return 0 // 1ª entrega sin descuento — aplica en la 2ª entrega automática
+}
+
+/** Porcentaje para las SIGUIENTES entregas automáticas */
+export function descuentoPctSiguiente(val: string | null): number {
   return Math.round((DESCUENTOS[val ?? ''] ?? 0) * 100)
 }
 
