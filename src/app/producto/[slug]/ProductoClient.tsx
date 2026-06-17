@@ -334,6 +334,25 @@ export default function ProductoClient({ product, variants }: Props) {
 
   // ── Nuevo flujo óptico unificado ──────────────────────────────────────
   const [eyeFlow, setEyeFlow] = useState<EyeFlowState>(initialEyeFlow)
+
+  // ── Imagen dinámica por color ─────────────────────────────────────────
+  const imagenesPorColor: Record<string, string> = (product as any).imagenes_por_color ?? {}
+  const [imagenActual, setImagenActual] = useState<string>(
+    product.imagen_url ?? '/icon-512.png'
+  )
+
+  // Actualizar imagen cuando cambia el color seleccionado
+  const handleColorChange = (newState: EyeFlowState) => {
+    setEyeFlow(newState)
+    if (newState.color && imagenesPorColor[newState.color]) {
+      setImagenActual(imagenesPorColor[newState.color])
+    } else {
+      setImagenActual(product.imagen_url ?? '/icon-512.png')
+    }
+    // Sincronizar cantidad según modo de ojo
+    if (newState.ojoMode === 'AMBOS') handleSetQty(2)
+    else if (newState.ojoMode) handleSetQty(1)
+  }
   // Aliases de lectura para código interno que usa los campos directamente
   const eye        = eyeFlow.ojoMode ?? 'AMBOS'
   const sph        = eyeFlow.sph
@@ -619,8 +638,8 @@ export default function ProductoClient({ product, variants }: Props) {
               <span className="absolute top-3 right-3 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full z-10 flex items-center gap-1 leading-none">
                 ✓ 100% Original
               </span>
-              {product.imagen_url ? (
-                <Image src={product.imagen_url} alt={product.nombre}
+              {imagenActual ? (
+                <Image src={imagenActual} alt={`${product.nombre}${eyeFlow.color ? ' ' + eyeFlow.color : ''}`}
                   fill unoptimized priority
                   className="object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out" />
               ) : (
@@ -725,12 +744,7 @@ export default function ProductoClient({ product, variants }: Props) {
               return (
                 <EyeFlowSelector
                   state={eyeFlow}
-                  onChange={newState => {
-                    setEyeFlow(newState)
-                    // Sincronizar cantidad según modo de ojo
-                    if (newState.ojoMode === 'AMBOS') handleSetQty(2)
-                    else if (newState.ojoMode) handleSetQty(1)
-                  }}
+                  onChange={handleColorChange}
                   needsCyl={needsToric}
                   needsAdd={isMulti}
                   needsColor={isColor}
