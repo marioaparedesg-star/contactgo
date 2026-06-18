@@ -337,7 +337,6 @@ export default function ProductoClient({ product, variants }: Props) {
 
   // ── Imagen dinámica por color ─────────────────────────────────────────
   const imagenesPorColor: Record<string, string> = (product as any).imagenes_por_color ?? {}
-  const galeriaImagenes: string[] = (product as any).galeria_imagenes ?? []
   const [imagenActual, setImagenActual] = useState<string>(
     product.imagen_url ?? '/icon-512.png'
   )
@@ -643,21 +642,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 )}
               </div>
 
-              {/* Galería de imágenes adicionales */}
-              {galeriaImagenes.length > 0 && (
-                <div className="flex gap-2 px-4 pb-2 overflow-x-auto scrollbar-hide">
-                  {galeriaImagenes.map((url, i) => (
-                    <button key={url} onClick={() => setImagenActual(url)}
-                      className={`shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
-                        imagenActual === url ? 'border-primary-500' : 'border-gray-200'
-                      }`} style={{width:72, height:54}}>
-                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
-                    </button>
-                  ))}
-                </div>
-              )}
-
-            {/* Thumbnails de color */}
+              {/* Thumbnails de color */}
               {isColor && Object.keys(imagenesPorColor).length > 0 && (
                 <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
                   {Object.entries(imagenesPorColor).map(([c, url]) => (
@@ -786,14 +771,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BELOW FOLD MOBILE */}
             <div className="px-4 pb-8 space-y-6">
-              {/* Banner social proof */}
-              {isLente && (
-                <div className="rounded-2xl overflow-hidden">
-                  <img src="/images/social-proof.png" alt="2,100+ clientes satisfechos en ContactGo" className="w-full h-auto" loading="lazy" />
-                </div>
-              )}
-
-            {/* Beneficios */}
+              {/* Beneficios */}
               {isLente && (
                 <div className="grid grid-cols-2 gap-2">
                   {[
@@ -870,20 +848,6 @@ export default function ProductoClient({ product, variants }: Props) {
                   </div>
                 )}
               </div>
-              {/* Galería lifestyle desktop */}
-              {galeriaImagenes.length > 0 && (
-                <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
-                  {galeriaImagenes.map((url, i) => (
-                    <button key={url} onClick={() => setImagenActual(url)}
-                      className={`shrink-0 w-16 h-12 rounded-xl border-2 overflow-hidden transition-all ${
-                        imagenActual === url ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
-                      }`}>
-                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
-                    </button>
-                  ))}
-                </div>
-              )}
-
               {isColor && Object.keys(imagenesPorColor).length > 0 && (
                 <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
                   {Object.entries(imagenesPorColor).map(([c, url]) => (
@@ -1100,10 +1064,6 @@ export default function ProductoClient({ product, variants }: Props) {
 
           {/* BELOW FOLD DESKTOP */}
           <div className="hidden lg:block px-6 xl:px-8 pb-8 mt-6 space-y-6">
-            <div className="rounded-2xl overflow-hidden shadow-sm">
-              <img src="/images/trust-band.png" alt="Pago seguro AZUL, envío nacional, productos originales" className="w-full h-auto" loading="lazy" />
-            </div>
-
             <div className="grid grid-cols-4 gap-3 bg-gray-50 rounded-2xl p-4 border border-gray-100">
               {[{icon:'🚚',t:'Envío gratis',d:'Desde RD$2,500'},{icon:'🔒',t:'Pago AZUL',d:'100% protegido'},{icon:'↩️',t:'7 días dev.',d:'Sin preguntas'},{icon:'✅',t:'Originales',d:'Dist. oficial'}].map(b => (
                 <div key={b.t} className="flex items-center gap-2.5">
