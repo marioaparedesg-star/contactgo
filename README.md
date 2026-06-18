@@ -179,3 +179,4 @@ contactgo/
 3. **WhatsApp automático** — Integrar Twilio o WapiKit
 4. **Analytics** — Agregar Google Analytics o Vercel Analytics
 5. **App móvil** — Migrar a React Native / Expo (mismo backend Supabase)
+6. Updated: June 2026
