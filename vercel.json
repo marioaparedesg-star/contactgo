@@ -2,15 +2,15 @@
   "crons": [
     {
       "path": "/api/carrito-abandonado",
-      "schedule": "0 */2 * * *"
-    },
-    {
-      "path": "/api/reminders/send",
       "schedule": "0 10 * * *"
     },
     {
-      "path": "/api/solicitar-resena",
+      "path": "/api/reminders/send",
       "schedule": "0 11 * * *"
+    },
+    {
+      "path": "/api/solicitar-resena",
+      "schedule": "0 12 * * *"
     }
   ]
 }
