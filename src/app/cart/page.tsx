@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect, useRef } from 'react'
 import EntregaBadge from '@/components/shop/EntregaBadge'
 import { labelFrecuencia, labelDescuento } from '@/lib/subscription-utils'
 import { trackEcommerce } from '@/lib/analytics'
@@ -9,13 +10,26 @@ import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye, Tag, Shield, Truck, RotateCcw, ChevronRight } from 'lucide-react'
-import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 
 
 
 export default function CartPage() {
   const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+  const [emailCapturado, setEmailCapturado] = useState('')
+  const [emailEnviado, setEmailEnviado] = useState(false)
+
+  const registrarCarritoAbandonado = async (email: string) => {
+    if (!email || emailEnviado || !email.includes('@')) return
+    try {
+      await fetch('/api/abandoned-cart/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, items: items.map((i: any) => ({ product_id: i.product.id, nombre: i.product.nombre, precio: i.product.precio, cantidad: i.cantidad })) }),
+      })
+      setEmailEnviado(true)
+    } catch { /* silencioso */ }
+  }
   const [cuponInput, setCuponInput] = useState(cuponCodigo ?? '')
   const [descuento,  setDescuento]  = useState(cuponDescuento)
   const [solucionSugerida, setSolucionSugerida] = useState<any>(null)
@@ -327,7 +341,29 @@ export default function CartPage() {
                 </div>
               )}
 
+              {/* Captura email antes del checkout — recuperación de carrito */}
+              {!emailEnviado && !emailCapturado && (
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 space-y-2">
+                  <p className="text-xs font-bold text-gray-700">¿Tu email para confirmar el pedido?</p>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      placeholder="tu@email.com"
+                      className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-primary-400"
+                      value={emailCapturado}
+                      onChange={e => setEmailCapturado(e.target.value)}
+                      onBlur={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
+                    />
+                    <button
+                      onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
+                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-3 py-2 rounded-xl transition-colors">
+                      ✓
+                    </button>
+                  </div>
+                </div>
+              )}
               <Link href="/checkout"
+                onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
                 className="w-full btn-primary flex items-center justify-center gap-2 py-4 text-base font-black rounded-2xl">
                 Proceder al pago <ChevronRight className="w-5 h-5" />
               </Link>

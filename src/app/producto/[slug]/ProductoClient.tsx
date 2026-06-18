@@ -598,148 +598,194 @@ export default function ProductoClient({ product, variants }: Props) {
   return (
     <>
       <Navbar />
-      <main className="pdp-main max-w-screen-xl mx-auto px-4 pt-4 pb-44 md:pb-12">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
-          <button onClick={() => router.back()} className="hover:text-primary-600 transition-colors flex items-center gap-1">
-            <ArrowLeft className="w-3 h-3" /> Catálogo
-          </button>
-          <span>/</span>
-          <span className="text-gray-600 font-medium truncate max-w-xs">{product.nombre}</span>
+
+      {/* ─── BREADCRUMB ─── */}
+      <div className="bg-gray-50 border-b border-gray-100">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
+          <nav className="flex items-center gap-1.5 text-xs text-gray-400 flex-wrap">
+            <button onClick={() => router.push('/')} className="hover:text-primary-600 transition-colors">Inicio</button>
+            <span>/</span>
+            <button onClick={() => router.push('/catalogo')} className="hover:text-primary-600 transition-colors">Catálogo</button>
+            <span>/</span>
+            <span className="text-gray-600 font-medium truncate max-w-[160px] sm:max-w-xs">{product.nombre}</span>
+          </nav>
         </div>
+      </div>
 
-        {/*
-          ─────────────────────────────────────────────────────────────────────
-          NUEVA ESTRUCTURA PDP — optimizada para conversión
-          MÓVIL:   Detalle (nombre+precio+CTA) PRIMERO → Imagen DESPUÉS
-          DESKTOP: Grid 2 columnas: imagen izq (sticky) | detalle der
-          ─────────────────────────────────────────────────────────────────────
-          SECCIÓN 1 — Above the fold: nombre, precio, ahorro, fecha, disponibilidad
-          SECCIÓN 2 — Selectores de receta (SPH/CYL/AXIS/ADD/color/tamaño)
-          SECCIÓN 3 — CTAs: Comprar ahora + Agregar + WA + Trust
-          SECCIÓN 4 — Suscripción + Pack (beneficios extra)
-          SECCIÓN 5 — WhyBlock + Especificaciones (colapsable) + Cross-sell
-          ─────────────────────────────────────────────────────────────────────
-        */}
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-32 lg:pb-8 pt-4 lg:pt-6">
 
-        {/*
-          MOBILE-FIRST: el panel de detalle va ANTES de la imagen en el DOM.
-          En desktop se muestra como grid de 2 columnas con imagen a la izquierda.
-          Esto elimina el scroll de ~400px en iPhone antes de ver el precio.
-        */}
-        <div className="grid md:grid-cols-[1.1fr_1fr] gap-6 lg:gap-10 items-start">
+        {/* ═══════════════════════════════════════════════════════════════
+            3-COLUMN GRID
+            Mobile:  stack col1 → col3 (buy box) → col2 (info+selectors)
+            Desktop: col1 (gallery) | col2 (info) | col3 (sticky buy box)
+            ═══════════════════════════════════════════════════════════════ */}
+        <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr_300px] xl:grid-cols-[400px_1fr_320px] gap-4 lg:gap-6 xl:gap-8 items-start">
 
-          {/* ═══════════════════════════════════════════
-              COLUMNA IZQUIERDA — Imagen (desktop sticky)
-              En móvil: order-1 (aparece PRIMERO = imagen arriba)
-              ═══════════════════════════════════════════ */}
-          <div className="md:sticky md:top-20 order-1 md:order-1">
-            <div className="group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 aspect-[5/4] shadow-sm hover:shadow-md transition-shadow duration-300 relative">
-              <span className="absolute top-3 right-3 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full z-10 flex items-center gap-1 leading-none">
+          {/* ══════════════════════════════════════
+              COLUMNA 1 — Galería de imágenes
+              ══════════════════════════════════════ */}
+          <div className="lg:sticky lg:top-20 lg:self-start order-1">
+            {/* Imagen principal */}
+            <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm aspect-square">
+              <span className="absolute top-3 left-3 z-10 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full flex items-center gap-1">
                 ✓ 100% Original
               </span>
               {imagenActual ? (
-                <Image src={imagenActual} alt={`${product.nombre}${eyeFlow.color ? ' ' + eyeFlow.color : ''}`}
+                <Image
+                  src={imagenActual}
+                  alt={`${product.nombre}${eyeFlow.color ? ' ' + eyeFlow.color : ''}`}
                   fill unoptimized priority
-                  className="object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out" />
+                  className="object-contain p-6 group-hover:scale-105 transition-transform duration-500 ease-out"
+                />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <Eye className="w-20 h-20 text-gray-200" />
                 </div>
               )}
             </div>
-            {/* Trust badges bajo la imagen — desktop y móvil */}
-            <div className="grid grid-cols-2 gap-2 mt-3">
+
+            {/* Thumbnails de colores — solo para lentes de color */}
+            {isColor && Object.keys(imagenesPorColor).length > 0 && (
+              <div className="flex gap-2 mt-2.5 overflow-x-auto pb-1 scrollbar-hide">
+                {Object.entries(imagenesPorColor).map(([c, url]) => (
+                  <button
+                    key={c}
+                    onClick={() => {
+                      setImagenActual(url)
+                      setEyeFlow(prev => ({ ...prev, color: c }))
+                    }}
+                    className={`shrink-0 w-12 h-12 rounded-xl border-2 overflow-hidden transition-all ${
+                      eyeFlow.color === c ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <img src={url} alt={c} className="w-full h-full object-contain p-1" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Trust badges */}
+            <div className="grid grid-cols-2 gap-1.5 mt-3">
               {[
-                { icon:'✅', text:'100% Original' },
-                { icon:'🚚', text:'Entrega rápida' },
-                { icon:'🔒', text:'Pago seguro AZUL' },
-                { icon:'↩️', text:'7 días devolución' },
+                { icon: '✅', label: '100% Original' },
+                { icon: '🚚', label: 'Entrega rápida' },
+                { icon: '🔒', label: 'Pago seguro AZUL' },
+                { icon: '↩️', label: '7 días devolución' },
               ].map(b => (
-                <div key={b.text} className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
-                  <span className="text-sm">{b.icon}</span>
-                  <span className="text-xs text-gray-600 font-medium">{b.text}</span>
+                <div key={b.label} className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
+                  <span className="text-sm shrink-0">{b.icon}</span>
+                  <span className="text-[10px] text-gray-600 font-medium leading-tight">{b.label}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ═══════════════════════════════════════════
-              COLUMNA DERECHA — Detalle + Selectores + CTA
-              En móvil: order-2 (aparece DESPUÉS de la imagen)
-              ═══════════════════════════════════════════ */}
-          <div className="flex flex-col gap-4 order-2 md:order-2">
-            {/* Nombre + marca — siempre visible, siempre arriba */}
+          {/* ══════════════════════════════════════
+              COLUMNA 2 — Info del producto + Selectores
+              ══════════════════════════════════════ */}
+          <div className="order-3 lg:order-2 min-w-0 space-y-4">
+
+            {/* Marca + Nombre */}
             <div>
-              <span className="text-xs font-bold text-primary-600 uppercase tracking-wide">{product.marca}</span>
-              <h1 className="font-display text-xl md:text-2xl font-bold text-gray-900 leading-tight mt-1">
-                {product.nombre}
-              </h1>
+              <p className="text-xs font-black text-primary-600 uppercase tracking-widest mb-1">{product.marca}</p>
+              <h1 className="text-2xl sm:text-3xl font-black text-gray-900 leading-tight">{product.nombre}</h1>
             </div>
 
-            {/* PRECIO — nombre → precio → tachado → ahorro → disponibilidad → fecha */}
+            {/* Reviews + Social Proof */}
+            {(product as any).avg_rating && (
+              <div className="flex flex-wrap items-center gap-2 text-sm">
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span key={i} className={`text-base ${i < Math.round(Number((product as any).avg_rating)) ? 'text-amber-400' : 'text-gray-200'}`}>★</span>
+                  ))}
+                  <span className="font-black text-gray-900 ml-1">{Number((product as any).avg_rating).toFixed(1)}</span>
+                </div>
+                <span className="text-gray-300">|</span>
+                <span className="text-gray-500">{(product as any).review_count ?? 0} reseñas verificadas</span>
+                <span className="text-gray-300">|</span>
+                <span className="text-green-600 font-semibold">2,100+ clientes satisfechos</span>
+              </div>
+            )}
+
+            {/* Precio + disponibilidad */}
             <div className="space-y-1.5">
-              <div className="flex items-start justify-between gap-2 flex-wrap">
+              <div className="flex items-start gap-3 flex-wrap">
                 <div>
-                  <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
+                  <p className="text-3xl sm:text-4xl font-black text-gray-900 leading-none">RD${price.toLocaleString()}</p>
                   {product.contenido && (
-                    <p className="text-xs text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}
+                    </p>
                   )}
                   {isLente && precioBase > 0 && (() => {
-                    // Usar precio_anterior de DB (12% sobre precio ContactGo)
                     const precioOptica = product.precio_anterior
                       ? Number(product.precio_anterior)
                       : Math.round(precioBase * 1.12 / 100) * 100
                     const ahorro = precioOptica - precioBase
-                    const pct = Math.round((ahorro / precioOptica) * 100)
                     if (ahorro <= 0) return null
+                    const pct = Math.round((ahorro / precioOptica) * 100)
                     return (
                       <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                         <span className="text-sm text-gray-400 line-through">RD${precioOptica.toLocaleString()} en óptica</span>
-                        <span className="text-sm font-black text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
+                        <span className="text-xs font-black text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
                           💰 -{pct}% vs óptica
                         </span>
                       </div>
                     )
                   })()}
                 </div>
-                <span className={`text-xs font-bold px-2.5 py-1.5 rounded-full flex items-center gap-1.5 border shrink-0 ${
-                  product.stock === 0                                     ? 'bg-red-50 text-red-600 border-red-100' :
-                  getEntregaInfo.especial && tipo === 'torico'            ? 'bg-blue-50 text-blue-700 border-blue-100' :
-                  getEntregaInfo.especial && tipo === 'multifocal'        ? 'bg-amber-50 text-amber-700 border-amber-100' :
-                  product.stock <= 3                                      ? 'bg-red-50 text-red-600 border-red-100 animate-pulse' :
-                  product.stock <= 8                                      ? 'bg-orange-50 text-orange-600 border-orange-100' :
-                                                                            'bg-green-50 text-green-700 border-green-100'
-                }`}>
-                  <span className="w-1.5 h-1.5 rounded-full inline-block bg-current opacity-70" />
-                  {product.stock === 0   ? 'Sin stock' :
-                   tipo === 'torico'     ? '🔵 A pedido' :
-                   tipo === 'multifocal' ? '🟡 A fabricar' :
-                   product.stock <= 3   ? `¡Últimas ${product.stock}!` :
-                   product.stock <= 8   ? 'Pocas unidades' :
-                   '🟢 Disponible'}
-                </span>
+                <div className="flex flex-col gap-1.5 ml-auto">
+                  <span className={`text-xs font-bold px-2.5 py-1.5 rounded-full flex items-center gap-1.5 border ${
+                    product.stock === 0 ? 'bg-red-50 text-red-600 border-red-100' :
+                    tipo === 'torico' ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                    tipo === 'multifocal' ? 'bg-amber-50 text-amber-700 border-amber-100' :
+                    'bg-green-50 text-green-700 border-green-100'
+                  }`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
+                    {product.stock === 0 ? 'Sin stock' :
+                     tipo === 'torico' ? '🔵 A pedido' :
+                     tipo === 'multifocal' ? '🟡 A fabricar' :
+                     '🟢 Disponible'}
+                  </span>
+                  {(() => {
+                    const fechaInfo = getFechaEntrega(tipo, product.nombre)
+                    return (
+                      <p className={`text-xs font-semibold flex items-center gap-1 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
+                        {getEntregaInfo.icono} {fechaInfo.texto}
+                      </p>
+                    )
+                  })()}
+                </div>
               </div>
-              {(() => {
-                const fechaInfo = getFechaEntrega(tipo, product.nombre)
-                return (
-                  <p className={`text-xs font-semibold flex items-center gap-1.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
-                    {getEntregaInfo.icono} {fechaInfo.texto}
-                  </p>
-                )
-              })()}
             </div>
 
-            {/* ── SECCIÓN 2: Flujo óptico nuevo ─────────────────────────── */}
+            {/* Beneficios visuales con iconos */}
+            {isLente && (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { icon: '👁️', label: 'Comodidad todo el día' },
+                  { icon: '💧', label: 'Hidratación avanzada' },
+                  { icon: '🎯', label: 'Visión nítida y estable' },
+                  { icon: '☀️', label: (product as any).proteccion_uv ? 'Protección UV' : 'Marca certificada' },
+                ].map(b => (
+                  <div key={b.label} className="flex flex-col items-center justify-center gap-1 bg-gray-50 rounded-xl p-2.5 border border-gray-100 text-center">
+                    <span className="text-xl">{b.icon}</span>
+                    <p className="text-[9px] font-semibold text-gray-600 leading-tight">{b.label}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* ── Selectores de receta ─────────────────────────────── */}
             {isLente && (() => {
               const sphOpts = (product.sph_disponibles?.length
-                ? [...product.sph_disponibles].map(Number).filter(v => !isNaN(v)).sort((a,b)=>a-b)
+                ? [...product.sph_disponibles].map(Number).filter(v => !isNaN(v)).sort((a, b) => a - b)
                 : ALL_SPH).map(v => Number(v) > 0 ? `+${Number(v).toFixed(2)}` : Number(v) === 0 ? '0.00' : Number(v).toFixed(2))
               const cylOpts = (product.cyl_disponibles?.length ? [...product.cyl_disponibles] : ALL_CYL)
-                .sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
+                .sort((a: any, b: any) => Number(a) - Number(b)).map((v: any) => Number(v).toFixed(2))
               const axisOpts = (product.axis_disponibles?.length ? [...product.axis_disponibles] : ALL_AXIS)
-                .sort((a:any,b:any)=>Number(a)-Number(b)).map(String)
-              const addOpts  = product.add_disponibles?.length ? product.add_disponibles : ALL_ADD
+                .sort((a: any, b: any) => Number(a) - Number(b)).map(String)
+              const addOpts = product.add_disponibles?.length ? product.add_disponibles : ALL_ADD
               const colorOpts = (product as any).colores_disponibles ?? []
               return (
                 <EyeFlowSelector
@@ -757,10 +803,11 @@ export default function ProductoClient({ product, variants }: Props) {
               )
             })()}
 
+            {/* Selector de tamaño (soluciones) */}
             {isSolucion && sizes.length > 0 && (
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Tamaño {sizes.length > 1 && <span className="text-red-500">*</span>}
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  Tamaño <span className="text-red-500">*</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {sizes.map(s => (
@@ -778,196 +825,291 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
             )}
 
-            {/* Cantidad — spinner visible para todos los tipos.
-                EyeSelector pre-selecciona qty (AMBOS=2, OD/OI=1) pero el usuario
-                puede ajustar manualmente para comprar 3, 4 o más cajas. */}
-            {!isGota && (
-              <div className="flex items-center gap-3">
-                <p className="text-xs font-semibold text-gray-600">Cantidad</p>
-                <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
-                  <button onClick={() => handleSetQty(Math.max(1, qty - 1))}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">−</button>
-                  <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
-                  <button onClick={() => handleSetQty(qty + 1)}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">+</button>
+            {/* ToricWizard + ADD info — solo desktop, en col 2 */}
+            {isToric && <ToricWizard productName={product.nombre} />}
+            {isMulti && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+                <p className="text-xs font-bold text-amber-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
+                <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                  {[
+                    { range: '+0.75–+1.25', label: 'Presbicia leve', color: 'bg-green-100 text-green-700' },
+                    { range: '+1.50–+2.00', label: 'Presbicia media', color: 'bg-yellow-100 text-yellow-700' },
+                    { range: '+2.25–+3.00', label: 'Presbicia alta', color: 'bg-orange-100 text-orange-700' },
+                  ].map(({ range, label, color }) => (
+                    <div key={range} className={`${color} rounded-lg px-1.5 py-1.5`}>
+                      <p className="font-black text-[9px]">{range}</p>
+                      <p className="leading-tight font-medium">{label}</p>
+                    </div>
+                  ))}
                 </div>
-                {isLente && !isColor && qty >= 2 && (
-                  <span className="text-[10px] text-green-600 font-bold">5% OFF</span>
-                )}
               </div>
             )}
-            {/* Advertencia inteligente de cantidad — no bloquea */}
 
+            {/* WhatsApp consulta — col 2 */}
+            <a
+              href={`https://wa.me/18294728328?text=${encodeURIComponent(
+                tipo === 'torico' ? `Hola, quiero información sobre el ${product.nombre} para astigmatismo. Necesito ayuda para elegir la graduación correcta.` :
+                tipo === 'multifocal' ? `Hola, tengo presbicia y me interesa el ${product.nombre}. ¿Pueden orientarme?` :
+                tipo === 'color' ? `Hola, me interesa el ${product.nombre}. ¿Qué colores tienen disponibles?` :
+                `Hola, tengo una pregunta sobre ${product.nombre}.`
+              )}`}
+              target="_blank" rel="noopener"
+              className="flex items-center gap-3 bg-[#f0fdf4] border border-[#bbf7d0] hover:bg-[#dcfce7] rounded-xl px-4 py-3 transition-colors group"
+            >
+              <svg className="w-5 h-5 text-[#25D366] shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              <div>
+                <p className="text-sm font-bold text-gray-800 group-hover:text-gray-900">
+                  💬 ¿Tienes dudas sobre tu graduación?
+                </p>
+                <p className="text-xs text-gray-500">Habla con un asesor ahora · Respuesta inmediata</p>
+              </div>
+            </a>
 
-            {/* ── SECCIÓN 3: CTAs principales ─────────────────────────────
-                Orden nuevo: Suscripción → Precio final → Comprar → Agregar → WA
-                WhyBlock y Specs BAJAN debajo del CTA (no distraen antes de comprar)
-                ───────────────────────────────────────────────────────────────── */}
+            {/* WhyBlock — debajo del WA en col 2 */}
+            <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
 
-            {/* Suscripción — justo antes del CTA */}
-            <SuscripcionSelector
-              value={suscripcion}
-              onChange={(val, descPct) => {
-                setSuscripcion(val)
-                if (val) {
-                  import('@/lib/analytics').then(({ trackSubscriptionSelected }) => {
-                    trackSubscriptionSelected(product.id, product.nombre, val, descPct ?? 0, price)
-                  })
-                }
-              }}
-              precio={product.precio}
-              tipo={tipo}
-            />
+            {/* Descripción + Specs (colapsable) */}
+            {product.descripcion && <SpecsAcordeon product={product} />}
 
-            <div className="flex flex-col gap-2.5">
-              {/* AGREGAR AL CARRITO = CTA principal verde (Amazon/Warby Parker style) */}
-              <button onClick={handleAdd} disabled={product.stock === 0 || sinVariante}
-                className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-primary-200/60 disabled:opacity-40 disabled:cursor-not-allowed">
-                <ShoppingCart className="w-4 h-4" />
-                {product.stock === 0 ? '— Sin stock —' : sinVariante ? (isColor ? '— Color agotado en esa graduación —' : '— Consultar disponibilidad —') : 'Agregar al carrito'}
-              </button>
-              {/* COMPRAR AHORA = CTA secundario oscuro */}
-              <button onClick={handleBuyNow} disabled={product.stock === 0 || sinVariante}
-                className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm disabled:opacity-40 disabled:cursor-not-allowed">
-                {product.stock === 0 ? '— Sin stock —' : sinVariante ? '— Agotado —' : (
-                  <span className="flex items-center gap-2">Comprar ahora <span className="opacity-70">→</span></span>
-                )}
-              </button>
+            {/* Cross-selling */}
+            <CrossSelling tipo={tipo} currentId={product.id} />
 
-              {/* WhatsApp abajo */}
-              {/* Trust strip compacto — 3 items esenciales */}
-              <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-100 pt-2.5 mt-0.5">
-                {[
-                  { icon: '✅', text: '100% Original garantizado' },
-                  { icon: '🔒', text: 'Pago seguro AZUL' },
-                  { icon: '↩️', text: '7 días devolución' },
-                ].map(({ icon, text }) => (
-                  <p key={text} className="text-[11px] text-gray-400 font-medium flex items-center gap-1">
-                    <span>{icon}</span>
-                    <span>{text}</span>
-                  </p>
-                ))}
+          </div>
+
+          {/* ══════════════════════════════════════
+              COLUMNA 3 — Caja de compra sticky (estilo Amazon)
+              ══════════════════════════════════════ */}
+          <div className="order-2 lg:order-3 lg:sticky lg:top-20 lg:self-start">
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+
+              {/* Header del buy box */}
+              <div className="bg-gray-50 border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+                <p className="text-xs font-black text-gray-500 uppercase tracking-wider">Frecuencia de entrega</p>
+                <p className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Precio siempre igual</p>
               </div>
 
-              {/* WhatsApp — después de trust strip */}
-              {/* WhatsApp con mensaje contextual según tipo de producto */}
-              {(() => {
-                const msgMap: Record<string,string> = {
-                  torico:     `Hola, quiero información sobre el ${product.nombre} para astigmatismo. Tengo mi receta y necesito ayuda para elegir la graduación correcta.`,
-                  multifocal: `Hola, tengo presbicia y me interesa el ${product.nombre}. ¿Pueden orientarme?`,
-                  color:      `Hola, me interesa el ${product.nombre}. ¿Qué colores tienen disponibles y cómo se ven en el ojo?`,
-                  esferico:   `Hola, tengo una pregunta sobre el ${product.nombre}.`,
-                  solucion:   `Hola, ¿el ${product.nombre} es compatible con mis lentes de contacto?`,
-                  gota:       `Hola, quiero información sobre ${product.nombre}.`,
-                }
-                const msg = msgMap[tipo] ?? `Hola, tengo una pregunta sobre el ${product.nombre}.`
-                return (
-                  <a
-                    href={`https://wa.me/18294728328?text=${encodeURIComponent(msg)}`}
-                    target="_blank" rel="noopener"
-                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-2.5 rounded-xl text-sm transition-colors active:scale-95">
-                    <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
-                    {tipo === 'torico' ? 'Ayuda con mi receta tórica' :
-                     tipo === 'multifocal' ? 'Consultar sobre multifocales' :
-                     'Consultar por WhatsApp'}
-                  </a>
-                )
-              })()}
+              <div className="p-4 space-y-3">
 
-              {/* ── SECCIÓN 4: Beneficios — después del CTA ── */}
-              <WhyBlock tipo={tipo} proteccion_uv={(product as any).proteccion_uv} />
-
-              {/* ToricWizard — información de ayuda, no bloquea la compra */}
-              {isToric && (
-                <ToricWizard productName={product.nombre} />
-              )}
-
-              {/* Explicación ADD — informativa, post-decisión */}
-              {isMulti && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-                  <p className="text-xs font-bold text-amber-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
-                  <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
-                    {[
-                      { range: '+0.75–+1.25', label: 'Presbicia leve',  color: 'bg-green-100 text-green-700' },
-                      { range: '+1.50–+2.00', label: 'Presbicia media', color: 'bg-yellow-100 text-yellow-700' },
-                      { range: '+2.25–+3.00', label: 'Presbicia alta',  color: 'bg-orange-100 text-orange-700' },
-                    ].map(({ range, label, color }) => (
-                      <div key={range} className={`${color} rounded-lg px-1.5 py-1.5`}>
-                        <p className="font-black text-[9px]">{range}</p>
-                        <p className="leading-tight font-medium">{label}</p>
-                      </div>
-                    ))}
+                {/* SUBSCRIPTION — Radio compact style */}
+                {isLente && (
+                  <div className="space-y-1.5">
+                    {([
+                      { val: null,         label: 'Compra única',  sublabel: 'Sin compromiso',    beneficio: null,                        popular: false },
+                      { val: 'mensual',    label: 'Mensual',       sublabel: 'Reposición 30 días', beneficio: 'Envío GRATIS',              popular: false },
+                      { val: 'trimestral', label: 'Trimestral',    sublabel: 'Reposición 90 días', beneficio: 'Envío GRATIS + Stock',      popular: true  },
+                      { val: 'semestral',  label: 'Semestral',     sublabel: 'Reposición 180 días',beneficio: 'Envío GRATIS + VIP',        popular: false },
+                    ] as Array<{ val: string|null; label: string; sublabel: string; beneficio: string|null; popular: boolean }>).map(op => {
+                      const isSelected = suscripcion === op.val
+                      return (
+                        <label key={String(op.val)} className={`flex items-start gap-2.5 p-2.5 rounded-xl border-2 cursor-pointer transition-all ${
+                          isSelected ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300 bg-white'
+                        }`}>
+                          <input
+                            type="radio"
+                            name="suscripcion_buybox"
+                            checked={isSelected}
+                            onChange={() => setSuscripcion(op.val)}
+                            className="mt-0.5 accent-primary-600 shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-1 flex-wrap">
+                              <p className={`text-xs font-bold flex items-center gap-1 ${isSelected ? 'text-primary-700' : 'text-gray-800'}`}>
+                                {op.label}
+                                {op.popular && (
+                                  <span className="text-[7px] font-black bg-amber-400 text-white px-1.5 py-0.5 rounded-full leading-none">★ Popular</span>
+                                )}
+                              </p>
+                              <p className={`text-[10px] font-black ${isSelected ? 'text-primary-700' : 'text-gray-700'}`}>
+                                RD${price.toLocaleString()}
+                              </p>
+                            </div>
+                            <p className={`text-[9px] ${isSelected ? 'text-primary-400' : 'text-gray-400'}`}>{op.sublabel}</p>
+                            {op.beneficio && (
+                              <p className="text-[9px] text-green-600 font-bold mt-0.5">✓ {op.beneficio}</p>
+                            )}
+                          </div>
+                        </label>
+                      )
+                    })}
                   </div>
-                  <p className="text-[10px] text-amber-600 mt-1.5">La ADD aparece en tu receta como "Add" o "Near Add".</p>
+                )}
+
+                {/* Para soluciones/gotas: precio simple */}
+                {!isLente && (
+                  <div className="text-center py-2">
+                    <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
+                    {product.contenido && <p className="text-xs text-gray-400 mt-1">{product.contenido}</p>}
+                  </div>
+                )}
+
+                {/* Disponibilidad + Entrega */}
+                <div className="flex flex-col gap-1 bg-gray-50 rounded-xl px-3 py-2">
+                  {(() => {
+                    const fechaInfo = getFechaEntrega(tipo, product.nombre)
+                    return (
+                      <>
+                        <p className={`text-xs font-bold flex items-center gap-1.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
+                          {getEntregaInfo.icono} {fechaInfo.texto}
+                        </p>
+                        <p className="text-[10px] text-green-600 font-semibold">
+                          {suscripcion ? '✓ Envío gratis con suscripción' : '🚚 Envío disponible a todo RD'}
+                        </p>
+                      </>
+                    )
+                  })()}
                 </div>
-              )}
 
-              {/* Descripción — ya compró o está a punto, aquí es contexto, no fricción */}
-              {product.descripcion && (
-                <p className="text-gray-500 text-sm leading-relaxed">{product.descripcion}</p>
-              )}
+                {/* Cantidad */}
+                {!isGota && (
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-bold text-gray-700">Cantidad</p>
+                    <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                      <button onClick={() => handleSetQty(Math.max(1, qty - 1))}
+                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">−</button>
+                      <span className="w-9 text-center font-black text-gray-900 text-sm">{qty}</span>
+                      <button onClick={() => handleSetQty(qty + 1)}
+                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 font-bold text-lg transition-colors">+</button>
+                    </div>
+                    {isLente && !isColor && qty >= 2 && (
+                      <span className="text-[10px] text-green-600 font-black bg-green-50 px-1.5 py-0.5 rounded-full">5% OFF pack</span>
+                    )}
+                  </div>
+                )}
 
-              {/* Cross-sell inline — post-CTA, el cliente ya se comprometió con el precio */}
-              {['esferico','torico','multifocal','color'].includes(tipo) && (
-                <InlineCrossSell tipo={tipo} currentId={product.id} />
-              )}
-
-              {/* Disclaimer médico — post-CTA, actúa como confirmación no como barrera */}
-              {isLente && (
-                <div className="flex gap-2 p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-400">
-                  <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-gray-300" />
-                  <span>Dispositivo médico. Requiere prescripción vigente.</span>
+                {/* PRECIO TOTAL */}
+                <div className="border-t border-gray-100 pt-3">
+                  <div className="flex items-baseline justify-between">
+                    <p className="text-xs text-gray-400">Total</p>
+                    <p className="text-2xl font-black text-gray-900">RD${(price * (isGota ? 1 : qty)).toLocaleString()}</p>
+                  </div>
+                  {isLente && qty > 1 && !isGota && (
+                    <p className="text-[10px] text-gray-400 text-right">{qty} cajas × RD${price.toLocaleString()}</p>
+                  )}
                 </div>
-              )}
+
+                {/* BOTÓN AGREGAR */}
+                <button
+                  onClick={handleAdd}
+                  disabled={product.stock === 0 || sinVariante}
+                  className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-white font-black py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-primary-200/50"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  {product.stock === 0 ? 'Sin stock' :
+                   sinVariante ? (isColor ? 'Color agotado' : 'Consultar disponibilidad') :
+                   'Agregar al carrito'}
+                </button>
+
+                {/* BOTÓN COMPRAR AHORA */}
+                <button
+                  onClick={handleBuyNow}
+                  disabled={product.stock === 0 || sinVariante}
+                  className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm"
+                >
+                  {product.stock === 0 || sinVariante ? 'No disponible' : (
+                    <span className="flex items-center gap-2">Comprar ahora <span className="opacity-60">⚡</span></span>
+                  )}
+                </button>
+
+                {/* WHATSAPP */}
+                <a
+                  href={`https://wa.me/18294728328?text=${encodeURIComponent(`Hola, quiero comprar ${product.nombre}. ¿Está disponible?`)}`}
+                  target="_blank" rel="noopener"
+                  className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] active:scale-95 text-white font-bold py-2.5 rounded-xl text-sm transition-colors"
+                >
+                  <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  Consultar por WhatsApp
+                </a>
+
+                {/* Garantías compactas */}
+                <div className="border-t border-gray-100 pt-2 space-y-1">
+                  {[
+                    '✅ Producto original certificado',
+                    '🔒 Pago 100% seguro con AZUL',
+                    '↩️ 7 días para devoluciones',
+                    '📦 Empaque discreto y seguro',
+                  ].map(g => (
+                    <p key={g} className="text-[10px] text-gray-400 font-medium">{g}</p>
+                  ))}
+                </div>
+
+              </div>
             </div>
 
-            {/* ── SECCIÓN 5: Especificaciones clínicas colapsables ── */}
-            {(product.curva_base || product.material || (product as any).fabricante_nombre) && (
-              <SpecsAcordeon product={product} />
+            {/* BUNDLE — justo debajo del buy box */}
+            {isLente && (
+              <div className="mt-3 bg-white border border-gray-200 rounded-2xl overflow-hidden">
+                <div className="bg-amber-50 border-b border-amber-100 px-4 py-2.5 flex items-center justify-between">
+                  <p className="text-xs font-black text-amber-800">Completa tu kit y ahorra</p>
+                  <span className="text-[10px] bg-amber-400 text-white font-black px-2 py-0.5 rounded-full">BUNDLE</span>
+                </div>
+                <InlineCrossSell tipo={tipo} currentId={product.id} />
+              </div>
             )}
 
           </div>
+        </div>
+
+        {/* ─── BELOW FOLD ─── */}
+        <div className="mt-8 space-y-6">
+
+          {/* Trust bar */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-gray-50 rounded-2xl p-4 border border-gray-100">
+            {[
+              { icon: '🚚', title: 'Envío gratis', desc: 'Desde RD$2,500' },
+              { icon: '🔒', title: 'Pago seguro AZUL', desc: '100% protegido' },
+              { icon: '↩️', title: '7 días devolución', desc: 'Sin preguntas' },
+              { icon: '✅', title: 'Productos originales', desc: 'Distribuidor oficial' },
+            ].map(b => (
+              <div key={b.title} className="flex items-center gap-2.5">
+                <span className="text-2xl shrink-0">{b.icon}</span>
+                <div>
+                  <p className="text-xs font-bold text-gray-800">{b.title}</p>
+                  <p className="text-[10px] text-gray-400">{b.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Reviews */}
+          <Reviews productId={product.id} />
+
+          {/* Productos frecuentemente comprados juntos */}
+          <FrequentlyBoughtTogether productId={product.id} tipo={tipo} precio={price} />
+
+          {/* FAQ */}
+          {isLente && <ProductFAQ tipo={tipo} nombre={product.nombre} />}
+
         </div>
       </main>
 
-      <FrequentlyBoughtTogether productId={product.id} tipo={tipo} precio={product.precio} />
-      <Reviews productId={product.id} initialReviews={(product as any).reviews ?? []} />
-      <CrossSelling tipo={product.tipo} currentId={product.id} />
-      <ProductFAQ tipo={product.tipo} nombre={product.nombre} />
-
-      {/* P6 Mobile: sticky CTA con precio, entrega y CTA amplios */}
-      {product.stock > 0 && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 px-4 pt-3 pb-4 shadow-xl safe-area-pb">
-          <div className="flex items-center justify-between mb-2.5 gap-2 pr-14">
-            <div className="min-w-0 flex-1">
-              <p className="text-[11px] text-gray-400 truncate leading-none">{product.nombre}</p>
-              <p className={`text-[10px] font-semibold mt-0.5 ${getEntregaInfo.especial ? 'text-amber-600' : 'text-green-600'}`}>
-                {getEntregaInfo.icono} {getFechaEntrega(tipo, product.nombre).corto}
-              </p>
-            </div>
-            <div className="shrink-0 text-right">
-              <p className="font-black text-primary-600 text-xl leading-none">RD${price.toLocaleString()}</p>
-              {qty >= 2 && isLente && !isColor && (
-                <p className="text-[9px] text-green-600 font-bold">{qty} cajas · 5% OFF</p>
-              )}
-            </div>
+      {/* ─── STICKY BOTTOM BAR MÓVIL ─── */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 px-4 py-3 shadow-2xl">
+        <div className="flex items-center gap-2 max-w-lg mx-auto">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-400 truncate">{product.nombre}</p>
+            <p className="font-black text-primary-600 text-lg leading-none">RD${price.toLocaleString()}</p>
           </div>
-          <div className="flex gap-2">
-            {/* Agregar al carrito = primario verde en mobile — consistente con desktop */}
-            <button onClick={handleAdd} disabled={sinVariante}
-              className="flex-1 btn-primary py-3.5 text-sm font-black flex items-center justify-center gap-2 active:scale-95 transition-transform disabled:opacity-40 rounded-2xl">
-              <ShoppingCart className="w-4 h-4" />
-              Agregar
-            </button>
-            <button onClick={handleBuyNow} disabled={sinVariante}
-              className="flex-none bg-gray-900 text-white font-bold px-4 py-3.5 rounded-2xl flex items-center gap-1 text-sm active:scale-95 transition-transform disabled:opacity-40">
-              →
-            </button>
-          </div>
+          <button
+            onClick={handleAdd}
+            disabled={product.stock === 0 || sinVariante}
+            className="flex-1 bg-primary-600 hover:bg-primary-700 active:scale-95 disabled:opacity-40 text-white font-black py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 transition-all"
+          >
+            <ShoppingCart className="w-4 h-4" />
+            {sinVariante ? 'Ver opciones' : 'Al carrito'}
+          </button>
+          <button
+            onClick={handleBuyNow}
+            disabled={product.stock === 0 || sinVariante}
+            className="flex-1 bg-gray-900 hover:bg-gray-800 active:scale-95 disabled:opacity-40 text-white font-bold py-3 rounded-xl text-sm transition-all"
+          >
+            Comprar ⚡
+          </button>
         </div>
-      )}
+      </div>
 
       <Footer />
     </>
