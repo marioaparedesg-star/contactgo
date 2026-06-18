@@ -61,11 +61,11 @@ interface Props {
 // ── Helpers visuales ──────────────────────────────────────────────────────
 function StepLabel({ n, label }: { n: number; label: string }) {
   return (
-    <div className="flex items-center gap-2 mb-3">
-      <span className="w-6 h-6 rounded-full bg-primary-600 text-white text-xs font-black flex items-center justify-center shrink-0">
+    <div className="flex items-center gap-1.5 mb-2">
+      <span className="w-5 h-5 rounded-full bg-primary-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">
         {n}
       </span>
-      <span className="text-xs font-bold text-gray-800">{label}</span>
+      <span className="text-xs font-bold text-gray-700">{label}</span>
     </div>
   )
 }
@@ -78,20 +78,27 @@ function OptionCard({
 }) {
   return (
     <button type="button" onClick={onClick}
-      className={`flex flex-col items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border-2 transition-all duration-150 min-h-[64px] w-full ${
+      className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all duration-150 min-h-[48px] w-full text-left ${
         selected
           ? 'border-primary-600 bg-primary-50 shadow-sm shadow-primary-100'
           : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
       } ${highlight && !selected ? 'border-amber-200 bg-amber-50' : ''}`}>
-      <span className="text-lg">{icon}</span>
-      <p className={`text-sm font-black text-center leading-tight ${selected ? 'text-primary-700' : 'text-gray-800'}`}>
-        {label}
-      </p>
-      {sublabel && (
-        <p className={`text-[10px] font-semibold ${selected ? 'text-primary-500' : 'text-gray-400'}`}>
-          {sublabel}
+      <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+        selected ? 'border-primary-600 bg-primary-600' : 'border-gray-300'
+      }`}>
+        {selected && <span className="w-2 h-2 rounded-full bg-white block" />}
+      </span>
+      <span className="text-base shrink-0">{icon}</span>
+      <div className="min-w-0">
+        <p className={`text-sm font-bold leading-tight ${selected ? 'text-primary-700' : 'text-gray-800'}`}>
+          {label}
         </p>
-      )}
+        {sublabel && (
+          <p className={`text-[10px] leading-tight ${selected ? 'text-primary-500' : 'text-gray-400'}`}>
+            {sublabel}
+          </p>
+        )}
+      </div>
     </button>
   )
 }
@@ -110,7 +117,7 @@ function SelectField({
         className={`w-full border-2 rounded-xl px-3 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors appearance-none bg-white ${
           value ? 'border-primary-300 text-gray-900' : 'border-gray-200 text-gray-400'
         }`}
-        style={{ fontSize: '16px' }}>
+        style={{ fontSize: '16px', minHeight: '48px' }}>
         <option value="">{placeholder}</option>
         {options.map(o => (
           <option key={String(o)} value={String(o)}>{String(o)}</option>
@@ -325,7 +332,7 @@ export default function EyeFlowSelector({
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-col gap-1.5 sm:grid sm:grid-cols-2 sm:gap-2">
           <button
             type="button"
             onClick={() => { set({ mismaReceta: true, noEstaSeguro: false }); trackEyeFlow('misma_receta') }}

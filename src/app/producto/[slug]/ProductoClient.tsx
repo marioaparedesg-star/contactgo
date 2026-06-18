@@ -612,21 +612,21 @@ export default function ProductoClient({ product, variants }: Props) {
         </div>
       </div>
 
-      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-28 lg:pb-6 pt-3 lg:pt-4">
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-24 lg:pb-6 pt-2 lg:pt-4 px-0 lg:px-0">
 
         {/* ═══════════════════════════════════════════════════════════════
             3-COLUMN GRID
             Mobile:  stack col1 → col3 (buy box) → col2 (info+selectors)
             Desktop: col1 (gallery) | col2 (info) | col3 (sticky buy box)
             ═══════════════════════════════════════════════════════════════ */}
-        <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr_280px] gap-3 lg:gap-5 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr_280px] gap-0 lg:gap-5 lg:items-start">
 
           {/* ══════════════════════════════════════
               COLUMNA 1 — Galería de imágenes
               ══════════════════════════════════════ */}
-          <div className="lg:sticky lg:top-20 lg:self-start order-1">
+          <div className="lg:sticky lg:top-20 lg:self-start order-2 lg:order-1">
             {/* Imagen principal */}
-            <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm aspect-[4/3]">
+            <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm aspect-[3/2] sm:aspect-[4/3]">
               <span className="absolute top-3 left-3 z-10 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full flex items-center gap-1">
                 ✓ 100% Original
               </span>
@@ -635,7 +635,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   src={imagenActual}
                   alt={`${product.nombre}${eyeFlow.color ? ' ' + eyeFlow.color : ''}`}
                   fill unoptimized priority
-                  className="object-contain p-6 group-hover:scale-105 transition-transform duration-500 ease-out"
+                  className="object-contain p-4 sm:p-6 group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -683,11 +683,11 @@ export default function ProductoClient({ product, variants }: Props) {
           {/* ══════════════════════════════════════
               COLUMNA 2 — Info del producto + Selectores
               ══════════════════════════════════════ */}
-          <div className="order-2 lg:order-2 min-w-0 space-y-3">
+          <div className="order-1 lg:order-2 min-w-0 space-y-3 lg:space-y-4">
 
             {/* Marca + Nombre */}
             <div>
-              <p className="text-[10px] font-black text-primary-600 uppercase tracking-widest mb-0.5">{product.marca}</p>
+              <p className="text-[10px] font-black text-primary-600 uppercase tracking-widest mb-0.5 hidden lg:block">{product.marca}</p>
               <h1 className="text-xl sm:text-2xl font-black text-gray-900 leading-tight">{product.nombre}</h1>
             </div>
 
@@ -706,6 +706,15 @@ export default function ProductoClient({ product, variants }: Props) {
                 <span className="text-green-600 font-semibold">2,100+ clientes satisfechos</span>
               </div>
             )}
+
+            {/* ── Trust bar mobile (solo en mobile) ── */}
+            <div className="lg:hidden flex items-center gap-3 overflow-x-auto scrollbar-hide py-1 -mx-1 px-1">
+              {['✅ 100% Original','🔒 Pago AZUL','🚚 Entrega rápida','↩️ 7 días dev.'].map(t => (
+                <span key={t} className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 border border-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
+                  {t}
+                </span>
+              ))}
+            </div>
 
             {/* Precio + disponibilidad */}
             <div className="space-y-1.5">
@@ -881,7 +890,7 @@ export default function ProductoClient({ product, variants }: Props) {
           {/* ══════════════════════════════════════
               COLUMNA 3 — Caja de compra sticky (estilo Amazon)
               ══════════════════════════════════════ */}
-          <div className="order-3 lg:order-3 lg:sticky lg:top-20 lg:self-start">
+          <div className="order-3 lg:order-3 lg:sticky lg:top-20 lg:self-start hidden lg:block">
             <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
 
               {/* Header del buy box */}
@@ -1086,27 +1095,46 @@ export default function ProductoClient({ product, variants }: Props) {
         </div>
       </main>
 
-      {/* ─── STICKY BOTTOM BAR MÓVIL — siempre visible ─── */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-2xl safe-area-inset-bottom">
-        <div className="flex items-center gap-2 px-3 py-2.5 max-w-lg mx-auto">
-          <div className="min-w-0">
-            <p className="font-black text-primary-600 text-base leading-none">RD${price.toLocaleString()}</p>
-            <p className="text-[9px] text-gray-400 mt-0.5">{product.contenido ?? ''}</p>
+      {/* ═══════════════════════════════════════════════════
+          STICKY BOTTOM BAR MOBILE — Amazon-style
+          Siempre visible, todo en 1 fila compacta
+          ═══════════════════════════════════════════════════ */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-gray-100" style={{boxShadow:'0 -4px 24px rgba(0,0,0,0.12)'}}>
+        {/* Indicador de graduación seleccionada */}
+        {(eyeFlow.sph || eyeFlow.color) && (
+          <div className="bg-primary-50 border-b border-primary-100 px-4 py-1.5 flex items-center gap-2">
+            <span className="text-[10px] text-primary-700 font-bold truncate">
+              {eyeFlow.color ? `🎨 ${eyeFlow.color}` : ''}{eyeFlow.sph ? ` · SPH ${eyeFlow.sph}` : ''}
+              {eyeFlow.ojoMode === 'AMBOS' ? ' · Ambos ojos' : eyeFlow.ojoMode === 'OD' ? ' · Ojo derecho' : eyeFlow.ojoMode === 'OI' ? ' · Ojo izquierdo' : ''}
+            </span>
+            <span className="ml-auto text-[10px] text-green-600 font-bold shrink-0">✓ Listo</span>
           </div>
+        )}
+        <div className="flex items-center gap-2 px-3 py-3 safe-area-inset-bottom">
+          {/* Precio */}
+          <div className="shrink-0">
+            <p className="text-base font-black text-gray-900 leading-none">RD${price.toLocaleString()}</p>
+            <p className="text-[9px] text-gray-400 mt-0.5 leading-none">{product.contenido ?? ''}</p>
+          </div>
+          {/* CTA Principal */}
           <button
             onClick={handleAdd}
-            disabled={product.stock === 0 || sinVariante}
-            className="flex-1 bg-primary-600 hover:bg-primary-700 active:scale-95 disabled:opacity-40 text-white font-black py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 transition-all shadow-md"
+            disabled={product.stock === 0}
+            className="flex-1 bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 text-white font-black py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 transition-all"
+            style={{minHeight:'52px'}}
           >
-            <ShoppingCart className="w-4 h-4" />
-            {sinVariante ? 'Elegir opciones' : 'Agregar al carrito'}
+            <ShoppingCart className="w-4 h-4 shrink-0" />
+            <span>{sinVariante ? 'Elegir graduación' : 'Agregar al carrito'}</span>
           </button>
+          {/* Comprar ahora */}
           <button
             onClick={handleBuyNow}
             disabled={product.stock === 0 || sinVariante}
-            className="bg-gray-900 hover:bg-gray-800 active:scale-95 disabled:opacity-40 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all"
+            className="shrink-0 bg-gray-900 hover:bg-gray-800 active:scale-95 disabled:opacity-30 text-white font-black py-3.5 px-4 rounded-2xl text-sm transition-all flex items-center gap-1"
+            style={{minHeight:'52px'}}
           >
-            ⚡
+            <span className="hidden xs:block text-sm">Comprar</span>
+            <span>⚡</span>
           </button>
         </div>
       </div>
