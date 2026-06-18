@@ -771,7 +771,14 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BELOW FOLD MOBILE */}
             <div className="px-4 pb-8 space-y-6">
-              {/* Beneficios */}
+              {/* Banner social proof */}
+              {isLente && (
+                <div className="rounded-2xl overflow-hidden">
+                  <img src="/images/social-proof.png" alt="2,100+ clientes satisfechos en ContactGo" className="w-full h-auto" loading="lazy" />
+                </div>
+              )}
+
+            {/* Beneficios */}
               {isLente && (
                 <div className="grid grid-cols-2 gap-2">
                   {[
@@ -1064,6 +1071,10 @@ export default function ProductoClient({ product, variants }: Props) {
 
           {/* BELOW FOLD DESKTOP */}
           <div className="hidden lg:block px-6 xl:px-8 pb-8 mt-6 space-y-6">
+            <div className="rounded-2xl overflow-hidden shadow-sm">
+              <img src="/images/trust-band.png" alt="Pago seguro AZUL, envío nacional, productos originales" className="w-full h-auto" loading="lazy" />
+            </div>
+
             <div className="grid grid-cols-4 gap-3 bg-gray-50 rounded-2xl p-4 border border-gray-100">
               {[{icon:'🚚',t:'Envío gratis',d:'Desde RD$2,500'},{icon:'🔒',t:'Pago AZUL',d:'100% protegido'},{icon:'↩️',t:'7 días dev.',d:'Sin preguntas'},{icon:'✅',t:'Originales',d:'Dist. oficial'}].map(b => (
                 <div key={b.t} className="flex items-center gap-2.5">
