@@ -337,6 +337,9 @@ export default function ProductoClient({ product, variants }: Props) {
 
   // ── Imagen dinámica por color ─────────────────────────────────────────
   const imagenesPorColor: Record<string, string> = (product as any).imagenes_por_color ?? {}
+  const galeriaImagenes: string[] = Array.isArray((product as any).galeria_imagenes)
+    ? (product as any).galeria_imagenes
+    : []
   const [imagenActual, setImagenActual] = useState<string>(
     product.imagen_url ?? '/icon-512.png'
   )
@@ -643,6 +646,20 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
 
               {/* Thumbnails de color */}
+              {/* Thumbnails galería lifestyle — desktop */}
+              {galeriaImagenes.length > 0 && (
+                <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
+                  {galeriaImagenes.map((url, i) => (
+                    <button key={url} onClick={() => setImagenActual(url)}
+                      className={`shrink-0 w-16 h-12 rounded-xl border-2 overflow-hidden transition-all ${
+                        imagenActual === url ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {isColor && Object.keys(imagenesPorColor).length > 0 && (
                 <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
                   {Object.entries(imagenesPorColor).map(([c, url]) => (
@@ -704,6 +721,20 @@ export default function ProductoClient({ product, variants }: Props) {
                 })()}
               </div>
             </div>
+
+            {/* Galería thumbnails — solo si tiene imágenes adicionales */}
+            {galeriaImagenes.length > 0 && (
+              <div className="flex gap-2 px-3 pb-1 overflow-x-auto scrollbar-hide">
+                {galeriaImagenes.map((url, i) => (
+                  <button key={url} onClick={() => setImagenActual(url)}
+                    className={`shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
+                      imagenActual === url ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                    }`} style={{width:80, height:60}}>
+                    <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* BLOQUE 3: TRUST BAR — scroll horizontal */}
             <div className="flex gap-2 px-4 py-2 overflow-x-auto scrollbar-hide border-y border-gray-100">
@@ -848,6 +879,20 @@ export default function ProductoClient({ product, variants }: Props) {
                   </div>
                 )}
               </div>
+              {/* Thumbnails galería lifestyle — desktop */}
+              {galeriaImagenes.length > 0 && (
+                <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
+                  {galeriaImagenes.map((url, i) => (
+                    <button key={url} onClick={() => setImagenActual(url)}
+                      className={`shrink-0 w-16 h-12 rounded-xl border-2 overflow-hidden transition-all ${
+                        imagenActual === url ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {isColor && Object.keys(imagenesPorColor).length > 0 && (
                 <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
                   {Object.entries(imagenesPorColor).map(([c, url]) => (
