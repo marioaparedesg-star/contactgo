@@ -337,6 +337,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
   // ── Imagen dinámica por color ─────────────────────────────────────────
   const imagenesPorColor: Record<string, string> = (product as any).imagenes_por_color ?? {}
+  const galeriaImagenes: string[] = (product as any).galeria_imagenes ?? []
   const [imagenActual, setImagenActual] = useState<string>(
     product.imagen_url ?? '/icon-512.png'
   )
@@ -642,7 +643,21 @@ export default function ProductoClient({ product, variants }: Props) {
                 )}
               </div>
 
-              {/* Thumbnails de color */}
+              {/* Galería de imágenes adicionales */}
+              {galeriaImagenes.length > 0 && (
+                <div className="flex gap-2 px-4 pb-2 overflow-x-auto scrollbar-hide">
+                  {galeriaImagenes.map((url, i) => (
+                    <button key={url} onClick={() => setImagenActual(url)}
+                      className={`shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
+                        imagenActual === url ? 'border-primary-500' : 'border-gray-200'
+                      }`} style={{width:72, height:54}}>
+                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+            {/* Thumbnails de color */}
               {isColor && Object.keys(imagenesPorColor).length > 0 && (
                 <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
                   {Object.entries(imagenesPorColor).map(([c, url]) => (
@@ -855,6 +870,20 @@ export default function ProductoClient({ product, variants }: Props) {
                   </div>
                 )}
               </div>
+              {/* Galería lifestyle desktop */}
+              {galeriaImagenes.length > 0 && (
+                <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
+                  {galeriaImagenes.map((url, i) => (
+                    <button key={url} onClick={() => setImagenActual(url)}
+                      className={`shrink-0 w-16 h-12 rounded-xl border-2 overflow-hidden transition-all ${
+                        imagenActual === url ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {isColor && Object.keys(imagenesPorColor).length > 0 && (
                 <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
                   {Object.entries(imagenesPorColor).map(([c, url]) => (
