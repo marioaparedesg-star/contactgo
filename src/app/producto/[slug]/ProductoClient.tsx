@@ -612,21 +612,21 @@ export default function ProductoClient({ product, variants }: Props) {
         </div>
       </div>
 
-      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-32 lg:pb-8 pt-4 lg:pt-6">
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-28 lg:pb-6 pt-3 lg:pt-4">
 
         {/* ═══════════════════════════════════════════════════════════════
             3-COLUMN GRID
             Mobile:  stack col1 → col3 (buy box) → col2 (info+selectors)
             Desktop: col1 (gallery) | col2 (info) | col3 (sticky buy box)
             ═══════════════════════════════════════════════════════════════ */}
-        <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr_300px] xl:grid-cols-[400px_1fr_320px] gap-4 lg:gap-6 xl:gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr_280px] gap-3 lg:gap-5 items-start">
 
           {/* ══════════════════════════════════════
               COLUMNA 1 — Galería de imágenes
               ══════════════════════════════════════ */}
           <div className="lg:sticky lg:top-20 lg:self-start order-1">
             {/* Imagen principal */}
-            <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm aspect-square">
+            <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm aspect-[4/3]">
               <span className="absolute top-3 left-3 z-10 text-[9px] font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full flex items-center gap-1">
                 ✓ 100% Original
               </span>
@@ -683,12 +683,12 @@ export default function ProductoClient({ product, variants }: Props) {
           {/* ══════════════════════════════════════
               COLUMNA 2 — Info del producto + Selectores
               ══════════════════════════════════════ */}
-          <div className="order-3 lg:order-2 min-w-0 space-y-4">
+          <div className="order-2 lg:order-2 min-w-0 space-y-3">
 
             {/* Marca + Nombre */}
             <div>
-              <p className="text-xs font-black text-primary-600 uppercase tracking-widest mb-1">{product.marca}</p>
-              <h1 className="text-2xl sm:text-3xl font-black text-gray-900 leading-tight">{product.nombre}</h1>
+              <p className="text-[10px] font-black text-primary-600 uppercase tracking-widest mb-0.5">{product.marca}</p>
+              <h1 className="text-xl sm:text-2xl font-black text-gray-900 leading-tight">{product.nombre}</h1>
             </div>
 
             {/* Reviews + Social Proof */}
@@ -711,7 +711,7 @@ export default function ProductoClient({ product, variants }: Props) {
             <div className="space-y-1.5">
               <div className="flex items-start gap-3 flex-wrap">
                 <div>
-                  <p className="text-3xl sm:text-4xl font-black text-gray-900 leading-none">RD${price.toLocaleString()}</p>
+                  <p className="text-2xl sm:text-3xl font-black text-gray-900 leading-none">RD${price.toLocaleString()}</p>
                   {product.contenido && (
                     <p className="text-xs text-gray-400 mt-1">
                       {product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}
@@ -761,16 +761,16 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* Beneficios visuales con iconos */}
             {isLente && (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-4 gap-1.5">
                 {[
                   { icon: '👁️', label: 'Comodidad todo el día' },
                   { icon: '💧', label: 'Hidratación avanzada' },
                   { icon: '🎯', label: 'Visión nítida y estable' },
                   { icon: '☀️', label: (product as any).proteccion_uv ? 'Protección UV' : 'Marca certificada' },
                 ].map(b => (
-                  <div key={b.label} className="flex flex-col items-center justify-center gap-1 bg-gray-50 rounded-xl p-2.5 border border-gray-100 text-center">
-                    <span className="text-xl">{b.icon}</span>
-                    <p className="text-[9px] font-semibold text-gray-600 leading-tight">{b.label}</p>
+                  <div key={b.label} className="flex flex-col items-center justify-center gap-0.5 bg-gray-50 rounded-lg p-2 border border-gray-100 text-center">
+                    <span className="text-base">{b.icon}</span>
+                    <p className="text-[8px] font-semibold text-gray-600 leading-tight">{b.label}</p>
                   </div>
                 ))}
               </div>
@@ -881,16 +881,16 @@ export default function ProductoClient({ product, variants }: Props) {
           {/* ══════════════════════════════════════
               COLUMNA 3 — Caja de compra sticky (estilo Amazon)
               ══════════════════════════════════════ */}
-          <div className="order-2 lg:order-3 lg:sticky lg:top-20 lg:self-start">
+          <div className="order-3 lg:order-3 lg:sticky lg:top-20 lg:self-start">
             <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
 
               {/* Header del buy box */}
-              <div className="bg-gray-50 border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+              <div className="bg-gray-50 border-b border-gray-100 px-3 py-2 flex items-center justify-between">
                 <p className="text-xs font-black text-gray-500 uppercase tracking-wider">Frecuencia de entrega</p>
                 <p className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Precio siempre igual</p>
               </div>
 
-              <div className="p-4 space-y-3">
+              <div className="p-3 space-y-2.5">
 
                 {/* SUBSCRIPTION — Radio compact style */}
                 {isLente && (
@@ -903,7 +903,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     ] as Array<{ val: string|null; label: string; sublabel: string; beneficio: string|null; popular: boolean }>).map(op => {
                       const isSelected = suscripcion === op.val
                       return (
-                        <label key={String(op.val)} className={`flex items-start gap-2.5 p-2.5 rounded-xl border-2 cursor-pointer transition-all ${
+                        <label key={String(op.val)} className={`flex items-start gap-2.5 p-2 rounded-lg border-2 cursor-pointer transition-all ${
                           isSelected ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300 bg-white'
                         }`}>
                           <input
@@ -915,13 +915,13 @@ export default function ProductoClient({ product, variants }: Props) {
                           />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-1 flex-wrap">
-                              <p className={`text-xs font-bold flex items-center gap-1 ${isSelected ? 'text-primary-700' : 'text-gray-800'}`}>
+                              <p className={`text-[11px] font-bold flex items-center gap-1 ${isSelected ? 'text-primary-700' : 'text-gray-800'}`}>
                                 {op.label}
                                 {op.popular && (
                                   <span className="text-[7px] font-black bg-amber-400 text-white px-1.5 py-0.5 rounded-full leading-none">★ Popular</span>
                                 )}
                               </p>
-                              <p className={`text-[10px] font-black ${isSelected ? 'text-primary-700' : 'text-gray-700'}`}>
+                              <p className={`text-[10px] font-bold ${isSelected ? 'text-primary-700' : 'text-gray-700'}`}>
                                 RD${price.toLocaleString()}
                               </p>
                             </div>
@@ -993,7 +993,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 <button
                   onClick={handleAdd}
                   disabled={product.stock === 0 || sinVariante}
-                  className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-white font-black py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-primary-200/50"
+                  className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-white font-black py-3 rounded-lg flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-primary-200/50"
                 >
                   <ShoppingCart className="w-4 h-4" />
                   {product.stock === 0 ? 'Sin stock' :
@@ -1005,7 +1005,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 <button
                   onClick={handleBuyNow}
                   disabled={product.stock === 0 || sinVariante}
-                  className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm"
+                  className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all text-sm"
                 >
                   {product.stock === 0 || sinVariante ? 'No disponible' : (
                     <span className="flex items-center gap-2">Comprar ahora <span className="opacity-60">⚡</span></span>
@@ -1086,27 +1086,27 @@ export default function ProductoClient({ product, variants }: Props) {
         </div>
       </main>
 
-      {/* ─── STICKY BOTTOM BAR MÓVIL ─── */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 px-4 py-3 shadow-2xl">
-        <div className="flex items-center gap-2 max-w-lg mx-auto">
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-gray-400 truncate">{product.nombre}</p>
-            <p className="font-black text-primary-600 text-lg leading-none">RD${price.toLocaleString()}</p>
+      {/* ─── STICKY BOTTOM BAR MÓVIL — siempre visible ─── */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-2xl safe-area-inset-bottom">
+        <div className="flex items-center gap-2 px-3 py-2.5 max-w-lg mx-auto">
+          <div className="min-w-0">
+            <p className="font-black text-primary-600 text-base leading-none">RD${price.toLocaleString()}</p>
+            <p className="text-[9px] text-gray-400 mt-0.5">{product.contenido ?? ''}</p>
           </div>
           <button
             onClick={handleAdd}
             disabled={product.stock === 0 || sinVariante}
-            className="flex-1 bg-primary-600 hover:bg-primary-700 active:scale-95 disabled:opacity-40 text-white font-black py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 transition-all"
+            className="flex-1 bg-primary-600 hover:bg-primary-700 active:scale-95 disabled:opacity-40 text-white font-black py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 transition-all shadow-md"
           >
             <ShoppingCart className="w-4 h-4" />
-            {sinVariante ? 'Ver opciones' : 'Al carrito'}
+            {sinVariante ? 'Elegir opciones' : 'Agregar al carrito'}
           </button>
           <button
             onClick={handleBuyNow}
             disabled={product.stock === 0 || sinVariante}
-            className="flex-1 bg-gray-900 hover:bg-gray-800 active:scale-95 disabled:opacity-40 text-white font-bold py-3 rounded-xl text-sm transition-all"
+            className="bg-gray-900 hover:bg-gray-800 active:scale-95 disabled:opacity-40 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all"
           >
-            Comprar ⚡
+            ⚡
           </button>
         </div>
       </div>

@@ -65,7 +65,7 @@ function StepLabel({ n, label }: { n: number; label: string }) {
       <span className="w-6 h-6 rounded-full bg-primary-600 text-white text-xs font-black flex items-center justify-center shrink-0">
         {n}
       </span>
-      <span className="text-sm font-bold text-gray-800">{label}</span>
+      <span className="text-xs font-bold text-gray-800">{label}</span>
     </div>
   )
 }
@@ -78,12 +78,12 @@ function OptionCard({
 }) {
   return (
     <button type="button" onClick={onClick}
-      className={`flex flex-col items-center justify-center gap-1.5 py-4 px-3 rounded-2xl border-2 transition-all duration-150 min-h-[90px] w-full ${
+      className={`flex flex-col items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border-2 transition-all duration-150 min-h-[64px] w-full ${
         selected
           ? 'border-primary-600 bg-primary-50 shadow-sm shadow-primary-100'
           : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
       } ${highlight && !selected ? 'border-amber-200 bg-amber-50' : ''}`}>
-      <span className="text-2xl">{icon}</span>
+      <span className="text-lg">{icon}</span>
       <p className={`text-sm font-black text-center leading-tight ${selected ? 'text-primary-700' : 'text-gray-800'}`}>
         {label}
       </p>
@@ -155,7 +155,7 @@ export default function EyeFlowSelector({
 
   // ── PASO 1: ¿Para cuántos ojos? ───────────────────────────────────────
   const step1 = (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <StepLabel n={1} label="¿Para cuántos ojos necesitas lentes?" />
       <div className="grid grid-cols-2 gap-3">
         <OptionCard
@@ -172,7 +172,7 @@ export default function EyeFlowSelector({
 
   // ── PASO 1b: ¿Cuál ojo? (solo si eligió "un solo ojo") ───────────────
   const step1b = (s.ojoMode === 'OD' || s.ojoMode === 'OI') ? (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <StepLabel n={2} label="¿Cuál ojo?" />
       <div className="grid grid-cols-2 gap-3">
         <OptionCard
@@ -189,7 +189,7 @@ export default function EyeFlowSelector({
 
   // ── PASO 2a: ¿Misma graduación? (solo si eligió "ambos ojos") ─────────
   const step2a = s.ojoMode === 'AMBOS' ? (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <StepLabel n={2} label="¿Usas la misma graduación en ambos ojos?" />
       <div className="grid grid-cols-2 gap-3">
         <OptionCard
@@ -213,7 +213,7 @@ export default function EyeFlowSelector({
 
   // ── FORMULARIO DE GRADUACIÓN — UN OJO o AMBOS+MISMA ──────────────────
   const singleRxForm = (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <StepLabel n={rxStepNum} label={
         s.ojoMode === 'AMBOS'
           ? 'Graduación (igual para ambos ojos)'
@@ -244,7 +244,7 @@ export default function EyeFlowSelector({
 
   // ── FORMULARIO DE GRADUACIÓN — AMBOS+DIFERENTE ────────────────────────
   const dualRxForm = (
-    <div className="space-y-4">
+    <div className="space-y-2.5">
       <StepLabel n={rxStepNum} label="Graduación por ojo" />
       {/* Ojo Derecho */}
       <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 space-y-3">
@@ -290,7 +290,7 @@ export default function EyeFlowSelector({
 
   // ── SELECTOR DE COLOR ─────────────────────────────────────────────────
   const colorStep = needsColor ? (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <StepLabel n={rxStepNum + 1} label="Color del lente" />
       <div className="grid grid-cols-3 gap-2">
         {colorOpts.map(col => (
