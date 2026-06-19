@@ -268,7 +268,15 @@ export default async function ProductoPage(
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <ProductoClient product={product} variants={[]} />
+      <ProductoClient
+        product={{
+          ...product,
+          avg_rating: avgRating ?? null,
+          review_count: reviews.length,
+          reviews: reviews,
+        } as any}
+        variants={[]}
+      />
     </>
   )
 }
