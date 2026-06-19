@@ -1,5 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase'
 import { LoyaltySection } from '@/components/ui/LoyaltySection'
 import {
@@ -85,6 +87,8 @@ async function passkeyAvailable(): Promise<boolean> {
 
 // ─── Componente principal ────────────────────────────────────────────────────
 export default function CuentaPage() {
+  const router = useRouter()
+
   const [user, setUser]       = useState<any>(null)
   const [authChecked, setAuthChecked] = useState(false)
   const [perfil, setPerfil]   = useState<any>(null)
@@ -636,6 +640,28 @@ export default function CuentaPage() {
   )
 
   // ──────────────────────────────────── APP SCREEN ──────────────────────────
+  // ── Repetir pedido en 1 clic ──────────────────────────────────────────────
+  const [reordering, setReordering] = useState<string|null>(null)
+  const reorderPedido = async (e: React.MouseEvent, orderId: string) => {
+    e.stopPropagation()
+    setReordering(orderId)
+    try {
+      const res = await fetch('/api/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId }),
+      })
+      const data = await res.json()
+      if (data.items?.length) {
+        sessionStorage.setItem('reorder_items', JSON.stringify(data.items))
+        toast.success('✅ Llevándote al carrito...')
+        router.push('/cart?reorder=1')
+      }
+    } catch { toast.error('Error al repetir el pedido') }
+    finally { setReordering(null) }
+  }
+
+
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
       {/* Header premium */}
@@ -803,11 +829,15 @@ export default function CuentaPage() {
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                   <span className="text-primary-600 font-bold text-lg">RD${(p.total||0).toLocaleString()}</span>
                   <div className="flex items-center gap-2">
-                    <a href={`/confirmacion?orden=${p.id}`}
-                      onClick={e => e.stopPropagation()}
-                      className="text-xs bg-primary-50 text-primary-600 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1 hover:bg-primary-100 transition-colors">
-                      <RefreshCw className="w-3 h-3" /> Volver a pedir
-                    </a>
+                    {p.estado === 'pagado' && (
+                      <button
+                        onClick={e => reorderPedido(e, p.id)}
+                        disabled={reordering === p.id}
+                        className="text-xs bg-primary-600 text-white px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-primary-700 disabled:opacity-50 transition-colors shadow-sm">
+                        <RefreshCw className={`w-3 h-3 ${reordering===p.id?'animate-spin':''}`} />
+                        {reordering === p.id ? 'Añadiendo...' : 'Repetir pedido'}
+                      </button>
+                    )}
                     <ChevronRight className="w-4 h-4 text-gray-300" />
                   </div>
                 </div>
