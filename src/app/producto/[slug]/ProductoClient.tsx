@@ -376,7 +376,7 @@ export default function ProductoClient({ product, variants }: Props) {
   const [suscripcion, setSuscripcion] = useState<string | null>(null)
 
   const tipo       = product.tipo ?? ''
-  const getEntregaInfo = getEntrega(tipo, product.nombre)
+  const getEntregaInfo = getEntrega(tipo, product.nombre, eyeFlow.sph)
   const sku        = product.sku ?? ''
   const colors     = (product as any).colores_disponibles ?? []
   const sizes      = SOLUTION_SIZES[sku]  ?? []
@@ -715,8 +715,8 @@ export default function ProductoClient({ product, variants }: Props) {
                   Disponible
                 </span>
                 {(()=>{
-                  const fi = getFechaEntrega(tipo, product.nombre)
-                  const ei = getEntrega(tipo, product.nombre)
+                  const fi = getFechaEntrega(tipo, product.nombre, eyeFlow.sph)
+                  const ei = getEntrega(tipo, product.nombre, eyeFlow.sph)
                   return <span className={`text-xs font-semibold ${ei.especial ? 'text-amber-600' : 'text-green-600'}`}>{ei.icono} {fi.texto}</span>
                 })()}
               </div>
