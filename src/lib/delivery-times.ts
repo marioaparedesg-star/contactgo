@@ -38,9 +38,9 @@ const T_24_72H: EntregaInfo = {
 }
 
 const T_5_10D: EntregaInfo = {
-  etiqueta: 'Pedido especial · 5-10 días',
-  detalle:  'Fabricado bajo pedido por el distribuidor oficial. Entrega estimada de 5 a 10 días laborables.',
-  dias_min: 5, dias_max: 10,
+  etiqueta: 'Pedido especial · 5-15 días',
+  detalle:  'Fabricado bajo pedido por el distribuidor oficial. Entrega estimada de 5 a 15 días laborables.',
+  dias_min: 5, dias_max: 15,
   especial: true,
   icono:    '⚗️',
 }
