@@ -1,14 +1,16 @@
 'use client'
-import { getEntrega } from '@/lib/delivery-times'
+import { getEntrega, getFechaEntrega } from '@/lib/delivery-times'
 
 interface Props {
-  tipo:     string
-  nombre?:  string
+  tipo:    string
+  nombre?: string
+  sph?:    string | number | null
   variant?: 'pdp' | 'cart' | 'checkout' | 'compact'
 }
 
-export default function EntregaBadge({ tipo, nombre = '', variant = 'pdp' }: Props) {
-  const info = getEntrega(tipo, nombre)
+export default function EntregaBadge({ tipo, nombre = '', sph, variant = 'pdp' }: Props) {
+  const info  = getEntrega(tipo, nombre, sph)
+  const fecha = getFechaEntrega(tipo, nombre, sph)
 
   if (variant === 'compact') {
     return (
@@ -21,29 +23,33 @@ export default function EntregaBadge({ tipo, nombre = '', variant = 'pdp' }: Pro
 
   if (variant === 'cart' || variant === 'checkout') {
     return (
-      <p className={`text-[11px] font-semibold flex items-center gap-1
-        ${info.especial ? 'text-amber-700' : 'text-green-700'}`}>
-        {info.icono} {info.detalle}
-      </p>
+      <div className={`flex items-center gap-1.5 mt-1 ${info.especial ? 'text-amber-700' : 'text-green-700'}`}>
+        <span className="text-sm">{info.icono}</span>
+        <div>
+          <p className="text-[11px] font-bold leading-none">{fecha.texto}</p>
+          {info.especial && (
+            <p className="text-[9px] text-amber-600 mt-0.5">Fabricación especial</p>
+          )}
+        </div>
+      </div>
     )
   }
 
-  // PDP — bloque completo
+  // PDP — bloque completo Amazon-style
   return (
     <div className={`rounded-xl px-3 py-2.5 flex items-start gap-2 border
-      ${info.especial
-        ? 'bg-amber-50 border-amber-100'
-        : 'bg-green-50 border-green-100'}`}>
-      <span className={`shrink-0 mt-0.5 ${info.especial ? 'text-amber-500' : 'text-green-500'}`}>
-        {info.icono}
-      </span>
+      ${info.especial ? 'bg-amber-50 border-amber-100' : 'bg-green-50 border-green-100'}`}>
+      <span className="text-lg shrink-0 mt-0.5">{info.icono}</span>
       <div>
-        <p className={`font-bold text-xs ${info.especial ? 'text-amber-800' : 'text-green-800'}`}>
-          {info.especial ? 'Fabricación especial' : 'Envío rápido'}
+        <p className={`font-black text-sm leading-none ${info.especial ? 'text-amber-800' : 'text-green-800'}`}>
+          {fecha.texto}
         </p>
-        <p className={`text-[10px] mt-0.5 leading-relaxed ${info.especial ? 'text-amber-600' : 'text-green-600'}`}>
-          {info.detalle}
-        </p>
+        {info.especial && (
+          <p className="text-[10px] text-amber-600 mt-1 font-medium">Fabricación especial · Pedido al distribuidor</p>
+        )}
+        {!info.especial && (
+          <p className="text-[10px] text-green-600 mt-0.5">🚚 Envío a todo RD disponible</p>
+        )}
       </div>
     </div>
   )

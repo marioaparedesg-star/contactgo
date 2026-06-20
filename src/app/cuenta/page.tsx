@@ -829,7 +829,15 @@ export default function CuentaPage() {
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                   <span className="text-primary-600 font-bold text-lg">RD${(p.total||0).toLocaleString()}</span>
                   <div className="flex items-center gap-2">
-                    {p.estado === 'pagado' && (
+                    {p.pago_estado === 'pagado' && (
+                      <a
+                        href={`/pedido/${p.numero_orden}`}
+                        onClick={e => e.stopPropagation()}
+                        className="text-xs border border-primary-200 text-primary-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-primary-50 transition-colors">
+                        📦 Seguir pedido
+                      </a>
+                    )}
+                    {p.pago_estado === 'pagado' && (
                       <button
                         onClick={e => reorderPedido(e, p.id)}
                         disabled={reordering === p.id}

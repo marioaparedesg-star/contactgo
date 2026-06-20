@@ -1,4 +1,5 @@
 'use client'
+import { createClient } from '@/lib/supabase'
 import { trackEyeFlow, trackWhatsappHelp } from '@/lib/analytics'
 /**
  * EyeFlowSelector — Flujo óptico unificado ContactGo
@@ -361,8 +362,97 @@ export default function EyeFlowSelector({
                        (s.ojoMode === 'AMBOS' && s.mismaReceta === true && !s.noEstaSeguro)
   const showDualRx   = s.ojoMode === 'AMBOS' && s.mismaReceta === false && !s.noEstaSeguro
 
+  // ── Recetas guardadas ──────────────────────────────────────────────────
+  const [savedRx, setSavedRx] = useState<any[]>([])
+  const [showSavedRx, setShowSavedRx] = useState(false)
+
+  useEffect(() => {
+    const loadRx = async () => {
+      const sb = createClient()
+      const { data: { user } } = await sb.auth.getUser()
+      if (!user) return
+      const { data } = await sb
+        .from('saved_prescriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('es_principal', { ascending: false })
+        .limit(5)
+      if (data?.length) setSavedRx(data)
+    }
+    loadRx()
+  }, [])
+
+  // Aplicar receta guardada al estado
+  const applyRx = (rx: any) => {
+    onChange({
+      ...s,
+      ojoMode: 'AMBOS',
+      mismaReceta: rx.od_sph === rx.oi_sph && rx.od_cyl === rx.oi_cyl,
+      sph: rx.od_sph ? String(rx.od_sph) : s.sph,
+      cyl: rx.od_cyl ? String(rx.od_cyl) : s.cyl,
+      axis: rx.od_axis ? String(rx.od_axis) : s.axis,
+      add: rx.add_power ? String(rx.add_power) : s.add,
+    })
+    setShowSavedRx(false)
+  }
+
+  // Calcular progreso
+  const totalSteps = needsColor ? (needsCyl ? 5 : 4) : needsCyl ? 4 : needsAdd ? 4 : 3
+  let doneSteps = 0
+  if (s.ojoMode) doneSteps++
+  if (s.mismaReceta !== undefined) doneSteps++
+  if (!needsColor && s.sph) doneSteps++
+  if (needsColor && s.color) doneSteps++
+  if (needsCyl && s.cyl && s.axis) doneSteps++
+  if (needsAdd && s.add) doneSteps++
+  const progressPct = Math.min(100, Math.round((doneSteps / totalSteps) * 100))
+
   return (
-    <div className="space-y-5">
+    <div className="space-y-2.5">
+      {/* ── RECETA GUARDADA ─────────────────────────── */}
+      {savedRx.length > 0 && (
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowSavedRx(!showSavedRx)}
+            className="w-full flex items-center justify-between gap-2 bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-800 rounded-xl px-3 py-2.5 text-xs font-bold transition-colors">
+            <span className="flex items-center gap-1.5">
+              <span>📋</span> Usar receta guardada ({savedRx.length})
+            </span>
+            <span>{showSavedRx ? '▲' : '▼'}</span>
+          </button>
+          {showSavedRx && (
+            <div className="absolute top-full left-0 right-0 z-20 bg-white border border-blue-100 rounded-xl shadow-lg mt-1 overflow-hidden">
+              {savedRx.map((rx: any) => (
+                <button key={rx.id} type="button" onClick={() => applyRx(rx)}
+                  className="w-full text-left px-3 py-2.5 hover:bg-blue-50 transition-colors border-b border-gray-50 last:border-0">
+                  <p className="text-xs font-bold text-gray-800">{rx.nombre ?? 'Mi receta'}</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">
+                    OD: SPH {rx.od_sph ?? '—'}{rx.od_cyl ? ` / CYL ${rx.od_cyl}` : ''}
+                    {' · '}
+                    OI: SPH {rx.oi_sph ?? '—'}{rx.oi_cyl ? ` / CYL ${rx.oi_cyl}` : ''}
+                  </p>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── PROGRESS BAR ─────────────────────────────── */}
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Configuración de receta</p>
+          <p className="text-[10px] font-black text-primary-600">{doneSteps}/{totalSteps} pasos</p>
+        </div>
+        <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+          <div className="h-full bg-gradient-to-r from-primary-400 to-primary-600 rounded-full transition-all duration-500"
+               style={{width: `${progressPct}%`}} />
+        </div>
+        {progressPct === 100 && (
+          <p className="text-[10px] font-black text-green-600">✓ Receta completa</p>
+        )}
+      </div>
       {step1}
       {step1b}
       {step2a}

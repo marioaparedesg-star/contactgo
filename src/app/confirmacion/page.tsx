@@ -371,10 +371,17 @@ function ConfirmacionContent() {
 
         {/* Acciones */}
         <div className="space-y-3 pt-1">
-          <Link href="/cuenta"
-            className="w-full bg-green-500 hover:bg-green-600 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200">
-            <Package className="w-5 h-5" /> Seguir mi pedido
-          </Link>
+          {order?.numero_orden ? (
+            <Link href={`/pedido/${order.numero_orden}`}
+              className="w-full bg-green-500 hover:bg-green-600 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200">
+              <Package className="w-5 h-5" /> Seguir mi pedido
+            </Link>
+          ) : (
+            <Link href="/cuenta"
+              className="w-full bg-green-500 hover:bg-green-600 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200">
+              <Package className="w-5 h-5" /> Seguir mi pedido
+            </Link>
+          )}
           {orderId && (
             <a href={order?.public_token ? `/recibo?token=${order.public_token}` : `/recibo?orden=${orderId}`} target="_blank" rel="noopener noreferrer"
               className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm">

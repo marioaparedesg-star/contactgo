@@ -708,6 +708,20 @@ export default function ProductoClient({ product, variants }: Props) {
                 })()}
               </div>
               {product.contenido && <p className="text-[11px] text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>}
+              {/* Precio por día — hace el producto sentir más accesible */}
+              {isLente && (() => {
+                const contenido = product.contenido ?? ''
+                const diasCaja = product.reemplazo === 'Diario' ? 30 :
+                                 product.reemplazo === 'Quincenal' ? 15 :
+                                 product.reemplazo === 'Mensual' ? 30 : null
+                if (!diasCaja) return null
+                const pxDia = (price / diasCaja).toFixed(2)
+                return (
+                  <p className="text-[11px] font-bold text-green-600 mt-1">
+                    Solo RD${pxDia} por día de visión perfecta
+                  </p>
+                )
+              })()}
 
               {/* Disponibilidad + entrega */}
               <div className="flex items-center gap-3 mt-2 flex-wrap">
@@ -946,6 +960,11 @@ export default function ProductoClient({ product, variants }: Props) {
                   })()}
                 </div>
                 {product.contenido && <p className="text-xs text-gray-400 mt-1">{product.contenido}{product.reemplazo?` · ${product.reemplazo}`:''}</p>}
+                {isLente && (() => {
+                  const diasCaja = product.reemplazo === 'Diario' ? 30 : product.reemplazo === 'Quincenal' ? 15 : product.reemplazo === 'Mensual' ? 30 : null
+                  if (!diasCaja) return null
+                  return <p className="text-xs font-bold text-green-600 mt-0.5">Solo RD${(price/diasCaja).toFixed(2)} por día</p>
+                })()}
                 <div className="flex items-center gap-3 mt-2 flex-wrap">
                   <span className="text-sm font-bold text-green-600 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-green-500" />Disponible

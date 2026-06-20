@@ -146,7 +146,7 @@ export default function CartPage() {
                         )}
                         <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
                         <div className="mt-1">
-                          <EntregaBadge tipo={(item.product as any).tipo ?? 'esferico'} nombre={item.product.nombre} variant="cart" />
+                          <EntregaBadge tipo={(item.product as any).tipo ?? 'esferico'} nombre={item.product.nombre} sph={item.sph} variant="cart" />
                         </div>
                       </div>
                       <button onClick={() => {
