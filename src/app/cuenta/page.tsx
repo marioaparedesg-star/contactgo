@@ -53,7 +53,7 @@ async function registerPasskey(userId: string, userName: string): Promise<boolea
     }) as PublicKeyCredential | null
     if (!cred) return false
     // Guardamos el credentialId en localStorage (en producción iría al backend)
-    localStorage.setItem(STORAGE_KEY, bufferToBase64url(cred.rawId))
+    try { localStorage.setItem(STORAGE_KEY, bufferToBase64url(cred.rawId)) } catch {}
     return true
   } catch { return false }
 }
@@ -164,8 +164,9 @@ export default function CuentaPage() {
   const [loadingPasskey, setLoadingPasskey] = useState(false)
 
   useEffect(() => {
-    passkeyAvailable().then(setPasskeySupported)
-    setPasskeyRegistered(!!localStorage.getItem(STORAGE_KEY))
+    // Safari iOS: localStorage puede lanzar SecurityError sin try-catch
+    try { passkeyAvailable().then(setPasskeySupported) } catch { setPasskeySupported(false) }
+    try { setPasskeyRegistered(!!localStorage.getItem(STORAGE_KEY)) } catch { setPasskeyRegistered(false) }
     const sb = createClient()
     sb.auth.getUser().then(({ data: { user } }) => {
       setAuthChecked(true)
@@ -242,7 +243,7 @@ export default function CuentaPage() {
   }
 
   const handleRemovePasskey = () => {
-    localStorage.removeItem(STORAGE_KEY)
+    try { localStorage.removeItem(STORAGE_KEY) } catch {}
     setPasskeyRegistered(false)
     setPasskeyMsg({ type:'ok', text:'Acceso biométrico eliminado.' })
   }
@@ -493,7 +494,7 @@ export default function CuentaPage() {
     const ok = await authenticatePasskey()
     if (ok) {
       // Si pasa biometría, iniciamos sesión con el email guardado
-      const stored = localStorage.getItem('cg_passkey_email')
+      const stored = (() => { try { return localStorage.getItem('cg_passkey_email') } catch { return null } })()
       if (!stored) { setMsg('No hay sesión guardada para biometría. Inicia sesión normal primero.'); return }
       // Usamos magic link silent o simplemente recargamos con la sesión activa
       // En producción esto iría a un endpoint backend. Por ahora redirigimos.
@@ -620,7 +621,7 @@ export default function CuentaPage() {
           </form>
 
           {/* Face ID / Huella - solo en login */}
-          {modo === 'login' && passkeySupported && localStorage.getItem(STORAGE_KEY) && (
+          {modo === 'login' && passkeySupported && ((() => { try { return localStorage.getItem(STORAGE_KEY) } catch { return null } })()) && (
             <div className="mt-4">
               <div className="flex items-center gap-3 my-3">
                 <div className="flex-1 h-px bg-gray-200" />
