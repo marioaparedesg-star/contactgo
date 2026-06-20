@@ -132,19 +132,20 @@ export default async function HomePage() {
               {/* Logos de marcas */}
               <div className="flex-1 grid grid-cols-2 gap-3 w-full max-w-sm">
                 {[
-                  { brand: 'ACUVUE®', sub: 'Johnson & Johnson Vision', color: 'bg-red-50 border-red-100' },
-                  { brand: 'AIR OPTIX®', sub: 'Alcon', color: 'bg-blue-50 border-blue-100' },
-                  { brand: 'CooperVision®', sub: 'Biofinity • Proclear', color: 'bg-teal-50 border-teal-100' },
-                  { brand: 'Bausch+Lomb', sub: 'ULTRA • ReNu', color: 'bg-orange-50 border-orange-100' },
+                  { brand: 'ACUVUE®', sub: 'Johnson & Johnson Vision', color: 'bg-red-50 border-red-100', href: '/marca/acuvue' },
+                  { brand: 'AIR OPTIX®', sub: 'Alcon', color: 'bg-blue-50 border-blue-100', href: '/marca/alcon' },
+                  { brand: 'CooperVision®', sub: 'Biofinity • Proclear', color: 'bg-teal-50 border-teal-100', href: '/marca/coopervision' },
+                  { brand: 'Bausch+Lomb', sub: 'ULTRA • ReNu', color: 'bg-orange-50 border-orange-100', href: '/catalogo' },
                 ].map(m => (
-                  <div key={m.brand} className={`${m.color} border rounded-2xl p-4 text-center`}>
+                  <a key={m.brand} href={m.href}
+                    className={`${m.color} border rounded-2xl p-4 text-center block hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer`}>
                     <p className="font-black text-gray-900 text-sm">{m.brand}</p>
                     <p className="text-gray-600 text-[11px] mt-0.5">{m.sub}</p>
                     <div className="flex items-center justify-center gap-1 mt-2">
                       <CheckCircle className="w-3 h-3 text-green-500" />
-                      <span className="text-[10px] text-green-700 font-semibold">Autorizado</span>
+                      <span className="text-[10px] text-green-700 font-semibold">Ver lentes →</span>
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>

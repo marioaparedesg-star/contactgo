@@ -45,14 +45,25 @@ function ResetContent() {
     e.preventDefault()
     if (!email) return
     setLoading(true); setMsg(null)
-    const sb = createClient()
-    const { error } = await sb.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/auth/callback?next=/cuenta/reset-password`,
-    })
-    if (error) {
-      setMsg({ type: 'err', text: error.message })
-    } else {
-      setMsg({ type: 'ok', text: 'Revisa tu correo. Te enviamos un enlace para restablecer tu contraseña.' })
+    try {
+      // Usar nuestra API que envía email bonito desde info@contactgo.net
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() })
+      })
+      if (res.ok) {
+        setMsg({ type: 'ok', text: `✅ Te enviamos un correo a ${email}. Revisa tu bandeja de entrada y también el spam.` })
+      } else {
+        // Fallback: usar Supabase directo
+        const sb = createClient()
+        await sb.auth.resetPasswordForEmail(email.trim(), {
+          redirectTo: `${window.location.origin}/auth/callback?next=/cuenta/reset-password`,
+        })
+        setMsg({ type: 'ok', text: 'Revisa tu correo. Te enviamos un enlace para restablecer tu contraseña.' })
+      }
+    } catch {
+      setMsg({ type: 'err', text: 'Error al enviar el correo. Intenta de nuevo.' })
     }
     setLoading(false)
   }
