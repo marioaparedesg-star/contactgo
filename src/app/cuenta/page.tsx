@@ -81,8 +81,14 @@ async function authenticatePasskey(): Promise<boolean> {
 }
 
 async function passkeyAvailable(): Promise<boolean> {
-  if (!window.PublicKeyCredential) return false
-  return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+  try {
+    if (typeof window === 'undefined') return false
+    if (!window.PublicKeyCredential) return false
+    if (typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable !== 'function') return false
+    return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+  } catch {
+    return false
+  }
 }
 
 // ─── Componente principal ────────────────────────────────────────────────────
@@ -102,14 +108,7 @@ export default function CuentaPage() {
   const [motivoCancel, setMotivoCancel] = useState('')
   const [cancelLoading, setCancelLoading] = useState(false)
   const [loadingPedido, setLoadingPedido] = useState(false)
-  const [tab, setTab] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash.replace('#', '')
-      const validTabs = ['perfil','pedidos','suscripciones','recetas','direcciones','pagos']
-      if (validTabs.includes(hash)) return hash
-    }
-    return ''
-  })
+  const [tab, setTab] = useState('')  // ← siempre empieza vacío (evita hydration mismatch)
   const [editando, setEditando] = useState(false)
   const [form, setForm]       = useState({ nombre: '', telefono: '' })
   const [direcciones, setDirecciones] = useState<any[]>([])
@@ -163,21 +162,35 @@ export default function CuentaPage() {
   const [passkeyMsg, setPasskeyMsg] = useState<{type:'ok'|'err', text:string}|null>(null)
   const [loadingPasskey, setLoadingPasskey] = useState(false)
 
+  // ── useEffect principal — blindado contra crashes Safari iOS ────────────────
   useEffect(() => {
-    // Safari iOS: localStorage puede lanzar SecurityError sin try-catch
-    try { passkeyAvailable().then(setPasskeySupported) } catch { setPasskeySupported(false) }
+    // 1. Leer hash de URL post-hydration (nunca durante SSR)
+    try {
+      const hash = window.location.hash.replace('#', '')
+      const validTabs = ['perfil','pedidos','suscripciones','recetas','direcciones','pagos']
+      if (validTabs.includes(hash)) setTab(hash)
+    } catch {}
+
+    // 2. Passkey — con .catch() para Safari iOS (puede rechazar la promesa)
+    passkeyAvailable()
+      .then(v => setPasskeySupported(v))
+      .catch(() => setPasskeySupported(false))
+
+    // 3. localStorage — con try-catch para Safari private mode
     try { setPasskeyRegistered(!!localStorage.getItem(STORAGE_KEY)) } catch { setPasskeyRegistered(false) }
+
+    // 4. Cargar datos del usuario
     const sb = createClient()
-    sb.auth.getUser().then(({ data: { user } }) => {
-      setAuthChecked(true)
-      if (user) {
+    sb.auth.getUser()
+      .then(({ data: { user } }) => {
+        setAuthChecked(true)
+        if (!user) return
         setUser(user)
-        // Cargar datos en paralelo con manejo de error individual
         Promise.allSettled([
           sb.from('profiles').select('*').eq('id', user.id).single(),
           sb.from('orders').select('*').eq('user_id', user.id).order('fecha', { ascending: false }),
           sb.from('addresses').select('*').eq('user_id', user.id).order('created_at'),
-          sb.from('prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
+          sb.from('saved_prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('payment_methods').select('*').eq('user_id', user.id).order('created_at'),
           sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
         ]).then(([rPerfil, rOrdenes, rDirs, rRecetas, rPagos, rSubs]) => {
@@ -194,9 +207,9 @@ export default function CuentaPage() {
           if (rRecetas.status === 'fulfilled')  setRecetas(rRecetas.value.data || [])
           if (rPagos.status === 'fulfilled')    setPagos(rPagos.value.data || [])
           if (rSubs.status === 'fulfilled')     setSuscripciones(rSubs.value.data || [])
-        })
-      }
-    })
+        }).catch(err => console.error('[cuenta] load error:', err))
+      })
+      .catch(err => { console.error('[cuenta] getUser error:', err); setAuthChecked(true) })
   }, [])
 
   // ── Cambiar contraseña ──
