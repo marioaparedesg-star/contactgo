@@ -119,6 +119,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Preconnect para performance */}
         <link rel="preconnect" href="https://atendbjolicwcsqfyiyh.supabase.co" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
         <link rel="dns-prefetch" href="https://wa.me" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -137,6 +138,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           id="gtm-script"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M9GZGJJQ');` }}
+        />
+
+        {/* ── Google Ads — AW-830060688 ────────────────────────────────────── */}
+        <Script
+          id="google-ads"
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-830060688"
+        />
+        <Script
+          id="google-ads-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-830060688');
+          ` }}
         />
 
         <Script

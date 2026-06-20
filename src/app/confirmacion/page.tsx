@@ -46,6 +46,24 @@ function ConfirmacionContent() {
   const [order,   setOrder]   = useState<any>(null)
   const [items,   setItems]   = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+
+  // ── Google Ads Conversión ──────────────────────────────────────────────────
+  useEffect(() => {
+    if (declinado || !orderId) return
+    // Disparar evento de conversión cuando el pago es exitoso
+    const fireConversion = () => {
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'conversion', {
+          send_to: 'AW-830060688/CsASCPyC2MIcEJDx5osD',
+          transaction_id: orderId,
+        })
+      }
+    }
+    // Pequeño delay para asegurar que gtag esté cargado
+    const timer = setTimeout(fireConversion, 1500)
+    return () => clearTimeout(timer)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [declinado, orderId])
   const [dots,    setDots]    = useState(false)
 
   // Limpiar carrito
