@@ -189,7 +189,7 @@ export default function CuentaPage() {
         setUser(user)
         Promise.allSettled([
           sb.from('profiles').select('*').eq('id', user.id).single(),
-          sb.from('orders').select('*').eq('user_id', user.id).order('fecha', { ascending: false }),
+          sb.from('orders').select('*, order_items(*)').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('addresses').select('*').eq('user_id', user.id).order('created_at'),
           sb.from('saved_prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('payment_methods').select('*').eq('user_id', user.id).order('created_at'),
@@ -843,14 +843,12 @@ export default function CuentaPage() {
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                   <span className="text-primary-600 font-bold text-lg">RD${(p.total||0).toLocaleString()}</span>
                   <div className="flex items-center gap-2">
-                    {p.pago_estado === 'pagado' && (
-                      <a
-                        href={`/pedido/${p.numero_orden}`}
-                        onClick={e => e.stopPropagation()}
-                        className="text-xs border border-primary-200 text-primary-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-primary-50 transition-colors">
-                        📦 Seguir pedido
-                      </a>
-                    )}
+                    <a
+                      href={`/pedido/${p.numero_orden}`}
+                      onClick={e => e.stopPropagation()}
+                      className="text-xs border border-primary-200 text-primary-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-primary-50 transition-colors">
+                      {p.pago_estado === 'pagado' ? '📦 Seguir pedido' : '👁️ Ver pedido'}
+                    </a>
                     {p.pago_estado === 'pagado' && (
                       <button
                         onClick={e => reorderPedido(e, p.id)}

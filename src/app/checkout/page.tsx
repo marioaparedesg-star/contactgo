@@ -305,8 +305,13 @@ export default function CheckoutPage() {
     setAuthLoading(true); setAuthMsg('')
     const sb = createClient()
     if (authMode === 'register') {
-      const { error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: authNombre } } })
+      const { error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: authNombre, phone: authTel, fecha_nacimiento: authFecha } } })
       if (error) { setAuthMsg(error.message); setAuthLoading(false); return }
+      fetch('/api/auth/welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: authEmail, nombre: authNombre }),
+      }).catch(() => {})
       const { data: { user } } = await sb.auth.getUser()
       if (user) {
         await sb.from('profiles').upsert({ id: user.id, nombre: authNombre, email: authEmail, telefono: authTel, role: 'customer' })

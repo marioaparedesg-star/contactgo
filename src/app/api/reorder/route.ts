@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   )
   const { data: items } = await sb
     .from('order_items')
-    .select('product_id, nombre, precio, cantidad, sph, cyl, axis, add_power, color, ojo_mode, size, suscripcion, precio_original')
+    .select('product_id, nombre, precio, cantidad, sph, sph_od, sph_oi, cyl, cyl_od, cyl_oi, axis, axis_od, axis_oi, add_power, color, ojo_mode, size, suscripcion, precio_original, product:products(id, nombre, precio, tipo, slug, imagen_url)')
     .eq('order_id', orderId)
   if (!items?.length) return NextResponse.json({ error: 'No encontrado' }, { status: 404 })
   return NextResponse.json({ items })

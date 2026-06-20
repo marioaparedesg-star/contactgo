@@ -16,6 +16,47 @@ import toast from 'react-hot-toast'
 
 export default function CartPage() {
   const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+
+  // ── Leer items de "Repetir pedido" al cargar ─────────────────────────────
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('reorder_items')
+      const reorderParam = new URLSearchParams(window.location.search).get('reorder')
+      if (raw && reorderParam === '1') {
+        const reorderItems = JSON.parse(raw)
+        sessionStorage.removeItem('reorder_items') // limpiar para no re-añadir
+        if (reorderItems?.length) {
+          // Limpiar carrito primero para no mezclar con items actuales
+          clearCart()
+          // Añadir los items del pedido anterior
+          reorderItems.forEach((item: any) => {
+            if (item.product_id) {
+              addItem({
+                product: {
+                  id: item.product_id,
+                  nombre: item.nombre ?? '',
+                  precio: item.precio ?? 0,
+                  tipo: item.tipo ?? 'esferico',
+                  slug: item.slug ?? '',
+                  imagen_url: item.imagen_url ?? null,
+                } as any,
+                cantidad: item.cantidad ?? 1,
+                sph:       item.sph       ?? null,
+                cyl:       item.cyl       ?? null,
+                axis:      item.axis      ?? null,
+                add_power: item.add_power ?? null,
+                color:     item.color     ?? null,
+                ojo_mode:  item.ojo_mode  ?? null,
+                size:      item.size      ?? null,
+                suscripcion: item.suscripcion ?? null,
+              } as any)
+            }
+          })
+        }
+      }
+    } catch {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const [emailCapturado, setEmailCapturado] = useState('')
   const [emailEnviado, setEmailEnviado] = useState(false)
 
