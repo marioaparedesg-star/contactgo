@@ -347,7 +347,7 @@ export default function CuentaPage() {
   const guardarReceta = async () => {
     const sb = createClient()
     const diagnostico = detectarDiagnostico(recetaForm)
-    const { data } = await sb.from('prescriptions').insert({ user_id: user.id, ...recetaForm, diagnostico }).select().single()
+    const { data } = await sb.from('saved_prescriptions').insert({ user_id: user.id, ...recetaForm, diagnostico }).select().single()
     if (data) {
       setRecetas(r => [data, ...r])
       setAgregandoReceta(false)
@@ -357,7 +357,7 @@ export default function CuentaPage() {
 
   const eliminarReceta = async (id: string) => {
     const sb = createClient()
-    await sb.from('prescriptions').delete().eq('id', id)
+    await sb.from('saved_prescriptions').delete().eq('id', id)
     setRecetas(r => r.filter(x => x.id !== id))
   }
 
@@ -1258,7 +1258,7 @@ export default function CuentaPage() {
                   <button onClick={async () => {
                     const diagnostico = detectarDiagnostico(recetaForm)
                     const sb = createClient()
-                    const { data } = await sb.from('prescriptions').insert({
+                    const { data } = await sb.from('saved_prescriptions').insert({
                       user_id: user.id, ...recetaForm, diagnostico,
                       fecha_emision: fechaEmisionForm || null,
                     }).select().single()

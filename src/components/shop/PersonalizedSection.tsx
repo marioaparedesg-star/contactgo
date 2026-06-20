@@ -30,7 +30,7 @@ export default function PersonalizedSection() {
       if (perfil?.nombre) setNombre(perfil.nombre.split(' ')[0])
 
       const { data: recetas } = await sb
-        .from('prescriptions').select('*')
+        .from('saved_prescriptions').select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
