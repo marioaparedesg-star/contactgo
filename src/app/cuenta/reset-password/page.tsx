@@ -16,16 +16,28 @@ function ResetContent() {
   const [loading, setLoading] = useState(false)
   const [msg, setMsg]         = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
 
-  // Si viene con access_token en el hash (retorno de email de reset)
+  // Detectar si el usuario llegó via link de recovery (PKCE flow)
+  // El /auth/callback ya canjeó el code= y estableció la sesión
   useEffect(() => {
-    const hash = window.location.hash
+    const hash   = window.location.hash
+    const search = window.location.search
+
+    // Detectar error del callback
+    const urlParams = new URLSearchParams(search)
+    const err = urlParams.get('error')
+    if (err) { setMsg({ type: 'err', text: decodeURIComponent(err) }); return }
+
+    // Si hay sesión activa = venimos del link de recovery → modo actualizar
+    const sb = createClient()
+    sb.auth.getSession().then(({ data }) => {
+      if (data.session?.user) {
+        setMode('update')
+      }
+    })
+
+    // Compatibilidad con hash tokens (flow antiguo)
     if (hash.includes('access_token') || hash.includes('type=recovery')) {
       setMode('update')
-      // Procesar el token del hash
-      const sb = createClient()
-      sb.auth.getSession().then(({ data }) => {
-        if (data.session) setMode('update')
-      })
     }
   }, [])
 
@@ -35,7 +47,7 @@ function ResetContent() {
     setLoading(true); setMsg(null)
     const sb = createClient()
     const { error } = await sb.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/cuenta/reset-password`,
+      redirectTo: `${window.location.origin}/auth/callback?next=/cuenta/reset-password`,
     })
     if (error) {
       setMsg({ type: 'err', text: error.message })
