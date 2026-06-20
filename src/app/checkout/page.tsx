@@ -62,6 +62,7 @@ export default function CheckoutPage() {
   const [authMode, setAuthMode] = useState<'login'|'register'>('register')
   const [authEmail, setAuthEmail] = useState('')
   const [authPass, setAuthPass] = useState('')
+  const [authFecha, setAuthFecha] = useState('')
   const [authNombre, setAuthNombre] = useState('')
   const [authTel, setAuthTel] = useState('')
   const [authLoading, setAuthLoading] = useState(false)
@@ -412,8 +413,15 @@ export default function CheckoutPage() {
             </div>
             <div className="space-y-3">
               {authMode === 'register' && <>
-                <input placeholder="Nombre completo" value={authNombre} onChange={e => setAuthNombre(e.target.value)} className="input w-full" />
-                <input placeholder="Teléfono (opcional)" value={authTel} onChange={e => setAuthTel(e.target.value)} className="input w-full" />
+                <input placeholder="Nombre completo" value={authNombre} onChange={e => setAuthNombre(e.target.value)} className="input w-full" required />
+                <input placeholder="Teléfono (ej: 829-000-0000)" value={authTel} onChange={e => setAuthTel(e.target.value)} className="input w-full" type="tel" required />
+                <div>
+                  <label className="text-xs font-bold text-gray-600 block mb-1">Fecha de nacimiento</label>
+                  <input type="date" value={authFecha} onChange={e => setAuthFecha(e.target.value)}
+                    max={new Date(Date.now()-18*365.25*24*60*60*1000).toISOString().split('T')[0]}
+                    className="input w-full" required style={{fontSize:'16px'}} />
+                  <p className="text-[10px] text-gray-400 mt-0.5">Solo mayores de 18 años</p>
+                </div>
               </>}
               <input type="email" autoComplete="email" placeholder="Email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="input w-full" />
               <input type="password" autoComplete="current-password" placeholder="Contraseña" value={authPass} onChange={e => setAuthPass(e.target.value)} className="input w-full" />
@@ -433,27 +441,28 @@ export default function CheckoutPage() {
           <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-1.5 text-sm text-green-700 font-semibold">
               <Lock className="w-4 h-4" />
-              <span className="hidden sm:inline">Pago seguro</span>
+              <span className="hidden sm:inline text-xs">Pago seguro AZUL</span>
             </div>
+            {/* Pasos */}
             <div className="flex items-center gap-2">
               {steps.map((s, i) => (
-                <div key={s.n} className="flex items-center gap-2">
+                <div key={s.n} className="flex items-center gap-1.5">
                   <button onClick={() => step > s.n && setStep(s.n)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                      step === s.n ? 'bg-primary-600 text-white shadow-md' :
-                      step > s.n ? 'bg-green-100 text-green-700 cursor-pointer hover:bg-green-200' :
+                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-black transition-all ${
+                      step === s.n ? 'bg-primary-600 text-white shadow-md scale-105' :
+                      step > s.n ? 'bg-green-100 text-green-700 cursor-pointer' :
                       'bg-gray-100 text-gray-400'
                     }`}>
                     {step > s.n ? <Check className="w-3 h-3" /> : <span>{s.n}</span>}
-                    <span className="hidden sm:inline">{s.label}</span>
+                    <span>{s.label}</span>
                   </button>
                   {i < steps.length - 1 && (
-                    <div className={`w-8 h-0.5 rounded-full ${step > s.n ? 'bg-green-400' : 'bg-gray-200'}`} />
+                    <div className={`w-6 h-1 rounded-full transition-all ${step > s.n ? 'bg-green-400' : 'bg-gray-200'}`} />
                   )}
                 </div>
               ))}
             </div>
-            <div className="text-xs text-gray-400 font-medium hidden sm:block">contactgo.net</div>
+            <div className="text-[10px] text-gray-400 font-medium">{step}/3</div>
           </div>
         </div>
 

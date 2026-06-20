@@ -51,6 +51,12 @@ export default function WelcomePopup() {
       })
       if (err) { setError(err.message); return }
       await fetch('/api/welcome-coupon', { method: 'POST' })
+      // Email de bienvenida bonito
+      await fetch('/api/auth/welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, nombre }),
+      }).catch(() => {})
       setPaso('exito')
       sessionStorage.setItem('popup_visto', '1')
     } catch { setError('Error al crear cuenta') }

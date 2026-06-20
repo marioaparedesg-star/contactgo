@@ -56,6 +56,13 @@ function ConfirmacionContent() {
         if (s.state) { s.state.items = []; localStorage.setItem('contactgo-cart', JSON.stringify(s)) }
       } catch {}
       if (orderId) {
+        // Guardar receta automáticamente (lentes con graduación)
+        fetch('/api/rx-save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id: orderId }),
+        }).catch(() => {})
+
         fetch('/api/notify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
