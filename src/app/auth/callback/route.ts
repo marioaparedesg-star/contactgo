@@ -1,16 +1,16 @@
-// /auth/callback — maneja intercambio PKCE de Supabase Auth
-// Recibe ?code= de resetPasswordForEmail() y otros flows PKCE
+// /auth/callback — maneja PKCE codes Y token_hash de recovery emails
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url)
-  const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/cuenta'
-  const errorParam = searchParams.get('error')
+  const code        = searchParams.get('code')
+  const token_hash  = searchParams.get('token_hash')
+  const type        = searchParams.get('type')
+  const next        = searchParams.get('next') ?? '/cuenta'
+  const errorParam  = searchParams.get('error')
 
-  // Si viene un error explícito de Supabase, redirigir con mensaje
   if (errorParam) {
     const desc = searchParams.get('error_description') ?? 'Error de autenticación'
     return NextResponse.redirect(
@@ -18,34 +18,46 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  if (code) {
-    const cookieStore = await cookies()
-    const sb = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get:    (name) => cookieStore.get(name)?.value,
-          set:    (name, value, options) => { try { cookieStore.set(name, value, options) } catch {} },
-          remove: (name, options) => { try { cookieStore.delete(name) } catch {} },
-        },
-      }
-    )
+  const cookieStore = await cookies()
+  const sb = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get:    (n) => cookieStore.get(n)?.value,
+        set:    (n, v, o) => { try { cookieStore.set(n, v, o) } catch {} },
+        remove: (n, o)    => { try { cookieStore.delete(n) }    catch {} },
+      },
+    }
+  )
 
-    const { error } = await sb.auth.exchangeCodeForSession(code)
-
+  // CASO 1: token_hash (nuestros emails bonitos via admin.generateLink)
+  if (token_hash && type) {
+    const { error } = await sb.auth.verifyOtp({
+      token_hash,
+      type: type as any,
+    })
     if (!error) {
-      // ✅ Código canjeado → redirigir al destino
       return NextResponse.redirect(`${origin}${next}`)
     }
-
-    console.error('exchangeCodeForSession error:', error.message)
+    console.error('verifyOtp error:', error.message)
     return NextResponse.redirect(
       `${origin}/cuenta/reset-password?error=${encodeURIComponent('El enlace ha expirado o ya fue usado. Solicita uno nuevo.')}`
     )
   }
 
-  // Sin código → redirigir a cuenta (puede tener hash con access_token)
-  // El cliente manejará el hash en JavaScript
+  // CASO 2: code (PKCE flow estándar de resetPasswordForEmail cliente)
+  if (code) {
+    const { error } = await sb.auth.exchangeCodeForSession(code)
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`)
+    }
+    console.error('exchangeCodeForSession error:', error.message)
+    return NextResponse.redirect(
+      `${origin}/cuenta/reset-password?error=${encodeURIComponent('El enlace ha expirado. Solicita uno nuevo.')}`
+    )
+  }
+
+  // Sin código ni token → redirigir
   return NextResponse.redirect(`${origin}${next}`)
 }

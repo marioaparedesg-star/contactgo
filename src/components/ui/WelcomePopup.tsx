@@ -16,7 +16,7 @@ export default function WelcomePopup() {
   const router = useRouter()
 
   useEffect(() => {
-    if (sessionStorage.getItem('popup_visto')) return
+    try { if (sessionStorage.getItem('popup_visto')) return } catch {}
     const sb = createClient()
     sb.auth.getUser().then(({ data: { user } }) => {
       if (user) return
@@ -58,7 +58,7 @@ export default function WelcomePopup() {
         body: JSON.stringify({ email, nombre }),
       }).catch(() => {})
       setPaso('exito')
-      sessionStorage.setItem('popup_visto', '1')
+      try { sessionStorage.setItem('popup_visto', '1') } catch {}
     } catch { setError('Error al crear cuenta') }
     finally { setLoading(false) }
   }

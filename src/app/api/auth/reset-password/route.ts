@@ -1,3 +1,5 @@
+// POST /api/auth/reset-password
+// Genera link de recovery y envía email premium desde info@contactgo.net
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
@@ -8,52 +10,44 @@ export async function POST(req: NextRequest) {
   if (!email) return NextResponse.json({ error: 'Email requerido' }, { status: 400 })
 
   const cookieStore = await cookies()
-  // Usar anon key (no service_role) para PKCE flow correcto
   const sb = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies: { get: (n) => cookieStore.get(n)?.value, set: (n,v,o) => cookieStore.set(n,v,o), remove: (n,o) => cookieStore.delete(n) } }
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { cookies: { get: (n) => cookieStore.get(n)?.value, set: () => {}, remove: () => {} } }
   )
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+  const SITE = 'https://www.contactgo.net'
 
-  // resetPasswordForEmail genera link PKCE (?code=) — compatible con /auth/callback
-  const { error } = await sb.auth.resetPasswordForEmail(email.trim(), {
-    redirectTo: `${SITE_URL}/auth/callback?next=/cuenta/reset-password`,
+  // Generar link de recovery con admin API
+  const { data, error } = await sb.auth.admin.generateLink({
+    type: 'recovery',
+    email: email.trim(),
+    options: {
+      redirectTo: `${SITE}/auth/callback?next=/cuenta/reset-password`,
+    }
   })
 
-  if (error) {
-    console.error('Reset password error:', error.message)
-    return NextResponse.json({ error: error.message }, { status: 400 })
+  if (error || !data?.properties?.hashed_token) {
+    // Fallback: resetPasswordForEmail estándar (Supabase envía su propio email)
+    await sb.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${SITE}/auth/callback?next=/cuenta/reset-password`,
+    })
+    return NextResponse.json({ ok: true, via: 'fallback' })
   }
 
-  // Enviar email bonito con Resend usando el link generado por Supabase
-  // Nota: Supabase ya envió el email básico, usamos Resend para el diseño
-  // Esto requiere deshabilitar el email de Supabase en el dashboard
-  // Por ahora enviamos ambos (el de Supabase llega más rápido como fallback)
+  // Construir nuestro propio link usando token_hash + type
+  // El callback lo maneja con verifyOtp()
+  const tokenHash = data.properties.hashed_token
+  const resetLink = `${SITE}/auth/callback?token_hash=${encodeURIComponent(tokenHash)}&type=recovery&next=/cuenta/reset-password`
+
+  const nombre = (email as string).split('@')[0]
+
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
-    const nombre = email.split('@')[0]
-
-    // Generar link bonito usando admin para obtener el token
-    const sbAdmin = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      { cookies: { get: (n) => cookieStore.get(n)?.value, set: () => {}, remove: () => {} } }
-    )
-
-    const { data: linkData } = await sbAdmin.auth.admin.generateLink({
-      type: 'recovery',
-      email: email.trim(),
-      options: { redirectTo: `${SITE_URL}/auth/callback?next=/cuenta/reset-password` }
-    })
-
-    const resetLink = linkData?.properties?.action_link ?? `${SITE_URL}/cuenta/reset-password`
-
     await resend.emails.send({
       from: 'ContactGo <info@contactgo.net>',
       to: email.trim(),
-      subject: '🔑 Restablecer tu contraseña — ContactGo',
+      subject: 'Restablecer contraseña — ContactGo',
       html: `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
@@ -62,88 +56,97 @@ export async function POST(req: NextRequest) {
 <tr><td align="center">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;">
 
-  <tr><td style="background:linear-gradient(135deg,#14532d,#16a34a);border-radius:20px 20px 0 0;padding:40px;text-align:center;">
-    <table width="100%" cellpadding="0" cellspacing="0">
-      <tr><td align="center" style="padding-bottom:20px;">
-        <table cellpadding="0" cellspacing="0">
-          <tr>
-            <td style="background:rgba(255,255,255,0.2);border-radius:12px;padding:8px 14px;">
-              <span style="color:white;font-size:18px;font-weight:900;font-family:Arial,sans-serif;">CG</span>
-            </td>
-            <td style="padding-left:10px;">
-              <span style="color:white;font-size:17px;font-weight:700;font-family:Arial,sans-serif;">ContactGo</span>
-            </td>
-          </tr>
-        </table>
-      </td></tr>
+  <!-- HEADER -->
+  <tr><td style="background:linear-gradient(135deg,#14532d 0%,#16a34a 100%);border-radius:20px 20px 0 0;padding:40px;text-align:center;">
+    <!-- Logo -->
+    <table align="center" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+      <tr>
+        <td style="background:rgba(255,255,255,0.2);border-radius:14px;padding:10px 18px;vertical-align:middle;">
+          <span style="color:white;font-size:22px;font-weight:900;letter-spacing:1px;font-family:Arial Black,sans-serif;">CG</span>
+        </td>
+        <td style="padding-left:12px;vertical-align:middle;">
+          <span style="color:white;font-size:20px;font-weight:800;font-family:Arial,sans-serif;">ContactGo</span>
+        </td>
+      </tr>
     </table>
-    <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:72px;height:72px;margin:0 auto 20px;display:table;text-align:center;line-height:72px;">
-      <span style="font-size:36px;display:table-cell;vertical-align:middle;">🔐</span>
+    <!-- Ícono -->
+    <div style="background:rgba(255,255,255,0.2);border-radius:50%;width:72px;height:72px;margin:0 auto 20px;display:table-cell;vertical-align:middle;text-align:center;">
+      <span style="font-size:36px;line-height:72px;">🔐</span>
     </div>
-    <h1 style="color:white;font-size:24px;font-weight:900;margin:0 0 8px;font-family:Arial,sans-serif;">Restablece tu contraseña</h1>
-    <p style="color:rgba(255,255,255,0.85);font-size:14px;margin:0;font-family:Arial,sans-serif;">Recibimos una solicitud para tu cuenta</p>
+    <h1 style="color:white;font-size:24px;font-weight:900;margin:16px 0 8px;">Restablece tu contraseña</h1>
+    <p style="color:rgba(255,255,255,0.8);font-size:14px;margin:0;">Recibimos una solicitud para tu cuenta</p>
   </td></tr>
 
-  <tr><td style="background:white;padding:36px;">
-    <p style="color:#374151;font-size:15px;margin:0 0 8px;font-family:Arial,sans-serif;">Hola <strong>${nombre}</strong> 👋</p>
-    <p style="color:#4b5563;font-size:14px;line-height:1.7;margin:0 0 28px;font-family:Arial,sans-serif;">
+  <!-- BODY -->
+  <tr><td style="background:white;padding:40px;">
+    <p style="color:#374151;font-size:16px;margin:0 0 8px;">Hola <strong>${nombre}</strong> 👋</p>
+    <p style="color:#4b5563;font-size:14px;line-height:1.7;margin:0 0 28px;">
       Alguien solicitó restablecer la contraseña de tu cuenta en ContactGo.
-      Si fuiste tú, haz clic en el botón de abajo.
+      Si fuiste tú, haz clic en el botón de abajo. Si no lo solicitaste, ignora este correo.
     </p>
 
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0;">
+    <!-- BOTÓN -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
       <tr><td align="center">
         <a href="${resetLink}"
-          style="display:inline-block;background:linear-gradient(135deg,#16a34a,#15803d);color:white;font-weight:800;font-size:15px;text-decoration:none;padding:16px 48px;border-radius:14px;font-family:Arial,sans-serif;box-shadow:0 4px 14px rgba(22,163,74,0.35);">
+          style="display:inline-block;background:linear-gradient(135deg,#16a34a,#15803d);color:white;font-weight:800;font-size:16px;text-decoration:none;padding:18px 48px;border-radius:14px;letter-spacing:0.3px;">
           🔑 Crear nueva contraseña
         </a>
       </td></tr>
     </table>
 
-    <div style="background:#fef9c3;border:1px solid #fde047;border-radius:12px;padding:16px;margin:24px 0;">
-      <p style="color:#713f12;font-size:13px;margin:0;font-weight:600;font-family:Arial,sans-serif;">⏱️ Este enlace expira en <strong>1 hora</strong></p>
-      <p style="color:#92400e;font-size:12px;margin:6px 0 0;font-family:Arial,sans-serif;">Si no lo usas a tiempo, tendrás que solicitar uno nuevo.</p>
-    </div>
+    <!-- ALERTA EXPIRACIÓN -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <tr><td style="background:#fef9c3;border:1px solid #fde047;border-radius:12px;padding:16px;">
+        <p style="color:#713f12;font-size:13px;margin:0;font-weight:700;">⏱️ Este enlace expira en 1 hora</p>
+        <p style="color:#92400e;font-size:12px;margin:6px 0 0;">Si no lo usas a tiempo, solicita uno nuevo en contactgo.net</p>
+      </td></tr>
+    </table>
 
-    <p style="color:#6b7280;font-size:13px;margin:24px 0 0;line-height:1.6;font-family:Arial,sans-serif;">
-      Si <strong>no solicitaste</strong> este cambio, ignora este correo. Tu contraseña no cambiará.
+    <p style="color:#9ca3af;font-size:12px;margin:0 0 20px;line-height:1.6;">
+      Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
+      <a href="${resetLink}" style="color:#16a34a;word-break:break-all;font-size:11px;">${resetLink}</a>
     </p>
 
-    <hr style="border:none;border-top:1px solid #f3f4f6;margin:28px 0;">
+    <hr style="border:none;border-top:1px solid #f3f4f6;margin:24px 0;">
 
-    <table width="100%" cellpadding="8">
+    <!-- TRUST SIGNALS -->
+    <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
-        <td align="center" style="width:33%;">
-          <div style="background:#f0fdf4;border-radius:10px;padding:12px;text-align:center;">
-            <p style="font-size:22px;margin:0;">🔒</p>
-            <p style="color:#374151;font-size:11px;font-weight:600;margin:4px 0 0;font-family:Arial,sans-serif;">Pago Seguro<br>AZUL</p>
+        <td align="center" width="33%">
+          <div style="background:#f0fdf4;border-radius:10px;padding:12px 8px;">
+            <p style="font-size:20px;margin:0;">🔒</p>
+            <p style="color:#374151;font-size:11px;font-weight:700;margin:4px 0 0;text-align:center;">Pago Seguro<br>AZUL</p>
           </div>
         </td>
-        <td align="center" style="width:33%;">
-          <div style="background:#f0fdf4;border-radius:10px;padding:12px;text-align:center;">
-            <p style="font-size:22px;margin:0;">✅</p>
-            <p style="color:#374151;font-size:11px;font-weight:600;margin:4px 0 0;font-family:Arial,sans-serif;">Productos<br>Originales</p>
+        <td width="8px"></td>
+        <td align="center" width="33%">
+          <div style="background:#f0fdf4;border-radius:10px;padding:12px 8px;">
+            <p style="font-size:20px;margin:0;">✅</p>
+            <p style="color:#374151;font-size:11px;font-weight:700;margin:4px 0 0;text-align:center;">Productos<br>Originales</p>
           </div>
         </td>
-        <td align="center" style="width:33%;">
-          <div style="background:#f0fdf4;border-radius:10px;padding:12px;text-align:center;">
-            <p style="font-size:22px;margin:0;">🚚</p>
-            <p style="color:#374151;font-size:11px;font-weight:600;margin:4px 0 0;font-family:Arial,sans-serif;">Envío a<br>todo RD</p>
+        <td width="8px"></td>
+        <td align="center" width="33%">
+          <div style="background:#f0fdf4;border-radius:10px;padding:12px 8px;">
+            <p style="font-size:20px;margin:0;">🚚</p>
+            <p style="color:#374151;font-size:11px;font-weight:700;margin:4px 0 0;text-align:center;">Envío a<br>todo RD</p>
           </div>
         </td>
       </tr>
     </table>
   </td></tr>
 
-  <tr><td style="background:#1e293b;border-radius:0 0 20px 20px;padding:24px;text-align:center;">
-    <p style="color:#94a3b8;font-size:13px;margin:0 0 8px;font-family:Arial,sans-serif;">
-      <strong style="color:white;">ContactGo</strong> — La tienda de lentes de contacto de República Dominicana
+  <!-- FOOTER -->
+  <tr><td style="background:#1e293b;border-radius:0 0 20px 20px;padding:28px 40px;text-align:center;">
+    <p style="color:#94a3b8;font-size:13px;margin:0 0 10px;">
+      <strong style="color:white;">ContactGo</strong> — La tienda de lentes de contacto de RD
     </p>
-    <p style="margin:0;font-family:Arial,sans-serif;">
+    <p style="margin:0;">
       <a href="https://www.contactgo.net" style="color:#4ade80;text-decoration:none;font-size:12px;font-weight:600;">contactgo.net</a>
-      <span style="color:#475569;margin:0 6px;">·</span>
+      <span style="color:#475569;margin:0 8px;">·</span>
       <a href="mailto:info@contactgo.net" style="color:#4ade80;text-decoration:none;font-size:12px;">info@contactgo.net</a>
-      <span style="color:#475569;margin:0 6px;">·</span>
+      <span style="color:#475569;margin:0 8px;">·</span>
       <span style="color:#64748b;font-size:12px;">(829) 472-8328</span>
     </p>
   </td></tr>
@@ -151,12 +154,12 @@ export async function POST(req: NextRequest) {
 </table>
 </td></tr>
 </table>
-</body></html>`
+</body>
+</html>`
     })
-  } catch (emailErr) {
-    console.error('Error enviando email Resend:', emailErr)
-    // No falla — Supabase ya envió el email básico como fallback
+    return NextResponse.json({ ok: true, via: 'resend' })
+  } catch (err) {
+    console.error('Email error:', err)
+    return NextResponse.json({ ok: true, via: 'fallback_silent' })
   }
-
-  return NextResponse.json({ ok: true })
 }

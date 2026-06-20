@@ -16,29 +16,42 @@ function ResetContent() {
   const [loading, setLoading] = useState(false)
   const [msg, setMsg]         = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
 
-  // Detectar si el usuario llegó via link de recovery (PKCE flow)
-  // El /auth/callback ya canjeó el code= y estableció la sesión
+  // Detectar modo update: usuario llegó vía link de recovery
+  // /auth/callback ya ejecutó verifyOtp o exchangeCodeForSession
   useEffect(() => {
-    const hash   = window.location.hash
     const search = window.location.search
+    const hash   = window.location.hash
+    const params = new URLSearchParams(search)
 
-    // Detectar error del callback
-    const urlParams = new URLSearchParams(search)
-    const err = urlParams.get('error')
-    if (err) { setMsg({ type: 'err', text: decodeURIComponent(err) }); return }
+    // Error del callback
+    const err = params.get('error')
+    if (err) {
+      setMsg({ type: 'err', text: decodeURIComponent(err) })
+      return
+    }
 
-    // Si hay sesión activa = venimos del link de recovery → modo actualizar
+    // Si Supabase pone el token en el hash (implicit flow)
+    if (hash.includes('access_token') || hash.includes('type=recovery')) {
+      const sb = createClient()
+      sb.auth.getUser().then(({ data }) => {
+        if (data.user) setMode('update')
+      })
+      return
+    }
+
+    // Verificar si ya hay sesión activa (callback exitoso)
     const sb = createClient()
-    sb.auth.getSession().then(({ data }) => {
-      if (data.session?.user) {
+    sb.auth.getUser().then(({ data }) => {
+      if (data.user) setMode('update')
+    })
+
+    // Escuchar cambios de sesión (cuando Supabase procesa el token)
+    const { data: { subscription } } = sb.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
         setMode('update')
       }
     })
-
-    // Compatibilidad con hash tokens (flow antiguo)
-    if (hash.includes('access_token') || hash.includes('type=recovery')) {
-      setMode('update')
-    }
+    return () => subscription.unsubscribe()
   }, [])
 
   const sendReset = async (e: React.FormEvent) => {

@@ -60,7 +60,7 @@ async function registerPasskey(userId: string, userName: string): Promise<boolea
 
 async function authenticatePasskey(): Promise<boolean> {
   if (!window.PublicKeyCredential) return false
-  const storedId = localStorage.getItem(STORAGE_KEY)
+  const storedId = (() => { try { return localStorage.getItem(STORAGE_KEY) } catch { return null } })()
   if (!storedId) return false
   try {
     const challenge = crypto.getRandomValues(new Uint8Array(32))
@@ -654,7 +654,7 @@ export default function CuentaPage() {
       })
       const data = await res.json()
       if (data.items?.length) {
-        sessionStorage.setItem('reorder_items', JSON.stringify(data.items))
+        try { sessionStorage.setItem('reorder_items', JSON.stringify(data.items)) } catch {}
         toast.success('✅ Llevándote al carrito...')
         router.push('/cart?reorder=1')
       }
