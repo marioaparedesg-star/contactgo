@@ -46,7 +46,13 @@ export default function ProductCard({ product, isBestseller }: Props) {
     e.preventDefault()
     if (needsRx) { window.location.href = `/producto/${(product as any).slug || product.id}`; return }
     addItem(product)
-    toast.success(`${product.nombre} agregado`)
+    toast.custom((t) => (
+      <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-sm w-full bg-white shadow-xl rounded-2xl border border-green-100 flex items-center gap-3 p-4`}>
+        <span className="text-xl flex-shrink-0">✅</span>
+        <p className="text-sm font-bold text-gray-900 flex-1 truncate">{product.nombre} agregado</p>
+        <a href="/cart" className="text-xs font-black text-primary-600 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-xl flex-shrink-0">Ver →</a>
+      </div>
+    ), { duration: 3500, position: 'top-center' })
     trackEcommerce('add_to_cart', {
       items: [{ item_id: product.id, item_name: product.nombre, item_brand: product.marca ?? '', item_category: product.tipo ?? '', price: product.precio, quantity: 1 }],
       value: product.precio

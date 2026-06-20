@@ -8,6 +8,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import CookieConsent from '@/components/ui/CookieConsent'
 import { Toaster } from 'react-hot-toast'
 import WelcomePopup from '@/components/ui/WelcomePopup'
+import ScrollToTop from '@/components/ui/ScrollToTop'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.contactgo.net'),

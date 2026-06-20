@@ -56,6 +56,18 @@ export default async function HomePage() {
         {/* ── HERO ── */}
         <HeroSlider lentesCount={ordersCount > 0 ? ordersCount * 6 + 4200 : 4200} />
 
+        {/* ── Buscador rápido — el cliente lo necesita en mobile ─────────── */}
+        <section className="bg-white px-4 py-3 border-b border-gray-50 sticky top-14 z-30 shadow-sm">
+          <a href="/catalogo"
+            className="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl px-4 py-3 transition-colors w-full max-w-2xl mx-auto">
+            <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span className="text-sm text-gray-400 flex-1">Busca ACUVUE, Air Optix, graduación...</span>
+            <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full flex-shrink-0">Buscar</span>
+          </a>
+        </section>
+
         {/* ── Stats reales — prueba social ────────────────────────────────── */}
         <section className="bg-white border-b border-gray-100 py-5 px-4">
           <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">

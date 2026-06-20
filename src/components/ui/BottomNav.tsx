@@ -1,41 +1,57 @@
 'use client'
 import { usePathname } from 'next/navigation'
-import { Home, Search, ShoppingCart, User, Grid3X3 } from 'lucide-react'
+import { Home, ShoppingCart, User, Grid3X3, Search } from 'lucide-react'
 import { useCartStore } from '@/lib/cart-store'
 
 export default function BottomNav() {
-  const pathname = usePathname()
+  const pathname  = usePathname()
   const itemCount = useCartStore(s => s.itemCount())
-
-  const tabs = [
-    { href: '/', icon: Home, label: 'Inicio' },
-    { href: '/catalogo', icon: Grid3X3, label: 'Catalogo' },
-    { href: '/receta', icon: Search, label: 'Receta' },
-    { href: '/cart', icon: ShoppingCart, label: 'Carrito', badge: itemCount },
-    { href: '/cuenta', icon: User, label: 'Cuenta' },
-  ]
 
   if (pathname.startsWith('/admin')) return null
 
+  const tabs = [
+    { href: '/',        icon: Home,         label: 'Inicio'   },
+    { href: '/catalogo',icon: Grid3X3,      label: 'Catálogo' },
+    { href: '/receta',  icon: Search,       label: 'Receta'   },
+    { href: '/cart',    icon: ShoppingCart, label: 'Carrito', badge: itemCount },
+    { href: '/cuenta',  icon: User,         label: 'Cuenta'   },
+  ]
+
   return (
-    <nav aria-label="Navegación principal" className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 pb-safe md:hidden">
-      <div className="flex items-center justify-around h-16">
+    <nav aria-label="Navegación" className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 z-40 safe-area-bottom shadow-lg shadow-black/5">
+      <div className="flex items-center justify-around h-16 px-1">
         {tabs.map(tab => {
           const Icon = tab.icon
           const active = pathname === tab.href || (tab.href !== '/' && pathname.startsWith(tab.href))
           return (
             <a key={tab.href} href={tab.href}
-              className={"flex flex-col items-center gap-0.5 px-3 py-2 relative " + (active ? (tab.href === "/cart" ? "text-primary-600" : "text-gray-800") : "text-gray-400")}>
-              <div className="relative">
-                <Icon className="w-6 h-6" />
+              className="flex flex-col items-center justify-center gap-0.5 flex-1 py-2 relative group"
+              aria-label={tab.label}
+              aria-current={active ? 'page' : undefined}>
+              {/* Indicador activo */}
+              {active && (
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-primary-600 rounded-full" />
+              )}
+              {/* Ícono con fondo activo */}
+              <div className={`relative flex items-center justify-center w-10 h-7 rounded-xl transition-all duration-200 ${
+                active ? 'bg-primary-50' : 'group-hover:bg-gray-50'
+              }`}>
+                <Icon className={`w-5 h-5 transition-colors ${
+                  active ? 'text-primary-600' : 'text-gray-400 group-hover:text-gray-600'
+                }`} strokeWidth={active ? 2.5 : 1.5} />
+                {/* Badge del carrito */}
                 {tab.badge ? (
-                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
-                    {tab.badge > 9 ? "9+" : tab.badge}
+                  <span className="absolute -top-1 -right-1 min-w-[16px] h-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 leading-none">
+                    {tab.badge > 9 ? '9+' : tab.badge}
                   </span>
                 ) : null}
               </div>
-              <span className={"text-xs font-medium " + (active ? (tab.href === "/cart" ? "text-primary-600" : "text-gray-800") : "text-gray-400")}>{tab.label}</span>
-              {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gray-800 rounded-full" />}
+              {/* Label */}
+              <span className={`text-[10px] font-semibold transition-colors leading-none ${
+                active ? 'text-primary-600' : 'text-gray-400'
+              }`}>
+                {tab.label}
+              </span>
             </a>
           )
         })}
