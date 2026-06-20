@@ -43,12 +43,26 @@ export default function PedidosPage() {
     }
   }
 
-  const cambiarEstado = async (orderId:string, estado:string) => {
+  const cambiarEstado = async (orderId:string, estado:string, nota?:string) => {
+    // 1. Actualizar estado en orders
     await sb.from('orders').update({estado}).eq('id',orderId)
+
+    // 2. Registrar en order_status_history (dispara trigger → order_events → cliente)
+    const { data: { user } } = await sb.auth.getUser()
+    await sb.from('order_status_history').insert({
+      order_id: orderId,
+      estado,
+      nota: nota ?? null,
+      changed_by: user?.id ?? null,
+    })
+
+    // 3. Actualizar UI local
     setPedidos(ps=>ps.map(p=>p.id===orderId?{...p,estado}:p))
     if (selected?.id===orderId) setSelected((s:any)=>({...s,estado}))
-    toast.success(`Estado → ${estado}`)
-    // Notificar al cliente automáticamente
+    toast.success(`✅ Estado actualizado → ${estado}`)
+    toast.success('Cliente puede ver el tracking en /pedido/' + (selected?.numero_orden ?? ''), {duration:3000, icon:'📦'})
+
+    // 4. Notificar al cliente por email/WhatsApp
     fetch('/api/notify',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({order_id:orderId, evento:'estado_cambio', nuevo_estado:estado})
@@ -259,13 +273,32 @@ export default function PedidosPage() {
                 {/* Cambiar estado */}
                 <div className="mb-4">
                   <p className="text-xs font-bold text-gray-500 uppercase mb-2">Estado del pedido</p>
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {ESTADOS.map(e=>(
+                  {/* Link al tracking del cliente */}
+                  <a href={`/pedido/${selected.numero_orden}`} target="_blank" rel="noopener"
+                    className="flex items-center gap-1.5 text-[10px] font-semibold text-blue-600 hover:text-blue-800 mb-2">
+                    📦 Ver como el cliente → /pedido/{selected.numero_orden}
+                  </a>
+                  <div className="grid grid-cols-3 gap-1.5 mb-2">
+                    {[
+                      {k:'recibido',i:'✅'},
+                      {k:'pago_aprobado',i:'💳'},
+                      {k:'preparando',i:'📦'},
+                      {k:'fabricante',i:'🏭'},
+                      {k:'transito',i:'🚛'},
+                      {k:'entregado',i:'🎉'},
+                    ].map(({k:e,i})=>(
                       <button key={e} onClick={()=>cambiarEstado(selected.id,e)}
-                        className={`text-[10px] font-bold py-1.5 rounded-lg border transition-all ${selected.estado===e?ESTADO_COLOR[e]+' border-current':'bg-gray-50 text-gray-500 border-gray-200 hover:border-gray-300'}`}>
-                        {e}
+                        className={`text-[10px] font-bold py-2 rounded-lg border transition-all ${
+                          selected.estado===e ? 'bg-primary-600 text-white border-primary-600' : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-primary-300 hover:text-primary-600'
+                        }`}>
+                        <span className="block text-base">{i}</span>
+                        <span className="block truncate">{e}</span>
                       </button>
                     ))}
+                  </div>
+                  <div className="text-[9px] text-gray-400 mt-1 flex items-center gap-1">
+                    <span>ℹ️</span>
+                    <span>Al cambiar el estado, el cliente lo ve en su página de tracking y recibe email automático</span>
                   </div>
                 </div>
 

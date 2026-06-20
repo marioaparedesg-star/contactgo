@@ -161,6 +161,15 @@ export default function EyeFlowSelector({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // ── Auto-seleccionar AMBOS para lentes de color ──────────────────────
+  useEffect(() => {
+    if (needsColor && !s.ojoMode) {
+      // Lentes de color: una caja sirve para ambos ojos, simplificar flujo
+      set({ ojoMode: 'AMBOS', mismaReceta: true })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [needsColor])
+
   // ── PASO 1: ¿Para cuántos ojos? ───────────────────────────────────────
   const step1 = (
     <div className="space-y-2.5">
@@ -453,8 +462,16 @@ export default function EyeFlowSelector({
           <p className="text-[10px] font-black text-green-600">✓ Receta completa</p>
         )}
       </div>
-      {step1}
-      {step1b}
+      {/* Paso 1 de ojo: oculto para lentes de color (auto=ambos) */}
+      {!needsColor && step1}
+      {!needsColor && step1b}
+      {/* Para color: mostrar badge que confirma "Para ambos ojos" */}
+      {needsColor && (
+        <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+          <span className="text-sm">👀</span>
+          <p className="text-xs font-bold text-green-700">Una caja para ambos ojos</p>
+        </div>
+      )}
       {step2a}
       {showSingleRx && singleRxForm}
       {showDualRx   && dualRxForm}
