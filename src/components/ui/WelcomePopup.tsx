@@ -38,9 +38,6 @@ export default function WelcomePopup() {
     e.preventDefault()
     if (!nombre.trim())    { setError('Ingresa tu nombre'); return }
     if (password.length < 6) { setError('Mínimo 6 caracteres'); return }
-    if (!fechaNacimiento)  { setError('Ingresa tu fecha de nacimiento'); return }
-    const edad = (Date.now() - new Date(fechaNacimiento).getTime()) / (365.25*24*60*60*1000)
-    if (edad < 18) { setError('Debes ser mayor de 18 años para comprar lentes de contacto'); return }
     setLoading(true); setError('')
     try {
       const sb = createClient()
@@ -128,15 +125,7 @@ export default function WelcomePopup() {
                 onChange={e => setPassword(e.target.value)} autoComplete="new-password" required
                 className="w-full border-2 border-gray-200 focus:border-primary-400 rounded-xl px-4 py-3 text-sm outline-none"
                 style={{ fontSize: '16px' }} />
-              <div>
-                <input type="date" value={fechaNacimiento}
-                  onChange={e => setFechaNac(e.target.value)}
-                  max={new Date(Date.now()-18*365.25*24*60*60*1000).toISOString().split('T')[0]}
-                  required
-                  className="w-full border-2 border-gray-200 focus:border-primary-400 rounded-xl px-4 py-3 text-sm outline-none"
-                  style={{ fontSize: '16px' }} />
-                <p className="text-[10px] text-gray-400 mt-0.5">Solo mayores de 18 años</p>
-              </div>
+
               {error && <p className="text-red-500 text-xs">{error}</p>}
               <button type="submit" disabled={loading}
                 className="w-full bg-primary-600 disabled:opacity-50 text-white font-black py-3.5 rounded-2xl text-sm shadow-md">
