@@ -9,7 +9,6 @@ export default function WelcomePopup() {
   const [email, setEmail]               = useState('')
   const [nombre, setNombre]             = useState('')
   const [password, setPassword]         = useState('')
-  const [fechaNacimiento, setFechaNac]  = useState('')
   const [paso, setPaso]                 = useState<'email'|'registro'|'exito'>('email')
   const [loading, setLoading]           = useState(false)
   const [error, setError]               = useState('')
@@ -47,7 +46,7 @@ export default function WelcomePopup() {
       const sb = createClient()
       const { error: err } = await sb.auth.signUp({
         email, password,
-        options: { data: { full_name: nombre, fecha_nacimiento: fechaNacimiento } }
+        options: { data: { full_name: nombre } }
       })
       if (err) { setError(err.message); return }
       await fetch('/api/welcome-coupon', { method: 'POST' })
