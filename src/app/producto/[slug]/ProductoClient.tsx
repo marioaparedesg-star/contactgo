@@ -647,20 +647,6 @@ export default function ProductoClient({ product, variants }: Props) {
               </div>
 
               {/* Thumbnails de color */}
-              {/* Thumbnails galería lifestyle — desktop */}
-              {galeriaImagenes.length > 0 && (
-                <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
-                  {galeriaImagenes.map((url, i) => (
-                    <button key={url} onClick={() => setImagenActual(url)}
-                      className={`shrink-0 w-16 h-12 rounded-xl border-2 overflow-hidden transition-all ${
-                        imagenActual === url ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
-                      }`}>
-                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
-                    </button>
-                  ))}
-                </div>
-              )}
-
               {isColor && Object.keys(imagenesPorColor).length > 0 && (
                 <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
                   {Object.entries(imagenesPorColor).map(([c, url]) => (

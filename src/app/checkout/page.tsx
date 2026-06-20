@@ -897,19 +897,7 @@ export default function CheckoutPage() {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      {/* Sugerencia de cupón para primera compra */}
-                      {!cupon && (
-                        <button
-                          onClick={() => { setCupon('BIENVENIDO10'); }}
-                          className="w-full flex items-center justify-between bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 hover:bg-amber-100 transition-colors"
-                        >
-                          <div className="text-left">
-                            <p className="text-[10px] font-black text-amber-700 uppercase tracking-wide">¿Primera compra?</p>
-                            <p className="text-xs text-amber-800 font-bold">Usa el cupón <span className="font-mono bg-amber-200 px-1 rounded">BIENVENIDO10</span> — 10% OFF</p>
-                          </div>
-                          <span className="text-amber-600 text-xs font-bold shrink-0 ml-2">Aplicar →</span>
-                        </button>
-                      )}
+
                       <div className="flex gap-2">
                         <div className="relative flex-1">
                           <Tag className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
