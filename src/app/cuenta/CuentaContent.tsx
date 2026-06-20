@@ -161,6 +161,7 @@ export default function CuentaPage() {
   const [passkeyRegistered, setPasskeyRegistered] = useState(false)
   const [passkeyMsg, setPasskeyMsg] = useState<{type:'ok'|'err', text:string}|null>(null)
   const [loadingPasskey, setLoadingPasskey] = useState(false)
+  const [reordering, setReordering] = useState<string|null>(null) // ← Movido aquí: ANTES de los early returns
 
   // ── useEffect principal — blindado contra crashes Safari iOS ────────────────
   useEffect(() => {
@@ -655,7 +656,6 @@ export default function CuentaPage() {
 
   // ──────────────────────────────────── APP SCREEN ──────────────────────────
   // ── Repetir pedido en 1 clic ──────────────────────────────────────────────
-  const [reordering, setReordering] = useState<string|null>(null)
   const reorderPedido = async (e: React.MouseEvent, orderId: string) => {
     e.stopPropagation()
     setReordering(orderId)
