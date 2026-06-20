@@ -177,10 +177,10 @@ export default async function HomePage() {
               { label: 'Tóricos',      slug: 'torico',     emoji: '🎯',  desc: 'Para astigmatismo' },
               { label: 'Multifocales', slug: 'multifocal', emoji: '🔭',  desc: 'Para presbicia' },
               { label: 'Color',        slug: 'color',      emoji: '🎨',  desc: 'Con y sin graduación' },
-              { label: 'Soluciones',   slug: 'solucion',   emoji: '💧',  desc: 'Limpieza y cuidado' },
-              { label: 'Gotas',        slug: 'gota',       emoji: '💊',  desc: 'Lubricación ocular' },
+              { label: 'Soluciones',   slug: 'solucion',   emoji: '💧',  desc: 'Limpieza y cuidado', href: '/soluciones' },
+              { label: 'Gotas',        slug: 'gota',       emoji: '💊',  desc: 'Lubricación ocular', href: '/gotas' },
             ].map(cat => (
-              <Link key={cat.slug} href={`/catalogo?tipo=${cat.slug}`}
+              <Link key={cat.slug} href={cat.href ?? `/catalogo?tipo=${cat.slug}`}
                 className="card p-3 md:p-4 text-center hover:border-primary-200 hover:-translate-y-0.5 group transition-all">
                 <div className="text-2xl md:text-3xl mb-1.5">{cat.emoji}</div>
                 <p className="font-semibold text-gray-900 text-xs md:text-sm">{cat.label}</p>

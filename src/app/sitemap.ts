@@ -19,6 +19,7 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/toricos',                                     priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/multifocales',                                priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/color',                                       priority: 0.80, changeFrequency: 'weekly'  },
+    { url: 'https://www.contactgo.net/gotas',                                      priority: 0.75, changeFrequency: 'weekly' as const },
     { url: 'https://www.contactgo.net/soluciones',                                  priority: 0.75, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/marca/acuvue',                                priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/marca/alcon',                                 priority: 0.85, changeFrequency: 'weekly'  },
