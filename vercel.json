@@ -11,6 +11,10 @@
     {
       "path": "/api/solicitar-resena",
       "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cancelar-pendientes",
+      "schedule": "0 * * * *"
     }
   ]
 }

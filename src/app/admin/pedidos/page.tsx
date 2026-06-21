@@ -136,6 +136,17 @@ export default function PedidosPage() {
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">Pedidos</h1>
             <p className="text-sm text-gray-400 mt-0.5">{pedidos.length} total · {pedidos.filter(p=>p.estado==='confirmado'&&p.pago_estado!=='pagado').length} por preparar · {pedidos.filter(p=>p.pago_estado==='pagado'&&p.estado!=='entregado').length} pagados</p>
+            <button
+              onClick={async()=>{
+                if(!confirm('¿Cancelar todos los pedidos pendientes con más de 3 horas sin pago?')) return
+                const r = await fetch('/api/cancelar-pendientes',{headers:{authorization:`Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET??'cg-cron-2024'}`}})
+                const d = await r.json()
+                alert(d.cancelados>0?`✅ ${d.cancelados} pedido(s) cancelados: ${d.pedidos?.join(', ')}`:'No hay pedidos pendientes por más de 3h')
+                window.location.reload()
+              }}
+              className="mt-2 text-[10px] text-red-500 hover:text-red-700 font-bold underline">
+              ⏱️ Cancelar pendientes {'>'} 3h
+            </button>
           </div>
 
           {/* Filtros */}
