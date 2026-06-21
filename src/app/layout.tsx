@@ -134,6 +134,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* GTM noscript fallback */}
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9GZGJJQ" height="0" width="0" style={{display:'none',visibility:'hidden'}} /></noscript>
 
+                {/* Polyfill webkit.messageHandlers — Facebook iOS In-App Browser */}
+        <Script
+          id="webkit-polyfill"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: `try{if(window.webkit&&!window.webkit.messageHandlers)window.webkit.messageHandlers={}}catch(e){}` }}
+        />
         <Script
           id="gtm-script"
           strategy="afterInteractive"

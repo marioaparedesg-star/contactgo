@@ -82,7 +82,16 @@ export default async function CatalogoPage() {
         </div>
 
         {/* CatalogoFiltros: navega via URL. CatalogoGrid: filtra client-side con useSearchParams */}
-        <Suspense>
+        <Suspense fallback={
+          <div className="animate-pulse space-y-4">
+            <div className="flex gap-2 flex-wrap">
+              {[1,2,3,4,5].map(i=><div key={i} className="h-9 w-24 bg-gray-100 rounded-xl"/>)}
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {[1,2,3,4,5,6,7,8].map(i=><div key={i} className="h-64 bg-gray-100 rounded-2xl"/>)}
+            </div>
+          </div>
+        }>
           <CatalogoFiltros
             tipos={TIPOS}
             marcas={marcas}
