@@ -12,8 +12,6 @@ import Image from 'next/image'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye, Tag, Shield, Truck, RotateCcw, ChevronRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-
-
 export default function CartPage() {
   const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
 

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase'
+import Footer from '@/components/ui/Footer'
 import { LoyaltySection } from '@/components/ui/LoyaltySection'
 import {
   User, Package, MapPin, Phone, Mail, Edit2, Check, X, Plus, Trash2, LogOut,
@@ -1827,6 +1828,7 @@ export default function CuentaPage() {
           </div>
         </div>
       )}
-    </div>
+    
+    <Footer /></div>
   )
 }

@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Navbar from '@/components/ui/Navbar'
+import Footer from '@/components/ui/Footer'
 import { useCartStore } from '@/lib/cart-store'
 import { createClient } from '@/lib/supabase'
 import EntregaBadge from '@/components/shop/EntregaBadge'
@@ -27,8 +28,6 @@ type FormData = z.infer<typeof schema>
 
 const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata',
   'Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad']
-
-
 
 // AZUL disponible solo cuando hay AUTH_KEY configurada
 const AZUL_READY = Boolean(process.env.NEXT_PUBLIC_AZUL_READY)
@@ -1011,6 +1010,7 @@ export default function CheckoutPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   )
 }

@@ -187,9 +187,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}}
         />
         <noscript>
-          <img height="1" width="1" style={{display:'none'}}
+          <img height="1" width="1" alt="" role="presentation" style={{display:'none'}}
             src="https://www.facebook.com/tr?id=1516674003159165&ev=PageView&noscript=1"
-            alt=""
           />
         </noscript>
         {children}
