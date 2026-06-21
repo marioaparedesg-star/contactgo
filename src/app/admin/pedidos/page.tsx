@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase'
 import { Search, X, Printer, MessageCircle, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const ESTADOS = ['activos','todos','pendiente','confirmado','preparando','enviado','entregado','cancelado']
+const ESTADOS = ['activos','pagados','declinados','todos','pendiente','confirmado','preparando','enviado','entregado','cancelado']
 const ESTADO_COLOR: Record<string,string> = {
   pendiente:'bg-amber-50 text-amber-700 border-amber-200', confirmado:'bg-blue-50 text-blue-700 border-blue-200',
   preparando:'bg-purple-50 text-purple-700 border-purple-200', enviado:'bg-indigo-50 text-indigo-700 border-indigo-200',
@@ -29,7 +29,7 @@ export default function PedidosPage() {
 
   useEffect(()=>{
     sb.from('orders').select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,direccion_texto,ciudad,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin').order('created_at', { ascending: false }).limit(200)
-      .not('pago_estado','eq','declinado')
+      // Traemos todos los estados para verlos en el admin
       .not('numero_orden','like','CG-TEST%')
       .order('created_at',{ascending:false})
       .then(({data})=>{ setPedidos(data??[]); setLoading(false) })
@@ -82,7 +82,7 @@ export default function PedidosPage() {
     <body><h2>ContactGo — Pedido #${pedidoId}</h2>
     <p><b>Fecha:</b> ${fecha} | <b>Cliente:</b> ${selected.cliente_nombre} | <b>Tel:</b> ${selected.cliente_telefono??'—'}</p>
     <p><b>Email:</b> ${selected.cliente_email??'—'} | <b>Dirección:</b> ${selected.direccion_texto??'—'}</p>
-    <p><b>Pago:</b> ${selected.metodo_pago?.replace('_',' ')} | <b>Estado pago:</b> ${selected.pago_estado} ${selected.ncf?`| <b>NCF:</b> ${selected.ncf}`:''}</p>
+    <p><b>Pago:</b> ${selected.metodo_pago?.replace('_',' ')} | <b>Estado:</b> ${selected.pago_estado} ${selected.azul_auth_code ? `| <b>Auth:</b> ${selected.azul_auth_code}` : ''} ${selected.azul_rrn ? `| <b>RRN:</b> ${selected.azul_rrn.slice(-8)}` : ''} ${selected.ncf?`| <b>NCF:</b> ${selected.ncf}`:''}</p>
     <table><tr><th>Producto</th><th>Receta</th><th>Cant.</th><th>Precio</th></tr>
     ${its.map((i:any)=>{
       const subMap={mensual:'📦Mensual',trimestral:'⭐Trim.',semestral:'💎Sem.',['15_dias']:'📦15d'}
@@ -114,7 +114,9 @@ export default function PedidosPage() {
   }
 
   const filtrados = pedidos.filter(p=>{
-    if (filtroEstado==='activos' && (p.estado==='cancelado' || p.pago_estado==='declinado')) return false
+    if (filtroEstado==='activos'   && (p.estado==='cancelado' || p.pago_estado==='declinado')) return false
+    if (filtroEstado==='pagados'   && p.pago_estado !== 'pagado') return false
+    if (filtroEstado==='declinados'&& p.pago_estado !== 'declinado') return false
     if (filtroEstado!=='todos' && filtroEstado!=='activos' && p.estado!==filtroEstado) return false
     if (filtroPago!=='todos' && p.metodo_pago!==filtroPago) return false
     if (!search) return true
@@ -147,7 +149,9 @@ export default function PedidosPage() {
               className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-400">
               <option value="todos">Todos los estados</option>
               {ESTADOS.map(e=><option key={e} value={e}>{
-              e==='activos'?'Activos (sin cancelados)':
+              e==='activos'   ? 'Activos' :
+                e==='pagados'   ? '💚 Pagados' :
+                e==='declinados'? '🔴 Declinados' :
               e==='todos'?'Todos los pedidos':
               e.charAt(0).toUpperCase()+e.slice(1)
             }</option>)}
@@ -177,7 +181,9 @@ export default function PedidosPage() {
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${ESTADO_COLOR[p.estado]??'bg-gray-100 text-gray-600 border-gray-200'}`}>
                             {p.estado}
                           </span>
-                          {p.pago_estado==='pagado'&&<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Pagado</span>}
+                          {p.pago_estado==='pagado'    && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Pagado ✅</span>}
+                          {p.pago_estado==='declinado' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">Declinado ❌</span>}
+                          {p.pago_estado==='pendiente' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">Pendiente ⏳</span>}
                         </div>
                         <p className="text-xs text-gray-400 mt-1 flex items-center gap-1.5">
                           {p.metodo_pago==='tarjeta'?<CreditCard className="w-3 h-3"/>:<Truck className="w-3 h-3"/>}

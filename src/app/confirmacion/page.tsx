@@ -181,7 +181,7 @@ function ConfirmacionContent() {
           Tu tarjeta fue declinada. Verifica los datos o intenta con otra tarjeta. Tu carrito sigue guardado.
         </p>
         <div className="space-y-3">
-          <Link href="/checkout"
+          <Link href={orderId ? `/checkout?reintento=${orderId}` : '/checkout'}
             className="w-full btn-primary flex items-center justify-center gap-2 py-3.5 font-bold">
             🔄 Reintentar pago
           </Link>

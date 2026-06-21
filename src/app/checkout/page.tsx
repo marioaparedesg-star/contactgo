@@ -400,6 +400,13 @@ export default function CheckoutPage() {
   return (
     <>
       <Navbar />
+      {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('reintento') && (
+        <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+          <p className="text-center text-sm text-amber-800 font-semibold">
+            ⚠️ Tu pago anterior fue declinado. Verifica tu tarjeta e intenta de nuevo.
+          </p>
+        </div>
+      )}
       {showDisclaimer && (
         <DisclaimerMedico showModal items={items} onAceptar={handleDisclaimerAceptado} onCancelar={() => setShowDisclaimer(false)} />
       )}
