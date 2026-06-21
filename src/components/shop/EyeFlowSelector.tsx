@@ -47,6 +47,10 @@ interface Props {
   needsAdd:    boolean   // multifocal
   needsColor:  boolean   // lente de color
   sphOpts:     (number|string)[]
+  sphMin?:     number
+  sphMax?:     number
+  sphStep?:    number
+  sphPlano?:   boolean
   cylOpts:     (number|string)[]
   axisOpts:    (number|string)[]
   addOpts:     string[]
@@ -134,7 +138,8 @@ function SelectField({
 // ── Componente principal ──────────────────────────────────────────────────
 export default function EyeFlowSelector({
   state, onChange, needsCyl, needsAdd, needsColor,
-  sphOpts, cylOpts, axisOpts, addOpts, colorOpts, prefilledRx
+  sphOpts, cylOpts, axisOpts, addOpts, colorOpts, prefilledRx,
+  sphMin = -20, sphMax = 8, sphStep = 0.25, sphPlano = false
 }: Props) {
   const s = state
   const set = (patch: Partial<EyeFlowState>) => onChange({ ...s, ...patch })
@@ -242,6 +247,7 @@ export default function EyeFlowSelector({
       <SPHPicker label="Esfera (SPH)" value={s.sph}
         onChange={v => set({ sph: v })}
         placeholder="Selecciona tu graduación"
+        sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano}
         hint="Es el número principal de tu receta" />
       {needsCyl && (
         <SelectField label="Cilindro (CYL)" value={s.cyl}
@@ -271,7 +277,8 @@ export default function EyeFlowSelector({
         <p className="text-xs font-black text-blue-700 uppercase tracking-wide">👁 Ojo Derecho (OD)</p>
         <SPHPicker label="Esfera (SPH) — Ojo Derecho" value={s.sph_od}
           onChange={v => set({ sph_od: v })}
-          placeholder="Graduación ojo derecho" />
+          placeholder="Graduación ojo derecho"
+          sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano} />
         {needsCyl && (
           <SelectField label="Cilindro (CYL)" value={s.cyl_od}
             onChange={v => set({ cyl_od: v })}
@@ -288,7 +295,8 @@ export default function EyeFlowSelector({
         <p className="text-xs font-black text-green-700 uppercase tracking-wide">👁 Ojo Izquierdo (OI)</p>
         <SPHPicker label="Esfera (SPH) — Ojo Izquierdo" value={s.sph_oi}
           onChange={v => set({ sph_oi: v })}
-          placeholder="Graduación ojo izquierdo" />
+          placeholder="Graduación ojo izquierdo"
+          sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano} />
         {needsCyl && (
           <SelectField label="Cilindro (CYL)" value={s.cyl_oi}
             onChange={v => set({ cyl_oi: v })}

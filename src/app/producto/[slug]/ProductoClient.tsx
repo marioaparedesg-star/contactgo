@@ -19,6 +19,7 @@ import InlineCrossSell from '@/components/shop/InlineCrossSell'
 import RecetaGuiaTorico from '@/components/shop/RecetaGuiaTorico'
 import { getEntrega, getFechaEntrega } from '@/lib/delivery-times'
 import EntregaHoy from '@/components/shop/EntregaHoy'
+import { buildSPHOptions } from '@/components/shop/SPHPicker'
 import EyeFlowSelector, { type EyeFlowState, initialEyeFlow } from '@/components/shop/EyeFlowSelector'
 import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES } from '@/lib/subscription-utils'
 
@@ -749,7 +750,14 @@ export default function ProductoClient({ product, variants }: Props) {
             {/* BLOQUE 4: CONFIGURADOR DE RECETA */}
             <div className="px-4 pt-3 pb-2">
               {isLente && (() => {
-                const sphOpts = (product.sph_disponibles?.length ? [...product.sph_disponibles].map(Number).filter(v=>!isNaN(v)).sort((a,b)=>a-b) : ALL_SPH)
+                // Usar rangos exactos del fabricante desde la DB
+                const { neg: _sphNeg, pos: _sphPos } = buildSPHOptions(
+                  Number(product.sph_min ?? -20),
+                  Number(product.sph_max ?? 8),
+                  Number(product.sph_step ?? 0.25),
+                  Boolean(product.sph_plano),
+                )
+                const sphOpts = [..._sphNeg, ..._sphPos]
                   .map(v => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
                 const cylOpts = (product.cyl_disponibles?.length ? [...product.cyl_disponibles] : ALL_CYL).sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
                 const axisOpts = (product.axis_disponibles?.length ? [...product.axis_disponibles] : ALL_AXIS).sort((a:any,b:any)=>Number(a)-Number(b)).map(String)
@@ -760,6 +768,8 @@ export default function ProductoClient({ product, variants }: Props) {
                     state={eyeFlow} onChange={handleColorChange}
                     needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor}
                     sphOpts={sphOpts} cylOpts={cylOpts} axisOpts={axisOpts} addOpts={addOpts} colorOpts={colorOpts}
+                    sphMin={Number(product.sph_min ?? -20)} sphMax={Number(product.sph_max ?? 8)}
+                    sphStep={Number(product.sph_step ?? 0.25)} sphPlano={Boolean(product.sph_plano)}
                   />
                 )
               })()}
@@ -972,13 +982,22 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               )}
               {isLente && (() => {
-                const sphOpts = (product.sph_disponibles?.length ? [...product.sph_disponibles].map(Number).filter(v=>!isNaN(v)).sort((a,b)=>a-b) : ALL_SPH)
+                // Usar rangos exactos del fabricante desde la DB
+                const { neg: _sphNeg, pos: _sphPos } = buildSPHOptions(
+                  Number(product.sph_min ?? -20),
+                  Number(product.sph_max ?? 8),
+                  Number(product.sph_step ?? 0.25),
+                  Boolean(product.sph_plano),
+                )
+                const sphOpts = [..._sphNeg, ..._sphPos]
                   .map(v => Number(v)>0?`+${Number(v).toFixed(2)}`:Number(v)===0?'0.00':Number(v).toFixed(2))
                 const cylOpts = (product.cyl_disponibles?.length?[...product.cyl_disponibles]:ALL_CYL).sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
                 const axisOpts = (product.axis_disponibles?.length?[...product.axis_disponibles]:ALL_AXIS).sort((a:any,b:any)=>Number(a)-Number(b)).map(String)
                 const addOpts = product.add_disponibles?.length?product.add_disponibles:ALL_ADD
                 const colorOpts = (product as any).colores_disponibles??[]
-                return (<EyeFlowSelector state={eyeFlow} onChange={handleColorChange} needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor} sphOpts={sphOpts} cylOpts={cylOpts} axisOpts={axisOpts} addOpts={addOpts} colorOpts={colorOpts} />)
+                return (<EyeFlowSelector state={eyeFlow} onChange={handleColorChange} needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor} sphOpts={sphOpts} cylOpts={cylOpts} axisOpts={axisOpts} addOpts={addOpts} colorOpts={colorOpts}
+                    sphMin={Number(product.sph_min ?? -20)} sphMax={Number(product.sph_max ?? 8)}
+                    sphStep={Number(product.sph_step ?? 0.25)} sphPlano={Boolean(product.sph_plano)} />)
               })()}
               {isSolucion && sizes.length>0 && (
                 <div className="space-y-2">
