@@ -1,4 +1,5 @@
 'use client'
+import SPHPicker from '@/components/shop/SPHPicker'
 import { createClient } from '@/lib/supabase'
 import { trackEyeFlow, trackWhatsappHelp } from '@/lib/analytics'
 /**
@@ -105,69 +106,11 @@ function OptionCard({
 }
 
 function SelectField({
-  label, value, onChange, options, placeholder, hint, useChips = false
+  label, value, onChange, options, placeholder, hint
 }: {
   label: string; value: string; onChange: (v: string) => void
-  options: (string|number|any)[]; placeholder: string; hint?: string; useChips?: boolean
+  options: (string|number|any)[]; placeholder: string; hint?: string
 }) {
-  const [search, setSearch] = useState('')
-
-  // CHIPS TÁCTILES para SPH (móvil-first, accesible)
-  if (useChips) {
-    const filtered = search
-      ? options.filter(o => String(o).includes(search))
-      : options
-    return (
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label className="block text-xs font-bold text-gray-700">{label}</label>
-          {value && (
-            <span className="text-xs font-black text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">
-              {value}
-            </span>
-          )}
-        </div>
-        {hint && <p className="text-[10px] text-gray-400">{hint}</p>}
-        {/* Buscador rápido */}
-        <input
-          type="text"
-          inputMode="decimal"
-          placeholder="Busca tu graduación ej: -2.75"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="w-full border-2 border-gray-200 focus:border-primary-400 rounded-xl px-3 py-2.5 text-sm outline-none transition-colors"
-          style={{ fontSize: '16px' }}
-        />
-        {/* Chips horizontales scrollables */}
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1">
-          {filtered.slice(0, 60).map(o => (
-            <button
-              key={String(o)} type="button"
-              onClick={() => { onChange(String(o)); setSearch('') }}
-              className={`shrink-0 px-3 py-2 rounded-xl text-sm font-bold border-2 transition-all min-w-[60px] text-center ${
-                value === String(o)
-                  ? 'bg-primary-600 text-white border-primary-600 shadow-md'
-                  : 'bg-white text-gray-700 border-gray-200 hover:border-primary-300'
-              }`}
-              style={{ minHeight: '44px' }}>
-              {String(o)}
-            </button>
-          ))}
-          {filtered.length > 60 && (
-            <span className="shrink-0 text-xs text-gray-400 self-center px-2">
-              Usa el buscador para ver más
-            </span>
-          )}
-        </div>
-        {/* Fallback select para accesibilidad */}
-        {!filtered.length && search && (
-          <p className="text-xs text-amber-600 font-semibold">
-            No encontrado. Verifica tu receta o escribe otro valor.
-          </p>
-        )}
-      </div>
-    )
-  }
 
   // SELECT normal para CYL, AXIS, ADD
   return (
@@ -296,9 +239,9 @@ export default function EyeFlowSelector({
           ? 'Graduación (igual para ambos ojos)'
           : s.ojoMode === 'OD' ? 'Graduación — Ojo Derecho' : 'Graduación — Ojo Izquierdo'
       } />
-      <SelectField label="Esfera (SPH)" value={s.sph} useChips={true}
+      <SPHPicker label="Esfera (SPH)" value={s.sph}
         onChange={v => set({ sph: v })}
-        options={sphOpts} placeholder="Selecciona tu graduación"
+        placeholder="Selecciona tu graduación"
         hint="Es el número principal de tu receta" />
       {needsCyl && (
         <SelectField label="Cilindro (CYL)" value={s.cyl}
@@ -326,9 +269,9 @@ export default function EyeFlowSelector({
       {/* Ojo Derecho */}
       <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 space-y-3">
         <p className="text-xs font-black text-blue-700 uppercase tracking-wide">👁 Ojo Derecho (OD)</p>
-        <SelectField label="Esfera (SPH) — Ojo Derecho" value={s.sph_od} useChips={true}
+        <SPHPicker label="Esfera (SPH) — Ojo Derecho" value={s.sph_od}
           onChange={v => set({ sph_od: v })}
-          options={sphOpts} placeholder="Graduación ojo derecho" />
+          placeholder="Graduación ojo derecho" />
         {needsCyl && (
           <SelectField label="Cilindro (CYL)" value={s.cyl_od}
             onChange={v => set({ cyl_od: v })}
@@ -343,9 +286,9 @@ export default function EyeFlowSelector({
       {/* Ojo Izquierdo */}
       <div className="bg-green-50 border border-green-100 rounded-2xl p-4 space-y-3">
         <p className="text-xs font-black text-green-700 uppercase tracking-wide">👁 Ojo Izquierdo (OI)</p>
-        <SelectField label="Esfera (SPH) — Ojo Izquierdo" value={s.sph_oi} useChips={true}
+        <SPHPicker label="Esfera (SPH) — Ojo Izquierdo" value={s.sph_oi}
           onChange={v => set({ sph_oi: v })}
-          options={sphOpts} placeholder="Graduación ojo izquierdo" />
+          placeholder="Graduación ojo izquierdo" />
         {needsCyl && (
           <SelectField label="Cilindro (CYL)" value={s.cyl_oi}
             onChange={v => set({ cyl_oi: v })}
