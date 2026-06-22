@@ -138,7 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script
           id="webkit-polyfill"
           strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: `try{if(window.webkit&&!window.webkit.messageHandlers)window.webkit.messageHandlers={}}catch(e){}` }}
+          dangerouslySetInnerHTML={{ __html: `try{if(typeof window!=='undefined'){window.webkit=window.webkit||{};window.webkit.messageHandlers=window.webkit.messageHandlers||{};}}catch(e){}` }}
         />
         <Script
           id="gtm-script"
