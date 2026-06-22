@@ -117,7 +117,54 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Este <script> inline corre sincrónicamente en el HTML, antes de
             CUALQUIER bundle de JS externo, GTM o Google Ads.
         ── */}
-        <script dangerouslySetInnerHTML={{ __html: `try{window.webkit=window.webkit||{};window.webkit.messageHandlers=window.webkit.messageHandlers||{};}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `
+(function(){
+  try {
+    // Capa 1: assignment normal
+    if(!window.webkit) window.webkit = {};
+    if(!window.webkit.messageHandlers) window.webkit.messageHandlers = {};
+  } catch(e) {}
+
+  try {
+    // Capa 2: Object.defineProperty para casos non-writable (Facebook WKWebView)
+    if(!window.webkit) window.webkit = {};
+    var desc = Object.getOwnPropertyDescriptor(window.webkit, 'messageHandlers');
+    if(!desc || !desc.value) {
+      try {
+        Object.defineProperty(window.webkit, 'messageHandlers', {
+          get: function() { return {}; },
+          configurable: true
+        });
+      } catch(e2) {}
+    }
+  } catch(e) {}
+
+  // Capa 3: suprimir el error específico GLOBALMENTE
+  // Evita que llegue a Sentry Y evita crashear el hilo JS
+  window.addEventListener('error', function(e) {
+    if(e && e.message && e.message.indexOf('webkit.messageHandlers') !== -1) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return true;
+    }
+  }, true);
+
+  // Capa 4: override de sendDataToNative con try-catch cuando esté disponible
+  function patchSendDataToNative() {
+    if(typeof window.sendDataToNative === 'function' && !window._cgPatched) {
+      var orig = window.sendDataToNative;
+      window.sendDataToNative = function() {
+        try { return orig.apply(this, arguments); } catch(e) {}
+      };
+      window._cgPatched = true;
+    }
+  }
+  patchSendDataToNative();
+  document.addEventListener('DOMContentLoaded', patchSendDataToNative, true);
+  setTimeout(patchSendDataToNative, 500);
+  setTimeout(patchSendDataToNative, 1500);
+})();
+        ` }} />
         <meta name="google-site-verification" content="lESKC-PqCyerfH9lDLzKi1em3nnRvh7LwKXKuPOmn1k" />
         
 
@@ -143,13 +190,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* GTM noscript fallback */}
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9GZGJJQ" height="0" width="0" style={{display:'none',visibility:'hidden'}} /></noscript>
 
-                {/* Polyfill webkit.messageHandlers — Facebook iOS In-App Browser */}
-        
-        <Script
-          id="gtm-script"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M9GZGJJQ');` }}
-        />
 
         {/* ── Google Ads — AW-830060688 ────────────────────────────────────── */}
         <Script
