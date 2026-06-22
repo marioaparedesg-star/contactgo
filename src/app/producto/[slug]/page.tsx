@@ -27,9 +27,19 @@ export const revalidate = 300
 // ═══════════════════════════════════════════════════════════════════
 async function getProduct(slug: string) {
   const sb = createServerSupabaseClient()
-  const { data } = await sb.from('products')
+  // Buscar primero por slug, si no encuentra intenta por id (UUID)
+  // Cubre links viejos que usaban el UUID como identificador
+  let { data } = await sb.from('products')
     .select('*, reviews:product_reviews(id, rating, comment, user_name, ciudad, verified, approved, created_at)')
     .eq('slug', slug).single()
+  
+  if (!data) {
+    // Fallback: buscar por id (para links históricos con UUID)
+    const { data: byId } = await sb.from('products')
+      .select('*, reviews:product_reviews(id, rating, comment, user_name, ciudad, verified, approved, created_at)')
+      .eq('id', slug).single()
+    data = byId
+  }
   if (!data) return null
 
   // ── CAPA 1: Parámetros oficiales ────────────────────────────────
