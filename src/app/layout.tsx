@@ -109,6 +109,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <head>
+        {/* ── Polyfill webkit.messageHandlers ────────────────────────────────────
+            CRÍTICO: debe ser el primer script que corre.
+            Facebook, Instagram, WeChat y cualquier WKWebView en iOS pueden
+            no tener window.webkit.messageHandlers definido.
+            GTM/Google Ads llaman sendDataToNative() que asume que existe.
+            Este <script> inline corre sincrónicamente en el HTML, antes de
+            CUALQUIER bundle de JS externo, GTM o Google Ads.
+        ── */}
+        <script dangerouslySetInnerHTML={{ __html: `try{window.webkit=window.webkit||{};window.webkit.messageHandlers=window.webkit.messageHandlers||{};}catch(e){}` }} />
         <meta name="google-site-verification" content="lESKC-PqCyerfH9lDLzKi1em3nnRvh7LwKXKuPOmn1k" />
         
 
@@ -135,11 +144,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9GZGJJQ" height="0" width="0" style={{display:'none',visibility:'hidden'}} /></noscript>
 
                 {/* Polyfill webkit.messageHandlers — Facebook iOS In-App Browser */}
-        <Script
-          id="webkit-polyfill"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: `try{if(typeof window!=='undefined'){window.webkit=window.webkit||{};window.webkit.messageHandlers=window.webkit.messageHandlers||{};}}catch(e){}` }}
-        />
+        
         <Script
           id="gtm-script"
           strategy="afterInteractive"
