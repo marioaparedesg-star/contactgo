@@ -158,6 +158,7 @@ export default function CartPage() {
           </div>
         </div>
       </main>
+      <div className="pb-24 md:pb-0" />
     </>
   )
 
@@ -435,6 +436,7 @@ export default function CartPage() {
         </div>
 
       </main>
+      <div className="pb-24 md:pb-0" />
 
       {/* Sticky móvil */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 shadow-lg">

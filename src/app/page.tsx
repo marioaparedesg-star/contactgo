@@ -403,6 +403,7 @@ export default async function HomePage() {
 
 
       </main>
+      <div className="pb-20 md:pb-0" />
       <Footer />
     </>
   )

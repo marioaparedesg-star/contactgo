@@ -51,8 +51,8 @@ const SLIDES = [
     accent:     '#7c3aed',
     bg:         { from: '#0d0618', via: '#130a28', to: '#1a1035' },
     glow:       'rgba(124,58,237,0.22)',
-    image:      `${BASE}/freshlook_colorblends.png`,
-    imageAlt:   'Lentes de colores FreshLook ColorBlends',
+    image:      `${BASE}/air-optix-colors.png`,
+    imageAlt:   'Lentes de contacto de colores AIR OPTIX COLORS Alcon',
     tag:        '✨ Sin graduación disponible',
     precio:     null, stats: null,
   },
@@ -233,7 +233,7 @@ export default function HeroSlider({ lentesCount = 4200 }: { lentesCount?: numbe
                 width={230}
                 height={230}
                 className="object-contain p-4 drop-shadow-lg"
-                priority={current === 0}
+                priority={current <= 1}
                 unoptimized
                 onError={(e) => { (e.target as HTMLImageElement).src = '/hero-lens-1.png' }}
               />
@@ -378,7 +378,7 @@ export default function HeroSlider({ lentesCount = 4200 }: { lentesCount?: numbe
                       fill
                       className="object-contain p-5 lg:p-6 drop-shadow-xl"
                       sizes="(max-width: 1024px) 256px, 320px"
-                      priority={current === 0}
+                      priority={current <= 1}
                       unoptimized
                       onError={(e) => { (e.target as HTMLImageElement).src = '/hero-lens-1.png' }}
                     />

@@ -1,5 +1,6 @@
 'use client'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { Home, ShoppingCart, User, Grid3X3, Search } from 'lucide-react'
 import { useCartStore } from '@/lib/cart-store'
 
@@ -24,7 +25,7 @@ export default function BottomNav() {
           const Icon = tab.icon
           const active = pathname === tab.href || (tab.href !== '/' && pathname.startsWith(tab.href))
           return (
-            <a key={tab.href} href={tab.href}
+            <Link key={tab.href} href={tab.href}
               className="flex flex-col items-center justify-center gap-0.5 flex-1 py-2 relative group"
               aria-label={tab.label}
               aria-current={active ? 'page' : undefined}>
@@ -52,7 +53,7 @@ export default function BottomNav() {
               }`}>
                 {tab.label}
               </span>
-            </a>
+            </Link>
           )
         })}
       </div>
