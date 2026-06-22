@@ -2,8 +2,8 @@
 /**
  * Google Customer Reviews Opt-In
  * Merchant ID: 5786261428
- * Solo se activa cuando pago_estado = pagado.
- * Script cargado dinámicamente, sin bloqueo de render.
+ * Implementación exacta según Google Merchant Center docs (junio 2026)
+ * Usa window.gapi.surveyoptin.render — el método actual oficial de Google
  */
 import { useEffect } from 'react'
 
@@ -15,7 +15,15 @@ interface Props {
 }
 
 declare global {
-  interface Window { renderOptIn?: (config: Record<string, unknown>) => void }
+  interface Window {
+    renderOptIn?: () => void
+    gapi?: {
+      load?: (lib: string, cb: () => void) => void
+      surveyoptin?: {
+        render?: (config: Record<string, unknown>) => void
+      }
+    }
+  }
 }
 
 export default function GoogleCustomerReviewsOptIn({ orderId, email, estimatedDeliveryDate, gtins }: Props) {
@@ -25,39 +33,49 @@ export default function GoogleCustomerReviewsOptIn({ orderId, email, estimatedDe
 
     // Deduplicar por orden en la sesión
     const dedupeKey = `gcr_optin_${orderId}`
-    if (sessionStorage.getItem(dedupeKey)) return
-    sessionStorage.setItem(dedupeKey, '1')
+    try {
+      if (sessionStorage.getItem(dedupeKey)) return
+      sessionStorage.setItem(dedupeKey, '1')
+    } catch { /* Safari privado */ }
 
-    const MERCHANT_ID = '5786261428'
+    const MERCHANT_ID = 5786261428  // número, no string
     const SCRIPT_ID   = 'gcr-platform-js'
 
-    const renderOptIn = () => {
-      if (typeof window.renderOptIn !== 'function') return
-      const config: Record<string, unknown> = {
-        merchant_id:             MERCHANT_ID,
-        order_id:                orderId,
-        email,
-        delivery_country:        'DO',
-        estimated_delivery_date: estimatedDeliveryDate,
-        opt_in_style:            'CENTER_DIALOG',
-      }
-      if (gtins && gtins.length > 0) {
-        config.products = gtins.map(g => ({ gtin: g }))
-      }
-      window.renderOptIn(config)
+    // Configuración exacta según Google Merchant Center
+    const config: Record<string, unknown> = {
+      merchant_id:             MERCHANT_ID,
+      order_id:                orderId,
+      email,
+      delivery_country:        'DO',
+      estimated_delivery_date: estimatedDeliveryDate,
+      opt_in_style:            'CENTER_DIALOG',
+    }
+    if (gtins && gtins.length > 0) {
+      config.products = gtins.map(g => ({ gtin: g }))
     }
 
+    // Función que Google llama cuando el script carga (onload=renderOptIn)
+    window.renderOptIn = function () {
+      window.gapi?.load?.('surveyoptin', function () {
+        window.gapi?.surveyoptin?.render?.(config)
+      })
+    }
+
+    // Si el script ya está cargado, ejecutar directamente
     if (document.getElementById(SCRIPT_ID)) {
-      renderOptIn()
+      window.renderOptIn?.()
       return
     }
 
+    // Insertar script exactamente como lo pide Google:
+    // <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
     const script    = document.createElement('script')
     script.id       = SCRIPT_ID
-    script.src      = 'https://apis.google.com/js/platform.js'
+    script.src      = 'https://apis.google.com/js/platform.js?onload=renderOptIn'
     script.async    = true
-    script.onload   = renderOptIn
+    script.defer    = true
     document.head.appendChild(script)
+
   }, [orderId, email, estimatedDeliveryDate])  // eslint-disable-line react-hooks/exhaustive-deps
 
   return null
