@@ -3,8 +3,6 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-const BASE = 'https://atendbjolicwcsqfyiyh.supabase.co/storage/v1/object/public/products'
-
 const SLIDES = [
   {
     badge:      '🇩🇴 Entrega a domicilio en toda RD',
@@ -35,7 +33,7 @@ const SLIDES = [
     accent:     '#2563eb',
     bg:         { from: '#010b20', via: '#021030', to: '#031642' },
     glow:       'rgba(37,99,235,0.22)',
-    image:      `${BASE}/oasys-v2.png`,
+    image:      '/hero-oasys.png',
     imageAlt:   'ACUVUE Oasys con HYDRACLEAR Plus',
     tag:        '🔥 Más popular',
     precio:     'RD$3,952',
@@ -51,7 +49,7 @@ const SLIDES = [
     accent:     '#7c3aed',
     bg:         { from: '#0d0618', via: '#130a28', to: '#1a1035' },
     glow:       'rgba(124,58,237,0.22)',
-    image:      `${BASE}/air-optix-colors.png`,
+    image:      '/hero-air-optix-colors.png',
     imageAlt:   'Lentes de contacto de colores AIR OPTIX COLORS Alcon',
     tag:        '✨ Sin graduación disponible',
     precio:     null, stats: null,
@@ -66,7 +64,7 @@ const SLIDES = [
     accent:     '#0d9488',
     bg:         { from: '#011210', via: '#01201e', to: '#012a28' },
     glow:       'rgba(13,148,136,0.22)',
-    image:      `${BASE}/oasys_astig-v2.png`,
+    image:      '/hero-oasys-astig.png',
     imageAlt:   'Lentes tóricos para astigmatismo',
     tag: null, precio: null, stats: null,
   },
@@ -234,7 +232,9 @@ export default function HeroSlider({ lentesCount = 4200 }: { lentesCount?: numbe
                 height={230}
                 className="object-contain p-4 drop-shadow-lg"
                 priority={current <= 1}
-                unoptimized
+                fetchPriority={current === 0 ? 'high' : 'auto'}
+                sizes="230px"
+                quality={85}
                 onError={(e) => { (e.target as HTMLImageElement).src = '/hero-lens-1.png' }}
               />
             </div>
@@ -379,7 +379,8 @@ export default function HeroSlider({ lentesCount = 4200 }: { lentesCount?: numbe
                       className="object-contain p-5 lg:p-6 drop-shadow-xl"
                       sizes="(max-width: 1024px) 256px, 320px"
                       priority={current <= 1}
-                      unoptimized
+                      fetchPriority={current === 0 ? 'high' : 'auto'}
+                      quality={85}
                       onError={(e) => { (e.target as HTMLImageElement).src = '/hero-lens-1.png' }}
                     />
                   </div>

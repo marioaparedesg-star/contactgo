@@ -172,6 +172,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#16a34a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="manifest" href="/manifest.json" />
+        {/* Preload hero — mejora LCP (Largest Contentful Paint) */}
+        <link rel="preload" as="image" href="/hero-lens-1.png" />
         {/* Preconnect para performance */}
         <link rel="preconnect" href="https://atendbjolicwcsqfyiyh.supabase.co" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
