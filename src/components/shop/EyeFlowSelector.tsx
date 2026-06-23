@@ -178,6 +178,41 @@ export default function EyeFlowSelector({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [needsColor])
 
+  // ── Recetas guardadas — HOOKS deben estar antes de cualquier early return ──
+  const [savedRx, setSavedRx] = useState<any[]>([])
+  const [showSavedRx, setShowSavedRx] = useState(false)
+
+  useEffect(() => {
+    const loadRx = async () => {
+      const sb = createClient()
+      const { data: { user } } = await sb.auth.getUser()
+      if (!user) return
+      const { data } = await sb
+        .from('saved_prescriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('es_principal', { ascending: false })
+        .limit(5)
+      if (data?.length) setSavedRx(data)
+    }
+    loadRx()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Aplicar receta guardada al estado
+  const applyRx = (rx: any) => {
+    onChange({
+      ...s,
+      ojoMode: 'AMBOS',
+      mismaReceta: rx.od_sph === rx.oi_sph && rx.od_cyl === rx.oi_cyl,
+      sph: rx.od_sph ? String(rx.od_sph) : s.sph,
+      cyl: rx.od_cyl ? String(rx.od_cyl) : s.cyl,
+      axis: rx.od_axis ? String(rx.od_axis) : s.axis,
+      add: rx.add_power ? String(rx.add_power) : s.add,
+    })
+    setShowSavedRx(false)
+  }
+
   // ── PASO 1: ¿Para cuántos ojos? ───────────────────────────────────────
   const step1 = (
     <div className="space-y-2.5">
@@ -381,40 +416,6 @@ export default function EyeFlowSelector({
   const showSingleRx = (s.ojoMode === 'OD' || s.ojoMode === 'OI') ||
                        (s.ojoMode === 'AMBOS' && s.mismaReceta === true && !s.noEstaSeguro)
   const showDualRx   = s.ojoMode === 'AMBOS' && s.mismaReceta === false && !s.noEstaSeguro
-
-  // ── Recetas guardadas ──────────────────────────────────────────────────
-  const [savedRx, setSavedRx] = useState<any[]>([])
-  const [showSavedRx, setShowSavedRx] = useState(false)
-
-  useEffect(() => {
-    const loadRx = async () => {
-      const sb = createClient()
-      const { data: { user } } = await sb.auth.getUser()
-      if (!user) return
-      const { data } = await sb
-        .from('saved_prescriptions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('es_principal', { ascending: false })
-        .limit(5)
-      if (data?.length) setSavedRx(data)
-    }
-    loadRx()
-  }, [])
-
-  // Aplicar receta guardada al estado
-  const applyRx = (rx: any) => {
-    onChange({
-      ...s,
-      ojoMode: 'AMBOS',
-      mismaReceta: rx.od_sph === rx.oi_sph && rx.od_cyl === rx.oi_cyl,
-      sph: rx.od_sph ? String(rx.od_sph) : s.sph,
-      cyl: rx.od_cyl ? String(rx.od_cyl) : s.cyl,
-      axis: rx.od_axis ? String(rx.od_axis) : s.axis,
-      add: rx.add_power ? String(rx.add_power) : s.add,
-    })
-    setShowSavedRx(false)
-  }
 
   // Calcular progreso
   const totalSteps = needsColor ? (needsCyl ? 5 : 4) : needsCyl ? 4 : needsAdd ? 4 : 3
