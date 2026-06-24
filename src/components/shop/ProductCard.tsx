@@ -105,6 +105,14 @@ export default function ProductCard({ product, isBestseller }: Props) {
             fill
             className="object-contain p-4 group-hover:scale-110 transition-transform duration-500 drop-shadow-sm"
             sizes="(max-width: 400px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw"
+            onError={(e) => {
+              const el = e.target as HTMLImageElement
+              // Fallback: intentar cargar sin el optimizer de Next.js
+              if (!el.dataset.fallback) {
+                el.dataset.fallback = '1'
+                el.src = product.imagen_url!
+              }
+            }}
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-gray-100">
