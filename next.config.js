@@ -100,6 +100,18 @@ const nextConfig = {
       { source: '/iniciar-sesion', destination: '/cuenta', permanent: true },
       { source: '/register',       destination: '/cuenta', permanent: true },
       { source: '/registro',       destination: '/cuenta', permanent: true },
+      // Rutas alternativas que usuarios buscan
+      { source: '/contacto',       destination: '/sobre-nosotros', permanent: false },
+      { source: '/inicio',         destination: '/',       permanent: true },
+      { source: '/home',           destination: '/',       permanent: true },
+      { source: '/tienda',         destination: '/catalogo', permanent: true },
+      { source: '/lentes',         destination: '/catalogo', permanent: true },
+      { source: '/pedidos',        destination: '/cuenta', permanent: true },
+      { source: '/auth/login',     destination: '/cuenta', permanent: true },
+      { source: '/auth/registro',  destination: '/cuenta', permanent: true },
+      { source: '/mis-pedidos',    destination: '/cuenta', permanent: true },
+      { source: '/mi-cuenta',      destination: '/cuenta', permanent: true },
+      { source: '/checkout/cart',  destination: '/cart',   permanent: true },
       { source: '/blog/como-leer-tu-receta', destination: '/blog/como-leer-receta-optica-rd', permanent: true },
     ];
   },
