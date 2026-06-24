@@ -307,7 +307,7 @@ export default function CheckoutPage() {
       sendCAPI('InitiateCheckout', {
         value: totalFinal,
         currency: 'DOP',
-        content_ids: items.map(i => i.id),
+        content_ids: items.map(i => i.product?.id ?? ''),
         num_items: items.length,
         order_id: orderNum,
       })
