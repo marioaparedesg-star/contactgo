@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+/* Fuentes cargadas via next/font en layout.tsx — no importar aquí */
 
 @tailwind base;
 @tailwind components;

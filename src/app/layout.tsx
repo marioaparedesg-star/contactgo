@@ -2,6 +2,7 @@ import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
+import { Plus_Jakarta_Sans, DM_Sans } from 'next/font/google'
 import './globals.css'
 import BottomNav from '@/components/ui/BottomNav'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
@@ -9,6 +10,20 @@ import CookieConsent from '@/components/ui/CookieConsent'
 import { Toaster } from 'react-hot-toast'
 import WelcomePopup from '@/components/ui/WelcomePopup'
 import ScrollToTop from '@/components/ui/ScrollToTop'
+
+// next/font self-hostea las fuentes — elimina el bloqueo de 780ms de Google Fonts CDN
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+  variable: '--font-plus-jakarta',
+})
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-dm-sans',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.contactgo.net'),
@@ -232,14 +247,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
         <link rel="dns-prefetch" href="https://wa.me" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.resend.com" />
         {/* Google Tag Manager — GTM-M9GZGJJQ */}
       
         {/* Microsoft Clarity — usando next/script para garantizar carga */}
       </head>
-      <body>
+      <body className={`${plusJakarta.variable} ${dmSans.variable}`}>
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only">Ir al contenido principal</a>
         {/* GTM noscript fallback */}
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9GZGJJQ" height="0" width="0" style={{display:'none',visibility:'hidden'}} /></noscript>
