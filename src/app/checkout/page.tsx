@@ -452,7 +452,8 @@ export default function CheckoutPage() {
           <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-1.5 text-sm text-green-700 font-semibold">
               <Lock className="w-4 h-4" />
-              <span className="hidden sm:inline text-xs">Pago seguro AZUL</span>
+              <img src="/azul-badge.png" alt="Pago seguro AZUL" width="28" height="28" className="h-7 w-7 object-contain rounded" />
+              <span className="hidden sm:inline text-xs">Pago seguro</span>
             </div>
             {/* Pasos */}
             <div className="flex items-center gap-2">
@@ -748,10 +749,11 @@ export default function CheckoutPage() {
                           <div className="flex items-center gap-1.5 shrink-0">
                             <img src="/visa-blue.png" alt="Visa" width={36} height={14} className="h-4 object-contain" />
                             <img src="/mastercard.png" alt="Mastercard" width={44} height={18} className="h-5 object-contain" />
+                            <img src="/azul-badge.png" alt="AZUL" width={28} height={28} className="h-7 w-7 object-contain rounded" />
                           </div>
                         </div>
                         <div className="flex items-start gap-2 bg-blue-50 rounded-xl px-3 py-2.5">
-                          <span className="text-sm shrink-0">🔒</span>
+                          <img src="/azul-badge.png" alt="AZUL" width={20} height={20} className="h-5 w-5 object-contain rounded shrink-0 mt-0.5" />
                           <p className="text-xs text-blue-700 leading-relaxed">
                             Serás redirigido al portal seguro de <strong>AZUL (Banco Popular)</strong>. ContactGo <strong>no almacena</strong> datos de tarjetas.
                           </p>

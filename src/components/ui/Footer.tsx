@@ -142,7 +142,7 @@ export default function Footer() {
             <img src="/visa-blue.png" alt="Visa" width="38" height="12" className="h-4 opacity-50 object-contain" />
             <img src="/mastercard.png" alt="Mastercard" width="24" height="19" className="h-4 opacity-60 object-contain" />
             <span className="text-[10px] text-gray-700 border border-gray-800 px-1.5 py-0.5 rounded">🔒 SSL</span>
-            <span className="text-[10px] text-gray-700 border border-gray-800 px-1.5 py-0.5 rounded">AZUL</span>
+            <img src="/azul-badge.png" alt="Pago seguro AZUL" width="28" height="28" className="h-7 w-7 opacity-80 object-contain rounded" />
           </div>
         </div>
 

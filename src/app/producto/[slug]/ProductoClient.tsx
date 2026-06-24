@@ -850,7 +850,6 @@ export default function ProductoClient({ product, variants }: Props) {
               {/* Garantías */}
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  {icon:'🔒',t:'Pago AZUL',s:'100% seguro'},
                   {icon:'🚚',t:'Envío nacional',s:'A todo RD'},
                   {icon:'↩️',t:'7 días dev.',s:'Sin preguntas'},
                   {icon:'✅',t:'Originales',s:'Dist. oficial'},
@@ -860,6 +859,11 @@ export default function ProductoClient({ product, variants }: Props) {
                     <div><p className="text-[10px] font-bold text-gray-800">{b.t}</p><p className="text-[9px] text-gray-400">{b.s}</p></div>
                   </div>
                 ))}
+                {/* Badge AZUL con logo real */}
+                <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-xl border border-gray-100">
+                  <img src="/azul-badge.png" alt="AZUL" width="24" height="24" className="h-6 w-6 object-contain rounded shrink-0" />
+                  <div><p className="text-[10px] font-bold text-gray-800">Pago AZUL</p><p className="text-[9px] text-gray-400">100% seguro</p></div>
+                </div>
               </div>
 
               {/* Reviews */}
