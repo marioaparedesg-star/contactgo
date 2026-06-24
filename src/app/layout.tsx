@@ -119,37 +119,89 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ── */}
         <script dangerouslySetInnerHTML={{ __html: `
 (function(){
+  // ── CAPA 1: webkit.messageHandlers (Facebook/Instagram WKWebView) ──
   try {
-    // Capa 1: assignment normal
     if(!window.webkit) window.webkit = {};
-    if(!window.webkit.messageHandlers) window.webkit.messageHandlers = {};
-  } catch(e) {}
+    if(!window.webkit.messageHandlers) window.webkit.messageHandlers = new Proxy({}, {
+      get: function(t,k) { return t[k] || { postMessage: function(){} }; }
+    });
+  } catch(e) {
+    try {
+      if(!window.webkit) window.webkit = {};
+      if(!window.webkit.messageHandlers) window.webkit.messageHandlers = {};
+    } catch(e2) {}
+  }
 
+  // ── CAPA 2: postMessage seguro en webkit.messageHandlers ──
+  // El error "Error invoking postMessage: Java object is gone"
+  // viene de GTM/FB intentando postMessage a handlers nativos ya destruidos
   try {
-    // Capa 2: Object.defineProperty para casos non-writable (Facebook WKWebView)
-    if(!window.webkit) window.webkit = {};
-    var desc = Object.getOwnPropertyDescriptor(window.webkit, 'messageHandlers');
-    if(!desc || !desc.value) {
+    var origWH = window.webkit && window.webkit.messageHandlers;
+    if(origWH) {
+      var safeProxy = new Proxy(origWH, {
+        get: function(target, name) {
+          var handler = target[name];
+          if(handler && typeof handler.postMessage === 'function') {
+            return {
+              postMessage: function(msg) {
+                try { return handler.postMessage(msg); } catch(e) {}
+              }
+            };
+          }
+          return { postMessage: function(){} };
+        }
+      });
       try {
         Object.defineProperty(window.webkit, 'messageHandlers', {
-          get: function() { return {}; },
+          get: function() { return safeProxy; },
           configurable: true
         });
-      } catch(e2) {}
+      } catch(e) {}
     }
   } catch(e) {}
 
-  // Capa 3: suprimir el error específico GLOBALMENTE
-  // Evita que llegue a Sentry Y evita crashear el hilo JS
+  // ── CAPA 3: enableDidUserTypeOnKeyboardLogging ──
+  // Error de Facebook In-App Browser intentando acceder a método privado
+  try {
+    if(window.webkit && window.webkit.messageHandlers) {
+      if(!window.webkit.messageHandlers.enableDidUserTypeOnKeyboardLogging) {
+        window.webkit.messageHandlers.enableDidUserTypeOnKeyboardLogging = { postMessage: function(){} };
+      }
+    }
+  } catch(e) {}
+
+  // ── CAPA 4: Suprimir errores globalmente antes de que lleguen a Sentry ──
   window.addEventListener('error', function(e) {
-    if(e && e.message && e.message.indexOf('webkit.messageHandlers') !== -1) {
+    if(!e || !e.message) return;
+    var msg = e.message;
+    if(
+      msg.indexOf('webkit.messageHandlers') !== -1 ||
+      msg.indexOf('postMessage') !== -1 ||
+      msg.indexOf('Java object is gone') !== -1 ||
+      msg.indexOf('enableDidUserTypeOnKeyboard') !== -1 ||
+      msg.indexOf('KeyboardLogging') !== -1
+    ) {
       e.preventDefault();
       e.stopImmediatePropagation();
       return true;
     }
   }, true);
 
-  // Capa 4: override de sendDataToNative con try-catch cuando esté disponible
+  // También capturar unhandledrejection de los mismos errores
+  window.addEventListener('unhandledrejection', function(e) {
+    if(!e || !e.reason) return;
+    var msg = String(e.reason.message || e.reason);
+    if(
+      msg.indexOf('postMessage') !== -1 ||
+      msg.indexOf('Java object is gone') !== -1 ||
+      msg.indexOf('enableDidUserTypeOnKeyboard') !== -1
+    ) {
+      e.preventDefault();
+      return true;
+    }
+  }, true);
+
+  // ── CAPA 5: sendDataToNative seguro ──
   function patchSendDataToNative() {
     if(typeof window.sendDataToNative === 'function' && !window._cgPatched) {
       var orig = window.sendDataToNative;

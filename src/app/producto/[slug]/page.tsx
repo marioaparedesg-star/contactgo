@@ -275,6 +275,11 @@ export default async function ProductoPage(
 
   return (
     <>
+      {/* Preload imagen principal — mejora LCP en PDP */}
+      {product.imagen_url && (
+        // @ts-ignore — fetchpriority es atributo válido pero TS no lo reconoce aún
+        <link rel="preload" as="image" href={product.imagen_url} fetchPriority="high" />
+      )}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />

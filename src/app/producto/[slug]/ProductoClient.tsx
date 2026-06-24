@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ShoppingCart, ArrowLeft, Eye, AlertCircle } from 'lucide-react'
@@ -336,6 +336,26 @@ export default function ProductoClient({ product, variants }: Props) {
 
   // ── Nuevo flujo óptico unificado ──────────────────────────────────────
   const [eyeFlow, setEyeFlow] = useState<EyeFlowState>(initialEyeFlow)
+
+  // ── Opciones del selector — memoizadas para no bloquear el hilo (INP) ──
+  const selectorOpts = useMemo(() => {
+    const { neg: _sphNeg, pos: _sphPos } = buildSPHOptions(
+      Number(product.sph_min ?? -20),
+      Number(product.sph_max ?? 8),
+      Number(product.sph_step ?? 0.25),
+      Boolean(product.sph_plano),
+    )
+    const sphOpts = [..._sphNeg, ..._sphPos]
+      .map(v => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
+    const cylOpts = (product.cyl_disponibles?.length ? [...product.cyl_disponibles] : ALL_CYL)
+      .sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
+    const axisOpts = (product.axis_disponibles?.length ? [...product.axis_disponibles] : ALL_AXIS)
+      .sort((a:any,b:any)=>Number(a)-Number(b)).map(String)
+    const addOpts = product.add_disponibles?.length ? product.add_disponibles : ALL_ADD
+    const colorOpts = (product as any).colores_disponibles ?? []
+    return { sphOpts, cylOpts, axisOpts, addOpts, colorOpts }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.id])
 
   // ── Imagen dinámica por color ─────────────────────────────────────────
   const imagenesPorColor: Record<string, string> = (product as any).imagenes_por_color ?? {}
@@ -749,30 +769,15 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BLOQUE 4: CONFIGURADOR DE RECETA */}
             <div className="px-4 pt-3 pb-2">
-              {isLente && (() => {
-                // Usar rangos exactos del fabricante desde la DB
-                const { neg: _sphNeg, pos: _sphPos } = buildSPHOptions(
-                  Number(product.sph_min ?? -20),
-                  Number(product.sph_max ?? 8),
-                  Number(product.sph_step ?? 0.25),
-                  Boolean(product.sph_plano),
-                )
-                const sphOpts = [..._sphNeg, ..._sphPos]
-                  .map(v => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
-                const cylOpts = (product.cyl_disponibles?.length ? [...product.cyl_disponibles] : ALL_CYL).sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
-                const axisOpts = (product.axis_disponibles?.length ? [...product.axis_disponibles] : ALL_AXIS).sort((a:any,b:any)=>Number(a)-Number(b)).map(String)
-                const addOpts = product.add_disponibles?.length ? product.add_disponibles : ALL_ADD
-                const colorOpts = (product as any).colores_disponibles ?? []
-                return (
+              {isLente && (
                   <EyeFlowSelector
                     state={eyeFlow} onChange={handleColorChange}
                     needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor}
-                    sphOpts={sphOpts} cylOpts={cylOpts} axisOpts={axisOpts} addOpts={addOpts} colorOpts={colorOpts}
+                    sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts}
                     sphMin={Number(product.sph_min ?? -20)} sphMax={Number(product.sph_max ?? 8)}
                     sphStep={Number(product.sph_step ?? 0.25)} sphPlano={Boolean(product.sph_plano)}
                   />
-                )
-              })()}
+              )}
 
               {/* Size selector para soluciones */}
               {isSolucion && sizes.length > 0 && (
@@ -985,24 +990,9 @@ export default function ProductoClient({ product, variants }: Props) {
                   ))}
                 </div>
               )}
-              {isLente && (() => {
-                // Usar rangos exactos del fabricante desde la DB
-                const { neg: _sphNeg, pos: _sphPos } = buildSPHOptions(
-                  Number(product.sph_min ?? -20),
-                  Number(product.sph_max ?? 8),
-                  Number(product.sph_step ?? 0.25),
-                  Boolean(product.sph_plano),
-                )
-                const sphOpts = [..._sphNeg, ..._sphPos]
-                  .map(v => Number(v)>0?`+${Number(v).toFixed(2)}`:Number(v)===0?'0.00':Number(v).toFixed(2))
-                const cylOpts = (product.cyl_disponibles?.length?[...product.cyl_disponibles]:ALL_CYL).sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
-                const axisOpts = (product.axis_disponibles?.length?[...product.axis_disponibles]:ALL_AXIS).sort((a:any,b:any)=>Number(a)-Number(b)).map(String)
-                const addOpts = product.add_disponibles?.length?product.add_disponibles:ALL_ADD
-                const colorOpts = (product as any).colores_disponibles??[]
-                return (<EyeFlowSelector state={eyeFlow} onChange={handleColorChange} needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor} sphOpts={sphOpts} cylOpts={cylOpts} axisOpts={axisOpts} addOpts={addOpts} colorOpts={colorOpts}
+              {isLente && (<EyeFlowSelector state={eyeFlow} onChange={handleColorChange} needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor} sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts}
                     sphMin={Number(product.sph_min ?? -20)} sphMax={Number(product.sph_max ?? 8)}
-                    sphStep={Number(product.sph_step ?? 0.25)} sphPlano={Boolean(product.sph_plano)} />)
-              })()}
+                    sphStep={Number(product.sph_step ?? 0.25)} sphPlano={Boolean(product.sph_plano)} />)}
               {isSolucion && sizes.length>0 && (
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700">Tamaño</label>
