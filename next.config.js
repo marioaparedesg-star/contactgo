@@ -3,24 +3,21 @@
 // Content Security Policy — permite Supabase, GTM, Meta Pixel, AZUL, Resend
 const csp = [
   "default-src 'self'",
-  // Scripts: self + GTM + Meta Pixel + inline (Next.js necesita unsafe-inline)
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://maps.gstatic.com",
-  // Estilos: self + inline (Tailwind genera estilos inline)
+  // Scripts — GTM, Meta Pixel, Google Ads, Cloudflare Insights
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://maps.gstatic.com https://googleads.g.doubleclick.net https://static.cloudflareinsights.com https://www.googleadservices.com",
+  // Estilos
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com https://maps.googleapis.com",
   // Fuentes
   "font-src 'self' https://fonts.gstatic.com",
-  // Imágenes: self + Supabase Storage + Google + Facebook + data URIs
-  "img-src 'self' data: blob: https://atendbjolicwcsqfyiyh.supabase.co https://*.supabase.co https://atendbjolicwcsqfyiyh.supabase.co/storage https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://pixel.wp.com https://contactgo.net https://www.contactgo.net https://maps.googleapis.com https://maps.gstatic.com https://*.googleapis.com https://*.gstatic.com",
-  // Conexiones API: self + Supabase + GA + AZUL + Resend
-  "connect-src 'self' https://atendbjolicwcsqfyiyh.supabase.co wss://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pruebas.azul.com.do https://pagos.azul.com.do https://api.resend.com https://e.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://*.googleapis.com https://www.facebook.com https://connect.facebook.net",
-  // Frames: AZUL necesita poder renderizar en frame para su portal de pago
-  "frame-src 'self' https://pruebas.azul.com.do https://pagos.azul.com.do https://www.googletagmanager.com",
+  // Imágenes — Google Ads, Clarity GIF, DoubleClick, Bing (Clarity sync)
+  "img-src 'self' data: blob: https://atendbjolicwcsqfyiyh.supabase.co https://*.supabase.co https://atendbjolicwcsqfyiyh.supabase.co/storage https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://pixel.wp.com https://contactgo.net https://www.contactgo.net https://maps.googleapis.com https://maps.gstatic.com https://*.googleapis.com https://*.gstatic.com https://googleads.g.doubleclick.net https://www.google.com https://c.clarity.ms https://*.clarity.ms https://www.googleadservices.com https://c.bing.com",
+  // Conexiones — Google Ads (DoubleClick), CAPI FB, Google Ads remarketing
+  "connect-src 'self' https://atendbjolicwcsqfyiyh.supabase.co wss://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pruebas.azul.com.do https://pagos.azul.com.do https://api.resend.com https://e.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://*.googleapis.com https://www.facebook.com https://connect.facebook.net https://ad.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com https://www.googleadservices.com https://region1.google-analytics.com",
+  // Frames — Google para merchant widget (futuro)
+  "frame-src 'self' https://pruebas.azul.com.do https://pagos.azul.com.do https://www.googletagmanager.com https://www.google.com",
   "frame-ancestors 'self'",
-  // Forms: puede hacer POST a AZUL
   "form-action 'self' https://pruebas.azul.com.do https://pagos.azul.com.do",
-  // Media
   "media-src 'self'",
-  // Workers
   "worker-src 'self' blob:",
 ].join('; ')
 
