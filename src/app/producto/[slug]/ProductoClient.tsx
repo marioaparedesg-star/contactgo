@@ -221,6 +221,7 @@ function SelectField({ label, value, options, onChange, required, format }: {
         className={`w-full border-2 rounded-xl px-4 py-3 min-h-[44px] text-sm font-medium focus:outline-none transition-colors bg-white ${
           value ? 'border-primary-400 text-gray-900' : 'border-gray-200 text-gray-400'
         }`}
+        style={{ fontSize: '16px' }}
       >
         <option value="">Selecciona</option>
         {options.map(o => (
