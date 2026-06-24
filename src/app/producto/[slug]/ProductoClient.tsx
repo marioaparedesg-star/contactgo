@@ -10,7 +10,7 @@ import ProductFAQ from '@/components/shop/ProductFAQ'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import { useCartStore } from '@/lib/cart-store'
-import { trackEcommerce, trackBuyNow, trackEyeFlow } from '@/lib/analytics'
+import { trackEcommerce, trackBuyNow, trackEyeFlow, sendCAPI } from '@/lib/analytics'
 import type { Product } from '@/types'
 import toast from 'react-hot-toast'
 import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
@@ -612,6 +612,13 @@ export default function ProductoClient({ product, variants }: Props) {
       items: [{ item_id: product.id, item_name: product.nombre,
         item_brand: (product as any).marca ?? '',
         price, quantity: qty }],
+    })
+    // CAPI server-side — evento AddToCart sin depender del Pixel
+    sendCAPI('AddToCart', {
+      value: price * qty,
+      currency: 'DOP',
+      content_ids: [product.id],
+      num_items: qty,
     })
     return true
   }

@@ -205,3 +205,48 @@ export function trackWhatsappHelp(source: 'no_seguro' | 'pdp' | 'cart' | 'checko
     window.fbq('trackCustom', 'WhatsappHelp', { source })
   }
 }
+
+// ── Facebook Conversions API (CAPI) — server-side duplicate ──────────────
+// Envía eventos al servidor para que lleguen a Facebook sin depender del Pixel
+// Funciona aunque las restricciones de categoría bloqueen el Pixel del browser
+export async function sendCAPI(
+  eventName: 'Purchase' | 'AddToCart' | 'InitiateCheckout' | 'ViewContent' | 'PageView',
+  eventData?: {
+    value?: number
+    currency?: string
+    content_ids?: string[]
+    num_items?: number
+    order_id?: string
+  },
+  userData?: {
+    email?: string
+    phone?: string
+    firstName?: string
+    fbp?: string   // cookie _fbp
+    fbc?: string   // cookie _fbc
+  }
+) {
+  if (typeof window === 'undefined') return
+
+  // Obtener cookies de Facebook si no se pasaron
+  const getCookie = (name: string) => {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+    return match ? match[2] : undefined
+  }
+
+  const mergedUserData = {
+    fbp: getCookie('_fbp'),
+    fbc: getCookie('_fbc'),
+    ...userData,
+  }
+
+  try {
+    await fetch('/api/fb-events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ eventName, eventData, userData: mergedUserData }),
+    })
+  } catch {
+    // CAPI es best-effort — no bloquear el flujo del usuario
+  }
+}
