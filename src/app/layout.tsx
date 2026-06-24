@@ -234,9 +234,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Preload fuente crítica — evita FOIT y reduce LCP */}
-        <link rel="preload" as="font" type="font/woff2" crossOrigin="anonymous"
-          href="https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA.woff2" />
         <link rel="dns-prefetch" href="https://api.resend.com" />
         {/* Google Tag Manager — GTM-M9GZGJJQ */}
       
@@ -267,7 +264,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Script
           id="clarity-script"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: `
             (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -280,7 +277,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Meta Pixel — ID: 1516674003159165 */}
         <Script
           id="meta-pixel"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: `
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
