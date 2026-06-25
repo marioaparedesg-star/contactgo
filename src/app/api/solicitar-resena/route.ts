@@ -51,10 +51,13 @@ export async function POST(req: NextRequest) {
       Tu opinión ayuda a otros clientes a elegir los lentes correctos.
       Solo toma 1 minuto dejar una reseña.
     </p>
-    <a href="${BASE}/producto?resena=true&orden=${o.numero_orden}"
-      style="display:block;background:#16a34a;color:white;font-weight:700;padding:14px 24px;border-radius:10px;text-align:center;text-decoration:none;font-size:15px;margin:20px 0">
-      ⭐ Dejar mi reseña
+    <a href="https://g.page/r/Cb-RwE6S9vzgEAE/review"
+      style="display:block;background:#facc15;color:#111;font-weight:700;padding:14px 24px;border-radius:10px;text-align:center;text-decoration:none;font-size:15px;margin:20px 0">
+      ⭐ Dejar reseña en Google
     </a>
+    <p style="color:#374151;font-size:13px;text-align:center;margin-top:-10px">
+      Solo toma 1 minuto · Tu opinión nos ayuda muchísimo
+    </p>
     <p style="color:#9ca3af;font-size:12px;text-align:center">
       ContactGo · contactgo.net · WhatsApp: +1 829 472-8328
     </p>

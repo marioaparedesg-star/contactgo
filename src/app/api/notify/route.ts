@@ -249,6 +249,18 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
     </p>
   </td></tr>
 
+  <!-- RESEÑA GOOGLE -->
+  <tr><td style="padding:0 32px 20px;">
+    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:16px;text-align:center;">
+      <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#92400e;">⭐ ¿Ya recibiste tus lentes?</p>
+      <p style="margin:0 0 12px;font-size:12px;color:#78350f;">Tu reseña en Google ayuda a otros dominicanos a encontrarnos. Solo toma 1 minuto.</p>
+      <a href="https://g.page/r/Cb-RwE6S9vzgEAE/review"
+        style="display:inline-block;background:#facc15;color:#111;font-weight:700;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:13px;">
+        ⭐ Dejar reseña en Google
+      </a>
+    </div>
+  </td></tr>
+
   <!-- SEGURIDAD -->
   <tr><td style="padding:0 32px 20px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;padding:10px 14px;">

@@ -111,10 +111,16 @@ export default async function ResenasPage() {
       {/* CTA */}
       <div className="bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
         <h2 className="font-bold text-gray-900 text-lg mb-2">¿Ya compraste en ContactGo?</h2>
-        <p className="text-sm text-gray-600 mb-4">Tu opinión ayuda a otros dominicanos a tomar la mejor decisión.</p>
-        <Link href="/cuenta" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold text-sm inline-block">
-          Dejar mi reseña
-        </Link>
+        <p className="text-sm text-gray-600 mb-4">Tu opinión ayuda a otros dominicanos a tomar la mejor decisión. Solo toma 1 minuto. ⭐</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="https://g.page/r/Cb-RwE6S9vzgEAE/review" target="_blank" rel="noopener noreferrer"
+            className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-6 py-3 rounded-xl font-bold text-sm inline-flex items-center justify-center gap-2 transition-colors">
+            ⭐ Dejar reseña en Google
+          </a>
+          <Link href="/cuenta" className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-bold text-sm inline-flex items-center justify-center gap-2 transition-colors">
+            Ver mis pedidos
+          </Link>
+        </div>
       </div>
     </main>
     </>
