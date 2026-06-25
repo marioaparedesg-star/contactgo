@@ -313,6 +313,37 @@ export default function PedidosPage() {
                       </button>
                     ))}
                   </div>
+
+                  {/* ── Acciones rápidas para pendientes sin pago ── */}
+                  {(selected.pago_estado === 'pendiente' || selected.estado === 'pendiente') && (
+                    <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
+                      <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wide">⚠️ Pago pendiente — acciones</p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`¿Marcar el pedido #${selected.numero_orden} como PAGADO manualmente?`)) return
+                            await sb.from('orders').update({ pago_estado: 'pagado', pagado_en: new Date().toISOString() }).eq('id', selected.id)
+                            await cambiarEstado(selected.id, 'confirmado', 'Pago confirmado manualmente por admin')
+                            setSelected((s:any) => ({...s, pago_estado:'pagado'}))
+                            toast.success('✅ Marcado como pagado')
+                          }}
+                          className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
+                          💳 Marcar como pagado
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`¿CANCELAR el pedido #${selected.numero_orden}? Esta acción no se puede deshacer.`)) return
+                            await sb.from('orders').update({ estado: 'cancelado', pago_estado: 'cancelado' }).eq('id', selected.id)
+                            setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, estado:'cancelado', pago_estado:'cancelado'} : p))
+                            setSelected((s:any) => ({...s, estado:'cancelado', pago_estado:'cancelado'}))
+                            toast.success('🗑️ Pedido cancelado')
+                          }}
+                          className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-red-100 text-red-700 border border-red-200 hover:bg-red-200 transition-colors">
+                          🗑️ Cancelar pedido
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   <div className="text-[9px] text-gray-400 mt-1 flex items-center gap-1">
                     <span>ℹ️</span>
                     <span>Al cambiar el estado, el cliente lo ve en su página de tracking y recibe email automático</span>

@@ -34,6 +34,7 @@ const NAV_SECTIONS = [
     label: 'Clientes',
     items: [
       { href: '/admin/clientes',      icon: Users,           label: 'Clientes',       badge: null },
+      { href: '/admin/registrados',   icon: Users,           label: '👥 Registrados',  badge: null },
       { href: '/admin/abandonados',   icon: ShoppingCart,    label: 'Abandonados',    badge: null },
     ]
   },
