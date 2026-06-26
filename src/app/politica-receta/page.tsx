@@ -113,7 +113,7 @@ export default function PoliticaRecetaPage() {
               <h2 className="font-bold text-gray-900 text-base mb-4">🏭 Sobre nuestros productos y fabricantes</h2>
               <p className="mb-3">
                 Todos los lentes que comercializamos son fabricados directamente por las marcas titulares
-                o sus distribuidores oficiales autorizados:
+                o sus fabricantes:
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {[
@@ -130,7 +130,7 @@ export default function PoliticaRecetaPage() {
               </div>
               <p className="mt-4 text-xs text-gray-500">
                 Los lentes tóricos y multifocales de fabricación especial son producidos bajo pedido
-                directamente por el distribuidor/fabricante oficial. Los tiempos de entrega adicionales
+                directamente por el fabricante. Los tiempos de entrega adicionales
                 (5-30 días) reflejan el proceso de fabricación a medida.
               </p>
             </section>

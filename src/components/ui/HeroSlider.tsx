@@ -6,7 +6,7 @@ import Image from 'next/image'
 const SLIDES = [
   {
     badge:      '🇩🇴 Entrega a domicilio en toda RD',
-    title:      'Olvídate de\nla óptica.',
+    title:      'Tus lentes,\nen tu puerta.',
     sub:        'Tus lentes en tu puerta mañana.',
     subtitle:   'Los mismos lentes de siempre, entregados en 24h. Sin filas, sin citas, sin salir de casa.',
     cta:        { label: 'Ver mis lentes', href: '/catalogo' },

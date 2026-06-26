@@ -9,7 +9,7 @@ const ESTADOS = [
   { key: 'recibido',      label: 'Pedido recibido',          icono: '✅', desc: 'Tu pedido fue recibido exitosamente' },
   { key: 'pago_aprobado', label: 'Pago aprobado',            icono: '💳', desc: 'Pago procesado por AZUL Banco Popular' },
   { key: 'preparando',    label: 'Preparando pedido',        icono: '📦', desc: 'Estamos preparando tu pedido' },
-  { key: 'fabricante',    label: 'Solicitado al fabricante', icono: '🏭', desc: 'Tu pedido fue enviado al distribuidor' },
+  { key: 'fabricante',    label: 'Pedido especial en proceso', icono: '🏭', desc: 'Tu pedido fue enviado al distribuidor' },
   { key: 'transito',      label: 'En tránsito',              icono: '🚛', desc: 'Tu pedido está en camino' },
   { key: 'entregado',     label: 'Entregado',                icono: '🎉', desc: '¡Tu pedido fue entregado!' },
 ]

@@ -57,27 +57,27 @@ export default function Page() {
               </tr></thead>
               <tbody>
                 {[
-                  { nombre: 'Acuvue Moist (30u)', optica: 'RD$4,166', online: 'RD$3,720' },
-                  { nombre: 'Acuvue Oasys (6u)', optica: 'RD$4,166', online: 'RD$3,720' },
-                  { nombre: 'Air Optix HydraGlyde', optica: 'RD$4,704', online: 'RD$4,200' },
-                  { nombre: 'Biofinity mensual', optica: 'RD$5,107', online: 'RD$4,560' },
-                  { nombre: 'Air Optix Colors', optica: 'RD$2,822', online: 'RD$2,520' },
+                  { nombre: 'Acuvue Moist (30u)', tienda_fisica: 'RD$4,166', online: 'RD$3,720' },
+                  { nombre: 'Acuvue Oasys (6u)', tienda_fisica: 'RD$4,166', online: 'RD$3,720' },
+                  { nombre: 'Air Optix HydraGlyde', tienda_fisica: 'RD$4,704', online: 'RD$4,200' },
+                  { nombre: 'Biofinity mensual', tienda_fisica: 'RD$5,107', online: 'RD$4,560' },
+                  { nombre: 'Air Optix Colors', tienda_fisica: 'RD$2,822', online: 'RD$2,520' },
                 ].map(r => (
                   <tr key={r.nombre} className="border-b border-green-100">
                     <td className="py-2 pr-4 text-gray-700">{r.nombre}</td>
-                    <td className="py-2 pr-4 text-right text-gray-500">{r.optica}</td>
+                    <td className="py-2 pr-4 text-right text-gray-500">{r.tienda_fisica}</td>
                     <td className="py-2 text-right font-bold text-green-700">{r.online}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-gray-500 mt-3">*Precios de ópticas son estimados basados en nuestro análisis de mercado. Los precios de ContactGo son exactos.</p>
+          <p className="text-xs text-gray-500 mt-3">*Precios de referencia del mercado dominicano. Los precios de ContactGo son exactos.</p>
         </div>
 
         <div>
           <h2 className="font-display text-xl font-bold text-gray-900 mb-3">¿Por qué son más baratos online?</h2>
-          <p>Las ópticas físicas tienen costos fijos enormes: alquiler en centros comerciales, empleados, electricidad, equipos. Todos esos costos se trasladan al precio del producto. Una tienda online como ContactGo opera con muchos menos gastos, y ese ahorro te lo pasamos a ti.</p>
+          <p>Las tiendas físicas tienen costos fijos enormes: alquiler en centros comerciales, empleados, electricidad, equipos. Todos esos costos se trasladan al precio del producto. Una tienda online como ContactGo opera con muchos menos gastos, y ese ahorro te lo pasamos a ti.</p>
           <p className="mt-3">Además, somos una óptica especializada que compra en volumen, lo que nos permite precios más competitivos sin sacrificar la autenticidad.</p>
         </div>
 
@@ -85,12 +85,12 @@ export default function Page() {
           <h2 className="font-display text-xl font-bold text-gray-900 mb-3">¿Cuánto ahorro al mes comprando online?</h2>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { tipo: 'Lentes diarios', optica: 'RD$4,166/mes', online: 'RD$3,720/mes', ahorro: 'RD$446' },
-              { tipo: 'Lentes mensuales', optica: '~RD$20,520/año', online: '~RD$18,240/año', ahorro: '~RD$2,280' },
+              { tipo: 'Lentes diarios', tienda_fisica: 'RD$4,166/mes', online: 'RD$3,720/mes', ahorro: 'RD$446' },
+              { tipo: 'Lentes mensuales', tienda_fisica: '~RD$20,520/año', online: '~RD$18,240/año', ahorro: '~RD$2,280' },
             ].map(c => (
               <div key={c.tipo} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
                 <p className="font-bold text-gray-900 text-sm mb-2">{c.tipo}</p>
-                <p className="text-xs text-gray-500">Óptica: <span className="line-through">{c.optica}</span></p>
+                <p className="text-xs text-gray-500">Precio referencia: <span className="line-through">{c.tienda_fisica}</span></p>
                 <p className="text-xs text-gray-500">Online: <span className="font-bold text-green-700">{c.online}</span></p>
                 <p className="text-sm font-black text-primary-600 mt-2">Ahorras {c.ahorro}</p>
               </div>

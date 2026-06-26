@@ -361,7 +361,7 @@ export default async function HomePage() {
           <div className="space-y-3">
             {[
               { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
-              { q: '¿Son 100% originales?', a: 'Sí. Sí, 100% originales y certificados. Somos una óptica especializada — cada producto viene sellado de fábrica con código de autenticidad.' },
+              { q: '¿Son 100% originales?', a: 'Sí. Sí, 100% originales y certificados. Cada producto viene sellado de fábrica con código de autenticidad verificable.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados sí. Puedes subirla en /receta o enviárnosla por WhatsApp. Para colores sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },

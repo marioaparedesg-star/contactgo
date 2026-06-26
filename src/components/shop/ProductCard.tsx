@@ -190,7 +190,7 @@ export default function ProductCard({ product, isBestseller }: Props) {
             {/* Precio anterior (óptica) tachado */}
             {product.precio_anterior && product.precio_anterior > product.precio && (
               <p className="text-[11px] text-gray-400 line-through leading-none mb-0.5">
-                RD${Number(product.precio_anterior).toLocaleString()} en óptica
+                RD${Number(product.precio_anterior).toLocaleString()} precio anterior
               </p>
             )}
             <div className="flex items-center gap-2">

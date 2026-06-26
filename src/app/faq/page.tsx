@@ -38,7 +38,7 @@ const FAQS = [
   {
     categoria: '👁️ Productos',
     preguntas: [
-      { q: '¿Los productos son originales?', a: 'Sí, todos nuestros productos son 100% originales y certificados. Somos una óptica especializada en lentes de contacto. Todos los productos son originales y certificados.' },
+      { q: '¿Los productos son originales?', a: 'Sí, todos nuestros productos son 100% originales y certificados. Somos una tienda especializada en lentes de contacto. Todos los productos son 100% originales, sellados de fábrica y certificados.' },
       { q: '¿Necesito receta para comprar lentes de contacto?', a: 'Recomendamos tener una receta actualizada de tu oftalmólogo antes de comprar. Contamos con un buscador por receta para ayudarte a elegir el tipo correcto.' },
       { q: '¿Qué pasa si mi graduación no está disponible?', a: 'Escríbenos por WhatsApp y buscamos la graduación específica para ti. Podemos hacer pedidos especiales.' },
       { q: '¿Los lentes de color necesitan graduación?', a: 'No. Tenemos lentes de color sin graduación (plano) y con graduación para miopía e hipermetropía.' },
