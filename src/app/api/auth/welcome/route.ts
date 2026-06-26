@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       ${[
         ['🚀','Entrega en 24 horas','Para productos en stock en Santo Domingo'],
         ['🔒','Pago 100% seguro','Con AZUL Banco Popular — sin riesgo'],
-        ['✅','Originales certificados','Distribuidores autorizados de ACUVUE, Alcon y más'],
+        ['✅','Originales certificados','Productos 100% Originales de ACUVUE, Alcon y más'],
         ['↩️','7 días de devolución','Sin preguntas, sin complicaciones'],
       ].map(([icon, title, desc]) => `
         <tr><td style="padding:10px 0;border-bottom:1px solid #f3f4f6;">

@@ -9,12 +9,12 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/sobre-nosotros' },
   title: 'Sobre Nosotros | ContactGo — Lentes de Contacto RD',
-  description: 'Conoce a ContactGo, la única tienda dominicana especializada 100% en lentes de contacto originales. Distribuidores autorizados de ACUVUE, Alcon, CooperVision y Bausch+Lomb.',
+  description: 'Conoce a ContactGo, la única tienda dominicana especializada 100% en lentes de contacto originales. Tienda especializada en lentes de contacto — ACUVUE, Alcon, CooperVision y Bausch+Lomb 100% originales.',
 }
 
 const VALORES = [
   { icon: '🏥', title: 'Especialización total', desc: 'Solo lentes de contacto. No somos una óptica genérica — somos expertos en una sola cosa y la hacemos muy bien.' },
-  { icon: '✅', title: '100% originales', desc: 'Cada producto viene directamente de distribuidores autorizados. Nunca imitaciones, nunca productos vencidos.' },
+  { icon: '✅', title: '100% originales', desc: 'Cada producto proviene de distribuidores oficiales. Nunca imitaciones, nunca productos vencidos. Nunca imitaciones, nunca productos vencidos.' },
   { icon: '🚚', title: 'Entrega en 24-48h', desc: 'Cubrimos Santo Domingo, Santiago y todo el país. Tu pedido sale el mismo día si ordenas antes de las 3pm.' },
   { icon: '👁️', title: 'Soporte especializado', desc: 'Nuestro equipo conoce cada producto a fondo. Si tienes dudas sobre tu receta, te ayudamos antes de comprar.' },
 ]
@@ -72,7 +72,7 @@ export default function SobreNosotrosPage() {
               ContactGo nació de una necesidad real: encontrar lentes de contacto de calidad en la República Dominicana era un proceso frustrante. Precios elevados, productos escasos, poca información y ninguna garantía de autenticidad.
             </p>
             <p>
-              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — directamente de distribuidores autorizados.
+              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — comprados directamente a distribuidores oficiales en RD.
             </p>
             <p>
               Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin lentes, y entrega en 24-48 horas a todo el país.
@@ -108,7 +108,7 @@ export default function SobreNosotrosPage() {
         {/* Marcas autorizadas */}
         <section className="bg-gray-50 py-16 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Distribuidores autorizados</h2>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Productos 100% Originales</h2>
             <p className="text-gray-500 text-sm text-center mb-10">Trabajamos directamente con las mejores marcas del mundo</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {MARCAS.map(m => (
@@ -116,7 +116,7 @@ export default function SobreNosotrosPage() {
                   <span className="text-2xl">{m.pais}</span>
                   <div>
                     <p className="font-bold text-gray-900 text-sm">{m.nombre}</p>
-                    <p className="text-xs text-primary-600 font-semibold mb-1">{m.fabricante} · Distribuidor Autorizado</p>
+                    <p className="text-xs text-primary-600 font-semibold mb-1">{m.fabricante} · Productos Originales</p>
                     <p className="text-xs text-gray-500">{m.descripcion}</p>
                   </div>
                 </div>

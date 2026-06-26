@@ -19,7 +19,7 @@ const secciones = [
   },
   {
     title: '2. Descripción del servicio',
-    body: 'ContactGo es una tienda en línea especializada en lentes de contacto y productos de cuidado ocular en República Dominicana. Somos distribuidores autorizados de marcas premium como ACUVUE®, Air Optix®, Biofinity® y Bausch+Lomb®.'
+    body: 'ContactGo es una tienda en línea especializada en lentes de contacto y productos de cuidado ocular en República Dominicana. Todos nuestros productos son 100% originales, adquiridos de distribuidores autorizados de marcas premium como ACUVUE®, Air Optix®, Biofinity® y Bausch+Lomb®.'
   },
   {
     title: '3. Productos y disponibilidad',
