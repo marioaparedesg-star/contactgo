@@ -70,7 +70,7 @@ export default async function Page() {
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Compra lentes de contacto en Santo Domingo sin salir de casa</h2>
           <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega a domicilio en toda el área metropolitana de <strong>Santo Domingo</strong>. Olvidarte de ir a la óptica — tus lentes llegan directamente donde estás en 24-48 horas.</p>
-          <p>Todos nuestros productos son 100% originales, adquiridos de distribuidores autorizados de <strong>ACUVUE® (Johnson & Johnson)</strong>, <strong>Air Optix® (Alcon)</strong>, <strong>Biofinity® (CooperVision)</strong> y <strong>Bausch+Lomb</strong>. Todos los productos son 100% originales con garantía de autenticidad. El envío a Santo Domingo tiene un costo fijo de <strong>RD$200</strong> y es gratuito en pedidos superiores a RD$6,000.</p>
+          <p>Todos nuestros productos son 100% originales, 100% originales, con garantía de autenticidad. El envío a Santo Domingo tiene un costo fijo de <strong>RD$200</strong> y es gratuito en pedidos superiores a RD$6,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto según tu SPH, CYL y AXIS en minutos.</p>
 
           {/* Trust strip */}

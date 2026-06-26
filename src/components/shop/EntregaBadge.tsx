@@ -45,7 +45,7 @@ export default function EntregaBadge({ tipo, nombre = '', sph, variant = 'pdp' }
           {fecha.texto}
         </p>
         {info.especial && (
-          <p className="text-[10px] text-amber-600 mt-1 font-medium">Fabricación especial · Pedido especial al proveedor</p>
+          <p className="text-[10px] text-amber-600 mt-1 font-medium">Fabricación especial · Pedido especial</p>
         )}
         {!info.especial && (
           <p className="text-[10px] text-green-600 mt-0.5">🚚 Envío a todo RD disponible</p>

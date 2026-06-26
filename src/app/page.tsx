@@ -38,7 +38,7 @@ const SCHEMA_ORG = {
   "@type": "FAQPage",
   "mainEntity": [
     { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias." } },
-    { "@type": "Question", "name": "¿Son originales los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, 100% originales y certificados. Todos nuestros productos son 100% originales, adquiridos de distribuidores autorizados de Acuvue, Air Optix, CooperVision y Bausch+Lomb." } },
+    { "@type": "Question", "name": "¿Son originales los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, 100% originales y certificados. Todos nuestros productos son 100% originales, adquiridos de las principales marcas de lentes de contacto del mundo." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
     { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
   ]
@@ -112,7 +112,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── CONFIANZA MÉDICA — DISTRIBUIDORES AUTORIZADOS ── */}
+        {/* ── CONFIANZA MÉDICA — PRODUCTOS ORIGINALES ── */}
         <section className="bg-gradient-to-b from-gray-50 to-white border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
             <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
@@ -125,7 +125,7 @@ export default async function HomePage() {
                   La única tienda en RD especializada<br className="hidden md:block" /> 100% en lentes de contacto
                 </h2>
                 <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-5 max-w-lg">
-                  Cada lente que ves aquí es original, verificado y viene directamente de los distribuidores oficiales en RD. No vendemos imitaciones. Nunca.
+                  Cada lente que ves aquí es original, verificado y viene directamente de los canales oficiales de las marcas. No vendemos imitaciones. Nunca.
                 </p>
                 <div className="flex flex-col gap-2">
                   {[
@@ -361,7 +361,7 @@ export default async function HomePage() {
           <div className="space-y-3">
             {[
               { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
-              { q: '¿Son 100% originales?', a: 'Sí. Todos nuestros productos son 100% originales, adquiridos de distribuidores autorizados de Acuvue (J&J), Air Optix (Alcon), CooperVision y Bausch+Lomb. Cada producto tiene código de autenticidad.' },
+              { q: '¿Son 100% originales?', a: 'Sí. Sí, 100% originales y certificados. Somos una óptica especializada — cada producto viene sellado de fábrica con código de autenticidad.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados sí. Puedes subirla en /receta o enviárnosla por WhatsApp. Para colores sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },

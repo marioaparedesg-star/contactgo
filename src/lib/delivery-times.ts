@@ -39,7 +39,7 @@ const T_24_72H: EntregaInfo = {
 
 const T_5_10D: EntregaInfo = {
   etiqueta: 'Pedido especial · 5-15 días',
-  detalle:  'Fabricado bajo pedido por el distribuidor oficial. Entrega estimada de 5 a 15 días laborables.',
+  detalle:  'Disponible bajo pedido especial. Entrega estimada de 5 a 15 días laborables.',
   dias_min: 5, dias_max: 15,
   especial: true,
   icono:    '⚗️',
@@ -47,7 +47,7 @@ const T_5_10D: EntregaInfo = {
 
 const T_25_30D: EntregaInfo = {
   etiqueta: 'Fabricación especial · 25-30 días',
-  detalle:  'Fabricado a medida por el distribuidor oficial de la marca. Entrega estimada de 25 a 30 días laborables.',
+  detalle:  'Producto especializado disponible bajo pedido. Entrega estimada de 25 a 30 días laborables.',
   dias_min: 25, dias_max: 30,
   especial: true,
   icono:    '⏱️',
@@ -71,7 +71,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
   if (esXR(nombre) && ['torico','esferico','multifocal'].includes(tipo)) {
     return {
       etiqueta: 'Fabricación bajo pedido · 25-30 días',
-      detalle:  'Fabricado bajo pedido por el distribuidor oficial. Entrega estimada de 25 a 30 días laborables.',
+      detalle:  'Disponible bajo pedido especial. Entrega estimada de 25 a 30 días laborables.',
       dias_min: 25, dias_max: 30,
       especial: true,
       icono:    '🔬',

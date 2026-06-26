@@ -78,7 +78,7 @@ export default function Page() {
         <div>
           <h2 className="font-display text-xl font-bold text-gray-900 mb-3">¿Por qué son más baratos online?</h2>
           <p>Las ópticas físicas tienen costos fijos enormes: alquiler en centros comerciales, empleados, electricidad, equipos. Todos esos costos se trasladan al precio del producto. Una tienda online como ContactGo opera con muchos menos gastos, y ese ahorro te lo pasamos a ti.</p>
-          <p className="mt-3">Además, compramos directamente a los distribuidores autorizados en volumen, lo que nos permite precios más competitivos sin sacrificar la autenticidad del producto.</p>
+          <p className="mt-3">Además, somos una óptica especializada que compra en volumen, lo que nos permite precios más competitivos sin sacrificar la autenticidad.</p>
         </div>
 
         <div>

@@ -9,11 +9,11 @@ import type { Metadata } from 'next'
 
 export const metadata = {
   title: 'Lentes ACUVUE en República Dominicana | ContactGo',
-  description: 'Compra lentes de contacto ACUVUE originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',
+  description: 'Compra lentes de contacto ACUVUE originales en RD. Óptica especializada. Envío 24-48h a todo el país.',
   alternates: { canonical: 'https://www.contactgo.net/marca/acuvue' },
   openGraph: {
     title: 'Lentes ACUVUE en RD | ContactGo',
-    description: 'Distribuidor autorizado de ACUVUE en República Dominicana.',
+    description: 'Óptica especializada en lentes ACUVUE en República Dominicana.',
     url: 'https://www.contactgo.net/marca/acuvue',
     locale: 'es_DO',
     siteName: 'ContactGo',

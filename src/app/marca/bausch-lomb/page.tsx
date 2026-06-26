@@ -13,7 +13,7 @@ export const metadata = {
   alternates: { canonical: 'https://www.contactgo.net/marca/bausch-lomb' },
   openGraph: {
     title: 'Lentes Bausch+Lomb en RD | ContactGo',
-    description: 'Distribuidor autorizado de Bausch+Lomb en República Dominicana.',
+    description: 'Óptica especializada en lentes Bausch+Lomb en República Dominicana.',
     url: 'https://www.contactgo.net/marca/bausch-lomb',
     locale: 'es_DO',
     siteName: 'ContactGo',

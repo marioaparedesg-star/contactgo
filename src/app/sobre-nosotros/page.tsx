@@ -72,7 +72,7 @@ export default function SobreNosotrosPage() {
               ContactGo nació de una necesidad real: encontrar lentes de contacto de calidad en la República Dominicana era un proceso frustrante. Precios elevados, productos escasos, poca información y ninguna garantía de autenticidad.
             </p>
             <p>
-              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — comprados directamente a distribuidores oficiales en RD.
+              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — 100% originales, adquiridos a través de canales oficiales de cada marca.
             </p>
             <p>
               Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin lentes, y entrega en 24-48 horas a todo el país.

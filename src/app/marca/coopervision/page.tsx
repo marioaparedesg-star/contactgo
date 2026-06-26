@@ -9,11 +9,11 @@ import type { Metadata } from 'next'
 
 export const metadata = {
   title: 'Lentes CooperVision en República Dominicana | ContactGo',
-  description: 'Compra lentes de contacto CooperVision originales en RD. Distribuidor autorizado. Envío 24-48h a todo el país.',
+  description: 'Compra lentes de contacto CooperVision originales en RD. Óptica especializada. Envío 24-48h a todo el país.',
   alternates: { canonical: 'https://www.contactgo.net/marca/coopervision' },
   openGraph: {
     title: 'Lentes CooperVision en RD | ContactGo',
-    description: 'Distribuidor autorizado de CooperVision en República Dominicana.',
+    description: 'Óptica especializada en lentes CooperVision en República Dominicana.',
     url: 'https://www.contactgo.net/marca/coopervision',
     locale: 'es_DO',
     siteName: 'ContactGo',

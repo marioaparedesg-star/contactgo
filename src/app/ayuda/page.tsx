@@ -106,7 +106,7 @@ const SECCIONES = [
     id: 'garantias', emoji: '✅', titulo: 'Garantías y Autenticidad',
     color: 'bg-green-50 border-green-100', badge: 'bg-green-100 text-green-700',
     items: [
-      { q: '¿Son originales los productos?', a: 'Todos nuestros productos son 100% originales, 100% originales, adquiridos de los distribuidores oficiales de ACUVUE (J&J), Alcon, Bausch+Lomb y CooperVision en República Dominicana.' },
+      { q: '¿Son originales los productos?', a: 'Todos nuestros productos son 100% originales, 100% originales, 100% originales, con garantía de autenticidad directamente de las marcas fabricantes.' },
       { q: '¿Los lentes están dentro de su fecha de vencimiento?', a: 'Sí, todos los productos tienen al menos 18 meses de vida útil desde la fecha de compra.' },
       { q: '¿Qué garantía tienen los lentes de contacto?', a: 'Si detectas algún defecto de fabricación (rotura, deformación), lo reemplazamos sin costo.' },
     ],
