@@ -40,7 +40,7 @@ export function precioConSuscripcion(precioBase: number, _frecuencia: string | n
 
 export const SOLUTION_PRICES: Record<string, Record<string, number>> = {
   'RENU-MULTI': { '60ml': 562, '120ml': 655, '355ml': 1353 },
-  'OPTI-MULTI': { '90ml': 450, '120ml': 700, '300ml': 1250 },
+  'OPTI-MULTI': { '90ml': 750, '300ml': 1450 },
   'PRO-60ML':   { '60ml': 419 },
   'DRE-80ML':   { '80ml': 333 },
   'SPR-FOAM':   { 'Frasco único': 350 },
@@ -48,7 +48,7 @@ export const SOLUTION_PRICES: Record<string, Record<string, number>> = {
 
 export const SOLUTION_SIZES: Record<string, string[]> = {
   'RENU-MULTI': ['60ml', '120ml', '355ml'],
-  'OPTI-MULTI': ['90ml', '120ml', '300ml'],
+  'OPTI-MULTI': ['90ml', '300ml'],
   'PRO-60ML':   ['60ml'],
   'DRE-80ML':   ['80ml'],
   'SPR-FOAM':   ['Frasco único'],
