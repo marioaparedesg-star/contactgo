@@ -48,6 +48,14 @@ export async function GET() {
       <g:return_policy_label>standard-return-policy</g:return_policy_label>
       <g:custom_label_0>${p.tipo ?? 'lente'}</g:custom_label_0>
       <g:custom_label_1>${p.marca}</g:custom_label_1>
+      ${p.tipo === 'color' && p.colores_disponibles?.length ? `<g:color><![CDATA[${
+        // Google requiere colores base estándar — máximo 40 chars, máximo 3 colores separados por /
+        (p.colores_disponibles as string[])
+          .map((c: string) => c.replace('Brilliant ', '').replace('Gemstone ', '').replace('Sterling ', '').replace('Pure ', '').replace('True ', ''))
+          .filter((c: string, i: number, arr: string[]) => arr.indexOf(c) === i) // deduplicar
+          .slice(0, 3)
+          .join('/')
+      }]]></g:color>` : ''}
     </item>`
   }).join('\n')
 
