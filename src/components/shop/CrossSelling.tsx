@@ -11,7 +11,7 @@ const CROSS_MAP: Record<string, string[]> = {
   esferico:   ['solucion', 'gota'],
   torico:     ['solucion', 'gota'],
   multifocal: ['solucion', 'gota'],
-  color:      ['solucion', 'gota'],
+  color:      ['color', 'solucion', 'gota'], // Mostrar otros lentes de color primero
   solucion:   ['gota'],
   gota:       ['solucion'],
 }
@@ -32,6 +32,7 @@ export default function CrossSelling({ tipo, currentId }: { tipo: string; curren
 
   const titulo = tipo === 'gota' ? 'Completa tu rutina ocular'
     : tipo === 'solucion' ? 'Añade lubricación extra'
+    : tipo === 'color' ? '🎨 Más lentes de color disponibles'
     : 'Completa tu kit de lentes'
 
   if (!products.length) return null

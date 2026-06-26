@@ -265,6 +265,13 @@ export default function EyeFlowSelector({
           onClick={() => { set({ noEstaSeguro: true }); trackEyeFlow('no_seguro') }}
           icon="🤔" label="No estoy seguro" />
       </div>
+      {/* Mensaje de ayuda cuando tienen graduaciones diferentes — común en lentes de color */}
+      {s.mismaReceta === false && !s.noEstaSeguro && (
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700 flex items-start gap-2">
+          <span className="text-base">💡</span>
+          <span>Perfecto — ingresa la graduación de cada ojo por separado. Si no tienes tu receta a mano, <a href="https://wa.me/18294728328?text=Hola%2C+necesito+ayuda+con+mi+receta+para+lentes+de+color" target="_blank" rel="noopener noreferrer" className="font-bold underline">escríbenos por WhatsApp</a> y te ayudamos.</span>
+        </div>
+      )}
     </div>
   ) : null
 
