@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useCallback } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/ui/Navbar'
@@ -12,7 +12,7 @@ import {
   type GlassesRx, type ConvertedRx,
 } from '@/lib/prescription'
 import type { Product } from '@/types'
-import { Eye, Camera, Upload, RotateCcw, Loader2, Sparkles, Info, AlertTriangle, ChevronRight, Mail, CheckCircle, ShoppingCart, ArrowRight } from 'lucide-react'
+import { Eye, RotateCcw, Sparkles, Info, AlertTriangle, ChevronRight, Mail, CheckCircle, ShoppingCart, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -46,10 +46,6 @@ export default function RecetaPage() {
   const [od, setOd] = useState<EyeInput>(EMPTY)
   const [oi, setOi] = useState<EyeInput>(EMPTY)
   const [misma, setMisma] = useState(false)
-  const [showFoto, setShowFoto] = useState(false)
-  const [imgPreview, setImgPreview] = useState<string | null>(null)
-  const [ocrLoading, setOcrLoading] = useState(false)
-  const [ocrMsg, setOcrMsg] = useState<string | null>(null)
   const [result, setResult] = useState<ConvertedRx | null>(null)
   const [products, setProducts] = useState<any[]>([])
   const [loadingP, setLoadingP] = useState(false)
@@ -60,42 +56,7 @@ export default function RecetaPage() {
   const [pendingRx, setPendingRx] = useState<GlassesRx | null>(null)
   const [frecuencia, setFrecuencia] = useState<'diario' | 'quincenal' | 'mensual'>('diario')
   const [cartAdded, setCartAdded] = useState<string | null>(null)
-  const fileRef = useRef<HTMLInputElement>(null)
 
-  // ── OCR ─────────────────────────────────────────────────────────────────────
-  const handleImage = useCallback(async (file: File) => {
-    setOcrLoading(true); setOcrMsg(null)
-    setImgPreview(URL.createObjectURL(file))
-    trackEvento('upload_started')
-    try {
-      const base64 = await new Promise<string>((res, rej) => {
-        const img = new (window as any).Image()
-        img.onload = () => {
-          const MAX = 1024; let w = img.width, h = img.height
-          if (w > MAX || h > MAX) { if (w > h) { h = Math.round(h * MAX / w); w = MAX } else { w = Math.round(w * MAX / h); h = MAX } }
-          const c = document.createElement('canvas'); c.width = w; c.height = h
-          c.getContext('2d')!.drawImage(img, 0, 0, w, h)
-          res(c.toDataURL('image/jpeg', 0.88).split(',')[1])
-        }
-        img.onerror = rej; img.src = URL.createObjectURL(file)
-      })
-      const res = await fetch('/api/ocr-receta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64, mimeType: 'image/jpeg' }) })
-      const json = await res.json()
-      if (!res.ok || !json.ok) {
-        setOcrMsg('⚠️ No se pudo leer automáticamente — ingresa los valores manualmente')
-        trackEvento('ocr_fail')
-        setOcrLoading(false); return
-      }
-      const r = json.receta
-      const newOd: EyeInput = { sph: r.od_sph != null ? String(r.od_sph) : '', cyl: r.od_cyl != null ? String(r.od_cyl) : '', axis: r.od_axis != null ? String(r.od_axis) : '', add: r.add_power != null ? String(r.add_power) : '' }
-      const newOi: EyeInput = { sph: r.oi_sph != null ? String(r.oi_sph) : '', cyl: r.oi_cyl != null ? String(r.oi_cyl) : '', axis: r.oi_axis != null ? String(r.oi_axis) : '', add: r.add_power != null ? String(r.add_power) : '' }
-      setOd(newOd); setOi(newOi)
-      setOcrMsg(r.confianza === 'alta' ? '✅ Receta leída — verifica los valores' : '⚠️ Verifica los valores detectados')
-      trackEvento('ocr_ok', { tipo_receta: r.diagnostico })
-      toast.success('Receta detectada con IA')
-    } catch { setOcrMsg('⚠️ Error procesando la imagen'); trackEvento('ocr_fail') }
-    finally { setOcrLoading(false) }
-  }, [])
 
   // ── Motor de recomendación ────────────────────────────────────────────────
   const cargarProductos = async (conv: ConvertedRx) => {
@@ -148,7 +109,7 @@ export default function RecetaPage() {
   }
 
   const skipLead = () => { if (pendingRx) ejecutarCalculo(pendingRx) }
-  const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setImgPreview(null); setOcrMsg(null); setShowLead(false); setPendingRx(null); setCartAdded(null) }
+  const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null) }
 
   // ── Agregar al carrito DIRECTO (para esférico y color) ────────────────────
   const handleAddToCart = (product: any) => {
@@ -210,18 +171,18 @@ export default function RecetaPage() {
           {/* Badge médico */}
           <div className="relative inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-[11px] font-bold px-3 py-1.5 rounded-full mb-3">
             <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"/>
-            Herramienta de adaptación óptica · Powered by Gemini AI
+            Ingresa tu receta y encuentra tu lente perfecto
           </div>
           <h1 className="relative font-display font-black text-2xl md:text-3xl mb-2 tracking-tight">
             Convierte tu receta<br/>
             <span style={{ color: '#4ade80' }}>en tus lentes perfectos.</span>
           </h1>
-          <p className="relative text-white/60 text-sm mb-4">Sube una foto o ingresa los valores · Resultado en 60 segundos</p>
+          <p className="relative text-white/60 text-sm mb-4">Ingresa los valores de tu receta · Resultado en segundos</p>
           <div className="relative flex items-center justify-center flex-wrap gap-3">
             {[
               { icon: '✅', text: 'Gratis' },
               { icon: '⚡', text: '60 segundos' },
-              { icon: '🤖', text: 'IA Gemini' },
+              { icon: '⚡', text: 'Resultado inmediato' },
               { icon: '📦', text: 'Stock real' },
               { icon: '🔒', text: 'Sin registro' },
             ].map(t => (
@@ -259,37 +220,9 @@ export default function RecetaPage() {
 
         <div className="max-w-3xl mx-auto px-4 py-5 space-y-4">
 
-          {/* Toggle modo */}
-          <div className="flex gap-2">
-            {[{id:'manual',ico:<Eye className="w-4 h-4"/>,lbl:'Manual'},{id:'imagen',ico:<Camera className="w-4 h-4"/>,lbl:'Foto de receta'}].map(m => (
-              <button key={m.id} onClick={() => setShowFoto(m.id==='imagen')}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold border transition-all ${(m.id==='imagen') === showFoto ? 'bg-primary-600 border-primary-600 text-white shadow-sm' : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'}`}>
-                {m.ico}{m.lbl}
-              </button>
-            ))}
-          </div>
 
-          {/* OCR */}
-          {showFoto && (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
-              <input ref={fileRef} type="file" accept="image/*,.pdf" className="hidden" onChange={e => { const f=e.target.files?.[0]; if(f) handleImage(f) }} />
-              {!imgPreview
-                ? <button onClick={() => fileRef.current?.click()}
-                    className="w-full border-2 border-dashed border-gray-200 rounded-xl py-8 flex flex-col items-center gap-2 hover:border-primary-400 hover:bg-primary-50 transition-all group">
-                    <Upload className="w-8 h-8 text-gray-200 group-hover:text-primary-400 transition-colors" />
-                    <p className="text-sm font-semibold text-gray-500">Toca para subir tu receta</p>
-                    <p className="text-xs text-gray-400">JPG · PNG · HEIC · PDF · Cualquier idioma</p>
-                  </button>
-                : <div className="relative">
-                    <img src={imgPreview} alt="Receta" className="w-full rounded-xl max-h-44 object-contain bg-gray-50"/>
-                    <button onClick={() => { setImgPreview(null); setOcrMsg(null); if(fileRef.current) fileRef.current.value='' }}
-                      className="absolute top-2 right-2 bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs font-semibold shadow-sm">Cambiar</button>
-                  </div>
-              }
-              {ocrLoading && <div className="flex items-center gap-2 bg-blue-50 rounded-xl px-3 py-2.5"><Loader2 className="w-3.5 h-3.5 text-blue-600 animate-spin"/><p className="text-xs text-blue-700 font-medium">Leyendo con IA Gemini...</p></div>}
-              {ocrMsg && !ocrLoading && <p className={`text-xs px-3 py-2.5 rounded-xl font-medium ${ocrMsg.includes('✅') ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}`}>{ocrMsg}</p>}
-            </div>
-          )}
+
+
 
           {/* Info vertex */}
           <div className="flex items-start gap-2 bg-blue-50 border border-blue-100 rounded-xl px-3 py-2.5">
@@ -346,7 +279,7 @@ export default function RecetaPage() {
 
                 {loadingP ? (
                   <div className="flex flex-col items-center gap-3 py-12 text-gray-400">
-                    <Loader2 className="w-6 h-6 animate-spin"/>
+                    <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"/>
                     <p className="text-sm">Buscando productos compatibles...</p>
                   </div>
                 ) : products.length === 0 ? (
@@ -493,8 +426,16 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded }: { produc
           className={`w-full py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${wasAdded ? 'bg-green-500 text-white' : featured ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-800 text-white hover:bg-gray-700'}`}>
           {wasAdded ? (<><CheckCircle className="w-3.5 h-3.5"/> ¡En tu carrito!</>) : isSimple ? (<><ShoppingCart className="w-3.5 h-3.5"/> Agregar al carrito</>) : (<><ArrowRight className="w-3.5 h-3.5"/> Ver con mi receta</>)}
         </button>
-        {/* Link al PDP */}
+        {/* Link al PDP — siempre lleva la receta */}
         <Link href={`/producto/${p.slug}`}
+          onClick={() => {
+            // Guardar receta en session antes de navegar
+            try {
+              sessionStorage.setItem('cg_rx_pending', JSON.stringify({
+                od: result.od, oi: result.oi, tipo: result.tipo, timestamp: Date.now()
+              }))
+            } catch {}
+          }}
           className="w-full py-1.5 rounded-xl text-[10px] font-semibold flex items-center justify-center gap-1 text-gray-500 hover:text-gray-700 transition-colors">
           Ver detalles →
         </Link>

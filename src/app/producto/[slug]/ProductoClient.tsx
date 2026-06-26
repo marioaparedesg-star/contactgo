@@ -460,9 +460,18 @@ export default function ProductoClient({ product, variants }: Props) {
         tipo: string
         timestamp: number
       }
-      // Solo válido 30 min y solo si el tipo de producto coincide
+      // Solo válido 30 min
       if (Date.now() - rx.timestamp > 30 * 60 * 1000) { sessionStorage.removeItem('cg_rx_pending'); return }
-      if (rx.tipo && rx.tipo !== tipo) return
+      // Aplicar si el tipo coincide O si es compatible (ej: tórico→multifocal_torico, esferico→torico)
+      const tiposCompatibles: Record<string, string[]> = {
+        esferico:        ['esferico','torico','multifocal','color'],
+        torico:          ['torico','multifocal_torico'],
+        multifocal:      ['multifocal','multifocal_torico'],
+        multifocal_torico:['torico','multifocal','multifocal_torico'],
+        color:           ['color','esferico'],
+      }
+      const compatible = !rx.tipo || tiposCompatibles[rx.tipo]?.includes(tipo) || rx.tipo === tipo
+      if (!compatible) return
 
       // Usar una sola vez — consumir
       sessionStorage.removeItem('cg_rx_pending')
