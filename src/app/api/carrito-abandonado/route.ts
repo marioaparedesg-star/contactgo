@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
   </td></tr>
   <tr><td style="background:#f9fafb;padding:12px 28px;border-top:1px solid #f3f4f6;text-align:center;">
     <p style="margin:0;font-size:11px;color:#9ca3af;">ContactGo · contactgo.net · Santo Domingo, RD</p>
-    <p style="margin:4px 0 0;font-size:10px;color:#d1d5db;">100% Originales · Tienda Especializada</p>
+    <p style="margin:4px 0 0;font-size:10px;color:#d1d5db;">100% Originales · Entrega en 24-48h · Pago Seguro</p>
   </td></tr>
 </table></td></tr></table>
 </body></html>`

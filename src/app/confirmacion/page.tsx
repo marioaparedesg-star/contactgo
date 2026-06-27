@@ -450,7 +450,7 @@ function ConfirmacionContent() {
         {items.some((i:any) => /acuvue|air optix|biofinity|clariti|proclear|bausch/i.test(i.nombre ?? '')) && (
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
             <p className="text-xs text-amber-700 leading-relaxed">
-              <strong>Recordatorio:</strong> Los lentes de contacto son dispositivos médicos. Consulta a tu optometrista si presentas molestias, enrojecimiento o visión borrosa con los lentes puestos.
+              <strong>Un detalle importante:</strong> Los lentes de contacto son dispositivos médicos. Si sientes molestias, enrojecimiento o visión borrosa al usarlos, retíralos y consulta a tu especialista.
             </p>
           </div>
         )}

@@ -320,7 +320,7 @@ export default function CartPage() {
                     <Tag className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
                     <input value={cuponInput} onChange={e => setCuponInput(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && aplicarCupon()}
-                      placeholder="Código de descuento"
+                      placeholder="¿Tienes un código? Úsalo aquí"
                       className="w-full pl-9 pr-3 py-2.5 border-2 border-gray-200 rounded-xl text-xs focus:outline-none focus:border-primary-500 transition-colors" />
                   </div>
                   <button onClick={aplicarCupon}

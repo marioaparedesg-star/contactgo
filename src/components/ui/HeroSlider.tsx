@@ -5,10 +5,10 @@ import Image from 'next/image'
 
 const SLIDES = [
   {
-    badge:      '🇩🇴 Entrega a domicilio en toda RD',
+    badge:      '🇩🇴 Entregamos en toda República Dominicana',
     title:      'Tus lentes,\nen tu puerta.',
     sub:        'Tus lentes en tu puerta mañana.',
-    subtitle:   'Los mismos lentes de siempre, entregados en 24h. Sin filas, sin citas, sin salir de casa.',
+    subtitle:   'Compra en minutos. Recibe en 24 horas. Sin filas, sin esperas, sin complicaciones.',
     cta:        { label: 'Ver mis lentes', href: '/catalogo' },
     cta2:       { label: 'Calcular mi receta gratis', href: '/receta' },
     accent:     '#0d6efd',
@@ -24,10 +24,10 @@ const SLIDES = [
     tag: null, precio: null,
   },
   {
-    badge:      '⭐ Más vendido en ContactGo',
+    badge:      '⭐ El más vendido',
     title:      'ACUVUE® Oasys®\nHYDRACLEAR® Plus',
     sub:        'Silicona hidrogel. Comodidad todo el día.',
-    subtitle:   'La tecnología más avanzada en lentes quincenales. Comodidad extrema todo el día.',
+    subtitle:   'Tecnología HydraGlyde® para ojos más cómodos todo el día. El lente quincenal más elegido en RD.',
     cta:        { label: 'Comprar ahora', href: '/producto/acuvue-oasys-lentes-contacto-silicona-hidrogel-dominicana' },
     cta2:       { label: 'Ver toda ACUVUE', href: '/catalogo?marca=acuvue' },
     accent:     '#2563eb',
@@ -43,7 +43,7 @@ const SLIDES = [
     badge:      '🎨 +12 colores disponibles',
     title:      'Cambia tu look\ncon colores.',
     sub:        'Con o sin graduación. Envío en 24h.',
-    subtitle:   'Con o sin graduación. Envío en 24h a toda la República Dominicana.',
+    subtitle:   'Transforma tu look sin visitas, sin complicaciones. Con o sin graduación. Entrega en 24h.',
     cta:        { label: 'Ver colores', href: '/catalogo?tipo=color' },
     cta2:       { label: 'Air Optix Colors', href: '/producto/air-optix-colors-lentes-contacto-color-dominicana' },
     accent:     '#7c3aed',
@@ -58,7 +58,7 @@ const SLIDES = [
     badge:      '💙 Lentes para astigmatismo',
     title:      'Visión nítida con\nastigmatismo.',
     sub:        'Estabilización avanzada. Disponible en RD.',
-    subtitle:   'Estabilización avanzada para una visión clara todo el día. Disponible en RD.',
+    subtitle:   'Diseñados para astigmatismo severo. Visión nítida desde el primer segundo. Disponibles hoy en RD.',
     cta:        { label: 'Ver tóricos', href: '/catalogo?tipo=torico' },
     cta2:       { label: 'Buscar con receta', href: '/receta' },
     accent:     '#0d9488',

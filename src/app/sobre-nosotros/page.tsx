@@ -8,15 +8,15 @@ import type { Metadata } from 'next'
 // canonical agregado
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/sobre-nosotros' },
-  title: 'Sobre Nosotros | ContactGo — Lentes de Contacto RD',
-  description: 'Conoce a ContactGo, la única tienda dominicana especializada 100% en lentes de contacto originales. Tienda especializada en lentes de contacto — ACUVUE, Alcon, CooperVision y Bausch+Lomb 100% originales.',
+  title: 'Nuestra Historia | ContactGo — La forma más fácil de comprar lentes en RD',
+  description: 'Conoce la historia detrás de ContactGo — por qué existimos, qué nos mueve y cómo hacemos que comprar lentes de contacto en República Dominicana sea tan fácil como pedir comida a domicilio.',
 }
 
 const VALORES = [
   { icon: '🏥', title: 'Especialización total', desc: 'Solo lentes de contacto. No somos una óptica genérica — somos expertos en una sola cosa y la hacemos muy bien.' },
-  { icon: '✅', title: '100% originales', desc: 'Cada producto proviene de distribuidores oficiales. Nunca imitaciones, nunca productos vencidos. Nunca imitaciones, nunca productos vencidos.' },
-  { icon: '🚚', title: 'Entrega en 24-48h', desc: 'Cubrimos Santo Domingo, Santiago y todo el país. Tu pedido sale el mismo día si ordenas antes de las 3pm.' },
-  { icon: '👁️', title: 'Soporte especializado', desc: 'Nuestro equipo conoce cada producto a fondo. Si tienes dudas sobre tu receta, te ayudamos antes de comprar.' },
+  { icon: '✅', title: 'Originales. Siempre.', desc: 'Cada caja llega sellada de fábrica. Nunca usados, nunca reempacados, nunca vencidos. Lo que ves es exactamente lo que recibes.' },
+  { icon: '🚀', title: 'Tu puerta, en 24-48h', desc: 'Pedido antes de las 3pm — sale hoy. Cubrimos Santo Domingo, Santiago, Punta Cana y todo el país. Sin excusas, sin demoras.' },
+  { icon: '💬', title: 'Alguien que realmente sabe', desc: 'Cuando escribes a ContactGo, alguien que entiende de lentes te responde. No un bot, no un guión. Ayuda real para tu receta.' },
 ]
 
 const MARCAS = [
@@ -27,9 +27,9 @@ const MARCAS = [
 ]
 
 const STATS = [
-  { valor: '4,200+', label: 'Lentes entregados' },
+  { valor: '4,200+', label: 'Pedidos cumplidos' },
   { valor: '36',     label: 'Productos originales' },
-  { valor: '4',      label: 'Marcas autorizadas' },
+  { valor: '4',      label: 'Marcas de nivel mundial' },
   { valor: '24-48h', label: 'Tiempo de entrega' },
 ]
 
@@ -44,7 +44,7 @@ export default function SobreNosotrosPage() {
           <div className="max-w-3xl mx-auto">
             <span className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-widest uppercase">La única tienda especializada en RD</span>
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-5 leading-tight">
-              Somos ContactGo
+              Por qué existimos
             </h1>
             <p className="text-primary-100 text-lg max-w-xl mx-auto leading-relaxed">
               Nacimos para resolver un problema real: conseguir lentes de contacto originales en República Dominicana era difícil, caro y lleno de incertidumbre. Lo cambiamos.

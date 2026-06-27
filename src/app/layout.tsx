@@ -12,7 +12,7 @@ import ScrollToTop from '@/components/ui/ScrollToTop'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.contactgo.net'),
-  title: 'ContactGo | Lentes de Contacto en RD',
+  title: 'ContactGo — Tus lentes. En tu puerta.',
   manifest: '/manifest.json',
 
 
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
     shortcut: '/favicon.ico',
   },
-  description: 'Compra lentes de contacto originales en RD. Acuvue, Air Optix, Biofinity y más. Envío 24-48h a Santo Domingo, Santiago y todo el país. Tóricos, multifocales y color.',
+  description: 'ContactGo — La forma más fácil de comprar lentes de contacto en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Productos 100% originales. Entrega en 24-48h a donde estés.',
   authors: [{ name: 'ContactGo', url: 'https://www.contactgo.net' }],
   creator: 'ContactGo',
   publisher: 'ContactGo',
@@ -39,16 +39,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_DO',
-    title: 'ContactGo — Lentes de Contacto en República Dominicana',
-    description: 'Compra lentes de contacto en RD con envío en 24-48h. Acuvue, Air Optix, FreshLook y más marcas premium.',
+    title: 'ContactGo — Tus lentes. En tu puerta.',
+    description: 'La forma más fácil de comprar lentes de contacto en RD. Originales, rápidos, a tu puerta.',
     url: 'https://www.contactgo.net',
     siteName: 'ContactGo',
     images: [{ url: '/og-1200x630.png', width: 1200, height: 630, alt: 'ContactGo — Lentes de Contacto RD' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ContactGo | Lentes de Contacto en RD',
-    description: 'Lentes de contacto con envío en 24-48h en República Dominicana.',
+    title: 'ContactGo — Tus lentes. En tu puerta.',
+    description: 'La forma más fácil de comprar lentes de contacto en RD. Originales, rápidos, a tu puerta.',
     images: ['https://www.contactgo.net/og-1200x630.png'],
   },
 }
@@ -72,7 +72,7 @@ const organizationSchema = {
   "url": "https://www.contactgo.net",
   "logo": "https://www.contactgo.net/og-1200x630.png",
   "image": "https://www.contactgo.net/og-1200x630.png",
-  "description": "Tienda online especializada en lentes de contacto y soluciones oftálmicas en República Dominicana. Entrega a domicilio en 24-48 horas.",
+  "description": "ContactGo es la forma más fácil de comprar lentes de contacto en República Dominicana. Productos 100% originales. Entrega en 24-48 horas a donde estés.",
   "telephone": "+18294728328",
   "email": "info@contactgo.net",
   "address": {

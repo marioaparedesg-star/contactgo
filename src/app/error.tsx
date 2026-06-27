@@ -19,7 +19,7 @@ export default function Error({
       <div className="text-center max-w-md">
         <div className="text-6xl font-bold text-primary-600 mb-4">500</div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Algo salió mal
+          Algo salió mal — ya lo estamos resolviendo
         </h1>
         <p className="text-gray-600 mb-8">
           Tuvimos un problema inesperado. Por favor intenta de nuevo o contáctanos.

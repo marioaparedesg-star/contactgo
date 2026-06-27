@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'ContactGo — Lentes de Contacto en República Dominicana | Envío 24-48h',
-  description: 'Compra lentes de contacto originales en RD. ACUVUE, Air Optix, Biofinity, FreshLook. Productos 100% Originales. Envío a domicilio en Santo Domingo, Santiago y todo el país.',
+  title: 'ContactGo — Tus lentes de contacto. En tu puerta. | República Dominicana',
+  description: 'ContactGo — La forma más rápida y sencilla de comprar lentes de contacto en RD. ACUVUE, Air Optix, Biofinity. 100% originales. Entrega en 24-48h a donde estés.',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   alternates: { canonical: 'https://www.contactgo.net' },
 }
@@ -93,10 +93,10 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
-                { icon: Truck,    title: 'Envío 24–48h',     desc: 'A todo el país',              color: 'text-blue-600',   bg: 'bg-blue-50' },
-                { icon: Shield,   title: 'Misma marca, mejor precio',  desc: 'Productos 100% Originales',  color: 'text-green-600',  bg: 'bg-green-50' },
-                { icon: Star,     title: `${ordersCount > 0 ? (ordersCount * 6 + 4200).toLocaleString() + '+' : '4,200+'} lentes`,  desc: 'Entregados en RD',        color: 'text-amber-500',  bg: 'bg-amber-50' },
-                { icon: Clock,    title: 'Soporte 24/7',     desc: 'WhatsApp y email',            color: 'text-purple-600', bg: 'bg-purple-50' },
+                { icon: Truck,    title: 'Entrega en 24-48h',  desc: 'A cualquier punto de RD',    color: 'text-blue-600',   bg: 'bg-blue-50' },
+                { icon: Shield,   title: '100% Originales',   desc: 'Sellados de fábrica',        color: 'text-green-600',  bg: 'bg-green-50' },
+                { icon: Star,     title: `${ordersCount > 0 ? (ordersCount * 6 + 4200).toLocaleString() + '+' : '4,200+'} pedidos`,  desc: 'Clientes satisfechos',   color: 'text-amber-500',  bg: 'bg-amber-50' },
+                { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
                 <div key={title} className="flex items-center gap-3">
                   <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center shrink-0`}>
@@ -173,10 +173,10 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
-              { label: 'Esféricos',    slug: 'esferico',   emoji: '👁️',  desc: 'Miopía e hipermetropía' },
-              { label: 'Tóricos',      slug: 'torico',     emoji: '🎯',  desc: 'Para astigmatismo' },
-              { label: 'Multifocales', slug: 'multifocal', emoji: '🔭',  desc: 'Para presbicia' },
-              { label: 'Color',        slug: 'color',      emoji: '🎨',  desc: 'Con y sin graduación' },
+              { label: 'Esféricos',    slug: 'esferico',   emoji: '👁️',  desc: 'Miopía e hipermetropía — lo más pedido' },
+              { label: 'Tóricos',      slug: 'torico',     emoji: '🎯',  desc: 'Visión nítida con astigmatismo' },
+              { label: 'Multifocales', slug: 'multifocal', emoji: '🔭',  desc: 'Para ver de cerca y de lejos' },
+              { label: 'Color',        slug: 'color',      emoji: '🎨',  desc: 'Cambia tu look, con o sin graduación' },
               { label: 'Soluciones',   slug: 'solucion',   emoji: '💧',  desc: 'Limpieza y cuidado', href: '/soluciones' },
               { label: 'Gotas',        slug: 'gota',       emoji: '💊',  desc: 'Lubricación ocular', href: '/gotas' },
             ].map(cat => (
@@ -299,7 +299,7 @@ export default async function HomePage() {
               </div>
               <h3 className="font-display text-2xl md:text-3xl font-black text-white mb-2">Recordatorio automático</h3>
               <p className="text-gray-400 max-w-md text-sm md:text-base">
-                Te avisamos cuando tus lentes estén por vencer. Un click y las tienes en camino. Con 10% de descuento.
+                Guardamos tu receta. Te avisamos cuando es hora de reponer. Tú solo confirmas — nosotros hacemos el resto. Con 10% de descuento en cada recompra.
               </p>
             </div>
             <a href="https://wa.me/18294728328?text=Hola%20ContactGo%2C%20quiero%20activar%20recordatorio%20de%20recompra"
