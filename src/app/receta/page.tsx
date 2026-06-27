@@ -177,7 +177,7 @@ export default function RecetaPage() {
             Convierte tu receta<br/>
             <span style={{ color: '#4ade80' }}>en tus lentes perfectos.</span>
           </h1>
-          <p className="relative text-white/60 text-sm mb-4">Ingresa los valores de tu receta · Resultado en segundos</p>
+          <p className="relative text-white/60 text-sm mb-4">Ingresa tu receta y encuentra tu lente perfecto en segundos</p>
           <div className="relative flex items-center justify-center flex-wrap gap-3">
             {[
               { icon: '✅', text: 'Gratis' },

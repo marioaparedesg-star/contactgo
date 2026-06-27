@@ -9,7 +9,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/sobre-nosotros' },
   title: 'Nuestra Historia | ContactGo — La forma más fácil de comprar lentes en RD',
-  description: 'Conoce la historia detrás de ContactGo — por qué existimos, qué nos mueve y cómo hacemos que comprar lentes de contacto en República Dominicana sea tan fácil como pedir comida a domicilio.',
+  description: 'ContactGo nació para hacer que comprar lentes de contacto en República Dominicana sea tan sencillo como pedir comida. Conoce nuestra historia y lo que nos mueve cada día.',
 }
 
 const VALORES = [
@@ -69,7 +69,7 @@ export default function SobreNosotrosPage() {
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Nuestra historia</h2>
           <div className="space-y-4 text-gray-600 leading-relaxed">
             <p>
-              ContactGo nació de una necesidad real: encontrar lentes de contacto de calidad en la República Dominicana era un proceso frustrante. Precios elevados, productos escasos, poca información y ninguna garantía de autenticidad.
+              ContactGo nació de una pregunta simple: ¿por qué comprar lentes de contacto tiene que ser tan complicado? Visitas innecesarias, poca disponibilidad y ninguna garantía de autenticidad. Había una mejor forma de hacerlo — y decidimos crearla.
             </p>
             <p>
               Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — 100% originales, adquiridos a través de canales oficiales de cada marca.
@@ -86,7 +86,7 @@ export default function SobreNosotrosPage() {
             <span className="text-4xl mb-4 block">🎯</span>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Nuestra misión</h2>
             <p className="text-gray-600 leading-relaxed text-lg">
-              Ser la plataforma líder de salud visual recurrente en República Dominicana — haciendo que conseguir lentes de contacto sea tan fácil, seguro y confiable como cualquier compra en línea en el mundo.
+              Hacer que cada dominicano pueda cuidar su salud visual sin complicaciones — con los mejores lentes del mundo, entregados en su puerta, de la manera más sencilla posible.
             </p>
           </div>
         </section>

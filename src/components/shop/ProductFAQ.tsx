@@ -43,7 +43,7 @@ const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
 
 const FAQS_GENERAL = [
   { q: '¿Hacen envíos a toda República Dominicana?', a: 'Sí. Santo Domingo y Santiago en 24-48h. Resto del país en 2-3 días hábiles. Los lentes tóricos tardan 20-30 días por fabricación a medida.' },
-  { q: '¿Los productos son 100% originales?', a: 'Sí. Todos nuestros productos son 100% originales, adquiridos a través de canales oficiales de las marcas. Cada caja viene sellada de fábrica y puede verificarse con el fabricante.' },
+  { q: '¿Los productos son 100% originales?', a: 'Sí. Todos los productos de ContactGo son 100% originales, sellados de fábrica y con código de autenticidad. Nunca vendemos imitaciones.' },
   { q: '¿Puedo devolver mi pedido?', a: 'Sí, en 30 días si el producto viene defectuoso o no es lo que pediste. Los lentes sin abrir y en su empaque original también son elegibles para devolución.' },
 ]
 

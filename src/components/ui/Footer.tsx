@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="flex flex-col gap-0.5">
             <span className="text-white font-bold text-base tracking-tight">ContactGo</span>
             {/* MEJORA-7: Ubicación física visible */}
-            <span className="text-gray-500 text-[10px]">Santo Domingo, República Dominicana</span>
+            <span className="text-gray-500 text-[10px]">La única tienda 100% especializada en lentes · RD</span>
             {/* MEJORA-10: Teléfono clickeable visible */}
             <a href="tel:+18294728328" className="text-green-400 text-[11px] font-semibold hover:text-green-300 transition-colors">
               📞 (829) 472-8328

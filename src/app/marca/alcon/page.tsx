@@ -13,7 +13,7 @@ export const metadata = {
   alternates: { canonical: 'https://www.contactgo.net/marca/alcon' },
   openGraph: {
     title: 'Lentes Alcon en RD | ContactGo',
-    description: 'Tienda especializada en productos Alcon en República Dominicana.',
+    description: 'ContactGo — Air Optix®, COLORS y soluciones Alcon originales en República Dominicana.',
     url: 'https://www.contactgo.net/marca/alcon',
     locale: 'es_DO',
     siteName: 'ContactGo',

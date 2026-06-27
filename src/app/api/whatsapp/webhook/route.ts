@@ -10,7 +10,7 @@ const RESPUESTAS: { keywords: string[]; respuesta: string }[] = [
     keywords: ['hola', 'buenas', 'buenos', 'hi', 'hello', 'buen dia', 'buen día'],
     respuesta: `👋 ¡Hola! Bienvenido a *ContactGo* 👁️
 
-Somos la tienda online de lentes de contacto en República Dominicana. ¿En qué podemos ayudarte?
+Somos la única tienda dominicana especializada 100% en lentes de contacto. ¿En qué podemos ayudarte hoy?
 
 Puedes preguntarme sobre:
 • 📦 *Productos* — ACUVUE, Bausch+Lomb, CooperVision, Alcon
@@ -199,12 +199,12 @@ function getAutoRespuesta(mensaje: string): string | null {
   // Respuesta genérica si no matchea ninguna keyword
   return `👋 ¡Hola! Soy el asistente de *ContactGo*.
 
-Recibí tu mensaje y un asesor te responderá pronto. Mientras tanto, puedes ver nuestro catálogo:
+Recibí tu mensaje. Un especialista en lentes de contacto te responderá en breve. Mientras tanto, puedes ver nuestro catálogo:
 https://www.contactgo.net/catalogo
 
 O si tienes una urgencia, llámanos al *(829) 472-8328*.
 
-¡Gracias por escribirnos! 😊`
+¡Gracias por contactar a ContactGo! 😊`
 }
 
 // Enviar mensaje por WhatsApp API

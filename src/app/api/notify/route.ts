@@ -29,11 +29,11 @@ const ESTADO_LABEL: Record<string, string> = {
 
 const ESTADO_MSG: Record<string, string> = {
   pendiente:  'Hemos recibido tu pedido y está pendiente de confirmación.',
-  confirmado: 'Tu pedido ha sido confirmado y está siendo procesado.',
+  confirmado: 'Tu pedido está confirmado. Lo estamos preparando para que llegue lo antes posible.',
   preparando: 'Estamos preparando tus lentes con mucho cuidado.',
-  enviado:    'Tu pedido está en camino. Te contactaremos al llegar.',
-  entregado:  '¡Tu pedido fue entregado! Esperamos que lo disfrutes.',
-  cancelado:  'Tu pedido fue cancelado. Si tienes dudas, contáctanos.',
+  enviado:    'Tus lentes están en camino. En poco tiempo los tendrás en tu puerta.',
+  entregado:  '¡Tus lentes han llegado! Esperamos que los disfrutes. Si tienes alguna duda, estamos aquí.',
+  cancelado:  'Tu pedido fue cancelado. Escríbenos y lo resolvemos de inmediato.',
 }
 
 function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: string): string {
@@ -132,7 +132,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
   <!-- SALUDO -->
   <tr><td style="padding:24px 32px 0;">
     <p style="margin:0;font-size:16px;color:#111;font-weight:700;">
-      ${isNuevo ? `¡Hola ${order.cliente_nombre?.split(' ')[0] ?? ''}, tu pedido está confirmado! 🎉` : `Actualización de tu pedido #${pedidoId}`}
+      ${isNuevo ? `¡Hola ${order.cliente_nombre?.split(' ')[0] ?? ''}! Tu pedido está confirmado 🎉` : `Actualización de tu pedido #${pedidoId}`}
     </p>
     <p style="margin:6px 0 0;font-size:13px;color:#6b7280;">
       ${isNuevo ? 'Hemos recibido tu pedido y estamos procesándolo. A continuación tu comprobante completo.' : estadoMsg}

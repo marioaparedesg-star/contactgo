@@ -44,7 +44,7 @@ function emailTemplate(
       <h2 style="color:#1a1a1a;font-size:20px;margin-bottom:8px;">${titulo}</h2>
       <p style="color:#555;font-size:15px;line-height:1.6;">${urgencia}</p>
       <div style="background:#f8faff;border:2px solid #0d6efd;border-radius:12px;padding:20px;margin:24px 0;text-align:center;">
-        <p style="color:#555;font-size:13px;margin:0 0 8px;">Tu cupón exclusivo de recompra:</p>
+        <p style="color:#555;font-size:13px;margin:0 0 8px;">Tu descuento de cliente frecuente:</p>
         <p style="color:#0d6efd;font-size:28px;font-weight:900;margin:0;letter-spacing:4px;">${cupon}</p>
         <p style="color:#0d6efd;font-size:14px;margin:6px 0 0;font-weight:bold;">${descuento}% de descuento en tu próxima orden</p>
       </div>
