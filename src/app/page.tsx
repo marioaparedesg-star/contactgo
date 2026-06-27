@@ -18,7 +18,7 @@ import type { Product } from '@/types'
 
 export const revalidate = 60
 
-async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount: number }> {
+async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount: number, precioOasys: number }> {
   const sb = createServerSupabaseClient()
   // CRÍTICO-1: count:'exact' forzaba dynamic (ƒ). Valor cosmético → hardcoded.
   // select:'*' traía 17MB de arrays SPH/CYL. Campos específicos reducen payload.
@@ -30,7 +30,19 @@ async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount
     .in('tipo', ['esferico','torico','multifocal','color'])
     .order('nombre', { ascending: true })
     .limit(8)
-  return { products: (data ?? []) as unknown as Product[], ordersCount: 95 }
+
+  // Precio real de ACUVUE Oasys para el HeroSlider — fuente única: Supabase
+  const { data: oasysData } = await sb.from('products')
+    .select('precio')
+    .eq('sku', 'AOASYS-6U')
+    .eq('activo', true)
+    .single()
+
+  return {
+    products: (data ?? []) as unknown as Product[],
+    ordersCount: 95,
+    precioOasys: oasysData ? Number(oasysData.precio) : 3875,
+  }
 }
 
 const SCHEMA_ORG = {
@@ -45,7 +57,7 @@ const SCHEMA_ORG = {
 }
 
 export default async function HomePage() {
-  const { products: featured, ordersCount } = await getFeaturedProducts()
+  const { products: featured, ordersCount, precioOasys } = await getFeaturedProducts()
 
   return (
     <>
@@ -54,7 +66,7 @@ export default async function HomePage() {
       <main id="main-content">
 
         {/* ── HERO ── */}
-        <HeroSlider lentesCount={ordersCount > 0 ? ordersCount * 6 + 4200 : 4200} />
+        <HeroSlider lentesCount={ordersCount > 0 ? ordersCount * 6 + 4200 : 4200} precioOasys={precioOasys} />
 
         {/* ── Buscador rápido — el cliente lo necesita en mobile ─────────── */}
         <section className="bg-white px-4 py-3 border-b border-gray-50 sticky top-14 z-30 shadow-sm">
@@ -268,8 +280,8 @@ export default async function HomePage() {
               <div className="flex flex-col items-center gap-3 shrink-0">
                 <div className="text-center bg-white rounded-2xl px-6 py-4 shadow-sm border border-blue-100">
                   <p className="text-xs text-gray-400 mb-1">Armamos tu kit personalizado</p>
-                  <p className="font-black text-2xl text-blue-700">Desde RD$4,270</p>
-                  <p className="text-xs text-green-600 font-bold mt-1">Ahorra RD$200 vs comprar por separado</p>
+                  <p className="font-black text-2xl text-blue-700">Desde RD${(precioOasys + 750).toLocaleString()}</p>
+                  <p className="text-xs text-green-600 font-bold mt-1">Lentes + solución + gotas en 1 envío</p>
                 </div>
                 <a
                   href={`https://wa.me/18294728328?text=${encodeURIComponent('Hola, me interesa el Starter Kit de lentes de contacto. ¿Pueden armarme uno con mis lentes y la solución?')}`}

@@ -36,7 +36,7 @@ const SLIDES = [
     image:      '/hero-oasys.png',
     imageAlt:   'ACUVUE Oasys con HYDRACLEAR Plus',
     tag:        '🔥 Más popular',
-    precio:     'RD$3,952',
+    precio:     'DYNAMIC_OASYS',
     stats:      null,
   },
   {
@@ -70,7 +70,7 @@ const SLIDES = [
   },
 ]
 
-export default function HeroSlider({ lentesCount = 4200 }: { lentesCount?: number }) {
+export default function HeroSlider({ lentesCount = 4200, precioOasys }: { lentesCount?: number, precioOasys?: number }) {
   const [current, setCurrent]             = useState(0)
   const [transitioning, setTransitioning] = useState(false)
   const [direction, setDirection]         = useState<'next'|'prev'>('next')
@@ -241,7 +241,7 @@ export default function HeroSlider({ lentesCount = 4200 }: { lentesCount?: numbe
             {/* Precio flotante si aplica */}
             {s.precio && (
               <div className="absolute bottom-2 right-[calc(50%-115px+8px)] bg-white/15 backdrop-blur-sm border border-white/20 text-white text-xs font-black px-2.5 py-1 rounded-full leading-none">
-                Desde {s.precio}
+                Desde {s.precio === 'DYNAMIC_OASYS' ? (precioOasys ? `RD$${Number(precioOasys).toLocaleString()}` : 'RD$3,875') : s.precio}
               </div>
             )}
           </div>
@@ -323,7 +323,9 @@ export default function HeroSlider({ lentesCount = 4200 }: { lentesCount?: numbe
                 {s.precio && (
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-white/45 text-xs">Desde</span>
-                    <span className="text-white font-black text-2xl">{s.precio}</span>
+                    <span className="text-white font-black text-2xl">
+                      {s.precio === 'DYNAMIC_OASYS' ? (precioOasys ? `RD$${Number(precioOasys).toLocaleString()}` : 'RD$3,875') : s.precio}
+                    </span>
                     <span className="text-white/45 text-xs">/ caja</span>
                   </div>
                 )}
