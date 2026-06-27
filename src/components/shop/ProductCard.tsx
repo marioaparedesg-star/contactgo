@@ -74,6 +74,7 @@ export default function ProductCard({ product, isBestseller }: Props) {
   return (
     <Link
       href={`/producto/${(product as any).slug || product.id}`}
+      scroll={true}
       className="card group flex flex-col overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:-translate-y-0.5"
     >
       {/* ── Imagen ── */}

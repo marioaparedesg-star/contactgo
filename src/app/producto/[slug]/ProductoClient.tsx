@@ -448,6 +448,11 @@ export default function ProductoClient({ product, variants }: Props) {
     isColor ? (!!color && !varianteSeleccionadaTieneStock()) : !varianteSeleccionadaTieneStock()
   )
 
+  // ── Scroll al top al montar el PDP — evita que Next.js conserve posición de scroll anterior ──
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
+  }, [product.id])
+
   // ── Analytics: view_item al cargar el producto ──────────────────────────
   // ── Pre-llenar receta desde la calculadora (/receta) ─────────────────────────
   useEffect(() => {
