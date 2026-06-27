@@ -113,11 +113,11 @@ export async function generateMetadata(
     description: desc,
     alternates: { canonical: url.startsWith("https://www.") ? url : url.replace("https://", "https://www.") },
     openGraph: {
+      type: 'website' as const,
       title: data.nombre,
       description: desc,
       url,
       images: (() => {
-      // Para productos de color: usar la primera imagen de color disponible como OG
       const colImgs = (data as any).imagenes_por_color as Record<string,string> | undefined
       const firstColorImg = colImgs && Object.values(colImgs)[0]
         ? `https://www.contactgo.net${Object.values(colImgs)[0]}`
@@ -127,18 +127,22 @@ export async function generateMetadata(
     })(),
       locale: 'es_DO',
       siteName: 'ContactGo',
-      type: 'website' as const, // Next.js Metadata type
-      // og:type product se maneja via JSON-LD Product schema
     },
     twitter: {
       card: 'summary_large_image',
-      title: data.nombre,
+      title: `${data.nombre} — RD$${Number(data.precio).toLocaleString()} | ContactGo`,
       description: desc,
       images: data.imagen_url ? [data.imagen_url] : ['https://www.contactgo.net/og-1200x630.png'],
     },
+    other: {
+      'product:price:amount': String(data.precio),
+      'product:price:currency': 'DOP',
+      'product:availability': (data.stock ?? 0) > 0 ? 'in stock' : 'out of stock',
+      'product:brand': data.marca ?? 'ContactGo',
+      'product:condition': 'new',
+    },
   }
 }
-
 export default async function ProductoPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {

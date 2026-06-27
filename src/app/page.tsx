@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'ContactGo — Tus lentes de contacto. En tu puerta. | República Dominicana',
+  title: 'ContactGo — Lentes de contacto originales en RD | Entrega 24h',
   description: 'ContactGo — La única tienda dominicana especializada 100% en lentes de contacto. ACUVUE, Air Optix, Biofinity originales. Recibe en 24-48h. Compra en minutos.',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   alternates: { canonical: 'https://www.contactgo.net' },
@@ -361,7 +361,7 @@ export default async function HomePage() {
           <div className="space-y-3">
             {[
               { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
-              { q: '¿Son 100% originales?', a: 'Sí. Sí, 100% originales y certificados. Cada producto viene sellado de fábrica con código de autenticidad verificable.' },
+              { q: '¿Son 100% originales?', a: 'Sí. Cada producto viene sellado de fábrica con código de autenticidad verificable. Nunca vendemos imitaciones.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados recomendamos tener una receta actualizada. Nuestra calculadora gratuita te ayuda a identificar el tipo correcto de lente. Para lentes de color sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },

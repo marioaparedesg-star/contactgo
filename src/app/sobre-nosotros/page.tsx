@@ -8,7 +8,7 @@ import type { Metadata } from 'next'
 // canonical agregado
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/sobre-nosotros' },
-  title: 'Nuestra Historia | ContactGo — La forma más fácil de comprar lentes en RD',
+  title: 'Sobre ContactGo — La tienda de lentes de contacto en RD',
   description: 'ContactGo nació para hacer que comprar lentes de contacto en República Dominicana sea tan sencillo como pedir comida. Conoce nuestra historia y lo que nos mueve cada día.',
 }
 
@@ -36,6 +36,33 @@ const STATS = [
 export default function SobreNosotrosPage() {
   return (
     <>
+
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ContactGo",
+        "url": "https://contactgo.net",
+        "logo": "https://www.contactgo.net/logo.png",
+        "description": "Tienda especializada en lentes de contacto originales en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Envío a domicilio en 24-48h.",
+        "foundingDate": "2026",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Santo Domingo",
+          "addressCountry": "DO"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+1-829-472-8328",
+          "contactType": "customer service",
+          "areaServed": "DO",
+          "availableLanguage": "Spanish"
+        },
+        "sameAs": [
+          "https://www.instagram.com/contactgord",
+          "https://www.facebook.com/contactgord"
+        ]
+      })}} />
       <Navbar />
       <main id="main-content" className="pb-20">
 
@@ -145,32 +172,6 @@ export default function SobreNosotrosPage() {
           </p>
         </section>
 
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "ContactGo",
-        "url": "https://contactgo.net",
-        "logo": "https://www.contactgo.net/logo.png",
-        "description": "Tienda especializada en lentes de contacto originales en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Envío a domicilio en 24-48h.",
-        "foundingDate": "2026",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Santo Domingo",
-          "addressCountry": "DO"
-        },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+1-829-472-8328",
-          "contactType": "customer service",
-          "areaServed": "DO",
-          "availableLanguage": "Spanish"
-        },
-        "sameAs": [
-          "https://www.instagram.com/contactgord",
-          "https://www.facebook.com/contactgord"
-        ]
-      })}} />
       </main>
       <Footer />
     </>

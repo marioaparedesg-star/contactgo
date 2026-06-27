@@ -357,7 +357,7 @@ export async function POST(req: NextRequest) {
 
     const subject = evento === 'nuevo_pedido'
       ? `✅ Pedido #${pedidoId} recibido — ContactGo`
-      : `📦 Tu pedido #${pedidoId} · ${estadoLabel} — ContactGo`
+      : `ContactGo · Tu pedido #${pedidoId} está ${estadoLabel} 👁️`
 
     // Email al cliente + log de entrega
     if (order.cliente_email) {

@@ -536,7 +536,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
     // ── Validación color ──────────────────────────────────────────────
     if (isColor && !color) {
-      toast.error('Selecciona el color del lente')
+      toast.error('¿Qué color quieres? Elige uno arriba 🎨')
       return false
     }
 
@@ -547,13 +547,13 @@ export default function ProductoClient({ product, variants }: Props) {
         precio_override: price, precio_original: precioBase,
         suscripcion: suscripcion ?? undefined,
       })
-      toast.success('¡Agregado al carrito! ✓')
+      toast.success('¡Perfecto! Lente agregado al carrito 🎉')
       return true
     }
 
     // ── Lentes: requieren selección de ojo ────────────────────────────
     if (!ojoMode) {
-      toast.error('¿Para cuántos ojos necesitas los lentes?')
+      toast.error('Indica si los lentes son para un ojo o para ambos')
       return false
     }
 
@@ -563,10 +563,10 @@ export default function ProductoClient({ product, variants }: Props) {
     const isUnSoloOjo  = ojoMode === 'OD' || ojoMode === 'OI'
 
     if (isAmbosIgual || isUnSoloOjo) {
-      if (!sph)  { toast.error('Selecciona tu graduación (SPH)'); return false }
-      if (needsToric && !cyl)  { toast.error('Selecciona el cilindro (CYL)'); return false }
-      if (needsToric && cyl && !axis) { toast.error('Selecciona el eje (AXIS)'); return false }
-      if (isMulti && !add)  { toast.error('Selecciona la adición (ADD)'); return false }
+      if (!sph)  { toast.error('Selecciona tu poder esférico — el primer número de tu receta'); return false }
+      if (needsToric && !cyl)  { toast.error('Selecciona el cilindro (CYL) — el segundo número de tu receta'); return false }
+      if (needsToric && cyl && !axis) { toast.error('Selecciona el eje — el tercer número de tu receta para astigmatismo'); return false }
+      if (isMulti && !add)  { toast.error('Selecciona la adición (ADD) — el último número de tu receta multifocal'); return false }
     }
 
     if (isAmbosDifer) {
@@ -575,10 +575,10 @@ export default function ProductoClient({ product, variants }: Props) {
         return false
       }
       if (needsToric) {
-        if (sph_od && !cyl_od) { toast.error('Falta el CYL del ojo derecho'); return false }
-        if (sph_oi && !cyl_oi) { toast.error('Falta el CYL del ojo izquierdo'); return false }
-        if (cyl_od && !axis_od) { toast.error('Falta el AXIS del ojo derecho'); return false }
-        if (cyl_oi && !axis_oi) { toast.error('Falta el AXIS del ojo izquierdo'); return false }
+        if (sph_od && !cyl_od) { toast.error('Falta el cilindro del ojo derecho (CYL)'); return false }
+        if (sph_oi && !cyl_oi) { toast.error('Falta el cilindro del ojo izquierdo (CYL)'); return false }
+        if (cyl_od && !axis_od) { toast.error('Falta el eje del ojo derecho (AXIS)'); return false }
+        if (cyl_oi && !axis_oi) { toast.error('Falta el eje del ojo izquierdo (AXIS)'); return false }
       }
     }
 
@@ -616,7 +616,7 @@ export default function ProductoClient({ product, variants }: Props) {
     }
 
     const ojoMsg = ojoMode === 'AMBOS' ? 'para ambos ojos' : ojoMode === 'OD' ? '— ojo derecho' : '— ojo izquierdo'
-    toast.success(`Agregado al carrito ${ojoMsg} ✓`)
+    toast.success(`¡Listo! ${ojoMsg} agregado al carrito 🛍️`)
     trackEcommerce('add_to_cart', {
       items: [{ item_id: product.id, item_name: product.nombre,
         item_brand: (product as any).marca ?? '',

@@ -405,7 +405,7 @@ export default function CartPage() {
               <Link href="/checkout"
                 onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
                 className="w-full btn-primary flex items-center justify-center gap-2 py-4 text-base font-black rounded-2xl">
-                Proceder al pago <ChevronRight className="w-5 h-5" />
+                Ir al pago · RD${tot.toLocaleString()} <ChevronRight className="w-5 h-5" />
               </Link>
 
               <p className="text-center text-[11px] text-gray-400">

@@ -81,6 +81,7 @@ export default function CheckoutPage() {
 
   const sub = subtotal()
   const envio = sub >= 8000 ? 0 : 200
+  const envioGratis = sub >= 8000
   const totalFinal = sub + envio - descuento
 
   const { register, handleSubmit, getValues, setValue, trigger, watch, formState: { errors } } = useForm<FormData>({
@@ -1037,8 +1038,13 @@ export default function CheckoutPage() {
                   </div>
 
                   {envio > 0 && sub > 0 && (
-                    <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2 text-[10px] text-amber-700 text-center font-medium">
-                      Agrega <strong>RD${(8000-sub).toLocaleString()}</strong> más para envío gratis 🚀
+                    <div className="bg-green-50 border border-green-200 rounded-xl px-3 py-2.5 text-xs text-green-700 text-center font-semibold flex items-center justify-center gap-1.5">
+                      🚀 Agrega <strong className="font-black">RD${(8000-sub).toLocaleString()}</strong> más y el envío es GRATIS
+                    </div>
+                  )}
+                  {envio === 0 && (
+                    <div className="bg-green-50 border border-green-200 rounded-xl px-3 py-2 text-xs text-green-700 text-center font-semibold">
+                      ✅ ¡Tu envío es gratis!
                     </div>
                   )}
 

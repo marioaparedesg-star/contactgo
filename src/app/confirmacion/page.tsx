@@ -215,7 +215,8 @@ function ConfirmacionContent() {
             <CheckCircle className="w-11 h-11 text-white" strokeWidth={1.5} />
           </div>
           <p className="text-green-200 text-sm font-medium mb-1">¡Todo listo!</p>
-          <h1 className="text-3xl font-black text-white mb-3">Pedido confirmado</h1>
+          <h1 className="text-3xl font-black text-white mb-1">Tus lentes están en camino</h1>
+          <p className="text-white/70 text-sm mb-3">Recibirás una confirmación por email y WhatsApp</p>
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur rounded-2xl px-5 py-2.5 border border-white/20">
             <span className="text-green-200 text-sm">Pedido</span>
             <span className="text-white font-black text-xl tracking-widest">#{pedidoId}</span>
