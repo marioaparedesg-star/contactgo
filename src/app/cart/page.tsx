@@ -401,27 +401,7 @@ export default function CartPage() {
                 </div>
               )}
 
-              {/* Captura email antes del checkout — recuperación de carrito */}
-              {!emailEnviado && !emailCapturado && (
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 space-y-2">
-                  <p className="text-xs font-bold text-gray-700">¿Tu email para confirmar el pedido?</p>
-                  <div className="flex gap-2">
-                    <input
-                      type="email"
-                      placeholder="tu@email.com"
-                      className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-primary-400"
-                      value={emailCapturado}
-                      onChange={e => setEmailCapturado(e.target.value)}
-                      onBlur={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
-                    />
-                    <button
-                      onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold px-3 py-2 rounded-xl transition-colors">
-                      ✓
-                    </button>
-                  </div>
-                </div>
-              )}
+              {/* Email capture movido aquí — captura discreta en el blur del CTA, no antes */}
               <Link href="/checkout"
                 onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
                 className="w-full btn-primary flex items-center justify-center gap-2 py-4 text-base font-black rounded-2xl">

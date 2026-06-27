@@ -457,6 +457,27 @@ export default function CheckoutPage() {
               <button onClick={handleAuth} disabled={authLoading} className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-60">
                 {authLoading ? 'Procesando...' : authMode === 'register' ? 'Crear cuenta y continuar' : 'Entrar y continuar'}
               </button>
+              {/* Magic Link — F7 UX FIX: sin contraseña para usuarios que no recuerdan */}
+              {authMode === 'login' && (
+                <button
+                  onClick={async () => {
+                    if (!authEmail) { setAuthMsg('Ingresa tu email primero'); return }
+                    setAuthLoading(true)
+                    const sb = createClient()
+                    const { error } = await sb.auth.signInWithOtp({
+                      email: authEmail,
+                      options: { emailRedirectTo: `${window.location.origin}/auth/callback?redirect=/checkout` }
+                    })
+                    setAuthLoading(false)
+                    if (error) { setAuthMsg('Error al enviar el enlace'); return }
+                    setAuthMsg('✅ Enlace enviado a tu email. Ábrelo para entrar sin contraseña.')
+                  }}
+                  disabled={authLoading}
+                  className="w-full text-xs text-primary-600 hover:text-primary-700 font-semibold py-2 border border-primary-100 rounded-xl hover:bg-primary-50 transition-colors"
+                >
+                  ✉️ Entrar sin contraseña (link al email)
+                </button>
+              )}
               <button onClick={() => setShowAuthModal(false)} className="w-full text-sm text-gray-400 hover:text-gray-600 py-1">Cancelar</button>
             </div>
           </div>

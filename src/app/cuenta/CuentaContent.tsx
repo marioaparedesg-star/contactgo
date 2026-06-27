@@ -841,6 +841,45 @@ export default function CuentaPage() {
                   </div>
                   <span className={"px-3 py-1 rounded-full text-xs font-bold " + (ESTADO[p.estado]||'bg-gray-50 text-gray-600')}>{p.estado}</span>
                 </div>
+
+                {/* Timeline visual de progreso — F5 UX FIX */}
+                {p.pago_estado === 'pagado' && (() => {
+                  const PASOS = [
+                    { id: 'confirmado', label: 'Confirmado', icon: '✓' },
+                    { id: 'preparando', label: 'Preparando', icon: '📦' },
+                    { id: 'enviado',    label: 'En camino',  icon: '🚀' },
+                    { id: 'entregado',  label: 'Entregado',  icon: '🏠' },
+                  ]
+                  const estadoIdx = PASOS.findIndex(paso =>
+                    paso.id === p.estado ||
+                    (p.estado === 'pendiente' && paso.id === 'confirmado')
+                  )
+                  const activeIdx = Math.max(0, estadoIdx)
+                  return (
+                    <div className="flex items-center gap-0 mb-3">
+                      {PASOS.map((paso, i) => (
+                        <div key={paso.id} className="flex items-center flex-1">
+                          <div className="flex flex-col items-center flex-1">
+                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all ${
+                              i <= activeIdx
+                                ? 'bg-primary-600 text-white'
+                                : 'bg-gray-100 text-gray-300'
+                            }`}>
+                              {i <= activeIdx ? paso.icon : i + 1}
+                            </div>
+                            <p className={`text-[9px] mt-1 font-medium ${i <= activeIdx ? 'text-primary-600' : 'text-gray-300'}`}>
+                              {paso.label}
+                            </p>
+                          </div>
+                          {i < PASOS.length - 1 && (
+                            <div className={`h-0.5 flex-1 mb-3 ${i < activeIdx ? 'bg-primary-400' : 'bg-gray-100'}`} />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )
+                })()}
+
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                   <span className="text-primary-600 font-bold text-lg">RD${(p.total||0).toLocaleString()}</span>
                   <div className="flex items-center gap-2">
@@ -848,7 +887,7 @@ export default function CuentaPage() {
                       href={`/pedido/${p.numero_orden}`}
                       onClick={e => e.stopPropagation()}
                       className="text-xs border border-primary-200 text-primary-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-primary-50 transition-colors">
-                      {p.pago_estado === 'pagado' ? '📦 Seguir pedido' : '👁️ Ver pedido'}
+                      {p.pago_estado === 'pagado' ? '📦 Ver detalles' : '👁️ Ver pedido'}
                     </a>
                     {p.pago_estado === 'pagado' && (
                       <button

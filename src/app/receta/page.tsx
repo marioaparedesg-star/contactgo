@@ -82,7 +82,7 @@ export default function RecetaPage() {
       oi: { sph: parseN(oi.sph) ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
     }
     setPendingRx(rx)
-    if (!leadEmail) { setShowLead(true); return }
+    // UX FIX F4: Mostrar resultados INMEDIATAMENTE. Pedir email DESPUÉS como paso opcional.
     await ejecutarCalculo(rx)
   }
 
@@ -90,25 +90,36 @@ export default function RecetaPage() {
     const conv = convertGlassesToContacts(rx); setResult(conv); setShowLead(false); setCartAdded(null)
     await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
+    // Guardar receta como lead anónimo (sin bloquear)
+    try {
+      createClient().from('calculator_leads').insert({
+        nombre: null, email: null,
+        od_sph: rx.od.sph, od_cyl: rx.od.cyl, od_axis: rx.od.axis,
+        oi_sph: rx.oi.sph, oi_cyl: rx.oi.cyl, oi_axis: rx.oi.axis,
+        tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
+      }).then(() => {})
+    } catch {}
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
   }
 
+  // Lead capture ahora es POST-resultado (opcional, no bloqueante)
   const handleLeadSubmit = async () => {
-    if (!pendingRx) return
+    if (!pendingRx || !leadEmail) return
     const conv = convertGlassesToContacts(pendingRx)
     try {
-      createClient().from('calculator_leads').insert({
-        nombre: leadNombre || null, email: leadEmail || null,
+      createClient().from('calculator_leads').upsert({
+        nombre: leadNombre || null, email: leadEmail,
         od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
         oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
         tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
-      }).then(() => {})
+      }, { onConflict: 'email' }).then(() => {})
       trackEvento('lead_captured', { tipo_receta: conv.tipo })
+      setShowLead(false)
+      toast.success('¡Receta guardada! Te la enviamos por email.')
     } catch {}
-    await ejecutarCalculo(pendingRx)
   }
 
-  const skipLead = () => { if (pendingRx) ejecutarCalculo(pendingRx) }
+  const skipLead = () => { setShowLead(false) }
   const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null) }
 
   // ── Agregar al carrito DIRECTO (para esférico y color) ────────────────────
@@ -193,26 +204,26 @@ export default function RecetaPage() {
           </div>
         </div>
 
-        {/* Lead modal */}
-        {showLead && (
+        {/* Lead modal — aparece DESPUÉS de ver los resultados, nunca antes */}
+        {showLead && result && (
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
               <div className="text-center mb-5">
                 <div className="w-12 h-12 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-3"><Mail className="w-6 h-6 text-primary-600" /></div>
-                <h3 className="font-black text-gray-900 text-lg">¡Casi listo!</h3>
-                <p className="text-xs text-gray-500 mt-1">Guarda tu receta y recibe descuentos personalizados</p>
+                <h3 className="font-black text-gray-900 text-lg">¿Guardamos tu receta?</h3>
+                <p className="text-xs text-gray-500 mt-1">Te la enviamos por email y te avisamos cuando sea hora de reponer</p>
               </div>
               <div className="space-y-3 mb-4">
-                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre (opcional)"
+                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Tu nombre (opcional)"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-400" />
                 <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Tu correo electrónico"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-400" />
               </div>
               <button onClick={handleLeadSubmit} className="w-full btn-primary py-3 font-black rounded-xl text-sm mb-2">
-                Ver mis productos recomendados →
+                Guardar mi receta →
               </button>
               <button onClick={skipLead} className="w-full text-xs text-gray-400 py-2 hover:text-gray-600">
-                Continuar sin guardar
+                No, gracias
               </button>
             </div>
           </div>
@@ -318,6 +329,17 @@ export default function RecetaPage() {
 
               {/* WhatsApp */}
               <WhatsAppCard result={result} buildMsg={buildWA}/>
+
+              {/* Guardar receta — CTA opcional post-resultado */}
+              {!showLead && (
+                <button
+                  onClick={() => setShowLead(true)}
+                  className="w-full flex items-center justify-center gap-2 border border-dashed border-gray-200 rounded-2xl py-3 text-xs text-gray-400 hover:border-primary-300 hover:text-primary-600 transition-all"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  Guardar mi receta por email para la próxima vez
+                </button>
+              )}
 
             </div>
           )}
