@@ -24,6 +24,11 @@ export default function Page() {
     <>
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-12 pb-24">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
+          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
+          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <span className="text-gray-600">cuanto-duran-lentes-contacto</span>
+        </div>
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Guías</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">¿Cuánto duran los lentes de contacto?</h1>

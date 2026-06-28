@@ -1,538 +1,251 @@
 export const revalidate = 3600
 
-import Link from 'next/link'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import { promises as fs } from 'fs'
-import path from 'path'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  alternates: { canonical: 'https://www.contactgo.net/blog' },
   title: 'Blog de lentes de contacto en RD — ContactGo',
-  description: 'Guías, comparativas, precios y consejos sobre lentes de contacto en República Dominicana. ACUVUE, Biofinity, Air Optix y más.',
+  description: 'Guías, precios, comparativas y consejos sobre lentes de contacto en República Dominicana. ACUVUE, Biofinity, Air Optix y más. Actualizado 2026.',
+  alternates: { canonical: 'https://www.contactgo.net/blog' },
   openGraph: {
-    title: 'Blog ContactGo — Guías de lentes de contacto en RD',
-    description: 'Guías, comparativas y precios de lentes de contacto en República Dominicana.',
+    type: 'website',
+    title: 'Blog ContactGo — Lentes de contacto en República Dominicana',
+    description: 'La mayor biblioteca de artículos sobre lentes de contacto en RD. Precios, guías, comparativas y consejos especializados.',
     url: 'https://www.contactgo.net/blog',
     siteName: 'ContactGo',
     locale: 'es_DO',
-    type: 'website',
+    images: [{ url: 'https://www.contactgo.net/og-blog.webp', width: 1200, height: 630, alt: 'Blog ContactGo — Lentes de contacto en RD' }],
   },
 }
 
-// ═══════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 // REGISTRO COMPLETO DE ARTÍCULOS
-// Agregar aquí cada artículo nuevo — el índice se actualiza solo
-// ═══════════════════════════════════════════════════════════════════
-const POSTS: {
-  slug: string
-  titulo: string
-  descripcion: string
-  emoji: string
-  categoria: string
-  tiempo: string
-  fecha: string
-  destacado?: boolean
-}[] = [
-  // ── PRECIOS — INTENCIÓN DE COMPRA ─────────────────────────────────
-  {
-    slug: 'acuvue-oasys-precio-republica-dominicana',
-    titulo: 'ACUVUE Oasys precio en República Dominicana 2026',
-    descripcion: 'Precio actual del ACUVUE Oasys en RD. Esférico, Astigmatism y Multifocal. Entrega 24-48h. Originales J&J.',
-    emoji: '💰', categoria: 'Precios', tiempo: '5 min', fecha: '2026-06-01', destacado: true,
-  },
-  {
-    slug: 'air-optix-hydraglyde-precio-republica-dominicana',
-    titulo: 'Air Optix HydraGlyde precio en RD 2026',
-    descripcion: 'Precio del Air Optix plus HydraGlyde en República Dominicana. Desde RD$4,375. Entrega 24-48h. Originales Alcon.',
-    emoji: '💰', categoria: 'Precios', tiempo: '6 min', fecha: '2026-06-15', destacado: true,
-  },
-  {
-    slug: 'biofinity-precio-republica-dominicana',
-    titulo: 'Biofinity precio en República Dominicana 2026',
-    descripcion: 'Todos los precios de la línea Biofinity en RD: Esférico, XR, Toric, XR Toric y Multifocal. CooperVision originales.',
-    emoji: '💰', categoria: 'Precios', tiempo: '7 min', fecha: '2026-06-15', destacado: true,
-  },
-  {
-    slug: 'acuvue-oasys-for-astigmatism-precio-rd',
-    titulo: 'ACUVUE Oasys for Astigmatism precio RD 2026',
-    descripcion: 'Precio de ACUVUE Oasys for Astigmatism y 1-DAY Moist for Astigmatism en RD. Desde RD$6,250. Entrega 24h.',
-    emoji: '💰', categoria: 'Precios', tiempo: '6 min', fecha: '2026-06-15', destacado: true,
-  },
-  {
-    slug: 'cuanto-cuestan-lentes-contacto-rd',
-    titulo: '¿Cuánto cuestan los lentes de contacto en RD 2026?',
-    descripcion: 'Guía completa de precios de todas las marcas en República Dominicana. ACUVUE, Biofinity, Air Optix y más.',
-    emoji: '📊', categoria: 'Precios', tiempo: '6 min', fecha: '2026-01-15',
-  },
-  // ── COMPRA ONLINE ──────────────────────────────────────────────────
-  {
-    slug: 'comprar-lentes-contacto-online-republica-dominicana',
-    titulo: 'Comprar lentes de contacto online en RD — Guía 2026',
-    descripcion: 'Cómo comprar lentes de contacto por internet en RD de forma segura. Originales, entrega 24-48h y pago con AZUL.',
-    emoji: '🛒', categoria: 'Compra', tiempo: '8 min', fecha: '2026-06-15', destacado: true,
-  },
-  {
-    slug: 'donde-comprar-lentes-contacto-santo-domingo',
-    titulo: 'Dónde comprar lentes de contacto en Santo Domingo 2026',
-    descripcion: 'Opciones para comprar lentes de contacto originales en Santo Domingo. Entrega a domicilio en 24-48h.',
-    emoji: '📍', categoria: 'Compra', tiempo: '8 min', fecha: '2026-06-01',
-  },
-  // ── COMPARATIVAS ───────────────────────────────────────────────────
-  {
-    slug: 'biofinity-vs-acuvue-comparacion',
-    titulo: 'Biofinity vs ACUVUE Oasys — ¿Cuál es mejor en RD?',
-    descripcion: 'Comparativa completa: precio, oxígeno, hidratación y disponibilidad de las dos marcas más vendidas en República Dominicana.',
-    emoji: '⚖️', categoria: 'Comparativas', tiempo: '7 min', fecha: '2026-05-10',
-  },
-  {
-    slug: 'lentes-diarios-vs-mensuales',
-    titulo: 'Lentes diarios vs mensuales — ¿Cuál elegir en RD 2026?',
-    descripcion: 'Comparativa completa: precio por día, higiene, comodidad y cuál tipo conviene según tu estilo de vida.',
-    emoji: '🔄', categoria: 'Comparativas', tiempo: '7 min', fecha: '2026-04-20',
-  },
-  // ── GUÍAS PRINCIPIANTES ────────────────────────────────────────────
-  {
-    slug: 'que-son-los-lentes-de-contacto',
-    titulo: '¿Qué son los lentes de contacto? Guía completa 2026',
-    descripcion: 'Todo sobre los lentes de contacto: qué son, tipos, materiales y cómo funcionan. La guía más completa en español.',
-    emoji: '👁️', categoria: 'Guías', tiempo: '12 min', fecha: '2026-06-01',
-  },
-  {
-    slug: 'como-usar-lentes-de-contacto-primera-vez',
-    titulo: 'Cómo usar lentes de contacto por primera vez — Guía 2026',
-    descripcion: 'Guía paso a paso: cómo ponerse, quitarse y cuidar los lentes de contacto la primera vez. Para principiantes.',
-    emoji: '🎯', categoria: 'Guías', tiempo: '10 min', fecha: '2026-06-01',
-  },
-  {
-    slug: 'primeros-pasos-lentes-contacto-rd',
-    titulo: 'Primeros pasos con lentes de contacto en República Dominicana',
-    descripcion: 'Todo lo que necesitas saber antes de comprar tu primer par de lentes de contacto en RD.',
-    emoji: '🌟', categoria: 'Guías', tiempo: '7 min', fecha: '2026-03-01',
-  },
-  {
-    slug: 'como-poner-lentes-de-contacto',
-    titulo: 'Cómo poner y quitar lentes de contacto paso a paso',
-    descripcion: 'Tutorial completo para principiantes. Técnica correcta, errores comunes y consejos de especialistas.',
-    emoji: '🤲', categoria: 'Guías', tiempo: '4 min', fecha: '2026-02-15',
-  },
-  {
-    slug: 'tipos-de-lentes-de-contacto',
-    titulo: 'Tipos de lentes de contacto — ¿Cuál es el correcto para ti?',
-    descripcion: 'Diferencias entre esféricos, tóricos, multifocales y de color. Cómo elegir según tu diagnóstico.',
-    emoji: '🔍', categoria: 'Educación', tiempo: '5 min', fecha: '2026-02-01',
-  },
-  {
-    slug: 'como-leer-receta-optica-rd',
-    titulo: 'Cómo leer tu receta óptica — Guía visual completa',
-    descripcion: 'SPH, CYL, AXIS, ADD, BC, DIA... qué significa cada valor de tu prescripción. En español simple.',
-    emoji: '📋', categoria: 'Guías', tiempo: '5 min', fecha: '2026-01-20',
-  },
-  // ── SALUD OCULAR ───────────────────────────────────────────────────
-  {
-    slug: 'dormir-con-lentes-de-contacto-riesgos',
-    titulo: 'Dormir con lentes de contacto: riesgos reales 2026',
-    descripcion: 'Los peligros médicos de dormir con lentes puestos. Qué hacer si se te olvidó quitártelos. Guía médica.',
-    emoji: '⚠️', categoria: 'Salud ocular', tiempo: '9 min', fecha: '2026-06-01',
-  },
-  {
-    slug: 'dormir-con-lentes-contacto',
-    titulo: '¿Puedo dormir con lentes de contacto? Riesgos reales',
-    descripcion: 'Todo sobre los riesgos de dormir con lentes de contacto y qué hacer si te quedaste dormido con ellos.',
-    emoji: '😴', categoria: 'Salud ocular', tiempo: '5 min', fecha: '2026-01-10',
-  },
-  {
-    slug: 'ojos-secos-lentes-contacto',
-    titulo: 'Ojos secos y lentes de contacto — Soluciones reales',
-    descripcion: '¿Sientes sequedad con tus lentes? Los mejores lentes y gotas para ojos secos disponibles en RD.',
-    emoji: '💧', categoria: 'Salud ocular', tiempo: '5 min', fecha: '2026-03-15',
-  },
-  // ── CATEGORÍAS ESPECÍFICAS ─────────────────────────────────────────
-  {
-    slug: 'lentes-contacto-para-astigmatismo',
-    titulo: 'Lentes para astigmatismo en RD — Precios y marcas 2026',
-    descripcion: 'Guía completa de lentes tóricos en República Dominicana. ACUVUE, Biofinity Toric, clariti y más con precios.',
-    emoji: '🎯', categoria: 'Astigmatismo', tiempo: '8 min', fecha: '2026-05-01',
-  },
-  {
-    slug: 'lentes-de-contacto-para-astigmatismo-rd',
-    titulo: 'Lentes de contacto para astigmatismo en República Dominicana',
-    descripcion: 'Guía de lentes tóricos en RD: cómo funcionan, marcas disponibles y por qué son diferentes a los normales.',
-    emoji: '🎯', categoria: 'Astigmatismo', tiempo: '6 min', fecha: '2026-02-20',
-  },
-  {
-    slug: 'lentes-multifocales-presbicia-rd',
-    titulo: 'Lentes multifocales para presbicia en RD — Guía 2026',
-    descripcion: 'Todo sobre lentes de contacto multifocales en República Dominicana. Biofinity Multi, ACUVUE Multi, Proclear.',
-    emoji: '🔭', categoria: 'Presbicia', tiempo: '6 min', fecha: '2026-03-20',
-  },
-  {
-    slug: 'lentes-contacto-colores-rd',
-    titulo: 'Lentes de contacto de colores en República Dominicana',
-    descripcion: 'Air Optix Colors, Lunare — con y sin graduación. Los colores más populares y cómo elegir el tuyo.',
-    emoji: '🎨', categoria: 'Color', tiempo: '4 min', fecha: '2026-04-01',
-  },
-  {
-    slug: 'lentes-contacto-ninos-adolescentes-rd',
-    titulo: 'Lentes de contacto para niños y adolescentes en RD',
-    descripcion: 'Guía para padres: edad recomendada, tipos de lentes para jóvenes y reglas de uso seguro.',
-    emoji: '👶', categoria: 'Guías', tiempo: '7 min', fecha: '2026-04-15',
-  },
+// Añadir cada artículo nuevo aquí → aparece automático
+// ═══════════════════════════════════════════════════════════
+const POSTS = [
+  // ── INTENCIÓN DE COMPRA — PRECIOS ─────────────────────────────────────────
+  { slug: 'acuvue-oasys-precio-republica-dominicana', titulo: 'ACUVUE Oasys precio en República Dominicana 2026', desc: 'Precio actualizado de ACUVUE Oasys, Astigmatism y Multifocal en RD. Desde RD$3,875. Entrega 24-48h.', emoji: '💰', cat: 'Precios', mins: 5, fecha: '2026-06-01', hot: true },
+  { slug: 'air-optix-hydraglyde-precio-republica-dominicana', titulo: 'Air Optix HydraGlyde precio en RD 2026', desc: 'Precio actual de Air Optix plus HydraGlyde en RD. Desde RD$4,375. Originales Alcon. Entrega 24-48h.', emoji: '💰', cat: 'Precios', mins: 6, fecha: '2026-06-15', hot: true },
+  { slug: 'biofinity-precio-republica-dominicana', titulo: 'Biofinity precio en República Dominicana 2026', desc: 'Toda la línea Biofinity en RD: Esférico, Toric, XR, Multifocal. Desde RD$4,750. CooperVision originales.', emoji: '💰', cat: 'Precios', mins: 7, fecha: '2026-06-15', hot: true },
+  { slug: 'acuvue-oasys-for-astigmatism-precio-rd', titulo: 'ACUVUE Oasys for Astigmatism precio RD 2026', desc: 'RD$6,250 la caja de 6. También 1-DAY Moist for Astigmatism disponible. J&J originales. Entrega 24h.', emoji: '💰', cat: 'Precios', mins: 6, fecha: '2026-06-15', hot: true },
+  { slug: 'lentes-astigmatismo-precio-republica-dominicana', titulo: 'Lentes para astigmatismo — Todos los precios en RD 2026', desc: 'Comparativa de precios de todos los lentes tóricos disponibles en RD. ACUVUE, Biofinity, clariti, Avaira.', emoji: '🎯', cat: 'Precios', mins: 8, fecha: '2026-06-20', hot: true },
+  { slug: 'lentes-multifocales-precio-republica-dominicana', titulo: 'Lentes multifocales precio en República Dominicana 2026', desc: 'Todos los multifocales disponibles en RD con precio. Biofinity, ACUVUE, Air Optix, Proclear. Desde RD$4,100.', emoji: '🔭', cat: 'Precios', mins: 8, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-colores-precio-republica-dominicana', titulo: 'Lentes de colores precio en RD 2026', desc: 'Air Optix Colors y Lunare precio en RD. Con y sin graduación. Desde RD$2,250. 12 colores disponibles.', emoji: '🎨', cat: 'Precios', mins: 6, fecha: '2026-06-20', hot: true },
+  { slug: 'bausch-lomb-ultra-precio-republica-dominicana', titulo: 'Bausch+Lomb ULTRA precio en RD 2026', desc: 'BL ULTRA esférico RD$4,500 · Astigmatism RD$4,000 · Presbyopia RD$4,100. Biotrue ONEday RD$3,500.', emoji: '💰', cat: 'Precios', mins: 6, fecha: '2026-06-20' },
+  { slug: 'clariti-1-day-precio-republica-dominicana', titulo: 'clariti 1 day precio en República Dominicana 2026', desc: 'clariti 1 day esférico RD$4,375 · tórico RD$5,750 · multifocal RD$6,000. CooperVision. Entrega 24-48h.', emoji: '💰', cat: 'Precios', mins: 5, fecha: '2026-06-20' },
+  { slug: 'acuvue-moist-1-day-precio-republica-dominicana', titulo: '1-DAY ACUVUE Moist precio en RD 2026', desc: '1-DAY ACUVUE Moist 30u RD$3,875. Moist for Astigmatism RD$6,250. J&J originales. Entrega en 24h.', emoji: '💰', cat: 'Precios', mins: 5, fecha: '2026-06-20' },
+  { slug: 'opti-free-puremoist-precio-republica-dominicana', titulo: 'Opti-Free Puremoist precio en RD 2026', desc: 'Opti-Free 90ml RD$750 · 300ml RD$1,450. La solución multipropósito de Alcon. Entrega 24-48h.', emoji: '🧴', cat: 'Soluciones', mins: 5, fecha: '2026-06-20' },
+  { slug: 'cuanto-cuestan-lentes-contacto-rd', titulo: '¿Cuánto cuestan los lentes de contacto en RD? Guía 2026', desc: 'Guía completa de precios de todas las marcas en República Dominicana. ACUVUE, Biofinity, Air Optix y más.', emoji: '📊', cat: 'Precios', mins: 6, fecha: '2026-01-15' },
 
-  // ── PRECIOS INTENCIÓN DE COMPRA — Sprint 2 ────────────────────────────────
-  {
-    slug: 'lentes-contacto-colores-precio-republica-dominicana',
-    titulo: 'Lentes de contacto de colores precio en RD 2026',
-    descripcion: 'Air Optix Colors y Lunare precio en RD. Con y sin graduación. Desde RD$2,250. Entrega 24-48h.',
-    emoji: '🎨', categoria: 'Precios', tiempo: '6 min', fecha: '2026-06-20', destacado: true,
-  },
-  {
-    slug: 'lentes-astigmatismo-precio-republica-dominicana',
-    titulo: 'Lentes para astigmatismo precio en RD 2026 — Guía completa',
-    descripcion: 'Todos los lentes tóricos con precio en RD. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,000.',
-    emoji: '🎯', categoria: 'Astigmatismo', tiempo: '8 min', fecha: '2026-06-20', destacado: true,
-  },
-  {
-    slug: 'lentes-multifocales-precio-republica-dominicana',
-    titulo: 'Lentes multifocales precio en República Dominicana 2026',
-    descripcion: 'Todos los multifocales con precio en RD. Biofinity, ACUVUE, Air Optix, Proclear. Desde RD$4,100.',
-    emoji: '🔭', categoria: 'Presbicia', tiempo: '8 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'bausch-lomb-ultra-precio-republica-dominicana',
-    titulo: 'Bausch+Lomb ULTRA precio en República Dominicana 2026',
-    descripcion: 'ULTRA esférico RD$4,500 · Astigmatism RD$4,000 · Presbyopia RD$4,100. Originales B+L. Entrega 24h.',
-    emoji: '💰', categoria: 'Precios', tiempo: '6 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'clariti-1-day-precio-republica-dominicana',
-    titulo: 'clariti 1 day precio en República Dominicana 2026',
-    descripcion: 'clariti 1 day esférico RD$4,375 · tórico RD$5,750 · multifocal RD$6,000. CooperVision originales.',
-    emoji: '💰', categoria: 'Precios', tiempo: '5 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'acuvue-moist-1-day-precio-republica-dominicana',
-    titulo: '1-DAY ACUVUE Moist precio en República Dominicana 2026',
-    descripcion: '1-DAY ACUVUE Moist 30u RD$3,875. Moist for Astigmatism RD$6,250. J&J originales. Entrega 24h.',
-    emoji: '💰', categoria: 'Precios', tiempo: '5 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'opti-free-puremoist-precio-republica-dominicana',
-    titulo: 'Opti-Free Puremoist precio en República Dominicana 2026',
-    descripcion: 'Opti-Free 90ml RD$750 · 300ml RD$1,450. La mejor solución multipropósito. Entrega 24-48h en RD.',
-    emoji: '🧴', categoria: 'Soluciones', tiempo: '5 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'acuvue-oasys-vs-air-optix-hydraglyde',
-    titulo: 'ACUVUE Oasys vs Air Optix HydraGlyde — ¿Cuál elegir 2026?',
-    descripcion: 'Comparativa completa en RD. Precio, oxígeno, hidratación. Qué comprar según tu uso diario.',
-    emoji: '⚖️', categoria: 'Comparativas', tiempo: '8 min', fecha: '2026-06-20', destacado: true,
-  },
-  // ── SEO LOCAL — 31 CIUDADES/PROVINCIAS ────────────────────────────────────
-  {
-    slug: 'lentes-contacto-punta-cana-entrega',
-    titulo: 'Lentes de contacto en Punta Cana — Entrega a domicilio',
-    descripcion: 'Lentes de contacto con entrega en Punta Cana, Bávaro y Cap Cana. 24-48h. Originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-santiago-republica-dominicana',
-    titulo: 'Lentes de contacto en Santiago — Entrega 24h',
-    descripcion: 'Lentes con entrega en Santiago de los Caballeros en 24h. ACUVUE, Biofinity, Air Optix originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '5 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-san-pedro-macoris',
-    titulo: 'Lentes de contacto en San Pedro de Macorís — Entrega 24-48h',
-    descripcion: 'Entrega de lentes de contacto originales en San Pedro de Macorís y provincia. Pago con AZUL.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-la-romana',
-    titulo: 'Lentes de contacto en La Romana — Entrega a domicilio',
-    descripcion: 'Lentes de contacto con entrega en La Romana y Casa de Campo. ACUVUE, Biofinity originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-san-francisco-macoris',
-    titulo: 'Lentes de contacto en San Francisco de Macorís',
-    descripcion: 'Entrega de lentes originales en San Francisco de Macorís y el Cibao oriental. 24-48h.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-puerto-plata',
-    titulo: 'Lentes de contacto en Puerto Plata — Entrega 24-48h',
-    descripcion: 'Lentes con entrega en Puerto Plata, Sosúa y Cabarete. ACUVUE, Air Optix originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-la-vega',
-    titulo: 'Lentes de contacto en La Vega — Entrega a domicilio',
-    descripcion: 'Entrega de lentes de contacto en La Vega y Constanza. Originales con pago seguro AZUL.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-higuey',
-    titulo: 'Lentes de contacto en Higüey — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Higüey y La Altagracia. Biofinity, ACUVUE originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-bani-peravia',
-    titulo: 'Lentes de contacto en Baní — Entrega a domicilio',
-    descripcion: 'Entrega de lentes originales en Baní y provincia de Peravia. Sin salir de casa.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-san-cristobal',
-    titulo: 'Lentes de contacto en San Cristóbal — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en San Cristóbal y el sur. 100% originales. Pago con AZUL.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-moca-espaillat',
-    titulo: 'Lentes de contacto en Moca — Entrega a domicilio',
-    descripcion: 'Entrega en Moca y provincia de Espaillat. ACUVUE, Biofinity, Air Optix originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-azua',
-    titulo: 'Lentes de contacto en Azua — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Azua de Compostela y el sur occidental.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-barahona',
-    titulo: 'Lentes de contacto en Barahona — Entrega a domicilio',
-    descripcion: 'Entrega de lentes originales en Barahona y la costa sur dominicana.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-monte-plata',
-    titulo: 'Lentes de contacto en Monte Plata — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Monte Plata y sus municipios. Pago seguro.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-hato-mayor',
-    titulo: 'Lentes de contacto en Hato Mayor — Entrega a domicilio',
-    descripcion: 'Entrega de lentes originales en Hato Mayor del Rey y alrededores.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-el-seibo',
-    titulo: 'Lentes de contacto en El Seibo — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en El Seibo y Santa Cruz del Seibo.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-samana',
-    titulo: 'Lentes de contacto en Samaná — Entrega a domicilio',
-    descripcion: 'Entrega en Samaná, Las Terrenas y Los Haitises. ACUVUE, Biofinity originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-nagua',
-    titulo: 'Lentes de contacto en Nagua — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Nagua y la costa atlántica. Originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-bonao',
-    titulo: 'Lentes de contacto en Bonao — Entrega a domicilio',
-    descripcion: 'Entrega de lentes originales en Bonao y la provincia de Monseñor Nouel.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-cotui',
-    titulo: 'Lentes de contacto en Cotuí — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Cotuí y Sánchez Ramírez.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-san-juan-maguana',
-    titulo: 'Lentes de contacto en San Juan de la Maguana',
-    descripcion: 'Entrega en San Juan de la Maguana y la región del Valle. Originales. Pago AZUL.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-mao-valverde',
-    titulo: 'Lentes de contacto en Mao — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Mao y la provincia de Valverde.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-monte-cristi',
-    titulo: 'Lentes de contacto en Monte Cristi — Entrega a domicilio',
-    descripcion: 'Entrega de lentes originales en Monte Cristi y el noroeste dominicano.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-dajabon',
-    titulo: 'Lentes de contacto en Dajabón — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Dajabón y la frontera norte.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-neyba',
-    titulo: 'Lentes de contacto en Neyba — Entrega a domicilio',
-    descripcion: 'Entrega en Neyba y la provincia de Baoruco. ACUVUE, Biofinity originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-jimani',
-    titulo: 'Lentes de contacto en Jimaní — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Jimaní y la provincia de Independencia.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-comendador',
-    titulo: 'Lentes de contacto en Comendador — Entrega a domicilio',
-    descripcion: 'Entrega en Comendador y la provincia de Elías Piña. Originales garantizados.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-pedernales',
-    titulo: 'Lentes de contacto en Pedernales — Entrega 24-48h',
-    descripcion: 'Lentes de contacto con entrega en Pedernales y el extremo sur.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-constanza',
-    titulo: 'Lentes de contacto en Constanza — Entrega a domicilio',
-    descripcion: 'Entrega en Constanza y la cordillera central. ACUVUE, Air Optix originales.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-distrito-nacional',
-    titulo: 'Lentes de contacto en el Distrito Nacional — Entrega 24h',
-    descripcion: 'Entrega de lentes originales en el Distrito Nacional y Ciudad de Santo Domingo en 24h.',
-    emoji: '📍', categoria: 'Entrega por ciudad', tiempo: '4 min', fecha: '2026-06-20',
-  },
-  {
-    slug: 'lentes-contacto-toda-republica-dominicana',
-    titulo: 'Lentes de contacto con entrega en toda República Dominicana',
-    descripcion: 'Entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix originales. 24-72h.',
-    emoji: '🇩🇴', categoria: 'Entrega por ciudad', tiempo: '5 min', fecha: '2026-06-20', destacado: true,
-  },
+  // ── COMPRA ONLINE ──────────────────────────────────────────────────────────
+  { slug: 'comprar-lentes-contacto-online-republica-dominicana', titulo: 'Comprar lentes de contacto online en RD — Guía segura 2026', desc: 'Cómo comprar lentes de contacto por internet en RD con seguridad. Originales, entrega 24-48h y pago con AZUL.', emoji: '🛒', cat: 'Compra', mins: 8, fecha: '2026-06-15', hot: true },
+  { slug: 'donde-comprar-lentes-contacto-santo-domingo', titulo: 'Dónde comprar lentes de contacto en Santo Domingo 2026', desc: 'Opciones para comprar lentes originales en Santo Domingo. Entrega a domicilio en 24-48h.', emoji: '📍', cat: 'Compra', mins: 8, fecha: '2026-06-01' },
 
-  // ── CUIDADO Y MANTENIMIENTO ────────────────────────────────────────
-  {
-    slug: 'solucion-limpieza-lentes-contacto',
-    titulo: 'Cómo elegir la mejor solución para lentes de contacto',
-    descripcion: 'Opti-Free, Dream Eye, Prolub — cuál usar según tu tipo de lente y cómo limpiarlos correctamente.',
-    emoji: '🧴', categoria: 'Cuidado', tiempo: '4 min', fecha: '2026-04-10',
-  },
-  {
-    slug: 'cuanto-duran-lentes-contacto',
-    titulo: '¿Cuánto duran los lentes de contacto? Guía completa',
-    descripcion: 'Diarios, quincenales y mensuales: cuándo cambiarlos y cómo sacarles el máximo provecho.',
-    emoji: '📅', categoria: 'Cuidado', tiempo: '5 min', fecha: '2026-03-05',
-  },
-]
+  // ── COMPARATIVAS ───────────────────────────────────────────────────────────
+  { slug: 'acuvue-oasys-vs-air-optix-hydraglyde', titulo: 'ACUVUE Oasys vs Air Optix HydraGlyde — ¿Cuál elegir?', desc: 'Comparativa completa. Precio, oxígeno, hidratación. La guía definitiva para elegir entre los dos más populares.', emoji: '⚖️', cat: 'Comparativas', mins: 8, fecha: '2026-06-20', hot: true },
+  { slug: 'biofinity-vs-acuvue-comparacion', titulo: 'Biofinity vs ACUVUE Oasys — ¿Cuál es mejor en RD?', desc: 'Comparativa completa: precio, oxígeno, hidratación y disponibilidad de los dos más vendidos en RD.', emoji: '⚖️', cat: 'Comparativas', mins: 7, fecha: '2026-05-10' },
+  { slug: 'lentes-diarios-vs-mensuales', titulo: 'Lentes diarios vs mensuales — ¿Cuál elegir en RD 2026?', desc: 'Comparativa completa: precio por día, higiene, comodidad. Cuál conviene según tu estilo de vida.', emoji: '🔄', cat: 'Comparativas', mins: 7, fecha: '2026-04-20' },
 
-// Agrupar por categoría para la navegación
-const CATEGORIAS = [...new Set(POSTS.map(p => p.categoria))]
+  // ── GUÍAS PRINCIPIANTES ────────────────────────────────────────────────────
+  { slug: 'que-son-los-lentes-de-contacto', titulo: '¿Qué son los lentes de contacto? Guía completa 2026', desc: 'Todo sobre lentes de contacto: qué son, tipos, materiales y cómo funcionan. La guía más completa en español.', emoji: '👁️', cat: 'Guías', mins: 12, fecha: '2026-06-01' },
+  { slug: 'como-usar-lentes-de-contacto-primera-vez', titulo: 'Cómo usar lentes de contacto por primera vez', desc: 'Guía paso a paso para principiantes: ponerse, quitarse y cuidar lentes de contacto. Con consejos de especialistas.', emoji: '🎯', cat: 'Guías', mins: 10, fecha: '2026-06-01' },
+  { slug: 'primeros-pasos-lentes-contacto-rd', titulo: 'Primeros pasos con lentes de contacto en República Dominicana', desc: 'Todo lo que necesitas saber antes de comprar tu primer par de lentes en RD.', emoji: '🌟', cat: 'Guías', mins: 7, fecha: '2026-03-01' },
+  { slug: 'como-poner-lentes-de-contacto', titulo: 'Cómo poner y quitar lentes de contacto paso a paso', desc: 'Tutorial completo para principiantes. Técnica correcta, errores comunes y consejos prácticos.', emoji: '🤲', cat: 'Guías', mins: 4, fecha: '2026-02-15' },
+  { slug: 'tipos-de-lentes-de-contacto', titulo: 'Tipos de lentes de contacto — ¿Cuál es el correcto para ti?', desc: 'Diferencias entre esféricos, tóricos, multifocales y de color. Cómo elegir según tu diagnóstico.', emoji: '🔍', cat: 'Educación', mins: 5, fecha: '2026-02-01' },
+  { slug: 'como-leer-receta-optica-rd', titulo: 'Cómo leer tu receta óptica — Guía visual completa', desc: 'SPH, CYL, AXIS, ADD, BC, DIA — qué significa cada valor de tu prescripción. En español simple.', emoji: '📋', cat: 'Guías', mins: 5, fecha: '2026-01-20' },
 
-export default function BlogPage({
-  searchParams,
-}: {
-  searchParams?: { categoria?: string }
-}) {
-  const categoriaActiva = searchParams?.categoria || 'Todos'
-  const postsFiltrados = categoriaActiva === 'Todos'
-    ? POSTS
-    : POSTS.filter(p => p.categoria === categoriaActiva)
+  // ── SALUD OCULAR ───────────────────────────────────────────────────────────
+  { slug: 'dormir-con-lentes-de-contacto-riesgos', titulo: '¿Qué pasa si duermes con lentes de contacto? Riesgos reales', desc: 'Los peligros médicos de dormir con lentes puestos y qué hacer si se te olvidó quitártelos.', emoji: '⚠️', cat: 'Salud ocular', mins: 9, fecha: '2026-06-01' },
+  { slug: 'dormir-con-lentes-contacto', titulo: '¿Puedo dormir con lentes de contacto? La verdad médica', desc: 'Todo sobre los riesgos de dormir con lentes y qué hacer si te quedaste dormido con ellos puestos.', emoji: '😴', cat: 'Salud ocular', mins: 5, fecha: '2026-01-10' },
+  { slug: 'ojos-secos-lentes-contacto', titulo: 'Ojos secos y lentes de contacto — Soluciones reales', desc: '¿Sientes sequedad con tus lentes? Los mejores lentes y gotas para ojos secos disponibles en RD.', emoji: '💧', cat: 'Salud ocular', mins: 5, fecha: '2026-03-15' },
+  { slug: 'cuanto-duran-lentes-contacto', titulo: '¿Cuánto duran los lentes de contacto? Guía completa', desc: 'Diarios, quincenales y mensuales: cuándo cambiarlos y cómo sacarles el máximo provecho.', emoji: '📅', cat: 'Cuidado', mins: 5, fecha: '2026-03-05' },
 
-  const destacados = POSTS.filter(p => p.destacado)
+  // ── CATEGORÍAS ESPECÍFICAS ─────────────────────────────────────────────────
+  { slug: 'lentes-contacto-para-astigmatismo', titulo: 'Lentes para astigmatismo en RD — Precios y marcas 2026', desc: 'Guía completa de lentes tóricos en RD. ACUVUE, Biofinity Toric, clariti y más con precios actualizados.', emoji: '🎯', cat: 'Astigmatismo', mins: 8, fecha: '2026-05-01' },
+  { slug: 'lentes-de-contacto-para-astigmatismo-rd', titulo: 'Lentes de contacto para astigmatismo en República Dominicana', desc: 'Guía de lentes tóricos en RD: cómo funcionan, marcas disponibles y por qué son diferentes a los normales.', emoji: '🎯', cat: 'Astigmatismo', mins: 6, fecha: '2026-02-20' },
+  { slug: 'lentes-multifocales-presbicia-rd', titulo: 'Lentes multifocales para presbicia en RD — Guía 2026', desc: 'Todo sobre lentes de contacto multifocales en RD. Biofinity Multi, ACUVUE Multi, Proclear y más.', emoji: '🔭', cat: 'Presbicia', mins: 6, fecha: '2026-03-20' },
+  { slug: 'lentes-contacto-colores-rd', titulo: 'Lentes de contacto de colores en República Dominicana', desc: 'Air Optix Colors y Lunare — con y sin graduación. Los colores más populares y cómo elegirlos.', emoji: '🎨', cat: 'Color', mins: 4, fecha: '2026-04-01' },
+  { slug: 'lentes-contacto-ninos-adolescentes-rd', titulo: 'Lentes de contacto para niños y adolescentes en RD', desc: 'Guía para padres: edad recomendada, tipos de lentes para jóvenes y reglas de uso seguro.', emoji: '👶', cat: 'Guías', mins: 7, fecha: '2026-04-15' },
+
+  // ── CUIDADO Y MANTENIMIENTO ────────────────────────────────────────────────
+  { slug: 'solucion-limpieza-lentes-contacto', titulo: 'Cómo elegir la mejor solución para lentes de contacto', desc: 'Opti-Free, Dream Eye, Prolub — cuál usar según tu tipo de lente y cómo limpiarlos correctamente.', emoji: '🧴', cat: 'Cuidado', mins: 4, fecha: '2026-04-10' },
+
+  // ── ENTREGA POR CIUDAD ─────────────────────────────────────────────────────
+  { slug: 'lentes-contacto-toda-republica-dominicana', titulo: 'Lentes de contacto con entrega en toda República Dominicana', desc: 'Entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix originales. 24-72h donde estés.', emoji: '🇩🇴', cat: 'Entrega', mins: 5, fecha: '2026-06-20', hot: true },
+  { slug: 'lentes-contacto-punta-cana-entrega', titulo: 'Lentes de contacto en Punta Cana — Entrega a domicilio', desc: 'Entrega en Punta Cana, Bávaro y Cap Cana en 24-48h. ACUVUE, Biofinity, Air Optix originales.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-santiago-republica-dominicana', titulo: 'Lentes de contacto en Santiago — Entrega 24h', desc: 'Entrega en Santiago de los Caballeros en 24 horas. Originales con pago seguro AZUL.', emoji: '📍', cat: 'Entrega', mins: 5, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-san-pedro-macoris', titulo: 'Lentes de contacto en San Pedro de Macorís', desc: 'Entrega de lentes originales en San Pedro de Macorís en 24-48h.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-la-romana', titulo: 'Lentes de contacto en La Romana — Entrega a domicilio', desc: 'Lentes de contacto con entrega en La Romana y Casa de Campo en 24-48h.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-san-francisco-macoris', titulo: 'Lentes de contacto en San Francisco de Macorís', desc: 'Entrega en San Francisco de Macorís y el Cibao oriental en 24-48h.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-puerto-plata', titulo: 'Lentes de contacto en Puerto Plata — Entrega 24-48h', desc: 'Entrega en Puerto Plata, Sosúa y Cabarete. ACUVUE, Air Optix originales.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-la-vega', titulo: 'Lentes de contacto en La Vega — Entrega a domicilio', desc: 'Entrega de lentes originales en La Vega y Constanza en 24-48h.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-higuey', titulo: 'Lentes de contacto en Higüey — Entrega 24-48h', desc: 'Lentes con entrega en Higüey y La Altagracia. Biofinity, ACUVUE originales.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-bani-peravia', titulo: 'Lentes de contacto en Baní — Entrega a domicilio', desc: 'Entrega de lentes originales en Baní y provincia de Peravia en 24-48h.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-san-cristobal', titulo: 'Lentes de contacto en San Cristóbal — Entrega 24-48h', desc: 'Lentes con entrega en San Cristóbal y el sur. 100% originales. Pago con AZUL.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-moca-espaillat', titulo: 'Lentes de contacto en Moca — Entrega a domicilio', desc: 'Entrega en Moca y provincia de Espaillat. ACUVUE, Biofinity, Air Optix originales.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-azua', titulo: 'Lentes de contacto en Azua — Entrega 24-48h', desc: 'Lentes con entrega en Azua de Compostela y el sur occidental.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-barahona', titulo: 'Lentes de contacto en Barahona — Entrega a domicilio', desc: 'Entrega de lentes originales en Barahona y la costa sur dominicana.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-monte-plata', titulo: 'Lentes de contacto en Monte Plata — Entrega 24-48h', desc: 'Lentes con entrega en Monte Plata y sus municipios.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-hato-mayor', titulo: 'Lentes de contacto en Hato Mayor — Entrega a domicilio', desc: 'Entrega de lentes originales en Hato Mayor del Rey y alrededores.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-el-seibo', titulo: 'Lentes de contacto en El Seibo — Entrega 24-48h', desc: 'Lentes con entrega en El Seibo y Santa Cruz del Seibo.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-samana', titulo: 'Lentes de contacto en Samaná — Entrega a domicilio', desc: 'Entrega en Samaná, Las Terrenas y Los Haitises. Originales con AZUL.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-nagua', titulo: 'Lentes de contacto en Nagua — Entrega 24-48h', desc: 'Lentes con entrega en Nagua y la costa atlántica. Originales garantizados.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-bonao', titulo: 'Lentes de contacto en Bonao — Entrega a domicilio', desc: 'Entrega de lentes originales en Bonao y la provincia de Monseñor Nouel.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-cotui', titulo: 'Lentes de contacto en Cotuí — Entrega 24-48h', desc: 'Lentes con entrega en Cotuí y Sánchez Ramírez.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-san-juan-maguana', titulo: 'Lentes de contacto en San Juan de la Maguana', desc: 'Entrega en San Juan de la Maguana y la región del Valle.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-mao-valverde', titulo: 'Lentes de contacto en Mao — Entrega 24-48h', desc: 'Lentes con entrega en Mao y la provincia de Valverde.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-monte-cristi', titulo: 'Lentes de contacto en Monte Cristi — Entrega a domicilio', desc: 'Entrega de lentes originales en Monte Cristi y el noroeste.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-dajabon', titulo: 'Lentes de contacto en Dajabón — Entrega 24-48h', desc: 'Lentes con entrega en Dajabón y la frontera norte.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-neyba', titulo: 'Lentes de contacto en Neyba — Entrega a domicilio', desc: 'Entrega en Neyba y la provincia de Baoruco.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-jimani', titulo: 'Lentes de contacto en Jimaní — Entrega 24-48h', desc: 'Lentes con entrega en Jimaní y la provincia de Independencia.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-comendador', titulo: 'Lentes de contacto en Comendador — Entrega a domicilio', desc: 'Entrega en Comendador y la provincia de Elías Piña.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-pedernales', titulo: 'Lentes de contacto en Pedernales — Entrega 24-48h', desc: 'Lentes con entrega en Pedernales y el extremo sur.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-constanza', titulo: 'Lentes de contacto en Constanza — Entrega a domicilio', desc: 'Entrega en Constanza y la cordillera central.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+  { slug: 'lentes-contacto-distrito-nacional', titulo: 'Lentes de contacto en el Distrito Nacional — Entrega 24h', desc: 'Entrega en el Distrito Nacional y Ciudad de Santo Domingo en 24h.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },
+] as const
+
+type Post = typeof POSTS[number]
+
+const CATS = ['Todos', 'Precios', 'Compra', 'Comparativas', 'Astigmatismo', 'Presbicia', 'Color', 'Guías', 'Salud ocular', 'Cuidado', 'Soluciones', 'Educación', 'Entrega']
+
+export default function BlogPage({ searchParams }: { searchParams?: { categoria?: string } }) {
+  const catActiva = searchParams?.categoria ?? 'Todos'
+  const posts: readonly Post[] = catActiva === 'Todos' ? POSTS : POSTS.filter(p => p.cat === catActiva)
+  const destacados = POSTS.filter(p => (p as any).hot)
+  const articulosFeatured = POSTS.filter(p => p.cat !== 'Entrega' && (p as any).hot).slice(0, 3)
+  const porCiudad = POSTS.filter(p => p.cat === 'Entrega')
 
   return (
     <>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 py-12 pb-24">
+      <main className="max-w-3xl mx-auto px-4 py-10 pb-24">
 
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold text-gray-900 mb-2">
-            Blog de lentes de contacto
+        {/* ── HEADER PREMIUM ── */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-1.5 h-6 bg-primary-600 rounded-full inline-block" />
+            <span className="text-xs font-bold text-primary-600 uppercase tracking-widest">ContactGo Blog</span>
+          </div>
+          <h1 className="font-display text-4xl font-black text-gray-900 leading-tight mb-3">
+            Guías de lentes de<br className="hidden sm:block" /> contacto en República Dominicana
           </h1>
-          <p className="text-gray-500">
-            Guías, precios y comparativas para República Dominicana · {POSTS.length} artículos
+          <p className="text-gray-500 text-lg leading-relaxed">
+            {POSTS.filter(p => p.cat !== 'Entrega').length} artículos especializados · Precios actualizados junio 2026 · Entrega en toda RD
           </p>
         </div>
 
-        {/* Destacados */}
-        {categoriaActiva === 'Todos' && (
-          <div className="mb-8">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">⭐ Artículos más buscados</p>
-            <div className="grid grid-cols-2 gap-2">
-              {destacados.map(post => (
+        {/* ── FEATURED — solo cuando catActiva=Todos ── */}
+        {catActiva === 'Todos' && (
+          <div className="mb-10">
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">Más buscados ahora</p>
+            <div className="grid sm:grid-cols-3 gap-3">
+              {articulosFeatured.map(post => (
                 <Link key={post.slug} href={`/blog/${post.slug}`}
-                  className="bg-primary-50 border border-primary-100 rounded-xl p-3 hover:border-primary-300 hover:shadow-sm transition-all">
-                  <p className="text-xs font-bold text-primary-700 leading-tight">{post.titulo}</p>
-                  <p className="text-[10px] text-primary-500 mt-1">{post.categoria} · {post.tiempo}</p>
+                  className="group relative bg-gradient-to-br from-primary-600 to-teal-600 rounded-2xl p-4 hover:from-primary-700 hover:to-teal-700 transition-all overflow-hidden">
+                  <div className="absolute top-0 right-0 text-6xl opacity-10 -mt-2 -mr-2">{post.emoji}</div>
+                  <span className="text-[10px] font-bold text-primary-200 uppercase tracking-wider">{post.cat}</span>
+                  <h2 className="text-white font-bold text-sm leading-tight mt-1 mb-2 line-clamp-2">{post.titulo}</h2>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-primary-200 text-[11px]">⏱ {post.mins} min</span>
+                    <span className="text-primary-300">·</span>
+                    <span className="text-primary-200 text-[11px] group-hover:text-white transition-colors">Leer →</span>
+                  </div>
                 </Link>
               ))}
             </div>
           </div>
         )}
 
-        {/* Filtros de categoría */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {['Todos', ...CATEGORIAS].map(cat => (
-            <Link
-              key={cat}
-              href={cat === 'Todos' ? '/blog' : `/blog?categoria=${cat}`}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${
-                categoriaActiva === cat
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {cat}
-            </Link>
-          ))}
+        {/* ── FILTROS DE CATEGORÍA ── */}
+        <div className="mb-6 overflow-x-auto -mx-4 px-4">
+          <div className="flex gap-2 pb-1" style={{minWidth: 'max-content'}}>
+            {CATS.map(cat => (
+              <Link key={cat} href={cat === 'Todos' ? '/blog' : `/blog?categoria=${encodeURIComponent(cat)}`}
+                className={`text-xs font-semibold px-3.5 py-1.5 rounded-full whitespace-nowrap transition-all ${
+                  catActiva === cat
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}>
+                {cat}
+              </Link>
+            ))}
+          </div>
         </div>
 
-        {/* Lista de artículos */}
-        <div className="space-y-3">
-          {postsFiltrados.map(post => (
-            <Link key={post.slug} href={`/blog/${post.slug}`}
-              className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-4 hover:border-primary-200 hover:shadow-sm transition-all group">
-              <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center text-xl shrink-0 group-hover:bg-primary-100 transition-colors">
-                {post.emoji}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-[10px] font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full shrink-0">
-                    {post.categoria}
-                  </span>
-                  <span className="text-[10px] text-gray-400">{post.tiempo} lectura</span>
-                </div>
-                <h2 className="font-bold text-gray-900 text-sm leading-tight mb-1 group-hover:text-primary-600 transition-colors">
-                  {post.titulo}
-                </h2>
-                <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
-                  {post.descripcion}
-                </p>
-              </div>
-              <svg className="w-4 h-4 text-gray-300 shrink-0 mt-1 group-hover:text-primary-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          ))}
-        </div>
+        {/* ── ARTÍCULOS DE CONTENIDO (no ciudades) ── */}
+        {(catActiva === 'Todos' || catActiva !== 'Entrega') && (
+          <>
+            {catActiva === 'Todos' && (
+              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">
+                Todos los artículos ({posts.filter(p => p.cat !== 'Entrega').length})
+              </p>
+            )}
+            <div className="space-y-2 mb-8">
+              {posts.filter(p => p.cat !== 'Entrega').map(post => (
+                <Link key={post.slug} href={`/blog/${post.slug}`}
+                  className="group flex items-start gap-4 p-4 rounded-2xl hover:bg-gray-50 transition-all border border-transparent hover:border-gray-100">
+                  <div className="w-10 h-10 bg-gray-50 group-hover:bg-white rounded-xl flex items-center justify-center text-xl shrink-0 border border-gray-100 group-hover:border-gray-200 transition-all">
+                    {post.emoji}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{post.cat}</span>
+                      {'hot' in post && (post as any).hot && (
+                        <span className="text-[9px] font-black text-primary-600 bg-primary-50 px-1.5 py-0.5 rounded-full">★ TOP</span>
+                      )}
+                    </div>
+                    <h2 className="font-semibold text-gray-900 text-sm leading-snug mb-0.5 group-hover:text-primary-600 transition-colors line-clamp-1">
+                      {post.titulo}
+                    </h2>
+                    <p className="text-xs text-gray-400 line-clamp-1">{post.desc}</p>
+                  </div>
+                  <div className="shrink-0 flex flex-col items-end gap-1">
+                    <span className="text-[11px] text-gray-300">{post.mins}m</span>
+                    <svg className="w-4 h-4 text-gray-200 group-hover:text-primary-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
 
-        {/* CTA al final */}
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <p className="font-bold text-gray-900 mb-1">¿Listo para comprar?</p>
-          <p className="text-sm text-gray-500 mb-4">35+ lentes de contacto originales con entrega en 24-48h en toda República Dominicana</p>
+        {/* ── SECCIÓN CIUDADES ── */}
+        {(catActiva === 'Todos' || catActiva === 'Entrega') && (
+          <div className="mt-4">
+            <div className="border-t border-gray-100 pt-8 mb-5">
+              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Entrega en toda República Dominicana</p>
+              <p className="text-sm text-gray-500">Lentes de contacto originales con entrega a domicilio en las 31 provincias</p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {porCiudad.map(post => (
+                <Link key={post.slug} href={`/blog/${post.slug}`}
+                  className="flex items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-all group">
+                  <span className="text-base">{post.emoji}</span>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-gray-700 group-hover:text-primary-600 transition-colors truncate">
+                      {post.titulo.replace('Lentes de contacto en ', '').replace(' — Entrega 24-48h', '').replace(' — Entrega a domicilio', '').replace(' — Entrega 24h', '').replace('Lentes de contacto con entrega en ', '')}
+                    </p>
+                    <p className="text-[10px] text-gray-400">Entrega 24-48h</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── CTA FINAL ── */}
+        <div className="mt-12 bg-gray-900 rounded-2xl p-6 text-center">
+          <p className="text-white font-bold text-lg mb-1">¿Listo para comprar?</p>
+          <p className="text-gray-400 text-sm mb-4">35+ lentes originales · Entrega 24-48h · Pago con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
-            <Link href="/catalogo" className="bg-primary-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-primary-700 transition-colors">
-              Ver catálogo completo →
+            <Link href="/catalogo" className="bg-white text-gray-900 font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-gray-100 transition-colors">
+              Ver catálogo →
             </Link>
-            <Link href="/receta" className="bg-white border border-primary-200 text-primary-600 font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-primary-50 transition-colors">
+            <Link href="/receta" className="bg-primary-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-primary-700 transition-colors">
               Calcular mi receta gratis
             </Link>
           </div>
