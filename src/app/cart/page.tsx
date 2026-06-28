@@ -215,7 +215,8 @@ export default function CartPage() {
                         })
                         removeByIndex(idx)
                       }}
-                        className="text-gray-300 hover:text-red-500 transition-colors p-1 shrink-0">
+                        aria-label="Eliminar producto"
+        className="text-gray-300 hover:text-red-500 active:text-red-600 transition-colors p-2.5 shrink-0 -mr-1 rounded-xl hover:bg-red-50">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -274,13 +275,15 @@ export default function CartPage() {
                     {/* Precio + cantidad */}
                     <div className="flex items-center justify-between mt-3">
                       <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
-                        <button onClick={() => updateItem(idx, item.cantidad - 1)}
-                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 text-gray-600 font-bold transition-colors">
+                        <button type="button" onClick={() => updateItem(idx, item.cantidad - 1)}
+                          aria-label="Reducir cantidad"
+                          className="w-11 h-11 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
                           <Minus className="w-3 h-3" />
                         </button>
                         <span className="w-8 text-center text-sm font-bold text-gray-900">{item.cantidad}</span>
-                        <button onClick={() => updateItem(idx, item.cantidad + 1)}
-                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 text-gray-600 font-bold transition-colors">
+                        <button type="button" onClick={() => updateItem(idx, item.cantidad + 1)}
+                          aria-label="Aumentar cantidad"
+                          className="w-11 h-11 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
                           <Plus className="w-3 h-3" />
                         </button>
                       </div>

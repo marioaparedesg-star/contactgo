@@ -93,8 +93,9 @@ export default function Navbar() {
             Mi cuenta
           </Link>
           <button
+            type="button"
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-xl hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="md:hidden p-2 rounded-xl hover:bg-gray-100 active:bg-gray-200 min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={open}
             aria-controls="mobile-menu">

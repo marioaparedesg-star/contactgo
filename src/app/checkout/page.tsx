@@ -529,7 +529,7 @@ export default function CheckoutPage() {
                 step > 1 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100'
               }`}>
-                <div className="p-5 flex items-center justify-between" onClick={() => step > 1 && setStep(1)}>
+                <div className="p-5 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 1 ? 'bg-green-500 text-white' : step === 1 ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 1 ? <Check className="w-4 h-4" /> : '1'}
@@ -584,7 +584,7 @@ export default function CheckoutPage() {
                 step > 2 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100 opacity-50'
               }`}>
-                <div className="p-5 flex items-center justify-between" onClick={() => step > 2 && setStep(2)}>
+                <div className="p-5 flex items-center justify-between cursor-pointer" onClick={() => step > 2 && setStep(2)} role="button" tabIndex={step > 2 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 2 && setStep(2)} aria-label="Volver al paso 2">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 2 ? 'bg-green-500 text-white' : step === 2 ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 2 ? <Check className="w-4 h-4" /> : '2'}
@@ -801,7 +801,7 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* T&C */}
-                    <div className="flex items-start gap-3 cursor-pointer" onClick={() => setAceptaTerminos(!aceptaTerminos)}>
+                    <div className="flex items-start gap-3 cursor-pointer" onClick={() => setAceptaTerminos(!aceptaTerminos)} role="checkbox" aria-checked={aceptaTerminos} tabIndex={0} onKeyDown={e => e.key === 'Enter' || e.key === ' ' ? setAceptaTerminos(!aceptaTerminos) : null}>
                       <div className={`w-5 h-5 rounded-lg border-2 shrink-0 mt-0.5 flex items-center justify-center transition-all ${aceptaTerminos ? 'bg-primary-600 border-primary-600' : 'border-gray-300 hover:border-primary-400'}`}>
                         {aceptaTerminos && <Check className="w-3 h-3 text-white" />}
                       </div>
