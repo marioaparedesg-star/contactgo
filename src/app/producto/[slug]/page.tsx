@@ -183,7 +183,6 @@ export default async function ProductoPage(
       if (!colImgs || !Object.values(colImgs)[0]) return {}
       return { "image": [`https://www.contactgo.net${Object.values(colImgs)[0]}`, product.imagen_url].filter(Boolean) }
     })(),
-    ...((product as any).ean  ? { "gtin13": String((product as any).ean) } : {}),
     "url": `https://www.contactgo.net/producto/${product.slug}`,
     "offers": {
       "@type": "Offer",
