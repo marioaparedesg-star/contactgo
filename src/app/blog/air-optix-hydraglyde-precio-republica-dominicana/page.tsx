@@ -146,7 +146,7 @@ export default function Page() {
 
             <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4 text-sm">
               <p className="font-bold text-green-800 mb-1">🚀 Entrega en 24-48 horas</p>
-              <p className="text-green-700">En Santo Domingo, Santiago y principales ciudades. Para otras zonas del país, consultar tiempos en el proceso de compra.</p>
+              <p className="text-green-700">Entrega a <strong>toda la República Dominicana</strong>: Santo Domingo y Santiago en 24h, resto del país en 24-72h.</p>
             </div>
           </section>
 

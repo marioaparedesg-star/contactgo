@@ -88,7 +88,7 @@ export default function Page() {
               <span className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center text-lg">👁️</span>
               <div>
                 <p className="font-bold text-gray-900 text-sm">1-DAY ACUVUE® MOIST®</p>
-                <p className="text-xs text-gray-500">Diario · El más recomendado para principiantes · RD$3,720</p>
+                <p className="text-xs text-gray-500">Diario · El más recomendado para principiantes · RD$3,875</p>
               </div>
               <span className="ml-auto text-primary-600 font-bold text-sm">Ver →</span>
             </Link>

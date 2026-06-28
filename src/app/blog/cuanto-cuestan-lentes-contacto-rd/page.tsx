@@ -57,10 +57,10 @@ export default function Page() {
               </tr></thead>
               <tbody>
                 {[
-                  { nombre: 'Acuvue Moist (30u)', tienda_fisica: 'RD$4,166', online: 'RD$3,720' },
-                  { nombre: 'Acuvue Oasys (6u)', tienda_fisica: 'RD$4,166', online: 'RD$3,720' },
+                  { nombre: 'Acuvue Moist (30u)', tienda_fisica: 'RD$4,166', online: 'RD$3,875' },
+                  { nombre: 'Acuvue Oasys (6u)', tienda_fisica: 'RD$4,166', online: 'RD$3,875' },
                   { nombre: 'Air Optix HydraGlyde', tienda_fisica: 'RD$4,704', online: 'RD$4,200' },
-                  { nombre: 'Biofinity mensual', tienda_fisica: 'RD$5,107', online: 'RD$4,560' },
+                  { nombre: 'Biofinity mensual', tienda_fisica: 'RD$5,107', online: 'RD$4,750' },
                   { nombre: 'Air Optix Colors', tienda_fisica: 'RD$2,822', online: 'RD$2,520' },
                 ].map(r => (
                   <tr key={r.nombre} className="border-b border-green-100">
@@ -85,7 +85,7 @@ export default function Page() {
           <h2 className="font-display text-xl font-bold text-gray-900 mb-3">¿Cuánto ahorro al mes comprando online?</h2>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { tipo: 'Lentes diarios', tienda_fisica: 'RD$4,166/mes', online: 'RD$3,720/mes', ahorro: 'RD$446' },
+              { tipo: 'Lentes diarios', tienda_fisica: 'RD$4,166/mes', online: 'RD$3,875/mes', ahorro: 'RD$446' },
               { tipo: 'Lentes mensuales', tienda_fisica: '~RD$20,520/año', online: '~RD$18,240/año', ahorro: '~RD$2,280' },
             ].map(c => (
               <div key={c.tipo} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
