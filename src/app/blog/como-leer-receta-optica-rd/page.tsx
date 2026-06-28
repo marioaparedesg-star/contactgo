@@ -30,6 +30,12 @@ const terminos = [
 export default function Page() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-10 pb-32">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
+          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
+          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <span className="text-gray-600">Cómo leer tu receta óptica</span>
+        </div>
+
       <div className="mb-6">
         <Link href="/blog" className="text-xs text-primary-600 font-semibold hover:underline">← Blog</Link>
       </div>
@@ -52,6 +58,20 @@ export default function Page() {
           <span>·</span>
           <span>⏱ 6 min lectura</span>
         </div>
+
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 list-decimal list-inside">
+            <li key="0"><a href="#valores" className="text-primary-600 hover:underline text-sm">Qué significa cada valor</a></li>
+            <li key="1"><a href="#sph" className="text-primary-600 hover:underline text-sm">SPH — Miopía e hipermetropía</a></li>
+            <li key="2"><a href="#cyl" className="text-primary-600 hover:underline text-sm">CYL y AXIS — Astigmatismo</a></li>
+            <li key="3"><a href="#add" className="text-primary-600 hover:underline text-sm">ADD — Presbicia</a></li>
+            <li key="4"><a href="#bc" className="text-primary-600 hover:underline text-sm">BC y DIA</a></li>
+            <li key="5"><a href="#calcular" className="text-primary-600 hover:underline text-sm">Calculadora de receta</a></li>
+            <li key="6"><a href="#faq" className="text-primary-600 hover:underline text-sm">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
       <p className="text-gray-500 text-sm mb-8">Guía visual · 5 min de lectura</p>
 
       <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -167,6 +187,51 @@ export default function Page() {
           <a href="/receta" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
             Usar mi calculadora de receta →
           </a>
+        </div>
+
+        <section id="faq">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
+          <div className="space-y-3">
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué significa SPH en una receta óptica?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">SPH (esfera o poder esférico) indica la corrección necesaria para miopía (valores negativos) o hipermetropía (valores positivos). Es el valor más importante de tu receta para elegir los lentes de contacto correctos.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué es el CYL y el AXIS en una receta?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">CYL (cilindro) indica el grado de astigmatismo. AXIS (eje) es la orientación en grados del astigmatismo. Si tu receta tiene CYL y AXIS, necesitas lentes de contacto tóricos específicos para astigmatismo.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Para qué sirve el ADD en una receta óptica?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">ADD (adición) es el valor de corrección extra que necesitan las personas con presbicia (vista cansada) para ver de cerca. Si tu receta tiene ADD, necesitas lentes de contacto multifocales.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Es la misma receta para gafas y lentes de contacto?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">No exactamente. La prescripción base es similar, pero los lentes de contacto requieren parámetros adicionales como BC (radio de curvatura) y DIA (diámetro). Tu optometrista puede adaptar la receta de gafas para lentes de contacto.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cómo sé qué lentes de contacto necesito con mi receta?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Usa la calculadora de receta gratuita de ContactGo: ingresa tu SPH (y CYL/AXIS si los tienes) y te mostramos los lentes compatibles. También puedes enviarnos tu receta por WhatsApp y te asesoramos.</p>
+          </details>
+          </div>
+        </section>
+
+        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+          </div>
+        </div>
+
+        <div className="mt-6 p-4 bg-gray-50 rounded-2xl">
+          <p className="text-sm font-bold text-gray-900 mb-3">Productos recomendados en ContactGo</p>
+          <div className="grid gap-2">
+            <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="text-sm text-primary-600 hover:underline">→ ACUVUE® Oasys® — Quincenal premium desde RD$3,875</a>
+            <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="text-sm text-primary-600 hover:underline">→ Biofinity® — Mensual alto oxígeno desde RD$4,750</a>
+            <a href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="text-sm text-primary-600 hover:underline">→ Air Optix® HydraGlyde® — Mensual Alcon desde RD$4,375</a>
+          </div>
         </div>
       </main>
   )

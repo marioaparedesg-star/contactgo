@@ -49,6 +49,17 @@ export default function Page() {
           <span>⏱ 7 min lectura</span>
         </div>
 
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 list-decimal list-inside">
+            <li key="0"><a href="#oxigeno" className="text-primary-600 hover:underline text-sm">Comparativa técnica</a></li>
+            <li key="1"><a href="#precios" className="text-primary-600 hover:underline text-sm">Precios en RD</a></li>
+            <li key="2"><a href="#uso" className="text-primary-600 hover:underline text-sm">¿Cuándo elegir cada uno?</a></li>
+            <li key="3"><a href="#faq" className="text-primary-600 hover:underline text-sm">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
+
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>Biofinity de CooperVision y ACUVUE Oasys de Johnson & Johnson son las dos marcas de lentes de contacto más vendidas en República Dominicana. Ambas son de silicona hidrogel premium, pero tienen diferencias importantes que pueden hacer una de ellas mejor para ti específicamente.</p>
 
@@ -171,6 +182,38 @@ export default function Page() {
           <a href="/catalogo" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
             Comparar precios en el catálogo →
           </a>
+        </div>
+
+        <section id="faq">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
+          <div className="space-y-3">
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Biofinity o ACUVUE Oasys — cuál es mejor?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Depende del uso. Biofinity (mensual, Dk/t 160) ofrece mayor oxígeno y menor costo por día (~RD$52). ACUVUE Oasys (quincenal, Dk/t 147) es ideal para uso con pantallas y renovación frecuente. Para uso diario intensivo, Biofinity. Para quien prefiere cambio cada 2 semanas, ACUVUE Oasys.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuestan Biofinity y ACUVUE Oasys en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: Biofinity RD$4,750 la caja de 6 (mensual, ~RD$52/día). ACUVUE Oasys RD$3,875 la caja de 6 (quincenal, ~RD$92/día). Por precio de caja, ACUVUE Oasys es más barato, pero por día de uso, Biofinity es más económico.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Biofinity y ACUVUE Oasys son lentes mensuales o quincenales?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Biofinity es mensual (30 días de uso). ACUVUE Oasys es quincenal (14 días). Esta diferencia es la clave para decidir: si prefieres cambiar menos frecuentemente y quieres el menor costo por día, Biofinity. Si prefieres mayor frecuencia de cambio, ACUVUE Oasys.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Biofinity y ACUVUE Oasys en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Ambos están disponibles en ContactGo con entrega en 24-48 horas en toda República Dominicana. Biofinity desde RD$4,750 y ACUVUE Oasys desde RD$3,875, 100% originales y sellados de fábrica.</p>
+          </details>
+          </div>
+        </section>
+
+        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+          </div>
         </div>
       </main>
       <Footer />

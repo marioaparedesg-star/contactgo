@@ -24,6 +24,12 @@ export default function Page() {
     <>
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-12 pb-24">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
+          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
+          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <span className="text-gray-600">Ojos secos y lentes de contacto — Soluci</span>
+        </div>
+
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">Salud ocular</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Ojos secos y lentes de contacto: guía completa</h1>
@@ -43,6 +49,18 @@ export default function Page() {
           <span>·</span>
           <span>⏱ 5 min lectura</span>
         </div>
+
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 list-decimal list-inside">
+            <li key="0"><a href="#causas" className="text-primary-600 hover:underline text-sm">Por qué se secan los ojos con lentes</a></li>
+            <li key="1"><a href="#lentes" className="text-primary-600 hover:underline text-sm">Mejores lentes para ojos secos</a></li>
+            <li key="2"><a href="#gotas" className="text-primary-600 hover:underline text-sm">Gotas compatibles con lentes</a></li>
+            <li key="3"><a href="#habitos" className="text-primary-600 hover:underline text-sm">Hábitos que ayudan</a></li>
+            <li key="4"><a href="#faq" className="text-primary-600 hover:underline text-sm">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>La sequedad ocular es la queja más común entre usuarios de lentes de contacto en República Dominicana, especialmente en oficinas con aire acondicionado o al pasar horas frente a pantallas. La buena noticia: hay soluciones concretas para cada nivel de sequedad.</p>
@@ -155,6 +173,34 @@ export default function Page() {
           <a href="/catalogo?tipo=solucion" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
             Ver soluciones hidratantes →
           </a>
+        </div>
+
+        <section id="faq">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
+          <div className="space-y-3">
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo usar lentes de contacto si tengo ojos secos?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí, en la mayoría de los casos. Existen lentes especialmente diseñados para ojos secos como el Air Optix HydraGlyde (tecnología HydraGlyde) o el Biofinity (Aquaform). Para casos severos, consulta a tu oftalmólogo.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué lentes de contacto son mejores para ojos secos?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Los de silicona hidrogel con tecnologías de hidratación avanzada: Air Optix plus HydraGlyde, Biofinity, ACUVUE Oasys y BL ULTRA son los más recomendados. Todos están disponibles en ContactGo con entrega en toda RD.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué gotas puedo usar con lentes de contacto?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Gotas lubricantes compatibles con lentes de contacto como Refresh Tears y Prolub Hyfresh. Evita gotas vasoconstrictoras ("quita el rojo") que no son compatibles con lentes. Siempre verifica que la etiqueta indique "compatible con lentes de contacto".</p>
+          </details>
+          </div>
+        </section>
+
+        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+          </div>
         </div>
       </main>
       <Footer />

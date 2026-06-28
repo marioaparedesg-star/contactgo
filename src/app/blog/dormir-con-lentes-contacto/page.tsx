@@ -156,6 +156,15 @@ export default function DormirConLentesPage() {
             </div>
           </section>
         </div>
+
+        <div className="mt-6 p-4 bg-gray-50 rounded-2xl">
+          <p className="text-sm font-bold text-gray-900 mb-3">Productos recomendados en ContactGo</p>
+          <div className="grid gap-2">
+            <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="text-sm text-primary-600 hover:underline">→ ACUVUE® Oasys® — Quincenal premium desde RD$3,875</a>
+            <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="text-sm text-primary-600 hover:underline">→ Biofinity® — Mensual alto oxígeno desde RD$4,750</a>
+            <a href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="text-sm text-primary-600 hover:underline">→ Air Optix® HydraGlyde® — Mensual Alcon desde RD$4,375</a>
+          </div>
+        </div>
       </main>
       <Footer />
     </>

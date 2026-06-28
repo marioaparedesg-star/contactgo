@@ -250,7 +250,8 @@ export default function Page() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-3 text-sm">¿Tienes dudas? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta gratuita</Link> o escríbenos por WhatsApp y te ayudamos a identificar el Biofinity correcto para tu prescripción.</p>
+            <p className="mt-3 text-sm">¿Tienes dudas? Usa nuestra <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
+            <a href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta gratuita</a> o escríbenos por WhatsApp y te ayudamos a identificar el Biofinity correcto para tu prescripción.</p>
           </section>
 
           <div className="grid gap-3">

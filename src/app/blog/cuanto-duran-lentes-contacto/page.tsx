@@ -49,6 +49,19 @@ export default function Page() {
           <span>⏱ 5 min lectura</span>
         </div>
 
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 list-decimal list-inside">
+            <li key="0"><a href="#tipos" className="text-primary-600 hover:underline text-sm">Duración por tipo de lente</a></li>
+            <li key="1"><a href="#diarios" className="text-primary-600 hover:underline text-sm">Lentes diarios</a></li>
+            <li key="2"><a href="#quincenales" className="text-primary-600 hover:underline text-sm">Lentes quincenales</a></li>
+            <li key="3"><a href="#mensuales" className="text-primary-600 hover:underline text-sm">Lentes mensuales</a></li>
+            <li key="4"><a href="#senales" className="text-primary-600 hover:underline text-sm">Cuándo cambiarlos antes de tiempo</a></li>
+            <li key="5"><a href="#faq" className="text-primary-600 hover:underline text-sm">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
+
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>Una de las preguntas más frecuentes de nuestros clientes en RD es cuánto tiempo pueden usar sus lentes antes de cambiarlos. La respuesta depende completamente del tipo de lente — y nunca debes extender el tiempo más allá de lo recomendado por el fabricante.</p>
 
@@ -175,6 +188,38 @@ export default function Page() {
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-8 text-sm text-amber-900">
             <strong>⚠️ Aviso médico:</strong> Este artículo es informativo y no sustituye la consulta con un profesional óptico u oftalmólogo. Los lentes de contacto son productos sanitarios que requieren prescripción. Si experimentas molestias, suspende su uso y consulta a tu especialista.
           </div>
+
+        <section id="faq">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
+          <div className="space-y-3">
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto duran los lentes de contacto mensuales?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Los lentes mensuales como Biofinity, Air Optix HydraGlyde y BL Ultra duran exactamente 30 días desde que abres la caja, independientemente de cuántos días los uses. Una caja de 6 lentes alcanza para 3 meses por ojo.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo usar lentes mensuales más de 30 días?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">No. Usar lentes más tiempo del indicado aumenta el riesgo de infecciones y reduce la calidad de visión por acumulación de depósitos. Aunque "se vean bien", el material se deteriora y los depósitos aumentan el riesgo de irritación e infección.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto duran los lentes de contacto diarios?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Los lentes diarios como 1-DAY ACUVUE Moist y clariti 1 day duran exactamente 1 día — se colocan por la mañana y se descartan al final del día. Nunca deben reutilizarse ni guardarse en solución para el día siguiente.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cómo sé cuándo cambiar mis lentes de contacto?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Guíate por el calendario, no por cómo se sienten. Marca en el calendario el día que abres una caja nueva y programa el cambio a los 14 o 30 días según el tipo. Si el lente molesta antes de esa fecha, retíralo y usa uno nuevo.</p>
+          </details>
+          </div>
+        </section>
+
+        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+          </div>
+        </div>
       </main>
       <Footer />
     </>

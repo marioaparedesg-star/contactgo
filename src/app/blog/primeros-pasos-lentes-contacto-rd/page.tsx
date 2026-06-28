@@ -24,6 +24,12 @@ export default function Page() {
     <>
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-12 pb-24">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
+          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
+          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <span className="text-gray-600">Primeros pasos con lentes de contacto en</span>
+        </div>
+
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Principiantes</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Primeros pasos con lentes de contacto en República Dominicana</h1>
@@ -43,6 +49,18 @@ export default function Page() {
           <span>·</span>
           <span>⏱ 7 min lectura</span>
         </div>
+
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 list-decimal list-inside">
+            <li key="0"><a href="#receta" className="text-primary-600 hover:underline text-sm">Cómo obtener tu receta</a></li>
+            <li key="1"><a href="#elegir" className="text-primary-600 hover:underline text-sm">Elegir tus primeros lentes</a></li>
+            <li key="2"><a href="#comprar" className="text-primary-600 hover:underline text-sm">Dónde comprar en RD</a></li>
+            <li key="3"><a href="#empezar" className="text-primary-600 hover:underline text-sm">Cómo empezar a usarlos</a></li>
+            <li key="4"><a href="#faq" className="text-primary-600 hover:underline text-sm">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>Cada semana decenas de dominicanos se plantean pasar de las gafas a los lentes de contacto. Si estás en ese grupo, esta guía es para ti. Aquí va todo lo que necesitas saber antes de hacer tu primera compra.</p>
@@ -182,6 +200,33 @@ export default function Page() {
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-8 text-sm text-amber-900">
             <strong>⚠️ Aviso médico:</strong> Este artículo es informativo y no sustituye la consulta con un profesional óptico u oftalmólogo. Los lentes de contacto son productos sanitarios que requieren prescripción. Si experimentas molestias, suspende su uso y consulta a tu especialista.
           </div>
+
+        <section id="faq">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
+          <div className="space-y-3">
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué necesito para empezar a usar lentes de contacto en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Necesitas: una receta óptica actualizada de tu optometrista, los lentes de tu graduación, solución multipropósito (si son quincenales/mensuales), y aprender la técnica de colocación. En ContactGo encuentras todo esto con entrega a domicilio.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo comprar lentes de contacto sin ir a una óptica en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. Si ya tienes tu receta actualizada, puedes comprar directamente en ContactGo online. Si no tienes receta, primero visita a un optometrista para obtenerla, luego compra en ContactGo con entrega en 24-48h.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuesta empezar con lentes de contacto en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">La primera caja de lentes mensuales básicos (por ejemplo ACUVUE Oasys, 6 lentes) cuesta RD$3,875. Añade solución multipropósito (RD$750) para el primer mes: inversión inicial de aproximadamente RD$4,625.</p>
+          </details>
+          </div>
+        </section>
+
+        <div className="mt-6 p-4 bg-gray-50 rounded-2xl">
+          <p className="text-sm font-bold text-gray-900 mb-3">Productos recomendados en ContactGo</p>
+          <div className="grid gap-2">
+            <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="text-sm text-primary-600 hover:underline">→ ACUVUE® Oasys® — Quincenal premium desde RD$3,875</a>
+            <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="text-sm text-primary-600 hover:underline">→ Biofinity® — Mensual alto oxígeno desde RD$4,750</a>
+            <a href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="text-sm text-primary-600 hover:underline">→ Air Optix® HydraGlyde® — Mensual Alcon desde RD$4,375</a>
+          </div>
+        </div>
       </main>
       <Footer />
     </>

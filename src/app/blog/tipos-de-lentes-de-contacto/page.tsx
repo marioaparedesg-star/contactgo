@@ -24,6 +24,12 @@ export default function Page() {
     <>
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-12 pb-24">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
+          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
+          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <span className="text-gray-600">Tipos de lentes de contacto</span>
+        </div>
+
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">Educación</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Tipos de lentes de contacto: ¿cuál es el correcto para ti?</h1>
@@ -43,6 +49,21 @@ export default function Page() {
           <span>·</span>
           <span>⏱ 5 min lectura</span>
         </div>
+
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 list-decimal list-inside">
+            <li key="0"><a href="#blandos" className="text-primary-600 hover:underline text-sm">Lentes blandos</a></li>
+            <li key="1"><a href="#diarios" className="text-primary-600 hover:underline text-sm">Lentes diarios</a></li>
+            <li key="2"><a href="#quincenales" className="text-primary-600 hover:underline text-sm">Lentes quincenales</a></li>
+            <li key="3"><a href="#mensuales" className="text-primary-600 hover:underline text-sm">Lentes mensuales</a></li>
+            <li key="4"><a href="#toricos" className="text-primary-600 hover:underline text-sm">Lentes tóricos</a></li>
+            <li key="5"><a href="#multifocales" className="text-primary-600 hover:underline text-sm">Lentes multifocales</a></li>
+            <li key="6"><a href="#color" className="text-primary-600 hover:underline text-sm">Lentes de color</a></li>
+            <li key="7"><a href="#faq" className="text-primary-600 hover:underline text-sm">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>No todos los lentes de contacto son iguales. Cada tipo está diseñado para corregir una condición visual específica. Aquí te explicamos las diferencias para que elijas el correcto.</p>
@@ -150,6 +171,37 @@ export default function Page() {
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-8 text-sm text-amber-900">
             <strong>⚠️ Aviso médico:</strong> Este artículo es informativo y no sustituye la consulta con un profesional óptico u oftalmólogo. Los lentes de contacto son productos sanitarios que requieren prescripción. Si experimentas molestias, suspende su uso y consulta a tu especialista.
           </div>
+
+        <section id="faq">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
+          <div className="space-y-3">
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuántos tipos de lentes de contacto existen?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Existen dos grandes grupos: blandos (hidrogel y silicona hidrogel) y rígidos permeables al gas. Los blandos se dividen por período de uso en diarios, quincenales y mensuales, y por corrección en esféricos, tóricos, multifocales y de color.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué tipo de lente de contacto es mejor para astigmatismo?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Los lentes tóricos, diseñados específicamente para astigmatismo. Incorporan un sistema de estabilización que los mantiene orientados correctamente en el ojo. Ejemplos: ACUVUE Oasys for Astigmatism, Biofinity Toric, clariti 1 day toric.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuál es la diferencia entre lentes diarios y mensuales?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Los diarios se usan un día y se descartan, sin necesidad de solución. Los mensuales se usan hasta 30 días y requieren limpieza y almacenamiento diario con solución multipropósito. Los diarios son más higiénicos; los mensuales son más económicos por día de uso.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué tipo de lente de contacto es más cómodo?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Depende de cada persona, pero en general los de silicona hidrogel (ACUVUE Oasys, Biofinity, Air Optix HydraGlyde) son los más cómodos por su alta transmisión de oxígeno y tecnologías de hidratación avanzada.</p>
+          </details>
+          </div>
+        </section>
+
+        <div className="mt-6 p-4 bg-gray-50 rounded-2xl">
+          <p className="text-sm font-bold text-gray-900 mb-3">Productos recomendados en ContactGo</p>
+          <div className="grid gap-2">
+            <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="text-sm text-primary-600 hover:underline">→ ACUVUE® Oasys® — Quincenal premium desde RD$3,875</a>
+            <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="text-sm text-primary-600 hover:underline">→ Biofinity® — Mensual alto oxígeno desde RD$4,750</a>
+            <a href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="text-sm text-primary-600 hover:underline">→ Air Optix® HydraGlyde® — Mensual Alcon desde RD$4,375</a>
+          </div>
+        </div>
       </main>
       <Footer />
     </>

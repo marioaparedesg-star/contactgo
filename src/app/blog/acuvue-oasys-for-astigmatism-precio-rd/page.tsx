@@ -280,7 +280,8 @@ export default function Page() {
           <p className="text-sm text-gray-600 mb-4">ACUVUE Oasys y 1-DAY MOIST for Astigmatism originales de J&J · Toda la línea tórica disponible</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/toricos" className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">Ver lentes tóricos →</Link>
-            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-red-200 text-red-700 font-bold px-6 py-3 rounded-xl hover:bg-red-50 transition-colors text-sm">Calcular mi receta</Link>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-red-200 text-red-700 font-bold px-6 py-3 rounded-xl hover:bg-red-50 transition-colors text-sm">Calcular mi receta</a>
             <a href="https://wa.me/18294728328?text=Hola%2C%20quiero%20ACUVUE%20Oasys%20for%20Astigmatism%20en%20RD" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>

@@ -24,6 +24,12 @@ export default function Page() {
     <>
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-12 pb-24">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
+          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
+          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <span className="text-gray-600">Lentes multifocales para presbicia en RD</span>
+        </div>
+
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
         <span className="text-xs font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">Presbicia</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Lentes multifocales para presbicia: la guía definitiva</h1>
@@ -43,6 +49,18 @@ export default function Page() {
           <span>·</span>
           <span>⏱ 5 min lectura</span>
         </div>
+
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 list-decimal list-inside">
+            <li key="0"><a href="#que-son" className="text-primary-600 hover:underline text-sm">Qué son los lentes multifocales</a></li>
+            <li key="1"><a href="#como-funcionan" className="text-primary-600 hover:underline text-sm">Cómo funcionan</a></li>
+            <li key="2"><a href="#marcas" className="text-primary-600 hover:underline text-sm">Marcas disponibles en RD</a></li>
+            <li key="3"><a href="#precios" className="text-primary-600 hover:underline text-sm">Precios 2026</a></li>
+            <li key="4"><a href="#faq" className="text-primary-600 hover:underline text-sm">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>Después de los 40-45 años, casi todos necesitamos ayuda para ver de cerca. La presbicia (también llamada "vista cansada") afecta a millones de dominicanos. La buena noticia: los lentes de contacto multifocales te permiten ver bien a todas las distancias sin depender de gafas de lectura.</p>
@@ -144,6 +162,38 @@ export default function Page() {
           <a href="/multifocales" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
             Ver lentes multifocales →
           </a>
+        </div>
+
+        <section id="faq">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
+          <div className="space-y-3">
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué son los lentes de contacto multifocales?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Son lentes diseñados para personas con presbicia (vista cansada), que permiten ver bien tanto de cerca como de lejos en un solo lente. Usan zonas ópticas concéntricas o progresivas para diferentes distancias.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿A partir de qué edad se necesitan lentes multifocales?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">La presbicia suele aparecer entre los 40 y 45 años, aunque puede variar. Si notas que necesitas alejar los objetos para leer o tienes fatiga visual al trabajar de cerca, es momento de consultar a tu optometrista.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Son difíciles de adaptar los lentes multifocales?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Requieren un período de adaptación de 2-4 semanas. El cerebro aprende a seleccionar el foco correcto automáticamente. La mayoría de usuarios se adapta sin problemas siguiendo las instrucciones del especialista.</p>
+          </details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuestan los lentes multifocales en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo desde RD$4,100 (Bausch+Lomb ULTRA for Presbyopia) hasta RD$9,500 (Biofinity Multifocal). También disponibles Air Optix Multifocal a RD$7,250 y ACUVUE Oasys Multifocal a RD$8,200.</p>
+          </details>
+          </div>
+        </section>
+
+        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+          </div>
         </div>
       </main>
       <Footer />

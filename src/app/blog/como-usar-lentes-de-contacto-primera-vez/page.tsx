@@ -407,7 +407,7 @@ export default function Page() {
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
             <p>Usar lentes de contacto por primera vez es más sencillo de lo que parece. La clave está en la higiene, la paciencia durante el período de adaptación y en respetar siempre las indicaciones de uso. Miles de dominicanos los usan a diario sin ningún problema.</p>
-            <p className="mt-3">Si estás buscando tus primeros lentes de contacto, en ContactGo encontrarás las mejores marcas — ACUVUE, Air Optix, Biofinity y más — con entrega directa a tu puerta en 24-48 horas. ¿No sabes cuál elegir? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta</Link> o escríbenos por WhatsApp y te asesoramos.</p>
+            <p className="mt-3">Si estás buscando tus primeros lentes de contacto, en ContactGo encontrarás las mejores marcas — ACUVUE, Air Optix, Biofinity y más — con entrega directa a tu puerta en 24-48 horas. ¿No sabes cuál elegir? Usa nuestra <a href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta</a> o escríbenos por WhatsApp y te asesoramos.</p>
           </section>
         </div>
 

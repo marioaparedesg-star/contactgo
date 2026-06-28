@@ -99,6 +99,18 @@ export default function Page() {
           <span>⏱ 6 min lectura</span>
         </div>
 
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 text-sm list-decimal list-inside">
+            <li key="0"><a href="#precios" className="text-primary-600 hover:underline">Precios de toda la línea ACUVUE Oasys</a></li>
+            <li key="1"><a href="#que-es" className="text-primary-600 hover:underline">¿Qué es ACUVUE Oasys?</a></li>
+            <li key="2"><a href="#hydraclear" className="text-primary-600 hover:underline">Tecnología HYDRACLEAR Plus</a></li>
+            <li key="3"><a href="#linea" className="text-primary-600 hover:underline">Toda la línea disponible</a></li>
+            <li key="4"><a href="#receta" className="text-primary-600 hover:underline">Cómo comprar con tu receta</a></li>
+            <li key="5"><a href="#faq" className="text-primary-600 hover:underline">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
         {/* Precio destacado */}
         <div className="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-2xl p-5 mb-8">
           <p className="text-xs font-bold text-red-600 uppercase tracking-wide mb-1">Precio actualizado junio 2026</p>
@@ -347,6 +359,16 @@ export default function Page() {
             <Link href="/marca/acuvue" className="inline-flex items-center justify-center gap-2 bg-white border border-red-200 text-red-600 font-bold px-6 py-3 rounded-xl hover:bg-red-50 transition-colors text-sm">
               Ver todos los modelos ACUVUE
             </Link>
+          </div>
+        </div>
+
+        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda República Dominicana</h3>
+          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>
       </main>

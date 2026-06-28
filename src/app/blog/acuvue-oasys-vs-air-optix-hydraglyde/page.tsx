@@ -67,6 +67,17 @@ export default function Page() {
         <div className="flex items-center gap-3 mb-5 p-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
           <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Comparativa técnica actualizada junio 2026 · ⏱ 8 min</p></div>
+
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 text-sm list-decimal list-inside">
+            <li key="0"><a href="#comparativa" className="text-primary-600 hover:underline">Comparativa técnica completa</a></li>
+            <li key="1"><a href="#precios" className="text-primary-600 hover:underline">Precios en RD 2026</a></li>
+            <li key="2"><a href="#cuando" className="text-primary-600 hover:underline">¿Cuándo elegir cada uno?</a></li>
+            <li key="3"><a href="#tecnologia" className="text-primary-600 hover:underline">Tecnologías de hidratación</a></li>
+            <li key="4"><a href="#faq" className="text-primary-600 hover:underline">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
         </div>
 
         <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 mb-6">
@@ -181,6 +192,16 @@ export default function Page() {
             <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-red-700 transition-colors text-sm">Comprar ACUVUE Oasys →</Link>
             <Link href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="inline-flex items-center justify-center gap-2 bg-teal-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-teal-700 transition-colors text-sm">Comprar Air Optix HydraGlyde →</Link>
             <a href="https://wa.me/18294728328?text=Hola%2C%20no%20s%C3%A9%20si%20ACUVUE%20Oasys%20o%20Air%20Optix%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Asesoría WhatsApp</a>
+          </div>
+        </div>
+
+        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda República Dominicana</h3>
+          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>
       </main>

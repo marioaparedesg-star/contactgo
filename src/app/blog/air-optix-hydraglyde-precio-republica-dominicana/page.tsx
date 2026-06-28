@@ -269,7 +269,8 @@ export default function Page() {
             </div>
             <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm">
               <p className="font-bold text-blue-800 mb-1">¿No tienes tu receta? Sin problema</p>
-              <p className="text-blue-700">Usa nuestra <Link href="/receta" className="font-bold hover:underline">calculadora gratuita de receta</Link> — ingresa tu prescripción de gafas y te ayudamos a encontrar el Air Optix más compatible.</p>
+              <p className="text-blue-700">Usa nuestra <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
+            <a href="/receta" className="font-bold hover:underline">calculadora gratuita de receta</a> — ingresa tu prescripción de gafas y te ayudamos a encontrar el Air Optix más compatible.</p>
             </div>
           </section>
 

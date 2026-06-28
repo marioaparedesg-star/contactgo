@@ -100,6 +100,17 @@ export default function Page() {
           <span>⏱ 8 min lectura</span>
         </div>
 
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 text-sm list-decimal list-inside">
+            <li key="0"><a href="#precios" className="text-primary-600 hover:underline">Todos los precios tóricos</a></li>
+            <li key="1"><a href="#que-es" className="text-primary-600 hover:underline">¿Qué lente necesito?</a></li>
+            <li key="2"><a href="#marcas" className="text-primary-600 hover:underline">Marcas disponibles en ContactGo</a></li>
+            <li key="3"><a href="#receta" className="text-primary-600 hover:underline">Tu receta y los tóricos</a></li>
+            <li key="4"><a href="#faq" className="text-primary-600 hover:underline">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
+
         {/* Quick answer */}
         <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-5 mb-8">
           <p className="text-xs font-bold text-purple-700 uppercase tracking-wide mb-2">Respuesta directa</p>
@@ -342,6 +353,16 @@ export default function Page() {
             <a href="https://wa.me/18294728328?text=Hola%2C%20tengo%20astigmatismo%20y%20quiero%20comprar%20lentes%20t%C3%B3ricos%20en%20RD" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
               Asesoría WhatsApp
             </a>
+          </div>
+        </div>
+
+        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda República Dominicana</h3>
+          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>
       </main>

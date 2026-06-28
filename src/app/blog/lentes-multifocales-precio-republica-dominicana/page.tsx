@@ -52,6 +52,17 @@ export default function Page() {
         <div className="flex items-center gap-3 mb-5 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
           <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Precios actualizados junio 2026 · Entrega en toda RD · ⏱ 6 min</p></div>
+
+        <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
+          <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
+          <ol className="space-y-1.5 text-sm list-decimal list-inside">
+            <li key="0"><a href="#precios" className="text-primary-600 hover:underline">Tabla de precios multifocales</a></li>
+            <li key="1"><a href="#que-son" className="text-primary-600 hover:underline">¿Qué son los lentes multifocales?</a></li>
+            <li key="2"><a href="#marcas" className="text-primary-600 hover:underline">Todas las opciones disponibles</a></li>
+            <li key="3"><a href="#adaptacion" className="text-primary-600 hover:underline">Período de adaptación</a></li>
+            <li key="4"><a href="#faq" className="text-primary-600 hover:underline">Preguntas frecuentes</a></li>
+          </ol>
+        </div>
         </div>
 
         <div className="space-y-3 mb-6">
