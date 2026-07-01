@@ -72,6 +72,30 @@ const POSTS = [
   // ── CUIDADO Y MANTENIMIENTO ────────────────────────────────────────────────
   { slug: 'solucion-limpieza-lentes-contacto', titulo: 'Cómo elegir la mejor solución para lentes de contacto', desc: 'Opti-Free, Dream Eye, Prolub — cuál usar según tu tipo de lente y cómo limpiarlos correctamente.', emoji: '🧴', cat: 'Cuidado', mins: 4, fecha: '2026-04-10' },
 
+
+  // ── SPRINT 3 — 15 ARTÍCULOS DE INTENCIÓN DE BÚSQUEDA ─────────────────────
+  // Gotas oculares
+  { slug: 'refresh-optive-precio-republica-dominicana', titulo: 'Refresh Optive precio en República Dominicana 2026', desc: 'Refresh Optive Lubricant RD$900 · Advanced RD$1,000. Para ojos secos. Compatible con lentes. Entrega 24-48h.', emoji: '💧', cat: 'Precios', mins: 7, fecha: '2026-06-28', hot: true },
+  { slug: 'refresh-tears-precio-republica-dominicana', titulo: 'Refresh Tears precio en República Dominicana 2026', desc: 'Refresh Tears Lubricant Eye Drops en RD: RD$800. Lágrimas artificiales Allergan. Compatible con lentes. Entrega 24h.', emoji: '💧', cat: 'Precios', mins: 6, fecha: '2026-06-28' },
+  { slug: 'manzanilla-sophia-precio-republica-dominicana', titulo: 'Manzanilla Sophia precio en República Dominicana 2026', desc: 'Precio de Manzanilla Sophia en RD: RD$600. Para qué sirve y si es compatible con lentes de contacto.', emoji: '🌿', cat: 'Precios', mins: 6, fecha: '2026-06-28' },
+  { slug: 'gotas-para-ojos-secos-republica-dominicana', titulo: 'Las mejores gotas para ojos secos en RD 2026', desc: 'Comparativa completa de todas las gotas para ojo seco disponibles en RD. Refresh Optive, Tears, Prolub, Manzanilla Sophia.', emoji: '💧', cat: 'Salud ocular', mins: 9, fecha: '2026-06-28', hot: true },
+  // Lentes especializados
+  { slug: 'avaira-vitality-precio-republica-dominicana', titulo: 'Avaira Vitality precio en República Dominicana 2026', desc: 'Avaira Vitality esférico RD$3,690 · tórico RD$4,875. El mensual más económico de CooperVision en RD.', emoji: '💰', cat: 'Precios', mins: 6, fecha: '2026-06-28' },
+  { slug: 'lentes-contacto-ojos-secos-republica-dominicana', titulo: 'Los mejores lentes de contacto para ojos secos en RD 2026', desc: 'Air Optix HydraGlyde, ACUVUE Oasys, Biofinity, BL ULTRA — los 5 mejores para sequedad ocular con ranking y precios.', emoji: '💧', cat: 'Salud ocular', mins: 9, fecha: '2026-06-28', hot: true },
+  { slug: 'biotrue-oneday-precio-republica-dominicana', titulo: 'Biotrue ONEday precio en República Dominicana 2026', desc: 'Biotrue ONEday Bausch+Lomb en RD: RD$3,500 caja de 30. Lente diario con HyperGel 78% agua. Entrega 24-48h.', emoji: '💰', cat: 'Precios', mins: 6, fecha: '2026-06-28' },
+  { slug: 'proclear-multifocal-precio-republica-dominicana', titulo: 'Proclear Multifocal precio en República Dominicana 2026', desc: 'Proclear Multifocal RD$7,250 · XR RD$18,500 · Toric RD$20,000. CooperVision para presbicia. Entrega 24-48h.', emoji: '💰', cat: 'Precios', mins: 6, fecha: '2026-06-28' },
+  // Para turistas
+  { slug: 'contact-lenses-dominican-republic', titulo: 'Contact Lenses in Dominican Republic — Same Day Delivery', desc: 'Buy ACUVUE, Biofinity, Air Optix contact lenses in DR with delivery to your hotel in 24-48 hours. Punta Cana, Santo Domingo.', emoji: '🇺🇸', cat: 'Para turistas', mins: 8, fecha: '2026-06-28', hot: true },
+  { slug: 'forgot-contact-lenses-punta-cana', titulo: 'Forgot Your Contact Lenses in Punta Cana? We Deliver', desc: 'Emergency contact lens delivery to your hotel in Punta Cana, Bávaro and Cap Cana in 24-48 hours. Order online or WhatsApp.', emoji: '🚨', cat: 'Para turistas', mins: 6, fecha: '2026-06-28', hot: true },
+  // Salud y embarazo
+  { slug: 'lentes-contacto-embarazo-republica-dominicana', titulo: '¿Puedo usar lentes de contacto en el embarazo?', desc: 'Los cambios oculares durante el embarazo, qué lentes son más cómodos y cuándo consultar al médico. Guía médica 2026.', emoji: '🤰', cat: 'Salud ocular', mins: 8, fecha: '2026-06-28' },
+  { slug: 'cuantas-horas-usar-lentes-contacto', titulo: '¿Cuántas horas al día puedo usar lentes de contacto?', desc: 'Límites de uso por tipo de lente, señales de alarma y cómo extender el tiempo de uso cómodamente. Guía médica.', emoji: '⏱️', cat: 'Salud ocular', mins: 8, fecha: '2026-06-28' },
+  // Comparativas
+  { slug: 'biofinity-toric-vs-acuvue-oasys-astigmatism', titulo: 'Biofinity Toric vs ACUVUE Oasys for Astigmatism — ¿Cuál elegir?', desc: 'Comparativa completa: precio, oxígeno, estabilización y cuál es mejor para tu astigmatismo en RD.', emoji: '⚖️', cat: 'Comparativas', mins: 9, fecha: '2026-06-28', hot: true },
+  // Guías de uso
+  { slug: 'lentes-contacto-deporte-actividad-fisica', titulo: 'Lentes de contacto para deporte y actividad física', desc: 'Qué lentes elegir para gym, running, fútbol y cada deporte. Lo que nunca debes hacer (nadar con lentes).', emoji: '🏃', cat: 'Guías', mins: 8, fecha: '2026-06-28' },
+  { slug: 'lentes-contacto-computadora-pantallas', titulo: 'Lentes de contacto para trabajar con computadora', desc: 'Los mejores lentes para reducir la fatiga ocular digital. Regla 20-20-20, gotas lubricantes y consejos prácticos.', emoji: '💻', cat: 'Guías', mins: 8, fecha: '2026-06-28' },
+
   // ── ENTREGA POR CIUDAD ─────────────────────────────────────────────────────
   { slug: 'lentes-contacto-toda-republica-dominicana', titulo: 'Lentes de contacto con entrega en toda República Dominicana', desc: 'Entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix originales. 24-72h donde estés.', emoji: '🇩🇴', cat: 'Entrega', mins: 5, fecha: '2026-06-20', hot: true },
   { slug: 'lentes-contacto-punta-cana-entrega', titulo: 'Lentes de contacto en Punta Cana — Entrega a domicilio', desc: 'Entrega en Punta Cana, Bávaro y Cap Cana en 24-48h. ACUVUE, Biofinity, Air Optix originales.', emoji: '📍', cat: 'Entrega', mins: 4, fecha: '2026-06-20' },

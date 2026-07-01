@@ -106,6 +106,9 @@ export default function HeroSlider({ lentesCount = 4200, precioOasys }: { lentes
   }
 
   useEffect(() => {
+    // Guard: Yandex Browser y algunos webviews pueden tener window sin document
+    // (causa del error null.document en / — Sentry JAVASCRIPT-NEXTJS-E)
+    if (typeof window === 'undefined' || !window.document) return
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')  { prev(); resetAuto() }
       if (e.key === 'ArrowRight') { next(); resetAuto() }
