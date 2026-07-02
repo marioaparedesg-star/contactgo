@@ -133,10 +133,10 @@ export default function Footer() {
             <p className="text-[11px] text-gray-700">
               © {new Date().getFullYear()} ContactGo — República Dominicana
             </p>
-            {/* MEJORA-6: Razón social y RNC — credibilidad legal */}
-            <p className="text-[10px] text-gray-800">
+            {/* RNC pendiente de aprobación DGII — descomentar cuando esté activo */}
+            {/* <p className="text-[10px] text-gray-800">
               ContactGo SRL · RNC: 1-32-30854-5 · Santo Domingo, DO
-            </p>
+            </p> */}
           </div>
           <div className="flex items-center gap-2 order-1 sm:order-2">
             <img src="/visa-blue.png" alt="Visa" width="38" height="12" className="h-4 opacity-50 object-contain" />
