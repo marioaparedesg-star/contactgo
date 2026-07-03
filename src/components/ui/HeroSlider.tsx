@@ -106,15 +106,18 @@ export default function HeroSlider({ lentesCount = 4200, precioOasys }: { lentes
   }
 
   useEffect(() => {
-    // Guard: Yandex Browser y algunos webviews pueden tener window sin document
-    // (causa del error null.document en / — Sentry JAVASCRIPT-NEXTJS-E)
-    if (typeof window === 'undefined' || !window.document) return
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft')  { prev(); resetAuto() }
-      if (e.key === 'ArrowRight') { next(); resetAuto() }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
+    // Guard: Yandex Browser y webviews con window sin document (Sentry JAVASCRIPT-NEXTJS-E)
+    try {
+      if (typeof window === 'undefined' || !window || !window.document) return
+      const handler = (e: KeyboardEvent) => {
+        try {
+          if (e.key === 'ArrowLeft')  { prev(); resetAuto() }
+          if (e.key === 'ArrowRight') { next(); resetAuto() }
+        } catch { /* silenciar errores en browsers no estándar */ }
+      }
+      window.addEventListener('keydown', handler)
+      return () => { try { window.removeEventListener('keydown', handler) } catch {} }
+    } catch { /* silenciar errores de acceso a window en webviews */ }
   }, [next, prev, resetAuto])
 
   const s = SLIDES[current]

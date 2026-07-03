@@ -43,11 +43,17 @@ export default function CatalogoFiltros({
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      const target = e.target as Node
-      // Guard: el nodo puede estar desconectado del DOM si React ya lo eliminó
-      // (causa del error parentNode en /catalogo — Sentry JAVASCRIPT-NEXTJS-1)
-      if (!target || !document.body.contains(target)) return
-      if (ref.current && !ref.current.contains(target)) setOpen(false)
+      try {
+        const target = e.target as Node
+        // Guard triple: SSR, document.body null, y nodo desconectado del DOM
+        // Fix: Sentry JAVASCRIPT-NEXTJS-1 — parentNode null en /catalogo (regressed)
+        if (!target) return
+        if (typeof document === 'undefined' || !document.body) return
+        if (!document.body.contains(target)) return
+        if (ref.current && !ref.current.contains(target)) setOpen(false)
+      } catch {
+        // Silenciar errores de DOM en webviews y browsers no estándar
+      }
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
