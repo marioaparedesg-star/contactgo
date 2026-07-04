@@ -390,19 +390,15 @@ export async function POST(req: NextRequest) {
     // WhatsApp al cliente — solo para pedidos nuevos
     if (evento === 'nuevo_pedido' && order.cliente_telefono) {
       const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
-      fetch(`${BASE}/api/whatsapp/notify`, {
+      fetch(`${BASE}/api/whatsapp/confirmar-pedido`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          order_id,
-          cliente_nombre: order.cliente_nombre,
-          cliente_telefono: order.cliente_telefono,
-          total: order.total,
-          numero_orden: order.numero_orden,
-          metodo_pago: order.metodo_pago,
-        })
+        headers: {
+          'Content-Type': 'application/json',
+          'x-internal-token': process.env.INTERNAL_API_TOKEN ?? '',
+        },
+        body: JSON.stringify({ order_id })
       }).then(r => r.json())
-        .catch(() => {})
+        .then(d => console.log('[notify] WA confirmacion:', d?.ok ? 'OK' : d))
         .catch(e => console.error('[notify] WA error:', e))
     }
 
