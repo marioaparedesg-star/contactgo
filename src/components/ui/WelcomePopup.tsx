@@ -20,7 +20,10 @@ export default function WelcomePopup() {
     try { if (sessionStorage.getItem('popup_visto')) return } catch {}
 
     const sb = createClient()
-    sb.auth.getUser().then(({ data: { user } }) => {
+    // Guard: Sentry undefined.then — getUser puede ser undefined si Supabase no inicializa
+    const authPromise = sb?.auth?.getUser?.()
+    if (!authPromise || typeof authPromise.then !== 'function') return
+    authPromise.then(({ data: { user } }) => {
       if (user) return
 
       // Mostrar a los 5 segundos
