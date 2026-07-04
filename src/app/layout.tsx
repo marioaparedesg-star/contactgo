@@ -251,6 +251,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=AW-830060688"
         />
+        {/* GA4 — Google Analytics 4 */}
+        <Script
+          id="ga4"
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-KGM473ZPDB"
+        />
         <Script
           id="google-ads-init"
           strategy="afterInteractive"
@@ -259,6 +265,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'AW-830060688');
+            gtag('config', 'G-KGM473ZPDB');
           ` }}
         />
 
