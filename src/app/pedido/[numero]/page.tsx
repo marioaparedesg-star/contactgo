@@ -133,7 +133,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ numero:
             className="block w-full bg-primary-600 hover:bg-primary-700 text-white font-black py-4 rounded-2xl text-center text-sm transition-colors">
             Hacer otro pedido
           </a>
-          <a href={`https://wa.me/18294728328?text=Hola, pregunta sobre pedido ${order.numero_orden}`}
+          <a href={`/contacto?text=Hola, pregunta sobre pedido ${order.numero_orden}`}
             target="_blank" rel="noopener"
             className="flex items-center justify-center gap-2 w-full border border-gray-200 text-gray-600 font-semibold py-3 rounded-2xl text-sm hover:bg-gray-50 transition-colors">
             💬 Preguntar por WhatsApp

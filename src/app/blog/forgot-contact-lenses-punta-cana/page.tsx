@@ -45,7 +45,7 @@ export default function Page() {
           <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4">
             <p className="font-bold text-green-800 text-sm mb-2">📱 Fastest option: WhatsApp</p>
             <p className="text-green-700 text-sm mb-3">Message us directly with your prescription and hotel name. We respond immediately and coordinate delivery.</p>
-            <a href="https://wa.me/18294728328?text=Hello%2C%20I%20forgot%20my%20contact%20lenses%20in%20Punta%20Cana.%20Can%20you%20deliver%20to%20my%20hotel%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#20ba58] transition-colors">
+            <a href="/contacto?text=Hello%2C%20I%20forgot%20my%20contact%20lenses%20in%20Punta%20Cana.%20Can%20you%20deliver%20to%20my%20hotel%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#20ba58] transition-colors">
               WhatsApp us now →
             </a>
           </div>
@@ -83,7 +83,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>
-            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+            <a href="/contacto" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>
       </main><Footer />

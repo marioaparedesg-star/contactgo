@@ -163,7 +163,7 @@ function ReciboContent() {
               </button>
             )}
             <a
-              href="https://wa.me/18294728328?text=Hola%2C+no+puedo+ver+mi+comprobante+de+pago"
+              href="/contacto?text=Hola%2C+no+puedo+ver+mi+comprobante+de+pago"
               target="_blank" rel="noopener noreferrer"
               style={{display:'block',background:'#16a34a',color:'white',textDecoration:'none',padding:'12px 20px',borderRadius:'10px',fontWeight:'700',fontSize:'14px'}}
             >

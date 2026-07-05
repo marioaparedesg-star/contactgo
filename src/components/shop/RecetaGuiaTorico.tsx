@@ -138,7 +138,7 @@ export default function RecetaGuiaTorico() {
 
               {/* CTA WhatsApp si aún no entiende */}
               <a
-                href="https://wa.me/18294728328?text=Hola%2C+tengo+una+duda+leyendo+mi+receta+t%C3%B3rica.+%C2%BFPueden+ayudarme%3F"
+                href="/contacto?text=Hola%2C+tengo+una+duda+leyendo+mi+receta+t%C3%B3rica.+%C2%BFPueden+ayudarme%3F"
                 target="_blank"
                 rel="noopener"
                 className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-2.5 rounded-xl text-sm transition-colors"

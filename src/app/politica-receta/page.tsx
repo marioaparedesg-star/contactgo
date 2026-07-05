@@ -143,7 +143,7 @@ export default function PoliticaRecetaPage() {
                 seleccionar los parámetros correctos.
               </p>
               <a
-                href="https://wa.me/18294728328?text=Hola%2C+tengo+dudas+sobre+mi+receta+para+lentes+de+contacto"
+                href="/contacto?text=Hola%2C+tengo+dudas+sobre+mi+receta+para+lentes+de+contacto"
                 target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold text-sm px-5 py-3 rounded-xl hover:bg-[#22c55e] transition-colors"
               >

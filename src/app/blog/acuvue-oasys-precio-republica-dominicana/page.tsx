@@ -238,7 +238,7 @@ export default function Page() {
               ))}
             </div>
             <div className="mt-4 bg-primary-50 border border-primary-100 rounded-xl p-3 text-sm">
-              <p>¿No sabes qué modelo necesitas? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta gratuita</Link> o <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="text-primary-600 font-semibold hover:underline">escríbenos por WhatsApp</a> y te asesoramos.</p>
+              <p>¿No sabes qué modelo necesitas? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta gratuita</Link> o <a href="/contacto" target="_blank" rel="noopener noreferrer" className="text-primary-600 font-semibold hover:underline">escríbenos por WhatsApp</a> y te asesoramos.</p>
             </div>
           </section>
 
@@ -299,7 +299,7 @@ export default function Page() {
               <Link href="/marca/acuvue" className="flex-1 flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-5 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">
                 Ver toda la línea ACUVUE →
               </Link>
-              <a href="https://wa.me/18294728328?text=Hola%2C%20quiero%20comprar%20ACUVUE%20Oasys%20en%20Rep%C3%BAblica%20Dominicana" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-5 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
+              <a href="/contacto?text=Hola%2C%20quiero%20comprar%20ACUVUE%20Oasys%20en%20Rep%C3%BAblica%20Dominicana" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-5 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
                 Pedir por WhatsApp
               </a>
             </div>
@@ -368,7 +368,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
-            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
+            <a href="/contacto" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>
       </main>

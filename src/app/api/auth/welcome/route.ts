@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
 
     <p style="color:#9ca3af;font-size:12px;text-align:center;margin:0;">
       ¿Necesitas ayuda? Escríbenos por
-      <a href="https://wa.me/18294728328" style="color:#16a34a;font-weight:600;">WhatsApp</a>
+      <a href="/contacto" style="color:#16a34a;font-weight:600;">WhatsApp</a>
       o a <a href="mailto:info@contactgo.net" style="color:#16a34a;">info@contactgo.net</a>
     </p>
   </td></tr>

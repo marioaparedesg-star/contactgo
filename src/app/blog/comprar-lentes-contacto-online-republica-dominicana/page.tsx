@@ -72,7 +72,7 @@ export default function Page() {
           <p className="text-sm text-primary-700 mb-3">La forma más segura y rápida de comprar lentes de contacto online en RD es través de <strong>ContactGo</strong>: la única tienda dominicana especializada 100% en lentes de contacto. Originales, entrega 24-48h y pago con AZUL.</p>
           <div className="flex gap-2">
             <Link href="/catalogo" className="flex-1 bg-primary-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-primary-700 transition-colors">Ver catálogo completo →</Link>
-            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Comprar por WhatsApp</a>
+            <a href="/contacto" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Comprar por WhatsApp</a>
           </div>
         </div>
 
@@ -175,7 +175,7 @@ export default function Page() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-3 text-sm text-gray-600">¿No tienes tu receta? <Link href="/receta" className="text-primary-600 font-semibold hover:underline">Usa nuestra calculadora gratuita</Link> — te ayudamos a identificar el lente correcto. También puedes consultarnos por <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="text-primary-600 font-semibold hover:underline">WhatsApp</a>.</p>
+            <p className="mt-3 text-sm text-gray-600">¿No tienes tu receta? <Link href="/receta" className="text-primary-600 font-semibold hover:underline">Usa nuestra calculadora gratuita</Link> — te ayudamos a identificar el lente correcto. También puedes consultarnos por <a href="/contacto" target="_blank" rel="noopener noreferrer" className="text-primary-600 font-semibold hover:underline">WhatsApp</a>.</p>
           </section>
 
           <section id="entrega">
@@ -248,7 +248,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</Link>
-            <a href="https://wa.me/18294728328?text=Hola%2C%20quiero%20comprar%20lentes%20de%20contacto%20en%20RD" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+            <a href="/contacto?text=Hola%2C%20quiero%20comprar%20lentes%20de%20contacto%20en%20RD" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>
       </main>

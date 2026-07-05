@@ -442,7 +442,7 @@ export default function Page() {
             <Link href="/soluciones" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">
               Ver soluciones de limpieza
             </Link>
-            <a href="https://wa.me/18294728328?text=Hola%2C%20es%20mi%20primera%20vez%20comprando%20lentes%20de%20contacto%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
+            <a href="/contacto?text=Hola%2C%20es%20mi%20primera%20vez%20comprando%20lentes%20de%20contacto%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
               Asesoría por WhatsApp
             </a>
           </div>

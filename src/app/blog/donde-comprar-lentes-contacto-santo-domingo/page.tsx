@@ -268,7 +268,7 @@ export default function Page() {
               {[
                 { titulo: '🧮 Calculadora de receta gratuita', desc: 'Ingresa los valores de tu receta y te mostramos los lentes más compatibles.', link: '/receta', cta: 'Usar calculadora' },
                 { titulo: '📖 Guía para leer tu receta', desc: 'Aprende qué significa cada valor: SPH, CYL, AXIS, BC, DIA.', link: '/blog/como-leer-receta-optica-rd', cta: 'Leer guía' },
-                { titulo: '💬 Asesoría por WhatsApp', desc: 'Escríbenos y te ayudamos a encontrar el lente correcto.', link: 'https://wa.me/18294728328', cta: 'Escribir ahora' },
+                { titulo: '💬 Asesoría por WhatsApp', desc: 'Escríbenos y te ayudamos a encontrar el lente correcto.', link: '/contacto', cta: 'Escribir ahora' },
               ].map(({ titulo, desc, link, cta }) => (
                 <Link key={link} href={link} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-primary-50/20 transition-all">
                   <div>
@@ -339,7 +339,7 @@ export default function Page() {
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">
               Calcular mi receta
             </Link>
-            <a href="https://wa.me/18294728328?text=Hola%2C%20quiero%20comprar%20lentes%20de%20contacto%20con%20entrega%20en%20Santo%20Domingo" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
+            <a href="/contacto?text=Hola%2C%20quiero%20comprar%20lentes%20de%20contacto%20con%20entrega%20en%20Santo%20Domingo" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
               Pedir por WhatsApp
             </a>
           </div>

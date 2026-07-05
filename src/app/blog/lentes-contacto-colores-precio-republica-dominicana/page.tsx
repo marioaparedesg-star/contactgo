@@ -81,7 +81,7 @@ export default function Page() {
           </table>
           <div className="flex gap-2 mt-4">
             <Link href="/color" className="flex-1 bg-purple-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-purple-700 transition-colors">Ver lentes de color →</Link>
-            <a href="https://wa.me/18294728328?text=Hola%2C%20quiero%20lentes%20de%20contacto%20de%20colores%20en%20RD" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Pedir por WhatsApp</a>
+            <a href="/contacto?text=Hola%2C%20quiero%20lentes%20de%20contacto%20de%20colores%20en%20RD" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Pedir por WhatsApp</a>
           </div>
         </div>
 
@@ -212,7 +212,7 @@ export default function Page() {
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-purple-200 text-purple-600 font-bold px-6 py-3 rounded-xl hover:bg-purple-50 transition-colors text-sm">
               Calcular mi receta gratis
             </a>
-            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
+            <a href="/contacto" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
               Pedir por WhatsApp
             </a>
           </div>
@@ -224,7 +224,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
-            <a href="https://wa.me/18294728328" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
+            <a href="/contacto" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>
       </main>

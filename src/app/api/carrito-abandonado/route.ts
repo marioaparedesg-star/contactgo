@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
   <!-- Bloque WhatsApp — canal preferido en RD -->
   <tr><td style="padding:16px 28px;text-align:center;">
     <p style="margin:0 0 10px;font-size:13px;color:#374151;font-weight:600;">¿Tienes dudas sobre tu graduación?</p>
-    <a href="https://wa.me/18294728328?text=${encodeURIComponent(`Hola, dejé unos lentes en el carrito y tengo una pregunta antes de completar el pedido.`)}"
+    <a href="/contacto?text=${encodeURIComponent(`Hola, dejé unos lentes en el carrito y tengo una pregunta antes de completar el pedido.`)}"
        style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;font-size:13px;padding:11px 24px;border-radius:10px;">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/48px-WhatsApp.svg.png" width="18" height="18" alt="" style="display:inline-block;vertical-align:middle;">
       Escríbenos por WhatsApp
