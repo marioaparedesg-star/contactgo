@@ -84,6 +84,46 @@ export async function POST(req: NextRequest) {
         } catch (dbErr: any) {
           console.error('[WA/webhook] DB insert error:', dbErr.message)
         }
+
+        // ── Notificación al admin (829-408-9097) ──
+        // Envía alerta instantánea al personal de Mario para respuesta rápida
+        try {
+          const ADMIN_PHONE = process.env.WHATSAPP_ADMIN_PHONE ?? '18294089097'
+          const WA_API = 'https://graph.facebook.com/v20.0'
+          const PHONE_ID = process.env.WHATSAPP_PHONE_ID ?? ''
+          const TOKEN = process.env.WHATSAPP_TOKEN ?? ''
+          
+          // No notificar mensajes propios ni reacciones
+          if (from !== ADMIN_PHONE.replace(/^1/, '') && msgType !== 'reaction') {
+            const displayPhone = from.length === 11 && from.startsWith('1')
+              ? `(${from.slice(1,4)}) ${from.slice(4,7)}-${from.slice(7)}`
+              : from
+            const nombre = contactName ?? displayPhone
+
+            const alerta = `📩 *Nuevo mensaje en ContactGo*\n\n` +
+              `👤 *${nombre}*\n` +
+              `📱 ${displayPhone}\n` +
+              `💬 ${msgBody.slice(0, 300)}${msgBody.length > 300 ? '...' : ''}\n\n` +
+              `👉 Responder: https://www.contactgo.net/admin/whatsapp`
+
+            await fetch(`${WA_API}/${PHONE_ID}/messages`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${TOKEN}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                messaging_product: 'whatsapp',
+                to: ADMIN_PHONE,
+                type: 'text',
+                text: { body: alerta },
+              }),
+            })
+          }
+        } catch (notifErr: any) {
+          // Notificación es best-effort — no bloquear el webhook
+          console.error('[WA/webhook] Notif error:', notifErr.message)
+        }
       }
     }
 
