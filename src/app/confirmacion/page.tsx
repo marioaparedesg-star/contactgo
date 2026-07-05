@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { getEntrega } from '@/lib/delivery-times'
 import { CheckCircle, Package, MapPin, CreditCard, MessageCircle, ChevronRight, XCircle } from 'lucide-react'
 import { fmtSph } from '@/lib/sph-utils'
-import { trackEcommerce } from '@/lib/analytics'
+import { trackEcommerce, sendCAPI } from '@/lib/analytics'
 import GoogleCustomerReviewsOptIn from '@/components/trust/GoogleCustomerReviews'
 
 const PASOS = [
@@ -131,6 +131,18 @@ function ConfirmacionContent() {
               price:         Number(item.precio ?? 0),
               quantity:      Number(item.cantidad ?? 1),
             })),
+          })
+          // ── Meta CAPI (server-side) — confiable sin importar browser/blocker ──
+          sendCAPI('Purchase', {
+            value: Number(o.total ?? 0),
+            currency: 'DOP',
+            content_ids: (i ?? []).map((item: any) => item.product_id ?? item.id),
+            num_items: (i ?? []).length,
+            order_id: o.numero_orden ?? orderId ?? '',
+          }, {
+            email: o.cliente_email ?? undefined,
+            phone: o.cliente_telefono ?? undefined,
+            firstName: o.cliente_nombre?.split(' ')[0] ?? undefined,
           })
         }
       }
