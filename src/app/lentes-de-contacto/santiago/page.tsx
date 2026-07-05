@@ -78,7 +78,7 @@ export default async function Page() {
           <p>Cubrimos todos los sectores de Santiago: <strong>Centro de la Ciudad, Los Jardines, Pueblo Nuevo, Las Colinas, La Trinitaria, Bella Vista, Ensanche Bermúdez, Gurabo</strong> y todos los municipios del Gran Santiago incluyendo Licey al Medio, Tamboril, Villa González y Puñal.</p>
           
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo enviar tu receta desde Santiago?</h3>
-          <p>Tienes tres opciones desde Santiago: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta en línea</a> con los valores de tu prescripción. (2) Envíanos una foto clara de tu receta por WhatsApp al (829) 472-8328. (3) Indica los valores de Esfera, Cilindro y Eje al hacer tu pedido. Tu optómetra de confianza en Santiago puede darte estos datos.</p>
+          <p>Tienes tres opciones desde Santiago: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta en línea</a> con los valores de tu prescripción. (2) Envíanos una foto clara de tu receta por WhatsApp al (829) 543-0580. (3) Indica los valores de Esfera, Cilindro y Eje al hacer tu pedido. Tu optómetra de confianza en Santiago puede darte estos datos.</p>
           
           <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santiago</h3>
           <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">

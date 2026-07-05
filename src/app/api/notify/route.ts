@@ -245,7 +245,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
     </a>
     <p style="margin:12px 0 0;font-size:12px;color:#9ca3af;">
       ¿Dudas? Escríbenos por
-      <a href="https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP ?? '18295430580'}?text=Hola%2C+tengo+una+pregunta+sobre+mi+pedido+%23${pedidoId}" style="color:#16a34a;font-weight:600;"> WhatsApp (829) 472-8328</a>
+      <a href="https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP ?? '18295430580'}?text=Hola%2C+tengo+una+pregunta+sobre+mi+pedido+%23${pedidoId}" style="color:#16a34a;font-weight:600;"> WhatsApp (829) 543-0580</a>
     </p>
   </td></tr>
 
@@ -280,7 +280,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
   <!-- FOOTER -->
   <tr><td style="background:#f9fafb;padding:14px 32px;text-align:center;border-top:1px solid #f3f4f6;">
     <p style="margin:0;font-size:11px;color:#9ca3af;line-height:1.6;">
-      <strong style="color:#6b7280;">ContactGo</strong> · contactgo.net · info@contactgo.net · (829) 472-8328<br>
+      <strong style="color:#6b7280;">ContactGo</strong> · contactgo.net · info@contactgo.net · (829) 543-0580<br>
       Santo Domingo, República Dominicana · No aceptamos devoluciones después de 30 días.
     </p>
   </td></tr>

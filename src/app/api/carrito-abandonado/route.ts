@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/48px-WhatsApp.svg.png" width="18" height="18" alt="" style="display:inline-block;vertical-align:middle;">
       Escríbenos por WhatsApp
     </a>
-    <p style="margin:8px 0 0;font-size:11px;color:#9ca3af;">Respondemos en minutos · (829) 472-8328</p>
+    <p style="margin:8px 0 0;font-size:11px;color:#9ca3af;">Respondemos en minutos · (829) 543-0580</p>
   </td></tr>
   <tr><td style="background:#f9fafb;padding:12px 28px;border-top:1px solid #f3f4f6;text-align:center;">
     <p style="margin:0;font-size:11px;color:#9ca3af;">ContactGo · contactgo.net · Santo Domingo, RD</p>

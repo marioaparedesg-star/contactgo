@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     <p style="color:#94a3b8;font-size:12px;margin:0 0 8px;">
       <strong style="color:white;">ContactGo</strong> — contactgo.net
     </p>
-    <p style="color:#475569;font-size:11px;margin:0;">(829) 472-8328 · info@contactgo.net · Santo Domingo, RD</p>
+    <p style="color:#475569;font-size:11px;margin:0;">(829) 543-0580 · info@contactgo.net · Santo Domingo, RD</p>
   </td></tr>
 
 </table>

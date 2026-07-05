@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
       <span style="color:#475569;margin:0 8px;">·</span>
       <a href="mailto:info@contactgo.net" style="color:#4ade80;text-decoration:none;font-size:12px;">info@contactgo.net</a>
       <span style="color:#475569;margin:0 8px;">·</span>
-      <span style="color:#64748b;font-size:12px;">(829) 472-8328</span>
+      <span style="color:#64748b;font-size:12px;">(829) 543-0580</span>
     </p>
   </td></tr>
 

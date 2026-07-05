@@ -183,7 +183,7 @@ function ReciboContent() {
             </a>
           </div>
           <p style={{color:'#d1d5db',fontSize:'11px',marginTop:'20px',marginBottom:0}}>
-            ContactGo · (829) 472-8328 · info@contactgo.net
+            ContactGo · (829) 543-0580 · info@contactgo.net
           </p>
         </div>
       </div>
@@ -231,7 +231,7 @@ function ReciboContent() {
             <div style={{fontSize:'28px',fontWeight:'900',color:'#0d6efd',letterSpacing:'-1px'}}>ContactGo</div>
             <div style={{fontSize:'11px',color:'#888',marginTop:'2px'}}>Lentes de Contacto República Dominicana</div>
             <div style={{fontSize:'11px',color:'#888'}}>contactgo.net · info@contactgo.net</div>
-            <div style={{fontSize:'11px',color:'#888'}}>(829) 472-8328 · Santo Domingo, RD</div>
+            <div style={{fontSize:'11px',color:'#888'}}>(829) 543-0580 · Santo Domingo, RD</div>
           </div>
           <div style={{textAlign:'right'}}>
             <div style={{fontSize:'16px',fontWeight:'900',color:'#1a1a1a',textTransform:'uppercase'}}>Comprobante de Pago</div>
@@ -360,9 +360,9 @@ function ReciboContent() {
         {/* PIE */}
         <div style={{borderTop:'1px solid #e5e7eb',paddingTop:'12px',textAlign:'center',fontSize:'10px',color:'#9ca3af',lineHeight:'1.8'}}>
           <strong style={{color:'#1a1a1a'}}>ContactGo — Lentes de Contacto República Dominicana</strong><br/>
-          contactgo.net · info@contactgo.net · (829) 472-8328 · Santo Domingo, República Dominicana<br/>
+          contactgo.net · info@contactgo.net · (829) 543-0580 · Santo Domingo, República Dominicana<br/>
           Este comprobante es válido como prueba de pago. Moneda: Peso Dominicano (RD$).<br/>
-          No se aceptan devoluciones después de 30 días. ¿Dudas? Contáctenos al (829) 472-8328
+          No se aceptan devoluciones después de 30 días. ¿Dudas? Contáctenos al (829) 543-0580
         </div>
       </div>
     </>

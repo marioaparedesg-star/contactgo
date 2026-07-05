@@ -17,7 +17,7 @@ export default function Footer() {
             <span className="text-gray-500 text-[10px]">La única tienda 100% especializada en lentes · RD</span>
             {/* MEJORA-10: Teléfono clickeable visible */}
             <a href="tel:+18295430580" className="text-green-400 text-[11px] font-semibold hover:text-green-300 transition-colors">
-              📞 (829) 472-8328
+              📞 (829) 543-0580
             </a>
           </div>
           <div className="flex items-center gap-2">
@@ -89,9 +89,9 @@ export default function Footer() {
             <ul className="space-y-1.5 text-xs">
               <li>
                 <a href="https://wa.me/18295430580" target="_blank" rel="noopener noreferrer"
-                  aria-label="WhatsApp (829) 472-8328"
+                  aria-label="WhatsApp (829) 543-0580"
                   className="text-gray-500 hover:text-gray-300 transition-colors">
-                  (829) 472-8328
+                  (829) 543-0580
                 </a>
               </li>
               <li>
