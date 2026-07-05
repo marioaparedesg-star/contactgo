@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingBag, Package, Users, BarChart2,
   Repeat, ShoppingCart, TrendingUp, Tag, Settings, ChevronLeft,
-  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText, Scan, AlertTriangle, CheckCircle, DollarSign
+  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText, Scan, AlertTriangle, CheckCircle, DollarSign, MessageCircle
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -37,6 +37,7 @@ const NAV_SECTIONS = [
       { href: '/admin/leads',         icon: TrendingUp,      label: '🎯 Leads Calculadora', badge: null },
       { href: '/admin/registrados',   icon: Users,           label: '👥 Registrados',  badge: null },
       { href: '/admin/abandonados',   icon: ShoppingCart,    label: 'Abandonados',    badge: null },
+      { href: '/admin/whatsapp',      icon: MessageCircle,   label: '💬 WhatsApp',     badge: 'whatsapp' },
     ]
   },
   {
@@ -67,6 +68,7 @@ export default function AdminNav() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [pendientes, setPendientes] = useState(0)
   const [stockAlerts, setStockAlerts] = useState(0)
+  const [waUnread, setWaUnread] = useState(0)
 
   useEffect(() => {
     // Si estamos en /admin/pedidos, marcar como vistos y no mostrar badge
@@ -88,11 +90,15 @@ export default function AdminNav() {
     }
     sb.from('products').select('*', { count: 'exact', head: true }).eq('activo', true).lte('stock', 3)
       .then(({ count }) => setStockAlerts(count ?? 0))
+    sb.from('whatsapp_messages').select('*', { count: 'exact', head: true })
+      .eq('direction', 'inbound').eq('read', false)
+      .then(({ count }) => setWaUnread(count ?? 0))
   }, [pathname])
 
   const getBadge = (key: string | null) => {
     if (key === 'pendientes') return pendientes
     if (key === 'stock') return stockAlerts
+    if (key === 'whatsapp') return waUnread
     return 0
   }
 

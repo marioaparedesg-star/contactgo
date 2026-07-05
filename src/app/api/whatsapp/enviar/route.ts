@@ -1,10 +1,9 @@
 // ============================================================
 // ContactGo — POST /api/whatsapp/enviar
-// Endpoint genérico para enviar mensajes desde el admin
-// POST { telefono, mensaje, order_id? }
+// Enviar mensajes desde el admin + guardar en Supabase
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
-import { sendText, sendShippingNotification, sendRenewalReminder } from '@/lib/whatsapp'
+import { sendText, sendShippingNotification, sendRenewalReminder, normalizePhone } from '@/lib/whatsapp'
 import { createClient } from '@supabase/supabase-js'
 
 function getSb() {
@@ -21,11 +20,11 @@ export async function POST(req: NextRequest) {
 
     if (!telefono) return NextResponse.json({ error: 'telefono requerido' }, { status: 400 })
 
-    let result
+    const sb = getSb()
+    let result: any
+    let sentBody = ''
 
     if (tipo === 'envio' && order_id) {
-      // Notificación de envío
-      const sb = getSb()
       const { data: order } = await sb
         .from('orders')
         .select('cliente_nombre, numero_orden, cliente_telefono')
@@ -38,19 +37,36 @@ export async function POST(req: NextRequest) {
           cliente_nombre:   order.cliente_nombre,
           numero_orden:     order.numero_orden,
         })
+        sentBody = `🚚 Notificación de envío - Pedido #${order.numero_orden}`
       }
     } else if (tipo === 'renovacion') {
-      // Recordatorio de renovación
       result = await sendRenewalReminder({
         telefono,
         nombre:   body.nombre ?? '',
         producto: body.producto ?? 'lentes de contacto',
       })
+      sentBody = `🔄 Recordatorio de renovación`
     } else if (mensaje) {
-      // Mensaje libre
       result = await sendText(telefono, mensaje)
+      sentBody = mensaje
     } else {
       return NextResponse.json({ error: 'mensaje o tipo requerido' }, { status: 400 })
+    }
+
+    // Save outbound message to DB
+    const waMessageId = result?.messages?.[0]?.id ?? null
+    try {
+      await sb.from('whatsapp_messages').insert({
+        wa_message_id: waMessageId,
+        phone: normalizePhone(telefono),
+        direction: 'outbound',
+        message_type: 'text',
+        body: sentBody,
+        status: 'sent',
+        read: true,
+      })
+    } catch (dbErr: any) {
+      console.error('[WA/enviar] DB insert error:', dbErr.message)
     }
 
     return NextResponse.json({ ok: true, result })
