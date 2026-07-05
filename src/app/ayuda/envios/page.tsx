@@ -33,7 +33,7 @@ export default function EnviosPage() {
             { title: '📱 Seguimiento de pedido', body: 'Una vez confirmado tu pedido te notificamos por WhatsApp. Cuando esté en camino recibirás los datos del mensajero para coordinar la entrega.' },
             { title: '🏠 ¿Dónde entregan?', body: 'Entregamos directamente en tu domicilio, lugar de trabajo o cualquier dirección que indiques al momento de hacer el pedido.' },
             { title: '📦 ¿Cómo viene empacado?', body: 'Todos los pedidos vienen empacados de forma segura para proteger los productos durante el transporte.' },
-            { title: '❓ Mi pedido no llegó', body: 'Si tu pedido no llegó en el tiempo estimado, contáctanos por WhatsApp al 829-472-8328 con tu número de pedido y lo verificamos de inmediato.' },
+            { title: '❓ Mi pedido no llegó', body: 'Si tu pedido no llegó en el tiempo estimado, contáctanos por WhatsApp al 829-543-0580 con tu número de pedido y lo verificamos de inmediato.' },
           ].map(({ title, body }) => (
             <div key={title} className="border border-gray-100 rounded-2xl p-5">
               <p className="font-semibold text-gray-900 text-sm mb-2">{title}</p>
@@ -44,7 +44,7 @@ export default function EnviosPage() {
         <div className="mt-10 bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
           <p className="font-semibold text-gray-900 mb-1">¿Tienes preguntas sobre tu envío?</p>
           <p className="text-gray-500 text-sm mb-4">Escríbenos y te respondemos en minutos.</p>
-          <a href="/contacto" target="_blank"
+          <a href="https://wa.me/18295430580" target="_blank"
             className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
             💬 Contactar por WhatsApp
           </a>

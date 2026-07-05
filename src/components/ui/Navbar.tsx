@@ -71,7 +71,7 @@ export default function Navbar() {
         {/* Actions */}
         <div className="flex items-center gap-2" role="navigation" aria-label="Acciones de usuario">
           {/* MEJORA-10: Teléfono clickeable visible en desktop */}
-          <a href="tel:+18294728328"
+          <a href="tel:+18295430580"
             className="hidden lg:flex items-center gap-1.5 text-[12px] text-gray-500 hover:text-gray-900 transition-colors font-medium px-2">
             <span>📞</span>
             <span>(829) 472-8328</span>

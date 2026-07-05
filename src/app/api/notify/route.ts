@@ -245,7 +245,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
     </a>
     <p style="margin:12px 0 0;font-size:12px;color:#9ca3af;">
       ¿Dudas? Escríbenos por
-      <a href="https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP ?? '18294728328'}?text=Hola%2C+tengo+una+pregunta+sobre+mi+pedido+%23${pedidoId}" style="color:#16a34a;font-weight:600;"> WhatsApp (829) 472-8328</a>
+      <a href="https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP ?? '18295430580'}?text=Hola%2C+tengo+una+pregunta+sobre+mi+pedido+%23${pedidoId}" style="color:#16a34a;font-weight:600;"> WhatsApp (829) 472-8328</a>
     </p>
   </td></tr>
 

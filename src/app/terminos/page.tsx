@@ -77,7 +77,7 @@ export default function TerminosPage() {
           <p>¿Preguntas sobre estos términos? Escríbenos a{' '}
             <a href="mailto:info@contactgo.net" className="text-primary-600 font-semibold">info@contactgo.net</a>
             {' '}o al WhatsApp{' '}
-            <a href="/contacto" className="text-primary-600 font-semibold">(829) 472-8328</a>
+            <a href="https://wa.me/18295430580" className="text-primary-600 font-semibold">(829) 472-8328</a>
           </p>
         </div>
       </main>

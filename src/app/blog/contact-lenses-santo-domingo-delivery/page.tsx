@@ -44,7 +44,7 @@ export default function Page() {
         </div>
         <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4">
           <p className="font-bold text-green-800 text-sm mb-2">Fastest option: WhatsApp</p>
-          <a href="/contacto" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#20ba58] transition-colors">Order on WhatsApp →</a>
+          <a href="https://wa.me/18295430580" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#20ba58] transition-colors">Order on WhatsApp →</a>
         </div>
       </section>
       <section id="faq">
@@ -75,7 +75,7 @@ export default function Page() {
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">View catalog →</a>
         <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calculate my prescription</a>
-        <a href="/contacto" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Order on WhatsApp</a>
+        <a href="https://wa.me/18295430580" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Order on WhatsApp</a>
       </div>
     </div>
   </main><Footer /></>)

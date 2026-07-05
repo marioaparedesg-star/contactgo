@@ -117,7 +117,7 @@ export default async function Page() {
         "@type": "LocalBusiness",
         "name": "ContactGo — Lentes de Contacto Santiago de los Caballeros",
         "url": "https://www.contactgo.net/lentes-de-contacto/santiago",
-        "telephone": "+1-829-472-8328",
+        "telephone": "+1-829-543-0580",
         "email": "info@contactgo.net",
         "areaServed": {
           "@type": "City",

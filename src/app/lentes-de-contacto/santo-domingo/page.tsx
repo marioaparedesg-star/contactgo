@@ -128,7 +128,7 @@ export default async function Page() {
         "@type": "LocalBusiness",
         "name": "ContactGo — Lentes de Contacto Santo Domingo",
         "url": "https://www.contactgo.net/lentes-de-contacto/santo-domingo",
-        "telephone": "+1-829-472-8328",
+        "telephone": "+1-829-543-0580",
         "email": "info@contactgo.net",
         "areaServed": {
           "@type": "City",

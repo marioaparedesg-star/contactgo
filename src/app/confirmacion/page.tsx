@@ -167,7 +167,7 @@ function ConfirmacionContent() {
   const entregaInfo = getEntrega(tipoDominante, tieneXR ? 'XR' : '')
   const hasTorico = tieneXR || tieneTorico // mantener para compatibilidad visual
   const waMsg      = encodeURIComponent(`Hola ContactGo 👋 quiero consultar sobre mi pedido #${pedidoId}`)
-  const waNumber   = '18294728328'
+  const waNumber   = '18295430580'
 
   // ── PAGO DECLINADO ─────────────────────────────────────────────────────────
   if (declinado) return (

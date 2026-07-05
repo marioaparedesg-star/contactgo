@@ -49,13 +49,13 @@ export default function ContactoPage() {
 
       {/* Canales rápidos */}
       <div className="grid grid-cols-2 gap-3 mb-8">
-        <a href="tel:+18294728328" className="flex items-center gap-3 p-4 border border-gray-100 rounded-2xl hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+        <a href="tel:+18295430580" className="flex items-center gap-3 p-4 border border-gray-100 rounded-2xl hover:border-primary-200 hover:bg-primary-50/20 transition-all">
           <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
             <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
           </div>
           <div>
             <p className="text-xs text-gray-500">Llamar</p>
-            <p className="text-sm font-bold text-gray-900">829-472-8328</p>
+            <p className="text-sm font-bold text-gray-900">829-543-0580</p>
           </div>
         </a>
         <a href="mailto:info@contactgo.net" className="flex items-center gap-3 p-4 border border-gray-100 rounded-2xl hover:border-primary-200 hover:bg-primary-50/20 transition-all">

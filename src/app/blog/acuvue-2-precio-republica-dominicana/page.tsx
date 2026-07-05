@@ -29,7 +29,7 @@ export default function Page() {
         <div className="flex items-baseline gap-2"><span className="text-4xl font-black text-gray-900">RD$3,600</span><span className="text-gray-500 text-sm">Caja de 6 lentes — quincenal</span></div>
         <div className="flex gap-2 mt-4">
           <a href="/producto/acuvue-2-lentes-contacto-quincenales-dominicana" className="flex-1 bg-primary-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-primary-700 transition-colors">Comprar ACUVUE® 2 →</a>
-          <a href="/contacto" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Pedir por WhatsApp</a>
+          <a href="https://wa.me/18295430580" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Pedir por WhatsApp</a>
         </div>
       </div>
       <p className="text-sm text-gray-700 mt-3">ACUVUE 2 es el lente quincenal clásico de Johnson &amp; Johnson, fabricado con hidrogel de alta calidad. Aunque no es silicona hidrogel como el ACUVUE Oasys, sigue siendo una opción confiable para quienes buscan el menor precio en la línea ACUVUE. Dk/t de 26 — recomendado para uso de hasta 8-10 horas diarias.</p>
@@ -58,7 +58,7 @@ export default function Page() {
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
         <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>
-        <a href="/contacto" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+        <a href="https://wa.me/18295430580" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
       </div>
     </div>
   </main><Footer /></>)
