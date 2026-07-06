@@ -3,9 +3,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
 export async function POST(req: NextRequest) {
-  const { email, nombre } = await req.json()
+  const { email, nombre, telefono, user_id } = await req.json()
   if (!email) return NextResponse.json({ ok: false })
   try {
+    // ── Enviar WhatsApp de bienvenida (paralelo, no bloqueante) ──
+    if (telefono && user_id) {
+      const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+      fetch(`${BASE}/api/wa/dispatch`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo: 'bienvenida', user_id, nombre, telefono }),
+      }).catch(() => {})
+    }
+
     const resend = new Resend(process.env.RESEND_API_KEY)
     const firstName = nombre?.split(' ')[0] ?? 'Cliente'
     await resend.emails.send({

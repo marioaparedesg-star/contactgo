@@ -62,12 +62,29 @@ export default function PedidosPage() {
     toast.success(`✅ Estado actualizado → ${estado}`)
     toast.success('Cliente puede ver el tracking en /pedido/' + (selected?.numero_orden ?? ''), {duration:3000, icon:'📦'})
 
-    // 4. Notificar al cliente por email/WhatsApp
+    // 4. Notificar al cliente por email
     fetch('/api/notify',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({order_id:orderId, evento:'estado_cambio', nuevo_estado:estado})
-    }).then(r=>r.ok&&toast.success('Cliente notificado ✉️',{duration:2000,icon:'📧'}))
+    }).then(r=>r.ok&&toast.success('Email enviado ✉️',{duration:2000,icon:'📧'}))
       .catch(()=>{})
+
+    // 5. Notificar al cliente por WhatsApp (todos los estados)
+    const mapaEstadoWA: Record<string, string> = {
+      confirmado: 'estado_confirmado',
+      preparando: 'estado_preparando',
+      enviado:    'estado_enviado',
+      entregado:  'estado_entregado',
+      cancelado:  'estado_cancelado',
+    }
+    const tipoWA = mapaEstadoWA[estado]
+    if (tipoWA) {
+      fetch('/api/wa/dispatch',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({tipo: tipoWA, order_id: orderId})
+      }).then(r=>r.ok&&toast.success('WhatsApp enviado 💬',{duration:2000,icon:'✅'}))
+        .catch(()=>{})
+    }
   }
 
 

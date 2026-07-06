@@ -296,5 +296,62 @@ export async function GET(req: NextRequest) {
     }
   } catch (e) { console.error('[cron/wa-daily] cross-sell:', e) }
 
-  return NextResponse.json({ ok: true, ...results, ...resultsCarritos, ...resultsCross, ejecutado_at: new Date().toISOString() })
+  // ─────────────────────────────────────────────────────
+  // 6. REINTENTOS — procesar cola de mensajes fallidos
+  // Backoff exponencial: 5min → 30min → 2h → giveup
+  // ─────────────────────────────────────────────────────
+  const resultsRetry = { reintentos: 0, resueltos: 0, descartados: 0 }
+  try {
+    const { data: retries } = await sb
+      .from('wa_retry_queue')
+      .select('*')
+      .eq('resolved', false)
+      .lt('next_retry_at', new Date().toISOString())
+      .lt('attempt', 3)
+      .limit(50)
+
+    for (const r of retries ?? []) {
+      try {
+        // Reintentar directamente con sendText
+        const { sendText } = await import('@/lib/whatsapp')
+        const res = await sendText(r.telefono, r.mensaje)
+        const wa_id = res?.messages?.[0]?.id ?? null
+
+        // Marcar como resuelto
+        await sb.from('wa_retry_queue').update({ resolved: true }).eq('id', r.id)
+        await sb.from('wa_automation_log').insert({
+          evento_id: r.evento_id,
+          telefono: r.telefono,
+          tipo: r.tipo,
+          estado: 'sent',
+          wa_message_id: wa_id,
+          order_id: r.order_id,
+          user_id: r.user_id,
+          attempt: (r.attempt ?? 0) + 1,
+        })
+        resultsRetry.resueltos++
+      } catch (e: any) {
+        const nextAttempt = (r.attempt ?? 0) + 1
+        if (nextAttempt >= 3) {
+          // Descartar tras 3 intentos
+          await sb.from('wa_retry_queue').update({
+            resolved: true,
+            last_error: `Max attempts. Last: ${e.message?.slice(0, 200)}`,
+          }).eq('id', r.id)
+          resultsRetry.descartados++
+        } else {
+          // Backoff: 30min o 2h
+          const delayMs = nextAttempt === 1 ? 30 * 60 * 1000 : 2 * 60 * 60 * 1000
+          await sb.from('wa_retry_queue').update({
+            attempt: nextAttempt,
+            next_retry_at: new Date(Date.now() + delayMs).toISOString(),
+            last_error: e.message?.slice(0, 200),
+          }).eq('id', r.id)
+          resultsRetry.reintentos++
+        }
+      }
+    }
+  } catch (e) { console.error('[cron/wa-daily] retry:', e) }
+
+  return NextResponse.json({ ok: true, ...results, ...resultsCarritos, ...resultsCross, ...resultsRetry, ejecutado_at: new Date().toISOString() })
 }

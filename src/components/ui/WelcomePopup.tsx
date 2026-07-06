@@ -92,16 +92,22 @@ export default function WelcomePopup() {
     setLoading(true); setError('')
     try {
       const sb = createClient()
-      const { error: err } = await sb.auth.signUp({
+      const { data: signUpData, error: err } = await sb.auth.signUp({
         email, password,
         options: { data: { full_name: nombre } }
       })
       if (err) { setError(err.message); return }
       await fetch('/api/welcome-coupon', { method: 'POST' })
+      // Buscar teléfono del profile si ya existe
+      let telefonoUser: string | null = null
+      try {
+        const { data: p } = await sb.from('profiles').select('telefono').eq('id', signUpData?.user?.id ?? '').maybeSingle()
+        telefonoUser = p?.telefono ?? null
+      } catch {}
       fetch('/api/auth/welcome', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, nombre }),
+        body: JSON.stringify({ email, nombre, telefono: telefonoUser, user_id: signUpData?.user?.id }),
       }).catch(() => {})
       setPaso('exito')
       try { sessionStorage.setItem('popup_visto', '1') } catch {}

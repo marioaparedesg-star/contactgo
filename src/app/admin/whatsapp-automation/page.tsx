@@ -10,6 +10,9 @@ type LogEntry = {
   estado: string
   error: string | null
   created_at: string
+  delivered_at: string | null
+  read_at: string | null
+  attempt: number | null
 }
 
 const TIPO_INFO: Record<string, { label: string; icon: any; color: string }> = {
@@ -139,8 +142,17 @@ export default function WhatsAppAutomationDashboard() {
                   <div className="text-right shrink-0">
                     {isFailed ? (
                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-medium">Falló</span>
+                    ) : log.read_at ? (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">✓✓ Leído</span>
+                    ) : log.delivered_at ? (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">✓✓ Entregado</span>
                     ) : (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">Enviado</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">✓ Enviado</span>
+                    )}
+                    {(log.attempt ?? 1) > 1 && (
+                      <span className="ml-1 text-[9px] px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-600">
+                        Reintento #{log.attempt}
+                      </span>
                     )}
                     <div className="text-[10px] text-gray-400 mt-1">
                       {new Date(log.created_at).toLocaleString('es-DO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}

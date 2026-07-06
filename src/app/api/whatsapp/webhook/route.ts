@@ -121,13 +121,28 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // ── Handle status updates ──
+    // ── Handle status updates (sent → delivered → read) ──
     const statuses = changes?.statuses
     if (statuses?.length > 0) {
       for (const s of statuses) {
+        // Actualizar tabla whatsapp_messages (mensajes chat)
         await sb.from('whatsapp_messages')
           .update({ status: s.status })
-          .eq('wa_message_id', s.id)
+          .eq('wa_message_id', s.id).then(() => {}, () => {})
+        
+        // Actualizar log de automatizaciones si es una notificación auto
+        const updates: any = {}
+        if (s.status === 'delivered' && s.timestamp) {
+          updates.delivered_at = new Date(Number(s.timestamp) * 1000).toISOString()
+        }
+        if (s.status === 'read' && s.timestamp) {
+          updates.read_at = new Date(Number(s.timestamp) * 1000).toISOString()
+        }
+        if (Object.keys(updates).length > 0) {
+          await sb.from('wa_automation_log')
+            .update(updates)
+            .eq('wa_message_id', s.id).then(() => {}, () => {})
+        }
       }
     }
 
