@@ -131,7 +131,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex flex-col gap-0.5 order-2 sm:order-1">
             <p className="text-[11px] text-gray-700">
-              © {new Date().getFullYear()} ContactGo — República Dominicana
+              © {new Date().getFullYear()} ContactGo — República Dominicana · WhatsApp: (829) 543-0580
             </p>
             {/* RNC pendiente de aprobación DGII — descomentar cuando esté activo */}
             {/* <p className="text-[10px] text-gray-800">
