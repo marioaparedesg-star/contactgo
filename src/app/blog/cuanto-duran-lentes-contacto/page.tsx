@@ -141,7 +141,7 @@ export default function Page() {
           <div className="bg-primary-600 rounded-2xl p-5 text-white text-center">
             <p className="font-bold mb-2">¿Cuándo te toca reponer?</p>
             <p className="text-sm text-white/80 mb-3">ContactGo te avisa automáticamente cuando tus lentes estén por terminarse. Activa el recordatorio ahora.</p>
-            <a href="/contacto?text=Hola%20quiero%20activar%20recordatorio%20de%20recompra"
+            <a href="https://wa.me/18295430580?text=Hola%20quiero%20activar%20recordatorio%20de%20recompra"
               target="_blank" rel="noopener noreferrer"
               className="bg-white text-primary-700 font-bold px-5 py-2.5 rounded-2xl inline-block text-sm hover:bg-gray-50 transition-all">
               Activar recordatorio gratuito →

@@ -24,7 +24,7 @@ export default function NotFound() {
           <Link href="/" className="border border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold text-sm">
             Ir al inicio
           </Link>
-          <a href="/contacto?text=Hola, necesito ayuda" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/18295430580?text=Hola, necesito ayuda" target="_blank" rel="noopener noreferrer"
             className="text-sm text-primary-600 font-semibold">
             💬 ¿Necesitas ayuda? WhatsApp
           </a>

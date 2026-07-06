@@ -413,7 +413,7 @@ export default function Page() {
             <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
               Ver lentes diarios disponibles →
             </Link>
-            <a href="/contacto?text=Hola%2C%20quiero%20cambiarme%20a%20lentes%20diarios%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
+            <a href="https://wa.me/18295430580?text=Hola%2C%20quiero%20cambiarme%20a%20lentes%20diarios%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
               Asesoría por WhatsApp
             </a>
           </div>

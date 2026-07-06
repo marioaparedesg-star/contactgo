@@ -191,7 +191,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-red-700 transition-colors text-sm">Comprar ACUVUE Oasys →</Link>
             <Link href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="inline-flex items-center justify-center gap-2 bg-teal-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-teal-700 transition-colors text-sm">Comprar Air Optix HydraGlyde →</Link>
-            <a href="/contacto?text=Hola%2C%20no%20s%C3%A9%20si%20ACUVUE%20Oasys%20o%20Air%20Optix%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Asesoría WhatsApp</a>
+            <a href="https://wa.me/18295430580?text=Hola%2C%20no%20s%C3%A9%20si%20ACUVUE%20Oasys%20o%20Air%20Optix%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Asesoría WhatsApp</a>
           </div>
         </div>
 

@@ -299,7 +299,7 @@ export default function Page() {
               <Link href="/marca/acuvue" className="flex-1 flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-5 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">
                 Ver toda la línea ACUVUE →
               </Link>
-              <a href="/contacto?text=Hola%2C%20quiero%20comprar%20ACUVUE%20Oasys%20en%20Rep%C3%BAblica%20Dominicana" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-5 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
+              <a href="https://wa.me/18295430580?text=Hola%2C%20quiero%20comprar%20ACUVUE%20Oasys%20en%20Rep%C3%BAblica%20Dominicana" target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-5 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
                 Pedir por WhatsApp
               </a>
             </div>

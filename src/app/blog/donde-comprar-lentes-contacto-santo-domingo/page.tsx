@@ -339,7 +339,7 @@ export default function Page() {
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">
               Calcular mi receta
             </Link>
-            <a href="/contacto?text=Hola%2C%20quiero%20comprar%20lentes%20de%20contacto%20con%20entrega%20en%20Santo%20Domingo" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
+            <a href="https://wa.me/18295430580?text=Hola%2C%20quiero%20comprar%20lentes%20de%20contacto%20con%20entrega%20en%20Santo%20Domingo" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
               Pedir por WhatsApp
             </a>
           </div>

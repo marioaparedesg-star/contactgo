@@ -114,7 +114,7 @@ export default function Page() {
           <p className="text-sm text-blue-700 mb-3">En Santo Domingo, Santiago y toda la República Dominicana. Pago seguro con AZUL/Banco Popular.</p>
           <div className="flex gap-2">
             <Link href="/marca/coopervision" className="flex-1 bg-blue-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-blue-700 transition-colors">Ver todos los Biofinity →</Link>
-            <a href="/contacto?text=Hola%2C%20quiero%20comprar%20Biofinity%20en%20RD" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Pedir por WhatsApp</a>
+            <a href="https://wa.me/18295430580?text=Hola%2C%20quiero%20comprar%20Biofinity%20en%20RD" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Pedir por WhatsApp</a>
           </div>
         </div>
 
@@ -303,7 +303,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/marca/coopervision" className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors text-sm">Ver todos los Biofinity →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-blue-200 text-blue-700 font-bold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors text-sm">Calcular mi receta</Link>
-            <a href="/contacto?text=Hola%2C%20quiero%20comprar%20Biofinity%20en%20Rep%C3%BAblica%20Dominicana" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
+            <a href="https://wa.me/18295430580?text=Hola%2C%20quiero%20comprar%20Biofinity%20en%20Rep%C3%BAblica%20Dominicana" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>
       </main>

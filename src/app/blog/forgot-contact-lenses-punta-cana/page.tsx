@@ -45,7 +45,7 @@ export default function Page() {
           <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4">
             <p className="font-bold text-green-800 text-sm mb-2">📱 Fastest option: WhatsApp</p>
             <p className="text-green-700 text-sm mb-3">Message us directly with your prescription and hotel name. We respond immediately and coordinate delivery.</p>
-            <a href="/contacto?text=Hello%2C%20I%20forgot%20my%20contact%20lenses%20in%20Punta%20Cana.%20Can%20you%20deliver%20to%20my%20hotel%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#20ba58] transition-colors">
+            <a href="https://wa.me/18295430580?text=Hello%2C%20I%20forgot%20my%20contact%20lenses%20in%20Punta%20Cana.%20Can%20you%20deliver%20to%20my%20hotel%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#20ba58] transition-colors">
               WhatsApp us now →
             </a>
           </div>

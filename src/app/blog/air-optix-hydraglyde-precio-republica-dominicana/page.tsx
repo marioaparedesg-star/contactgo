@@ -97,7 +97,7 @@ export default function Page() {
               className="flex-1 bg-teal-600 text-white font-bold px-5 py-3 rounded-xl text-sm text-center hover:bg-teal-700 transition-colors">
               Comprar Air Optix HydraGlyde →
             </Link>
-            <a href="/contacto?text=Hola%2C%20quiero%20comprar%20Air%20Optix%20HydraGlyde%20en%20RD"
+            <a href="https://wa.me/18295430580?text=Hola%2C%20quiero%20comprar%20Air%20Optix%20HydraGlyde%20en%20RD"
               target="_blank" rel="noopener noreferrer"
               className="flex-1 bg-[#25D366] text-white font-bold px-5 py-3 rounded-xl text-sm text-center hover:bg-[#20ba58] transition-colors">
               Pedir por WhatsApp
@@ -329,7 +329,7 @@ export default function Page() {
               className="inline-flex items-center justify-center gap-2 bg-white border border-teal-200 text-teal-700 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">
               Ver toda la línea Alcon
             </Link>
-            <a href="/contacto?text=Hola%2C%20quiero%20comprar%20Air%20Optix%20HydraGlyde"
+            <a href="https://wa.me/18295430580?text=Hola%2C%20quiero%20comprar%20Air%20Optix%20HydraGlyde"
               target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">
               Pedir por WhatsApp

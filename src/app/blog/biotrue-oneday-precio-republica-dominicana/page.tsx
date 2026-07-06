@@ -33,7 +33,7 @@ export default function Page() {
             <p className="text-xs text-gray-500 mt-1">≈ RD$117 por día de uso · Lente diario por ojo</p>
             <div className="flex gap-2 mt-4">
               <a href="/producto/biotrue-oneday-lentes-contacto-diarios-dominicana" className="flex-1 bg-orange-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-orange-700 transition-colors">Comprar Biotrue ONEday →</a>
-              <a href="/contacto?text=Hola%2C%20quiero%20Biotrue%20ONEday%20en%20RD" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Pedir por WhatsApp</a>
+              <a href="https://wa.me/18295430580?text=Hola%2C%20quiero%20Biotrue%20ONEday%20en%20RD" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Pedir por WhatsApp</a>
             </div>
           </div>
         </section>
