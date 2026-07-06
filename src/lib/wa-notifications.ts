@@ -157,13 +157,23 @@ export async function notificarPedidoConfirmado(order: any) {
   return notificar(`order_${order.id}_confirmado`, order.cliente_telefono, mensaje, 'confirmacion', { order_id: order.id })
 }
 
-/** #3 - Estado: confirmado */
-export async function notificarConfirmado(order: any) {
+/** #3 - Estado: recibido (nuevo pedido registrado) */
+export async function notificarRecibido(order: any) {
   const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
   const num = order.numero_orden ?? String(order.id).slice(0, 8)
   const mensaje = `✅ *${nombre}, recibimos tu pedido #${num}*\n\n` +
+    `Ya lo tenemos en nuestro sistema y comenzaremos a procesarlo.\n\n` +
+    `Te iremos avisando en cada paso hasta que llegue a tu puerta. 🚚`
+  return notificar(`order_${order.id}_recibido`, order.cliente_telefono, mensaje, 'estado_recibido', { order_id: order.id })
+}
+
+/** #3b - Estado: confirmado */
+export async function notificarConfirmado(order: any) {
+  const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+  const num = order.numero_orden ?? String(order.id).slice(0, 8)
+  const mensaje = `✅ *${nombre}, tu pedido #${num} está confirmado*\n\n` +
     `Ya comenzamos a prepararlo con mucho cuidado.\n\n` +
-    `Te iremos avisando en cada paso hasta que llegue a tu puerta.`
+    `Te avisaremos en cada paso hasta que llegue a tu puerta.`
   return notificar(`order_${order.id}_confirmado`, order.cliente_telefono, mensaje, 'estado_confirmado', { order_id: order.id })
 }
 
@@ -172,12 +182,22 @@ export async function notificarPreparando(order: any) {
   const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
   const num = order.numero_orden ?? String(order.id).slice(0, 8)
   const mensaje = `🔬 *${nombre}, estamos preparando tu pedido #${num}*\n\n` +
-    `Nuestro equipo está verificando cada lente cuidadosamente antes de empacarlo.\n\n` +
+    `Nuestro equipo está verificando cada producto cuidadosamente antes de empacarlo.\n\n` +
     `Muy pronto estará en camino. 🚚`
   return notificar(`order_${order.id}_preparando`, order.cliente_telefono, mensaje, 'estado_preparando', { order_id: order.id })
 }
 
-/** #5 - Estado: enviado / en camino */
+/** #4b - Estado: fabricante (esperando por importación) */
+export async function notificarFabricante(order: any) {
+  const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+  const num = order.numero_orden ?? String(order.id).slice(0, 8)
+  const mensaje = `🏭 *${nombre}, actualización de tu pedido #${num}*\n\n` +
+    `Estamos coordinando con el fabricante para tener tu producto disponible lo antes posible.\n\n` +
+    `Te mantendremos informado del progreso. 🙏`
+  return notificar(`order_${order.id}_fabricante`, order.cliente_telefono, mensaje, 'estado_fabricante', { order_id: order.id })
+}
+
+/** #5 - Estado: enviado / tránsito */
 export async function notificarEnviado(order: any) {
   const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
   const num = order.numero_orden ?? String(order.id).slice(0, 8)
@@ -193,6 +213,17 @@ export async function notificarEnviado(order: any) {
     `🔍 Sigue tu pedido: www.contactgo.net/pedido/${num}`
   
   return notificar(`order_${order.id}_enviado`, order.cliente_telefono, mensaje, 'estado_enviado', { order_id: order.id })
+}
+
+/** #5b - Estado: transito (más específico) */
+export async function notificarTransito(order: any) {
+  const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+  const num = order.numero_orden ?? String(order.id).slice(0, 8)
+  const mensaje = `🚛 *${nombre}, tu pedido #${num} va en camino*\n\n` +
+    `Ya está saliendo hacia tu dirección: ${order.direccion_texto?.slice(0, 60) ?? 'tu dirección registrada'}.\n\n` +
+    `📅 Entrega estimada: hoy o mañana\n\n` +
+    `🔍 Sigue tu pedido: www.contactgo.net/pedido/${num}`
+  return notificar(`order_${order.id}_transito`, order.cliente_telefono, mensaje, 'estado_transito', { order_id: order.id })
 }
 
 /** #6 - Estado: entregado */

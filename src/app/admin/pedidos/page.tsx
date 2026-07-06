@@ -69,13 +69,17 @@ export default function PedidosPage() {
     }).then(r=>r.ok&&toast.success('Email enviado ✉️',{duration:2000,icon:'📧'}))
       .catch(()=>{})
 
-    // 5. Notificar al cliente por WhatsApp (todos los estados)
+    // 5. Notificar al cliente por WhatsApp (TODOS los estados del UI)
     const mapaEstadoWA: Record<string, string> = {
-      confirmado: 'estado_confirmado',
-      preparando: 'estado_preparando',
-      enviado:    'estado_enviado',
-      entregado:  'estado_entregado',
-      cancelado:  'estado_cancelado',
+      recibido:      'estado_recibido',
+      pago_aprobado: 'estado_pago_aprobado',
+      confirmado:    'estado_confirmado',
+      preparando:    'estado_preparando',
+      fabricante:    'estado_fabricante',
+      enviado:       'estado_enviado',
+      transito:      'estado_transito',
+      entregado:     'estado_entregado',
+      cancelado:     'estado_cancelado',
     }
     const tipoWA = mapaEstadoWA[estado]
     if (tipoWA) {

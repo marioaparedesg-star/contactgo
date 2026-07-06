@@ -8,9 +8,12 @@ import { createClient } from '@supabase/supabase-js'
 import {
   notificarBienvenida,
   notificarPedidoConfirmado,
+  notificarRecibido,
   notificarConfirmado,
   notificarPreparando,
+  notificarFabricante,
   notificarEnviado,
+  notificarTransito,
   notificarEntregado,
   notificarCancelado,
   notificarPedidoEspecial,
@@ -62,6 +65,13 @@ export async function POST(req: NextRequest) {
         result = await notificarPedidoConfirmado(order)
         break
       }
+      case 'estado_recibido':
+      case 'estado_pago_aprobado': {
+        const order = await fetchOrderCompleto(data.order_id)
+        if (!order) return NextResponse.json({ error: 'order_not_found' }, { status: 404 })
+        result = await notificarRecibido(order)
+        break
+      }
       case 'estado_confirmado': {
         const order = await fetchOrderCompleto(data.order_id)
         if (!order) return NextResponse.json({ error: 'order_not_found' }, { status: 404 })
@@ -74,10 +84,22 @@ export async function POST(req: NextRequest) {
         result = await notificarPreparando(order)
         break
       }
+      case 'estado_fabricante': {
+        const order = await fetchOrderCompleto(data.order_id)
+        if (!order) return NextResponse.json({ error: 'order_not_found' }, { status: 404 })
+        result = await notificarFabricante(order)
+        break
+      }
       case 'estado_enviado': {
         const order = await fetchOrderCompleto(data.order_id)
         if (!order) return NextResponse.json({ error: 'order_not_found' }, { status: 404 })
         result = await notificarEnviado(order)
+        break
+      }
+      case 'estado_transito': {
+        const order = await fetchOrderCompleto(data.order_id)
+        if (!order) return NextResponse.json({ error: 'order_not_found' }, { status: 404 })
+        result = await notificarTransito(order)
         break
       }
       case 'estado_entregado': {

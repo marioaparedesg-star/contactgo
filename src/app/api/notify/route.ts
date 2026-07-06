@@ -390,11 +390,15 @@ export async function POST(req: NextRequest) {
     // WhatsApp al cliente — cuando pedido cambia de estado (TODOS los estados)
     if (evento === 'estado_cambio' && nuevo_estado && order.cliente_telefono) {
       const mapaEstadoWA: Record<string, string> = {
-        confirmado: 'estado_confirmado',
-        preparando: 'estado_preparando',
-        enviado:    'estado_enviado',
-        entregado:  'estado_entregado',
-        cancelado:  'estado_cancelado',
+        recibido:      'estado_recibido',
+        pago_aprobado: 'estado_pago_aprobado',
+        confirmado:    'estado_confirmado',
+        preparando:    'estado_preparando',
+        fabricante:    'estado_fabricante',
+        enviado:       'estado_enviado',
+        transito:      'estado_transito',
+        entregado:     'estado_entregado',
+        cancelado:     'estado_cancelado',
       }
       const tipoWA = mapaEstadoWA[nuevo_estado]
       if (tipoWA) {
