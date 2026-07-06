@@ -53,7 +53,7 @@ export default function SobreNosotrosPage() {
         },
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "+1-829-543-0580",
+          "telephone": "+1-809-694-2268",
           "contactType": "customer service",
           "areaServed": "DO",
           "availableLanguage": "Spanish"

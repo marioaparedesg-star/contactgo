@@ -113,7 +113,7 @@ export default function SeguridadPage() {
             <p className="text-sm text-gray-600 mb-3">Si tienes alguna pregunta sobre la seguridad de tus datos o detectas alguna actividad sospechosa, contáctanos de inmediato:</p>
             <div className="flex flex-col gap-1 text-sm">
               <span>📧 <a href="mailto:info@contactgo.net" className="text-primary-600 font-semibold">info@contactgo.net</a></span>
-              <span>📱 <a href="https://wa.me/18295430580" className="text-primary-600 font-semibold">(829) 543-0580</a></span>
+              <span>📱 <a href="https://wa.me/18096942268" className="text-primary-600 font-semibold">(809) 694-2268</a></span>
               <span>🌐 Santo Domingo, República Dominicana</span>
             </div>
           </section>

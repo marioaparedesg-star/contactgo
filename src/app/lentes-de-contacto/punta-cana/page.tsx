@@ -117,7 +117,7 @@ export default async function Page() {
         "@type": "LocalBusiness",
         "name": "ContactGo — Lentes de Contacto Punta Cana",
         "url": "https://www.contactgo.net/lentes-de-contacto/punta-cana",
-        "telephone": "+1-829-543-0580",
+        "telephone": "+1-809-694-2268",
         "email": "info@contactgo.net",
         "areaServed": {
           "@type": "City",

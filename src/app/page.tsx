@@ -284,7 +284,7 @@ export default async function HomePage() {
                   <p className="text-xs text-green-600 font-bold mt-1">Lentes + solución + gotas en 1 envío</p>
                 </div>
                 <a
-                  href={`https://wa.me/18295430580?text=${encodeURIComponent('Hola, me interesa el Starter Kit de lentes de contacto. ¿Pueden armarme uno con mis lentes y la solución?')}`}
+                  href={`https://wa.me/18096942268?text=${encodeURIComponent('Hola, me interesa el Starter Kit de lentes de contacto. ¿Pueden armarme uno con mis lentes y la solución?')}`}
                   target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold px-6 py-3 rounded-2xl transition-all shadow-lg text-sm w-full justify-center"
                 >
@@ -314,7 +314,7 @@ export default async function HomePage() {
                 Guardamos tu receta. Te avisamos cuando es hora de reponer. Tú solo confirmas y en 24h están en tu puerta. Con 10% de descuento garantizado en cada recompra.
               </p>
             </div>
-            <a href="https://wa.me/18295430580?text=Hola%20ContactGo%2C%20quiero%20activar%20recordatorio%20de%20recompra"
+            <a href="https://wa.me/18096942268?text=Hola%20ContactGo%2C%20quiero%20activar%20recordatorio%20de%20recompra"
               target="_blank" rel="noopener noreferrer"
               className="bg-[#25D366] text-white font-bold px-6 py-3 rounded-2xl hover:bg-[#20ba58] transition-all shadow-lg flex items-center gap-2 shrink-0">
               <svg viewBox="0 0 32 32" className="w-5 h-5 fill-white"><path d="M16.004 2.667C8.64 2.667 2.667 8.64 2.667 16c0 2.347.619 4.587 1.773 6.56L2.667 29.333l6.907-1.747A13.244 13.244 0 0016.004 29.333c7.363 0 13.333-5.973 13.333-13.333S23.367 2.667 16.004 2.667z"/></svg>

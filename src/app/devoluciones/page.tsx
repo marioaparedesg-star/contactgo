@@ -28,7 +28,7 @@ export default function DevolucionesPage() {
               <li>⏱ <strong>Plazo:</strong> 7 días desde la recepción del pedido</li>
               <li>📦 <strong>Condición:</strong> Producto sellado, sin abrir y en empaque original</li>
               <li>💳 <strong>Reembolso:</strong> Por el mismo método de pago en 3-5 días hábiles</li>
-              <li>📞 <strong>Contacto:</strong> WhatsApp (829) 543-0580 o info@contactgo.net</li>
+              <li>📞 <strong>Contacto:</strong> WhatsApp (809) 694-2268 o info@contactgo.net</li>
             </ul>
           </div>
 
@@ -54,7 +54,7 @@ export default function DevolucionesPage() {
           <section>
             <h2 className="font-bold text-gray-900 text-xl mb-3">¿Cómo iniciar una devolución?</h2>
             <ol className="space-y-3 text-sm list-decimal list-inside">
-              <li>Contáctanos por WhatsApp al (829) 543-0580 o escríbenos a info@contactgo.net dentro de las 7 días</li>
+              <li>Contáctanos por WhatsApp al (809) 694-2268 o escríbenos a info@contactgo.net dentro de las 7 días</li>
               <li>Indica tu número de pedido y el motivo de la devolución</li>
               <li>Te indicaremos la dirección para enviar el producto</li>
               <li>Una vez recibido y verificado, procesamos el reembolso en 3-5 días hábiles</li>

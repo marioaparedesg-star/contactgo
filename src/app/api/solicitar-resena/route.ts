@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       Solo toma 1 minuto · Tu opinión nos ayuda muchísimo
     </p>
     <p style="color:#9ca3af;font-size:12px;text-align:center">
-      ContactGo · contactgo.net · WhatsApp: +1 829 543-0580
+      ContactGo · contactgo.net · WhatsApp: +1 809 694-2268
     </p>
   </div>
 </div>`

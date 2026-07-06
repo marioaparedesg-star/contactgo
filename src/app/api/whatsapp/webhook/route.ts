@@ -98,39 +98,8 @@ export async function POST(req: NextRequest) {
         // ── Skip auto-reply para admin y reacciones ──
         if (from === ADMIN_PHONE.replace(/^1/, '') || msgType === 'reaction') continue
 
-        // ── Bienvenida (solo si NUNCA se envió antes a este número) ──
-        const { count: welcomeCount } = await sb
-          .from('whatsapp_messages')
-          .select('*', { count: 'exact', head: true })
-          .eq('phone', from)
-          .eq('direction', 'outbound')
-          .ilike('body', '%Bienvenido%ContactGo%')
-
-        if (!welcomeCount || welcomeCount === 0) {
-          const bienvenida = `👋 ¡Hola! Bienvenido/a a *ContactGo*\n\n` +
-            `Somos especialistas en lentes de contacto en República Dominicana 🇩🇴\n\n` +
-            `Recibimos tu mensaje y te estaremos asistiendo en breve. Mientras tanto, cuéntanos cómo podemos ayudarte:\n\n` +
-            `🔹 ¿Buscas una marca o graduación específica?\n` +
-            `🔹 ¿Necesitas ayuda con tu pedido?\n` +
-            `🔹 ¿Tienes tu receta y quieres cotizar?`
-
-          const res = await fetch(`${WA_API}/${PHONE_ID}/messages`, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ messaging_product: 'whatsapp', to: from, type: 'text', text: { body: bienvenida } }),
-          })
-          const data = await res.json()
-
-          await sb.from('whatsapp_messages').insert({
-            wa_message_id: data?.messages?.[0]?.id ?? null,
-            phone: from,
-            direction: 'outbound',
-            message_type: 'text',
-            body: bienvenida,
-            status: 'sent',
-            read: true,
-          })
-        }
+        // ── Bienvenida DESACTIVADA — clientes ahora escriben al 809-694-2268 (chat humano) ──
+        // El 829-543-0580 es exclusivo para automation API. Si alguien escribe aquí, solo notificamos al admin.
 
         // ── Notificación al admin ──
         const displayPhone = from.length === 11 && from.startsWith('1')

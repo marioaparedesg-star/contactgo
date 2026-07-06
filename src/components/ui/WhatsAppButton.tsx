@@ -61,7 +61,7 @@ function WhatsAppButtonInner() {
 
       {/* Botón WhatsApp */}
       <a
-        href={`https://wa.me/18295430580?text=${getMessage()}`}
+        href={`https://wa.me/18096942268?text=${getMessage()}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"

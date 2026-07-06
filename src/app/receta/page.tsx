@@ -473,7 +473,7 @@ function FallbackProductos({ result, buildWA }: { result: ConvertedRx; buildWA: 
       <p className="text-2xl mb-2">💬</p>
       <p className="font-bold text-gray-900 text-sm mb-1">Consultamos disponibilidad para ti</p>
       <p className="text-xs text-gray-500 mb-4">Un especialista te confirmará las opciones compatibles en minutos.</p>
-      <a href={`https://wa.me/18295430580?text=${buildWA(result)}`} target="_blank" rel="noopener noreferrer"
+      <a href={`https://wa.me/18096942268?text=${buildWA(result)}`} target="_blank" rel="noopener noreferrer"
         className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold text-sm px-5 py-3 rounded-xl shadow-md">
         💬 Consultar disponibilidad →
       </a>
@@ -543,7 +543,7 @@ function WhatsAppCard({ result, buildMsg }: { result: ConvertedRx; buildMsg: (r:
           </p>
           <p className={`text-xs mt-0.5 ${comp.nivel==='rojo'?'text-red-700':'text-gray-400'}`}>Respuesta en minutos</p>
         </div>
-        <a href={`https://wa.me/18295430580?text=${buildMsg(result)}`} target="_blank" rel="noopener noreferrer"
+        <a href={`https://wa.me/18096942268?text=${buildMsg(result)}`} target="_blank" rel="noopener noreferrer"
           className="shrink-0 flex items-center gap-1.5 bg-[#25D366] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md whitespace-nowrap">
           💬 WhatsApp →
         </a>

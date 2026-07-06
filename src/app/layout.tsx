@@ -73,15 +73,15 @@ const organizationSchema = {
   "logo": "https://www.contactgo.net/og-1200x630.png",
   "image": "https://www.contactgo.net/og-1200x630.png",
   "description": "ContactGo es la forma más fácil de comprar lentes de contacto en República Dominicana. Productos 100% originales. Entrega en 24-48 horas a donde estés.",
-  "telephone": "+18295430580",
+  "telephone": "+18096942268",
   "email": "info@contactgo.net",
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+18295430580",
+    "telephone": "+18096942268",
     "contactType": "customer service",
     "areaServed": "DO",
     "availableLanguage": ["es", "en"],
-    "url": "https://wa.me/18295430580"
+    "url": "https://wa.me/18096942268"
   },
   "address": {
     "@type": "PostalAddress",

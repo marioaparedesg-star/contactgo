@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const secciones = [
   {
     title: '1. Responsable del tratamiento',
-    body: 'ContactGo (en adelante "la Empresa") es responsable del tratamiento de los datos personales recopilados a través del sitio web contactgo.net. Correo de contacto: info@contactgo.net | Teléfono: (829) 543-0580 | Santo Domingo, República Dominicana.'
+    body: 'ContactGo (en adelante "la Empresa") es responsable del tratamiento de los datos personales recopilados a través del sitio web contactgo.net. Correo de contacto: info@contactgo.net | Teléfono: (809) 694-2268 | Santo Domingo, República Dominicana.'
   },
   {
     title: '2. Base legal (Ley 172-13)',

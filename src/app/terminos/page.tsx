@@ -35,7 +35,7 @@ const secciones = [
   },
   {
     title: '6. Devoluciones y reembolsos',
-    body: 'Aceptamos devoluciones dentro de las 7 días desde la recepción del pedido, siempre que el producto esté en su empaque original sellado y sin abrir. No se aceptan devoluciones de lentes abiertos por razones de higiene y seguridad médica. Los reembolsos se procesan en 3-5 días hábiles por el mismo método de pago original. Para iniciar una devolución: info@contactgo.net o WhatsApp (829) 543-0580.'
+    body: 'Aceptamos devoluciones dentro de las 7 días desde la recepción del pedido, siempre que el producto esté en su empaque original sellado y sin abrir. No se aceptan devoluciones de lentes abiertos por razones de higiene y seguridad médica. Los reembolsos se procesan en 3-5 días hábiles por el mismo método de pago original. Para iniciar una devolución: info@contactgo.net o WhatsApp (809) 694-2268.'
   },
   {
     title: '7. Responsabilidad médica',
@@ -77,7 +77,7 @@ export default function TerminosPage() {
           <p>¿Preguntas sobre estos términos? Escríbenos a{' '}
             <a href="mailto:info@contactgo.net" className="text-primary-600 font-semibold">info@contactgo.net</a>
             {' '}o al WhatsApp{' '}
-            <a href="https://wa.me/18295430580" className="text-primary-600 font-semibold">(829) 543-0580</a>
+            <a href="https://wa.me/18096942268" className="text-primary-600 font-semibold">(809) 694-2268</a>
           </p>
         </div>
       </main>

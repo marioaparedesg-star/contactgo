@@ -16,7 +16,7 @@ export default function Footer() {
             {/* MEJORA-7: Ubicación física visible */}
             <span className="text-gray-500 text-[10px]">La única tienda 100% especializada en lentes · RD</span>
             {/* WhatsApp clickeable */}
-            <a href="https://wa.me/18295430580?text=Hola%20ContactGo%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer" className="text-green-400 text-[11px] font-semibold hover:text-green-300 transition-colors">
+            <a href="https://wa.me/18096942268?text=Hola%20ContactGo%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer" className="text-green-400 text-[11px] font-semibold hover:text-green-300 transition-colors">
               💬 Escríbenos por WhatsApp
             </a>
           </div>
@@ -35,7 +35,7 @@ export default function Footer() {
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
             </a>
-            <a href="https://wa.me/18295430580" aria-label="Contactar por WhatsApp"
+            <a href="https://wa.me/18096942268" aria-label="Contactar por WhatsApp"
               target="_blank" rel="noopener noreferrer"
               className="w-7 h-7 rounded-lg bg-gray-800 hover:bg-green-600 flex items-center justify-center transition-colors">
               <svg className="w-3.5 h-3.5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
@@ -88,7 +88,7 @@ export default function Footer() {
             <p className="text-white text-[10px] font-bold uppercase tracking-widest mb-2.5">Contacto</p>
             <ul className="space-y-1.5 text-xs">
               <li>
-                <a href="https://wa.me/18295430580?text=Hola%20ContactGo%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/18096942268?text=Hola%20ContactGo%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer"
                   aria-label="WhatsApp ContactGo"
                   className="text-gray-500 hover:text-gray-300 transition-colors">
                   💬 WhatsApp
@@ -131,7 +131,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex flex-col gap-0.5 order-2 sm:order-1">
             <p className="text-[11px] text-gray-700">
-              © {new Date().getFullYear()} ContactGo — República Dominicana · WhatsApp: (829) 543-0580
+              © {new Date().getFullYear()} ContactGo — República Dominicana · WhatsApp: (809) 694-2268
             </p>
             {/* RNC pendiente de aprobación DGII — descomentar cuando esté activo */}
             {/* <p className="text-[10px] text-gray-800">

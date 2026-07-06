@@ -82,7 +82,7 @@ export default async function Page() {
           <p>Cubrimos toda la Gran Santo Domingo: <strong>Piantini, Naco, Mirador Sur, Bella Vista, Gazcue, Zona Colonial, Los Cacicazgos, Arroyo Hondo, La Esperilla, Serralles, Los Prados, Evaristo Morales</strong> y también sectores populares como <strong>Los Mina, Villa Mella, Herrera, Cristo Rey, Villas Agrícolas, Alma Rosa y Km 13</strong>. También entregamos en el Distrito Nacional y la provincia Santo Domingo Este, Oeste y Norte.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo enviar tu receta desde Santo Domingo?</h3>
-          <p>Tienes tres opciones: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta</a> con los valores de tu prescripción. (2) Envíanos foto de tu receta por WhatsApp al (829) 543-0580.</p>
+          <p>Tienes tres opciones: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta</a> con los valores de tu prescripción. (2) Envíanos foto de tu receta por WhatsApp al (809) 694-2268.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santo Domingo</h3>
           <div className="space-y-3">
@@ -128,7 +128,7 @@ export default async function Page() {
         "@type": "LocalBusiness",
         "name": "ContactGo — Lentes de Contacto Santo Domingo",
         "url": "https://www.contactgo.net/lentes-de-contacto/santo-domingo",
-        "telephone": "+1-829-543-0580",
+        "telephone": "+1-809-694-2268",
         "email": "info@contactgo.net",
         "areaServed": {
           "@type": "City",

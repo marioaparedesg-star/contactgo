@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
 
     <p style="color:#9ca3af;font-size:12px;text-align:center;margin:0;">
       ¿Necesitas ayuda? Escríbenos por
-      <a href="https://wa.me/18295430580" style="color:#16a34a;font-weight:600;">WhatsApp</a>
+      <a href="https://wa.me/18096942268" style="color:#16a34a;font-weight:600;">WhatsApp</a>
       o a <a href="mailto:info@contactgo.net" style="color:#16a34a;">info@contactgo.net</a>
     </p>
   </td></tr>
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     <p style="color:#94a3b8;font-size:12px;margin:0 0 8px;">
       <strong style="color:white;">ContactGo</strong> — contactgo.net
     </p>
-    <p style="color:#475569;font-size:11px;margin:0;">(829) 543-0580 · info@contactgo.net · Santo Domingo, RD</p>
+    <p style="color:#475569;font-size:11px;margin:0;">(809) 694-2268 · info@contactgo.net · Santo Domingo, RD</p>
   </td></tr>
 
 </table>

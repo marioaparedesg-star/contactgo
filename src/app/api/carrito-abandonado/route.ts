@@ -96,12 +96,12 @@ export async function POST(req: NextRequest) {
   <!-- Bloque WhatsApp — canal preferido en RD -->
   <tr><td style="padding:16px 28px;text-align:center;">
     <p style="margin:0 0 10px;font-size:13px;color:#374151;font-weight:600;">¿Tienes dudas sobre tu graduación?</p>
-    <a href="https://wa.me/18295430580?text=${encodeURIComponent(`Hola, dejé unos lentes en el carrito y tengo una pregunta antes de completar el pedido.`)}"
+    <a href="https://wa.me/18096942268?text=${encodeURIComponent(`Hola, dejé unos lentes en el carrito y tengo una pregunta antes de completar el pedido.`)}"
        style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;font-size:13px;padding:11px 24px;border-radius:10px;">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/48px-WhatsApp.svg.png" width="18" height="18" alt="" style="display:inline-block;vertical-align:middle;">
       Escríbenos por WhatsApp
     </a>
-    <p style="margin:8px 0 0;font-size:11px;color:#9ca3af;">Respondemos en minutos · (829) 543-0580</p>
+    <p style="margin:8px 0 0;font-size:11px;color:#9ca3af;">Respondemos en minutos · (809) 694-2268</p>
   </td></tr>
   <tr><td style="background:#f9fafb;padding:12px 28px;border-top:1px solid #f3f4f6;text-align:center;">
     <p style="margin:0;font-size:11px;color:#9ca3af;">ContactGo · contactgo.net · Santo Domingo, RD</p>

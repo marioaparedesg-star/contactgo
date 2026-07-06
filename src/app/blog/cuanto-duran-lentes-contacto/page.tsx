@@ -141,7 +141,7 @@ export default function Page() {
           <div className="bg-primary-600 rounded-2xl p-5 text-white text-center">
             <p className="font-bold mb-2">¿Cuándo te toca reponer?</p>
             <p className="text-sm text-white/80 mb-3">ContactGo te avisa automáticamente cuando tus lentes estén por terminarse. Activa el recordatorio ahora.</p>
-            <a href="https://wa.me/18295430580?text=Hola%20quiero%20activar%20recordatorio%20de%20recompra"
+            <a href="https://wa.me/18096942268?text=Hola%20quiero%20activar%20recordatorio%20de%20recompra"
               target="_blank" rel="noopener noreferrer"
               className="bg-white text-primary-700 font-bold px-5 py-2.5 rounded-2xl inline-block text-sm hover:bg-gray-50 transition-all">
               Activar recordatorio gratuito →
@@ -217,7 +217,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
-            <a href="https://wa.me/18295430580" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
+            <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>
       </main>

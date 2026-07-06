@@ -152,7 +152,7 @@ export default function Page() {
               <Link href="/receta" className="bg-white text-primary-700 font-bold px-4 py-2.5 rounded-2xl text-sm text-center hover:bg-gray-50 transition-all">
                 Buscar con mi receta
               </Link>
-              <a href="https://wa.me/18295430580?text=Hola%2C%20soy%20nuevo%20usando%20lentes%20y%20necesito%20ayuda%20para%20elegir"
+              <a href="https://wa.me/18096942268?text=Hola%2C%20soy%20nuevo%20usando%20lentes%20y%20necesito%20ayuda%20para%20elegir"
                 target="_blank" rel="noopener noreferrer"
                 className="border-2 border-white/50 text-white font-bold px-4 py-2.5 rounded-2xl text-sm text-center hover:bg-white/10 transition-all">
                 💬 Hablar con asesor
