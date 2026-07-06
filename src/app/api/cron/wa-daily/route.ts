@@ -1,0 +1,181 @@
+// ============================================================
+// ContactGo — CRON diario 9am (DR)
+// Envía: notificación de envío, solicitud de reseña, renovación
+// GET /api/cron/wa-daily  (Vercel Cron)
+// ============================================================
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { sendText, normalizePhone } from '@/lib/whatsapp'
+
+export const dynamic = 'force-dynamic'
+export const maxDuration = 60
+
+function getSb() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
+
+async function logAutomation(sb: any, order_id: string | null, telefono: string, tipo: string, ok: boolean, msgId?: string, err?: string) {
+  try {
+    await sb.from('wa_automation_log').insert({
+      order_id, telefono, tipo,
+      estado: ok ? 'sent' : 'failed',
+      wa_message_id: msgId ?? null,
+      error: err ?? null,
+    })
+  } catch {}
+}
+
+export async function GET(req: NextRequest) {
+  // Seguridad: solo Vercel Cron o llamadas con secret
+  const auth = req.headers.get('authorization')
+  const cronSecret = process.env.CRON_SECRET ?? 'contactgo_cron_2026'
+  if (auth !== `Bearer ${cronSecret}` && req.headers.get('x-vercel-cron') !== '1') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const sb = getSb()
+  const results = { envios: 0, resenas: 0, renovaciones: 0, errores: 0 }
+
+  // ─────────────────────────────────────────────────────
+  // 1. NOTIFICACIÓN DE ENVÍO — pedidos con estado='enviado' que no han recibido WA
+  // ─────────────────────────────────────────────────────
+  try {
+    const { data: enviados } = await sb
+      .from('orders')
+      .select('id, cliente_nombre, cliente_telefono, numero_orden')
+      .eq('estado', 'enviado')
+      .eq('wa_envio_enviado', false)
+      .not('cliente_telefono', 'is', null)
+      .limit(50)
+
+    for (const o of enviados ?? []) {
+      try {
+        const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+        const mensaje = `🚚 *¡Tus lentes están en camino, ${nombre}!*\n\n` +
+          `Tu pedido *#${o.numero_orden}* de ContactGo ya fue enviado.\n\n` +
+          `📍 *Estimado de entrega:* hoy o mañana\n` +
+          `📦 Recibirás tus lentes en la dirección que registraste\n\n` +
+          `¿Preguntas sobre tu entrega? Responde aquí mismo. 👇`
+        
+        const res = await sendText(o.cliente_telefono, mensaje)
+        await sb.from('orders').update({
+          wa_envio_enviado: true,
+          wa_envio_fecha: new Date().toISOString(),
+        }).eq('id', o.id)
+        await logAutomation(sb, o.id, o.cliente_telefono, 'envio', true, res?.messages?.[0]?.id)
+        results.envios++
+      } catch (e: any) {
+        await logAutomation(sb, o.id, o.cliente_telefono, 'envio', false, undefined, e.message)
+        results.errores++
+      }
+    }
+  } catch (e) { console.error('[cron/wa-daily] envios:', e) }
+
+  // ─────────────────────────────────────────────────────
+  // 2. SOLICITUD DE RESEÑA — 3 días después de envío
+  // ─────────────────────────────────────────────────────
+  try {
+    const hace3dias = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+    const { data: resenas } = await sb
+      .from('orders')
+      .select('id, cliente_nombre, cliente_telefono, numero_orden')
+      .eq('wa_envio_enviado', true)
+      .lt('wa_envio_fecha', hace3dias)
+      .eq('wa_resena_enviada', false)
+      .eq('resena_solicitada', false)
+      .not('cliente_telefono', 'is', null)
+      .limit(50)
+
+    for (const o of resenas ?? []) {
+      try {
+        const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+        const mensaje = `👋 Hola *${nombre}*, ¿cómo te fue con tus lentes de ContactGo?\n\n` +
+          `Tu opinión ayuda a otros dominicanos a decidir con confianza. 💚\n\n` +
+          `⭐ Comparte tu experiencia (30 segundos):\n` +
+          `👉 www.contactgo.net/resenas\n\n` +
+          `🎁 *Bonus:* Envía foto usándolos y te regalamos *RD$200 de crédito* para tu próxima compra.\n\n` +
+          `Gracias por confiar en nosotros. 🙏`
+        
+        const res = await sendText(o.cliente_telefono, mensaje)
+        await sb.from('orders').update({
+          wa_resena_enviada: true,
+          resena_solicitada: true,
+        }).eq('id', o.id)
+        await logAutomation(sb, o.id, o.cliente_telefono, 'resena', true, res?.messages?.[0]?.id)
+        results.resenas++
+      } catch (e: any) {
+        await logAutomation(sb, o.id, o.cliente_telefono, 'resena', false, undefined, e.message)
+        results.errores++
+      }
+    }
+  } catch (e) { console.error('[cron/wa-daily] resenas:', e) }
+
+  // ─────────────────────────────────────────────────────
+  // 3. RECORDATORIO DE RENOVACIÓN
+  // Diario: día 25 (cajas de 30)
+  // Mensual: día 25 post-compra
+  // Quincenal: día 12 post-compra (más frecuente, mismo criterio)
+  // Trigger conservador: 25 días desde pagado_en, tenga producto renovable
+  // ─────────────────────────────────────────────────────
+  try {
+    const hace25dias = new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString()
+    const hace60dias = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
+
+    const { data: renovaciones } = await sb
+      .from('orders')
+      .select(`
+        id, cliente_nombre, cliente_telefono, numero_orden, pagado_en,
+        order_items(nombre, tipo)
+      `)
+      .eq('pago_estado', 'aprobado')
+      .eq('wa_renovacion_enviada', false)
+      .lt('pagado_en', hace25dias)
+      .gt('pagado_en', hace60dias) // solo pedidos entre 25-60 días atrás
+      .not('cliente_telefono', 'is', null)
+      .limit(50)
+
+    for (const o of renovaciones ?? []) {
+      try {
+        // Solo enviar si el pedido tiene lentes (no solo soluciones/gotas)
+        const items = (o as any).order_items ?? []
+        const tieneLentes = items.some((i: any) => 
+          ['esferico', 'torico', 'multifocal', 'color'].includes(i.tipo)
+        )
+        if (!tieneLentes) {
+          await sb.from('orders').update({ wa_renovacion_enviada: true }).eq('id', o.id)
+          continue
+        }
+
+        const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+        const primerLente = items.find((i: any) => 
+          ['esferico', 'torico', 'multifocal', 'color'].includes(i.tipo)
+        )
+        const producto = primerLente?.nombre ?? 'tus lentes de contacto'
+
+        const mensaje = `👁️ Hola *${nombre}*, ¿cómo van tus lentes?\n\n` +
+          `Ya casi es momento de reponer *${producto}*.\n\n` +
+          `🔄 Renuévalos hoy y te llegan antes de que se acaben:\n` +
+          `👉 www.contactgo.net\n\n` +
+          `🎁 *10% de descuento* para clientes recurrentes con el código:\n` +
+          `*RENUEVA10*\n\n` +
+          `¿Los mismos o quieres probar algo nuevo? Responde aquí y te ayudo. 😊`
+        
+        const res = await sendText(o.cliente_telefono, mensaje)
+        await sb.from('orders').update({
+          wa_renovacion_enviada: true,
+          wa_renovacion_fecha: new Date().toISOString(),
+        }).eq('id', o.id)
+        await logAutomation(sb, o.id, o.cliente_telefono, 'renovacion', true, res?.messages?.[0]?.id)
+        results.renovaciones++
+      } catch (e: any) {
+        await logAutomation(sb, o.id, o.cliente_telefono, 'renovacion', false, undefined, e.message)
+        results.errores++
+      }
+    }
+  } catch (e) { console.error('[cron/wa-daily] renovaciones:', e) }
+
+  return NextResponse.json({ ok: true, ...results, ejecutado_at: new Date().toISOString() })
+}

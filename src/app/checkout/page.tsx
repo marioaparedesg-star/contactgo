@@ -192,7 +192,16 @@ export default function CheckoutPage() {
       // Marcar carrito como recuperado (usuario completó el checkout)
       try {
         const email = data.email
+        const tel = data.telefono
         if (email) createClient().from('abandoned_carts').update({ recuperado: true }).eq('cliente_email', email).then(() => {})
+        // También marcar en tabla nueva de WhatsApp
+        if (tel) {
+          fetch('/api/carrito/track', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ telefono: tel }),
+          }).catch(() => {})
+        }
       } catch { /* silencioso */ }
 
       // 2. Guardar items — crítico: verificar que se guardan
@@ -376,6 +385,23 @@ export default function CheckoutPage() {
             recuperado:       false,
             updated_at:       new Date().toISOString(),
           }, { onConflict: 'cliente_email', ignoreDuplicates: false })
+        }
+        // Track para cron de WhatsApp (nueva tabla dedicada)
+        if (vals.telefono && items.length > 0) {
+          fetch('/api/carrito/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              telefono: vals.telefono,
+              nombre: vals.nombre ?? null,
+              email: vals.email ?? null,
+              items: items.map(i => ({
+                id: i.product.id, nombre: i.product.nombre,
+                cantidad: i.cantidad,
+              })),
+              total: totalFinal,
+            }),
+          }).catch(() => {})
         }
         // Guardar perfil para pre-llenar próxima compra
         const { data: { user: u } } = await sb2.auth.getUser()

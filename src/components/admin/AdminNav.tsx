@@ -38,6 +38,7 @@ const NAV_SECTIONS = [
       { href: '/admin/registrados',   icon: Users,           label: '👥 Registrados',  badge: null },
       { href: '/admin/abandonados',   icon: ShoppingCart,    label: 'Abandonados',    badge: null },
       { href: '/admin/whatsapp',      icon: MessageCircle,   label: '💬 WhatsApp',     badge: 'whatsapp' },
+      { href: '/admin/whatsapp-automation', icon: Repeat,    label: '⚡ Automatización', badge: null },
     ]
   },
   {

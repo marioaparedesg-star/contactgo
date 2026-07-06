@@ -402,6 +402,38 @@ export async function POST(req: NextRequest) {
         .catch(e => console.error('[notify] WA error:', e))
     }
 
+    // WhatsApp al cliente — cuando pedido cambia a "enviado"
+    if (evento === 'estado_cambio' && nuevo_estado === 'enviado' && order.cliente_telefono) {
+      const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+      const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+      const numOrden = order.numero_orden ?? String(order_id).slice(0, 8)
+      const mensajeEnvio = `🚚 *¡Tus lentes están en camino, ${nombre}!*\n\n` +
+        `Tu pedido *#${numOrden}* de ContactGo ya fue enviado.\n\n` +
+        `📍 *Estimado de entrega:* hoy o mañana\n` +
+        `📦 En la dirección: ${order.direccion_texto?.slice(0, 80) ?? 'que registraste'}\n\n` +
+        `Puedes seguir tu pedido en:\n` +
+        `👉 www.contactgo.net/pedido/${numOrden}\n\n` +
+        `¿Preguntas sobre tu entrega? Responde aquí. 👇`
+
+      fetch(`${BASE}/api/whatsapp/enviar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ telefono: order.cliente_telefono, mensaje: mensajeEnvio }),
+      }).then(async r => {
+        if (r.ok) {
+          // Marcar como enviado para que el cron no vuelva a mandar
+          const sb2 = sbAdmin
+          await sb2.from('orders').update({
+            wa_envio_enviado: true,
+            wa_envio_fecha: new Date().toISOString(),
+          }).eq('id', order_id)
+          await sb2.from('wa_automation_log').insert({
+            order_id, telefono: order.cliente_telefono, tipo: 'envio', estado: 'sent',
+          })
+        }
+      }).catch(e => console.error('[notify] WA envio error:', e))
+    }
+
     // Email al admin (siempre)
     await resend.emails.send({
       from: FROM_EMAIL,

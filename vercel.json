@@ -1,20 +1,16 @@
 {
   "crons": [
     {
-      "path": "/api/carrito-abandonado",
-      "schedule": "0 10 * * *"
+      "path": "/api/cron/wa-daily",
+      "schedule": "0 13 * * *"
     },
     {
-      "path": "/api/reminders/send",
-      "schedule": "0 11 * * *"
-    },
-    {
-      "path": "/api/solicitar-resena",
-      "schedule": "0 12 * * *"
+      "path": "/api/cron/wa-hourly",
+      "schedule": "0 * * * *"
     },
     {
       "path": "/api/cancelar-pendientes",
-      "schedule": "0 3 * * *"
+      "schedule": "0 7 * * *"
     }
   ]
 }
