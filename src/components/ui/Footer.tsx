@@ -15,9 +15,9 @@ export default function Footer() {
             <span className="text-white font-bold text-base tracking-tight">ContactGo</span>
             {/* MEJORA-7: Ubicación física visible */}
             <span className="text-gray-500 text-[10px]">La única tienda 100% especializada en lentes · RD</span>
-            {/* MEJORA-10: Teléfono clickeable visible */}
-            <a href="tel:+18295430580" className="text-green-400 text-[11px] font-semibold hover:text-green-300 transition-colors">
-              📞 (829) 543-0580
+            {/* WhatsApp clickeable */}
+            <a href="https://wa.me/18295430580?text=Hola%20ContactGo%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer" className="text-green-400 text-[11px] font-semibold hover:text-green-300 transition-colors">
+              💬 Escríbenos por WhatsApp
             </a>
           </div>
           <div className="flex items-center gap-2">
@@ -88,10 +88,10 @@ export default function Footer() {
             <p className="text-white text-[10px] font-bold uppercase tracking-widest mb-2.5">Contacto</p>
             <ul className="space-y-1.5 text-xs">
               <li>
-                <a href="https://wa.me/18295430580" target="_blank" rel="noopener noreferrer"
-                  aria-label="WhatsApp (829) 543-0580"
+                <a href="https://wa.me/18295430580?text=Hola%20ContactGo%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer"
+                  aria-label="WhatsApp ContactGo"
                   className="text-gray-500 hover:text-gray-300 transition-colors">
-                  (829) 543-0580
+                  💬 WhatsApp
                 </a>
               </li>
               <li>
