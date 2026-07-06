@@ -85,16 +85,60 @@ export async function POST(req: NextRequest) {
           console.error('[WA/webhook] DB insert error:', dbErr.message)
         }
 
-        // ── Notificación al admin (829-408-9097) ──
-        // Envía alerta instantánea al personal de Mario para respuesta rápida
+        // ── Mensaje de bienvenida (solo primera vez) ──
         try {
           const ADMIN_PHONE = process.env.WHATSAPP_ADMIN_PHONE ?? '18294089097'
           const WA_API = 'https://graph.facebook.com/v20.0'
           const PHONE_ID = process.env.WHATSAPP_PHONE_ID ?? ''
           const TOKEN = process.env.WHATSAPP_TOKEN ?? ''
-          
-          // No notificar mensajes propios ni reacciones
+
+          // No auto-responder a mensajes propios ni reacciones
           if (from !== ADMIN_PHONE.replace(/^1/, '') && msgType !== 'reaction') {
+            
+            // Verificar si es primera vez — buscar mensajes previos de este número
+            const { count } = await sb
+              .from('whatsapp_messages')
+              .select('*', { count: 'exact', head: true })
+              .eq('phone', from)
+              .eq('direction', 'inbound')
+            
+            // Si es su primer mensaje (count = 1, el que acabamos de insertar)
+            if (count !== null && count <= 1) {
+              const bienvenida = `👋 ¡Hola! Bienvenido/a a *ContactGo*\n\n` +
+                `Somos especialistas en lentes de contacto en República Dominicana 🇩🇴\n\n` +
+                `Recibimos tu mensaje y te estaremos asistiendo en breve. Mientras tanto, cuéntanos cómo podemos ayudarte:\n\n` +
+                `🔹 ¿Buscas una marca o graduación específica?\n` +
+                `🔹 ¿Necesitas ayuda con tu pedido?\n` +
+                `🔹 ¿Tienes tu receta y quieres cotizar?`
+
+              const welcomeRes = await fetch(`${WA_API}/${PHONE_ID}/messages`, {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${TOKEN}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  messaging_product: 'whatsapp',
+                  to: from,
+                  type: 'text',
+                  text: { body: bienvenida },
+                }),
+              })
+              const welcomeData = await welcomeRes.json()
+
+              // Guardar mensaje de bienvenida en DB
+              await sb.from('whatsapp_messages').insert({
+                wa_message_id: welcomeData?.messages?.[0]?.id ?? null,
+                phone: from,
+                direction: 'outbound',
+                message_type: 'text',
+                body: bienvenida,
+                status: 'sent',
+                read: true,
+              })
+            }
+
+            // ── Notificación al admin ──
             const displayPhone = from.length === 11 && from.startsWith('1')
               ? `(${from.slice(1,4)}) ${from.slice(4,7)}-${from.slice(7)}`
               : from
@@ -121,8 +165,7 @@ export async function POST(req: NextRequest) {
             })
           }
         } catch (notifErr: any) {
-          // Notificación es best-effort — no bloquear el webhook
-          console.error('[WA/webhook] Notif error:', notifErr.message)
+          console.error('[WA/webhook] Auto-reply/notif error:', notifErr.message)
         }
       }
     }
