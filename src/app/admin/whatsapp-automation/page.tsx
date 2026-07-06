@@ -13,19 +13,20 @@ type LogEntry = {
 }
 
 const TIPO_INFO: Record<string, { label: string; icon: any; color: string }> = {
-  confirmacion: { label: 'Confirmación', icon: CheckCircle2, color: 'bg-green-100 text-green-700' },
-  envio:        { label: 'Envío', icon: Package, color: 'bg-blue-100 text-blue-700' },
-  resena:       { label: 'Reseña', icon: Star, color: 'bg-amber-100 text-amber-700' },
-  renovacion:   { label: 'Renovación', icon: Repeat, color: 'bg-purple-100 text-purple-700' },
-  carrito:      { label: 'Carrito', icon: ShoppingCart, color: 'bg-pink-100 text-pink-700' },
+  confirmacion:  { label: 'Confirmación', icon: CheckCircle2, color: 'bg-green-100 text-green-700' },
+  envio:         { label: 'Envío', icon: Package, color: 'bg-blue-100 text-blue-700' },
+  resena:        { label: 'Reseña', icon: Star, color: 'bg-amber-100 text-amber-700' },
+  renovacion:    { label: 'Renovación', icon: Repeat, color: 'bg-purple-100 text-purple-700' },
+  carrito:       { label: 'Carrito', icon: ShoppingCart, color: 'bg-pink-100 text-pink-700' },
+  pago_fallido:  { label: 'Pago Fallido', icon: XCircle, color: 'bg-orange-100 text-orange-700' },
+  cross_sell:    { label: 'Cross-sell', icon: ShoppingCart, color: 'bg-indigo-100 text-indigo-700' },
 }
 
 export default function WhatsAppAutomationDashboard() {
   const sb = createClient()
   const [logs, setLogs] = useState<LogEntry[]>([])
-  const [stats, setStats] = useState({ envios: 0, resenas: 0, renovaciones: 0, carritos: 0, confirmaciones: 0, fallos: 0 })
+  const [stats, setStats] = useState({ envios: 0, resenas: 0, renovaciones: 0, carritos: 0, confirmaciones: 0, pago_fallido: 0, cross_sell: 0, fallos: 0 })
   const [loading, setLoading] = useState(true)
-  const [ejecutando, setEjecutando] = useState(false)
 
   const cargarDatos = async () => {
     setLoading(true)
@@ -44,7 +45,7 @@ export default function WhatsAppAutomationDashboard() {
       .select('tipo, estado')
       .gt('created_at', hace30d)
 
-    const s = { envios: 0, resenas: 0, renovaciones: 0, carritos: 0, confirmaciones: 0, fallos: 0 }
+    const s = { envios: 0, resenas: 0, renovaciones: 0, carritos: 0, confirmaciones: 0, pago_fallido: 0, cross_sell: 0, fallos: 0 }
     ;(all ?? []).forEach((r: any) => {
       if (r.estado === 'failed') s.fallos++
       else if (r.tipo === 'envio') s.envios++
@@ -52,30 +53,14 @@ export default function WhatsAppAutomationDashboard() {
       else if (r.tipo === 'renovacion') s.renovaciones++
       else if (r.tipo === 'carrito') s.carritos++
       else if (r.tipo === 'confirmacion') s.confirmaciones++
+      else if (r.tipo === 'pago_fallido') s.pago_fallido++
+      else if (r.tipo === 'cross_sell') s.cross_sell++
     })
     setStats(s)
     setLoading(false)
   }
 
   useEffect(() => { cargarDatos() }, [])
-
-  const ejecutarCron = async (_tipo: 'daily') => {
-    if (ejecutando) return
-    setEjecutando(true)
-    try {
-      const secret = prompt('Ingresa el CRON_SECRET para ejecutar el cron manualmente:')
-      if (!secret) { setEjecutando(false); return }
-      const res = await fetch(`/api/cron/wa-daily`, {
-        headers: { 'Authorization': `Bearer ${secret}` },
-      })
-      const data = await res.json()
-      alert(`✅ Ejecutado:\n${JSON.stringify(data, null, 2)}`)
-      cargarDatos()
-    } catch (err: any) {
-      alert('Error: ' + err.message)
-    }
-    setEjecutando(false)
-  }
 
   const StatCard = ({ label, value, icon: Icon, color }: any) => (
     <div className="bg-white border rounded-2xl p-4 shadow-sm">
@@ -101,11 +86,11 @@ export default function WhatsAppAutomationDashboard() {
             <p className="text-xs text-gray-500">Últimos 30 días · Se ejecutan automáticamente</p>
           </div>
         </div>
-        <div className="flex gap-2">
-          <button onClick={() => ejecutarCron('daily')} disabled={ejecutando}
-            className="text-xs px-3 py-2 border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
-            ▶ Ejecutar ahora
-          </button>
+        <div className="flex items-center gap-2">
+          <span className="hidden md:flex items-center gap-1.5 text-[10px] px-2.5 py-1 rounded-full bg-green-100 text-green-700 font-semibold">
+            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+            AUTOMÁTICO
+          </span>
           <button onClick={cargarDatos} className="p-2 hover:bg-gray-100 rounded-lg">
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -113,12 +98,14 @@ export default function WhatsAppAutomationDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
         <StatCard label="Confirmación" value={stats.confirmaciones} icon={CheckCircle2} color="bg-green-100 text-green-700" />
         <StatCard label="Envío" value={stats.envios} icon={Package} color="bg-blue-100 text-blue-700" />
         <StatCard label="Reseña" value={stats.resenas} icon={Star} color="bg-amber-100 text-amber-700" />
         <StatCard label="Renovación" value={stats.renovaciones} icon={Repeat} color="bg-purple-100 text-purple-700" />
         <StatCard label="Carrito" value={stats.carritos} icon={ShoppingCart} color="bg-pink-100 text-pink-700" />
+        <StatCard label="Pago fallido" value={stats.pago_fallido} icon={XCircle} color="bg-orange-100 text-orange-700" />
+        <StatCard label="Cross-sell" value={stats.cross_sell} icon={ShoppingCart} color="bg-indigo-100 text-indigo-700" />
         <StatCard label="Fallos" value={stats.fallos} icon={XCircle} color="bg-red-100 text-red-700" />
       </div>
 
@@ -167,16 +154,20 @@ export default function WhatsAppAutomationDashboard() {
       </div>
 
       {/* Info panel */}
-      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-2xl p-4">
-        <h3 className="font-semibold text-sm text-blue-900 mb-2">📅 Cron diario · 9am DR (13 UTC)</h3>
-        <div className="grid md:grid-cols-2 gap-x-6 gap-y-1 text-xs text-blue-800">
-          <div>• 🚚 Notificaciones de envío pendientes</div>
-          <div>• ⭐ Reseñas (3 días post-envío) + RD$200 crédito</div>
-          <div>• 🔄 Renovación (día 25 post-compra) + 10% RENUEVA10</div>
-          <div>• 🛒 Carritos abandonados (2-24h) + 5% VUELVE5</div>
+      <div className="mt-6 bg-green-50 border border-green-200 rounded-2xl p-4">
+        <h3 className="font-semibold text-sm text-green-900 mb-3">🤖 7 Automatizaciones · 100% Automáticas · Sin intervención manual</h3>
+        <div className="grid md:grid-cols-2 gap-x-6 gap-y-1.5 text-xs text-green-800">
+          <div>✅ <b>Confirmación pedido</b> — tiempo real al pagar</div>
+          <div>✅ <b>Notificación envío</b> — al cambiar estado</div>
+          <div>✅ <b>Reseña</b> — 3 días post-envío (+ RD$200 crédito)</div>
+          <div>✅ <b>Renovación</b> — día 25 post-compra (10% RENUEVA10)</div>
+          <div>✅ <b>Carrito abandonado</b> — 2-24h (5% VUELVE5)</div>
+          <div>✅ <b>Pago fallido</b> — 3h sin pago (5% VUELVE5)</div>
+          <div>✅ <b>Cross-sell</b> — 15 días post-compra (10% COMPLETO10)</div>
+          <div>⚙️ <b>Cancelación pedidos</b> — 3h sin pago (auto)</div>
         </div>
-        <p className="text-[10px] text-blue-600 mt-2">
-          Confirmación de pedido y envío se disparan también en tiempo real (checkout / cambio de estado).
+        <p className="text-[10px] text-green-600 mt-2.5">
+          Cron ejecuta diario 9am DR · Confirmación, envío y notificaciones críticas también en tiempo real.
         </p>
       </div>
     </div>

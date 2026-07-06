@@ -225,5 +225,76 @@ export async function GET(req: NextRequest) {
     }
   } catch (e) { console.error('[cron/wa-daily] carritos:', e) }
 
-  return NextResponse.json({ ok: true, ...results, ...resultsCarritos, ejecutado_at: new Date().toISOString() })
+  // ─────────────────────────────────────────────────────
+  // 5. CROSS-SELL — 15 días post-compra
+  // Cliente compró lentes → sugerir solución/gotas si no las tiene
+  // ─────────────────────────────────────────────────────
+  const resultsCross = { cross_sell: 0 }
+  try {
+    const hace15dias = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+    const hace20dias = new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+
+    // Añadir columna wa_crosssell_enviado dinámicamente si no existe (via query try/catch)
+    const { data: ventasLentes } = await sb
+      .from('orders')
+      .select(`
+        id, cliente_nombre, cliente_telefono, numero_orden,
+        order_items(nombre, tipo)
+      `)
+      .eq('pago_estado', 'aprobado')
+      .lt('pagado_en', hace15dias)
+      .gt('pagado_en', hace20dias)
+      .not('cliente_telefono', 'is', null)
+      .limit(30)
+
+    for (const o of ventasLentes ?? []) {
+      // Verificar si ya se envió cross-sell a este pedido
+      const { count: yaEnviado } = await sb
+        .from('wa_automation_log')
+        .select('*', { count: 'exact', head: true })
+        .eq('order_id', o.id)
+        .eq('tipo', 'cross_sell')
+      if (yaEnviado && yaEnviado > 0) continue
+
+      const items = (o as any).order_items ?? []
+      const tieneLentes = items.some((i: any) => ['esferico', 'torico', 'multifocal', 'color'].includes(i.tipo))
+      const tieneSolucion = items.some((i: any) => i.tipo === 'solucion')
+      const tieneGotas = items.some((i: any) => i.tipo === 'gota')
+
+      if (!tieneLentes || (tieneSolucion && tieneGotas)) continue
+
+      try {
+        const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+        let sugerencia = ''
+        if (!tieneSolucion && !tieneGotas) {
+          sugerencia = `Complementa tus lentes con:\n\n` +
+            `💧 *Opti-Free Puremoist* (solución) — RD$750\n` +
+            `👁️ *Refresh Tears* (gotas) — RD$800\n\n` +
+            `Mantén tus lentes limpios y tus ojos frescos todo el día.`
+        } else if (!tieneSolucion) {
+          sugerencia = `💧 Notamos que no compraste solución de limpieza.\n\n` +
+            `*Opti-Free Puremoist* (RD$750) protege tus lentes y prolonga su vida útil.`
+        } else {
+          sugerencia = `👁️ Notamos que no compraste gotas lubricantes.\n\n` +
+            `*Refresh Tears* (RD$800) alivia la sequedad al usar lentes todo el día.`
+        }
+
+        const mensaje = `Hola *${nombre}* 👋\n\n` +
+          `Han pasado 2 semanas desde tu compra. ¿Cómo van tus lentes?\n\n` +
+          `${sugerencia}\n\n` +
+          `🎁 *10% OFF* con el código *COMPLETO10*\n` +
+          `👉 www.contactgo.net\n\n` +
+          `¿Preguntas? Responde aquí. 💚`
+
+        const res = await sendText(o.cliente_telefono, mensaje)
+        await logAutomation(sb, o.id, o.cliente_telefono, 'cross_sell', true, res?.messages?.[0]?.id)
+        resultsCross.cross_sell++
+      } catch (e: any) {
+        await logAutomation(sb, o.id, o.cliente_telefono, 'cross_sell', false, undefined, e.message)
+        results.errores++
+      }
+    }
+  } catch (e) { console.error('[cron/wa-daily] cross-sell:', e) }
+
+  return NextResponse.json({ ok: true, ...results, ...resultsCarritos, ...resultsCross, ejecutado_at: new Date().toISOString() })
 }
