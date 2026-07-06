@@ -74,9 +74,23 @@ export async function GET() {
     ]
 
     const rows = products.map(p => {
-      const price = `${Number(p.precio).toFixed(2)} DOP`
-      const salePrice = p.precio_anterior ? `${Number(p.precio).toFixed(2)} DOP` : ''
-      const originalPrice = p.precio_anterior ? `${Number(p.precio_anterior).toFixed(2)} DOP` : price
+      const currentPrice = Number(p.precio)
+      const oldPrice = p.precio_anterior ? Number(p.precio_anterior) : null
+      
+      // precio = what the customer pays (always)
+      // precio_anterior = strikethrough only if HIGHER than precio (discount)
+      let priceStr: string
+      let salePriceStr: string
+      
+      if (oldPrice && oldPrice > currentPrice) {
+        // Real discount: show old as price, current as sale_price
+        priceStr = `${oldPrice.toFixed(2)} DOP`
+        salePriceStr = `${currentPrice.toFixed(2)} DOP`
+      } else {
+        // No discount or price went up: just show current price
+        priceStr = `${currentPrice.toFixed(2)} DOP`
+        salePriceStr = ''
+      }
 
       return [
         escapeCSV(p.id),
@@ -84,8 +98,8 @@ export async function GET() {
         escapeCSV(p.descripcion?.slice(0, 5000)),
         mapAvailability(p.stock ?? 0),
         mapCondition(p.tipo),
-        escapeCSV(p.precio_anterior ? originalPrice : price),
-        escapeCSV(p.precio_anterior ? salePrice : ''),
+        escapeCSV(priceStr),
+        escapeCSV(salePriceStr),
         escapeCSV(`${BASE}/producto/${p.slug}`),
         escapeCSV(p.imagen_url),
         escapeCSV(p.marca),
