@@ -6,7 +6,7 @@ const WA_PHONE_ID = process.env.WHATSAPP_PHONE_ID
 
 // CallMeBot — API gratuita para enviar WhatsApp a tu propio número sin app de Meta
 const CALLMEBOT_API = process.env.CALLMEBOT_API_KEY  // Tu API key de callmebot.com
-const ADMIN_PHONE   = process.env.NEXT_PUBLIC_WHATSAPP ?? '18295430580'
+const ADMIN_PHONE   = process.env.NEXT_PUBLIC_WHATSAPP ?? '18096942268'
 
 export async function POST(req: NextRequest) {
   // Seguridad: origin + rate limit
