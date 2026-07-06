@@ -332,15 +332,58 @@ export default function WhatsAppInbox() {
                         </div>
                       )}
                       <div className={`flex ${isOut ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-[75%] rounded-2xl px-3.5 py-2 shadow-sm ${
+                        <div className={`max-w-[75%] rounded-2xl overflow-hidden shadow-sm ${
                           isOut
                             ? 'bg-[#d9fdd3] rounded-tr-md'
                             : 'bg-white rounded-tl-md'
                         }`}>
-                          <p className="text-sm text-gray-800 whitespace-pre-wrap break-words">
-                            {msg.body}
-                          </p>
-                          <div className={`flex items-center gap-1 mt-0.5 ${isOut ? 'justify-end' : ''}`}>
+                          {/* Media content */}
+                          {msg.media_url && msg.message_type === 'image' && (
+                            <a href={`/api/whatsapp/media?id=${msg.media_url}`} target="_blank" rel="noopener noreferrer">
+                              <img
+                                src={`/api/whatsapp/media?id=${msg.media_url}`}
+                                alt="Imagen"
+                                className="w-full max-w-xs rounded-t-2xl object-cover cursor-pointer"
+                                loading="lazy"
+                              />
+                            </a>
+                          )}
+                          {msg.media_url && msg.message_type === 'video' && (
+                            <video
+                              src={`/api/whatsapp/media?id=${msg.media_url}`}
+                              controls
+                              className="w-full max-w-xs rounded-t-2xl"
+                              preload="metadata"
+                            />
+                          )}
+                          {msg.media_url && msg.message_type === 'audio' && (
+                            <audio
+                              src={`/api/whatsapp/media?id=${msg.media_url}`}
+                              controls
+                              className="w-full min-w-[200px] my-1 mx-2"
+                              preload="metadata"
+                            />
+                          )}
+                          {msg.media_url && msg.message_type === 'document' && (
+                            <a href={`/api/whatsapp/media?id=${msg.media_url}`} target="_blank" rel="noopener noreferrer"
+                              className="flex items-center gap-2 px-3.5 py-2 text-blue-600 hover:text-blue-800">
+                              <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                              <span className="text-sm font-medium truncate">{msg.body || 'Documento'}</span>
+                            </a>
+                          )}
+                          {/* Text content */}
+                          {msg.body && msg.message_type !== 'document' && !(msg.message_type === 'image' && msg.body === '[Imagen]') && !(msg.message_type === 'video' && msg.body === '[Video]') && !(msg.message_type === 'audio' && msg.body === '[Audio]') && (
+                            <p className="text-sm text-gray-800 whitespace-pre-wrap break-words px-3.5 py-2">
+                              {msg.body}
+                            </p>
+                          )}
+                          {/* If no media and just text */}
+                          {!msg.media_url && (
+                            <p className="text-sm text-gray-800 whitespace-pre-wrap break-words px-3.5 py-2">
+                              {msg.body}
+                            </p>
+                          )}
+                          <div className={`flex items-center gap-1 px-3.5 pb-1.5 ${isOut ? 'justify-end' : ''}`}>
                             <span className="text-[10px] text-gray-400">
                               {new Date(msg.created_at).toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}
                             </span>
