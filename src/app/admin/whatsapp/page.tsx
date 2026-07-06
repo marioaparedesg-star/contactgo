@@ -131,13 +131,15 @@ export default function WhatsAppInbox() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ telefono: selectedPhone, mensaje: newMessage.trim() }),
       })
-      if (res.ok) {
+      const data = await res.json()
+      if (res.ok && data.ok) {
         setNewMessage('')
-        // Reload messages
-        setTimeout(() => loadMessages(selectedPhone), 500)
+        setTimeout(() => loadMessages(selectedPhone), 800)
+      } else {
+        alert(`Error al enviar: ${data.error || 'Intenta de nuevo'}`)
       }
-    } catch (err) {
-      console.error('Error sending:', err)
+    } catch (err: any) {
+      alert(`Error de conexión: ${err.message}`)
     }
     setSending(false)
     inputRef.current?.focus()
@@ -338,51 +340,35 @@ export default function WhatsAppInbox() {
                             ? 'bg-[#d9fdd3] rounded-tr-md'
                             : 'bg-white rounded-tl-md'
                         }`}>
-                          {/* Media content */}
-                          {msg.media_url && msg.message_type === 'image' && (
+                          {/* Media */}
+                          {msg.media_url && ['image'].includes(msg.message_type) && (
                             <a href={`/api/whatsapp/media?id=${msg.media_url}`} target="_blank" rel="noopener noreferrer">
-                              <img
-                                src={`/api/whatsapp/media?id=${msg.media_url}`}
-                                alt="Imagen"
-                                className="w-full max-w-xs rounded-t-2xl object-cover cursor-pointer"
-                                loading="lazy"
-                              />
+                              <img src={`/api/whatsapp/media?id=${msg.media_url}`} alt="" className="w-full max-w-[280px] object-cover" loading="lazy" />
                             </a>
                           )}
                           {msg.media_url && msg.message_type === 'video' && (
-                            <video
-                              src={`/api/whatsapp/media?id=${msg.media_url}`}
-                              controls
-                              className="w-full max-w-xs rounded-t-2xl"
-                              preload="metadata"
-                            />
+                            <video src={`/api/whatsapp/media?id=${msg.media_url}`} controls className="w-full max-w-[280px]" preload="metadata" />
                           )}
                           {msg.media_url && msg.message_type === 'audio' && (
-                            <audio
-                              src={`/api/whatsapp/media?id=${msg.media_url}`}
-                              controls
-                              className="w-full min-w-[200px] my-1 mx-2"
-                              preload="metadata"
-                            />
+                            <div className="px-3 py-2">
+                              <audio src={`/api/whatsapp/media?id=${msg.media_url}`} controls className="w-full" preload="metadata" />
+                            </div>
                           )}
                           {msg.media_url && msg.message_type === 'document' && (
                             <a href={`/api/whatsapp/media?id=${msg.media_url}`} target="_blank" rel="noopener noreferrer"
-                              className="flex items-center gap-2 px-3.5 py-2 text-blue-600 hover:text-blue-800">
-                              <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                              <span className="text-sm font-medium truncate">{msg.body || 'Documento'}</span>
+                              className="flex items-center gap-2 px-3.5 py-2 text-blue-600 hover:underline">
+                              📄 <span className="text-sm">{msg.body || 'Documento'}</span>
                             </a>
                           )}
-                          {/* Text content */}
-                          {msg.body && msg.message_type !== 'document' && !(msg.message_type === 'image' && msg.body === '[Imagen]') && !(msg.message_type === 'video' && msg.body === '[Video]') && !(msg.message_type === 'audio' && msg.body === '[Audio]') && (
+                          {/* Text body */}
+                          {msg.body && msg.message_type !== 'document' && (
                             <p className="text-sm text-gray-800 whitespace-pre-wrap break-words px-3.5 py-2">
                               {msg.body}
                             </p>
                           )}
-                          {/* If no media and just text */}
-                          {!msg.media_url && (
-                            <p className="text-sm text-gray-800 whitespace-pre-wrap break-words px-3.5 py-2">
-                              {msg.body}
-                            </p>
+                          {/* No body, no media — show type label */}
+                          {!msg.body && !msg.media_url && (
+                            <p className="text-sm text-gray-400 italic px-3.5 py-2">[{msg.message_type}]</p>
                           )}
                           <div className={`flex items-center gap-1 px-3.5 pb-1.5 ${isOut ? 'justify-end' : ''}`}>
                             <span className="text-[10px] text-gray-400">
