@@ -22,6 +22,7 @@ type Message = {
   direction: 'inbound' | 'outbound'
   message_type: string
   body: string | null
+  media_url: string | null
   status: string
   read: boolean
   created_at: string
