@@ -177,5 +177,53 @@ export async function GET(req: NextRequest) {
     }
   } catch (e) { console.error('[cron/wa-daily] renovaciones:', e) }
 
-  return NextResponse.json({ ok: true, ...results, ejecutado_at: new Date().toISOString() })
+  // ─────────────────────────────────────────────────────
+  // 4. CARRITOS ABANDONADOS — de las últimas 24h
+  // (en plan Hobby solo hay 1 cron diario, así que se procesa todo aquí)
+  // ─────────────────────────────────────────────────────
+  const resultsCarritos = { carritos: 0 }
+  try {
+    const hace2h = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+    const hace24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+
+    const { data: carritos } = await sb
+      .from('carritos_abandonados')
+      .select('*')
+      .eq('wa_enviado', false)
+      .eq('convertido', false)
+      .lt('created_at', hace2h)
+      .gt('created_at', hace24h)
+      .not('telefono', 'is', null)
+      .limit(50)
+
+    for (const c of carritos ?? []) {
+      try {
+        const nombre = c.nombre?.split(' ')[0] ?? ''
+        const items = Array.isArray(c.items) ? c.items : []
+        const productos = items.slice(0, 3)
+          .map((i: any) => `• ${i.nombre ?? 'Producto'}${i.cantidad > 1 ? ` x${i.cantidad}` : ''}`)
+          .join('\n')
+
+        const mensaje = `👋 Hola${nombre ? ` *${nombre}*` : ''}, dejaste algo esperando en tu carrito 🛒\n\n` +
+          `${productos}\n\n` +
+          `¿Tuviste algún problema al comprar? Te ayudamos ahora mismo.\n\n` +
+          `🎁 *5% de descuento* para que completes hoy:\n*VUELVE5*\n\n` +
+          `👉 Continúa aquí: www.contactgo.net/cart\n\n` +
+          `O responde este mensaje y te asistimos personalmente. 💚`
+
+        const res = await sendText(c.telefono, mensaje)
+        await sb.from('carritos_abandonados').update({
+          wa_enviado: true,
+          wa_enviado_at: new Date().toISOString(),
+        }).eq('id', c.id)
+        await logAutomation(sb, null, c.telefono, 'carrito', true, res?.messages?.[0]?.id)
+        resultsCarritos.carritos++
+      } catch (e: any) {
+        await logAutomation(sb, null, c.telefono, 'carrito', false, undefined, e.message)
+        results.errores++
+      }
+    }
+  } catch (e) { console.error('[cron/wa-daily] carritos:', e) }
+
+  return NextResponse.json({ ok: true, ...results, ...resultsCarritos, ejecutado_at: new Date().toISOString() })
 }

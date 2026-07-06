@@ -59,17 +59,17 @@ export default function WhatsAppAutomationDashboard() {
 
   useEffect(() => { cargarDatos() }, [])
 
-  const ejecutarCron = async (tipo: 'daily' | 'hourly') => {
+  const ejecutarCron = async (_tipo: 'daily') => {
     if (ejecutando) return
     setEjecutando(true)
     try {
-      const secret = prompt(`Ingresa el CRON_SECRET para ejecutar ${tipo} manualmente:`)
+      const secret = prompt('Ingresa el CRON_SECRET para ejecutar el cron manualmente:')
       if (!secret) { setEjecutando(false); return }
-      const res = await fetch(`/api/cron/wa-${tipo}`, {
+      const res = await fetch(`/api/cron/wa-daily`, {
         headers: { 'Authorization': `Bearer ${secret}` },
       })
       const data = await res.json()
-      alert(`✅ Ejecutado ${tipo}:\n${JSON.stringify(data, null, 2)}`)
+      alert(`✅ Ejecutado:\n${JSON.stringify(data, null, 2)}`)
       cargarDatos()
     } catch (err: any) {
       alert('Error: ' + err.message)
@@ -102,13 +102,9 @@ export default function WhatsAppAutomationDashboard() {
           </div>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => ejecutarCron('hourly')} disabled={ejecutando}
-            className="text-xs px-3 py-2 border rounded-lg hover:bg-gray-50 text-gray-700">
-            Ejecutar carritos
-          </button>
           <button onClick={() => ejecutarCron('daily')} disabled={ejecutando}
-            className="text-xs px-3 py-2 border rounded-lg hover:bg-gray-50 text-gray-700">
-            Ejecutar diario
+            className="text-xs px-3 py-2 border rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
+            ▶ Ejecutar ahora
           </button>
           <button onClick={cargarDatos} className="p-2 hover:bg-gray-100 rounded-lg">
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -171,23 +167,17 @@ export default function WhatsAppAutomationDashboard() {
       </div>
 
       {/* Info panel */}
-      <div className="mt-6 grid md:grid-cols-2 gap-3">
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
-          <h3 className="font-semibold text-sm text-blue-900 mb-2">📅 Cron diario · 9am DR</h3>
-          <ul className="text-xs text-blue-800 space-y-1">
-            <li>• Notificaciones de envío pendientes</li>
-            <li>• Solicitud de reseña (3 días post-envío)</li>
-            <li>• Recordatorio de renovación (día 25 post-compra)</li>
-          </ul>
+      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-2xl p-4">
+        <h3 className="font-semibold text-sm text-blue-900 mb-2">📅 Cron diario · 9am DR (13 UTC)</h3>
+        <div className="grid md:grid-cols-2 gap-x-6 gap-y-1 text-xs text-blue-800">
+          <div>• 🚚 Notificaciones de envío pendientes</div>
+          <div>• ⭐ Reseñas (3 días post-envío) + RD$200 crédito</div>
+          <div>• 🔄 Renovación (día 25 post-compra) + 10% RENUEVA10</div>
+          <div>• 🛒 Carritos abandonados (2-24h) + 5% VUELVE5</div>
         </div>
-        <div className="bg-pink-50 border border-pink-200 rounded-2xl p-4">
-          <h3 className="font-semibold text-sm text-pink-900 mb-2">⏰ Cron horario · cada hora</h3>
-          <ul className="text-xs text-pink-800 space-y-1">
-            <li>• Recuperación de carritos abandonados</li>
-            <li>• Espera 2h de inactividad antes de enviar</li>
-            <li>• Incluye código de descuento VUELVE5 (5%)</li>
-          </ul>
-        </div>
+        <p className="text-[10px] text-blue-600 mt-2">
+          Confirmación de pedido y envío se disparan también en tiempo real (checkout / cambio de estado).
+        </p>
       </div>
     </div>
   )
