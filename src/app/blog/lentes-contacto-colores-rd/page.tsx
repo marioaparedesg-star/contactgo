@@ -67,7 +67,7 @@ export default function Page() {
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Las marcas más populares en RD</h2>
             {[
-              { marca: 'FreshLook® Colorblends', desc: 'La marca #1 en RD para lentes de color. Tecnología tri-capa que mezcla 3 tonos para un efecto 100% natural. Disponibles en 12 colores.', colores: ['Blue', 'Green', 'Honey', 'Gray', 'Brown', 'Amethyst', 'Turquoise', 'Gemstone Green'], href: '/producto/freshlook-colorblends-lentes-contacto-color-dominicana' },
+              { marca: 'FreshLook® Colorblends', desc: 'La marca #1 en RD para lentes de color. Tecnología tri-capa que mezcla 3 tonos para un efecto 100% natural. Disponibles en 12 colores.', colores: ['Blue', 'Green', 'Honey', 'Gray', 'Brown', 'Amethyst', 'Turquoise', 'Gemstone Green'], href: '/producto/air-optix-colors-lentes-contacto-color-dominicana' },
               { marca: 'AIR OPTIX® COLORS', desc: 'De Alcon — silicona hidrogel con color. Cómodos para uso prolongado. El único lente de color de silicona hidrogel del mercado.', colores: ['Blue', 'Brown', 'Gray', 'Green', 'Honey', 'Brilliant Blue', 'True Sapphire', 'Gemstone Green'], href: '/producto/air-optix-colors-lentes-contacto-color-dominicana' },
               { marca: 'Lunare Tri-Kolor', desc: 'Opción local más accesible. Diseño de tres capas de color para un efecto vibrante y llamativo.', colores: ['Varios colores disponibles'], href: '/producto/lunare-tri-kolor-lentes-contacto-color-dominicana' },
             ].map(m => (

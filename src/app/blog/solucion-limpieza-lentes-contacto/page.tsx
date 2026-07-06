@@ -68,8 +68,8 @@ export default function Page() {
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Las soluciones disponibles en ContactGo</h2>
             {[
-              { nombre: 'Opti-Free® PureMoist', marca: 'Alcon', precio: 'RD$900', desc: 'La más recomendada para lentes de silicona hidrogel (Biofinity, Air Optix, ACUVUE Oasys). Tecnología POLYQUAD + ALDOX sin mercurio.', ideal: 'Silicona hidrogel', href: '/producto/opti-free-puremoist-solucion-multipropósito-dominicana' },
-              { nombre: 'ReNu Advanced', marca: 'Bausch+Lomb', precio: 'RD$850', desc: 'Fórmula HydraGlyde para alta hidratación. Compatible con todos los lentes blandos. Precio muy accesible.', ideal: 'Todos los lentes blandos', href: '/producto/renu-advanced-solucion-lentes-contacto-bausch-dominicana' },
+              { nombre: 'Opti-Free® PureMoist', marca: 'Alcon', precio: 'RD$900', desc: 'La más recomendada para lentes de silicona hidrogel (Biofinity, Air Optix, ACUVUE Oasys). Tecnología POLYQUAD + ALDOX sin mercurio.', ideal: 'Silicona hidrogel', href: '/producto/opti-free-puremoist-solucion-multiproposito-dominicana' },
+              { nombre: 'ReNu Advanced', marca: 'Bausch+Lomb', precio: 'RD$850', desc: 'Fórmula HydraGlyde para alta hidratación. Compatible con todos los lentes blandos. Precio muy accesible.', ideal: 'Todos los lentes blandos', href: '/producto/opti-free-puremoist-solucion-multiproposito-dominicana' },
               { nombre: 'Prolub Hyfresh', marca: 'Norsa', precio: 'RD$900', desc: 'La solución más popular en el mercado dominicano. Multipropósito — limpia, enjuaga, desinfecta y conserva. Precio competitivo.', ideal: 'Lentes blandos convencionales', href: '/producto/prolub-hyfresh-solucion-multiproposito-dominicana' },
               { nombre: 'Dream Eye Solución', marca: 'Dream Eye', precio: 'RD$800', desc: 'Opción económica para uso diario. Funciona bien con lentes de hidrogel convencional.', ideal: 'Lentes blandos estándar', href: '/producto/dream-eye-solucion-lentes-contacto-dominicana' },
             ].map(s => (

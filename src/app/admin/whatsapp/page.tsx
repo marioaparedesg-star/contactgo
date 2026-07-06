@@ -352,6 +352,9 @@ export default function WhatsAppInbox() {
                           {msg.media_url && msg.message_type === 'audio' && (
                             <div className="px-3 py-2">
                               <audio src={`/api/whatsapp/media?id=${msg.media_url}`} controls className="w-full" preload="metadata" />
+                              <a href={`/api/whatsapp/media?id=${msg.media_url}`} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-500 hover:underline">
+                                ¿No reproduce? Descargar audio
+                              </a>
                             </div>
                           )}
                           {msg.media_url && msg.message_type === 'document' && (

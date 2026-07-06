@@ -89,8 +89,8 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Gotas para usar con lentes de contacto</h2>
             <p className="mb-3 text-sm">No todas las gotas son compatibles con lentes de contacto. Asegúrate de usar gotas específicamente formuladas para uso con lentes:</p>
             {[
-              { nombre: 'Systane Ultra', desc: 'Formulada para uso con lentes blandos. Alivia la sequedad rápidamente.', href: '/producto/systane-ultra-gotas-ojos-secos-alcon-dominicana' },
-              { nombre: 'Prolub Ofteno', desc: 'Gotas lubricantes compatibles con lentes de contacto. Muy popular en RD.', href: '/producto/prolub-ofteno-gotas-lubricantes-oculares-dominicana' },
+              { nombre: 'Systane Ultra', desc: 'Formulada para uso con lentes blandos. Alivia la sequedad rápidamente.', href: '/producto/refresh-optive-advanced-gotas-ojos-secos-dominicana' },
+              { nombre: 'Prolub Ofteno', desc: 'Gotas lubricantes compatibles con lentes de contacto. Muy popular en RD.', href: '/producto/refresh-tears-gotas-lubricantes-ojos-dominicana' },
               { nombre: 'Refresh Optive Advanced', desc: 'Triple acción: hidrata, lubrica y protege. Para sequedad moderada a severa.', href: '/producto/refresh-optive-advanced-gotas-ojos-secos-dominicana' },
             ].map(g => (
               <div key={g.nombre} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl mb-2">
