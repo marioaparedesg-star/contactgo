@@ -1,12 +1,12 @@
 // ============================================================
 // ContactGo — WhatsApp Business API Client
-// Phone Number ID: 1194363350428130
-// Business Account ID: 1919483755414883
+// Phone Number ID: 1237770472751989
+// Business Account ID: 998977189800215
 // ============================================================
 
 const WA_API_URL = 'https://graph.facebook.com/v20.0'
-const PHONE_ID   = process.env.WHATSAPP_PHONE_ID ?? '1194363350428130'
-const TOKEN      = process.env.WHATSAPP_TOKEN    ?? 'EAAODYBNOh9kBR8avFTJIzPtc1GJ9CIjINLZAdoH2SahlR3zIdOHRkrsT0qKc3LzpMR1b3K1b8TMfuvgitGlDFAgRPnXdqKZA6GgorMyUMaK2Kf0dFIPdOio1Bx5Ep0xHZC15FuqxZCSVJ1Vq1ReOsMfxONVIei5Aa17rAx5nF55y2rhdA6Sdu3MYxNbPFwlRZBgZDZD'
+const PHONE_ID   = process.env.WHATSAPP_PHONE_ID ?? '1237770472751989'
+const TOKEN      = process.env.WHATSAPP_TOKEN    ?? 'EAAODYBNOh9kBR5g7CaplKQUX3FXs50nnk4sc69yXw4u7h2jsomwKNDwydaYKIEI56DKFzZCbaXjQjOq3OCpr6OECXt3W0nH5ZCq3sJwMQZBtvw0s4ClOufnBpAGnKoYuGQLT6KAlWy1eVuj5n9vOnZB3VpLlHAJ8mWm6SnXZB0XSnSzZB79GTudwVSZBBegflxAjNwy6IiqZCPgscmYrBNL0q1t5wjrK5M2KxlhzwpZB0GtrONiZBBdPrGvjbod4zkF1Yh5Ezuv8ZBXGVMQk0aoVeZAjmWF6NsYpU2kLsEMWiwZDZD'
 
 // Normaliza número dominicano a formato internacional
 export function normalizePhone(phone: string): string {
