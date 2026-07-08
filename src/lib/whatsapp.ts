@@ -6,12 +6,11 @@
 
 const WA_API_URL = 'https://graph.facebook.com/v20.0'
 const PHONE_ID   = process.env.WHATSAPP_PHONE_ID ?? '1237770472751989'
-const TOKEN      = process.env.WHATSAPP_TOKEN    ?? 'EAAODYBNOh9kBR5g7CaplKQUX3FXs50nnk4sc69yXw4u7h2jsomwKNDwydaYKIEI56DKFzZCbaXjQjOq3OCpr6OECXt3W0nH5ZCq3sJwMQZBtvw0s4ClOufnBpAGnKoYuGQLT6KAlWy1eVuj5n9vOnZB3VpLlHAJ8mWm6SnXZB0XSnSzZB79GTudwVSZBBegflxAjNwy6IiqZCPgscmYrBNL0q1t5wjrK5M2KxlhzwpZB0GtrONiZBBdPrGvjbod4zkF1Yh5Ezuv8ZBXGVMQk0aoVeZAjmWF6NsYpU2kLsEMWiwZDZD'
+const TOKEN      = process.env.WHATSAPP_TOKEN    ?? ''
 
 // Normaliza número dominicano a formato internacional
 export function normalizePhone(phone: string): string {
   const digits = phone.replace(/\D/g, '')
-  // Ya tiene código de país
   if (digits.startsWith('1') && digits.length === 11) return digits
   if (digits.startsWith('809') || digits.startsWith('829') || digits.startsWith('849')) {
     return '1' + digits
@@ -20,7 +19,7 @@ export function normalizePhone(phone: string): string {
   return digits
 }
 
-// Enviar mensaje de texto libre (solo para ventana de 24h)
+// ─── Enviar mensaje de texto libre (solo ventana 24h) ───
 export async function sendText(to: string, text: string) {
   const phone = normalizePhone(to)
   const res = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
@@ -37,13 +36,25 @@ export async function sendText(to: string, text: string) {
     }),
   })
   const data = await res.json()
-  if (!res.ok) throw new Error(JSON.stringify(data))
+  if (data.error) throw new Error(JSON.stringify(data.error))
   return data
 }
 
-// Enviar plantilla de mensaje (funciona fuera de ventana de 24h)
-export async function sendTemplate(to: string, template: string, components: any[] = [], lang = 'es') {
+// ─── Enviar template (funciona SIEMPRE, sin ventana 24h) ───
+export async function sendTemplate(
+  to: string,
+  templateName: string,
+  params: string[],
+  lang = 'es'
+) {
   const phone = normalizePhone(to)
+  const components: any[] = []
+  if (params.length > 0) {
+    components.push({
+      type: 'body',
+      parameters: params.map(p => ({ type: 'text', text: p })),
+    })
+  }
   const res = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
     method: 'POST',
     headers: {
@@ -55,101 +66,143 @@ export async function sendTemplate(to: string, template: string, components: any
       to: phone,
       type: 'template',
       template: {
-        name: template,
+        name: templateName,
         language: { code: lang },
         components,
       },
     }),
   })
   const data = await res.json()
-  if (!res.ok) throw new Error(JSON.stringify(data))
+  if (data.error) throw new Error(JSON.stringify(data.error))
   return data
 }
 
-// Mensaje de confirmación de pedido
+// ─── Enviar con fallback: intenta texto libre, si falla usa template ───
+export async function sendSmart(
+  to: string,
+  text: string,
+  templateName: string,
+  templateParams: string[]
+) {
+  try {
+    // Intentar texto libre primero (mejor experiencia, más flexible)
+    const res = await sendText(to, text)
+    return res
+  } catch (err: any) {
+    const errMsg = err.message ?? ''
+    // Si es error de ventana de 24h (131047) o no suscrito, usar template
+    if (errMsg.includes('131047') || errMsg.includes('131026') || errMsg.includes('131049') || errMsg.includes('133010') || errMsg.includes('130429')) {
+      return sendTemplate(to, templateName, templateParams)
+    }
+    throw err
+  }
+}
+
+// ─── Funciones de notificación específicas ───
+
 export async function sendOrderConfirmation(order: {
   cliente_telefono: string
   cliente_nombre: string
   numero_orden: string
-  total: number
-  items: Array<{ nombre: string; cantidad: number }>
+  total?: number
+  items?: { nombre: string; cantidad: number }[]
 }) {
-  const nombre    = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
-  const pedidoId  = order.numero_orden ?? ''
-  const total     = `RD$${(order.total / 100).toLocaleString('es-DO')}`
-  const productos = order.items.map(i => `• ${i.nombre} x${i.cantidad}`).join('\n')
-
-  const mensaje = `👁️ ¡Hola ${nombre}! Tu pedido en *ContactGo* está confirmado ✅
-
-📦 *Pedido #${pedidoId}*
-${productos}
-
-💳 *Total:* ${total}
-🚚 *Entrega:* 24-48 horas en toda RD
-
-Recibirás otro mensaje cuando tus lentes estén en camino.
-
-¿Tienes alguna pregunta? Responde aquí y te atendemos de inmediato. 😊`
-
-  return sendText(order.cliente_telefono, mensaje)
+  const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(order.cliente_telefono, 'confirmacion_pedido', [
+    nombre,
+    order.numero_orden,
+  ])
 }
 
-// Mensaje de pedido en camino
+export async function sendOrderUpdate(order: {
+  cliente_telefono: string
+  cliente_nombre: string
+  numero_orden: string
+}, estado: string, descripcion: string) {
+  const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(order.cliente_telefono, 'actualizacion_pedido', [
+    nombre,
+    order.numero_orden,
+    descripcion,
+  ])
+}
+
 export async function sendShippingNotification(order: {
   cliente_telefono: string
   cliente_nombre: string
   numero_orden: string
 }) {
-  const nombre   = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
-  const pedidoId = order.numero_orden ?? ''
-
-  const mensaje = `🚚 *¡Tus lentes están en camino, ${nombre}!*
-
-Tu pedido *#${pedidoId}* de ContactGo ya fue enviado y llegará pronto a tu puerta.
-
-📍 Estimado de entrega: hoy o mañana
-
-¿Tienes alguna pregunta sobre tu entrega? Responde aquí. 👇`
-
-  return sendText(order.cliente_telefono, mensaje)
+  const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(order.cliente_telefono, 'pedido_enviado', [
+    nombre,
+    order.numero_orden,
+    'hoy o mañana',
+    order.numero_orden,
+  ])
 }
 
-// Mensaje de recordatorio de renovación (25 días después de compra mensual)
-export async function sendRenewalReminder(customer: {
-  telefono: string
-  nombre: string
-  producto: string
+export async function sendDeliveredNotification(order: {
+  cliente_telefono: string
+  cliente_nombre: string
+  numero_orden: string
 }) {
-  const nombre = customer.nombre?.split(' ')[0] ?? 'Cliente'
-
-  const mensaje = `👁️ Hola *${nombre}*, ¿cómo van tus lentes de contacto?
-
-En pocos días se vence tu ciclo mensual de *${customer.producto}*.
-
-🔄 Renuévalos ahora y los recibes antes de que se te acaben:
-👉 www.contactgo.net
-
-¿Los mismos o quieres probar algo nuevo? Te ayudo aquí mismo. 😊`
-
-  return sendText(customer.telefono, mensaje)
+  const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(order.cliente_telefono, 'pedido_entregado', [
+    order.numero_orden,
+    nombre,
+  ])
 }
 
-// Mensaje de recuperación de carrito abandonado
-export async function sendCartRecovery(customer: {
-  telefono: string
-  nombre: string
-  productos: string[]
+export async function sendCancelledNotification(order: {
+  cliente_telefono: string
+  cliente_nombre: string
+  numero_orden: string
+  motivo?: string
 }) {
-  const nombre    = customer.nombre?.split(' ')[0] ?? ''
-  const productos = customer.productos.join(', ')
+  const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(order.cliente_telefono, 'pedido_cancelado', [
+    nombre,
+    order.numero_orden,
+    order.motivo ?? 'no se completó el pago',
+  ])
+}
 
-  const mensaje = `👋 Hola${nombre ? ` *${nombre}*` : ''}! Vimos que dejaste algo en tu carrito en ContactGo.
+export async function sendWelcome(data: {
+  telefono: string
+  nombre?: string
+}) {
+  const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(data.telefono, 'bienvenida_cliente', [nombre])
+}
 
-🛒 *${productos}*
+export async function sendCartRecovery(data: {
+  telefono: string
+  nombre?: string
+  productos?: string
+}) {
+  const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(data.telefono, 'carrito_abandonado', [
+    nombre,
+    data.productos ?? 'tus productos seleccionados',
+  ])
+}
 
-¿Tuviste algún problema al comprar? Podemos ayudarte ahora mismo o completar el pedido por WhatsApp.
+export async function sendRenewalReminder(data: {
+  telefono: string
+  nombre?: string
+  producto?: string
+}) {
+  const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(data.telefono, 'renovacion_lentes', [
+    nombre,
+    data.producto ?? 'tus lentes de contacto',
+  ])
+}
 
-👉 www.contactgo.net/cart`
-
-  return sendText(customer.telefono, mensaje)
+export async function sendReviewRequest(data: {
+  telefono: string
+  nombre?: string
+}) {
+  const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
+  return sendTemplate(data.telefono, 'solicitar_resena', [nombre])
 }
