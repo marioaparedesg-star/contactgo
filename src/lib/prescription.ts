@@ -81,21 +81,68 @@ export const PRODUCT_RANGES: ProductRange[] = [
   { slug: 'proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana', nombre: 'Proclear Multifocal Toric', marca: 'COOPERVISION', tipo: 'multifocal_torico', sph_min: -20, sph_max: 20, cyl_min: -5.75, cyl_max: -0.75, add_min: 0.75, add_max: 4.00, reemplazo: 'Mensual', extended: true },
 ]
 
-// ─── Motor principal: NO modifica la receta ──────────────────────────────────
+// ─── Conversión vertex (solo para recetas de GAFAS) ──────────────────────────
 
-export function convertGlassesToContacts(rx: GlassesRx): ConvertedRx {
-  // Pasar valores TAL CUAL — sin conversión vertex ni redondeo
-  const od: ContactRx = {
-    sph: rx.od.sph ?? 0,
-    cyl: (rx.od.cyl && rx.od.cyl !== 0) ? rx.od.cyl : null,
-    axis: rx.od.axis,
-    add: rx.od.add,
+const VERTEX_MM = 12
+
+function vertexCorrect(D: number): number {
+  if (Math.abs(D) < 4.0) return D
+  const d = VERTEX_MM / 1000
+  return D / (1 - d * D)
+}
+
+function roundStep(val: number): number {
+  if (val === 0) return 0
+  const step = Math.abs(val) > 4 ? 0.5 : 0.25
+  return Math.round(val / step) * step
+}
+
+function convertEyeFromGlasses(eye: EyeRx): ContactRx {
+  const sph = eye.sph ?? 0
+  const cyl = eye.cyl ?? 0
+  if (sph === 0 && cyl === 0) return { sph: 0, cyl: null, axis: eye.axis, add: eye.add }
+  if (cyl === 0) return { sph: roundStep(vertexCorrect(sph)), cyl: null, axis: null, add: eye.add }
+  const F1c = roundStep(vertexCorrect(sph))
+  const F2c = roundStep(vertexCorrect(sph + cyl))
+  const newCyl = parseFloat((F2c - F1c).toFixed(2))
+  return {
+    sph: F1c,
+    cyl: newCyl !== 0 ? newCyl : null,
+    axis: eye.axis,
+    add: eye.add,
   }
-  const oi: ContactRx = {
-    sph: rx.oi.sph ?? 0,
-    cyl: (rx.oi.cyl && rx.oi.cyl !== 0) ? rx.oi.cyl : null,
-    axis: rx.oi.axis,
-    add: rx.oi.add,
+}
+
+// ─── Motor principal ─────────────────────────────────────────────────────────
+
+/**
+ * Procesa la receta del cliente.
+ * @param rx - Receta ingresada
+ * @param source - 'contacto' = tomar como está, 'gafas' = convertir con vertex
+ */
+export function convertGlassesToContacts(rx: GlassesRx, source: 'contacto' | 'gafas' = 'contacto'): ConvertedRx {
+  let od: ContactRx
+  let oi: ContactRx
+  let needsVertex = false
+
+  if (source === 'gafas') {
+    od = convertEyeFromGlasses(rx.od)
+    oi = convertEyeFromGlasses(rx.oi)
+    needsVertex = Math.abs(rx.od.sph ?? 0) >= 4 || Math.abs(rx.oi.sph ?? 0) >= 4
+  } else {
+    // Contacto: valores TAL CUAL
+    od = {
+      sph: rx.od.sph ?? 0,
+      cyl: (rx.od.cyl && rx.od.cyl !== 0) ? rx.od.cyl : null,
+      axis: rx.od.axis,
+      add: rx.od.add,
+    }
+    oi = {
+      sph: rx.oi.sph ?? 0,
+      cyl: (rx.oi.cyl && rx.oi.cyl !== 0) ? rx.oi.cyl : null,
+      axis: rx.oi.axis,
+      add: rx.oi.add,
+    }
   }
 
   // Determinar tipo y condiciones basado en la receta

@@ -46,6 +46,7 @@ export default function RecetaPage() {
   const [od, setOd] = useState<EyeInput>(EMPTY)
   const [oi, setOi] = useState<EyeInput>(EMPTY)
   const [misma, setMisma] = useState(false)
+  const [rxSource, setRxSource] = useState<'contacto' | 'gafas' | null>(null)
   const [result, setResult] = useState<ConvertedRx | null>(null)
   const [products, setProducts] = useState<any[]>([])
   const [loadingP, setLoadingP] = useState(false)
@@ -79,17 +80,17 @@ export default function RecetaPage() {
   // ── Calcular ───────────────────────────────────────────────────────────────
   const calcular = async () => {
     if (!parseN(od.sph) && !parseN(oi.sph)) { toast.error('Ingresa al menos la Esfera (SPH)'); return }
+    if (!rxSource) { toast.error('Selecciona si tu receta es de gafas o lentes de contacto'); return }
     const rx: GlassesRx = {
       od: { sph: parseN(od.sph) ?? 0, cyl: parseN(od.cyl), axis: parseN(od.axis), add: parseN(od.add) },
       oi: { sph: parseN(oi.sph) ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
     }
     setPendingRx(rx)
-    // Mostrar resultados inmediatamente, lead capture opcional después
     await ejecutarCalculo(rx)
   }
 
   const ejecutarCalculo = async (rx: GlassesRx) => {
-    const conv = convertGlassesToContacts(rx); setResult(conv); setCartAdded(null)
+    const conv = convertGlassesToContacts(rx, rxSource ?? 'contacto'); setResult(conv); setCartAdded(null)
     await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
     // Guardar receta como lead anónimo
@@ -128,7 +129,7 @@ export default function RecetaPage() {
   }
 
   const skipLead = () => { setShowLead(false) }
-  const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null) }
+  const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null) }
 
   // ── Agregar al carrito DIRECTO (para esférico y color) ────────────────────
   const handleAddToCart = (product: any) => {
@@ -245,10 +246,40 @@ export default function RecetaPage() {
 
 
 
-          {/* Info vertex */}
-          <div className="flex items-start gap-2 bg-blue-50 border border-blue-100 rounded-xl px-3 py-2.5">
-            <Info className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5"/>
-            <p className="text-xs text-blue-700"><strong>¿Receta de gafas?</strong> La calculadora aplica la corrección de vértice automáticamente para {'>'} ±4.00D.</p>
+          {/* Tipo de receta — pregunta clave */}
+          <div className="bg-white rounded-2xl border-2 border-primary-100 shadow-sm p-4">
+            <p className="font-bold text-gray-900 text-sm mb-3">¿Qué tipo de receta tienes?</p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setRxSource('contacto')}
+                className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
+                  rxSource === 'contacto' 
+                    ? 'border-primary-500 bg-primary-50 shadow-sm' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <span className="text-2xl">👁️</span>
+                <span className={`text-xs font-bold ${rxSource === 'contacto' ? 'text-primary-700' : 'text-gray-600'}`}>Lentes de contacto</span>
+                <span className="text-[10px] text-gray-400 leading-tight text-center">Ya uso lentes de contacto y tengo mi receta</span>
+              </button>
+              <button
+                onClick={() => setRxSource('gafas')}
+                className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
+                  rxSource === 'gafas' 
+                    ? 'border-amber-500 bg-amber-50 shadow-sm' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <span className="text-2xl">👓</span>
+                <span className={`text-xs font-bold ${rxSource === 'gafas' ? 'text-amber-700' : 'text-gray-600'}`}>Gafas / Espejuelos</span>
+                <span className="text-[10px] text-gray-400 leading-tight text-center">Solo tengo receta de gafas y quiero probar lentes</span>
+              </button>
+            </div>
+            {rxSource === 'gafas' && (
+              <p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-3 py-2 mt-3">
+                👓→👁️ Ajustaremos tu graduación automáticamente para lentes de contacto. Es normal que los valores cambien ligeramente.
+              </p>
+            )}
           </div>
 
           {/* Formulario OD | OI */}
@@ -420,8 +451,9 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
           </div>
         ))}
       </div>
-      {r.condiciones.includes('Alta graduación')&&<p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">⚡ Graduación alta — tenemos lentes de rango extendido (XR) especiales para tu receta</p>}
-      {!r.condiciones.includes('Alta graduación')&&<p className="text-[10px] text-gray-500 bg-gray-100 rounded-lg px-2.5 py-1.5 mb-3">👁️ Tu receta para lentes de contacto</p>}
+      {r.needsVertex&&<p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">👓→👁️ Graduación ajustada de gafas a lentes de contacto. Los valores pueden diferir de tu receta original — esto es normal y correcto para lentes de contacto.</p>}
+      {!r.needsVertex && r.condiciones.includes('Alta graduación') && <p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">⚡ Graduación alta — tenemos lentes de rango extendido (XR) especiales para tu receta</p>}
+      {!r.needsVertex && !r.condiciones.includes('Alta graduación') && <p className="text-[10px] text-green-700 bg-green-50 rounded-lg px-2.5 py-1.5 mb-3">✅ Tu receta exacta para lentes de contacto — productos compatibles abajo</p>}
       <div className={`flex items-start gap-2 rounded-xl px-3 py-2 border ${compC.bg} ${compC.border}`}>
         <div className={`w-2 h-2 rounded-full shrink-0 mt-1 ${compC.dot}`}/>
         <div><p className={`text-xs font-black ${compC.text}`}>{comp.titulo}</p><p className={`text-[10px] mt-0.5 ${compC.text} opacity-80`}>{comp.desc}</p></div>
