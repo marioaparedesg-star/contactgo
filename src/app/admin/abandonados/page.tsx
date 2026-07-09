@@ -123,7 +123,7 @@ export default function AdminAbandonados() {
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-1">
                             {c.cliente_telefono && !c.recuperado && (
-                              <a href={`https://wa.me/${c.cliente_telefono.replace(/\D/g,'')}?text=${encodeURIComponent(`Hola ${c.cliente_nombre ?? ''}👋 Notamos que dejaste productos en tu carrito de ContactGo. ¿Te ayudamos? 👉 https://contactgo.net/cart`)}`}
+                              <a href={`https://wa.me/${c.cliente_telefono.replace(/\D/g,'')}?text=${encodeURIComponent(`Hola ${c.cliente_nombre ?? ''}👋 Notamos que dejaste productos en tu carrito de ContactGo. ¿Te ayudamos? 👉 https://www.contactgo.net/cart`)}`}
                                 target="_blank"
                                 className="p-1.5 hover:bg-green-50 rounded-lg text-green-600"
                                 title="WhatsApp">

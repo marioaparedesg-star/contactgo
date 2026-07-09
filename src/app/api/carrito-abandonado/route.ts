@@ -6,7 +6,7 @@ import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 const FROM = process.env.RESEND_FROM ?? 'ContactGo <info@contactgo.net>'
 function getResend() { return new Resend(process.env.RESEND_API_KEY) }
 

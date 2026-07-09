@@ -61,7 +61,7 @@ Responde SOLO con JSON válido, sin texto extra, sin markdown:
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://contactgo.net',
+        'HTTP-Referer': 'https://www.contactgo.net',
         'X-Title': 'ContactGo — Análisis de Receta',
       },
       body: JSON.stringify(body),

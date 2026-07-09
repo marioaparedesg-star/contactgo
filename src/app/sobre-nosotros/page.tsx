@@ -42,7 +42,7 @@ export default function SobreNosotrosPage() {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "ContactGo",
-        "url": "https://contactgo.net",
+        "url": "https://www.contactgo.net",
         "logo": "https://www.contactgo.net/logo.png",
         "description": "Tienda especializada en lentes de contacto originales en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Envío a domicilio en 24-48h.",
         "foundingDate": "2026",

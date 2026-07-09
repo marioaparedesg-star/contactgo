@@ -1,6 +1,6 @@
 import { guardRequest } from '@/lib/api-guard'
 // API: Meta Product Catalog Feed (XML)
-// URL: https://contactgo.net/api/meta-catalog
+// URL: https://www.contactgo.net/api/meta-catalog
 // Formato: RSS/XML compatible con Meta Commerce Manager
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
@@ -19,7 +19,7 @@ const TIPO_LABEL: Record<string, string> = {
 const CONDITION = 'new'
 const BRAND = 'ContactGo'
 const CURRENCY = 'DOP'
-const BASE = 'https://contactgo.net'
+const BASE = 'https://www.contactgo.net'
 
 export async function GET(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })

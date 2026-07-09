@@ -194,7 +194,7 @@ export default async function ProductoPage(
       "availability": product.stock > 0
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
-      "seller": { "@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net" },
+      "seller": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net" },
       "shippingDetails": {
         "@type": "OfferShippingDetails",
         "shippingRate": { "@type": "MonetaryAmount", "value": "200", "currency": "DOP" },
@@ -270,7 +270,7 @@ export default async function ProductoPage(
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net" },
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
       { "@type": "ListItem", "position": 2, "name": "Catálogo", "item": "https://www.contactgo.net/catalogo" },
       { "@type": "ListItem", "position": 3, "name": product.nombre, "item": `https://www.contactgo.net/producto/${product.slug}` }
     ]

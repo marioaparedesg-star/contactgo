@@ -22,7 +22,7 @@ function rateLimit(key: string, limit: number, windowMs = 60_000): boolean {
   return true
 }
 
-const ALLOWED_ORIGINS = ['https://contactgo.net', 'https://www.contactgo.net']
+const ALLOWED_ORIGINS = ['https://www.contactgo.net', 'https://www.contactgo.net']
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl

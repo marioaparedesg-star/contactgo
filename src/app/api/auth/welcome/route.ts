@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   try {
     // ── Enviar WhatsApp de bienvenida (paralelo, no bloqueante) ──
     if (telefono && user_id) {
-      const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+      const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
       fetch(`${BASE}/api/wa/dispatch`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

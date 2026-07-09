@@ -122,7 +122,7 @@ export default function Page() {
         "@type": ["Article", "MedicalWebPage"],
         "headline": "Lentes de contacto para astigmatismo en RD",
         "author": {"@type": "Organization", "name": "Equipo Editorial ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo"},
-        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
+        "publisher": {"@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": {"@type": "ImageObject", "url": "https://www.contactgo.net/logo.png"}},
         "datePublished": "2026-05-10",
         "dateModified": "2026-05-17", "lastReviewed": "2026-05-19",
       "reviewedBy": {

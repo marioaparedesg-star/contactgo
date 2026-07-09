@@ -5,7 +5,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server'
 
-const ALLOWED_ORIGINS = ['https://contactgo.net', 'https://www.contactgo.net']
+const ALLOWED_ORIGINS = ['https://www.contactgo.net', 'https://www.contactgo.net']
 
 // Rate limiting en memoria (fallback por instancia)
 const rateMap = new Map<string, { count: number; reset: number }>()

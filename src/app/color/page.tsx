@@ -85,7 +85,7 @@ export default async function Page() {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-          {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://contactgo.net"},
+          {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net"},
           {"@type": "ListItem", "position": 2, "name": "Lentes de Contacto de Color", "item": "https://www.contactgo.net/color"}
         ]
       })}} />

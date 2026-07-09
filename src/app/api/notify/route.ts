@@ -11,7 +11,7 @@ import { createClient } from '@supabase/supabase-js'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 
-const BASE_URL    = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+const BASE_URL    = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 // Admin recibe notificaciones en este email
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'info@contactgo.net'
 // FROM: si RESEND_FROM está configurado con dominio verificado, úsalo.
@@ -402,7 +402,7 @@ export async function POST(req: NextRequest) {
       }
       const tipoWA = mapaEstadoWA[nuevo_estado]
       if (tipoWA) {
-        const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+        const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
         fetch(`${BASE}/api/wa/dispatch`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -415,7 +415,7 @@ export async function POST(req: NextRequest) {
 
     // WhatsApp — nuevo pedido (confirmación de compra)
     if (evento === 'nuevo_pedido' && order.cliente_telefono) {
-      const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'
+      const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
       fetch(`${BASE}/api/wa/dispatch`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -438,7 +438,7 @@ export async function POST(req: NextRequest) {
     // Registrar recompra automáticamente para pedidos nuevos
     if (evento === 'nuevo_pedido') {
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://contactgo.net'}/api/recompra/registrar`, {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'}/api/recompra/registrar`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ order_id })

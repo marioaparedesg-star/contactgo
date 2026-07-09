@@ -17,7 +17,7 @@ export default function ReferidosPage() {
   }, [])
 
   const refCode = user?.id?.slice(0, 8).toUpperCase() ?? 'XXXXXXXX'
-  const refLink = `https://contactgo.net/?ref=${refCode}`
+  const refLink = `https://www.contactgo.net/?ref=${refCode}`
 
   const copiar = () => {
     navigator.clipboard.writeText(refLink)
