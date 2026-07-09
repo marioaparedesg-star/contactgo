@@ -87,21 +87,21 @@ export async function notificarEstado(order: any, estado: string) {
   const desc = mensajes[estado] ?? `Estado actualizado: ${estado}`
 
   return notificar(`order_${order.id}_${estado}`, order.cliente_telefono, `estado_${estado}`,
-    'actualizacion_pedido', [nombre, num, desc], { order_id: order.id })
+    'cg_estado_pedido', [nombre, num, desc], { order_id: order.id })
 }
 
 export async function notificarEnviado(order: any) {
   const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
   const num = order.numero_orden ?? String(order.id).slice(0, 8)
   return notificar(`order_${order.id}_enviado`, order.cliente_telefono, 'estado_enviado',
-    'pedido_enviado', [nombre, num, 'hoy o mañana', num], { order_id: order.id })
+    'cg_envio', [nombre, num, 'hoy o mañana', num], { order_id: order.id })
 }
 
 export async function notificarEntregado(order: any) {
   const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
   const num = order.numero_orden ?? String(order.id).slice(0, 8)
   return notificar(`order_${order.id}_entregado`, order.cliente_telefono, 'estado_entregado',
-    'pedido_entregado', [num, nombre], { order_id: order.id })
+    'cg_entregado', [num, nombre], { order_id: order.id })
 }
 
 export async function notificarCancelado(order: any) {
@@ -111,14 +111,14 @@ export async function notificarCancelado(order: any) {
     ? 'no se completó el pago a tiempo'
     : (order.notas_admin?.slice(0, 80) ?? 'motivos operativos')
   return notificar(`order_${order.id}_cancelado`, order.cliente_telefono, 'estado_cancelado',
-    'pedido_cancelado', [nombre, num, motivo], { order_id: order.id })
+    'cg_cancelado', [nombre, num, motivo], { order_id: order.id })
 }
 
 export async function notificarBienvenida(user: { user_id: string; nombre?: string; telefono?: string }) {
   if (!user.telefono) return { ok: false, skipped: 'sin_telefono' }
   const nombre = user.nombre?.split(' ')[0] ?? 'Cliente'
   return notificar(`user_${user.user_id}_bienvenida`, user.telefono, 'bienvenida',
-    'bienvenida_cliente', [nombre], { user_id: user.user_id })
+    'cg_bienvenida', [nombre], { user_id: user.user_id })
 }
 
 export async function notificarCarritoAbandonado(data: { telefono: string; nombre?: string; productos?: string }) {
