@@ -84,57 +84,50 @@ export default function RecetaPage() {
       oi: { sph: parseN(oi.sph) ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
     }
     setPendingRx(rx)
-    // Lead capture OBLIGATORIO antes de mostrar resultados
-    if (!leadCaptured) {
-      setShowLead(true)
-      return
-    }
+    // Mostrar resultados inmediatamente, lead capture opcional después
     await ejecutarCalculo(rx)
   }
 
   const ejecutarCalculo = async (rx: GlassesRx) => {
-    const conv = convertGlassesToContacts(rx); setResult(conv); setShowLead(false); setCartAdded(null)
+    const conv = convertGlassesToContacts(rx); setResult(conv); setCartAdded(null)
     await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
-    // Guardar receta como lead anónimo (sin bloquear)
+    // Guardar receta como lead anónimo
     try {
       createClient().from('calculator_leads').insert({
-        nombre: null, email: null,
+        nombre: null, email: null, telefono: null,
         od_sph: rx.od.sph, od_cyl: rx.od.cyl, od_axis: rx.od.axis,
         oi_sph: rx.oi.sph, oi_cyl: rx.oi.cyl, oi_axis: rx.oi.axis,
         tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
       }).then(() => {})
     } catch {}
+    // Mostrar lead capture después de resultados (si no lo han llenado)
+    if (!leadCaptured) setShowLead(true)
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
   }
 
   // Lead capture ahora es POST-resultado (opcional, no bloqueante)
   const handleLeadSubmit = async () => {
     if (!pendingRx) return
-    if (!leadNombre.trim()) { toast.error('Ingresa tu nombre completo'); return }
-    if (!leadEmail.trim() || !leadEmail.includes('@')) { toast.error('Ingresa un correo válido'); return }
-    if (!leadTelefono.trim() || leadTelefono.replace(/\D/g,'').length < 10) { toast.error('Ingresa tu número de teléfono'); return }
-    
+    if (!leadNombre.trim() || !leadEmail.trim()) { toast.error('Ingresa nombre y correo'); return }
     const conv = convertGlassesToContacts(pendingRx)
     try {
       createClient().from('calculator_leads').upsert({
         nombre: leadNombre.trim(),
         email: leadEmail.trim().toLowerCase(),
-        telefono: leadTelefono.replace(/\D/g,''),
+        telefono: leadTelefono.replace(/\D/g,'') || null,
         od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
         oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
         tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
       }, { onConflict: 'email' }).then(() => {})
-      trackEvento('lead_captured', { tipo_receta: conv.tipo, has_phone: true })
+      trackEvento('lead_captured', { tipo_receta: conv.tipo, has_phone: !!leadTelefono })
     } catch {}
-    
     setLeadCaptured(true)
     setShowLead(false)
-    toast.success('¡Datos guardados! Calculando tu receta...')
-    await ejecutarCalculo(pendingRx)
+    toast.success('¡Datos guardados! Te avisaremos cuando sea hora de reponer.')
   }
 
-  const skipLead = () => { /* No se puede saltar — es obligatorio */ }
+  const skipLead = () => { setShowLead(false) }
   const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null) }
 
   // ── Agregar al carrito DIRECTO (para esférico y color) ────────────────────
@@ -220,28 +213,28 @@ export default function RecetaPage() {
         </div>
 
         {/* Lead modal — aparece DESPUÉS de ver los resultados, nunca antes */}
-        {showLead && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
-              <div className="text-center mb-5">
-                <div className="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-3"><Eye className="w-6 h-6 text-green-600" /></div>
-                <h3 className="font-black text-gray-900 text-lg">Tu receta está casi lista</h3>
-                <p className="text-xs text-gray-500 mt-1">Ingresa tus datos para ver tus resultados y recibir recomendaciones personalizadas</p>
+        {showLead && !leadCaptured && (
+          <div className="max-w-3xl mx-auto px-4 mb-4">
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-4 relative">
+              <button onClick={skipLead} className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-lg leading-none p-1">✕</button>
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-9 h-9 bg-green-100 rounded-xl flex items-center justify-center shrink-0 mt-0.5"><Mail className="w-4 h-4 text-green-600" /></div>
+                <div>
+                  <h3 className="font-bold text-gray-900 text-sm">¿Guardamos tu receta?</h3>
+                  <p className="text-[11px] text-gray-500">Te avisamos cuando sea hora de reponer y te enviamos ofertas exclusivas</p>
+                </div>
               </div>
-              <div className="space-y-3 mb-4">
-                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre completo *"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
-                <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico *"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
-                <input value={leadTelefono} onChange={e => setLeadTelefono(e.target.value)} type="tel" placeholder="Teléfono (809-XXX-XXXX) *"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
+                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre completo"
+                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green-400 bg-white" />
+                <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico"
+                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green-400 bg-white" />
+                <input value={leadTelefono} onChange={e => setLeadTelefono(e.target.value)} type="tel" placeholder="Teléfono (opcional)"
+                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green-400 bg-white" />
               </div>
-              <button onClick={handleLeadSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 font-black rounded-xl text-sm transition-colors">
-                Ver mi receta calculada →
+              <button onClick={handleLeadSubmit} className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2 font-bold rounded-lg text-sm transition-colors">
+                Guardar mi receta
               </button>
-              <p className="text-[10px] text-gray-400 text-center mt-3">
-                Tus datos están seguros. Solo los usamos para tu receta y recomendaciones.
-              </p>
             </div>
           </div>
         )}
