@@ -53,6 +53,8 @@ export default function RecetaPage() {
   const [showLead, setShowLead] = useState(false)
   const [leadEmail, setLeadEmail] = useState('')
   const [leadNombre, setLeadNombre] = useState('')
+  const [leadTelefono, setLeadTelefono] = useState('')
+  const [leadCaptured, setLeadCaptured] = useState(false)
   const [pendingRx, setPendingRx] = useState<GlassesRx | null>(null)
   const [frecuencia, setFrecuencia] = useState<'diario' | 'quincenal' | 'mensual'>('diario')
   const [cartAdded, setCartAdded] = useState<string | null>(null)
@@ -82,7 +84,11 @@ export default function RecetaPage() {
       oi: { sph: parseN(oi.sph) ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
     }
     setPendingRx(rx)
-    // UX FIX F4: Mostrar resultados INMEDIATAMENTE. Pedir email DESPUÉS como paso opcional.
+    // Lead capture OBLIGATORIO antes de mostrar resultados
+    if (!leadCaptured) {
+      setShowLead(true)
+      return
+    }
     await ejecutarCalculo(rx)
   }
 
@@ -104,22 +110,31 @@ export default function RecetaPage() {
 
   // Lead capture ahora es POST-resultado (opcional, no bloqueante)
   const handleLeadSubmit = async () => {
-    if (!pendingRx || !leadEmail) return
+    if (!pendingRx) return
+    if (!leadNombre.trim()) { toast.error('Ingresa tu nombre completo'); return }
+    if (!leadEmail.trim() || !leadEmail.includes('@')) { toast.error('Ingresa un correo válido'); return }
+    if (!leadTelefono.trim() || leadTelefono.replace(/\D/g,'').length < 10) { toast.error('Ingresa tu número de teléfono'); return }
+    
     const conv = convertGlassesToContacts(pendingRx)
     try {
       createClient().from('calculator_leads').upsert({
-        nombre: leadNombre || null, email: leadEmail,
+        nombre: leadNombre.trim(),
+        email: leadEmail.trim().toLowerCase(),
+        telefono: leadTelefono.replace(/\D/g,''),
         od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
         oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
         tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
       }, { onConflict: 'email' }).then(() => {})
-      trackEvento('lead_captured', { tipo_receta: conv.tipo })
-      setShowLead(false)
-      toast.success('¡Receta guardada! Te la enviamos por email.')
+      trackEvento('lead_captured', { tipo_receta: conv.tipo, has_phone: true })
     } catch {}
+    
+    setLeadCaptured(true)
+    setShowLead(false)
+    toast.success('¡Datos guardados! Calculando tu receta...')
+    await ejecutarCalculo(pendingRx)
   }
 
-  const skipLead = () => { setShowLead(false) }
+  const skipLead = () => { /* No se puede saltar — es obligatorio */ }
   const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null) }
 
   // ── Agregar al carrito DIRECTO (para esférico y color) ────────────────────
@@ -205,26 +220,28 @@ export default function RecetaPage() {
         </div>
 
         {/* Lead modal — aparece DESPUÉS de ver los resultados, nunca antes */}
-        {showLead && result && (
+        {showLead && (
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
               <div className="text-center mb-5">
-                <div className="w-12 h-12 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-3"><Mail className="w-6 h-6 text-primary-600" /></div>
-                <h3 className="font-black text-gray-900 text-lg">¿Guardamos tu receta?</h3>
-                <p className="text-xs text-gray-500 mt-1">Te la enviamos por email y te avisamos cuando sea hora de reponer</p>
+                <div className="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-3"><Eye className="w-6 h-6 text-green-600" /></div>
+                <h3 className="font-black text-gray-900 text-lg">Tu receta está casi lista</h3>
+                <p className="text-xs text-gray-500 mt-1">Ingresa tus datos para ver tus resultados y recibir recomendaciones personalizadas</p>
               </div>
               <div className="space-y-3 mb-4">
-                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Tu nombre (opcional)"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-400" />
-                <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Tu correo electrónico"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-400" />
+                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre completo *"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
+                <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico *"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
+                <input value={leadTelefono} onChange={e => setLeadTelefono(e.target.value)} type="tel" placeholder="Teléfono (809-XXX-XXXX) *"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
               </div>
-              <button onClick={handleLeadSubmit} className="w-full btn-primary py-3 font-black rounded-xl text-sm mb-2">
-                Guardar mi receta →
+              <button onClick={handleLeadSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 font-black rounded-xl text-sm transition-colors">
+                Ver mi receta calculada →
               </button>
-              <button onClick={skipLead} className="w-full text-xs text-gray-400 py-2 hover:text-gray-600">
-                No, gracias
-              </button>
+              <p className="text-[10px] text-gray-400 text-center mt-3">
+                Tus datos están seguros. Solo los usamos para tu receta y recomendaciones.
+              </p>
             </div>
           </div>
         )}
