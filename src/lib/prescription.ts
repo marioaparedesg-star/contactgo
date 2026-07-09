@@ -1,13 +1,9 @@
 /**
- * prescription.ts — Motor de cálculo de recetas para ContactGo
+ * prescription.ts — Motor de recomendación de lentes de contacto
  * 
- * FUNCIONES PRINCIPALES:
- * 1. convertGlassesToContacts() — Conversión gafas → lentes con vertex distance
- * 2. analyzePrescription()      — Análisis y recomendación por condición
- * 3. matchProductsToRx()        — Matching real contra inventario disponible
+ * NO convierte ni modifica la receta del cliente.
+ * Toma los valores exactos y busca productos compatibles.
  */
-
-// ─── Tipos ────────────────────────────────────────────────────────────────────
 
 export interface EyeRx {
   sph:  number | null
@@ -26,109 +22,83 @@ export interface ContactRx extends EyeRx {}
 export interface ConvertedRx {
   od: ContactRx
   oi: ContactRx
-  needsVertex: boolean   // true si la corrección vertex cambió algo
-  tipo: 'esferico' | 'torico' | 'multifocal' | 'multifocal_torico' | 'multifocal_torico' | 'color'
+  needsVertex: boolean
+  tipo: 'esferico' | 'torico' | 'multifocal' | 'multifocal_torico' | 'color'
   condiciones: string[]
   descripcion: string
 }
 
-// ─── 1. Conversión vertex distance ────────────────────────────────────────────
-
-const VERTEX_MM = 12   // distancia vertex estándar: 12mm
-
-/**
- * Corrección por distancia vertex.
- * Solo impacta prescripciones > |±4.00D|.
- * Fórmula: F_contact = F_glasses / (1 - d × F_glasses)   donde d en metros
- */
-function vertexCorrect(D: number, d: number = VERTEX_MM / 1000): number {
-  if (Math.abs(D) < 4.0) return D
-  return D / (1 - d * D)
+// ─── Rangos de parámetros por producto ────────────────────────────────────────
+// Cada producto tiene rangos SPH, CYL, ADD que soporta
+export interface ProductRange {
+  slug: string
+  nombre: string
+  marca: string
+  tipo: 'esferico' | 'torico' | 'multifocal' | 'multifocal_torico'
+  sph_min: number
+  sph_max: number
+  cyl_min?: number   // para tóricos
+  cyl_max?: number
+  add_min?: number   // para multifocales
+  add_max?: number
+  reemplazo: string  // Diario, Quincenal, Mensual
+  extended?: boolean // rango extendido (XR)
 }
 
-/** Redondear al paso disponible en lentes de contacto */
-function roundContactStep(val: number): number {
-  if (val === 0) return 0
-  // Hasta ±4D: pasos de 0.25D
-  // Más de ±4D: pasos de 0.50D
-  const step = Math.abs(val) > 4 ? 0.5 : 0.25
-  return Math.round(val / step) * step
-}
+export const PRODUCT_RANGES: ProductRange[] = [
+  // ─── ESFÉRICOS ───
+  { slug: '1-day-acuvue-moist-lentes-contacto-diarios-dominicana', nombre: '1-DAY ACUVUE MOIST', marca: 'ACUVUE', tipo: 'esferico', sph_min: -12, sph_max: 6, reemplazo: 'Diario' },
+  { slug: 'acuvue-2-lentes-contacto-quincenales-dominicana', nombre: 'ACUVUE 2', marca: 'ACUVUE', tipo: 'esferico', sph_min: -12, sph_max: 8, reemplazo: 'Quincenal' },
+  { slug: 'acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana', nombre: 'ACUVUE OASYS', marca: 'ACUVUE', tipo: 'esferico', sph_min: -12, sph_max: 8, reemplazo: 'Quincenal' },
+  { slug: 'air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana', nombre: 'AIR OPTIX plus HydraGlyde', marca: 'ALCON', tipo: 'esferico', sph_min: -10, sph_max: 6, reemplazo: 'Mensual' },
+  { slug: 'bausch-lomb-ultra-lentes-contacto-mensuales-dominicana', nombre: 'Bausch+Lomb ULTRA', marca: 'BAUSCH+LOMB', tipo: 'esferico', sph_min: -12, sph_max: 6, reemplazo: 'Mensual' },
+  { slug: 'biotrue-oneday-lentes-contacto-diarios-dominicana', nombre: 'Biotrue ONEday', marca: 'BAUSCH+LOMB', tipo: 'esferico', sph_min: -9, sph_max: 6, reemplazo: 'Diario' },
+  { slug: 'avaira-vitality-lentes-contacto-mensuales-coopervision-dominicana', nombre: 'Avaira Vitality', marca: 'COOPERVISION', tipo: 'esferico', sph_min: -12, sph_max: 8, reemplazo: 'Mensual' },
+  { slug: 'biofinity-lentes-contacto-mensuales-coopervision-dominicana', nombre: 'Biofinity', marca: 'COOPERVISION', tipo: 'esferico', sph_min: -12, sph_max: 8, reemplazo: 'Mensual' },
+  { slug: 'biofinity-xr-lentes-contacto-alta-graduacion-esferica-dominicana', nombre: 'Biofinity XR', marca: 'COOPERVISION', tipo: 'esferico', sph_min: -20, sph_max: 15, reemplazo: 'Mensual', extended: true },
+  { slug: 'clariti-1-day-lentes-contacto-diarios-dominicana', nombre: 'clariti 1 day', marca: 'COOPERVISION', tipo: 'esferico', sph_min: -10, sph_max: 8, reemplazo: 'Diario' },
+  { slug: 'proclear-sphere-lentes-contacto-mensuales-dominicana', nombre: 'Proclear Sphere', marca: 'COOPERVISION', tipo: 'esferico', sph_min: -12, sph_max: 8, reemplazo: 'Mensual' },
 
-/** Cilindros disponibles para lentes tóricos en ContactGo */
-const TORIC_CYL_STEPS = [-0.75, -1.25, -1.75, -2.25, -2.75, -3.25, -3.75, -4.25, -4.75, -5.25, -5.75]
+  // ─── TÓRICOS ───
+  { slug: 'acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana', nombre: 'ACUVUE MOIST for Astigmatism', marca: 'ACUVUE', tipo: 'torico', sph_min: -9, sph_max: 4, cyl_min: -2.75, cyl_max: -0.75, reemplazo: 'Diario' },
+  { slug: 'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana', nombre: 'ACUVUE OASYS for Astigmatism', marca: 'ACUVUE', tipo: 'torico', sph_min: -9, sph_max: 4, cyl_min: -2.75, cyl_max: -0.75, reemplazo: 'Quincenal' },
+  { slug: 'bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana', nombre: 'Bausch+Lomb ULTRA for Astigmatism', marca: 'BAUSCH+LOMB', tipo: 'torico', sph_min: -9, sph_max: 6, cyl_min: -2.75, cyl_max: -0.75, reemplazo: 'Mensual' },
+  { slug: 'avaira-vitality-toric-lentes-astigmatismo-dominicana', nombre: 'Avaira Vitality Toric', marca: 'COOPERVISION', tipo: 'torico', sph_min: -10, sph_max: 6, cyl_min: -2.25, cyl_max: -0.75, reemplazo: 'Mensual' },
+  { slug: 'biofinity-toric-lentes-astigmatismo-coopervision-dominicana', nombre: 'Biofinity Toric', marca: 'COOPERVISION', tipo: 'torico', sph_min: -10, sph_max: 10, cyl_min: -5.75, cyl_max: -0.75, reemplazo: 'Mensual' },
+  { slug: 'biofinity-xr-toric-lentes-alta-graduacion-dominicana', nombre: 'Biofinity XR Toric', marca: 'COOPERVISION', tipo: 'torico', sph_min: -20, sph_max: 20, cyl_min: -5.75, cyl_max: -0.75, reemplazo: 'Mensual', extended: true },
+  { slug: 'clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana', nombre: 'clariti 1 day toric', marca: 'COOPERVISION', tipo: 'torico', sph_min: -9, sph_max: 4, cyl_min: -2.25, cyl_max: -0.75, reemplazo: 'Diario' },
 
-/** Redondear CYL al cilindro tórico más cercano disponible */
-function roundToToricCyl(cyl: number): number {
-  if (cyl === 0) return 0
-  const neg = cyl < 0 ? cyl : -cyl  // siempre trabajar en negativo
-  return TORIC_CYL_STEPS.reduce((prev, curr) =>
-    Math.abs(curr - neg) < Math.abs(prev - neg) ? curr : prev
-  )
-}
+  // ─── MULTIFOCALES ───
+  { slug: 'acuvue-oasys-multifocal-lentes-contacto-dominicana', nombre: 'ACUVUE OASYS Multifocal', marca: 'ACUVUE', tipo: 'multifocal', sph_min: -9, sph_max: 6, add_min: 0.75, add_max: 2.50, reemplazo: 'Quincenal' },
+  { slug: 'air-optix-hydraglyde-multifocal-lentes-presbicia-dominicana', nombre: 'AIR OPTIX Multifocal', marca: 'ALCON', tipo: 'multifocal', sph_min: -10, sph_max: 6, add_min: 0.75, add_max: 3.00, reemplazo: 'Mensual' },
+  { slug: 'bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana', nombre: 'Bausch+Lomb ULTRA for Presbyopia', marca: 'BAUSCH+LOMB', tipo: 'multifocal', sph_min: -10, sph_max: 6, add_min: 0.75, add_max: 2.50, reemplazo: 'Mensual' },
+  { slug: 'biofinity-multifocal-lentes-presbicia-coopervision-dominicana', nombre: 'Biofinity Multifocal', marca: 'COOPERVISION', tipo: 'multifocal', sph_min: -10, sph_max: 8, add_min: 0.75, add_max: 4.00, reemplazo: 'Mensual' },
+  { slug: 'clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana', nombre: 'clariti 1 day multifocal', marca: 'COOPERVISION', tipo: 'multifocal', sph_min: -6, sph_max: 5, add_min: 0.75, add_max: 2.50, reemplazo: 'Diario' },
+  { slug: 'proclear-multifocal-lentes-presbicia-mensual-dominicana', nombre: 'Proclear Multifocal', marca: 'COOPERVISION', tipo: 'multifocal', sph_min: -8, sph_max: 6, add_min: 0.75, add_max: 4.00, reemplazo: 'Mensual' },
+  { slug: 'proclear-multifocal-xr-lentes-presbicia-alta-graduacion-dominicana', nombre: 'Proclear Multifocal XR', marca: 'COOPERVISION', tipo: 'multifocal', sph_min: -20, sph_max: 20, add_min: 0.75, add_max: 4.00, reemplazo: 'Mensual', extended: true },
 
-/** Redondear AXIS al eje tórico más cercano (múltiplos de 10°) */
-function roundToToricAxis(axis: number): number {
-  const steps = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180]
-  return steps.reduce((prev, curr) =>
-    Math.abs(curr - axis) < Math.abs(prev - axis) ? curr : prev
-  )
-}
+  // ─── MULTIFOCAL TÓRICO ───
+  { slug: 'proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana', nombre: 'Proclear Multifocal Toric', marca: 'COOPERVISION', tipo: 'multifocal_torico', sph_min: -20, sph_max: 20, cyl_min: -5.75, cyl_max: -0.75, add_min: 0.75, add_max: 4.00, reemplazo: 'Mensual', extended: true },
+]
 
-/**
- * Convierte UN ojo de receta de gafas a lentes de contacto.
- * Si |SPH| ≤ 4D → no hay cambio significativo
- * Si |SPH| > 4D → aplica fórmula vertex a ambos meridianos principales
- */
-function convertEye(eye: EyeRx): ContactRx {
-  const sph = eye.sph ?? 0
-  const cyl = eye.cyl ?? 0
+// ─── Motor principal: NO modifica la receta ──────────────────────────────────
 
-  if (sph === 0 && cyl === 0) {
-    return { sph: 0, cyl: null, axis: eye.axis, add: eye.add }
-  }
-
-  // Si NO hay cilindro, solo convertir la esfera
-  if (cyl === 0) {
-    const sphConverted = roundContactStep(vertexCorrect(sph))
-    return { sph: sphConverted, cyl: null, axis: null, add: eye.add }
-  }
-
-  // Si HAY cilindro, convertir ambos meridianos
-  const F1 = sph
-  const F2 = sph + cyl
-
-  const F1c = roundContactStep(vertexCorrect(F1))
-  const F2c = roundContactStep(vertexCorrect(F2))
-  const rawCyl = parseFloat((F2c - F1c).toFixed(2))
-
-  let newCyl:  number | null = null
-  let newAxis: number | null = eye.axis
-
-  if (rawCyl !== 0) {
-    newCyl  = roundToToricCyl(rawCyl)
-    newAxis = eye.axis != null ? roundToToricAxis(eye.axis) : null
-  }
-
-  return {
-    sph:  F1c,
-    cyl:  newCyl,
-    axis: newAxis,
-    add:  eye.add,
-  }
-}
-
-/** Convierte una receta COMPLETA de gafas a lentes de contacto */
 export function convertGlassesToContacts(rx: GlassesRx): ConvertedRx {
-  const od = convertEye(rx.od)
-  const oi = convertEye(rx.oi)
+  // Pasar valores TAL CUAL — sin conversión vertex ni redondeo
+  const od: ContactRx = {
+    sph: rx.od.sph ?? 0,
+    cyl: (rx.od.cyl && rx.od.cyl !== 0) ? rx.od.cyl : null,
+    axis: rx.od.axis,
+    add: rx.od.add,
+  }
+  const oi: ContactRx = {
+    sph: rx.oi.sph ?? 0,
+    cyl: (rx.oi.cyl && rx.oi.cyl !== 0) ? rx.oi.cyl : null,
+    axis: rx.oi.axis,
+    add: rx.oi.add,
+  }
 
-  // ¿Cambió algo por vertex distance?
-  const needsVertex =
-    (rx.od.sph != null && Math.abs(rx.od.sph) >= 4) ||
-    (rx.oi.sph != null && Math.abs(rx.oi.sph) >= 4)
-
-  // Determinar tipo y condiciones
+  // Determinar tipo y condiciones basado en la receta
   const allSph = [rx.od.sph, rx.oi.sph].filter(v => v != null) as number[]
   const allCyl = [rx.od.cyl, rx.oi.cyl].filter(v => v != null && v !== 0) as number[]
   const allAdd = [rx.od.add, rx.oi.add].filter(v => v != null && v !== 0) as number[]
@@ -141,7 +111,7 @@ export function convertGlassesToContacts(rx: GlassesRx): ConvertedRx {
   if (avgSph > 0.25)  condiciones.push('Hipermetropía')
   if (allCyl.length)  condiciones.push('Astigmatismo')
   if (allAdd.length)  condiciones.push('Presbicia')
-  if (maxSph >= 6)    condiciones.push('Alta graduación')
+  if (maxSph >= 8)    condiciones.push('Alta graduación')
   if (!condiciones.length) condiciones.push('Sin graduación')
 
   let tipo: ConvertedRx['tipo'] = 'esferico'
@@ -149,30 +119,80 @@ export function convertGlassesToContacts(rx: GlassesRx): ConvertedRx {
 
   if (allAdd.length > 0 && allCyl.length > 0) {
     tipo = 'multifocal_torico'
-    descripcion = 'Tu receta tiene presbicia Y astigmatismo. Necesitas lentes multifocales tóricos. El Proclear® Multifocal Toric corrige ambas condiciones simultáneamente.'
+    descripcion = 'Tu receta tiene presbicia y astigmatismo. Necesitas lentes multifocales tóricos.'
   } else if (allAdd.length > 0) {
     tipo = 'multifocal'
-    descripcion = 'Tu receta incluye adición (ADD), lo que indica presbicia. Necesitas lentes multifocales que corrijan tanto la visión de lejos como de cerca.'
+    descripcion = 'Tu receta incluye adición (ADD) — necesitas lentes multifocales.'
   } else if (allCyl.length > 0) {
     tipo = 'torico'
-    descripcion = 'Tu receta tiene cilindro (CYL), lo que indica astigmatismo. Los lentes tóricos están diseñados para corregir esta condición con precisión.'
+    descripcion = 'Tu receta tiene cilindro (CYL) — necesitas lentes tóricos para astigmatismo.'
   } else {
     tipo = 'esferico'
-    if (avgSph < 0) {
-      descripcion = maxSph >= 6
-        ? 'Tienes miopía de alta graduación. Los lentes esféricos de alta potencia corregirán tu visión de lejos.'
-        : 'Tienes miopía. Los lentes esféricos corregirán tu visión de lejos.'
-    } else if (avgSph > 0) {
-      descripcion = 'Tienes hipermetropía. Los lentes esféricos corregirán tu visión de cerca.'
-    } else {
-      descripcion = 'Tu receta es plano o cosmética. Puedes usar lentes de color sin graduación.'
-    }
+    descripcion = maxSph >= 8
+      ? 'Graduación alta. Tenemos lentes de rango extendido (XR) para tu receta.'
+      : 'Lentes esféricos estándar.'
   }
 
-  return { od, oi, needsVertex, tipo, condiciones, descripcion }
+  return { od, oi, needsVertex: false, tipo, condiciones, descripcion }
 }
 
-// ─── 2. Análisis sin conversión (para compatibilidad) ─────────────────────────
+// ─── Buscar productos compatibles con la receta ──────────────────────────────
+
+export function findCompatibleProducts(rx: ConvertedRx): { slug: string; nombre: string; marca: string; reemplazo: string; extended?: boolean; score: number }[] {
+  const sphOD = rx.od.sph ?? 0
+  const sphOI = rx.oi.sph ?? 0
+  const maxSph = Math.max(Math.abs(sphOD), Math.abs(sphOI))
+  const minSphVal = Math.min(sphOD, sphOI) // más negativo
+  const maxSphVal = Math.max(sphOD, sphOI) // más positivo
+  const cylOD = rx.od.cyl ?? 0
+  const cylOI = rx.oi.cyl ?? 0
+  const maxCyl = Math.min(cylOD, cylOI) // más negativo = peor caso
+  const addOD = rx.od.add ?? 0
+  const addOI = rx.oi.add ?? 0
+  const maxAdd = Math.max(addOD, addOI)
+
+  const compatible = PRODUCT_RANGES
+    .filter(p => p.tipo === rx.tipo)
+    .filter(p => {
+      // SPH: ambos ojos deben estar dentro del rango
+      if (minSphVal < p.sph_min || maxSphVal > p.sph_max) return false
+      
+      // CYL: para tóricos, verificar rango
+      if (rx.tipo === 'torico' || rx.tipo === 'multifocal_torico') {
+        if (p.cyl_min == null || p.cyl_max == null) return false
+        if (maxCyl < p.cyl_min) return false // CYL demasiado alto para este producto
+        if (Math.abs(maxCyl) < Math.abs(p.cyl_max)) return false // CYL demasiado bajo
+      }
+      
+      // ADD: para multifocales
+      if (rx.tipo === 'multifocal' || rx.tipo === 'multifocal_torico') {
+        if (p.add_min == null || p.add_max == null) return false
+        if (maxAdd < p.add_min || maxAdd > p.add_max) return false
+      }
+      
+      return true
+    })
+    .map(p => {
+      // Score: preferir productos de rango estándar sobre XR (más comunes, más baratos)
+      let score = 100
+      if (p.extended) score -= 10 // XR tiene menos prioridad si hay estándar
+      // Preferir marcas premium
+      if (p.marca === 'COOPERVISION') score += 5
+      if (p.marca === 'ACUVUE') score += 3
+      // Preferir si la graduación cae cómodamente dentro del rango (no en los extremos)
+      const sphRange = p.sph_max - p.sph_min
+      const sphCenter = (p.sph_max + p.sph_min) / 2
+      const distFromCenter = Math.abs(((sphOD + sphOI) / 2) - sphCenter) / (sphRange / 2)
+      score -= Math.round(distFromCenter * 10) // penalizar si está en extremos
+      
+      return { slug: p.slug, nombre: p.nombre, marca: p.marca, reemplazo: p.reemplazo, extended: p.extended, score }
+    })
+    .sort((a, b) => b.score - a.score)
+
+  return compatible
+}
+
+// ─── Análisis sin conversión (compatibilidad) ────────────────────────────────
 
 export function analyzePrescription(rx: {
   od_sph?: number; od_cyl?: number; od_axis?: number; od_add?: number
@@ -186,7 +206,7 @@ export function analyzePrescription(rx: {
   return convertGlassesToContacts(glassesRx)
 }
 
-// ─── 3. Helpers de formato ────────────────────────────────────────────────────
+// ─── Helpers de formato ──────────────────────────────────────────────────────
 
 export function fmtSph(val: number | null): string {
   if (val == null) return '—'
@@ -209,7 +229,7 @@ export function fmtAdd(val: number | null): string {
   return val > 0 ? `+${val.toFixed(2)}` : val.toFixed(2)
 }
 
-// ─── 4. SPH/CYL/AXIS disponibles en ContactGo ────────────────────────────────
+// ─── SPH/CYL/AXIS/ADD disponibles ────────────────────────────────────────────
 
 export const SPH_GLASSES = [
   -20, -19.5, -19, -18.5, -18, -17.5, -17, -16.5, -16, -15.5, -15, -14.5, -14, -13.5, -13,

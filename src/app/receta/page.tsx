@@ -420,8 +420,8 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
           </div>
         ))}
       </div>
-      {r.needsVertex&&<p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">⚡ Graduación ajustada para lentes de contacto (corrección vertex). Los valores pueden diferir de tu receta de gafas — esto es normal y correcto.</p>}
-      {!r.needsVertex&&<p className="text-[10px] text-gray-500 bg-gray-100 rounded-lg px-2.5 py-1.5 mb-3">👁️ Tu receta para lentes de contacto</p>}
+      {r.condiciones.includes('Alta graduación')&&<p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">⚡ Graduación alta — tenemos lentes de rango extendido (XR) especiales para tu receta</p>}
+      {!r.condiciones.includes('Alta graduación')&&<p className="text-[10px] text-gray-500 bg-gray-100 rounded-lg px-2.5 py-1.5 mb-3">👁️ Tu receta para lentes de contacto</p>}
       <div className={`flex items-start gap-2 rounded-xl px-3 py-2 border ${compC.bg} ${compC.border}`}>
         <div className={`w-2 h-2 rounded-full shrink-0 mt-1 ${compC.dot}`}/>
         <div><p className={`text-xs font-black ${compC.text}`}>{comp.titulo}</p><p className={`text-[10px] mt-0.5 ${compC.text} opacity-80`}>{comp.desc}</p></div>
