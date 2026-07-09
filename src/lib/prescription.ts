@@ -88,19 +88,19 @@ function convertEye(eye: EyeRx): ContactRx {
     return { sph: 0, cyl: null, axis: eye.axis, add: eye.add }
   }
 
-  // Meridianos principales de la lente de gafas
-  const F1 = sph           // meridiano esférico
-  const F2 = sph + cyl     // meridiano cilíndrico
+  // Si NO hay cilindro, solo convertir la esfera
+  if (cyl === 0) {
+    const sphConverted = roundContactStep(vertexCorrect(sph))
+    return { sph: sphConverted, cyl: null, axis: null, add: eye.add }
+  }
 
-  // SPH: vertex distance + redondear al paso disponible
+  // Si HAY cilindro, convertir ambos meridianos
+  const F1 = sph
+  const F2 = sph + cyl
+
   const F1c = roundContactStep(vertexCorrect(F1))
-
-  // CYL: vertex en F2 SIN redondear — si redondeamos F2 antes,
-  // acumulamos error que distorsiona el CYL final.
-  // Ej: F2=-8.50 → vertex=-7.713 → redondeo0.5 → -7.50 → CYL=-1.50 (INCORRECTO)
-  //                                sin redondeo → CYL=-1.713 → toricRound → -1.75 (CORRECTO)
-  const F2c_raw = vertexCorrect(F2)
-  const rawCyl  = parseFloat((F2c_raw - F1c).toFixed(2))
+  const F2c = roundContactStep(vertexCorrect(F2))
+  const rawCyl = parseFloat((F2c - F1c).toFixed(2))
 
   let newCyl:  number | null = null
   let newAxis: number | null = eye.axis
