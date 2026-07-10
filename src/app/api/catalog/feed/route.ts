@@ -62,7 +62,7 @@ function mapFbCategoryId(tipo: string): string {
 function fixUppercaseTitle(title: string): string {
   if (title !== title.toUpperCase()) return title // ya no es 100% mayúsculas, no tocar
   // Detecta si es enteramente mayúsculas (ignorando ® y números) y aplica Title Case selectivo
-  const knownBrandWords = new Set(['ACUVUE', 'AIR', 'OPTIX', 'MOIST', 'OASYS', 'HYDRACLEAR', 'COLORS', 'ULTRA'])
+  const knownBrandWords = new Set(['ACUVUE', 'AIR', 'OPTIX', 'MOIST', 'OASYS', 'HYDRACLEAR', 'ULTRA'])
   return title.split(' ').map(word => {
     const clean = word.replace(/[®\d]/g, '')
     if (knownBrandWords.has(clean)) return word // conservar marca en mayúsculas
