@@ -35,12 +35,40 @@ function mapCategory(tipo: string): string {
     case 'color':
       return 'Health & Beauty > Personal Care > Vision Care > Contact Lenses'
     case 'solucion':
-      return 'Health & Beauty > Personal Care > Vision Care > Contact Lens Care'
+      return 'Health & Beauty > Personal Care > Vision Care'
     case 'gota':
-      return 'Health & Beauty > Personal Care > Vision Care > Eye Drops & Lubricants'
+      return 'Health & Beauty > Personal Care > Vision Care'
     default:
       return 'Health & Beauty > Personal Care > Vision Care'
   }
+}
+
+// fb_product_category requiere el ID numérico verificado de la taxonomía Meta/Google
+// 2923 = Contact Lenses (verificado: productcategory.net/wikidata Q23797)
+function mapFbCategoryId(tipo: string): string {
+  switch (tipo) {
+    case 'esferico':
+    case 'torico':
+    case 'multifocal':
+    case 'color':
+      return '2923' // Contact Lenses
+    default:
+      return '2919' // Health & Beauty > Personal Care > Vision Care (parent node)
+  }
+}
+
+// Título en Title Case para cumplir política Meta (no 100% mayúsculas)
+// Mantiene marcas registradas (ACUVUE, AIR OPTIX) pero corrige palabras genéricas
+function fixUppercaseTitle(title: string): string {
+  if (title !== title.toUpperCase()) return title // ya no es 100% mayúsculas, no tocar
+  // Detecta si es enteramente mayúsculas (ignorando ® y números) y aplica Title Case selectivo
+  const knownBrandWords = new Set(['ACUVUE', 'AIR', 'OPTIX', 'MOIST', 'OASYS', 'HYDRACLEAR', 'COLORS', 'ULTRA'])
+  return title.split(' ').map(word => {
+    const clean = word.replace(/[®\d]/g, '')
+    if (knownBrandWords.has(clean)) return word // conservar marca en mayúsculas
+    if (clean.length <= 2) return word // siglas cortas, conservar
+    return word.charAt(0) + word.slice(1).toLowerCase()
+  }).join(' ')
 }
 
 function mapAvailability(stock: number): string {
@@ -94,7 +122,7 @@ export async function GET() {
 
       return [
         escapeCSV(p.id),
-        escapeCSV(p.nombre),
+        escapeCSV(fixUppercaseTitle(p.nombre)),
         escapeCSV(p.descripcion?.slice(0, 5000)),
         mapAvailability(p.stock ?? 0),
         mapCondition(p.tipo),
@@ -104,7 +132,7 @@ export async function GET() {
         escapeCSV(p.imagen_url),
         escapeCSV(p.marca),
         escapeCSV(mapCategory(p.tipo)),
-        escapeCSV(mapCategory(p.tipo)),
+        escapeCSV(mapFbCategoryId(p.tipo)),
         escapeCSV(p.tipo),
         escapeCSV(p.gtin ?? ''),
         escapeCSV(p.reemplazo ?? ''),       // custom_label_0: Diario/Quincenal/Mensual
