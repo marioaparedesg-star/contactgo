@@ -86,6 +86,8 @@ export default function RecetaPage() {
       oi: { sph: parseN(oi.sph) ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
     }
     setPendingRx(rx)
+    // Pop-up de captura aparece INMEDIATAMENTE al dar clic — cerrable con X
+    if (!leadCaptured) { setShowLead(true); return }
     await ejecutarCalculo(rx)
   }
 
@@ -93,7 +95,7 @@ export default function RecetaPage() {
     const conv = convertGlassesToContacts(rx, rxSource ?? 'contacto'); setResult(conv); setCartAdded(null)
     await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
-    // Guardar receta como lead anónimo
+    // Guardar receta como lead anónimo (backup, por si cerraron el pop-up sin llenar)
     try {
       createClient().from('calculator_leads').insert({
         nombre: null, email: null, telefono: null,
@@ -102,12 +104,14 @@ export default function RecetaPage() {
         tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
       }).then(() => {})
     } catch {}
-    // Mostrar lead capture después de resultados (si no lo han llenado)
-    if (!leadCaptured) setShowLead(true)
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
   }
 
-  // Lead capture ahora es POST-resultado (opcional, no bloqueante)
+  // Cerrar pop-up sin llenar datos → mostrar resultados igual
+  const skipLeadAndCalculate = () => {
+    setShowLead(false)
+    if (pendingRx) ejecutarCalculo(pendingRx)
+  }
   const handleLeadSubmit = async () => {
     if (!pendingRx) return
     if (!leadNombre.trim() || !leadEmail.trim()) { toast.error('Ingresa nombre y correo'); return }
@@ -125,10 +129,9 @@ export default function RecetaPage() {
     } catch {}
     setLeadCaptured(true)
     setShowLead(false)
-    toast.success('¡Datos guardados! Te avisaremos cuando sea hora de reponer.')
+    toast.success('¡Datos guardados! Calculando tu receta...')
+    await ejecutarCalculo(pendingRx)
   }
-
-  const skipLead = () => { setShowLead(false) }
   const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null) }
 
   // ── Agregar al carrito DIRECTO (para esférico y color) ────────────────────
@@ -213,28 +216,29 @@ export default function RecetaPage() {
           </div>
         </div>
 
-        {/* Lead modal — aparece DESPUÉS de ver los resultados, nunca antes */}
+        {/* Pop-up de captura — aparece INMEDIATAMENTE al dar clic en "Calcular", cerrable con X */}
         {showLead && !leadCaptured && (
-          <div className="max-w-3xl mx-auto px-4 mb-4">
-            <div className="bg-green-50 border border-green-200 rounded-2xl p-4 relative">
-              <button onClick={skipLead} className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-lg leading-none p-1">✕</button>
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-9 h-9 bg-green-100 rounded-xl flex items-center justify-center shrink-0 mt-0.5"><Mail className="w-4 h-4 text-green-600" /></div>
-                <div>
-                  <h3 className="font-bold text-gray-900 text-sm">¿Guardamos tu receta?</h3>
-                  <p className="text-[11px] text-gray-500">Te avisamos cuando sea hora de reponer y te enviamos ofertas exclusivas</p>
-                </div>
+          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative">
+              <button onClick={skipLeadAndCalculate} className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl leading-none p-1">✕</button>
+              <div className="flex flex-col items-center text-center mb-5">
+                <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-3"><Mail className="w-6 h-6 text-green-600" /></div>
+                <h3 className="font-black text-gray-900 text-lg">¿Guardamos tu receta?</h3>
+                <p className="text-xs text-gray-500 mt-1">Te avisamos cuando sea hora de reponer y te enviamos ofertas exclusivas</p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
+              <div className="space-y-3 mb-4">
                 <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre completo"
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green-400 bg-white" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
                 <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico"
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green-400 bg-white" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
                 <input value={leadTelefono} onChange={e => setLeadTelefono(e.target.value)} type="tel" placeholder="Teléfono (opcional)"
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green-400 bg-white" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
               </div>
-              <button onClick={handleLeadSubmit} className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2 font-bold rounded-lg text-sm transition-colors">
-                Guardar mi receta
+              <button onClick={handleLeadSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 font-black rounded-xl text-sm transition-colors mb-2">
+                Guardar y ver mi receta →
+              </button>
+              <button onClick={skipLeadAndCalculate} className="w-full text-xs text-gray-400 py-1 hover:text-gray-600">
+                Continuar sin guardar
               </button>
             </div>
           </div>
