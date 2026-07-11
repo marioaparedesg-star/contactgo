@@ -196,21 +196,30 @@ export function trackAzulRedirect(orderNum: string, total: number) {
   }
 }
 
-// ── Evento: clic en WhatsApp desde "No estoy seguro" ─────────────────────
-export function trackWhatsappHelp(source: 'no_seguro' | 'pdp' | 'cart' | 'checkout') {
+// ── Evento: clic en WhatsApp (botón flotante, PDP, cart, etc.) ───────────
+// Dispara el evento ESTÁNDAR "Contact" de Meta — permite que Ads Manager
+// lo use directamente para optimización de campañas (a diferencia de un
+// evento custom, que requiere configuración manual como conversión personalizada)
+export function trackWhatsappHelp(source: 'no_seguro' | 'pdp' | 'cart' | 'checkout' | 'floating_button' | 'navbar' | 'footer') {
   if (typeof window === 'undefined') return
   window.dataLayer = window.dataLayer || []
-  window.dataLayer.push({ event: 'whatsapp_help_clicked', source })
+  window.dataLayer.push({ event: 'whatsapp_contact_clicked', source })
+
   if (window.fbq) {
-    window.fbq('trackCustom', 'WhatsappHelp', { source })
+    // Evento estándar — usable directamente en optimización de campañas de Meta
+    window.fbq('track', 'Contact', { content_name: 'whatsapp_click', source })
   }
+
+  // CAPI server-side — duplicado para no depender solo del Pixel del navegador
+  // (ad blockers, Safari ITP, etc. no afectan este envío)
+  sendCAPI('Contact', { content_ids: [source] })
 }
 
 // ── Facebook Conversions API (CAPI) — server-side duplicate ──────────────
 // Envía eventos al servidor para que lleguen a Facebook sin depender del Pixel
 // Funciona aunque las restricciones de categoría bloqueen el Pixel del browser
 export async function sendCAPI(
-  eventName: 'Purchase' | 'AddToCart' | 'InitiateCheckout' | 'ViewContent' | 'PageView',
+  eventName: 'Purchase' | 'AddToCart' | 'InitiateCheckout' | 'ViewContent' | 'PageView' | 'Contact',
   eventData?: {
     value?: number
     currency?: string

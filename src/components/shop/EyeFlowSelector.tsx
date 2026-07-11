@@ -269,7 +269,7 @@ export default function EyeFlowSelector({
       {s.mismaReceta === false && !s.noEstaSeguro && (
         <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700 flex items-start gap-2">
           <span className="text-base">💡</span>
-          <span>Perfecto — ingresa la graduación de cada ojo por separado. Si no tienes tu receta a mano, <a href="https://wa.me/18096942268?text=Hola%2C+necesito+ayuda+con+mi+receta+para+lentes+de+color" target="_blank" rel="noopener noreferrer" className="font-bold underline">escríbenos por WhatsApp</a> y te ayudamos.</span>
+          <span>Perfecto — ingresa la graduación de cada ojo por separado. Si no tienes tu receta a mano, <a href="https://wa.me/18096942268?text=Hola%2C+necesito+ayuda+con+mi+receta+para+lentes+de+color" target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsappHelp('pdp')} className="font-bold underline">escríbenos por WhatsApp</a> y te ayudamos.</span>
         </div>
       )}
     </div>

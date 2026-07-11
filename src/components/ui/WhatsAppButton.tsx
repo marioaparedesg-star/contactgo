@@ -1,6 +1,7 @@
 'use client'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
+import { trackWhatsappHelp } from '@/lib/analytics'
 
 function WhatsAppButtonInner() {
   const pathname = usePathname()
@@ -65,6 +66,7 @@ function WhatsAppButtonInner() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"
+        onClick={() => trackWhatsappHelp('floating_button')}
         className={`relative ${isPDP ? 'w-10 h-10' : 'w-12 h-12'} bg-[#25D366] rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform duration-200`}
       >
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" />
