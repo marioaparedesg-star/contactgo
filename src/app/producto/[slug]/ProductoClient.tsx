@@ -375,8 +375,10 @@ export default function ProductoClient({ product, variants }: Props) {
     } else {
       setImagenActual(product.imagen_url ?? '/icon-512.png')
     }
-    // Sincronizar cantidad según modo de ojo
-    if (newState.ojoMode === 'AMBOS') handleSetQty(2)
+    // Sincronizar cantidad según modo de ojo Y si la receta es igual o diferente
+    // — Misma receta (o un solo ojo): 1 caja sirve para ambos ojos → qty = 1
+    // — Receta diferente por ojo: cada ojo necesita su propia caja → qty = 2
+    if (newState.ojoMode === 'AMBOS' && newState.mismaReceta === false) handleSetQty(2)
     else if (newState.ojoMode) handleSetQty(1)
   }
   // Aliases de lectura para código interno que usa los campos directamente
