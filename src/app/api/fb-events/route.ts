@@ -19,6 +19,14 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { eventName, eventData, userData } = body
 
+    // Blindaje: nunca enviar a Meta un evento sin event_name válido —
+    // esto es lo que Meta reporta como "s2s_missing_event_name" y hace
+    // que descarte el evento, afectando atribución/optimización.
+    if (!eventName || typeof eventName !== 'string') {
+      console.error('[FB CAPI] Bloqueado: eventName ausente o inválido', { body })
+      return NextResponse.json({ ok: false, reason: 'missing_event_name' }, { status: 200 })
+    }
+
     const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 
                      req.headers.get('x-real-ip') ?? ''
     const userAgent = req.headers.get('user-agent') ?? ''
