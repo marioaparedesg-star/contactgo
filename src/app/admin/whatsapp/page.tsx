@@ -347,11 +347,16 @@ export default function WhatsAppInbox() {
                             </a>
                           )}
                           {msg.media_url && msg.message_type === 'video' && (
-                            <video src={`/api/whatsapp/media?id=${msg.media_url}`} controls className="w-full max-w-[280px]" preload="metadata" />
+                            <video src={`/api/whatsapp/media?id=${msg.media_url}`} controls className="w-full max-w-[280px]" preload="metadata"
+                              onError={(e) => { e.currentTarget.style.display = 'none' }} />
                           )}
                           {msg.media_url && msg.message_type === 'audio' && (
                             <div className="px-3 py-2">
-                              <audio src={`/api/whatsapp/media?id=${msg.media_url}`} controls className="w-full" preload="metadata" />
+                              {/* iOS/Safari no soporta el códec Opus/OGG de WhatsApp — onError oculta
+                                  el reproductor roto en vez de dejar una excepción sin manejar
+                                  (Sentry: JAVASCRIPT-NEXTJS-G, DOMException code 9 NotSupportedError) */}
+                              <audio src={`/api/whatsapp/media?id=${msg.media_url}`} controls className="w-full" preload="metadata"
+                                onError={(e) => { e.currentTarget.style.display = 'none' }} />
                               <a href={`/api/whatsapp/media?id=${msg.media_url}`} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-500 hover:underline">
                                 ¿No reproduce? Descargar audio
                               </a>

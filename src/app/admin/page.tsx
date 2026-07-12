@@ -26,6 +26,7 @@ export default function AdminDashboard() {
   const [recent, setRecent]   = useState<any[]>([])
   const [top, setTop]         = useState<any[]>([])
   const [stock, setStock]     = useState<any[]>([])
+  const [ords7Raw, setOrds7Raw] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [updated, setUpdated] = useState(new Date())
 
@@ -38,16 +39,10 @@ export default function AdminDashboard() {
     const since7  = new Date(Date.now()-7*24*3600*1000).toISOString()
     const since1  = new Date(new Date().setHours(0,0,0,0)).toISOString()
 
-    const [all, today7, ord7, ordRecent, items, stockLow] = await Promise.all([
+    const [all, ordRecent, items, stockLow] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
         .eq('pago_estado','pagado').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
         .gte('fecha',since30),
-      sb.from('orders').select('id,total,estado,fecha')
-        .eq('pago_estado','pagado').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
-        .gte('fecha',since1),
-      sb.from('orders').select('id,total,estado,fecha')
-        .eq('pago_estado','pagado').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
-        .gte('fecha',since7),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
         .order('created_at',{ascending:false}).limit(8),
@@ -59,8 +54,11 @@ export default function AdminDashboard() {
     ])
 
     const ords    = all.data ?? []
-    const ords7   = ord7.data ?? []
-    const ordsHoy = today7.data ?? []
+    // Los datasets de 7 días y hoy son subconjuntos del de 30 días —
+    // se derivan en memoria en vez de hacer 2 llamadas adicionales a Supabase
+    // (elimina el patrón N+1 detectado en Sentry: JAVASCRIPT-NEXTJS-4)
+    const ords7   = ords.filter(o => o.fecha >= since7)
+    const ordsHoy = ords.filter(o => o.fecha >= since1)
 
     const ventas30  = ords.reduce((s,o)=>s+Number(o.total??0),0)
     const ventas7   = ords7.reduce((s,o)=>s+Number(o.total??0),0)
@@ -92,6 +90,7 @@ export default function AdminDashboard() {
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
+    setOrds7Raw(ords7)
     setUpdated(new Date())
     setLoading(false)
   }
@@ -106,18 +105,15 @@ export default function AdminDashboard() {
       const d = new Date(Date.now()-(6-i)*86400000)
       return { d: d.toLocaleDateString('es-DO',{weekday:'short'}), v: 0, date: d.toDateString() }
     })
-    sb.from('orders').select('total,fecha')
-      .eq('pago_estado','pagado').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
-      .gte('fecha',new Date(Date.now()-7*86400000).toISOString())
-      .then(({data:o})=>{
-        ;(o??[]).forEach((ord:any)=>{
-          const od = new Date(ord.fecha).toDateString()
-          const bar = dias.find(d=>d.date===od)
-          if (bar) bar.v += Number(ord.total??0)
-        })
-        setBars(dias.map(d=>({d:d.d,v:d.v})))
-      })
-  },[data])
+    // Usa los datos de 7 días ya obtenidos en cargar() — evita una 4ta
+    // llamada redundante a Supabase con el mismo filtro (Sentry JAVASCRIPT-NEXTJS-4)
+    ords7Raw.forEach((ord:any)=>{
+      const od = new Date(ord.fecha).toDateString()
+      const bar = dias.find(d=>d.date===od)
+      if (bar) bar.v += Number(ord.total??0)
+    })
+    setBars(dias.map(d=>({d:d.d,v:d.v})))
+  },[data, ords7Raw])
 
   const maxBar = Math.max(...bars.map(b=>b.v),1)
 
