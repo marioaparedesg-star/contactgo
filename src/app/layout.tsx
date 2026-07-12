@@ -284,7 +284,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
               t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              y=l.getElementsByTagName(r)[0];
+              if(y&&y.parentNode){y.parentNode.insertBefore(t,y);}else{(l.head||l.documentElement).appendChild(t);}
             })(window, document, "clarity", "script", "wslp0l9vex");
           `}}
         />
@@ -300,7 +301,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
             n.queue=[];t=b.createElement(e);t.async=!0;
             t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            if(s&&s.parentNode){s.parentNode.insertBefore(t,s);}else{(b.head||b.documentElement).appendChild(t);}}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '1516674003159165');
             fbq('track', 'PageView');
