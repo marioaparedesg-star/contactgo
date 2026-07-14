@@ -359,32 +359,43 @@ export async function POST(req: NextRequest) {
       ? `✅ Pedido #${pedidoId} recibido — ContactGo`
       : `ContactGo · Tu pedido #${pedidoId} está ${estadoLabel} 👁️`
 
-    // Email al cliente + log de entrega
+    // Email al cliente + log de entrega — con protección contra duplicados
+    const emailTemplate = evento === 'nuevo_pedido' ? 'confirmacion_orden' : 'actualizacion_estado'
     if (order.cliente_email) {
-      let resendId: string | undefined
-      let emailError: string | undefined
-      try {
-        const { data: sent, error: sendErr } = await resend.emails.send({
-          from: FROM_EMAIL,
-          to: order.cliente_email,
-          subject,
-          html: emailCliente(order, itemsList, evento, nuevo_estado),
-        })
-        resendId = sent?.id
-        if (sendErr) emailError = sendErr.message
-      } catch (e: any) {
-        emailError = e?.message ?? 'Error desconocido'
+      // Verificar si ya se envió este mismo email para esta orden (evita duplicados
+      // por reintentos, doble-clic del cliente, o pruebas manuales del endpoint)
+      const { data: yaEnviado } = await sbAdmin.from('email_log')
+        .select('id').eq('order_id', order_id).eq('template', emailTemplate).eq('status', 'sent')
+        .maybeSingle()
+
+      if (!yaEnviado) {
+        let resendId: string | undefined
+        let emailError: string | undefined
+        try {
+          const { data: sent, error: sendErr } = await resend.emails.send({
+            from: FROM_EMAIL,
+            to: order.cliente_email,
+            subject,
+            html: emailCliente(order, itemsList, evento, nuevo_estado),
+          })
+          resendId = sent?.id
+          if (sendErr) emailError = sendErr.message
+        } catch (e: any) {
+          emailError = e?.message ?? 'Error desconocido'
+        }
+        // Registrar en email_log para auditoría — nombres de columna correctos
+        // (bug anterior: usaba tipo/asunto/enviado/error_msg que no existen en la tabla real)
+        await sbAdmin.from('email_log').insert({
+          order_id:    order_id,
+          template:    emailTemplate,
+          to_email:    order.cliente_email,
+          subject:     subject,
+          resend_id:   resendId ?? null,
+          status:      emailError ? 'error' : 'sent',
+        }).then(() => {})
+      } else {
+        console.log('[notify] Email ya enviado antes, se omite duplicado:', emailTemplate, order_id)
       }
-      // Registrar en email_log para auditoría
-      await sbAdmin.from('email_log').insert({
-        order_id:    order_id,
-        tipo:        evento === 'nuevo_pedido' ? 'confirmacion_orden' : 'actualizacion_estado',
-        destinatario: order.cliente_email,
-        asunto:      subject,
-        resend_id:   resendId ?? null,
-        enviado:     !emailError,
-        error_msg:   emailError ?? null,
-      }).then(() => {})
     }
 
     // WhatsApp al cliente — cuando pedido cambia de estado (TODOS los estados)
@@ -438,15 +449,41 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Email al admin (siempre)
-    await resend.emails.send({
-      from: FROM_EMAIL,
-      to: [ADMIN_EMAIL],
-      subject: evento === 'nuevo_pedido'
+    // Email al admin — con la misma protección contra duplicados
+    const adminTemplate = evento === 'nuevo_pedido' ? 'admin_nuevo_pedido' : 'admin_estado_cambio'
+    const { data: adminYaEnviado } = await sbAdmin.from('email_log')
+      .select('id').eq('order_id', order_id).eq('template', adminTemplate).eq('status', 'sent')
+      .maybeSingle()
+
+    if (!adminYaEnviado) {
+      const adminSubject = evento === 'nuevo_pedido'
         ? `🛍️ Nuevo pedido #${pedidoId} — RD$${order.total?.toLocaleString()}`
-        : `📋 Pedido #${pedidoId} → ${estadoLabel}`,
-      html: emailAdmin(order, itemsList, evento, nuevo_estado),
-    })
+        : `📋 Pedido #${pedidoId} → ${estadoLabel}`
+      let adminResendId: string | undefined
+      let adminError: string | undefined
+      try {
+        const { data: sentAdmin, error: adminSendErr } = await resend.emails.send({
+          from: FROM_EMAIL,
+          to: [ADMIN_EMAIL],
+          subject: adminSubject,
+          html: emailAdmin(order, itemsList, evento, nuevo_estado),
+        })
+        adminResendId = sentAdmin?.id
+        if (adminSendErr) adminError = adminSendErr.message
+      } catch (e: any) {
+        adminError = e?.message ?? 'Error desconocido'
+      }
+      await sbAdmin.from('email_log').insert({
+        order_id:  order_id,
+        template:  adminTemplate,
+        to_email:  ADMIN_EMAIL,
+        subject:   adminSubject,
+        resend_id: adminResendId ?? null,
+        status:    adminError ? 'error' : 'sent',
+      }).then(() => {})
+    } else {
+      console.log('[notify] Email admin ya enviado antes, se omite duplicado:', adminTemplate, order_id)
+    }
 
     // Registrar recompra automáticamente para pedidos nuevos
     if (evento === 'nuevo_pedido') {
