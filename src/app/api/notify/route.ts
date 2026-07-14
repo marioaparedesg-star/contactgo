@@ -403,26 +403,39 @@ export async function POST(req: NextRequest) {
       const tipoWA = mapaEstadoWA[nuevo_estado]
       if (tipoWA) {
         const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-        fetch(`${BASE}/api/wa/dispatch`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tipo: tipoWA, order_id }),
-        }).then(r => r.json())
-          .then(d => console.log('[notify] WA estado:', nuevo_estado, d?.ok ? 'OK' : d))
-          .catch(e => console.error('[notify] WA error:', e))
+        try {
+          const r = await fetch(`${BASE}/api/wa/dispatch`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tipo: tipoWA, order_id }),
+          })
+          const d = await r.json()
+          console.log('[notify] WA estado:', nuevo_estado, d?.ok ? 'OK' : d)
+        } catch (e) {
+          console.error('[notify] WA error:', e)
+        }
       }
     }
 
     // WhatsApp — nuevo pedido (confirmación de compra)
+    // CRÍTICO: debe llevar await — en Vercel serverless, una fetch sin await
+    // puede morir a medias cuando la función termina de responder, antes de
+    // completar la llamada real a Meta. Esto causaba que el WhatsApp de
+    // confirmación casi nunca llegara pese a que el email sí (el email sí
+    // tenía await más abajo).
     if (evento === 'nuevo_pedido' && order.cliente_telefono) {
       const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-      fetch(`${BASE}/api/wa/dispatch`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
-      }).then(r => r.json())
-        .then(d => console.log('[notify] WA pedido_pagado:', d?.ok ? 'OK' : d))
-        .catch(e => console.error('[notify] WA error:', e))
+      try {
+        const r = await fetch(`${BASE}/api/wa/dispatch`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
+        })
+        const d = await r.json()
+        console.log('[notify] WA pedido_pagado:', d?.ok ? 'OK' : d)
+      } catch (e) {
+        console.error('[notify] WA error:', e)
+      }
     }
 
     // Email al admin (siempre)
