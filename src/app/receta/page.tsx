@@ -116,17 +116,21 @@ export default function RecetaPage() {
     if (!pendingRx) return
     if (!leadNombre.trim() || !leadEmail.trim()) { toast.error('Ingresa nombre y correo'); return }
     const conv = convertGlassesToContacts(pendingRx)
-    try {
-      createClient().from('calculator_leads').upsert({
-        nombre: leadNombre.trim(),
-        email: leadEmail.trim().toLowerCase(),
-        telefono: leadTelefono.replace(/\D/g,'') || null,
-        od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
-        oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
-        tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
-      }, { onConflict: 'email' }).then(() => {})
+    const { error } = await createClient().from('calculator_leads').upsert({
+      nombre: leadNombre.trim(),
+      email: leadEmail.trim().toLowerCase(),
+      telefono: leadTelefono.replace(/\D/g,'') || null,
+      od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
+      oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
+      tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
+    }, { onConflict: 'email' })
+    if (error) {
+      console.error('[calculator_leads] Error guardando lead:', error)
+      // No bloqueamos la experiencia del cliente, pero sí queda visible en consola
+      // para detectar futuros problemas de guardado de inmediato (no en silencio).
+    } else {
       trackEvento('lead_captured', { tipo_receta: conv.tipo, has_phone: !!leadTelefono })
-    } catch {}
+    }
     setLeadCaptured(true)
     setShowLead(false)
     toast.success('¡Datos guardados! Calculando tu receta...')
