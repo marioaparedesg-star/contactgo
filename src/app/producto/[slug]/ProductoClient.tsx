@@ -1061,17 +1061,17 @@ export default function ProductoClient({ product, variants }: Props) {
             <div className="sticky top-20 self-start">
               <div className="bg-white border-2 border-gray-100 rounded-2xl shadow-sm overflow-hidden">
                 <div className="bg-gray-50 border-b border-gray-100 px-4 py-2.5 flex items-center justify-between">
-                  <p className="text-[11px] font-black text-gray-500 uppercase tracking-wider">Frecuencia de entrega</p>
-                  <p className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Precio fijo</p>
+                  <p className="text-[11px] font-black text-gray-500 uppercase tracking-wider">¿Cada cuánto necesitas reponer?</p>
+                  <p className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Sin compromiso</p>
                 </div>
                 <div className="p-3 space-y-2.5">
                   {isLente && (
                     <div className="space-y-1.5">
                       {([
-                        {val:null, label:'Compra única', sublabel:'Sin compromiso', beneficio:null, popular:false},
-                        {val:'mensual', label:'Mensual', sublabel:'Cada 30 días', beneficio:'Envío GRATIS', popular:false},
-                        {val:'trimestral', label:'Trimestral', sublabel:'Cada 90 días', beneficio:'Envío + Stock', popular:true},
-                        {val:'semestral', label:'Semestral', sublabel:'Cada 180 días', beneficio:'Envío + VIP', popular:false},
+                        {val:null, label:'Compra única', sublabel:'Solo esta vez', beneficio:null, popular:false},
+                        {val:'mensual', label:'Cada 30 días', sublabel:'Ideal para lentes diarios', beneficio:'Te avisamos por WhatsApp', popular:false},
+                        {val:'trimestral', label:'Cada 90 días', sublabel:'Ideal para lentes mensuales', beneficio:'Reordena en 1 clic', popular:true},
+                        {val:'semestral', label:'Cada 6 meses', sublabel:'Ideal para lentes trimestrales', beneficio:'Nunca se te olvida reponer', popular:false},
                       ] as Array<{val:string|null;label:string;sublabel:string;beneficio:string|null;popular:boolean}>).map(op => {
                         const isSel = suscripcion===op.val
                         return (
@@ -1083,21 +1083,25 @@ export default function ProductoClient({ product, variants }: Props) {
                                   {op.label}
                                   {op.popular && <span className="text-[7px] font-black bg-amber-400 text-white px-1.5 py-0.5 rounded-full">★ Popular</span>}
                                 </p>
-                                <p className={`text-[10px] font-black ${isSel?'text-primary-700':'text-gray-700'}`}>RD${price.toLocaleString()}</p>
                               </div>
                               <p className={`text-[9px] ${isSel?'text-primary-400':'text-gray-400'}`}>{op.sublabel}</p>
-                              {op.beneficio && <p className="text-[9px] text-green-600 font-bold mt-0.5">✓ {op.beneficio}</p>}
+                              {op.beneficio && <p className="text-[9px] text-blue-600 font-bold mt-0.5">💬 {op.beneficio}</p>}
                             </div>
                           </label>
                         )
                       })}
+                      {suscripcion && (
+                        <p className="text-[9px] text-gray-400 leading-tight px-1 pt-1">
+                          Te escribimos por WhatsApp cuando se acerque la fecha. Tú decides si reordenas — no hacemos ningún cobro automático.
+                        </p>
+                      )}
                     </div>
                   )}
                   {!isLente && <div className="text-center py-2"><p className="text-2xl font-black text-gray-900">RD${price.toLocaleString()}</p>{product.contenido && <p className="text-xs text-gray-400 mt-0.5">{product.contenido}</p>}</div>}
                   <div className="bg-gray-50 rounded-xl px-3 py-2 space-y-0.5">
                     {(()=>{const fi=getFechaEntrega(tipo,product.nombre);const ei=getEntrega(tipo,product.nombre);return(<>
                       <p className={`text-xs font-bold flex items-center gap-1.5 ${ei.especial?'text-amber-600':'text-green-600'}`}>{ei.icono} {fi.texto}</p>
-                      <p className="text-[10px] text-green-600 font-semibold">{suscripcion?'✓ Envío gratis con suscripción':'🚚 Envío a todo RD'}</p>
+                      <p className="text-[10px] text-green-600 font-semibold">{suscripcion?'💬 Te recordamos por WhatsApp':'🚚 Envío a todo RD'}</p>
                     </>)})()}
                   </div>
                   {!isGota && (

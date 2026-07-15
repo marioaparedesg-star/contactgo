@@ -1,13 +1,15 @@
 /**
- * Suscripciones ContactGo — Modelo de conveniencia (CERO descuentos)
- * El valor es el auto-replenishment, no el precio.
- * Amazon lo probó: la retención sube con conveniencia, no con descuento.
+ * Suscripciones ContactGo — Recordatorio de reposición (NO cobro automático)
+ * ContactGo aún no tiene cobro recurrente automático habilitado con AZUL.
+ * Este sistema guarda la preferencia del cliente y le envía un recordatorio
+ * por WhatsApp cerca de la fecha, con un link para reordenar en 1 clic —
+ * el cliente paga manualmente cada vez, como una compra normal.
  */
 
 export const FRECUENCIAS = {
-  'mensual':    { label: 'Mensual',    sublabel: 'Cada 30 días',  dias: 30,  descuento: 0, badge: 'Envío gratis',         puntos: 0,   popular: false },
-  'trimestral': { label: 'Trimestral', sublabel: 'Cada 90 días',  dias: 90,  descuento: 0, badge: 'Envío gratis + Stock',  puntos: 0,   popular: true  },
-  'semestral':  { label: 'Semestral',  sublabel: 'Cada 6 meses',  dias: 180, descuento: 0, badge: 'VIP + Regalo',          puntos: 0,   popular: false },
+  'mensual':    { label: 'Cada 30 días',  sublabel: 'Ideal para lentes diarios',      dias: 30,  descuento: 0, badge: 'Te avisamos por WhatsApp',       puntos: 0,   popular: false },
+  'trimestral': { label: 'Cada 90 días',  sublabel: 'Ideal para lentes mensuales',    dias: 90,  descuento: 0, badge: 'Reordena en 1 clic',              puntos: 0,   popular: true  },
+  'semestral':  { label: 'Cada 6 meses',  sublabel: 'Ideal para lentes trimestrales', dias: 180, descuento: 0, badge: 'Nunca se te olvida reponer',       puntos: 0,   popular: false },
 } as const
 
 export type Frecuencia = keyof typeof FRECUENCIAS
@@ -16,7 +18,7 @@ export const DESCUENTOS: Record<string, number> = {
   'mensual': 0, 'trimestral': 0, 'semestral': 0,
 }
 
-/** Siempre precio completo — el valor es la conveniencia */
+/** Sin cobro automático — el cliente paga cada compra normalmente */
 export function descuentoPct(_val: string | null): number { return 0 }
 export function descuentoPctSiguiente(_val: string | null): number { return 0 }
 
@@ -35,7 +37,7 @@ export function proxEnvio(frecuencia: string): Date {
 }
 
 export function precioConSuscripcion(precioBase: number, _frecuencia: string | null): number {
-  return precioBase // siempre precio completo
+  return precioBase // sin cobro automático, precio siempre el normal
 }
 
 export const SOLUTION_PRICES: Record<string, Record<string, number>> = {

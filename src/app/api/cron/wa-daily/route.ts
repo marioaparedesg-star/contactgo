@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendText, normalizePhone } from '@/lib/whatsapp'
+import { notificarRenovacion } from '@/lib/wa-notifications'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -176,6 +177,49 @@ export async function GET(req: NextRequest) {
       }
     }
   } catch (e) { console.error('[cron/wa-daily] renovaciones:', e) }
+
+  // ─────────────────────────────────────────────────────
+  // 3b. RECORDATORIOS DE REPOSICIÓN — suscripciones activas (tabla subscriptions)
+  // Selección del cliente en "¿Cada cuánto necesitas reponer?" en la página de producto.
+  // NO es cobro automático — solo envía WhatsApp con link para reordenar manualmente.
+  // Usa template ya aprobado (renovacion_lentes), no texto libre, para garantizar entrega.
+  // ─────────────────────────────────────────────────────
+  try {
+    const hoy = new Date().toISOString().split('T')[0]
+    const { data: subsVencidas } = await sb
+      .from('subscriptions')
+      .select('id, cliente_nombre, cliente_telefono, items, proximo_envio')
+      .eq('activa', true)
+      .eq('cancelada', false)
+      .lte('proximo_envio', hoy)
+
+    for (const s of subsVencidas ?? []) {
+      try {
+        const items = Array.isArray(s.items) ? s.items : []
+        const nombreProducto = items[0]?.nombre ?? 'tus lentes de contacto'
+        const res = await notificarRenovacion({
+          telefono: s.cliente_telefono,
+          nombre: s.cliente_nombre,
+          producto: nombreProducto,
+        })
+        if (res.ok) {
+          // Calcular siguiente fecha de recordatorio (mismo ciclo, se repite)
+          const { data: freqRow } = await sb.from('subscriptions').select('frecuencia').eq('id', s.id).single()
+          const dias = freqRow?.frecuencia === 'trimestral' ? 90 : freqRow?.frecuencia === 'semestral' ? 180 : 30
+          const siguiente = new Date()
+          siguiente.setDate(siguiente.getDate() + dias)
+          await sb.from('subscriptions').update({
+            proximo_envio: siguiente.toISOString().split('T')[0],
+            updated_at: new Date().toISOString(),
+          }).eq('id', s.id)
+          results.renovaciones++
+        }
+      } catch (e: any) {
+        console.error('[cron/wa-daily] recordatorio suscripción:', s.id, e.message)
+        results.errores++
+      }
+    }
+  } catch (e) { console.error('[cron/wa-daily] recordatorios suscripcion:', e) }
 
   // ─────────────────────────────────────────────────────
   // 4. CARRITOS ABANDONADOS — de las últimas 24h
