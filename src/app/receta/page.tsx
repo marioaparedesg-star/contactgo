@@ -96,14 +96,15 @@ export default function RecetaPage() {
     await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
     // Guardar receta como lead anónimo (backup, por si cerraron el pop-up sin llenar)
-    try {
-      createClient().from('calculator_leads').insert({
-        nombre: null, email: null, telefono: null,
+    // Vía endpoint server-side — el navegador ya no escribe directo a la tabla
+    fetch('/api/calculator-leads/save', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         od_sph: rx.od.sph, od_cyl: rx.od.cyl, od_axis: rx.od.axis,
         oi_sph: rx.oi.sph, oi_cyl: rx.oi.cyl, oi_axis: rx.oi.axis,
         tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
-      }).then(() => {})
-    } catch {}
+      }),
+    }).catch(() => {})
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
   }
 
@@ -116,24 +117,31 @@ export default function RecetaPage() {
     if (!pendingRx) return
     if (!leadNombre.trim() || !leadEmail.trim()) { toast.error('Ingresa nombre y correo'); return }
     const conv = convertGlassesToContacts(pendingRx)
-    const { error } = await createClient().from('calculator_leads').upsert({
-      nombre: leadNombre.trim(),
-      email: leadEmail.trim().toLowerCase(),
-      telefono: leadTelefono.replace(/\D/g,'') || null,
-      od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
-      oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
-      tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
-    }, { onConflict: 'email' })
-    if (error) {
-      console.error('[calculator_leads] Error guardando lead:', error)
-      // No bloqueamos la experiencia del cliente, pero sí queda visible en consola
-      // para detectar futuros problemas de guardado de inmediato (no en silencio).
-    } else {
+    let saveOk = false
+    try {
+      const res = await fetch('/api/calculator-leads/save', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: leadNombre.trim(),
+          email: leadEmail.trim().toLowerCase(),
+          telefono: leadTelefono.replace(/\D/g,'') || null,
+          od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
+          oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
+          tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
+        }),
+      })
+      const data = await res.json()
+      saveOk = !!data.ok
+      if (!saveOk) console.error('[calculator-leads] Error guardando:', data)
+    } catch (e) {
+      console.error('[calculator-leads] Excepción guardando:', e)
+    }
+    if (saveOk) {
       trackEvento('lead_captured', { tipo_receta: conv.tipo, has_phone: !!leadTelefono })
     }
     setLeadCaptured(true)
     setShowLead(false)
-    toast.success('¡Datos guardados! Calculando tu receta...')
+    toast.success(saveOk ? '¡Datos guardados! Calculando tu receta...' : 'Calculando tu receta...')
     await ejecutarCalculo(pendingRx)
   }
   const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null) }
