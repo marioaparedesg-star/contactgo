@@ -10,7 +10,7 @@ import ProductFAQ from '@/components/shop/ProductFAQ'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import { useCartStore } from '@/lib/cart-store'
-import { trackEcommerce, trackBuyNow, trackEyeFlow, sendCAPI } from '@/lib/analytics'
+import { trackEcommerce, trackBuyNow, trackEyeFlow, sendCAPI, generateEventId } from '@/lib/analytics'
 import type { Product } from '@/types'
 import toast from 'react-hot-toast'
 import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
@@ -624,18 +624,19 @@ export default function ProductoClient({ product, variants }: Props) {
 
     const ojoMsg = ojoMode === 'AMBOS' ? 'para ambos ojos' : ojoMode === 'OD' ? '— ojo derecho' : '— ojo izquierdo'
     toast.success(`¡Listo! ${ojoMsg} agregado al carrito 🛍️`)
+    const addToCartEventId = generateEventId()
     trackEcommerce('add_to_cart', {
       items: [{ item_id: product.id, item_name: product.nombre,
         item_brand: (product as any).marca ?? '',
         price, quantity: qty }],
-    })
-    // CAPI server-side — evento AddToCart sin depender del Pixel
+    }, addToCartEventId)
+    // CAPI server-side — mismo eventId que el Pixel para deduplicación en Meta
     sendCAPI('AddToCart', {
       value: price * qty,
       currency: 'DOP',
       content_ids: [product.id],
       num_items: qty,
-    })
+    }, undefined, addToCartEventId)
     return true
   }
 

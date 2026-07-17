@@ -36,9 +36,20 @@ const FB_MAP: Partial<Record<EcommerceEvent, string>> = {
   add_to_wishlist: 'AddToWishlist',
 }
 
+// ── Deduplicación Pixel + CAPI ────────────────────────────────────────────
+// Meta necesita el MISMO event_id en el evento del navegador (Pixel) y en
+// el evento del servidor (CAPI) para reconocerlos como el mismo evento y
+// no contarlo dos veces. Sin esto, Meta reporta 0% de cobertura de
+// deduplicación aunque ambos canales estén funcionando correctamente.
+export function generateEventId(): string {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`
+}
+
 export function trackEcommerce(
   event: EcommerceEvent,
-  data: { items: EcommerceItem[]; value?: number; transaction_id?: string; currency?: string }
+  data: { items: EcommerceItem[]; value?: number; transaction_id?: string; currency?: string },
+  eventId?: string
 ) {
   if (typeof window === 'undefined') return
 
@@ -53,7 +64,7 @@ export function trackEcommerce(
     ecommerce: { currency, value, items: data.items, transaction_id: data.transaction_id },
   })
 
-  // Meta Pixel
+  // Meta Pixel — eventID como 3er argumento habilita la deduplicación con CAPI
   const fbEvent = FB_MAP[event]
   if (fbEvent && window.fbq) {
     window.fbq('track', fbEvent, {
@@ -62,7 +73,7 @@ export function trackEcommerce(
       value,
       currency,
       num_items: data.items.length,
-    })
+    }, eventId ? { eventID: eventId } : undefined)
   }
 }
 
@@ -205,14 +216,15 @@ export function trackWhatsappHelp(source: 'no_seguro' | 'pdp' | 'cart' | 'checko
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({ event: 'whatsapp_contact_clicked', source })
 
+  const eventId = generateEventId()
+
   if (window.fbq) {
     // Evento estándar — usable directamente en optimización de campañas de Meta
-    window.fbq('track', 'Contact', { content_name: 'whatsapp_click', source })
+    window.fbq('track', 'Contact', { content_name: 'whatsapp_click', source }, { eventID: eventId })
   }
 
-  // CAPI server-side — duplicado para no depender solo del Pixel del navegador
-  // (ad blockers, Safari ITP, etc. no afectan este envío)
-  sendCAPI('Contact', { content_ids: [source] })
+  // CAPI server-side — mismo eventId para que Meta lo deduplique con el del Pixel
+  sendCAPI('Contact', { content_ids: [source] }, undefined, eventId)
 }
 
 // ── Facebook Conversions API (CAPI) — server-side duplicate ──────────────
@@ -233,7 +245,8 @@ export async function sendCAPI(
     firstName?: string
     fbp?: string   // cookie _fbp
     fbc?: string   // cookie _fbc
-  }
+  },
+  eventId?: string  // MISMO id usado en fbq(...) del Pixel, para deduplicación
 ) {
   if (typeof window === 'undefined') return
 
@@ -253,7 +266,7 @@ export async function sendCAPI(
     await fetch('/api/fb-events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ eventName, eventData, userData: mergedUserData }),
+      body: JSON.stringify({ eventName, eventData, userData: mergedUserData, eventId }),
     })
   } catch {
     // CAPI es best-effort — no bloquear el flujo del usuario

@@ -1,6 +1,6 @@
 'use client'
 import { descuentoPct, labelFrecuencia, labelDescuento, proxEnvio } from '@/lib/subscription-utils'
-import { trackEcommerce, trackCheckoutReviewed, trackAzulRedirect, sendCAPI } from '@/lib/analytics'
+import { trackEcommerce, trackCheckoutReviewed, trackAzulRedirect, sendCAPI, generateEventId } from '@/lib/analytics'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -39,17 +39,18 @@ export default function CheckoutPage() {
       const cartItems = useCartStore.getState().items
       if (cartItems && cartItems.length > 0) {
         const value = cartItems.reduce((s: number, i: any) => s + i.precio * (i.quantity ?? 1), 0)
+        const checkoutEventId = generateEventId()
         trackEcommerce('begin_checkout', {
           items: cartItems.map((i: any) => ({ item_id: i.id, item_name: i.nombre, item_brand: i.marca ?? '', price: i.precio, quantity: i.quantity ?? 1 })),
           value
-        })
-        // CAPI server-side — pasa por restricciones de categoría
+        }, checkoutEventId)
+        // CAPI server-side — mismo eventId que el Pixel para deduplicación
         sendCAPI('InitiateCheckout', {
           value,
           currency: 'DOP',
           content_ids: cartItems.map((i: any) => i.id),
           num_items: cartItems.length,
-        })
+        }, undefined, checkoutEventId)
       }
     } catch {}
   }, [])

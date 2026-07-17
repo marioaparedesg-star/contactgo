@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json()
-    const { eventName, eventData, userData } = body
+    const { eventName, eventData, userData, eventId } = body
 
     // Blindaje: nunca enviar a Meta un evento sin event_name válido —
     // esto es lo que Meta reporta como "s2s_missing_event_name" y hace
@@ -44,6 +44,11 @@ export async function POST(req: NextRequest) {
         fbc: userData?.fbc ?? null,
       },
     }
+
+    // event_id compartido con el Pixel del navegador — permite que Meta
+    // deduplique este evento de servidor con el equivalente del cliente
+    // en vez de contarlos como dos eventos distintos.
+    if (eventId) event.event_id = eventId
 
     if (userData?.email) event.user_data.em = [hashValue(userData.email)]
     if (userData?.phone) event.user_data.ph = [hashValue(userData.phone.replace(/\D/g, ''))]

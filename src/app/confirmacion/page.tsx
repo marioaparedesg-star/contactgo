@@ -119,6 +119,10 @@ function ConfirmacionContent() {
         const alreadyTracked = sessionStorage.getItem(`tracked_${orderId}`)
         if (!alreadyTracked) {
           sessionStorage.setItem(`tracked_${orderId}`, '1')
+          // event_id determinístico basado en la orden — si algo se recarga,
+          // sigue siendo el mismo ID (no uno aleatorio nuevo), y permite que
+          // Meta deduplique Pixel + CAPI para el evento de compra más importante.
+          const purchaseEventId = `purchase_${o.numero_orden ?? orderId}`
           trackEcommerce('purchase', {
             transaction_id: o.numero_orden ?? orderId ?? '',
             value: Number(o.total ?? 0),
@@ -131,8 +135,8 @@ function ConfirmacionContent() {
               price:         Number(item.precio ?? 0),
               quantity:      Number(item.cantidad ?? 1),
             })),
-          })
-          // ── Meta CAPI (server-side) — confiable sin importar browser/blocker ──
+          }, purchaseEventId)
+          // ── Meta CAPI (server-side) — mismo eventId que el Pixel ──
           sendCAPI('Purchase', {
             value: Number(o.total ?? 0),
             currency: 'DOP',
@@ -143,7 +147,7 @@ function ConfirmacionContent() {
             email: o.cliente_email ?? undefined,
             phone: o.cliente_telefono ?? undefined,
             firstName: o.cliente_nombre?.split(' ')[0] ?? undefined,
-          })
+          }, purchaseEventId)
         }
       }
       })
