@@ -485,6 +485,28 @@ export async function POST(req: NextRequest) {
       console.log('[notify] Email admin ya enviado antes, se omite duplicado:', adminTemplate, order_id)
     }
 
+    // Marcar lead de calculadora como convertido cuando su email/teléfono
+    // coincide con un pedido nuevo. No bloqueante: si falla, no afecta el
+    // resto del flujo de notificación.
+    if (evento === 'nuevo_pedido') {
+      try {
+        if (order.cliente_email) {
+          await sbAdmin.from('calculator_leads')
+            .update({ convertido: true, order_id: order_id })
+            .eq('email', order.cliente_email.toLowerCase().trim())
+            .eq('convertido', false)
+        }
+        if (order.cliente_telefono) {
+          await sbAdmin.from('calculator_leads')
+            .update({ convertido: true, order_id: order_id })
+            .eq('telefono', order.cliente_telefono)
+            .eq('convertido', false)
+        }
+      } catch (e) {
+        console.error('[notify] Error marcando lead como convertido:', e)
+      }
+    }
+
     // Registrar recompra automáticamente para pedidos nuevos
     if (evento === 'nuevo_pedido') {
       try {
@@ -494,6 +516,28 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({ order_id })
         })
       } catch (e) { /* no bloquear si falla */ }
+
+      // Marcar como convertido el lead de la calculadora que originó esta compra
+      // (match por email o teléfono). No bloqueante: si falla, el pedido sigue su curso.
+      try {
+        const telefonoOrden = order.cliente_telefono ? String(order.cliente_telefono).replace(/\D/g, '') : null
+        let query = sbAdmin.from('calculator_leads').update({ convertido: true, order_id }).eq('convertido', false)
+        if (order.cliente_email && telefonoOrden) {
+          query = query.or(`email.eq.${order.cliente_email},telefono.eq.${telefonoOrden}`)
+        } else if (order.cliente_email) {
+          query = query.eq('email', order.cliente_email)
+        } else if (telefonoOrden) {
+          query = query.eq('telefono', telefonoOrden)
+        } else {
+          query = null as any
+        }
+        if (query) {
+          const { error: convError } = await query
+          if (convError) console.error('[notify] calculator_leads convertido error:', convError.message)
+        }
+      } catch (e) {
+        console.error('[notify] calculator_leads convertido excepción:', e)
+      }
     }
 
     return NextResponse.json({ ok: true })

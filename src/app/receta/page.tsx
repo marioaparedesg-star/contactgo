@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/ui/Navbar'
@@ -95,22 +95,28 @@ export default function RecetaPage() {
     const conv = convertGlassesToContacts(rx, rxSource ?? 'contacto'); setResult(conv); setCartAdded(null)
     await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
-    // Guardar receta como lead anónimo (backup, por si cerraron el pop-up sin llenar)
-    // Vía endpoint server-side — el navegador ya no escribe directo a la tabla
-    fetch('/api/calculator-leads/save', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        od_sph: rx.od.sph, od_cyl: rx.od.cyl, od_axis: rx.od.axis,
-        oi_sph: rx.oi.sph, oi_cyl: rx.oi.cyl, oi_axis: rx.oi.axis,
-        tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
-      }),
-    }).catch(() => {})
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
   }
 
-  // Cerrar pop-up sin llenar datos → mostrar resultados igual
+  // Cerrar pop-up sin llenar datos → mostrar resultados igual.
+  // Guardamos UNA sola vez por sesión un lead anónimo de respaldo (antes esto
+  // se disparaba en cada cálculo, incluso justo después de capturar el lead
+  // con nombre/email, generando un registro duplicado "Sin nombre" cada vez).
+  const anonSavedRef = useRef(false)
   const skipLeadAndCalculate = () => {
     setShowLead(false)
+    if (!leadCaptured && !anonSavedRef.current && pendingRx) {
+      anonSavedRef.current = true
+      const conv = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto')
+      fetch('/api/calculator-leads/save', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
+          oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
+          tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
+        }),
+      }).catch(() => {})
+    }
     if (pendingRx) ejecutarCalculo(pendingRx)
   }
   const handleLeadSubmit = async () => {
