@@ -1,8 +1,8 @@
 // ============================================================
 // ContactGo — Cron cancelación automática de pedidos pendientes
-// Ejecuta cada hora (antes: diario 3am DR) — así el umbral real
-// de "más de 3h pendiente" se cumple de verdad y no espera hasta
-// 24-27h por la siguiente corrida diaria.
+// Ejecuta diariamente 3am DR — Vercel Hobby plan solo permite
+// crons diarios (Pro habilita frecuencia horaria/mayor si se
+// necesita cancelar más cerca de las 3h reales de espera).
 // Usa SERVICE_ROLE (bypass RLS) para poder ejecutar el UPDATE
 // AZUL intacto: este endpoint NO toca nada de AZUL
 // ============================================================
