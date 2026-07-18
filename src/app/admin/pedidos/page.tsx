@@ -279,7 +279,7 @@ export default function PedidosPage() {
                         <div key={idx} className="flex gap-2 text-sm">
                           <div className="flex-1">
                             <p className="font-medium text-gray-800 text-xs">{i.nombre}</p>
-                            {(i.sph!=null||i.cyl||i.axis) && (
+                            {(i.sph!=null||i.cyl||i.axis||i.color||i.add_power) && (
                               <p className="text-[10px] text-blue-600 font-mono">
                                 {(() => {
                                   const parts = []
@@ -290,6 +290,8 @@ export default function PedidosPage() {
                                   else if (i.sph != null) parts.push(`SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
                                   if (i.cyl) parts.push(`CYL ${i.cyl}`)
                                   if (i.axis) parts.push(`${i.axis}°`)
+                                  if (i.add_power) parts.push(`ADD +${i.add_power}`)
+                                  if (i.color) parts.push(`🎨 ${i.color}`)
                                   return parts.filter(Boolean).join(' · ') || '—'
                                 })()}
                               </p>
