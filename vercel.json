@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/cancelar-pendientes",
-      "schedule": "0 7 * * *"
+      "schedule": "0 * * * *"
     }
   ]
 }
