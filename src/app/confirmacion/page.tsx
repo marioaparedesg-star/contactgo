@@ -4,7 +4,8 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { getEntrega } from '@/lib/delivery-times'
-import { CheckCircle, Package, MapPin, CreditCard, MessageCircle, ChevronRight, XCircle } from 'lucide-react'
+import { CheckCircle, Package, MapPin, CreditCard, ChevronRight, XCircle } from 'lucide-react'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import { fmtSph } from '@/lib/sph-utils'
 import { trackEcommerce, sendCAPI } from '@/lib/analytics'
 import GoogleCustomerReviewsOptIn from '@/components/trust/GoogleCustomerReviews'
@@ -203,7 +204,7 @@ function ConfirmacionContent() {
           </Link>
           <a href={`https://wa.me/${waNumber}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-gray-200 text-sm text-gray-600 font-medium hover:bg-gray-50 transition-colors">
-            <MessageCircle className="w-4 h-4 text-green-500" /> ¿Necesitas ayuda?
+            <WhatsAppIcon className="w-4 h-4 text-green-500" /> ¿Necesitas ayuda?
           </a>
         </div>
       </div>
@@ -432,7 +433,7 @@ function ConfirmacionContent() {
           )}
           <a href={`https://wa.me/${waNumber}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
             className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm">
-            <MessageCircle className="w-4 h-4 text-green-500" /> ¿Preguntas? Escríbenos por WhatsApp
+            <WhatsAppIcon className="w-4 h-4 text-green-500" /> ¿Preguntas? Escríbenos por WhatsApp
           </a>
           {/* ⭐ Reseña Google — justo cuando el cliente está más feliz */}
           {order.pago_estado === 'pagado' && (

@@ -4,8 +4,9 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingBag, Package, Users, BarChart2,
   Repeat, ShoppingCart, TrendingUp, Tag, Settings, ChevronLeft,
-  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText, Scan, AlertTriangle, CheckCircle, DollarSign, MessageCircle
+  ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText, Scan, AlertTriangle, CheckCircle, DollarSign
 } from 'lucide-react'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
@@ -37,7 +38,7 @@ const NAV_SECTIONS = [
       { href: '/admin/leads',         icon: TrendingUp,      label: '🎯 Leads Calculadora', badge: null },
       { href: '/admin/registrados',   icon: Users,           label: '👥 Registrados',  badge: null },
       { href: '/admin/abandonados',   icon: ShoppingCart,    label: 'Abandonados',    badge: null },
-      { href: '/admin/whatsapp',      icon: MessageCircle,   label: '💬 WhatsApp',     badge: 'whatsapp' },
+      { href: '/admin/whatsapp',      icon: WhatsAppIcon,    label: '💬 WhatsApp',     badge: 'whatsapp' },
       { href: '/admin/whatsapp-automation', icon: Repeat,    label: '⚡ Automatización', badge: null },
     ]
   },

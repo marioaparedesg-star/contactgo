@@ -7,9 +7,10 @@ import Footer from '@/components/ui/Footer'
 import { LoyaltySection } from '@/components/ui/LoyaltySection'
 import {
   User, Package, MapPin, Phone, Mail, Edit2, Check, X, Plus, Trash2, LogOut,
-  ChevronRight, FileText, CreditCard, MessageCircle, Lock, Fingerprint, ShieldCheck,
+  ChevronRight, FileText, CreditCard, Lock, Fingerprint, ShieldCheck,
   Eye, EyeOff, KeyRound, Repeat, Calendar, RefreshCw
 } from 'lucide-react'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import LocationPicker, { type LocationData } from '@/components/ui/LocationPicker'
 
 // ─── WebAuthn helpers ────────────────────────────────────────────────────────
@@ -1861,7 +1862,7 @@ export default function CuentaPage() {
             <a href={"https://wa.me/18096942268?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mi%20pedido%20%23"+selectedPedido.id.slice(-6).toUpperCase()}
               target="_blank"
               className="flex items-center justify-center gap-2 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-2xl font-semibold text-sm transition-colors">
-              <MessageCircle className="w-4 h-4" />
+              <WhatsAppIcon className="w-4 h-4" />
               Consultar por WhatsApp
             </a>
           </div>

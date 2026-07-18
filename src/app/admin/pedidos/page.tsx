@@ -2,7 +2,8 @@
 export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Search, X, Printer, MessageCircle, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation } from 'lucide-react'
+import { Search, X, Printer, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation } from 'lucide-react'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import toast from 'react-hot-toast'
 
 const ESTADOS = ['activos','pagados','declinados','todos','pendiente','confirmado','preparando','enviado','entregado','cancelado']
@@ -378,7 +379,7 @@ export default function PedidosPage() {
                   </div>
                   <button onClick={()=>window.open(`https://wa.me/${selected.cliente_telefono?.replace(/\D/g,'')}?text=Hola+${encodeURIComponent(selected.cliente_nombre?.split(' ')[0]??'')}+tu+pedido+%23${selected.numero_orden??selected.id.slice(-8)}+está+${selected.estado}`,'_blank')}
                     className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700">
-                    <MessageCircle className="w-3.5 h-3.5"/>WA
+                    <WhatsAppIcon className="w-3.5 h-3.5"/>WA
                   </button>
                   {selected.lat && selected.lng && (
                     <button onClick={()=>window.open(`https://www.google.com/maps?q=${selected.lat},${selected.lng}`,'_blank')}

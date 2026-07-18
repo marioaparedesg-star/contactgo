@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
-import { MessageCircle, RefreshCw, CheckCircle2, XCircle, ShoppingCart, Package, Star, Repeat } from 'lucide-react'
+import { RefreshCw, CheckCircle2, XCircle, ShoppingCart, Package, Star, Repeat } from 'lucide-react'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 
 type LogEntry = {
   id: string
@@ -82,7 +83,7 @@ export default function WhatsAppAutomationDashboard() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-            <MessageCircle className="w-5 h-5 text-green-600" />
+            <WhatsAppIcon className="w-5 h-5 text-green-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">Automatizaciones WhatsApp</h1>
@@ -124,7 +125,7 @@ export default function WhatsAppAutomationDashboard() {
             </div>
           ) : (
             logs.map(log => {
-              const info = TIPO_INFO[log.tipo] ?? { label: log.tipo, icon: MessageCircle, color: 'bg-gray-100 text-gray-700' }
+              const info = TIPO_INFO[log.tipo] ?? { label: log.tipo, icon: WhatsAppIcon, color: 'bg-gray-100 text-gray-700' }
               const Icon = info.icon
               const isFailed = log.estado === 'failed'
               return (

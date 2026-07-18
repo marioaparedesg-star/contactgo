@@ -2,9 +2,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
 import {
-  MessageCircle, Send, ArrowLeft, Phone, Clock, Check, CheckCheck,
+  Send, ArrowLeft, Phone, Clock, Check, CheckCheck,
   Search, RefreshCw, Circle
 } from 'lucide-react'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 
 type Conversation = {
   phone: string
@@ -188,7 +189,7 @@ export default function WhatsAppInbox() {
           )}
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-              <MessageCircle className="w-5 h-5 text-green-600" />
+              <WhatsAppIcon className="w-5 h-5 text-green-600" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-gray-900">WhatsApp</h1>
@@ -225,7 +226,7 @@ export default function WhatsAppInbox() {
           <div className="flex-1 overflow-y-auto">
             {filteredConversations.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-                <MessageCircle className="w-12 h-12 text-gray-200 mb-3" />
+                <WhatsAppIcon className="w-12 h-12 text-gray-200 mb-3" />
                 <p className="text-sm text-gray-500 font-medium">Sin conversaciones</p>
                 <p className="text-xs text-gray-400 mt-1">Los mensajes entrantes aparecerán aquí</p>
               </div>
@@ -283,7 +284,7 @@ export default function WhatsAppInbox() {
             // Empty chat state
             <div className="flex-1 flex flex-col items-center justify-center text-center px-8">
               <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mb-4">
-                <MessageCircle className="w-10 h-10 text-green-300" />
+                <WhatsAppIcon className="w-10 h-10 text-green-300" />
               </div>
               <h3 className="text-lg font-semibold text-gray-700">ContactGo WhatsApp</h3>
               <p className="text-sm text-gray-400 mt-1 max-w-xs">

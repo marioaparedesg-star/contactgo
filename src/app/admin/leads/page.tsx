@@ -2,7 +2,8 @@
 export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Mail, MessageCircle, Search, Star, TrendingUp, Users, Eye } from 'lucide-react'
+import { Mail, Search, Star, TrendingUp, Users, Eye } from 'lucide-react'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 
 const GOOGLE_REVIEW = 'https://g.page/r/Cb-RwE6S9vzgEAE/review'
 
@@ -150,7 +151,7 @@ export default function LeadsPage() {
                     )}
                     <a href={waMsg(l)} target="_blank" rel="noopener noreferrer"
                       className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
-                      <MessageCircle className="w-3.5 h-3.5"/> WhatsApp
+                      <WhatsAppIcon className="w-3.5 h-3.5"/> WhatsApp
                     </a>
                     {l.convertido && (
                       <a href={GOOGLE_REVIEW} target="_blank" rel="noopener noreferrer"

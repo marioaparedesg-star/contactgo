@@ -2,7 +2,8 @@
 export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { X, MessageCircle, Pause, Play, XCircle, ChevronDown, ChevronUp, Repeat, Calendar, Phone, MapPin } from 'lucide-react'
+import { X, Pause, Play, XCircle, ChevronDown, ChevronUp, Repeat, Calendar, Phone, MapPin } from 'lucide-react'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import toast from 'react-hot-toast'
 
 const FRECUENCIA_LABEL: Record<string, string> = {
@@ -214,7 +215,7 @@ export default function SuscripcionesPage() {
                             <a href={`https://wa.me/${s.cliente_telefono.replace(/\D/g, '')}?text=Hola ${s.cliente_nombre}, te contactamos de ContactGo sobre tu suscripción.`}
                               target="_blank" rel="noopener noreferrer"
                               className="p-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-xl transition-colors">
-                              <MessageCircle className="w-4 h-4" />
+                              <WhatsAppIcon className="w-4 h-4" />
                             </a>
                           )}
                           {s.activa ? (
