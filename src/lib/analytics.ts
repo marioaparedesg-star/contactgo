@@ -230,6 +230,46 @@ export function trackWhatsappHelp(source: 'no_seguro' | 'pdp' | 'cart' | 'checko
 // ── Facebook Conversions API (CAPI) — server-side duplicate ──────────────
 // Envía eventos al servidor para que lleguen a Facebook sin depender del Pixel
 // Funciona aunque las restricciones de categoría bloqueen el Pixel del browser
+function getCookie(name: string) {
+  if (typeof document === 'undefined') return undefined
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+  return match ? match[2] : undefined
+}
+
+// _fbp es un cookie persistente que fbevents.js escribe de forma ASÍNCRONA
+// (el script se carga con async=true). En la primera pageview de una sesión
+// -sobre todo en clics desde un anuncio que caen directo a un PDP o a
+// checkout- puede que AddToCart/InitiateCheckout disparen ANTES de que el
+// script termine de cargar, y entonces _fbp/_fbc no existen todavía.
+// Esto bajaba el Event Match Quality de esos dos eventos (solo ip+UA, sin
+// fbp/fbc). Como sendCAPI ya es fire-and-forget (no bloquea la UI), esperamos
+// un poco por _fbp antes de enviar.
+async function waitForCookie(name: string, maxWaitMs = 1200, stepMs = 150): Promise<string | undefined> {
+  let waited = 0
+  let val = getCookie(name)
+  while (!val && waited < maxWaitMs) {
+    await new Promise(r => setTimeout(r, stepMs))
+    waited += stepMs
+    val = getCookie(name)
+  }
+  return val
+}
+
+// _fbc normalmente lo pone el Pixel a partir del parámetro ?fbclid= de la URL,
+// pero si el script todavía no cargó podemos construirlo nosotros mismos con
+// el mismo formato que usa Meta (fb.1.<timestamp>.<fbclid>) — no depende de
+// que fbevents.js haya corrido, solo de la URL actual.
+function getFbcFallback(): string | undefined {
+  if (typeof window === 'undefined') return undefined
+  try {
+    const fbclid = new URLSearchParams(window.location.search).get('fbclid')
+    if (!fbclid) return undefined
+    return `fb.1.${Date.now()}.${fbclid}`
+  } catch {
+    return undefined
+  }
+}
+
 export async function sendCAPI(
   eventName: 'Purchase' | 'AddToCart' | 'InitiateCheckout' | 'ViewContent' | 'PageView' | 'Contact',
   eventData?: {
@@ -250,15 +290,14 @@ export async function sendCAPI(
 ) {
   if (typeof window === 'undefined') return
 
-  // Obtener cookies de Facebook si no se pasaron
-  const getCookie = (name: string) => {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
-    return match ? match[2] : undefined
-  }
+  // Solo esperamos por _fbp/_fbc cuando el llamador no los pasó explícitamente
+  // (evita esperar innecesariamente en eventos que sí traen su propio userData)
+  const fbp = userData?.fbp ?? await waitForCookie('_fbp')
+  const fbc = userData?.fbc ?? getCookie('_fbc') ?? getFbcFallback()
 
   const mergedUserData = {
-    fbp: getCookie('_fbp'),
-    fbc: getCookie('_fbc'),
+    fbp,
+    fbc,
     ...userData,
   }
 
