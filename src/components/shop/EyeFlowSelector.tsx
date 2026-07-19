@@ -46,6 +46,7 @@ interface Props {
   needsCyl:    boolean   // tórico o multifocal tórico
   needsAdd:    boolean   // multifocal
   needsColor:  boolean   // lente de color
+  soloColor?:  boolean   // modalidad SIN GRADUACIÓN (plano): solo elige color
   sphOpts:     (number|string)[]
   sphMin?:     number
   sphMax?:     number
@@ -137,7 +138,7 @@ function SelectField({
 
 // ── Componente principal ──────────────────────────────────────────────────
 export default function EyeFlowSelector({
-  state, onChange, needsCyl, needsAdd, needsColor,
+  state, onChange, needsCyl, needsAdd, needsColor, soloColor = false,
   sphOpts, cylOpts, axisOpts, addOpts, colorOpts, prefilledRx,
   sphMin = -20, sphMax = 8, sphStep = 0.25, sphPlano = false
 }: Props) {
@@ -425,14 +426,21 @@ export default function EyeFlowSelector({
   const showDualRx   = s.ojoMode === 'AMBOS' && s.mismaReceta === false && !s.noEstaSeguro
 
   // Calcular progreso
-  const totalSteps = needsColor ? (needsCyl ? 5 : 4) : needsCyl ? 4 : needsAdd ? 4 : 3
+  // Modalidad SIN GRADUACIÓN: el único paso real es elegir el color.
+  const totalSteps = soloColor
+    ? 1
+    : needsColor ? (needsCyl ? 5 : 4) : needsCyl ? 4 : needsAdd ? 4 : 3
   let doneSteps = 0
-  if (s.ojoMode) doneSteps++
-  if (s.mismaReceta !== undefined) doneSteps++
-  if (!needsColor && s.sph) doneSteps++
-  if (needsColor && s.color) doneSteps++
-  if (needsCyl && s.cyl && s.axis) doneSteps++
-  if (needsAdd && s.add) doneSteps++
+  if (soloColor) {
+    if (s.color) doneSteps++
+  } else {
+    if (s.ojoMode) doneSteps++
+    if (s.mismaReceta !== undefined) doneSteps++
+    if (!needsColor && s.sph) doneSteps++
+    if (needsColor && s.color) doneSteps++
+    if (needsCyl && s.cyl && s.axis) doneSteps++
+    if (needsAdd && s.add) doneSteps++
+  }
   const progressPct = Math.min(100, Math.round((doneSteps / totalSteps) * 100))
 
   return (
@@ -491,10 +499,15 @@ export default function EyeFlowSelector({
           <p className="text-xs font-bold text-green-700">Una caja para ambos ojos</p>
         </div>
       )}
-      {step2a}
-      {showSingleRx && singleRxForm}
-      {showDualRx   && dualRxForm}
-      {(showSingleRx || showDualRx) && colorStep}
+      {/* SIN GRADUACIÓN (plano): el cliente solo elige color */}
+      {soloColor ? colorStep : (
+        <>
+          {step2a}
+          {showSingleRx && singleRxForm}
+          {showDualRx   && dualRxForm}
+          {(showSingleRx || showDualRx) && colorStep}
+        </>
+      )}
     </div>
   )
 }

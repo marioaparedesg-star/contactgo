@@ -178,6 +178,80 @@ function EyeSelector({ eye, onChange }: { eye: string; onChange: (v: string) => 
   )
 }
 
+/**
+ * ModalidadSelector — lentes de color
+ * Primer paso del PDP: el cliente decide si quiere el lente solo por el color
+ * (plano, sin corrección) o con su graduación. Cambia precio y flujo completo.
+ */
+function ModalidadSelector({
+  modalidad, onChange, precioPlano, precioGraduado,
+}: {
+  modalidad: 'plano' | 'graduado' | null
+  onChange: (m: 'plano' | 'graduado') => void
+  precioPlano: number
+  precioGraduado: number
+}) {
+  const opts = [
+    {
+      val: 'plano' as const,
+      titulo: 'Sin graduación',
+      sub: 'Plano · solo color',
+      precio: precioPlano,
+      icono: '🎨',
+      nota: 'No necesitas receta',
+    },
+    {
+      val: 'graduado' as const,
+      titulo: 'Con graduación',
+      sub: 'Según tu receta',
+      precio: precioGraduado,
+      icono: '👁️',
+      nota: 'Corrige tu visión',
+    },
+  ]
+  return (
+    <div className="space-y-2 mb-3">
+      <p className="text-xs font-bold text-gray-700">
+        ¿Cómo los quieres? <span className="text-red-500">*</span>
+      </p>
+      <div className="grid grid-cols-2 gap-2">
+        {opts.map(o => {
+          const activo = modalidad === o.val
+          return (
+            <button
+              key={o.val}
+              type="button"
+              onClick={() => onChange(o.val)}
+              aria-pressed={activo}
+              className={`relative rounded-2xl border-2 p-3 text-left transition-all ${
+                activo
+                  ? 'border-primary-600 bg-primary-50 ring-2 ring-primary-200'
+                  : 'border-gray-200 bg-white hover:border-gray-300'
+              }`}
+              style={{ minHeight: '104px' }}
+            >
+              {activo && (
+                <span className="absolute top-2 right-2 text-primary-600 text-sm font-black">✓</span>
+              )}
+              <span className="block text-lg leading-none mb-1">{o.icono}</span>
+              <span className="block text-[13px] font-black text-gray-900 leading-tight">{o.titulo}</span>
+              <span className="block text-[10px] text-gray-500 leading-tight mb-1.5">{o.sub}</span>
+              <span className="block text-sm font-black text-primary-700">
+                RD${o.precio.toLocaleString()}
+              </span>
+              <span className="block text-[9px] text-gray-400 leading-tight">{o.nota}</span>
+            </button>
+          )
+        })}
+      </div>
+      {!modalidad && (
+        <p className="text-[10px] text-gray-400">Elige una opción para continuar</p>
+      )}
+    </div>
+  )
+}
+
+
 // ─────────────────────────────────────────────────────────────────────────────
 // normalizeAdd: separa la clave interna del label descriptivo visible al cliente
 //
@@ -400,6 +474,14 @@ export default function ProductoClient({ product, variants }: Props) {
   const [precioBase, setPrecioBase] = useState(product.precio ?? 0) // precio con size, sin descuento suscripción
   const [suscripcion, setSuscripcion] = useState<string | null>(null)
 
+  // ── MODALIDAD para lentes de color: 'plano' (sin graduación) | 'graduado' ──
+  // El precio plano vive en products.variantes -> { plano: { precio: N } }
+  const precioPlano: number | null =
+    (product as any)?.variantes?.plano?.precio != null
+      ? Number((product as any).variantes.plano.precio)
+      : null
+  const [modalidad, setModalidad] = useState<'plano' | 'graduado' | null>(null)
+
   const tipo       = product.tipo ?? ''
   const getEntregaInfo = getEntrega(tipo, product.nombre, eyeFlow.sph)
   const sku        = product.sku ?? ''
@@ -446,7 +528,9 @@ export default function ProductoClient({ product, variants }: Props) {
   // Esféricos y color: mantienen la validación de stock real.
   // Color: ahora también se valida el stock. Si color+SPH agotado → sinVariante=true → botón 'Agotado'
   // Excepción: tórico y multifocal son fabricación especial (siempre habilitados)
-  const sinVariante = isLente && !isToric && !isMulti && sph !== '' && (
+  // Lentes de color con opción plano: no se puede comprar sin elegir modalidad
+  const faltaModalidad = isColor && precioPlano != null && !modalidad
+  const sinVariante = faltaModalidad || isLente && !isToric && !isMulti && sph !== '' && (
     isColor ? (!!color && !varianteSeleccionadaTieneStock()) : !varianteSeleccionadaTieneStock()
   )
 
@@ -526,6 +610,8 @@ export default function ProductoClient({ product, variants }: Props) {
       const prices = SOLUTION_PRICES[sku]
       if (prices?.[size]) base = prices[size]
     }
+    // Sin graduación (plano): precio propio, más bajo que el graduado
+    if (isColor && modalidad === 'plano' && precioPlano != null) base = precioPlano
     setPrecioBase(base) // precio base con size, sin descuento de suscripción ni pack
     const descSub  = suscripcion ? DESCUENTOS[suscripcion] ?? 0 : 0
     // Pack 2 cajas: 5% real — se aplica sobre el precio unitario
@@ -533,7 +619,7 @@ export default function ProductoClient({ product, variants }: Props) {
     // Composición de descuentos: primero suscripción, luego pack
     const descTotal = 1 - (1 - descSub) * (1 - descPack)
     setPrice(Math.round(base * (1 - descTotal)))
-  }, [size, product.precio, sku, suscripcion, qty, isLente, isColor])
+  }, [size, product.precio, sku, suscripcion, qty, isLente, isColor, modalidad, precioPlano])
 
   const handleAdd = (): boolean => {
     const { ojoMode, mismaReceta,
@@ -555,6 +641,22 @@ export default function ProductoClient({ product, variants }: Props) {
         suscripcion: suscripcion ?? undefined,
       })
       toast.success('¡Perfecto! Lente agregado al carrito 🎉')
+      return true
+    }
+
+    // ── SIN GRADUACIÓN (plano): compra directa, solo necesita color ───
+    // Un lente plano es idéntico en ambos ojos: no se pide ojo ni receta.
+    if (isColor && modalidad === 'plano') {
+      addItem(product, {
+        cantidad:        qty,
+        ojo_mode:        'AMBOS',
+        misma_receta:    true,
+        sph:             0,
+        color:           color,
+        precio_override: price,
+        precio_original: precioBase,
+      })
+      toast.success('¡Listo! Agregado al carrito 🎉')
       return true
     }
 
@@ -794,9 +896,18 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BLOQUE 4: CONFIGURADOR DE RECETA */}
             <div className="px-4 pt-3 pb-2">
-              {isLente && (
+              {isColor && precioPlano != null && (
+                <ModalidadSelector
+                  modalidad={modalidad}
+                  onChange={setModalidad}
+                  precioPlano={precioPlano}
+                  precioGraduado={product.precio ?? 0}
+                />
+              )}
+              {isLente && !(isColor && precioPlano != null && !modalidad) && (
                   <EyeFlowSelector
                     state={eyeFlow} onChange={handleColorChange}
+                    soloColor={isColor && modalidad === 'plano'}
                     needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor}
                     sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts}
                     sphMin={Number(product.sph_min ?? -20)} sphMax={Number(product.sph_max ?? 8)}
@@ -825,7 +936,7 @@ export default function ProductoClient({ product, variants }: Props) {
             {/* BLOQUE 5: CTA MOBILE (inline, arriba de la sticky bar) */}
             <div className="px-4 pb-4 space-y-2">
               <EntregaHoy />
-              <button onClick={handleAdd} disabled={product.stock===0}
+              <button onClick={handleAdd} disabled={product.stock===0||faltaModalidad}
                 className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 text-white font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-primary-200/50 transition-all">
                 <ShoppingCart className="w-5 h-5" />
                 {sinVariante ? 'Elegir graduación primero' : 'Agregar al carrito'}
@@ -1015,7 +1126,10 @@ export default function ProductoClient({ product, variants }: Props) {
                   ))}
                 </div>
               )}
-              {isLente && (<EyeFlowSelector state={eyeFlow} onChange={handleColorChange} needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor} sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts}
+              {isColor && precioPlano != null && (
+                <ModalidadSelector modalidad={modalidad} onChange={setModalidad} precioPlano={precioPlano} precioGraduado={product.precio ?? 0} />
+              )}
+              {isLente && !(isColor && precioPlano != null && !modalidad) && (<EyeFlowSelector state={eyeFlow} onChange={handleColorChange} soloColor={isColor && modalidad === 'plano'} needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor} sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts}
                     sphMin={Number(product.sph_min ?? -20)} sphMax={Number(product.sph_max ?? 8)}
                     sphStep={Number(product.sph_step ?? 0.25)} sphPlano={Boolean(product.sph_plano)} />)}
               {isSolucion && sizes.length>0 && (
