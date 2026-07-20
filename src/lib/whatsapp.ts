@@ -206,3 +206,41 @@ export async function sendReviewRequest(data: {
   const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
   return sendTemplate(data.telefono, 'solicitar_resena', [nombre])
 }
+
+// ─── Enviar mensaje interactivo con botones (máx 3) ───
+export async function sendButtons(
+  to: string,
+  bodyText: string,
+  buttons: { id: string; title: string }[],
+  headerText?: string,
+  footerText?: string,
+) {
+  const phone = normalizePhone(to)
+  const res = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      messaging_product: 'whatsapp',
+      to: phone,
+      type: 'interactive',
+      interactive: {
+        type: 'button',
+        ...(headerText ? { header: { type: 'text', text: headerText } } : {}),
+        body: { text: bodyText },
+        ...(footerText ? { footer: { text: footerText } } : {}),
+        action: {
+          buttons: buttons.map(b => ({
+            type: 'reply',
+            reply: { id: b.id, title: b.title },
+          })),
+        },
+      },
+    }),
+  })
+  const data = await res.json()
+  if (data.error) throw new Error(JSON.stringify(data.error))
+  return data
+}
