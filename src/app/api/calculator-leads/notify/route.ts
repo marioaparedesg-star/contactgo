@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from 'next/server'
 // productos y precios que la persona vio en pantalla (el frontend los
 // pasa tras el cálculo). Así el mensaje y la web nunca se contradicen.
 //
-// Plantilla: cg_receta_lista (UTILITY) — 5 parámetros:
-// {{1}} nombre · {{2}} receta · {{3}} económico · {{4}} recomendado · {{5}} premium
+// Plantillas v2 (formato en bloques, fácil de leer en móvil):
+//   cg_receta_v2        → 6 params: nombre, ojos, condiciones, eco, rec, prem
+//   cg_receta_v2_unica  → 4 params: nombre, ojos, condiciones, producto
 
 const WA_PHONE_ID = '1237770472751989'
 
@@ -15,13 +16,38 @@ function fmtSph(v: number | null | undefined): string {
   return (n > 0 ? '+' : '') + n.toFixed(2)
 }
 
+/** Una línea por ojo — mucho más legible que todo junto */
+function buildOjos(b: any): string {
+  const linea = (label: string, sph: any, cyl: any, axis: any) => {
+    let s = `👁️ ${label}: ${fmtSph(sph)}`
+    if (cyl) s += `  cil ${Number(cyl).toFixed(2)}  eje ${axis}°`
+    return s
+  }
+  return [
+    linea('Derecho', b.od_sph, b.od_cyl, b.od_axis),
+    linea('Izquierdo', b.oi_sph, b.oi_cyl, b.oi_axis),
+  ].join('\n')
+}
+
+/** Condiciones separadas con · en vez de comas y paréntesis */
+function buildCondiciones(condiciones: any): string {
+  if (!Array.isArray(condiciones) || !condiciones.length) return 'Visión simple'
+  return condiciones.join(' · ')
+}
+
+/** Nombre en una línea, precio en otra — evita cortes feos */
+function fmtProducto(p: any): string {
+  const nombre = String(p.nombre).replace(/[®™]/g, '').trim()
+  return `${nombre}\n💰 RD$${Number(p.precio).toLocaleString()}`
+}
+
 export async function POST(req: NextRequest) {
   try {
     const token = process.env.WHATSAPP_TOKEN
     if (!token) return NextResponse.json({ ok: false, reason: 'no_token' }, { status: 500 })
 
     const b = await req.json()
-    const { nombre, telefono, od_sph, od_cyl, od_axis, oi_sph, oi_cyl, oi_axis, condiciones, productos } = b
+    const { nombre, telefono, condiciones, productos } = b
 
     if (!telefono) return NextResponse.json({ ok: false, reason: 'no_phone' }, { status: 400 })
     if (!Array.isArray(productos) || !productos.length) {
@@ -32,42 +58,29 @@ export async function POST(req: NextRequest) {
     let phone = String(telefono).replace(/\D/g, '')
     if (/^(809|829|849)/.test(phone) && phone.length === 10) phone = '1' + phone
 
-    // Receta en una línea (parámetros de plantilla no permiten saltos de línea)
-    let od = `OD ${fmtSph(od_sph)}`
-    if (od_cyl) od += ` CYL ${Number(od_cyl).toFixed(2)} EJE ${od_axis}°`
-    let oi = `OI ${fmtSph(oi_sph)}`
-    if (oi_cyl) oi += ` CYL ${Number(oi_cyl).toFixed(2)} EJE ${oi_axis}°`
-    const cond = Array.isArray(condiciones) && condiciones.length ? ` (${condiciones.join(', ')})` : ''
-    const receta = `${od} · ${oi}${cond}`
+    const ojos = buildOjos(b)
+    const cond = buildCondiciones(condiciones)
 
-    // Los 3 tiers vienen en orden [económico, recomendado, premium] del
-    // motor de recomendación. Deduplicar por si el motor repitió productos
-    // (pasa cuando solo hay 1-2 compatibles con la graduación).
-    const fmt = (p: any) => `${p.nombre} — RD$${Number(p.precio).toLocaleString()}`
+    // Deduplicar: el motor repite productos cuando solo hay 1-2 compatibles
     const seen = new Set<string>()
     const unique = productos.filter((p: any) => {
-      const k = p.nombre
-      if (seen.has(k)) return false
-      seen.add(k); return true
+      if (seen.has(p.nombre)) return false
+      seen.add(p.nombre); return true
     })
 
-    // 1 producto único → plantilla de producto único (sin renglones de relleno)
-    // 2 → mostrar económico y premium en la de tiers usando el mismo del medio
-    // 3+ → plantilla completa de 3 tiers
+    // 1 producto → plantilla única (sin renglones de relleno)
+    // 2+ → plantilla de 3 tiers
     let templateName: string
     let productParams: { type: string; text: string }[]
     if (unique.length === 1) {
-      templateName = 'cg_receta_lista_unica'
-      productParams = [{ type: 'text', text: fmt(unique[0]) }]
+      templateName = 'cg_receta_v2_unica'
+      productParams = [{ type: 'text', text: fmtProducto(unique[0]) }]
     } else {
-      templateName = 'cg_receta_lista'
-      const eco  = fmt(unique[0])
-      const rec  = fmt(unique[1] ?? unique[0])
-      const prem = fmt(unique[2] ?? unique[unique.length - 1])
+      templateName = 'cg_receta_v2'
       productParams = [
-        { type: 'text', text: eco },
-        { type: 'text', text: rec },
-        { type: 'text', text: prem },
+        { type: 'text', text: fmtProducto(unique[0]) },
+        { type: 'text', text: fmtProducto(unique[1] ?? unique[0]) },
+        { type: 'text', text: fmtProducto(unique[2] ?? unique[unique.length - 1]) },
       ]
     }
 
@@ -85,7 +98,8 @@ export async function POST(req: NextRequest) {
             type: 'body',
             parameters: [
               { type: 'text', text: (nombre || 'Cliente').split(' ')[0] },
-              { type: 'text', text: receta },
+              { type: 'text', text: ojos },
+              { type: 'text', text: cond },
               ...productParams,
             ]
           }]
