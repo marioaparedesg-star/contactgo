@@ -344,7 +344,7 @@ export default async function HomePage() {
                 { nombre: 'Feyilina P.', ciudad: 'Santo Domingo', fecha: 'Hace 1 semana', texto: 'Llevo 6 meses comprando en ContactGo. Siempre rápido, siempre certificados. Ya no compro en ningún otro lugar.', producto: 'Biofinity® Toric', avatar: 'FP', color: 'bg-green-100 text-green-700' },
                 { nombre: 'Ana G.', ciudad: 'La Romana', fecha: 'Hace 2 semanas', texto: 'Tengo astigmatismo alto y siempre era difícil encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'ACUVUE Oasys Astig.', avatar: 'AG', color: 'bg-orange-100 text-orange-700' },
                 { nombre: 'Roberto S.', ciudad: 'Bávaro', fecha: 'Hace 3 semanas', texto: 'Llegaron en 24h con empaque sellado. Originales garantizados. La experiencia de compra es increíble.', producto: 'Air Optix Colors', avatar: 'RS', color: 'bg-purple-100 text-purple-700' },
-                { nombre: 'Luisa V.', ciudad: 'Santo Domingo', fecha: 'Hace 1 mes', texto: 'La calidad es perfecta. El proceso de compra tardó menos de 3 minutos. Nunca más compro en otro lugar.', producto: '1-Day ACUVUE 90u', avatar: 'LV', color: 'bg-teal-100 text-teal-700' },
+                { nombre: 'Luisa V.', ciudad: 'Santo Domingo', fecha: 'Hace 1 mes', texto: 'La calidad es perfecta. El proceso de compra tardó menos de 3 minutos. Nunca más compro en otro lugar.', producto: '1-Day ACUVUE MOIST', avatar: 'LV', color: 'bg-teal-100 text-teal-700' },
               ].map((t, i) => (
                 <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col gap-3">
                   <div className="flex gap-0.5">
