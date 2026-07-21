@@ -13,7 +13,7 @@ export const metadata = {
   alternates: { canonical: 'https://www.contactgo.net/marca/bausch-lomb' },
   openGraph: {
     title: 'Lentes Bausch+Lomb en RD | ContactGo',
-    description: 'ContactGo — Bausch+Lomb ULTRA® y Biotrue® originales en República Dominicana. Entrega 24-48h.',
+    description: 'ContactGo — Bausch+Lomb ULTRA® y Biotrue® certificados en República Dominicana. Entrega 24-48h.',
     url: 'https://www.contactgo.net/marca/bausch-lomb',
     locale: 'es_DO',
     siteName: 'ContactGo',

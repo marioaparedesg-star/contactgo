@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const VALORES = [
   { icon: '🏥', title: 'Especialización total', desc: 'Solo lentes de contacto. No somos una óptica genérica — somos expertos en una sola cosa y la hacemos muy bien.' },
-  { icon: '✅', title: 'Originales. Siempre.', desc: 'Cada caja llega sellada de fábrica. Nunca usados, nunca reempacados, nunca vencidos. Lo que ves es exactamente lo que recibes.' },
+  { icon: '✅', title: 'Certificados. Siempre.', desc: 'Cada caja llega sellada de fábrica. Nunca usados, nunca reempacados, nunca vencidos. Lo que ves es exactamente lo que recibes.' },
   { icon: '🚀', title: 'Tu puerta, en 24-48h', desc: 'Pedido antes de las 3pm — sale hoy. Cubrimos Santo Domingo, Santiago, Punta Cana y todo el país. Sin excusas, sin demoras.' },
   { icon: '💬', title: 'Alguien que realmente sabe', desc: 'Cuando escribes a ContactGo, alguien que entiende de lentes te responde. No un bot, no un guión. Ayuda real para tu receta.' },
 ]
@@ -28,7 +28,7 @@ const MARCAS = [
 
 const STATS = [
   { valor: '4,200+', label: 'Pedidos cumplidos' },
-  { valor: '36',     label: 'Productos originales' },
+  { valor: '36',     label: 'Productos certificados' },
   { valor: '4',      label: 'Marcas de nivel mundial' },
   { valor: '24-48h', label: 'Tiempo de entrega' },
 ]
@@ -44,7 +44,7 @@ export default function SobreNosotrosPage() {
         "name": "ContactGo",
         "url": "https://www.contactgo.net",
         "logo": "https://www.contactgo.net/logo.png",
-        "description": "Tienda especializada en lentes de contacto originales en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Envío a domicilio en 24-48h.",
+        "description": "Tienda especializada en lentes de contacto certificados en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Envío a domicilio en 24-48h.",
         "foundingDate": "2026",
         "address": {
           "@type": "PostalAddress",
@@ -74,7 +74,7 @@ export default function SobreNosotrosPage() {
               Por qué existimos
             </h1>
             <p className="text-primary-100 text-lg max-w-xl mx-auto leading-relaxed">
-              Nacimos para resolver un problema real: conseguir lentes de contacto originales en República Dominicana era difícil, caro y lleno de incertidumbre. Lo cambiamos.
+              Nacimos para resolver un problema real: conseguir lentes de contacto certificados en República Dominicana era difícil, caro y lleno de incertidumbre. Lo cambiamos.
             </p>
           </div>
         </section>
@@ -99,7 +99,7 @@ export default function SobreNosotrosPage() {
               ContactGo nació de una pregunta simple: ¿por qué comprar lentes de contacto tiene que ser tan complicado? Visitas innecesarias, poca disponibilidad y ninguna garantía de autenticidad. Había una mejor forma de hacerlo — y decidimos crearla.
             </p>
             <p>
-              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — 100% originales, adquiridos a través de canales oficiales de cada marca.
+              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — sellados de fábrica, adquiridos a través de canales oficiales de cada marca.
             </p>
             <p>
               Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin lentes, y entrega en 24-48 horas a todo el país.
@@ -135,7 +135,7 @@ export default function SobreNosotrosPage() {
         {/* Marcas autorizadas */}
         <section className="bg-gray-50 py-16 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Productos 100% Originales</h2>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Sellados de fábrica</h2>
             <p className="text-gray-500 text-sm text-center mb-10">Trabajamos directamente con las mejores marcas del mundo</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {MARCAS.map(m => (

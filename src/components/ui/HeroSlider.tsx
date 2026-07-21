@@ -15,11 +15,11 @@ const SLIDES = [
     bg:         { from: '#020d1e', via: '#021535', to: '#031d4a' },
     glow:       'rgba(13,110,253,0.22)',
     image:      '/hero-lens-1.png',
-    imageAlt:   'Lentes de contacto originales República Dominicana',
+    imageAlt:   'Lentes de contacto certificados República Dominicana',
     stats:      [
       { num: 'DYNAMIC', label: 'lentes entregados' },
       { num: '24h',     label: 'entrega SD' },
-      { num: '100%',    label: 'originales' },
+      { num: '100%',    label: 'certificados' },
     ],
     tag: null, precio: null,
   },

@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Devoluciones y Garantías | ContactGo RD',
-  description: 'Política de devoluciones y garantías de ContactGo. Productos 100% originales con respaldo de marca.',
+  description: 'Política de devoluciones y garantías de ContactGo. Sellados de fábrica con respaldo de marca.',
   alternates: { canonical: 'https://www.contactgo.net/ayuda/devoluciones' },
   openGraph: {
     title: 'Devoluciones y Garantías | ContactGo RD',
-    description: 'Política de devoluciones y garantías de ContactGo. Productos 100% originales con respaldo de marca.',
+    description: 'Política de devoluciones y garantías de ContactGo. Sellados de fábrica con respaldo de marca.',
     url: 'https://www.contactgo.net/ayuda/devoluciones',
     locale: 'es_DO',
     siteName: 'ContactGo',
@@ -33,7 +33,7 @@ export default function DevolucionesPage() {
             { title: '💰 ¿Cómo recibo mi reembolso?', body: 'El reembolso se procesa por el mismo método de pago original dentro de 3 a 5 días hábiles tras recibir el producto devuelto.' },
             { title: '🔄 ¿Puedo cambiar por otro producto?', body: 'Sí. Si prefieres un cambio en lugar de reembolso, lo gestionamos sin costo adicional de envío.' },
             { title: '⚠️ Producto dañado o incorrecto', body: 'Si recibiste un producto dañado o diferente al pedido, contáctanos inmediatamente. Lo reemplazamos sin ningún costo para ti.' },
-            { title: '🛡️ Garantía de autenticidad', body: 'Todos nuestros productos son 100% originales y certificados. Garantizamos la autenticidad de cada producto vendido en ContactGo.' },
+            { title: '🛡️ Garantía de autenticidad', body: 'Todos nuestros productos son sellados de fábrica y certificados. Garantizamos la autenticidad de cada producto vendido en ContactGo.' },
           ].map(({ title, body }) => (
             <div key={title} className="border border-gray-100 rounded-2xl p-5">
               <p className="font-semibold text-gray-900 text-sm mb-2">{title}</p>

@@ -86,7 +86,7 @@ export default function Page() {
     <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-6 text-sm text-amber-900"><strong>Aviso médico:</strong> Ante molestias oculares consulta siempre a tu especialista.</div>
     <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
       <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en toda República Dominicana en 24-48h</h3>
-      <p className="text-sm text-gray-500 mb-4">100% originales · Pago seguro con AZUL/Banco Popular</p>
+      <p className="text-sm text-gray-500 mb-4">sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
         <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>

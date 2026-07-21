@@ -785,7 +785,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   </div>
                 )}
                 <span className="absolute top-2 left-2 text-[9px] font-bold text-green-700 bg-white border border-green-100 px-2 py-0.5 rounded-full shadow-sm">
-                  ✅ 100% Original
+                  ✅ Sellado de fábrica
                 </span>
                 {(product as any).proteccion_uv && (
                   <span className="absolute top-2 right-2 text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
@@ -887,7 +887,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BLOQUE 3: TRUST BAR — scroll horizontal */}
             <div className="flex gap-2 px-4 py-2 overflow-x-auto scrollbar-hide border-y border-gray-100">
-              {['✅ 100% Original','🔒 Pago AZUL','🚚 Envío RD','↩️ 7 días dev.','💬 WA 24/7'].map(t => (
+              {['✅ Sellado de fábrica','🔒 Pago AZUL','🚚 Envío RD','↩️ 7 días dev.','💬 WA 24/7'].map(t => (
                 <span key={t} className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">
                   {t}
                 </span>
@@ -1025,7 +1025,7 @@ export default function ProductoClient({ product, variants }: Props) {
             <div className="sticky top-20 self-start">
               <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm aspect-square">
                 <span className="absolute top-3 left-3 z-10 text-[9px] font-bold text-green-700 bg-white border border-green-100 px-2 py-1 rounded-full">
-                  ✅ 100% Original
+                  ✅ Sellado de fábrica
                 </span>
                 {imagenActual ? (
                   <Image src={imagenActual} alt={product.nombre} fill unoptimized priority
@@ -1061,7 +1061,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               )}
               <div className="grid grid-cols-2 gap-1.5 mt-3">
-                {[{icon:'✅',label:'100% Original'},{icon:'🚚',label:'Entrega rápida'},{icon:'🔒',label:'Pago AZUL'},{icon:'↩️',label:'7 días dev.'}].map(b => (
+                {[{icon:'✅',label:'Sellado de fábrica'},{icon:'🚚',label:'Entrega rápida'},{icon:'🔒',label:'Pago AZUL'},{icon:'↩️',label:'7 días dev.'}].map(b => (
                   <div key={b.label} className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
                     <span className="text-sm shrink-0">{b.icon}</span>
                     <span className="text-[10px] text-gray-600 font-medium leading-tight">{b.label}</span>

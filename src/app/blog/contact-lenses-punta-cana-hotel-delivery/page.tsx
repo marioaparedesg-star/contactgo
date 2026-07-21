@@ -3,15 +3,15 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
 export const metadata: Metadata = {
-  title: 'Contact Lenses Punta Cana | ContactGo Dominican Republic', description: 'Buy ACUVUE, Biofinity, Air Optix contact lenses in Punta Cana with delivery in 24-48h. Secure payment, 100% originals.',
+  title: 'Contact Lenses Punta Cana | ContactGo Dominican Republic', description: 'Buy ACUVUE, Biofinity, Air Optix contact lenses in Punta Cana with delivery in 24-48h. Secure payment, factory sealed.',
   alternates: { canonical: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery' },
-  openGraph: { type: 'article', title: 'Contact Lenses Delivery to Punta Cana Hotels — Same Day', description: 'Buy ACUVUE, Biofinity, Air Optix contact lenses in Punta Cana with delivery in 24-48h. Secure payment, 100% originals.', url: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery', siteName: 'ContactGo', locale: 'en-DO', images: [{ url: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery.webp', width: 1200, height: 630, alt: 'Contact Lenses Delivery to Punta Cana Hotels — Same Day' }] },
+  openGraph: { type: 'article', title: 'Contact Lenses Delivery to Punta Cana Hotels — Same Day', description: 'Buy ACUVUE, Biofinity, Air Optix contact lenses in Punta Cana with delivery in 24-48h. Secure payment, factory sealed.', url: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery', siteName: 'ContactGo', locale: 'en-DO', images: [{ url: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery.webp', width: 1200, height: 630, alt: 'Contact Lenses Delivery to Punta Cana Hotels — Same Day' }] },
 }
 export default function Page() {
   return (<><Navbar /><main className="max-w-2xl mx-auto px-4 py-12 pb-24">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
       {"@context":"https://schema.org","@type":"Article","headline":"Contact Lenses Delivery to Punta Cana Hotels — Same Day","author":{"@type":"Organization","name":"Equipo ContactGo"},"publisher":{"@type":"Organization","name":"ContactGo","url":"https://www.contactgo.net","logo":{"@type":"ImageObject","url":"https://www.contactgo.net/logo.png"}},"datePublished":"2026-07-02","dateModified":"2026-07-02","url":"https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery"},
-      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":'Do you deliver contact lenses in Punta Cana?',"acceptedAnswer":{"@type":"Answer","text":'Yes. ContactGo delivers ACUVUE, Biofinity and Air Optix originals to Punta Cana and surrounding areas in 24-48 hours. Secure payment with Visa or Mastercard.'}},{"@type":"Question","name":'How fast can I get contact lenses in Punta Cana?',"acceptedAnswer":{"@type":"Answer","text":'Orders placed before 3pm are typically delivered the next business day in Punta Cana. For faster service, message us on WhatsApp.'}},{"@type":"Question","name":'Do you accept international credit cards?',"acceptedAnswer":{"@type":"Answer","text":'Yes. We accept Visa and Mastercard through AZUL/Banco Popular. International cards are welcome.'}}]},
+      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":'Do you deliver contact lenses in Punta Cana?',"acceptedAnswer":{"@type":"Answer","text":'Yes. ContactGo delivers ACUVUE, Biofinity and Air Optix factory sealed to Punta Cana and surrounding areas in 24-48 hours. Secure payment with Visa or Mastercard.'}},{"@type":"Question","name":'How fast can I get contact lenses in Punta Cana?',"acceptedAnswer":{"@type":"Answer","text":'Orders placed before 3pm are typically delivered the next business day in Punta Cana. For faster service, message us on WhatsApp.'}},{"@type":"Question","name":'Do you accept international credit cards?',"acceptedAnswer":{"@type":"Answer","text":'Yes. We accept Visa and Mastercard through AZUL/Banco Popular. International cards are welcome.'}}]},
       {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.contactgo.net"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.contactgo.net/blog"},{"@type":"ListItem","position":3,"name":"Contact Lenses Delivery to Punta Cana Hotels — Sam","item":"https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery"}]}
     ]) }} />
     <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4"><a href="/" className="hover:text-primary-600">Inicio</a><span>/</span><a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span><span className="text-gray-600 truncate">Contact Lenses Delivery to Punta Cana Ho</span></div>
@@ -22,7 +22,7 @@ export default function Page() {
       <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Contact lens specialists · 5 min · Julio 2026</p></div>
     </div>
     <div className="space-y-8 text-gray-700 leading-relaxed">
-      <p>ContactGo delivers original contact lenses directly to your hotel or home in Punta Cana within 24-48 hours. ACUVUE, Biofinity, Air Optix — all 100% original, factory sealed.</p>
+      <p>ContactGo delivers original contact lenses directly to your hotel or home in Punta Cana within 24-48 hours. ACUVUE, Biofinity, Air Optix — all sellado de fábrica, factory sealed.</p>
       <section id="entrega">
         <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Delivery zones</h2>
         <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
@@ -30,7 +30,7 @@ export default function Page() {
           <p className="text-sm text-gray-600">Bavaro, Cap Cana, Arena Gorda, Uvero Alto</p>
           <div className="flex items-center gap-2 mt-3">
             <span className="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">24-48h delivery</span>
-            <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">100% originals</span>
+            <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">factory sealed</span>
           </div>
         </div>
       </section>
@@ -50,7 +50,7 @@ export default function Page() {
       <section id="faq">
         <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Frequently asked questions</h2>
         <div className="space-y-3">
-          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">Do you deliver contact lenses in Punta Cana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Yes. ContactGo delivers ACUVUE, Biofinity and Air Optix originals to Punta Cana and surrounding areas in 24-48 hours. Secure payment with Visa or Mastercard.</p></details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">Do you deliver contact lenses in Punta Cana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Yes. ContactGo delivers ACUVUE, Biofinity and Air Optix factory sealed to Punta Cana and surrounding areas in 24-48 hours. Secure payment with Visa or Mastercard.</p></details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">How fast can I get contact lenses in Punta Cana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Orders placed before 3pm are typically delivered the next business day in Punta Cana. For faster service, message us on WhatsApp.</p></details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">Do you accept international credit cards?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Yes. We accept Visa and Mastercard through AZUL/Banco Popular. International cards are welcome.</p></details>
         </div>
@@ -71,7 +71,7 @@ export default function Page() {
     </div>
     <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
       <h3 className="font-bold text-gray-900 text-lg mb-2">Receive in Punta Cana in 24-48h</h3>
-      <p className="text-sm text-gray-500 mb-4">100% originals · Factory sealed · Secure payment</p>
+      <p className="text-sm text-gray-500 mb-4">factory sealed · Factory sealed · Secure payment</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">View catalog →</a>
         <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calculate my prescription</a>

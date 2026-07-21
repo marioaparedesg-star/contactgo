@@ -9,10 +9,10 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto' },
   title: 'Lentes de Contacto en República Dominicana | ContactGo',
-  description: 'Compra lentes de contacto originales en República Dominicana. Acuvue, Air Optix, Biofinity, FreshLook. Entrega en 24-48h. Productos 100% Originales.',
+  description: 'Compra lentes de contacto certificados en República Dominicana. Acuvue, Air Optix, Biofinity, FreshLook. Entrega en 24-48h. Sellados de fábrica.',
   openGraph: {
     title: 'Lentes de Contacto en República Dominicana — ContactGo',
-    description: 'La tienda especializada #1 en lentes de contacto originales en RD.',
+    description: 'La tienda especializada #1 en lentes de contacto certificados en RD.',
     url: 'https://www.contactgo.net/lentes-de-contacto',
     siteName: 'ContactGo',
     locale: 'es_DO',
@@ -47,7 +47,7 @@ export default async function LentesContactoPage() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "name": "Lentes de Contacto en República Dominicana",
-    "description": "Los mejores lentes de contacto originales disponibles en República Dominicana",
+    "description": "Los mejores lentes de contacto disponibles en República Dominicana",
     "url": "https://www.contactgo.net/lentes-de-contacto",
     "numberOfItems": products?.length ?? 0,
   }
@@ -63,7 +63,7 @@ export default async function LentesContactoPage() {
               Lentes de Contacto en<br />República Dominicana
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
-              La tienda especializada #1 en lentes de contacto originales en RD. Acuvue, Air Optix, Biofinity y más marcas premium. Entrega en 24-48 horas.
+              La tienda especializada #1 en lentes de contacto certificados en RD. Acuvue, Air Optix, Biofinity y más marcas premium. Entrega en 24-48 horas.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/catalogo" className="bg-primary-600 text-white font-bold px-6 py-3 rounded-2xl hover:bg-primary-700 transition-all">Ver catálogo completo</Link>
@@ -82,7 +82,7 @@ export default async function LentesContactoPage() {
         <section className="max-w-4xl mx-auto px-4 py-10 border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Guía completa de lentes de contacto en República Dominicana</h2>
           <div className="prose prose-gray max-w-none text-sm leading-relaxed space-y-4 text-gray-700">
-            <p>Los lentes de contacto son dispositivos médicos de uso frecuente en República Dominicana para corregir problemas visuales como miopía, hipermetropía, astigmatismo y presbicia. ContactGo es la tienda especializada líder en RD para comprar lentes de contacto originales con entrega rápida a domicilio.</p>
+            <p>Los lentes de contacto son dispositivos médicos de uso frecuente en República Dominicana para corregir problemas visuales como miopía, hipermetropía, astigmatismo y presbicia. ContactGo es la tienda especializada líder en RD para comprar lentes de contacto certificados con entrega rápida a domicilio.</p>
             <p>En ContactGo encontrarás las principales marcas internacionales: <strong>ACUVUE® de Johnson & Johnson</strong>, la marca #1 de lentes de contacto mundialmente; <strong>Air Optix® y FreshLook® de Alcon</strong>, conocidos por su tecnología HydraGlyde; <strong>Biofinity® y Proclear® de CooperVision</strong>, con tecnología Aquaform; y <strong>Bausch+Lomb ULTRA®</strong> con tecnología MoistureSeal.</p>
             <p>Para comprar lentes de contacto graduados necesitas una prescripción vigente (no mayor a 1 año). Puedes subir tu receta directamente en nuestra web o enviárnosla por WhatsApp al (809) 694-2268. Nuestro equipo de soporte verifica que los parámetros sean correctos antes de procesar tu pedido.</p>
             <p>Los precios de lentes de contacto en ContactGo incluyen entrega a domicilio para lentes diarios hasta RD$18,000 para lentes multifocales tóricos de alta graduación. Ofrecemos precios competitivos porque adquirimos directamente de los distribuidores oficiales en RD, sin intermediarios adicionales.</p>

@@ -31,7 +31,7 @@ export default function Page() {
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
             "url": "https://www.contactgo.net/blog/bausch-lomb-ultra-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los Bausch+Lomb ULTRA en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo: Bausch+Lomb ULTRA esf\u00e9rico RD$4,500 (6u mensual), ULTRA for Astigmatism RD$4,000 (6u mensual), ULTRA for Presbyopia RD$4,100 (6u mensual), y Biotrue ONEday RD$3,500 (30u diario)."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 tecnolog\u00eda tienen los Bausch+Lomb ULTRA?", "acceptedAnswer": {"@type": "Answer", "text": "Los Bausch+Lomb ULTRA usan la tecnolog\u00eda patentada MoistureSeal\u00ae que retiene 95% de la humedad inicial durante 16 horas de uso. El material es monometacrilato de 2-hidroxietilo (2-HEMA), un hidrogel de silicona de \u00faltima generaci\u00f3n."}}, {"@type": "Question", "name": "\u00bfSon buenos los Bausch+Lomb ULTRA para ojos secos?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed. La tecnolog\u00eda MoistureSeal es especialmente efectiva para personas con tendencia a ojos secos. Es uno de los lentes m\u00e1s recomendados para uso en ambientes de aire acondicionado o frente a pantallas prolongadas."}}, {"@type": "Question", "name": "\u00bfD\u00f3nde comprar Bausch+Lomb ULTRA originales en RD?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo todos los Bausch+Lomb son 100% originales, sellados de f\u00e1brica. Entregamos en 24-48 horas en toda Rep\u00fablica Dominicana con pago seguro mediante AZUL/Banco Popular."}}] },
+            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los Bausch+Lomb ULTRA en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo: Bausch+Lomb ULTRA esf\u00e9rico RD$4,500 (6u mensual), ULTRA for Astigmatism RD$4,000 (6u mensual), ULTRA for Presbyopia RD$4,100 (6u mensual), y Biotrue ONEday RD$3,500 (30u diario)."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 tecnolog\u00eda tienen los Bausch+Lomb ULTRA?", "acceptedAnswer": {"@type": "Answer", "text": "Los Bausch+Lomb ULTRA usan la tecnolog\u00eda patentada MoistureSeal\u00ae que retiene 95% de la humedad inicial durante 16 horas de uso. El material es monometacrilato de 2-hidroxietilo (2-HEMA), un hidrogel de silicona de \u00faltima generaci\u00f3n."}}, {"@type": "Question", "name": "\u00bfSon buenos los Bausch+Lomb ULTRA para ojos secos?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed. La tecnolog\u00eda MoistureSeal es especialmente efectiva para personas con tendencia a ojos secos. Es uno de los lentes m\u00e1s recomendados para uso en ambientes de aire acondicionado o frente a pantallas prolongadas."}}, {"@type": "Question", "name": "\u00bfD\u00f3nde comprar Bausch+Lomb ULTRA certificados en RD?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo todos los Bausch+Lomb son sellados de fábrica, sellados de f\u00e1brica. Entregamos en 24-48 horas en toda Rep\u00fablica Dominicana con pago seguro mediante AZUL/Banco Popular."}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -85,7 +85,7 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
 
-          <p className="text-[11px] text-gray-400 text-center">*100% originales · Sellados de fábrica · Entrega 24-48h en toda RD · Junio 2026</p>
+          <p className="text-[11px] text-gray-400 text-center">*sellados de fábrica · Sellados de fábrica · Entrega 24-48h en toda RD · Junio 2026</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -153,8 +153,8 @@ export default function Page() {
             <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. La tecnología MoistureSeal es especialmente efectiva para personas con tendencia a ojos secos. Es uno de los lentes más recomendados para uso en ambientes de aire acondicionado o frente a pantallas prolongadas.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Bausch+Lomb ULTRA originales en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo todos los Bausch+Lomb son 100% originales, sellados de fábrica. Entregamos en 24-48 horas en toda República Dominicana con pago seguro mediante AZUL/Banco Popular.</p>
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Bausch+Lomb ULTRA certificados en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo todos los Bausch+Lomb son sellados de fábrica, sellados de fábrica. Entregamos en 24-48 horas en toda República Dominicana con pago seguro mediante AZUL/Banco Popular.</p>
           </details>
 
             </div>
@@ -177,7 +177,7 @@ export default function Page() {
 
         <div className="mt-8 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
-          <p className="text-sm text-gray-600 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
+          <p className="text-sm text-gray-600 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</Link>

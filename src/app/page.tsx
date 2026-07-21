@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'ContactGo — Lentes de contacto originales en RD | Entrega 24h',
-  description: 'ContactGo — La única tienda dominicana especializada 100% en lentes de contacto. ACUVUE, Air Optix, Biofinity originales. Recibe en 24-48h. Compra en minutos.',
+  title: 'ContactGo — Lentes de contacto certificados en RD | Entrega 24h',
+  description: 'ContactGo — La única tienda dominicana especializada 100% en lentes de contacto. ACUVUE, Air Optix, Biofinity certificados. Recibe en 24-48h. Compra en minutos.',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   alternates: { canonical: 'https://www.contactgo.net' },
 }
@@ -50,7 +50,7 @@ const SCHEMA_ORG = {
   "@type": "FAQPage",
   "mainEntity": [
     { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias." } },
-    { "@type": "Question", "name": "¿Son originales los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todos los productos de ContactGo son 100% originales, sellados de fábrica y con garantía de autenticidad. Nunca vendemos imitaciones." } },
+    { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todos los productos de ContactGo son sellados de fábrica, sellados de fábrica y con garantía de autenticidad. Nunca vendemos imitaciones." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
     { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
   ]
@@ -106,7 +106,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
                 { icon: Truck,    title: 'Entrega en 24-48h',  desc: 'A cualquier punto de RD',    color: 'text-blue-600',   bg: 'bg-blue-50' },
-                { icon: Shield,   title: '100% Originales',   desc: 'Sellados de fábrica',        color: 'text-green-600',  bg: 'bg-green-50' },
+                { icon: Shield,   title: 'Sellado de fábricaes',   desc: 'Sellados de fábrica',        color: 'text-green-600',  bg: 'bg-green-50' },
                 { icon: Star,     title: `${ordersCount > 0 ? (ordersCount * 6 + 4200).toLocaleString() + '+' : '4,200+'} pedidos`,  desc: 'Clientes satisfechos',   color: 'text-amber-500',  bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
@@ -131,13 +131,13 @@ export default async function HomePage() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-3">
                   <Award className="w-5 h-5 text-blue-600" />
-                  <span className="text-blue-600 font-bold text-sm uppercase tracking-wide">Productos 100% Originales</span>
+                  <span className="text-blue-600 font-bold text-sm uppercase tracking-wide">Sellados de fábrica</span>
                 </div>
                 <h2 className="font-display text-2xl md:text-3xl font-black text-gray-900 mb-3 leading-tight">
                   La única tienda dominicana<br className="hidden md:block" /> especializada 100% en lentes de contacto
                 </h2>
                 <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-5 max-w-lg">
-                  Cada lente que ves aquí es 100% original, sellado de fábrica y verificado. Nunca imitaciones. Nunca productos vencidos. Siempre con garantía de autenticidad.
+                  Cada lente que ves aquí es sellado de fábrica, sellado de fábrica y verificado. Nunca imitaciones. Nunca productos vencidos. Siempre con garantía de autenticidad.
                 </p>
                 <div className="flex flex-col gap-2">
                   {[
@@ -339,9 +339,9 @@ export default async function HomePage() {
             </div>
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { nombre: 'María R.', ciudad: 'Santo Domingo', fecha: 'Hace 2 días', texto: 'Excelente servicio. Llegaron en 24 horas, empaque perfecto y los Acuvue 100% originales. Lo recomiendo a todos.', producto: 'ACUVUE® MOIST®', avatar: 'MR', color: 'bg-pink-100 text-pink-700' },
+                { nombre: 'María R.', ciudad: 'Santo Domingo', fecha: 'Hace 2 días', texto: 'Excelente servicio. Llegaron en 24 horas, empaque perfecto y los Acuvue sellados de fábrica. Lo recomiendo a todos.', producto: 'ACUVUE® MOIST®', avatar: 'MR', color: 'bg-pink-100 text-pink-700' },
                 { nombre: 'Carlos M.', ciudad: 'Santiago', fecha: 'Hace 5 días', texto: 'Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto.', producto: 'Air Optix HydraGlyde', avatar: 'CM', color: 'bg-blue-100 text-blue-700' },
-                { nombre: 'Feyilina P.', ciudad: 'Santo Domingo', fecha: 'Hace 1 semana', texto: 'Llevo 6 meses comprando en ContactGo. Siempre rápido, siempre originales. Ya no compro en ningún otro lugar.', producto: 'Biofinity® Toric', avatar: 'FP', color: 'bg-green-100 text-green-700' },
+                { nombre: 'Feyilina P.', ciudad: 'Santo Domingo', fecha: 'Hace 1 semana', texto: 'Llevo 6 meses comprando en ContactGo. Siempre rápido, siempre certificados. Ya no compro en ningún otro lugar.', producto: 'Biofinity® Toric', avatar: 'FP', color: 'bg-green-100 text-green-700' },
                 { nombre: 'Ana G.', ciudad: 'La Romana', fecha: 'Hace 2 semanas', texto: 'Tengo astigmatismo alto y siempre era difícil encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'ACUVUE Oasys Astig.', avatar: 'AG', color: 'bg-orange-100 text-orange-700' },
                 { nombre: 'Roberto S.', ciudad: 'Bávaro', fecha: 'Hace 3 semanas', texto: 'Llegaron en 24h con empaque sellado. Originales garantizados. La experiencia de compra es increíble.', producto: 'Air Optix Colors', avatar: 'RS', color: 'bg-purple-100 text-purple-700' },
                 { nombre: 'Luisa V.', ciudad: 'Santo Domingo', fecha: 'Hace 1 mes', texto: 'La calidad es perfecta. El proceso de compra tardó menos de 3 minutos. Nunca más compro en otro lugar.', producto: '1-Day ACUVUE 90u', avatar: 'LV', color: 'bg-teal-100 text-teal-700' },
@@ -373,7 +373,7 @@ export default async function HomePage() {
           <div className="space-y-3">
             {[
               { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
-              { q: '¿Son 100% originales?', a: 'Sí. Cada producto viene sellado de fábrica con código de autenticidad verificable. Nunca vendemos imitaciones.' },
+              { q: '¿Son sellados de fábrica?', a: 'Sí. Cada producto viene sellado de fábrica con código de autenticidad verificable. Nunca vendemos imitaciones.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados recomendamos tener una receta actualizada. Nuestra calculadora gratuita te ayuda a identificar el tipo correcto de lente. Para lentes de color sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },
@@ -393,7 +393,7 @@ export default async function HomePage() {
         {/* ── MARCAS ── */}
         <section className="bg-gray-50 border-y border-gray-100 py-8">
           <div className="max-w-7xl mx-auto px-4">
-            <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">Productos 100% Originales</p>
+            <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">Sellados de fábrica</p>
             <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 mb-5">
               {['ACUVUE®', 'AIR OPTIX®', 'FreshLook®', 'Bausch+Lomb', 'CooperVision®', 'Biofinity®', 'Opti-Free®', 'Prolub®'].map(m => (
                 <span key={m} className="text-gray-500 font-bold text-sm">{m}</span>

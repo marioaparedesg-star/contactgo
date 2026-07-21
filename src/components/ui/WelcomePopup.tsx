@@ -233,7 +233,7 @@ export default function WelcomePopup() {
         {/* Trust footer */}
         {paso !== 'exito' && (
           <div className="bg-gray-50 border-t px-6 py-3 flex items-center justify-center gap-4">
-            {['🔒 Gratis', '📦 Envío a RD', '✅ Originales'].map(t => (
+            {['🔒 Gratis', '📦 Envío a RD', '✅ Certificados'].map(t => (
               <span key={t} className="text-[10px] text-gray-500 font-medium">{t}</span>
             ))}
           </div>

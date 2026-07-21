@@ -62,7 +62,7 @@ export default function Page() {
 
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Los lentes de colores son tendencia en RD — desde looks naturales hasta cambios dramáticos. La clave está en elegir los correctos: seguros, originales y del color que mejor combine con tu tono de piel.</p>
+          <p>Los lentes de colores son tendencia en RD — desde looks naturales hasta cambios dramáticos. La clave está en elegir los correctos: seguros, certificados y del color que mejor combine con tu tono de piel.</p>
 
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Las marcas más populares en RD</h2>
@@ -117,7 +117,7 @@ export default function Page() {
 
           <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5">
             <h3 className="font-bold text-amber-900 mb-2">⚠️ Importante sobre seguridad</h3>
-            <p className="text-sm text-amber-800">Nunca compres lentes de colores en farmacias, accesorios o vendedores ambulantes. Los lentes sin certificación médica pueden causar infecciones graves o daño corneal permanente. En ContactGo todos los lentes son originales y certificados.</p>
+            <p className="text-sm text-amber-800">Nunca compres lentes de colores en farmacias, accesorios o vendedores ambulantes. Los lentes sin certificación médica pueden causar infecciones graves o daño corneal permanente. En ContactGo todos los lentes son certificados y certificados.</p>
           </div>
 
           <Link href="/catalogo?tipo=color"
@@ -171,7 +171,7 @@ export default function Page() {
           <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar lentes de contacto de colores en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo tienes Air Optix COLORS (Alcon) y Lunare Tri-Kolor con entrega en 24-48h en toda la República Dominicana. Air Optix COLORS desde RD$2,625 y Lunare desde RD$2,250, ambos 100% originales.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo tienes Air Optix COLORS (Alcon) y Lunare Tri-Kolor con entrega en 24-48h en toda la República Dominicana. Air Optix COLORS desde RD$2,625 y Lunare desde RD$2,250, ambos sellados de fábrica.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Los lentes de color necesitan receta?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
@@ -179,14 +179,14 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Son seguros los lentes de contacto de colores?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí, los de marcas reconocidas como Alcon (Air Optix COLORS) son seguros si se usan correctamente y son originales. Los riesgos vienen de lentes falsificados o de baja calidad, especialmente los que se venden en mercados informales sin certificación.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí, los de marcas reconocidas como Alcon (Air Optix COLORS) son seguros si se usan correctamente y son certificados. Los riesgos vienen de lentes falsificados o de baja calidad, especialmente los que se venden en mercados informales sin certificación.</p>
           </details>
           </div>
         </section>
 
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
-          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL</p>
+          <p className="text-sm text-gray-500 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>

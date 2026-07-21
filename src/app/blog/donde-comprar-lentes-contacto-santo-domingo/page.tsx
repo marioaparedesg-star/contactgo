@@ -7,12 +7,12 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Dónde comprar lentes de contacto en Santo Domingo 2026',
-  description: 'Guía actualizada 2026: dónde comprar lentes de contacto originales en Santo Domingo con entrega a domicilio en 24-48h. ACUVUE, Air Optix, Biofinity y más.',
+  description: 'Guía actualizada 2026: dónde comprar lentes de contacto certificados en Santo Domingo con entrega a domicilio en 24-48h. ACUVUE, Air Optix, Biofinity y más.',
   alternates: { canonical: 'https://www.contactgo.net/blog/donde-comprar-lentes-contacto-santo-domingo' },
   openGraph: {
     type: 'article',
     title: 'Dónde comprar lentes de contacto en Santo Domingo',
-    description: 'Guía 2026 para comprar lentes de contacto originales en Santo Domingo. Entrega 24-48h.',
+    description: 'Guía 2026 para comprar lentes de contacto certificados en Santo Domingo. Entrega 24-48h.',
     url: 'https://www.contactgo.net/blog/donde-comprar-lentes-contacto-santo-domingo',
     siteName: 'ContactGo',
     locale: 'es_DO',
@@ -31,7 +31,7 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "Article",
             "headline": "Dónde comprar lentes de contacto en Santo Domingo — Guía 2026",
-            "description": "Guía completa de dónde comprar lentes de contacto originales en Santo Domingo con entrega a domicilio.",
+            "description": "Guía completa de dónde comprar lentes de contacto certificados en Santo Domingo con entrega a domicilio.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-01",
@@ -93,12 +93,12 @@ export default function Page() {
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
 
-          <p>Encontrar <strong>lentes de contacto originales en Santo Domingo</strong> solía ser complicado. Largas esperas en clínicas, desplazamientos innecesarios y precios poco transparentes hacían que conseguir los lentes correctos fuera una odisea. En esta guía actualizada para 2026, te explicamos todas las opciones disponibles en la capital dominicana — incluyendo la manera más rápida y conveniente que existe hoy.</p>
+          <p>Encontrar <strong>lentes de contacto certificados en Santo Domingo</strong> solía ser complicado. Largas esperas en clínicas, desplazamientos innecesarios y precios poco transparentes hacían que conseguir los lentes correctos fuera una odisea. En esta guía actualizada para 2026, te explicamos todas las opciones disponibles en la capital dominicana — incluyendo la manera más rápida y conveniente que existe hoy.</p>
 
           {/* Quick answer box */}
           <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-5">
             <p className="text-sm font-bold text-primary-800 mb-2">⚡ Respuesta rápida</p>
-            <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto originales en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24-48 horas, más de 35 marcas disponibles, productos 100% originales y sellados de fábrica. Sin necesidad de desplazarte a ningún lugar.</p>
+            <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto certificados en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24-48 horas, más de 35 marcas disponibles, sellados de fábrica y sellados de fábrica. Sin necesidad de desplazarte a ningún lugar.</p>
             <Link href="/catalogo" className="mt-3 inline-block bg-primary-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-primary-700 transition-colors">
               Ver catálogo completo →
             </Link>
@@ -130,7 +130,7 @@ export default function Page() {
                         ['Especialización', '100% lentes de contacto'],
                         ['Marcas disponibles', 'ACUVUE, Air Optix, Biofinity, BL Ultra y más'],
                         ['Entrega Santo Domingo', '24-48 horas'],
-                        ['Autenticidad', '100% originales, sellados de fábrica'],
+                        ['Autenticidad', 'sellados de fábrica, sellados de fábrica'],
                         ['Precios', 'Desde RD$2,250'],
                         ['Pago', 'Tarjeta VISA/Mastercard (AZUL/Banco Popular)'],
                         ['Asesoría', 'WhatsApp + email'],
@@ -289,7 +289,7 @@ export default function Page() {
                 { q: '¿Dónde comprar lentes de contacto en Santo Domingo?', a: 'ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega en 24-48h en Santo Domingo y toda la República Dominicana. También puedes encontrarlos en clínicas oftalmológicas de la ciudad.' },
                 { q: '¿Cuánto cuestan los lentes de contacto en Santo Domingo?', a: 'En ContactGo los precios van desde RD$2,250 (lentes de color) hasta RD$20,000 (lentes multifocales especializados). Los lentes esféricos más populares como ACUVUE Oasys están desde RD$3,875.' },
                 { q: '¿Hay entrega a domicilio en Santo Domingo?', a: 'Sí. ContactGo entrega en 24-48 horas en Santo Domingo y áreas metropolitanas (Boca Chica, San Cristóbal, La Romana, etc.).' },
-                { q: '¿Los lentes de ContactGo son originales?', a: 'Sí, 100% originales y sellados de fábrica. ContactGo garantiza la autenticidad de todos sus productos.' },
+                { q: '¿Los lentes de ContactGo son certificados?', a: 'Sí, sellados de fábrica y sellados de fábrica. ContactGo garantiza la autenticidad de todos sus productos.' },
                 { q: '¿Necesito receta para comprar lentes en Santo Domingo?', a: 'Para lentes graduados, sí. Para lentes de color sin graduación, no. Si tienes tu prescripción de tu optometrista, puedes comprar directamente. Si no estás seguro, usa nuestra calculadora de receta gratuita.' },
               ].map(({ q, a }, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
@@ -307,7 +307,7 @@ export default function Page() {
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
-            <p>Comprar lentes de contacto en Santo Domingo en 2026 es más fácil que nunca. Mientras antes la única opción era desplazarse a una clínica u óptica y esperar, hoy ContactGo te los entrega en 24-48 horas directamente donde estés, con los mismos productos originales de las mejores marcas del mundo.</p>
+            <p>Comprar lentes de contacto en Santo Domingo en 2026 es más fácil que nunca. Mientras antes la única opción era desplazarse a una clínica u óptica y esperar, hoy ContactGo te los entrega en 24-48 horas directamente donde estés, con los mismos productos certificados de las mejores marcas del mundo.</p>
             <p className="mt-3">Si es la primera vez que compras lentes, visita a tu optometrista para obtener tu prescripción. Luego, el siguiente paso es simplemente elegir tu marca favorita en nuestro catálogo y coordinar la entrega a tu dirección en Santo Domingo.</p>
           </section>
 
@@ -330,7 +330,7 @@ export default function Page() {
         {/* CTA */}
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Tu pedido llega a Santo Domingo en 24-48h</h3>
-          <p className="text-sm text-gray-600 mb-1">Más de 35 productos 100% originales. Pago seguro con AZUL.</p>
+          <p className="text-sm text-gray-600 mb-1">Más de 35 sellados de fábrica. Pago seguro con AZUL.</p>
           <p className="text-xs text-gray-400 mb-4">Sin salir de casa · Sin esperas · Sin complicaciones</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">

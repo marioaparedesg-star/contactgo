@@ -5,11 +5,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Avaira Vitality precio en República Dominicana 2026 — ContactGo',
-  description: 'Precio de Avaira Vitality en RD: esférico RD$3,690 · tórico RD$4,875. Lentes mensuales CooperVision originales. Entrega 24-48h en toda República Dominicana.',
+  description: 'Precio de Avaira Vitality en RD: esférico RD$3,690 · tórico RD$4,875. Lentes mensuales CooperVision certificados. Entrega 24-48h en toda República Dominicana.',
   alternates: { canonical: 'https://www.contactgo.net/blog/avaira-vitality-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Avaira Vitality® precio en República Dominicana 2026',
-    description: 'Precio de Avaira Vitality en RD: esférico RD$3,690 · tórico RD$4,875. Lentes mensuales CooperVision originales. Entrega 24-48h en toda República Dominicana.',
+    description: 'Precio de Avaira Vitality en RD: esférico RD$3,690 · tórico RD$4,875. Lentes mensuales CooperVision certificados. Entrega 24-48h en toda República Dominicana.',
     url: 'https://www.contactgo.net/blog/avaira-vitality-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/avaira-vitality-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Avaira Vitality® precio en República Dominicana 2026' }],
@@ -24,13 +24,13 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Avaira Vitality® precio en República Dominicana 2026",
-            "description": "Precio de Avaira Vitality en RD: esférico RD$3,690 · tórico RD$4,875. Lentes mensuales CooperVision originales. Entrega 24-48h en toda República Dominicana.",
+            "description": "Precio de Avaira Vitality en RD: esférico RD$3,690 · tórico RD$4,875. Lentes mensuales CooperVision certificados. Entrega 24-48h en toda República Dominicana.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-28", "dateModified": "2026-06-28",
             "url": "https://www.contactgo.net/blog/avaira-vitality-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type":"Question","name":'¿Cuánto cuestan los Avaira Vitality en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo: Avaira Vitality esférico RD$3,690 la caja de 6 (mensual) y Avaira Vitality Toric RD$4,875 la caja de 6. Son los lentes mensuales de silicona hidrogel con mejor precio por día de uso disponibles en RD (~RD$41/día).'}},{"@type":"Question","name":'¿Son buenos los Avaira Vitality?',"acceptedAnswer":{"@type":"Answer","text":'Sí. Fabricados por CooperVision (la misma empresa del Biofinity), usan la tecnología Aquaform que retiene agua naturalmente. Con un Dk/t de 100, transmiten suficiente oxígeno para uso diario cómodo. Son una excelente relación calidad-precio.'}},{"@type":"Question","name":'¿Avaira Vitality o Biofinity — cuál es mejor?',"acceptedAnswer":{"@type":"Answer","text":'Depende de tu prioridad. Avaira Vitality es más económico (RD$3,690 vs RD$4,750). Biofinity tiene mayor Dk/t (160 vs 100). Para uso diario normal (hasta 10h), Avaira Vitality es suficiente. Para uso muy intensivo (12h+), Biofinity puede ser más cómodo.'}},{"@type":"Question","name":'¿Dónde comprar Avaira Vitality originales en RD?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo tienes Avaira Vitality y Avaira Vitality Toric 100% originales de CooperVision con entrega en 24-48 horas en toda la República Dominicana. Pago seguro con AZUL/Banco Popular.'}}] },
+            "mainEntity": [{"@type":"Question","name":'¿Cuánto cuestan los Avaira Vitality en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo: Avaira Vitality esférico RD$3,690 la caja de 6 (mensual) y Avaira Vitality Toric RD$4,875 la caja de 6. Son los lentes mensuales de silicona hidrogel con mejor precio por día de uso disponibles en RD (~RD$41/día).'}},{"@type":"Question","name":'¿Son buenos los Avaira Vitality?',"acceptedAnswer":{"@type":"Answer","text":'Sí. Fabricados por CooperVision (la misma empresa del Biofinity), usan la tecnología Aquaform que retiene agua naturalmente. Con un Dk/t de 100, transmiten suficiente oxígeno para uso diario cómodo. Son una excelente relación calidad-precio.'}},{"@type":"Question","name":'¿Avaira Vitality o Biofinity — cuál es mejor?',"acceptedAnswer":{"@type":"Answer","text":'Depende de tu prioridad. Avaira Vitality es más económico (RD$3,690 vs RD$4,750). Biofinity tiene mayor Dk/t (160 vs 100). Para uso diario normal (hasta 10h), Avaira Vitality es suficiente. Para uso muy intensivo (12h+), Biofinity puede ser más cómodo.'}},{"@type":"Question","name":'¿Dónde comprar Avaira Vitality certificados en RD?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo tienes Avaira Vitality y Avaira Vitality Toric sellados de fábrica de CooperVision con entrega en 24-48 horas en toda la República Dominicana. Pago seguro con AZUL/Banco Popular.'}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -152,8 +152,8 @@ export default function Page() {
             <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Depende de tu prioridad. Avaira Vitality es más económico (RD$3,690 vs RD$4,750). Biofinity tiene mayor Dk/t (160 vs 100). Para uso diario normal (hasta 10h), Avaira Vitality es suficiente. Para uso muy intensivo (12h+), Biofinity puede ser más cómodo.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Avaira Vitality originales en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo tienes Avaira Vitality y Avaira Vitality Toric 100% originales de CooperVision con entrega en 24-48 horas en toda la República Dominicana. Pago seguro con AZUL/Banco Popular.</p>
+            <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Avaira Vitality certificados en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo tienes Avaira Vitality y Avaira Vitality Toric sellados de fábrica de CooperVision con entrega en 24-48 horas en toda la República Dominicana. Pago seguro con AZUL/Banco Popular.</p>
           </details>
             </div>
           </section>
@@ -178,7 +178,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en toda República Dominicana en 24-48h</h3>
-          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL</p>
+          <p className="text-sm text-gray-500 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>

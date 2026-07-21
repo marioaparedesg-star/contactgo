@@ -30,7 +30,7 @@ export default function Page() {
     { q: '¿Sirve el ACUVUE Oasys normal para el astigmatismo?', a: 'No. El ACUVUE Oasys estándar es para miopía e hipermetropía sin astigmatismo. Para astigmatismo necesitas específicamente el ACUVUE Oasys for Astigmatism o el 1-DAY ACUVUE Moist for Astigmatism.' },
     { q: '¿Cuántos cilindros corrige el ACUVUE Oasys for Astigmatism?', a: 'El ACUVUE Oasys for Astigmatism está disponible en CYL de -0.75, -1.25, -1.75 y -2.25. Para cilindros mayores (-2.75 o más), otras opciones como Biofinity XR Toric pueden ser más adecuadas.' },
     { q: '¿Cómo sé si necesito lentes tóricos?', a: 'Si tu receta tiene valores de CYL (cilindro) y AXIS (eje), entonces tienes astigmatismo y necesitas lentes tóricos. Puedes verificarlo con nuestra calculadora de receta gratuita.' },
-    { q: '¿Dónde comprar ACUVUE Oasys for Astigmatism en República Dominicana?', a: 'ContactGo ofrece el ACUVUE Oasys for Astigmatism y el 1-DAY ACUVUE Moist for Astigmatism con entrega en 24-48 horas en toda la República Dominicana. Son 100% originales de Johnson & Johnson.' },
+    { q: '¿Dónde comprar ACUVUE Oasys for Astigmatism en República Dominicana?', a: 'ContactGo ofrece el ACUVUE Oasys for Astigmatism y el 1-DAY ACUVUE Moist for Astigmatism con entrega en 24-48 horas en toda la República Dominicana. Son sellados de fábrica de Johnson & Johnson.' },
   ]
 
   return (
@@ -90,7 +90,7 @@ export default function Page() {
               </div>
             </Link>
           ))}
-          <p className="text-xs text-gray-400 text-center">Entrega 24-48h en toda RD · 100% originales J&J · Actualizados junio 2026</p>
+          <p className="text-xs text-gray-400 text-center">Entrega 24-48h en toda RD · sellados de fábrica J&J · Actualizados junio 2026</p>
         </div>
 
         <div className="flex gap-2 mb-6">
@@ -277,7 +277,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes para astigmatismo en tu puerta en 24h</h3>
-          <p className="text-sm text-gray-600 mb-4">ACUVUE Oasys y 1-DAY MOIST for Astigmatism originales de J&J · Toda la línea tórica disponible</p>
+          <p className="text-sm text-gray-600 mb-4">ACUVUE Oasys y 1-DAY MOIST for Astigmatism certificados de J&J · Toda la línea tórica disponible</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/toricos" className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">Ver lentes tóricos →</Link>
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>

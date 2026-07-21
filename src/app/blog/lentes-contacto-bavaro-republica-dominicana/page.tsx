@@ -3,15 +3,15 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
 export const metadata: Metadata = {
-  title: 'Lentes de contacto en Bavaro — Entrega domicilio | ContactGo', description: 'Lentes de contacto con entrega en Bavaro en 24-48h. ACUVUE, Biofinity, Air Optix originales. Pago con tarjeta AZUL.',
+  title: 'Lentes de contacto en Bavaro — Entrega domicilio | ContactGo', description: 'Lentes de contacto con entrega en Bavaro en 24-48h. ACUVUE, Biofinity, Air Optix certificados. Pago con tarjeta AZUL.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-bavaro-republica-dominicana' },
-  openGraph: { type: 'article', title: 'Lentes de contacto en Bavaro — Entrega a domicilio 24-48h', description: 'Lentes de contacto con entrega en Bavaro en 24-48h. ACUVUE, Biofinity, Air Optix originales. Pago con tarjeta AZUL.', url: 'https://www.contactgo.net/blog/lentes-contacto-bavaro-republica-dominicana', siteName: 'ContactGo', locale: 'es-DO', images: [{ url: 'https://www.contactgo.net/blog/lentes-contacto-bavaro-republica-dominicana.webp', width: 1200, height: 630, alt: 'Lentes de contacto en Bavaro — Entrega a domicilio 24-48h' }] },
+  openGraph: { type: 'article', title: 'Lentes de contacto en Bavaro — Entrega a domicilio 24-48h', description: 'Lentes de contacto con entrega en Bavaro en 24-48h. ACUVUE, Biofinity, Air Optix certificados. Pago con tarjeta AZUL.', url: 'https://www.contactgo.net/blog/lentes-contacto-bavaro-republica-dominicana', siteName: 'ContactGo', locale: 'es-DO', images: [{ url: 'https://www.contactgo.net/blog/lentes-contacto-bavaro-republica-dominicana.webp', width: 1200, height: 630, alt: 'Lentes de contacto en Bavaro — Entrega a domicilio 24-48h' }] },
 }
 export default function Page() {
   return (<><Navbar /><main className="max-w-2xl mx-auto px-4 py-12 pb-24">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
       {"@context":"https://schema.org","@type":"Article","headline":"Lentes de contacto en Bavaro — Entrega a domicilio 24-48h","author":{"@type":"Organization","name":"Equipo ContactGo"},"publisher":{"@type":"Organization","name":"ContactGo","url":"https://www.contactgo.net","logo":{"@type":"ImageObject","url":"https://www.contactgo.net/logo.png"}},"datePublished":"2026-07-02","dateModified":"2026-07-02","url":"https://www.contactgo.net/blog/lentes-contacto-bavaro-republica-dominicana"},
-      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":'Entregan lentes de contacto en Bavaro?',"acceptedAnswer":{"@type":"Answer","text":'Si. ContactGo entrega lentes ACUVUE, Biofinity y Air Optix originales en Bavaro y alrededores en 24-48 horas. Pago seguro con tarjeta AZUL/Banco Popular.'}},{"@type":"Question","name":'En cuanto tiempo llegan los lentes a Bavaro?',"acceptedAnswer":{"@type":"Answer","text":'Los pedidos realizados antes de las 3pm generalmente se entregan al dia siguiente en Bavaro. Para mayor rapidez, escribe por WhatsApp.'}},{"@type":"Question","name":'Aceptan tarjetas de credito internacionales?',"acceptedAnswer":{"@type":"Answer","text":'Si. Aceptamos Visa y Mastercard a traves de AZUL/Banco Popular. Tarjetas nacionales e internacionales.'}}]},
+      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":'Entregan lentes de contacto en Bavaro?',"acceptedAnswer":{"@type":"Answer","text":'Si. ContactGo entrega lentes ACUVUE, Biofinity y Air Optix certificados en Bavaro y alrededores en 24-48 horas. Pago seguro con tarjeta AZUL/Banco Popular.'}},{"@type":"Question","name":'En cuanto tiempo llegan los lentes a Bavaro?',"acceptedAnswer":{"@type":"Answer","text":'Los pedidos realizados antes de las 3pm generalmente se entregan al dia siguiente en Bavaro. Para mayor rapidez, escribe por WhatsApp.'}},{"@type":"Question","name":'Aceptan tarjetas de credito internacionales?',"acceptedAnswer":{"@type":"Answer","text":'Si. Aceptamos Visa y Mastercard a traves de AZUL/Banco Popular. Tarjetas nacionales e internacionales.'}}]},
       {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.contactgo.net"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.contactgo.net/blog"},{"@type":"ListItem","position":3,"name":"Lentes de contacto en Bavaro — Entrega a domicilio","item":"https://www.contactgo.net/blog/lentes-contacto-bavaro-republica-dominicana"}]}
     ]) }} />
     <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4"><a href="/" className="hover:text-primary-600">Inicio</a><span>/</span><a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span><span className="text-gray-600 truncate">Lentes de contacto en Bavaro — Entrega a</span></div>
@@ -22,7 +22,7 @@ export default function Page() {
       <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Especialistas en salud visual · 5 min · Julio 2026</p></div>
     </div>
     <div className="space-y-8 text-gray-700 leading-relaxed">
-      <p>ContactGo entrega lentes de contacto originales directamente en tu hotel, residencia o negocio en Bavaro en 24-48 horas. ACUVUE, Biofinity, Air Optix — 100% originales y sellados de fabrica.</p>
+      <p>ContactGo entrega lentes de contacto certificados directamente en tu hotel, residencia o negocio en Bavaro en 24-48 horas. ACUVUE, Biofinity, Air Optix — sellados de fábrica y sellados de fabrica.</p>
       <section id="entrega">
         <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Zonas de entrega</h2>
         <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
@@ -30,7 +30,7 @@ export default function Page() {
           <p className="text-sm text-gray-600">Punta Cana, El Cortecito, Arena Gorda, Los Corales</p>
           <div className="flex items-center gap-2 mt-3">
             <span className="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">24-48h de entrega</span>
-            <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">100% originales</span>
+            <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">sellados de fábrica</span>
           </div>
         </div>
       </section>
@@ -50,7 +50,7 @@ export default function Page() {
       <section id="faq">
         <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
         <div className="space-y-3">
-          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">Entregan lentes de contacto en Bavaro?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Si. ContactGo entrega lentes ACUVUE, Biofinity y Air Optix originales en Bavaro y alrededores en 24-48 horas. Pago seguro con tarjeta AZUL/Banco Popular.</p></details>
+          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">Entregan lentes de contacto en Bavaro?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Si. ContactGo entrega lentes ACUVUE, Biofinity y Air Optix certificados en Bavaro y alrededores en 24-48 horas. Pago seguro con tarjeta AZUL/Banco Popular.</p></details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">En cuanto tiempo llegan los lentes a Bavaro?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Los pedidos realizados antes de las 3pm generalmente se entregan al dia siguiente en Bavaro. Para mayor rapidez, escribe por WhatsApp.</p></details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">Aceptan tarjetas de credito internacionales?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Si. Aceptamos Visa y Mastercard a traves de AZUL/Banco Popular. Tarjetas nacionales e internacionales.</p></details>
         </div>
@@ -71,7 +71,7 @@ export default function Page() {
     </div>
     <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
       <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en Bavaro en 24-48h</h3>
-      <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fabrica · Pago seguro con AZUL</p>
+      <p className="text-sm text-gray-500 mb-4">sellados de fábrica · Sellados de fabrica · Pago seguro con AZUL</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catalogo →</a>
         <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>

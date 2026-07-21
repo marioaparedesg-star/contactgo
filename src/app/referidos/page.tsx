@@ -30,7 +30,7 @@ export default function ReferidosPage() {
     if (navigator.share) {
       navigator.share({
         title: 'ContactGo — Lentes de contacto en RD',
-        text: '¡Compra tus lentes de contacto originales en ContactGo! Usa mi enlace y obtienes RD$300 de descuento en tu primera compra.',
+        text: '¡Compra tus lentes de contacto en ContactGo! Usa mi enlace y obtienes RD$300 de descuento en tu primera compra.',
         url: refLink
       })
     } else copiar()

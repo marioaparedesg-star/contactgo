@@ -32,7 +32,7 @@ export default function Page() {
     { q: '¿Son los Biofinity buenos lentes de contacto?', a: 'Sí, Biofinity es una de las marcas más reconocidas de CooperVision. Son lentes mensuales de silicona hidrogel con tecnología Aquaform® que proporciona un Dk/t de 160, uno de los más altos del mercado, lo que significa excelente transmisión de oxígeno.' },
     { q: '¿Cuánto duran los lentes Biofinity?', a: 'Los Biofinity son lentes de reemplazo mensual — se usan hasta 30 días consecutivos y luego se descartan. Una caja de 6 lentes es suficiente para 3 meses de uso por un ojo (6 meses si es para un solo ojo).' },
     { q: '¿Biofinity sirve para astigmatismo?', a: 'No el Biofinity estándar, pero sí el Biofinity Toric, diseñado específicamente para corregir el astigmatismo. Disponible en ContactGo desde RD$5,750 la caja de 6 lentes, con entrega en 24-48h.' },
-    { q: '¿Dónde comprar Biofinity originales en RD?', a: 'En ContactGo todos los Biofinity son 100% originales de CooperVision, sellados de fábrica. Entregamos en 24-48 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.' },
+    { q: '¿Dónde comprar Biofinity certificados en RD?', a: 'En ContactGo todos los Biofinity son sellados de fábrica de CooperVision, sellados de fábrica. Entregamos en 24-48 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.' },
     { q: '¿Biofinity o ACUVUE Oasys — cuál es mejor?', a: 'Depende del uso. Biofinity es mensual con mayor Dk/t (160 vs 147) y menor costo por día de uso. ACUVUE Oasys es quincenal, con tecnología HYDRACLEAR Plus ideal para pantallas. Para uso intensivo diario, Biofinity suele ser más económico. Para renovación frecuente, ACUVUE Oasys.' },
   ]
 
@@ -298,8 +298,8 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Biofinity originales en tu puerta en 24-48h</h3>
-          <p className="text-sm text-gray-600 mb-4">Toda la línea Biofinity disponible · CooperVision originales · Pago seguro con AZUL</p>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Biofinity certificados en tu puerta en 24-48h</h3>
+          <p className="text-sm text-gray-600 mb-4">Toda la línea Biofinity disponible · CooperVision certificados · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/marca/coopervision" className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors text-sm">Ver todos los Biofinity →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-blue-200 text-blue-700 font-bold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors text-sm">Calcular mi receta</Link>

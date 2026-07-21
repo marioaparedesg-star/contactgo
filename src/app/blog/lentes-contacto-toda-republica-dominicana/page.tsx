@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes de contacto con entrega a toda República Dominicana — ContactGo',
-  description: 'Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix originales. Entrega 24-72h donde estés en República Dominicana.',
+  description: 'Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h donde estés en República Dominicana.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-toda-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto con entrega en toda República Dominicana — 2026',
-    description: 'Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix originales. Entrega 24-72h donde estés en República Dominicana.',
+    description: 'Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h donde estés en República Dominicana.',
     url: 'https://www.contactgo.net/blog/lentes-contacto-toda-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-contacto-entrega-rd.webp', width: 1200, height: 630, alt: 'Lentes de contacto con entrega en toda República Dominicana — 2026' }],
@@ -34,7 +34,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Lentes de contacto con entrega en toda República Dominicana — 2026",
-            "description": "Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix originales. Entrega 24-72h donde estés en República Dominicana.",
+            "description": "Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h donde estés en República Dominicana.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
@@ -42,10 +42,10 @@ export default function Page() {
             "about": { "@type": "Place", "name": "República Dominicana", "addressCountry": "DO" } },
           { "@context": "https://schema.org", "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto originales en Entrega a todas las provincias y municipios de RD en 24-48 horas. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
+              { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en Entrega a todas las provincias y municipios de RD en 24-48 horas. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío a República Dominicana se calcula al momento del checkout. Los pedidos superiores a RD$8,000 tienen envío gratuito. Consulta el costo exacto al agregar tu dirección de entrega." } },
               { "@type": "Question", "name": "¿Cuánto tarda la entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en República Dominicana es en 24-48 horas hábiles para la mayoría de los pedidos. Pedidos realizados antes de las 3pm salen el mismo día." } },
-              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 35 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos originales y sellados de fábrica." } }
+              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 35 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y sellados de fábrica." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
@@ -68,12 +68,12 @@ export default function Page() {
           <span className="text-2xl">🚀</span>
           <div>
             <p className="text-sm font-bold text-green-800">Entrega 24h en Santo Domingo y Santiago · 24-48h en ciudades principales · 48-72h en municipios</p>
-            <p className="text-xs text-green-600">100% originales · Pago seguro con AZUL/Banco Popular</p>
+            <p className="text-xs text-green-600">sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
           </div>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>ContactGo entrega lentes de contacto en toda la República Dominicana — desde la capital hasta los municipios más remotos. No importa dónde estés, recibe tus lentes ACUVUE, Biofinity, Air Optix y más marcas originales directamente en tu puerta.</p>
+          <p>ContactGo entrega lentes de contacto en toda la República Dominicana — desde la capital hasta los municipios más remotos. No importa dónde estés, recibe tus lentes ACUVUE, Biofinity, Air Optix y más marcas certificados directamente en tu puerta.</p>
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Productos más vendidos disponibles en República Dominicana</h2>
@@ -109,7 +109,7 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Preguntas frecuentes — Entrega en República Dominicana</h2>
             <div className="space-y-3">
               {[
-                { q: '¿Hacen entrega en República Dominicana?', a: 'Sí. ContactGo entrega lentes de contacto originales en Entrega a todas las provincias y municipios de RD en 24-48 horas hábiles.' },
+                { q: '¿Hacen entrega en República Dominicana?', a: 'Sí. ContactGo entrega lentes de contacto en Entrega a todas las provincias y municipios de RD en 24-48 horas hábiles.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
                 { q: '¿Cuánto tarda la entrega en República Dominicana?', a: 'Entre 24 y 48 horas hábiles para la mayoría de los pedidos. Pedidos antes de las 3pm suelen salir el mismo día.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
@@ -132,7 +132,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en República Dominicana en 24-48h</h3>
-          <p className="text-sm text-gray-500 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL · Sin salir de casa</p>
+          <p className="text-sm text-gray-500 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro con AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>

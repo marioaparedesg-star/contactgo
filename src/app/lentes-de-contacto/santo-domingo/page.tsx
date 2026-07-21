@@ -7,11 +7,11 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santo Domingo RD | Envío 24-48h — ContactGo',
-  description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity, Air Optix 100% originales. Envío RD$200. Entrega en 24-48 horas.',
+  description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity, Air Optix sellados de fábrica. Envío RD$200. Entrega en 24-48 horas.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo' },
   openGraph: {
     title: 'Lentes de Contacto en Santo Domingo | ContactGo',
-    description: 'Entrega a domicilio en Santo Domingo en 24-48h. Productos 100% Originales.',
+    description: 'Entrega a domicilio en Santo Domingo en 24-48h. Sellados de fábrica.',
     url: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -46,7 +46,7 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$200 · 24-48h</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Santo Domingo</h1>
-          <p className="text-primary-100 text-lg max-w-xl mx-auto">Entrega a domicilio en toda el área metropolitana. ACUVUE, Biofinity, Air Optix y más — 100% originales.</p>
+          <p className="text-primary-100 text-lg max-w-xl mx-auto">Entrega a domicilio en toda el área metropolitana. ACUVUE, Biofinity, Air Optix y más — sellados de fábrica.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors">Usar mi receta</Link>
             <Link href="/catalogo" className="border border-white/40 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors">Ver catálogo completo</Link>
@@ -70,7 +70,7 @@ export default async function Page() {
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Compra lentes de contacto en Santo Domingo sin salir de casa</h2>
           <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega a domicilio en toda el área metropolitana de <strong>Santo Domingo</strong>. Olvidarte de ir a la óptica — tus lentes llegan directamente donde estás en 24-48 horas.</p>
-          <p>Todos nuestros productos son 100% originales, 100% originales, con garantía de autenticidad. El envío a Santo Domingo tiene un costo fijo de <strong>RD$200</strong> y es gratuito en pedidos superiores a RD$6,000.</p>
+          <p>Todos nuestros productos son sellados de fábrica, con garantía de autenticidad. El envío a Santo Domingo tiene un costo fijo de <strong>RD$200</strong> y es gratuito en pedidos superiores a RD$6,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto según tu SPH, CYL y AXIS en minutos.</p>
 
           {/* Trust strip */}
@@ -87,7 +87,7 @@ export default async function Page() {
           <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santo Domingo</h3>
           <div className="space-y-3">
             <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
-              <p className="text-gray-700 text-sm italic">"Excelente servicio, llegaron en 24 horas como prometieron. Los Acuvue son 100% originales, igual que en la óptica pero más baratos."</p>
+              <p className="text-gray-700 text-sm italic">"Excelente servicio, llegaron en 24 horas como prometieron. Los Acuvue son sellados de fábrica, igual que en la óptica pero más baratos."</p>
               <p className="text-xs text-gray-500 mt-2 font-semibold">— María R., Piantini ⭐⭐⭐⭐⭐</p>
             </div>
             <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
@@ -96,7 +96,7 @@ export default async function Page() {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[['🚚','Envío RD$200'],['📦','Entrega 24-48h'],['✅','100% Original'],['↩️','Dev. 48 horas']].map(([i,t]) => (
+            {[['🚚','Envío RD$200'],['📦','Entrega 24-48h'],['✅','Sellado de fábrica'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
                 <span className="text-xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>

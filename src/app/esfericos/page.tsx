@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Lentes Esféricos RD | Miopía e Hipermetropía — ContactGo',
   description: 'Compra lentes de contacto esféricos en República Dominicana. ACUVUE Moist, Air Optix, Biofinity para miopía e hipermetropía. Envío 24-48h a todo el país.',
   alternates: { canonical: 'https://www.contactgo.net/esfericos' },
-  openGraph: { title: 'Lentes Esféricos RD | Miopía e Hipermetropía', description: 'Los mejores lentes esféricos originales con envío a domicilio en RD.', url: 'https://www.contactgo.net/esfericos', locale: 'es_DO', siteName: 'ContactGo', type: 'website' },
+  openGraph: { title: 'Lentes Esféricos RD | Miopía e Hipermetropía', description: 'Los mejores lentes esféricos con envío a domicilio en RD.', url: 'https://www.contactgo.net/esfericos', locale: 'es_DO', siteName: 'ContactGo', type: 'website' },
 }
 
 export const revalidate = 60
@@ -37,7 +37,7 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-blue-700 via-primary-600 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para miopía e hipermetropía</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto Esféricos en RD</h1>
-          <p className="text-blue-100 text-lg max-w-xl mx-auto">ACUVUE, Air Optix, Biofinity y más. 100% originales, entrega en 24-48h en toda República Dominicana.</p>
+          <p className="text-blue-100 text-lg max-w-xl mx-auto">ACUVUE, Air Optix, Biofinity y más. sellados de fábrica, entrega en 24-48h en toda República Dominicana.</p>
         </section>
 
         <section className="max-w-7xl mx-auto px-4 py-10">
@@ -53,7 +53,7 @@ export default async function Page() {
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Todo sobre los lentes esféricos</h2>
           <p>Los lentes de contacto esféricos son el tipo más común en el mundo. Están diseñados para corregir dos de los problemas de visión más frecuentes: <strong>miopía</strong> (no ves bien de lejos) e <strong>hipermetropía</strong> (no ves bien de cerca). En República Dominicana, millones de personas los usan a diario.</p>
-          <p>En ContactGo manejamos la selección más completa de lentes esféricos disponible en RD: desde los populares <strong>ACUVUE® 1-DAY MOIST®</strong> (diarios desechables) hasta los cómodos <strong>Biofinity®</strong> mensuales de CooperVision. todos son productos 100% originales, sellados de fábrica y con garantía de autenticidad.</p>
+          <p>En ContactGo manejamos la selección más completa de lentes esféricos disponible en RD: desde los populares <strong>ACUVUE® 1-DAY MOIST®</strong> (diarios desechables) hasta los cómodos <strong>Biofinity®</strong> mensuales de CooperVision. todos son sellados de fábrica, sellados de fábrica y con garantía de autenticidad.</p>
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo elegir el lente esférico correcto?</h3>
           <p>Para elegir tu lente, necesitas saber el valor de <strong>Esfera</strong> de tu receta óptica. Este valor puede ser negativo (miopía) o positivo (hipermetropía). Si tu receta también tiene <strong>Cilindro</strong>, necesitas <Link href="/toricos" className="text-primary-600 font-semibold">lentes tóricos para astigmatismo</Link>.</p>
           <p>Los factores más importantes al elegir son: duración (diario, quincenal o mensual), material (silicona hidrogel para mayor transpirabilidad) y marca. Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> para encontrar el lente exacto para ti.</p>

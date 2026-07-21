@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Comprar lentes de contacto online en RD — Guía segura 2026',
-  description: 'Cómo comprar lentes de contacto online en República Dominicana de forma segura. ACUVUE, Biofinity, Air Optix originales con entrega 24-48h. Guía completa 2026.',
+  description: 'Cómo comprar lentes de contacto online en República Dominicana de forma segura. ACUVUE, Biofinity, Air Optix certificados con entrega 24-48h. Guía completa 2026.',
   alternates: { canonical: 'https://www.contactgo.net/blog/comprar-lentes-contacto-online-republica-dominicana' },
   openGraph: {
     type: 'article',
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const FAQS = [
-    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo ofrece lentes 100% originales, sellados de fábrica, con pago seguro mediante AZUL/Banco Popular y entrega verificada en 24-48 horas en toda la RD.' },
+    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo ofrece lentes sellados de fábrica, sellados de fábrica, con pago seguro mediante AZUL/Banco Popular y entrega verificada en 24-48 horas en toda la RD.' },
     { q: '¿Necesito receta para comprar lentes de contacto online?', a: 'Para lentes graduados sí. Necesitas los valores de tu receta (SPH, CYL, AXIS, ADD según el tipo). Para lentes de color sin graduación, no es necesaria. Puedes usar nuestra calculadora de receta gratuita si no tienes la tuya a mano.' },
-    { q: '¿Cómo sé que los lentes son originales?', a: 'Los lentes originales vienen en empaque sellado de fábrica con código de autenticidad verificable con el fabricante. En ContactGo todos los productos son 100% originales con garantía de autenticidad. Nunca vendemos imitaciones.' },
+    { q: '¿Cómo sé que los lentes son certificados?', a: 'Los lentes certificados vienen en empaque sellado de fábrica con código de autenticidad verificable con el fabricante. En ContactGo todos los productos son sellados de fábrica con garantía de autenticidad. Nunca vendemos imitaciones.' },
     { q: '¿Cuánto tarda la entrega de lentes de contacto en RD?', a: 'En ContactGo la entrega es en 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el resto del país.' },
     { q: '¿Puedo devolver los lentes si no son los correctos?', a: 'Sí. ContactGo acepta devoluciones de productos sellados no abiertos dentro de los 7 días de recibidos, siempre que no se haya roto el sello. Consulta nuestra política de devoluciones para más detalles.' },
     { q: '¿Cuál es la forma de pago para comprar lentes online en RD?', a: 'En ContactGo aceptamos tarjeta de crédito y débito (VISA y Mastercard) a través de AZUL/Banco Popular, el procesador de pagos más utilizado en República Dominicana.' },
@@ -79,7 +79,7 @@ export default function Page() {
         <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
           <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
           <ol className="space-y-1.5 text-sm list-decimal list-inside">
-            {[['ventajas','Ventajas de comprar lentes online en RD'],['como-comprar','Paso a paso: cómo comprar de forma segura'],['que-verificar','Cómo verificar que son originales'],['receta','Qué información necesitas de tu receta'],['pago','Opciones de pago disponibles'],['entrega','Tiempos de entrega por zona'],['faq','Preguntas frecuentes']].map(([id, label]) => (
+            {[['ventajas','Ventajas de comprar lentes online en RD'],['como-comprar','Paso a paso: cómo comprar de forma segura'],['que-verificar','Cómo verificar que son certificados'],['receta','Qué información necesitas de tu receta'],['pago','Opciones de pago disponibles'],['entrega','Tiempos de entrega por zona'],['faq','Preguntas frecuentes']].map(([id, label]) => (
               <li key={id}><a href={`#${id}`} className="text-primary-600 hover:underline">{label}</a></li>
             ))}
           </ol>
@@ -128,7 +128,7 @@ export default function Page() {
           </section>
 
           <section id="que-verificar">
-            <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Cómo verificar que los lentes son originales</h2>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Cómo verificar que los lentes son certificados</h2>
             <p>El riesgo real al comprar lentes de contacto online no es el pago — es recibir un producto falsificado que puede dañar la salud ocular. Aquí están las señales que distinguen una tienda confiable:</p>
             <div className="space-y-3 mt-4">
               {[

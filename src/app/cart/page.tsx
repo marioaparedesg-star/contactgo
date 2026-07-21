@@ -152,7 +152,7 @@ export default function CartPage() {
           </div>
           {/* Trust signals */}
           <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
-            {['✅ Originales', '🚚 24h SD', '🔒 Pago AZUL', '↩️ 7 días'].map(t => (
+            {['✅ Certificados', '🚚 24h SD', '🔒 Pago AZUL', '↩️ 7 días'].map(t => (
               <span key={t} className="text-[11px] text-gray-400 font-medium">{t}</span>
             ))}
           </div>
@@ -299,7 +299,7 @@ export default function CartPage() {
             {/* Trust badges */}
             <div className="grid grid-cols-3 gap-2 pt-2">
               {[
-                { icon: Shield, text: '100% Original' },
+                { icon: Shield, text: 'Sellado de fábrica' },
                 { icon: Truck,  text: 'Entrega 24-48h' },
                 { icon: RotateCcw, text: 'Devolución 48h' },
               ].map(b => (

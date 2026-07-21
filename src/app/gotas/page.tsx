@@ -72,10 +72,10 @@ export default async function Page() {
             Gotas para Ojos en República Dominicana
           </h1>
           <p className="text-sky-100 text-lg max-w-xl mx-auto">
-            Alivio inmediato para ojos secos e irritados. Refresh, Systane y más marcas originales con envío a domicilio.
+            Alivio inmediato para ojos secos e irritados. Refresh, Systane y más marcas certificadas con envío a domicilio.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-            {['✅ Originales', '🚚 Envío 24h', '💊 Sin receta', '💧 Para lentes'].map(b => (
+            {['✅ Certificados', '🚚 Envío 24h', '💊 Sin receta', '💧 Para lentes'].map(b => (
               <span key={b} className="bg-white/15 text-white text-xs font-semibold px-3 py-1.5 rounded-full">{b}</span>
             ))}
           </div>

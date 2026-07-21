@@ -9,7 +9,7 @@ import type { Metadata } from 'next'
 
 export const metadata = {
   title: 'Lentes ACUVUE en República Dominicana | ContactGo',
-  description: 'Lentes ACUVUE® originales en República Dominicana. OASYS, 1-DAY MOIST, Multifocal. Entrega 24-48h. Sellados de fábrica.',
+  description: 'Lentes ACUVUE® certificados en República Dominicana. OASYS, 1-DAY MOIST, Multifocal. Entrega 24-48h. Sellados de fábrica.',
   alternates: { canonical: 'https://www.contactgo.net/marca/acuvue' },
   openGraph: {
     title: 'Lentes ACUVUE en RD | ContactGo',

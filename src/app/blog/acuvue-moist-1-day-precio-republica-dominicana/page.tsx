@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: '1-DAY ACUVUE Moist precio en RD 2026 — ContactGo',
-  description: 'Precio de 1-DAY ACUVUE Moist en República Dominicana: RD$3,875 la caja de 30. Moist for Astigmatism RD$6,250. J&J originales. Entrega en 24h.',
+  description: 'Precio de 1-DAY ACUVUE Moist en República Dominicana: RD$3,875 la caja de 30. Moist for Astigmatism RD$6,250. J&J certificados. Entrega en 24h.',
   alternates: { canonical: 'https://www.contactgo.net/blog/acuvue-moist-1-day-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: '1-DAY ACUVUE® MOIST® precio en República Dominicana 2026',
-    description: 'Precio de 1-DAY ACUVUE Moist en República Dominicana: RD$3,875 la caja de 30. Moist for Astigmatism RD$6,250. J&J originales. Entrega en 24h.',
+    description: 'Precio de 1-DAY ACUVUE Moist en República Dominicana: RD$3,875 la caja de 30. Moist for Astigmatism RD$6,250. J&J certificados. Entrega en 24h.',
     url: 'https://www.contactgo.net/blog/acuvue-moist-1-day-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/acuvue-moist-1-day-precio-republica-dominicana.webp', width: 1200, height: 630, alt: '1-DAY ACUVUE® MOIST® precio en República Dominicana 2026' }],
@@ -25,7 +25,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "1-DAY ACUVUE® MOIST® precio en República Dominicana 2026",
-            "description": "Precio de 1-DAY ACUVUE Moist en República Dominicana: RD$3,875 la caja de 30. Moist for Astigmatism RD$6,250. J&J originales. Entrega en 24h.",
+            "description": "Precio de 1-DAY ACUVUE Moist en República Dominicana: RD$3,875 la caja de 30. Moist for Astigmatism RD$6,250. J&J certificados. Entrega en 24h.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
@@ -77,7 +77,7 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$6,250</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
 
-          <p className="text-[11px] text-gray-400 text-center">*100% originales · Sellados de fábrica · Entrega 24-48h en toda RD · Junio 2026</p>
+          <p className="text-[11px] text-gray-400 text-center">*sellados de fábrica · Sellados de fábrica · Entrega 24-48h en toda RD · Junio 2026</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -161,7 +161,7 @@ export default function Page() {
 
         <div className="mt-8 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
-          <p className="text-sm text-gray-600 mb-4">100% originales · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
+          <p className="text-sm text-gray-600 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</Link>
