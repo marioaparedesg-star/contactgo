@@ -90,30 +90,54 @@ export async function POST(req: NextRequest) {
       ]
     }
 
-    const res = await fetch(`https://graph.facebook.com/v21.0/${WA_PHONE_ID}/messages`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messaging_product: 'whatsapp',
-        to: phone,
-        type: 'template',
-        template: {
-          name: templateName,
-          language: { code: 'es' },
-          components: [{
-            type: 'body',
-            parameters: [
-              { type: 'text', text: safeParam((nombre || 'Cliente').split(' ')[0]) },
-              { type: 'text', text: od },
-              { type: 'text', text: oi },
-              { type: 'text', text: cond },
-              ...productParams,
-            ]
-          }]
-        }
-      }),
-    })
-    const data = await res.json()
+    const nombreCorto = safeParam((nombre || 'Cliente').split(' ')[0])
+
+    async function enviar(tpl: string, params: { type: string; text: string }[]) {
+      const r = await fetch(`https://graph.facebook.com/v21.0/${WA_PHONE_ID}/messages`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messaging_product: 'whatsapp',
+          to: phone,
+          type: 'template',
+          template: { name: tpl, language: { code: 'es' }, components: [{ type: 'body', parameters: params }] },
+        }),
+      })
+      return r.json()
+    }
+
+    // Intento 1: plantillas v3 (formato en bloques, más legible)
+    let data = await enviar(templateName, [
+      { type: 'text', text: nombreCorto },
+      { type: 'text', text: od },
+      { type: 'text', text: oi },
+      { type: 'text', text: cond },
+      ...productParams,
+    ])
+
+    // Fallback: si la v3 aún no está aprobada por Meta, usar la v1 aprobada
+    // para que ningún cliente se quede sin su mensaje.
+    if (data.error) {
+      console.warn('[calculator-leads/notify] v3 falló, usando fallback v1:', data.error?.message)
+      const receta = safeParam(`OD ${od} · OI ${oi} (${cond})`)
+      const fmtV1 = (p: any) => safeParam(`${fmtNombre(p)} — RD$${fmtPrecio(p)}`)
+      if (unique.length === 1) {
+        data = await enviar('cg_receta_lista_unica', [
+          { type: 'text', text: nombreCorto },
+          { type: 'text', text: receta },
+          { type: 'text', text: fmtV1(unique[0]) },
+        ])
+      } else {
+        data = await enviar('cg_receta_lista', [
+          { type: 'text', text: nombreCorto },
+          { type: 'text', text: receta },
+          { type: 'text', text: fmtV1(unique[0]) },
+          { type: 'text', text: fmtV1(unique[1] ?? unique[0]) },
+          { type: 'text', text: fmtV1(unique[2] ?? unique[unique.length - 1]) },
+        ])
+      }
+    }
+
     if (data.error) {
       console.error('[calculator-leads/notify] WA error:', JSON.stringify(data.error))
       return NextResponse.json({ ok: false, reason: 'wa_error', detail: data.error.message }, { status: 200 })
