@@ -276,6 +276,9 @@ export async function sendCAPI(
     value?: number
     currency?: string
     content_ids?: string[]
+    content_type?: string
+    content_name?: string
+    content_category?: string
     num_items?: number
     order_id?: string
   },

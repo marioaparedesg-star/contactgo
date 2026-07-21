@@ -60,9 +60,11 @@ export async function POST(req: NextRequest) {
         currency: eventData.currency ?? 'DOP',
         value: eventData.value,
         content_ids: eventData.content_ids,
-        content_type: 'product',
+        content_type: eventData.content_type ?? 'product',
         num_items: eventData.num_items,
         order_id: eventData.order_id,
+        ...(eventData.content_name ? { content_name: eventData.content_name } : {}),
+        ...(eventData.content_category ? { content_category: eventData.content_category } : {}),
       }
     }
 
