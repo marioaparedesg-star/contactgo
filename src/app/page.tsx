@@ -144,7 +144,7 @@ export default async function HomePage() {
                     'ACUVUE, Air Optix, Biofinity y más — directo del distribuidor',
                     'Pago seguro con AZUL / Banco Popular',
                     'Atención personalizada por WhatsApp',
-                    'Devoluciones en 7 días',
+                    'Envío a toda República Dominicana',
                   ].map(item => (
                     <div key={item} className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
@@ -268,8 +268,8 @@ export default async function HomePage() {
                 </p>
                 <ul className="space-y-1.5">
                   {[
-                    '✓ Lentes esféricos quincenales o mensuales',
-                    '✓ Solución multipropósito Opti-Free 300ml',
+                    '✓ Lentes esféricos, tóricos o multifocales',
+                    '✓ Solución multipropósito incluida',
                     '✓ Gotas lubricantes para la comodidad diaria',
                     '✓ 1 solo envío · Sin costo adicional',
                   ].map(item => (
@@ -279,8 +279,8 @@ export default async function HomePage() {
               </div>
               <div className="flex flex-col items-center gap-3 shrink-0">
                 <div className="text-center bg-white rounded-2xl px-6 py-4 shadow-sm border border-blue-100">
-                  <p className="text-xs text-gray-400 mb-1">Armamos tu kit personalizado</p>
-                  <p className="font-black text-2xl text-blue-700">Desde RD${(precioOasys + 750).toLocaleString()}</p>
+                  <p className="text-xs text-gray-400 mb-1">Te armamos tu kit a medida</p>
+                  <p className="font-black text-xl text-blue-700">Según tu receta</p>
                   <p className="text-xs text-green-600 font-bold mt-1">Lentes + solución + gotas en 1 envío</p>
                 </div>
                 <a
