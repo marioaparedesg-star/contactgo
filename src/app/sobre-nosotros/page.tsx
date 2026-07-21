@@ -99,7 +99,7 @@ export default function SobreNosotrosPage() {
               ContactGo nació de una pregunta simple: ¿por qué comprar lentes de contacto tiene que ser tan complicado? Visitas innecesarias, poca disponibilidad y ninguna garantía de autenticidad. Había una mejor forma de hacerlo — y decidimos crearla.
             </p>
             <p>
-              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — sellados de fábrica, adquiridos a través de canales oficiales de cada marca.
+              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — directo del fabricante, adquiridos a través de canales oficiales de cada marca.
             </p>
             <p>
               Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin lentes, y entrega en 24-48 horas a todo el país.
@@ -135,7 +135,7 @@ export default function SobreNosotrosPage() {
         {/* Marcas autorizadas */}
         <section className="bg-gray-50 py-16 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Sellados de fábrica</h2>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Directo del fabricante</h2>
             <p className="text-gray-500 text-sm text-center mb-10">Trabajamos directamente con las mejores marcas del mundo</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {MARCAS.map(m => (

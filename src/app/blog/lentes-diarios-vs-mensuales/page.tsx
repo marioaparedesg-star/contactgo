@@ -370,7 +370,7 @@ export default function Page() {
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Ya sabes cuál quieres? Pídelos hoy.</h3>
           <p className="text-sm text-gray-600 mb-1">Diarios, quincenales y mensuales — todos disponibles con entrega 24-48h en toda la RD.</p>
-          <p className="text-xs text-gray-400 mb-4">sellados de fábrica · Pago seguro AZUL · Sin complicaciones</p>
+          <p className="text-xs text-gray-400 mb-4">directo del fabricante · Pago seguro AZUL · Sin complicaciones</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
               Ver todos los lentes disponibles →

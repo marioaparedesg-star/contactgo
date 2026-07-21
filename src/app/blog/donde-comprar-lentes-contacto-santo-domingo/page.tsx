@@ -98,7 +98,7 @@ export default function Page() {
           {/* Quick answer box */}
           <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-5">
             <p className="text-sm font-bold text-primary-800 mb-2">⚡ Respuesta rápida</p>
-            <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto certificados en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24-48 horas, más de 35 marcas disponibles, sellados de fábrica y sellados de fábrica. Sin necesidad de desplazarte a ningún lugar.</p>
+            <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto certificados en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24-48 horas, más de 35 marcas disponibles, directo del fabricante. Sin necesidad de desplazarte a ningún lugar.</p>
             <Link href="/catalogo" className="mt-3 inline-block bg-primary-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-primary-700 transition-colors">
               Ver catálogo completo →
             </Link>
@@ -130,7 +130,7 @@ export default function Page() {
                         ['Especialización', '100% lentes de contacto'],
                         ['Marcas disponibles', 'ACUVUE, Air Optix, Biofinity, BL Ultra y más'],
                         ['Entrega Santo Domingo', '24-48 horas'],
-                        ['Autenticidad', 'sellados de fábrica, sellados de fábrica'],
+                        ['Autenticidad', 'directo del fabricante, directo del fabricante'],
                         ['Precios', 'Desde RD$2,250'],
                         ['Pago', 'Tarjeta VISA/Mastercard (AZUL/Banco Popular)'],
                         ['Asesoría', 'WhatsApp + email'],
@@ -289,7 +289,7 @@ export default function Page() {
                 { q: '¿Dónde comprar lentes de contacto en Santo Domingo?', a: 'ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega en 24-48h en Santo Domingo y toda la República Dominicana. También puedes encontrarlos en clínicas oftalmológicas de la ciudad.' },
                 { q: '¿Cuánto cuestan los lentes de contacto en Santo Domingo?', a: 'En ContactGo los precios van desde RD$2,250 (lentes de color) hasta RD$20,000 (lentes multifocales especializados). Los lentes esféricos más populares como ACUVUE Oasys están desde RD$3,875.' },
                 { q: '¿Hay entrega a domicilio en Santo Domingo?', a: 'Sí. ContactGo entrega en 24-48 horas en Santo Domingo y áreas metropolitanas (Boca Chica, San Cristóbal, La Romana, etc.).' },
-                { q: '¿Los lentes de ContactGo son certificados?', a: 'Sí, sellados de fábrica y sellados de fábrica. ContactGo garantiza la autenticidad de todos sus productos.' },
+                { q: '¿Los lentes de ContactGo son certificados?', a: 'Sí, directo del fabricante. ContactGo garantiza la autenticidad de todos sus productos.' },
                 { q: '¿Necesito receta para comprar lentes en Santo Domingo?', a: 'Para lentes graduados, sí. Para lentes de color sin graduación, no. Si tienes tu prescripción de tu optometrista, puedes comprar directamente. Si no estás seguro, usa nuestra calculadora de receta gratuita.' },
               ].map(({ q, a }, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
@@ -330,7 +330,7 @@ export default function Page() {
         {/* CTA */}
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Tu pedido llega a Santo Domingo en 24-48h</h3>
-          <p className="text-sm text-gray-600 mb-1">Más de 35 sellados de fábrica. Pago seguro con AZUL.</p>
+          <p className="text-sm text-gray-600 mb-1">Más de 35 directo del fabricante. Pago seguro con AZUL.</p>
           <p className="text-xs text-gray-400 mb-4">Sin salir de casa · Sin esperas · Sin complicaciones</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">

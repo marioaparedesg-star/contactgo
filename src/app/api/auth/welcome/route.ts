@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   <tr><td style="background:white;padding:36px;">
     <p style="color:#374151;font-size:16px;margin:0 0 20px;font-weight:600;">Hola ${firstName} 👋</p>
     <p style="color:#4b5563;font-size:14px;line-height:1.7;margin:0 0 28px;">
-      Tu cuenta está lista. Ahora puedes comprar lentes de contacto sellados de fábrica,
+      Tu cuenta está lista. Ahora puedes comprar lentes de contacto directo del fabricante,
       con entrega a domicilio en toda República Dominicana.
     </p>
 
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       ${[
         ['🚀','Entrega en 24 horas','Para productos en stock en Santo Domingo'],
         ['🔒','Pago 100% seguro','Con AZUL Banco Popular — sin riesgo'],
-        ['✅','Originales certificados','Sellados de fábrica de ACUVUE, Alcon y más'],
+        ['✅','Originales certificados','Directo del fabricante de ACUVUE, Alcon y más'],
         ['↩️','7 días de devolución','Sin preguntas, sin complicaciones'],
       ].map(([icon, title, desc]) => `
         <tr><td style="padding:10px 0;border-bottom:1px solid #f3f4f6;">

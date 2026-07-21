@@ -51,7 +51,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Los lentes de contacto necesitan receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Los lentes de contacto graduados requieren una prescripción óptica actualizada, emitida por un optometrista u oftalmólogo. Solo los lentes de color sin graduación pueden adquirirse sin receta." } },
               { "@type": "Question", "name": "¿Cuánto duran los lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "Depende del tipo: los lentes diarios se descartan al final del día, los quincenales duran 14 días y los mensuales duran 30 días de uso. Nunca se deben usar más allá de su período indicado." } },
               { "@type": "Question", "name": "¿Son seguros los lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, cuando se usan correctamente. Son seguros para millones de personas en todo el mundo. La clave está en seguir las instrucciones de uso, higiene y reemplazo indicadas por el fabricante y tu especialista." } },
-              { "@type": "Question", "name": "¿Dónde comprar lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo puedes comprar lentes de contacto sellados de fábrica de ACUVUE, Air Optix, Biofinity, Bausch+Lomb y más marcas con entrega en 24-48 horas a toda República Dominicana." } }
+              { "@type": "Question", "name": "¿Dónde comprar lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo puedes comprar lentes de contacto directo del fabricante de ACUVUE, Air Optix, Biofinity, Bausch+Lomb y más marcas con entrega en 24-48 horas a toda República Dominicana." } }
             ]
           },
           {
@@ -340,7 +340,7 @@ export default function Page() {
           {/* Sección 9 */}
           <section id="marcas">
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Las mejores marcas disponibles en República Dominicana</h2>
-            <p>En ContactGo ofrecemos las principales marcas de lentes de contacto del mundo, todas sellados de fábrica y selladas de fábrica:</p>
+            <p>En ContactGo ofrecemos las principales marcas de lentes de contacto del mundo, todas directo del fabricante y selladas de fábrica:</p>
             <div className="grid grid-cols-2 gap-3 mt-4">
               {[
                 { marca: 'ACUVUE®', fab: 'Johnson & Johnson', estrella: 'ACUVUE Oasys', link: '/marca/acuvue' },
@@ -425,7 +425,7 @@ export default function Page() {
                 { q: '¿Los lentes de contacto necesitan receta médica?', a: 'Sí, los lentes graduados requieren prescripción de un optometrista u oftalmólogo. Solo los lentes de color puramente estéticos (sin graduación) pueden adquirirse sin receta.' },
                 { q: '¿Cuánto duran los lentes de contacto?', a: 'Depende del tipo: los diarios se descartan al final del día, los quincenales duran 14 días y los mensuales 30 días. Nunca deben usarse más tiempo del indicado.' },
                 { q: '¿Son seguros los lentes de contacto?', a: 'Sí, cuando se usan correctamente y se mantiene una buena higiene. Millones de personas los usan a diario sin problemas. La clave está en seguir las instrucciones del fabricante y tu especialista.' },
-                { q: '¿Dónde comprar lentes de contacto en República Dominicana?', a: 'En ContactGo ofrecemos más de 35 productos de las principales marcas mundiales, sellados de fábrica, con entrega en 24-48 horas a todo el país.' },
+                { q: '¿Dónde comprar lentes de contacto en República Dominicana?', a: 'En ContactGo ofrecemos más de 35 productos de las principales marcas mundiales, directo del fabricante, con entrega en 24-48 horas a todo el país.' },
               ].map(({ q, a }, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
                   <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">
@@ -471,7 +471,7 @@ export default function Page() {
         {/* CTA */}
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Listo para encontrar tus lentes de contacto?</h3>
-          <p className="text-sm text-gray-600 mb-4">Más de 35 sellados de fábrica. Entrega en 24-48h en toda República Dominicana.</p>
+          <p className="text-sm text-gray-600 mb-4">Más de 35 directo del fabricante. Entrega en 24-48h en toda República Dominicana.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
               Ver catálogo completo →

@@ -434,7 +434,7 @@ export default function Page() {
         {/* CTA */}
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Listo para tus primeros lentes de contacto?</h3>
-          <p className="text-sm text-gray-600 mb-4">Todos los productos que necesitas: lentes sellados de fábrica y soluciones de limpieza. Entrega en 24-48h en toda la República Dominicana.</p>
+          <p className="text-sm text-gray-600 mb-4">Todos los productos que necesitas: lentes directo del fabricante y soluciones de limpieza. Entrega en 24-48h en toda la República Dominicana.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
               Ver lentes esféricos →

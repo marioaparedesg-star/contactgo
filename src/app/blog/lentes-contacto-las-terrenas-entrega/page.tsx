@@ -22,7 +22,7 @@ export default function Page() {
       <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Especialistas en salud visual · 5 min · Julio 2026</p></div>
     </div>
     <div className="space-y-8 text-gray-700 leading-relaxed">
-      <p>ContactGo entrega lentes de contacto certificados directamente en tu hotel, residencia o negocio en Las Terrenas en 24-48 horas. ACUVUE, Biofinity, Air Optix — sellados de fábrica y sellados de fabrica.</p>
+      <p>ContactGo entrega lentes de contacto certificados directamente en tu hotel, residencia o negocio en Las Terrenas en 24-48 horas. ACUVUE, Biofinity, Air Optix — directo del fabricante y sellados de fabrica.</p>
       <section id="entrega">
         <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Zonas de entrega</h2>
         <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
@@ -30,7 +30,7 @@ export default function Page() {
           <p className="text-sm text-gray-600">Samana, El Limon, Rincon</p>
           <div className="flex items-center gap-2 mt-3">
             <span className="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">24-48h de entrega</span>
-            <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">sellados de fábrica</span>
+            <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">directo del fabricante</span>
           </div>
         </div>
       </section>
@@ -71,7 +71,7 @@ export default function Page() {
     </div>
     <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
       <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en Las Terrenas en 24-48h</h3>
-      <p className="text-sm text-gray-500 mb-4">sellados de fábrica · Sellados de fabrica · Pago seguro con AZUL</p>
+      <p className="text-sm text-gray-500 mb-4">directo del fabricante · Sellados de fabrica · Pago seguro con AZUL</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catalogo →</a>
         <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>

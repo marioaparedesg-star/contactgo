@@ -84,7 +84,7 @@ export default function PoliticaRecetaPage() {
                   { icon: '✅', text: 'Solicitamos confirmación de que el cliente posee una receta válida emitida por profesional de la salud visual antes de procesar pedidos de lentes correctivos.' },
                   { icon: '✅', text: 'Mostramos claramente los parámetros técnicos de cada producto para que el cliente pueda verificar que coinciden con su prescripción.' },
                   { icon: '✅', text: 'Ofrecemos orientación gratuita vía WhatsApp con nuestro equipo de soporte para interpretar recetas.' },
-                  { icon: '✅', text: 'Los productos que comercializamos son sellados de fábrica, distribuidos por los fabricantes autorizados (J&J Vision, Alcon, CooperVision, Bausch+Lomb).' },
+                  { icon: '✅', text: 'Los productos que comercializamos son directo del fabricante, distribuidos por los fabricantes autorizados (J&J Vision, Alcon, CooperVision, Bausch+Lomb).' },
                   { icon: '⚠️', text: 'ContactGo no emite diagnósticos visuales ni reemplaza la consulta con un profesional de la salud.' },
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">

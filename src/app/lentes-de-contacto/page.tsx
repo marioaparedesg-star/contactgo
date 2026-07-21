@@ -9,7 +9,7 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto' },
   title: 'Lentes de Contacto en República Dominicana | ContactGo',
-  description: 'Compra lentes de contacto certificados en República Dominicana. Acuvue, Air Optix, Biofinity, FreshLook. Entrega en 24-48h. Sellados de fábrica.',
+  description: 'Compra lentes de contacto certificados en República Dominicana. Acuvue, Air Optix, Biofinity, FreshLook. Entrega en 24-48h. Directo del fabricante.',
   openGraph: {
     title: 'Lentes de Contacto en República Dominicana — ContactGo',
     description: 'La tienda especializada #1 en lentes de contacto certificados en RD.',

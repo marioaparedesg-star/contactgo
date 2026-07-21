@@ -34,7 +34,7 @@ export default async function ResenasPage() {
 
   // Fallback reviews if no real ones yet
   const fallback = [
-    { id: 1, autor_nombre: 'María R.', ciudad: 'Santo Domingo', calificacion: 5, comentario: 'Excelente servicio, llegaron en 24 horas como prometieron. Los Acuvue son sellados de fábrica, igual que en la óptica pero más baratos.', producto: 'ACUVUE® MOIST®', created_at: '2026-04-15' },
+    { id: 1, autor_nombre: 'María R.', ciudad: 'Santo Domingo', calificacion: 5, comentario: 'Excelente servicio, llegaron en 24 horas como prometieron. Los Acuvue son directo del fabricante, igual que en la óptica pero más baratos.', producto: 'ACUVUE® MOIST®', created_at: '2026-04-15' },
     { id: 2, autor_nombre: 'Carlos M.', ciudad: 'Santiago', calificacion: 5, comentario: 'Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto.', producto: 'Air Optix HydraGlyde', created_at: '2026-04-10' },
     { id: 3, autor_nombre: 'Feyilina P.', ciudad: 'Santo Domingo', calificacion: 5, comentario: 'Llevo 6 meses comprando aquí. Los precios son mucho mejores que en cualquier óptica y siempre llegan rápido.', producto: 'Biofinity® Toric', created_at: '2026-03-28' },
     { id: 4, autor_nombre: 'Ana G.', ciudad: 'La Romana', calificacion: 5, comentario: 'Me ayudaron a entender mi receta por WhatsApp. Súper atentos y los lentes de colores quedaron espectaculares.', producto: 'Air Optix® Colors', created_at: '2026-03-20' },

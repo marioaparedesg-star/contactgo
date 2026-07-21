@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
     shortcut: '/favicon.ico',
   },
-  description: 'ContactGo — La forma más fácil de comprar lentes de contacto en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Sellados de fábrica. Entrega en 24-48h a donde estés.',
+  description: 'ContactGo — La forma más fácil de comprar lentes de contacto en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Directo del fabricante. Entrega en 24-48h a donde estés.',
   authors: [{ name: 'ContactGo', url: 'https://www.contactgo.net' }],
   creator: 'ContactGo',
   publisher: 'ContactGo',
@@ -72,7 +72,7 @@ const organizationSchema = {
   "url": "https://www.contactgo.net",
   "logo": "https://www.contactgo.net/og-1200x630.png",
   "image": "https://www.contactgo.net/og-1200x630.png",
-  "description": "ContactGo es la forma más fácil de comprar lentes de contacto en República Dominicana. Sellados de fábrica. Entrega en 24-48 horas a donde estés.",
+  "description": "ContactGo es la forma más fácil de comprar lentes de contacto en República Dominicana. Directo del fabricante. Entrega en 24-48 horas a donde estés.",
   "telephone": "+18096942268",
   "email": "info@contactgo.net",
   "contactPoint": {

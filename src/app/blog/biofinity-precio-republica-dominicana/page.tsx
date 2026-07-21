@@ -32,7 +32,7 @@ export default function Page() {
     { q: '¿Son los Biofinity buenos lentes de contacto?', a: 'Sí, Biofinity es una de las marcas más reconocidas de CooperVision. Son lentes mensuales de silicona hidrogel con tecnología Aquaform® que proporciona un Dk/t de 160, uno de los más altos del mercado, lo que significa excelente transmisión de oxígeno.' },
     { q: '¿Cuánto duran los lentes Biofinity?', a: 'Los Biofinity son lentes de reemplazo mensual — se usan hasta 30 días consecutivos y luego se descartan. Una caja de 6 lentes es suficiente para 3 meses de uso por un ojo (6 meses si es para un solo ojo).' },
     { q: '¿Biofinity sirve para astigmatismo?', a: 'No el Biofinity estándar, pero sí el Biofinity Toric, diseñado específicamente para corregir el astigmatismo. Disponible en ContactGo desde RD$5,750 la caja de 6 lentes, con entrega en 24-48h.' },
-    { q: '¿Dónde comprar Biofinity certificados en RD?', a: 'En ContactGo todos los Biofinity son sellados de fábrica de CooperVision, sellados de fábrica. Entregamos en 24-48 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.' },
+    { q: '¿Dónde comprar Biofinity certificados en RD?', a: 'En ContactGo todos los Biofinity son directo del fabricante de CooperVision, directo del fabricante. Entregamos en 24-48 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.' },
     { q: '¿Biofinity o ACUVUE Oasys — cuál es mejor?', a: 'Depende del uso. Biofinity es mensual con mayor Dk/t (160 vs 147) y menor costo por día de uso. ACUVUE Oasys es quincenal, con tecnología HYDRACLEAR Plus ideal para pantallas. Para uso intensivo diario, Biofinity suele ser más económico. Para renovación frecuente, ACUVUE Oasys.' },
   ]
 

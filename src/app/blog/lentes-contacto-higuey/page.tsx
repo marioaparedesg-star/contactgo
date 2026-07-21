@@ -45,7 +45,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en Higüey y toda la provincia de La Altagracia en 24-48 horas. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío a Higüey se calcula al momento del checkout. Los pedidos superiores a RD$8,000 tienen envío gratuito. Consulta el costo exacto al agregar tu dirección de entrega." } },
               { "@type": "Question", "name": "¿Cuánto tarda la entrega en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en Higüey es en 24-48 horas hábiles para la mayoría de los pedidos. Pedidos realizados antes de las 3pm salen el mismo día." } },
-              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 35 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y sellados de fábrica." } }
+              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 35 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y directo del fabricante." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
@@ -68,12 +68,12 @@ export default function Page() {
           <span className="text-2xl">🚀</span>
           <div>
             <p className="text-sm font-bold text-green-800">Entrega 24-48h en Higüey y Higüey y toda la provincia de La Altagracia</p>
-            <p className="text-xs text-green-600">sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
+            <p className="text-xs text-green-600">directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           </div>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Comprar lentes de contacto en Higüey nunca fue tan fácil. ContactGo entrega directamente en Higüey y toda la provincia de La Altagracia en 24-48 horas — sin necesidad de visitar ninguna tienda. Más de 35 productos de las marcas más reconocidas del mundo, sellados de fábrica y sellados de fábrica.</p>
+          <p>Comprar lentes de contacto en Higüey nunca fue tan fácil. ContactGo entrega directamente en Higüey y toda la provincia de La Altagracia en 24-48 horas — sin necesidad de visitar ninguna tienda. Más de 35 productos de las marcas más reconocidas del mundo, directo del fabricante.</p>
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Productos más vendidos disponibles en Higüey</h2>
@@ -132,7 +132,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en Higüey en 24-48h</h3>
-          <p className="text-sm text-gray-500 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro con AZUL · Sin salir de casa</p>
+          <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>

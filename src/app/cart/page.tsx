@@ -299,7 +299,7 @@ export default function CartPage() {
             {/* Trust badges */}
             <div className="grid grid-cols-3 gap-2 pt-2">
               {[
-                { icon: Shield, text: 'Sellado de fábrica' },
+                { icon: Shield, text: 'Directo del fabricante' },
                 { icon: Truck,  text: 'Entrega 24-48h' },
                 { icon: RotateCcw, text: 'Devolución 48h' },
               ].map(b => (

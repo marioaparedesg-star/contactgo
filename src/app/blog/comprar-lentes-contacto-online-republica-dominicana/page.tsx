@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const FAQS = [
-    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo ofrece lentes sellados de fábrica, sellados de fábrica, con pago seguro mediante AZUL/Banco Popular y entrega verificada en 24-48 horas en toda la RD.' },
+    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo ofrece lentes directo del fabricante, directo del fabricante, con pago seguro mediante AZUL/Banco Popular y entrega verificada en 24-48 horas en toda la RD.' },
     { q: '¿Necesito receta para comprar lentes de contacto online?', a: 'Para lentes graduados sí. Necesitas los valores de tu receta (SPH, CYL, AXIS, ADD según el tipo). Para lentes de color sin graduación, no es necesaria. Puedes usar nuestra calculadora de receta gratuita si no tienes la tuya a mano.' },
-    { q: '¿Cómo sé que los lentes son certificados?', a: 'Los lentes certificados vienen en empaque sellado de fábrica con código de autenticidad verificable con el fabricante. En ContactGo todos los productos son sellados de fábrica con garantía de autenticidad. Nunca vendemos imitaciones.' },
+    { q: '¿Cómo sé que los lentes son certificados?', a: 'Los lentes certificados vienen en empaque directo del fabricante con código de autenticidad verificable con el fabricante. En ContactGo todos los productos son directo del fabricante con garantía de autenticidad. Nunca vendemos imitaciones.' },
     { q: '¿Cuánto tarda la entrega de lentes de contacto en RD?', a: 'En ContactGo la entrega es en 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el resto del país.' },
     { q: '¿Puedo devolver los lentes si no son los correctos?', a: 'Sí. ContactGo acepta devoluciones de productos sellados no abiertos dentro de los 7 días de recibidos, siempre que no se haya roto el sello. Consulta nuestra política de devoluciones para más detalles.' },
     { q: '¿Cuál es la forma de pago para comprar lentes online en RD?', a: 'En ContactGo aceptamos tarjeta de crédito y débito (VISA y Mastercard) a través de AZUL/Banco Popular, el procesador de pagos más utilizado en República Dominicana.' },
@@ -132,7 +132,7 @@ export default function Page() {
             <p>El riesgo real al comprar lentes de contacto online no es el pago — es recibir un producto falsificado que puede dañar la salud ocular. Aquí están las señales que distinguen una tienda confiable:</p>
             <div className="space-y-3 mt-4">
               {[
-                { check: '✅', label: 'Producto sellado de fábrica', desc: 'Cada caja debe venir con el sello original del fabricante intacto. Si el sellado está abierto o parece manipulado, es una señal de alarma.' },
+                { check: '✅', label: 'Producto directo del fabricante', desc: 'Cada caja debe venir con el sello original del fabricante intacto. Si el sellado está abierto o parece manipulado, es una señal de alarma.' },
                 { check: '✅', label: 'Código de autenticidad', desc: 'Las marcas principales (ACUVUE, Biofinity, Air Optix) tienen códigos de verificación en el empaque que pueden comprobarse en el sitio oficial del fabricante.' },
                 { check: '✅', label: 'Información clara del producto', desc: 'La etiqueta debe mostrar: nombre del producto, material, Dk/t, radio de curvatura (BC), diámetro (DIA), fecha de caducidad y graduación seleccionada.' },
                 { check: '✅', label: 'Tienda especializada en lentes', desc: 'Una tienda que vende exclusivamente lentes de contacto tiene mayor control de autenticidad que una tienda general.' },

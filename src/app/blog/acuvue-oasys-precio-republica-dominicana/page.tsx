@@ -53,7 +53,7 @@ export default function Page() {
             "@type": "FAQPage",
             "mainEntity": [
               { "@type": "Question", "name": "¿Cuánto cuesta ACUVUE Oasys en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo, ACUVUE Oasys (6 lentes quincenales) cuesta RD$3,875. El modelo para astigmatismo está en RD$6,250 y el multifocal en RD$8,200. Los precios incluyen envío en 24-48h en toda la RD." } },
-              { "@type": "Question", "name": "¿Dónde comprar ACUVUE Oasys en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar ACUVUE Oasys sellados de fábrica en ContactGo con entrega en 24-48h en toda República Dominicana. Son los mismos lentes que encuentras en clínicas y tiendas físicas pero con la comodidad de recibirlos en tu puerta." } },
+              { "@type": "Question", "name": "¿Dónde comprar ACUVUE Oasys en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar ACUVUE Oasys directo del fabricante en ContactGo con entrega en 24-48h en toda República Dominicana. Son los mismos lentes que encuentras en clínicas y tiendas físicas pero con la comodidad de recibirlos en tu puerta." } },
               { "@type": "Question", "name": "¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?", "acceptedAnswer": { "@type": "Answer", "text": "ACUVUE Oasys usa silicona hidrogel (Senofilcon A) con tecnología HYDRACLEAR Plus y ofrece mayor transmisión de oxígeno y comodidad. ACUVUE 2 usa hidrogel estándar. El Oasys es más cómodo, especialmente para uso prolongado o frente a pantallas." } },
               { "@type": "Question", "name": "¿Cuánto duran los ACUVUE Oasys?", "acceptedAnswer": { "@type": "Answer", "text": "ACUVUE Oasys son lentes quincenales — se usan durante 14 días y luego se descartan. Cada caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos." } }
             ]
@@ -127,7 +127,7 @@ export default function Page() {
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
 
-          <p>Si buscas el precio de <strong>ACUVUE Oasys en República Dominicana</strong>, llegaste al lugar correcto. En ContactGo somos la tienda especializada en lentes de contacto con el catálogo completo de la línea ACUVUE — sellados de fábrica y con entrega en 24-48 horas a toda la República Dominicana.</p>
+          <p>Si buscas el precio de <strong>ACUVUE Oasys en República Dominicana</strong>, llegaste al lugar correcto. En ContactGo somos la tienda especializada en lentes de contacto con el catálogo completo de la línea ACUVUE — directo del fabricante y con entrega en 24-48 horas a toda la República Dominicana.</p>
 
           {/* Tabla de precios */}
           <section>
@@ -311,7 +311,7 @@ export default function Page() {
             <div className="space-y-3">
               {[
                 { q: '¿Cuánto cuesta ACUVUE Oasys en República Dominicana?', a: 'En ContactGo, ACUVUE Oasys (6 lentes quincenales) cuesta RD$3,875. El modelo para astigmatismo está en RD$6,250 y el multifocal en RD$8,200. Los precios incluyen envío en 24-48h en toda la RD.' },
-                { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys sellados de fábrica, sellados de fábrica, con entrega a domicilio en 24-48 horas. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
+                { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys directo del fabricante, directo del fabricante, con entrega a domicilio en 24-48 horas. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
                 { q: '¿Cuánto duran los ACUVUE Oasys?', a: 'Son lentes quincenales — se usan durante 14 días consecutivos y luego se descartan. Una caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos.' },
                 { q: '¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?', a: 'ACUVUE Oasys usa silicona hidrogel con HYDRACLEAR Plus (mayor oxígeno, mayor comodidad). ACUVUE 2 usa hidrogel convencional y es una opción más económica a RD$3,600.' },
                 { q: '¿ACUVUE Oasys sirve para astigmatismo?', a: 'Sí, pero necesitas el modelo específico: ACUVUE Oasys for Astigmatism. Este tiene un diseño tórico que estabiliza el lente para corregir el astigmatismo con precisión. Cuesta RD$6,250 en ContactGo.' },
@@ -350,7 +350,7 @@ export default function Page() {
         <div className="mt-10 bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">ACUVUE Oasys — entrega en 24-48h</h3>
           <p className="text-sm text-gray-600 mb-1">Los mismos lentes que en la clínica, directo a tu puerta en toda República Dominicana.</p>
-          <p className="text-xs text-gray-400 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro AZUL</p>
+          <p className="text-xs text-gray-400 mb-4">directo del fabricante · Directo del fabricante · Pago seguro AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana"
               className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">
@@ -364,7 +364,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda República Dominicana</h3>
-          <p className="text-sm text-gray-500 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
+          <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>

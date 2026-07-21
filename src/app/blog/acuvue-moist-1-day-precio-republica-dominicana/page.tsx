@@ -77,7 +77,7 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$6,250</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
 
-          <p className="text-[11px] text-gray-400 text-center">*sellados de fábrica · Sellados de fábrica · Entrega 24-48h en toda RD · Junio 2026</p>
+          <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -161,7 +161,7 @@ export default function Page() {
 
         <div className="mt-8 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
-          <p className="text-sm text-gray-600 mb-4">sellados de fábrica · Sellados de fábrica · Pago seguro con AZUL/Banco Popular</p>
+          <p className="text-sm text-gray-600 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</Link>

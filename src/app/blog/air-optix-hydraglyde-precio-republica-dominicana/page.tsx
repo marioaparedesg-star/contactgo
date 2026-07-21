@@ -27,7 +27,7 @@ export default function Page() {
 
   const FAQS = [
     { q: '¿Cuánto cuestan los Air Optix HydraGlyde en República Dominicana?', a: 'En ContactGo los Air Optix Plus HydraGlyde esféricos cuestan RD$4,375 la caja de 6 lentes. La versión Multifocal está disponible desde RD$7,250.' },
-    { q: '¿Dónde comprar Air Optix HydraGlyde certificados en RD?', a: 'ContactGo los ofrece sellados de fábrica de Alcon con entrega en 24-48 horas en toda República Dominicana. Pago seguro con AZUL/Banco Popular.' },
+    { q: '¿Dónde comprar Air Optix HydraGlyde certificados en RD?', a: 'ContactGo los ofrece directo del fabricante de Alcon con entrega en 24-48 horas en toda República Dominicana. Pago seguro con AZUL/Banco Popular.' },
     { q: '¿Air Optix HydraGlyde es bueno para ojos secos?', a: 'Sí. La tecnología HydraGlyde® de Alcon incorpora una capa molecular de lubricante en la superficie del lente que mantiene la hidratación hasta 16 horas de uso continuo, ideal para personas con ojos secos moderados.' },
     { q: '¿Cuánto tiempo dura un lente Air Optix HydraGlyde?', a: 'Son lentes de reemplazo mensual — se usan máximo 30 días y luego se descartan. Con uso diario de 8 horas, una caja de 6 lentes dura aproximadamente 3 meses por ojo.' },
     { q: '¿Air Optix HydraGlyde sirve para astigmatismo?', a: 'La línea regular (esférico) no corrige astigmatismo. Para astigmatismo, Alcon ofrece Air Optix Astig, aunque en ContactGo disponemos de otras marcas tóricas como Biofinity Toric y ACUVUE Oasys Astig.' },
@@ -308,7 +308,7 @@ export default function Page() {
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
             <p>Los Air Optix® plus HydraGlyde® son una excelente elección para usuarios de lentes de contacto mensuales en República Dominicana. A RD$4,375 la caja de 6 lentes, son una opción competitiva que ofrece tecnología de hidratación avanzada, alta transmisión de oxígeno y resistencia a depósitos — todo lo que necesitas para un uso diario cómodo.</p>
-            <p className="mt-3">En ContactGo los encuentras sellados de fábrica de Alcon, con entrega en 24-48 horas en toda la República Dominicana. ¿Tienes dudas sobre si son el lente correcto para ti? Escríbenos por WhatsApp.</p>
+            <p className="mt-3">En ContactGo los encuentras directo del fabricante de Alcon, con entrega en 24-48 horas en toda la República Dominicana. ¿Tienes dudas sobre si son el lente correcto para ti? Escríbenos por WhatsApp.</p>
           </section>
         </div>
 
@@ -319,7 +319,7 @@ export default function Page() {
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-blue-50 border border-teal-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Air Optix HydraGlyde — en tu puerta en 24h</h3>
-          <p className="text-sm text-gray-600 mb-4">sellados de fábrica de Alcon · Sellados de fábrica · Entrega en toda República Dominicana</p>
+          <p className="text-sm text-gray-600 mb-4">directo del fabricante de Alcon · Directo del fabricante · Entrega en toda República Dominicana</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana"
               className="inline-flex items-center justify-center gap-2 bg-teal-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-700 transition-colors text-sm">

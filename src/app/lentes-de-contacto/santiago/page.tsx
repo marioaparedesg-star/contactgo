@@ -7,11 +7,11 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santiago RD | Envío a Domicilio — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity, Air Optix sellados de fábrica. Envío RD$350. Entrega en 24-48 horas.',
+  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$350. Entrega en 24-48 horas.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santiago' },
   openGraph: {
     title: 'Lentes de Contacto en Santiago | ContactGo',
-    description: 'Entrega a domicilio en Santiago en 24-48 horas. Sellados de fábrica.',
+    description: 'Entrega a domicilio en Santiago en 24-48 horas. Directo del fabricante.',
     url: 'https://www.contactgo.net/lentes-de-contacto/santiago',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -46,7 +46,7 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-teal-700 via-primary-600 to-blue-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$350 · 24-48 horas</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Santiago</h1>
-          <p className="text-white/90 text-lg max-w-xl mx-auto">Entrega a domicilio en Santiago y toda la región. ACUVUE, Biofinity, Air Optix sellados de fábrica.</p>
+          <p className="text-white/90 text-lg max-w-xl mx-auto">Entrega a domicilio en Santiago y toda la región. ACUVUE, Biofinity, Air Optix directo del fabricante.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors">Usar mi receta</Link>
             <Link href="/catalogo" className="border border-white/40 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors">Ver catálogo completo</Link>
@@ -68,7 +68,7 @@ export default async function Page() {
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Lentes de contacto con envío a Santiago</h2>
           <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Santiago</strong> y toda su región. No necesitas ir a una óptica — tus lentes llegan directamente donde estás en 24-48 horas.</p>
-          <p>Todos nuestros productos son sellados de fábrica y certificados. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en pedidos superiores a RD$6,000.</p>
+          <p>Todos nuestros productos son directo del fabricante y certificados. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en pedidos superiores a RD$6,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto en minutos.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">Marcas más pedidas en Santiago</h3>
@@ -86,7 +86,7 @@ export default async function Page() {
             <p className="text-xs text-gray-500 mt-2 font-semibold">— Carlos M., Santiago de los Caballeros ⭐⭐⭐⭐⭐</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[['🚚','Envío RD$350'],['📦','24-48 horas'],['✅','Sellado de fábrica'],['↩️','Dev. 48 horas']].map(([i,t]) => (
+            {[['🚚','Envío RD$350'],['📦','24-48 horas'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
                 <span className="text-xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>
