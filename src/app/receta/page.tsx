@@ -62,7 +62,7 @@ export default function RecetaPage() {
 
 
   // ── Motor de recomendación ────────────────────────────────────────────────
-  const cargarProductos = async (conv: ConvertedRx) => {
+  const cargarProductos = async (conv: ConvertedRx): Promise<any[]> => {
     setLoadingP(true)
     try {
       const res = await fetch('/api/receta/recomendar', {
@@ -70,10 +70,12 @@ export default function RecetaPage() {
         body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0 })
       })
       const json = await res.json()
-      setProducts(json.productos ?? [])
+      const lista = json.productos ?? []
+      setProducts(lista)
       setTotalDisp(json.total ?? 0)
       if (json.nota) toast(json.nota, { duration: 4000, icon: '💡' })
-    } catch { setProducts([]) }
+      return lista
+    } catch { setProducts([]); return [] }
     finally { setLoadingP(false) }
   }
 
@@ -91,11 +93,12 @@ export default function RecetaPage() {
     await ejecutarCalculo(rx)
   }
 
-  const ejecutarCalculo = async (rx: GlassesRx) => {
+  const ejecutarCalculo = async (rx: GlassesRx): Promise<any[]> => {
     const conv = convertGlassesToContacts(rx, rxSource ?? 'contacto'); setResult(conv); setCartAdded(null)
-    await cargarProductos(conv)
+    const lista = await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+    return lista
   }
 
   // El formulario de datos es obligatorio para ver resultados.
@@ -132,7 +135,22 @@ export default function RecetaPage() {
     setLeadCaptured(true)
     setShowLead(false)
     toast.success(saveOk ? '¡Datos guardados! Calculando tu receta...' : 'Calculando tu receta...')
-    await ejecutarCalculo(pendingRx)
+    const lista = await ejecutarCalculo(pendingRx)
+    // WhatsApp inmediato con LOS MISMOS productos y precios de la pantalla
+    if (saveOk && lista.length) {
+      const convFinal = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto')
+      fetch('/api/calculator-leads/notify', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: leadNombre.trim(),
+          telefono: telClean,
+          od_sph: convFinal.od.sph, od_cyl: convFinal.od.cyl, od_axis: convFinal.od.axis,
+          oi_sph: convFinal.oi.sph, oi_cyl: convFinal.oi.cyl, oi_axis: convFinal.oi.axis,
+          condiciones: convFinal.condiciones,
+          productos: lista.slice(0, 3).map((p: any) => ({ nombre: p.nombre, precio: p.precio })),
+        }),
+      }).catch(() => {})
+    }
   }
   const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null) }
 
