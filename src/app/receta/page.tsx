@@ -98,30 +98,14 @@ export default function RecetaPage() {
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
   }
 
-  // Cerrar pop-up sin llenar datos → mostrar resultados igual.
-  // Guardamos UNA sola vez por sesión un lead anónimo de respaldo (antes esto
-  // se disparaba en cada cálculo, incluso justo después de capturar el lead
-  // con nombre/email, generando un registro duplicado "Sin nombre" cada vez).
-  const anonSavedRef = useRef(false)
-  const skipLeadAndCalculate = () => {
-    setShowLead(false)
-    if (!leadCaptured && !anonSavedRef.current && pendingRx) {
-      anonSavedRef.current = true
-      const conv = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto')
-      fetch('/api/calculator-leads/save', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
-          oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
-          tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
-        }),
-      }).catch(() => {})
-    }
-    if (pendingRx) ejecutarCalculo(pendingRx)
-  }
+  // El formulario de datos es obligatorio para ver resultados.
+  // Ya NO se guardan leads anónimos "Sin nombre" — todo lead tiene
+  // nombre + WhatsApp, lo que los hace contactables y accionables.
   const handleLeadSubmit = async () => {
     if (!pendingRx) return
-    if (!leadNombre.trim() || !leadEmail.trim()) { toast.error('Ingresa nombre y correo'); return }
+    const telClean = leadTelefono.replace(/\D/g,'')
+    if (!leadNombre.trim()) { toast.error('Ingresa tu nombre'); return }
+    if (telClean.length < 10) { toast.error('Ingresa tu número de WhatsApp (10 dígitos)'); return }
     const conv = convertGlassesToContacts(pendingRx)
     let saveOk = false
     try {
@@ -129,8 +113,8 @@ export default function RecetaPage() {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: leadNombre.trim(),
-          email: leadEmail.trim().toLowerCase(),
-          telefono: leadTelefono.replace(/\D/g,'') || null,
+          email: leadEmail.trim() ? leadEmail.trim().toLowerCase() : null,
+          telefono: telClean,
           od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
           oi_sph: pendingRx.oi.sph, oi_cyl: pendingRx.oi.cyl, oi_axis: pendingRx.oi.axis,
           tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel, condiciones: conv.condiciones
@@ -238,26 +222,23 @@ export default function RecetaPage() {
         {showLead && !leadCaptured && (
           <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative">
-              <button onClick={skipLeadAndCalculate} className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl leading-none p-1">✕</button>
               <div className="flex flex-col items-center text-center mb-5">
                 <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-3"><Mail className="w-6 h-6 text-green-600" /></div>
-                <h3 className="font-black text-gray-900 text-lg">¿Guardamos tu receta?</h3>
-                <p className="text-xs text-gray-500 mt-1">Te avisamos cuando sea hora de reponer y te enviamos ofertas exclusivas</p>
+                <h3 className="font-black text-gray-900 text-lg">Tu resultado está listo 🎉</h3>
+                <p className="text-xs text-gray-500 mt-1">Déjanos tus datos para mostrarte qué lentes te sirven y avisarte cuando toque reponer</p>
               </div>
               <div className="space-y-3 mb-4">
-                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre completo"
+                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre completo *"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
-                <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico"
+                <input value={leadTelefono} onChange={e => setLeadTelefono(e.target.value)} type="tel" placeholder="WhatsApp * (ej: 809-555-1234)"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
-                <input value={leadTelefono} onChange={e => setLeadTelefono(e.target.value)} type="tel" placeholder="Teléfono (opcional)"
+                <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico (opcional)"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
               </div>
-              <button onClick={handleLeadSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 font-black rounded-xl text-sm transition-colors mb-2">
-                Guardar y ver mi receta →
+              <button onClick={handleLeadSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
+                Ver mi resultado →
               </button>
-              <button onClick={skipLeadAndCalculate} className="w-full text-xs text-gray-400 py-1 hover:text-gray-600">
-                Continuar sin guardar
-              </button>
+              <p className="text-[10px] text-gray-400 text-center">🔒 Tus datos están seguros. Nunca spam.</p>
             </div>
           </div>
         )}
