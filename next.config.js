@@ -98,7 +98,6 @@ const nextConfig = {
       { source: '/register',       destination: '/cuenta', permanent: true },
       { source: '/registro',       destination: '/cuenta', permanent: true },
       // Rutas alternativas que usuarios buscan
-      { source: '/contacto',       destination: '/sobre-nosotros', permanent: false },
       { source: '/inicio',         destination: '/',       permanent: true },
       { source: '/home',           destination: '/',       permanent: true },
       { source: '/tienda',         destination: '/catalogo', permanent: true },
