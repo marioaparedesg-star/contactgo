@@ -293,11 +293,23 @@ export async function sendCAPI(
   // Solo esperamos por _fbp/_fbc cuando el llamador no los pasó explícitamente
   // (evita esperar innecesariamente en eventos que sí traen su propio userData)
   const fbp = userData?.fbp ?? await waitForCookie('_fbp')
-  const fbc = userData?.fbc ?? getCookie('_fbc') ?? getFbcFallback()
+  const fbc = userData?.fbc ?? await waitForCookie('_fbc', 800, 100) ?? getFbcFallback()
+
+  // external_id: identificador estable del visitante para mejorar Event Match Quality.
+  // Usamos _fbp (que persiste entre sesiones) o generamos uno basado en sessionStorage.
+  let externalId: string | undefined
+  try {
+    externalId = fbp ?? sessionStorage.getItem('cg_ext_id') ?? undefined
+    if (!externalId) {
+      externalId = 'cg_' + Math.random().toString(36).slice(2) + Date.now().toString(36)
+      sessionStorage.setItem('cg_ext_id', externalId)
+    }
+  } catch { /* SSR or private browsing */ }
 
   const mergedUserData = {
     fbp,
     fbc,
+    external_id: externalId,
     ...userData,
   }
 

@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
         client_user_agent: userAgent,
         fbp: userData?.fbp ?? null,
         fbc: userData?.fbc ?? null,
+        ...(userData?.external_id ? { external_id: [hashValue(userData.external_id)] } : {}),
       },
     }
 
