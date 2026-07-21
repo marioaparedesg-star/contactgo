@@ -50,9 +50,26 @@ export async function POST(req: NextRequest) {
       if (seen.has(k)) return false
       seen.add(k); return true
     })
-    const eco  = fmt(unique[0])
-    const rec  = unique[1] ? fmt(unique[1]) : 'Pregúntanos por más opciones 😊'
-    const prem = unique[2] ? fmt(unique[2]) : 'Pregúntanos por más opciones 😊'
+
+    // 1 producto único → plantilla de producto único (sin renglones de relleno)
+    // 2 → mostrar económico y premium en la de tiers usando el mismo del medio
+    // 3+ → plantilla completa de 3 tiers
+    let templateName: string
+    let productParams: { type: string; text: string }[]
+    if (unique.length === 1) {
+      templateName = 'cg_receta_lista_unica'
+      productParams = [{ type: 'text', text: fmt(unique[0]) }]
+    } else {
+      templateName = 'cg_receta_lista'
+      const eco  = fmt(unique[0])
+      const rec  = fmt(unique[1] ?? unique[0])
+      const prem = fmt(unique[2] ?? unique[unique.length - 1])
+      productParams = [
+        { type: 'text', text: eco },
+        { type: 'text', text: rec },
+        { type: 'text', text: prem },
+      ]
+    }
 
     const res = await fetch(`https://graph.facebook.com/v21.0/${WA_PHONE_ID}/messages`, {
       method: 'POST',
@@ -62,16 +79,14 @@ export async function POST(req: NextRequest) {
         to: phone,
         type: 'template',
         template: {
-          name: 'cg_receta_lista',
+          name: templateName,
           language: { code: 'es' },
           components: [{
             type: 'body',
             parameters: [
               { type: 'text', text: (nombre || 'Cliente').split(' ')[0] },
               { type: 'text', text: receta },
-              { type: 'text', text: eco },
-              { type: 'text', text: rec },
-              { type: 'text', text: prem },
+              ...productParams,
             ]
           }]
         }
