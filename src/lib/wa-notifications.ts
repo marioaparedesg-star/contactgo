@@ -14,6 +14,35 @@ function getSb() {
   )
 }
 
+// Arma un texto legible del mensaje automático para mostrar en la bandeja.
+// No reconstruye el template exacto (eso vive en Meta), pero da contexto claro
+// al agente de servicio al cliente sobre qué se le envió al cliente.
+function cuerpoLegible(templateName: string, params: string[], tipo: string): string {
+  const p = params ?? []
+  switch (templateName) {
+    case 'confirmacion_pedido':
+      return `✅ Confirmación de pedido enviada — ${p[1] ?? ''} · ${p[2] ?? ''} · Total ${p[3] ?? ''}`
+    case 'cg_estado_pedido':
+      return `📦 Actualización de estado — pedido ${p[1] ?? ''}: ${p[2] ?? ''}`
+    case 'cg_envio':
+      return `🚚 Aviso de envío enviado — pedido ${p[1] ?? ''}`
+    case 'cg_entregado':
+      return `📬 Confirmación de entrega enviada — pedido ${p[0] ?? ''}`
+    case 'cg_cancelado':
+      return `❌ Aviso de cancelación enviado — pedido ${p[1] ?? ''} (${p[2] ?? ''})`
+    case 'cg_bienvenida':
+      return `👋 Mensaje de bienvenida enviado a ${p[0] ?? 'cliente'}`
+    case 'carrito_abandonado':
+      return `🛒 Recordatorio de carrito enviado — ${p[1] ?? ''}`
+    case 'renovacion_lentes':
+      return `🔄 Recordatorio de renovación enviado — ${p[1] ?? ''}`
+    case 'solicitar_resena':
+      return `⭐ Solicitud de reseña enviada a ${p[0] ?? 'cliente'}`
+    default:
+      return `📤 Mensaje automático enviado (${templateName})`
+  }
+}
+
 export async function notificar(
   eventoId: string,
   telefono: string | null | undefined,
@@ -45,6 +74,21 @@ export async function notificar(
       wa_message_id: wa_id, order_id: opts?.order_id ?? null,
       user_id: opts?.user_id ?? null, attempt: 1,
     })
+    // También registrar en la bandeja de WhatsApp (whatsapp_messages) para que
+    // el mensaje automático sea visible en Servicio al Cliente como saliente.
+    try {
+      await sb.from('whatsapp_messages').insert({
+        wa_message_id: wa_id,
+        phone,
+        direction: 'outbound',
+        message_type: 'template',
+        body: cuerpoLegible(templateName, params, tipo),
+        status: 'sent',
+        read: true,
+      })
+    } catch (bandejaErr: any) {
+      console.error('[wa-notif] bandeja insert error:', bandejaErr?.message)
+    }
     return { ok: true, wa_id }
   } catch (err: any) {
     const errMsg = err.message?.slice(0, 500) ?? 'unknown'
@@ -164,6 +208,12 @@ export async function notificarTextoLibre(
       wa_message_id: wa_id, order_id: opts?.order_id ?? null,
       user_id: opts?.user_id ?? null, attempt: 1,
     })
+    try {
+      await sb.from('whatsapp_messages').insert({
+        wa_message_id: wa_id, phone, direction: 'outbound',
+        message_type: 'text', body: mensaje, status: 'sent', read: true,
+      })
+    } catch { /* silencioso */ }
     return { ok: true, wa_id }
   } catch {
     return { ok: false, error: 'fuera_de_ventana_24h' }
