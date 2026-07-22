@@ -156,6 +156,9 @@ export async function POST(
       .update({ estado: 'completado', order_id: order.id, completado_at: new Date().toISOString() })
       .eq('id', link.id)
 
+    // NOTA: En ventas por WhatsApp el cliente ya está siendo atendido manualmente,
+    // así que NO se le envía ningún email ni WhatsApp automático. Solo se notifica al admin.
+
     // Notificar al admin por WhatsApp (mejor esfuerzo, no bloquea)
     try {
       const { sendText } = await import('@/lib/whatsapp')
@@ -170,15 +173,6 @@ export async function POST(
     } catch (waErr: any) {
       console.error('[venta-wa] WA admin notify error:', waErr?.message)
     }
-
-    // Email de nuevo pedido (mejor esfuerzo)
-    try {
-      await fetch(`${BASE}/api/notify`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }),
-      })
-    } catch { /* silencioso */ }
 
     return NextResponse.json({ ok: true, numero_orden: orderNum })
   } catch (err: any) {

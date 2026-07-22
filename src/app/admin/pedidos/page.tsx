@@ -29,7 +29,7 @@ export default function PedidosPage() {
 
 
   useEffect(()=>{
-    sb.from('orders').select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,direccion_texto,ciudad,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin').order('created_at', { ascending: false }).limit(200)
+    sb.from('orders').select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,cliente_cedula,cliente_fecha_nacimiento,direccion_texto,ciudad,canal,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin').order('created_at', { ascending: false }).limit(200)
       // Traemos todos los estados para verlos en el admin
       .not('numero_orden','like','CG-TEST%')
       .order('created_at',{ascending:false})
@@ -103,7 +103,8 @@ export default function PedidosPage() {
     <style>body{font-family:Arial,sans-serif;padding:20px;font-size:13px}h2{color:#16a34a}table{width:100%;border-collapse:collapse}td,th{padding:6px 8px;border:1px solid #e5e7eb}th{background:#f9fafb}.total{font-weight:bold;font-size:15px}</style></head>
     <body><h2>ContactGo — Pedido #${pedidoId}</h2>
     <p><b>Fecha:</b> ${fecha} | <b>Cliente:</b> ${selected.cliente_nombre} | <b>Tel:</b> ${selected.cliente_telefono??'—'}</p>
-    <p><b>Email:</b> ${selected.cliente_email??'—'} | <b>Dirección:</b> ${selected.direccion_texto??'—'}</p>
+    <p><b>Cédula:</b> ${selected.cliente_cedula??'—'} | <b>Email:</b> ${selected.cliente_email??'—'}</p>
+    <p><b>Dirección:</b> ${selected.direccion_texto??'—'}</p>
     <p><b>Pago:</b> ${selected.metodo_pago?.replace('_',' ')} | <b>Estado:</b> ${selected.pago_estado} ${selected.azul_auth_code ? `| <b>Auth:</b> ${selected.azul_auth_code}` : ''} ${selected.azul_rrn ? `| <b>RRN:</b> ${selected.azul_rrn.slice(-8)}` : ''} ${selected.ncf?`| <b>NCF:</b> ${selected.ncf}`:''}</p>
     <table><tr><th>Producto</th><th>Receta</th><th>Cant.</th><th>Precio</th></tr>
     ${its.map((i:any)=>{
@@ -243,9 +244,22 @@ export default function PedidosPage() {
 
                 {/* Info cliente */}
                 <div className="bg-gray-50 rounded-xl p-3 mb-4 text-sm space-y-1">
-                  <p className="font-semibold text-gray-800">{selected.cliente_nombre}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-gray-800">{selected.cliente_nombre}</p>
+                    {selected.canal === 'whatsapp' && (
+                      <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Venta WhatsApp</span>
+                    )}
+                  </div>
                   <p className="text-gray-500">{selected.cliente_email}</p>
                   <p className="text-gray-500">{selected.cliente_telefono}</p>
+                  {selected.cliente_cedula && (
+                    <p className="text-gray-500 text-xs">Cédula: {selected.cliente_cedula?.length === 11
+                      ? `${selected.cliente_cedula.slice(0,3)}-${selected.cliente_cedula.slice(3,10)}-${selected.cliente_cedula.slice(10)}`
+                      : selected.cliente_cedula}</p>
+                  )}
+                  {selected.cliente_fecha_nacimiento && (
+                    <p className="text-gray-500 text-xs">Nacimiento: {new Date(selected.cliente_fecha_nacimiento + 'T00:00:00').toLocaleDateString('es-DO', { day:'2-digit', month:'2-digit', year:'numeric' })}</p>
+                  )}
                   <p className="text-gray-500 text-xs">{selected.direccion_texto}</p>
                   {selected.lat && selected.lng && (
                     <p className="text-[10px] text-blue-500 font-mono mt-0.5">{selected.lat?.toFixed(5)}, {selected.lng?.toFixed(5)}</p>

@@ -96,7 +96,8 @@ export async function POST(req: NextRequest) {
         .eq('id', order_id)
       if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 })
 
-      // Disparar notificación de cambio de estado (email/WA al cliente) — mejor esfuerzo
+      // Al confirmar el pago SÍ se notifica al cliente (WhatsApp + email) como cualquier
+      // pedido pagado — ya es una venta confirmada real.
       try {
         await fetch(`${BASE}/api/notify`, {
           method: 'POST',
