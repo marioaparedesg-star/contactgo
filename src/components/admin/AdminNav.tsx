@@ -17,6 +17,7 @@ const NAV_SECTIONS = [
     items: [
       { href: '/admin',               icon: LayoutDashboard, label: 'Dashboard',      badge: null },
       { href: '/admin/pedidos',       icon: ShoppingBag,     label: 'Pedidos',        badge: 'pendientes' },
+      { href: '/admin/venta-whatsapp', icon: WhatsAppIcon,   label: '💰 Venta WhatsApp', badge: null },
       { href: '/admin/suscripciones', icon: Repeat,          label: 'Suscripciones',  badge: null },
     ]
   },
