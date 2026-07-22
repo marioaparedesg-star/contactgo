@@ -45,8 +45,12 @@ export default function PedidosPage() {
   }
 
   const cambiarEstado = async (orderId:string, estado:string, nota?:string) => {
-    // 1. Actualizar estado en orders
-    await sb.from('orders').update({estado}).eq('id',orderId)
+    // 1. Actualizar estado en orders (vía API server-side con service role — evita bloqueo RLS)
+    const upd = await fetch('/api/admin/pedidos', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ accion:'cambiar_estado', order_id:orderId, nuevo_estado:estado })
+    })
+    if (!upd.ok) { toast.error('No se pudo actualizar el estado'); return }
 
     // 2. Registrar en order_status_history (dispara trigger → order_events → cliente)
     const { data: { user } } = await sb.auth.getUser()
@@ -360,18 +364,29 @@ export default function PedidosPage() {
                         <button
                           onClick={async () => {
                             if (!confirm(`¿Marcar el pedido #${selected.numero_orden} como PAGADO manualmente?`)) return
-                            await sb.from('orders').update({ pago_estado: 'pagado', pagado_en: new Date().toISOString() }).eq('id', selected.id)
-                            await cambiarEstado(selected.id, 'confirmado', 'Pago confirmado manualmente por admin')
-                            setSelected((s:any) => ({...s, pago_estado:'pagado'}))
+                            const r = await fetch('/api/admin/pedidos', {
+                              method:'POST', headers:{'Content-Type':'application/json'},
+                              body: JSON.stringify({ accion:'marcar_pagado', order_id:selected.id })
+                            })
+                            if (!r.ok) { toast.error('No se pudo marcar como pagado'); return }
+                            setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, pago_estado:'pagado', estado:'confirmado'} : p))
+                            setSelected((s:any) => ({...s, pago_estado:'pagado', estado:'confirmado'}))
                             toast.success('✅ Marcado como pagado')
+                            // Notificar al cliente (email + WhatsApp) como pedido confirmado
+                            fetch('/api/notify',{ method:'POST', headers:{'Content-Type':'application/json'},
+                              body: JSON.stringify({order_id:selected.id, evento:'estado_cambio', nuevo_estado:'confirmado'}) }).catch(()=>{})
                           }}
                           className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
                           💳 Marcar como pagado
                         </button>
                         <button
                           onClick={async () => {
-                            if (!confirm(`¿CANCELAR el pedido #${selected.numero_orden}? Esta acción no se puede deshacer.`)) return
-                            await sb.from('orders').update({ estado: 'cancelado', pago_estado: 'cancelado' }).eq('id', selected.id)
+                            if (!confirm(`¿CANCELAR el pedido #${selected.numero_orden}?`)) return
+                            const r = await fetch('/api/admin/pedidos', {
+                              method:'POST', headers:{'Content-Type':'application/json'},
+                              body: JSON.stringify({ accion:'cancelar', order_id:selected.id })
+                            })
+                            if (!r.ok) { toast.error('No se pudo cancelar'); return }
                             setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, estado:'cancelado', pago_estado:'cancelado'} : p))
                             setSelected((s:any) => ({...s, estado:'cancelado', pago_estado:'cancelado'}))
                             toast.success('🗑️ Pedido cancelado')
@@ -380,6 +395,21 @@ export default function PedidosPage() {
                           🗑️ Cancelar pedido
                         </button>
                       </div>
+                      <button
+                        onClick={async () => {
+                          if (!confirm(`¿ELIMINAR PERMANENTEMENTE el pedido #${selected.numero_orden}? Solo para pedidos de prueba. No se puede deshacer.`)) return
+                          const r = await fetch('/api/admin/pedidos', {
+                            method:'POST', headers:{'Content-Type':'application/json'},
+                            body: JSON.stringify({ accion:'eliminar', order_id:selected.id })
+                          })
+                          if (!r.ok) { toast.error('No se pudo eliminar'); return }
+                          setPedidos(ps => ps.filter(p => p.id !== selected.id))
+                          setSelected(null)
+                          toast.success('🗑️ Pedido eliminado permanentemente')
+                        }}
+                        className="w-full text-[10px] font-bold py-1.5 px-3 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
+                        ⛔ Eliminar permanentemente (solo pruebas)
+                      </button>
                     </div>
                   )}
                   <div className="text-[9px] text-gray-400 mt-1 flex items-center gap-1">
