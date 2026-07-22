@@ -367,13 +367,42 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* ── CÓMO FUNCIONA ── */}
+        <section className="max-w-5xl mx-auto px-4 py-10 md:py-14">
+          <div className="text-center mb-8">
+            <span className="text-primary-600 font-bold text-xs uppercase tracking-wide">Comprar es fácil</span>
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mt-1">Tus lentes en 3 pasos</h2>
+            <p className="text-gray-500 text-sm mt-2 max-w-lg mx-auto">¿Nunca has comprado lentes de contacto en línea? Es más simple de lo que crees.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { n: '1', icon: '🔍', t: 'Encuentra tu lente', d: 'Usa nuestra calculadora gratuita o dinos qué marca usas. Si tienes dudas, te asesoramos por WhatsApp al instante.' },
+              { n: '2', icon: '💳', t: 'Paga seguro', d: 'Tarjeta de crédito o débito con AZUL de Banco Popular. Pago 100% protegido con 3D Secure. Nunca guardamos los datos de tu tarjeta.' },
+              { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Entrega en 24-48h en Santo Domingo y Santiago, 2-3 días al resto del país. Sin filas, sin citas, sin salir de casa.' },
+            ].map(p => (
+              <div key={p.n} className="relative bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+                <div className="absolute -top-3 -left-1 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-black text-sm shadow-md">{p.n}</div>
+                <div className="text-3xl mb-2">{p.icon}</div>
+                <h3 className="font-black text-gray-900 text-base mb-1">{p.t}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{p.d}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-6">
+            <a href="/receta" className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors">
+              Calcular mi receta gratis
+              <ChevronRight className="w-4 h-4" />
+            </a>
+          </div>
+        </section>
+
         {/* ── FAQ ── */}
         <section className="max-w-3xl mx-auto px-4 py-10 md:py-14">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-3">
             {[
               { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
-              { q: '¿Son directo del fabricante?', a: 'Sí. Cada producto viene directo del fabricante con código de autenticidad verificable. Nunca vendemos imitaciones.' },
+              { q: '¿Son directo del fabricante?', a: 'Sí. Trabajamos directo con los distribuidores oficiales de cada marca. Recibes tu producto sellado, con su empaque original de fábrica. Nunca vendemos imitaciones.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados recomendamos tener una receta actualizada. Nuestra calculadora gratuita te ayuda a identificar el tipo correcto de lente. Para lentes de color sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },
