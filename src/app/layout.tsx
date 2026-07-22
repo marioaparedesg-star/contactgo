@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'es_DO',
     title: 'ContactGo — Tus lentes. En tu puerta.',
-    description: 'La forma más fácil de comprar lentes de contacto en RD. Originales, rápidos, a tu puerta.',
+    description: 'La forma más fácil de comprar lentes de contacto en RD. Rápidos y directo a tu puerta.',
     url: 'https://www.contactgo.net',
     siteName: 'ContactGo',
     images: [{ url: '/og-1200x630.jpg', width: 1200, height: 630, alt: 'ContactGo — Lentes de Contacto RD' }],
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'ContactGo — Tus lentes. En tu puerta.',
-    description: 'La forma más fácil de comprar lentes de contacto en RD. Originales, rápidos, a tu puerta.',
+    description: 'La forma más fácil de comprar lentes de contacto en RD. Rápidos y directo a tu puerta.',
     images: ['https://www.contactgo.net/og-1200x630.jpg'],
   },
 }
