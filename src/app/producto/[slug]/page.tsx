@@ -122,7 +122,7 @@ export async function generateMetadata(
       const firstColorImg = colImgs && Object.values(colImgs)[0]
         ? `https://www.contactgo.net${Object.values(colImgs)[0]}`
         : null
-      const ogImgUrl = firstColorImg ?? data.imagen_url ?? 'https://www.contactgo.net/og-1200x630.png'
+      const ogImgUrl = firstColorImg ?? data.imagen_url ?? 'https://www.contactgo.net/og-1200x630.jpg'
       return [{ url: ogImgUrl, width: 800, height: 800, alt: data.nombre }]
     })(),
       locale: 'es_DO',
@@ -132,7 +132,7 @@ export async function generateMetadata(
       card: 'summary_large_image',
       title: `${data.nombre} — RD$${Number(data.precio).toLocaleString()} | ContactGo`,
       description: desc,
-      images: data.imagen_url ? [data.imagen_url] : ['https://www.contactgo.net/og-1200x630.png'],
+      images: data.imagen_url ? [data.imagen_url] : ['https://www.contactgo.net/og-1200x630.jpg'],
     },
     other: {
       'product:price:amount': String(data.precio),

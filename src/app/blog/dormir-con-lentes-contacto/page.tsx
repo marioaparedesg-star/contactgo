@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description: 'Guía completa sobre los riesgos de dormir con lentes de contacto. Infecciones, hipoxia corneal y protocolo de emergencia.',
     url: 'https://www.contactgo.net/blog/dormir-con-lentes-contacto',
     type: 'article',
-    images: [{ url: 'https://www.contactgo.net/og-1200x630.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.contactgo.net/og-1200x630.jpg', width: 1200, height: 630 }],
   },
 }
 

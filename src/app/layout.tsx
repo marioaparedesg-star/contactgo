@@ -43,13 +43,13 @@ export const metadata: Metadata = {
     description: 'La forma más fácil de comprar lentes de contacto en RD. Originales, rápidos, a tu puerta.',
     url: 'https://www.contactgo.net',
     siteName: 'ContactGo',
-    images: [{ url: '/og-1200x630.png', width: 1200, height: 630, alt: 'ContactGo — Lentes de Contacto RD' }],
+    images: [{ url: '/og-1200x630.jpg', width: 1200, height: 630, alt: 'ContactGo — Lentes de Contacto RD' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ContactGo — Tus lentes. En tu puerta.',
     description: 'La forma más fácil de comprar lentes de contacto en RD. Originales, rápidos, a tu puerta.',
-    images: ['https://www.contactgo.net/og-1200x630.png'],
+    images: ['https://www.contactgo.net/og-1200x630.jpg'],
   },
 }
 
@@ -70,8 +70,8 @@ const organizationSchema = {
   "@id": "https://www.contactgo.net/#organization",
   "name": "ContactGo",
   "url": "https://www.contactgo.net",
-  "logo": "https://www.contactgo.net/og-1200x630.png",
-  "image": "https://www.contactgo.net/og-1200x630.png",
+  "logo": "https://www.contactgo.net/og-1200x630.jpg",
+  "image": "https://www.contactgo.net/og-1200x630.jpg",
   "description": "ContactGo es la forma más fácil de comprar lentes de contacto en República Dominicana. Directo del fabricante. Entrega en 24-48 horas a donde estés.",
   "telephone": "+18096942268",
   "email": "info@contactgo.net",
