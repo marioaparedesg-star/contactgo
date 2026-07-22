@@ -259,11 +259,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=AW-830060688"
         />
-        {/* GA4 — Google Analytics 4 */}
+        {/* Google Tag Manager — GTM-M9GZGJJQ (maneja GA4 G-KGM473ZPDB) */}
         <Script
-          id="ga4"
+          id="gtm-loader"
           strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-KGM473ZPDB"
+          dangerouslySetInnerHTML={{ __html: `
+            (function(w,l){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});})(window,'dataLayer');
+          `}}
+        />
+        <Script
+          id="gtm-src"
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtm.js?id=GTM-M9GZGJJQ"
         />
         <Script
           id="google-ads-init"
@@ -273,7 +280,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'AW-830060688');
-            gtag('config', 'G-KGM473ZPDB');
           ` }}
         />
 
