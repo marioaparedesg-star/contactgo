@@ -3,8 +3,44 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-const SLIDES = [
+type LegacySlide = {
+  variant: 'legacy'
+  badge: string
+  title: string
+  sub: string
+  subtitle: string
+  cta: { label: string; href: string }
+  cta2: { label: string; href: string }
+  accent: string
+  bg: { from: string; via: string; to: string }
+  glow: string
+  image: string
+  imageAlt: string
+  stats: { num: string; label: string }[] | null
+  tag: string | null
+  precio: string | null
+}
+
+type FullBleedSlide = {
+  variant: 'fullbleed'
+  image: string
+  imageAlt: string
+  priceSlug: string
+  priceFallback: number
+  ctaLabel: string
+  ctaHref: string
+  cta2Label: string
+  cta2Href: string
+  glow: string
+}
+
+type Slide = LegacySlide | FullBleedSlide
+
+const OASYS_SLUG = 'acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana'
+
+const SLIDES: Slide[] = [
   {
+    variant:    'legacy',
     badge:      '🇩🇴 Entregamos en toda República Dominicana',
     title:      'Tus lentes,\nen tu puerta.',
     sub:        'Los mejores lentes del mundo. En tu puerta mañana.',
@@ -24,53 +60,88 @@ const SLIDES = [
     tag: null, precio: null,
   },
   {
-    badge:      '⭐ El más vendido',
-    title:      'ACUVUE® Oasys®\nHYDRACLEAR® Plus',
-    sub:        'El lente más elegido en República Dominicana.',
-    subtitle:   'Tecnología HYDRACLEAR® Plus para máxima comodidad. Disponible hoy, en tu puerta mañana.',
-    cta:        { label: 'Pedir el más vendido', href: '/producto/acuvue-oasys-lentes-contacto-silicona-hidrogel-dominicana' },
-    cta2:       { label: 'Ver toda ACUVUE', href: '/catalogo?marca=acuvue' },
-    accent:     '#2563eb',
-    bg:         { from: '#010b20', via: '#021030', to: '#031642' },
-    glow:       'rgba(37,99,235,0.22)',
-    image:      '/hero-oasys.png',
-    imageAlt:   'ACUVUE Oasys con HYDRACLEAR Plus',
-    tag:        '🔥 Más popular',
-    precio:     'DYNAMIC_OASYS',
-    stats:      null,
+    variant:      'fullbleed',
+    image:        '/hero-oasys.jpg',
+    imageAlt:     'ACUVUE OASYS con HYDRACLEAR Plus — comodidad que dura todo el día',
+    priceSlug:    OASYS_SLUG,
+    priceFallback: 3700,
+    ctaLabel:     'Pedir ACUVUE OASYS',
+    ctaHref:      '/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana',
+    cta2Label:    'Ver toda ACUVUE',
+    cta2Href:     '/catalogo?marca=acuvue',
+    glow:         'rgba(37,99,235,0.25)',
   },
   {
-    badge:      '🎨 +12 colores disponibles',
-    title:      'Cambia tu look\ncon colores.',
-    sub:        'Con o sin graduación. Envío en 24h.',
-    subtitle:   'AIR OPTIX® COLORS en 12 tonos únicos. Con o sin graduación. Entrega en 24h donde estés.',
-    cta:        { label: 'Ver colores', href: '/catalogo?tipo=color' },
-    cta2:       { label: 'Air Optix Colors', href: '/producto/air-optix-colors-lentes-contacto-color-dominicana' },
-    accent:     '#7c3aed',
-    bg:         { from: '#0d0618', via: '#130a28', to: '#1a1035' },
-    glow:       'rgba(124,58,237,0.22)',
-    image:      '/hero-air-optix-colors.png',
-    imageAlt:   'Lentes de contacto de colores AIR OPTIX COLORS Alcon',
-    tag:        '✨ Sin graduación disponible',
-    precio:     null, stats: null,
+    variant:      'fullbleed',
+    image:        '/hero-acuvue-moist.jpg',
+    imageAlt:     '1-DAY ACUVUE MOIST — lentes diarios, cero complicaciones',
+    priceSlug:    '1-day-acuvue-moist-lentes-contacto-diarios-dominicana',
+    priceFallback: 3800,
+    ctaLabel:     'Pedir ACUVUE MOIST',
+    ctaHref:      '/producto/1-day-acuvue-moist-lentes-contacto-diarios-dominicana',
+    cta2Label:    'Ver toda ACUVUE',
+    cta2Href:     '/catalogo?marca=acuvue',
+    glow:         'rgba(56,189,248,0.25)',
   },
   {
-    badge:      '💙 Lentes para astigmatismo',
-    title:      'Visión nítida con\nastigmatismo.',
-    sub:        'Estabilización avanzada. Disponible en RD.',
-    subtitle:   'Visión nítida desde el primer segundo. Estabilización avanzada para astigmatismo. Disponibles hoy, sin esperas.',
-    cta:        { label: 'Ver tóricos', href: '/catalogo?tipo=torico' },
-    cta2:       { label: 'Buscar con receta', href: '/receta' },
-    accent:     '#0d9488',
-    bg:         { from: '#011210', via: '#01201e', to: '#012a28' },
-    glow:       'rgba(13,148,136,0.22)',
-    image:      '/hero-oasys-astig.png',
-    imageAlt:   'Lentes tóricos para astigmatismo',
-    tag: null, precio: null, stats: null,
+    variant:      'fullbleed',
+    image:        '/hero-air-optix-colors.jpg',
+    imageAlt:     'AIR OPTIX COLORS — cambia tu look con colores',
+    priceSlug:    'air-optix-colors-lentes-contacto-color-dominicana',
+    priceFallback: 2500,
+    ctaLabel:     'Pedir AIR OPTIX Colors',
+    ctaHref:      '/producto/air-optix-colors-lentes-contacto-color-dominicana',
+    cta2Label:    'Ver todos los colores',
+    cta2Href:     '/catalogo?tipo=color',
+    glow:         'rgba(124,58,237,0.25)',
+  },
+  {
+    variant:      'fullbleed',
+    image:        '/hero-air-optix-hydraglyde.jpg',
+    imageAlt:     'AIR OPTIX plus HydraGlyde — hidratación que dura todo el mes',
+    priceSlug:    'air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana',
+    priceFallback: 4400,
+    ctaLabel:     'Pedir Air Optix HydraGlyde',
+    ctaHref:      '/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana',
+    cta2Label:    'Ver marca Alcon',
+    cta2Href:     '/catalogo?marca=alcon',
+    glow:         'rgba(14,165,233,0.25)',
+  },
+  {
+    variant:      'fullbleed',
+    image:        '/hero-biofinity.jpg',
+    imageAlt:     'Biofinity CooperVision — un mes de visión clara y cómoda',
+    priceSlug:    'biofinity-lentes-contacto-mensuales-coopervision-dominicana',
+    priceFallback: 4750,
+    ctaLabel:     'Pedir Biofinity',
+    ctaHref:      '/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana',
+    cta2Label:    'Ver CooperVision',
+    cta2Href:     '/catalogo?marca=coopervision',
+    glow:         'rgba(147,51,234,0.22)',
+  },
+  {
+    variant:      'fullbleed',
+    image:        '/hero-oasys-astig.jpg',
+    imageAlt:     'ACUVUE OASYS for Astigmatism — visión nítida con astigmatismo',
+    priceSlug:    'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana',
+    priceFallback: 6250,
+    ctaLabel:     'Pedir lentes tóricos',
+    ctaHref:      '/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana',
+    cta2Label:    'Ver todos los tóricos',
+    cta2Href:     '/catalogo?tipo=torico',
+    glow:         'rgba(13,148,136,0.25)',
   },
 ]
 
-export default function HeroSlider({ lentesCount = 4200, precioOasys }: { lentesCount?: number, precioOasys?: number }) {
+export default function HeroSlider({
+  lentesCount = 4200,
+  precioOasys,
+  preciosHero = {},
+}: {
+  lentesCount?: number
+  precioOasys?: number
+  preciosHero?: Record<string, number>
+}) {
   const [current, setCurrent]             = useState(0)
   const [transitioning, setTransitioning] = useState(false)
   const [direction, setDirection]         = useState<'next'|'prev'>('next')
@@ -122,13 +193,8 @@ export default function HeroSlider({ lentesCount = 4200, precioOasys }: { lentes
 
   const s = SLIDES[current]
 
-  const bgStyle = {
-    background:  `linear-gradient(135deg, ${s.bg.from} 0%, ${s.bg.via} 55%, ${s.bg.to} 100%)`,
-    transition:  'background 600ms ease',
-  }
-
   // ─── Dots shared ──────────────────────────────────────────────────────────
-  const Dots = ({ className = '' }: { className?: string }) => (
+  const Dots = ({ className = '', dark = false }: { className?: string; dark?: boolean }) => (
     <div className={`flex items-center gap-1.5 justify-center ${className}`} role="tablist" aria-label="Slides">
       {SLIDES.map((_, i) => (
         <button
@@ -141,12 +207,119 @@ export default function HeroSlider({ lentesCount = 4200, precioOasys }: { lentes
           style={{
             width:      i === current ? 18 : 5,
             height:     5,
-            background: i === current ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.22)',
+            background: i === current
+              ? (dark ? 'rgba(20,20,20,0.85)' : 'rgba(255,255,255,0.85)')
+              : (dark ? 'rgba(20,20,20,0.28)' : 'rgba(255,255,255,0.22)'),
           }}
         />
       ))}
     </div>
   )
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // SLIDE FULL-BLEED — imagen completa con texto ya integrado en el diseño.
+  // Solo superponemos precio dinámico + botón de compra en la zona limpia.
+  // ═══════════════════════════════════════════════════════════════════════
+  if (s.variant === 'fullbleed') {
+    const price = s.priceSlug === OASYS_SLUG && precioOasys
+      ? precioOasys
+      : (preciosHero[s.priceSlug] ?? s.priceFallback)
+
+    return (
+      <section
+        aria-label="Hero — ContactGo lentes de contacto"
+        className="relative overflow-hidden select-none bg-[#eef3f8]"
+      >
+        <div
+          className="absolute inset-0 z-0"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          aria-hidden="true"
+        />
+        <div
+          className="relative w-full aspect-video min-h-[260px] max-h-[640px] transition-opacity duration-260 ease-out"
+          style={{ opacity: transitioning ? 0 : 1 }}
+        >
+          <Image
+            src={s.image}
+            alt={s.imageAlt}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            quality={85}
+            priority={current === 0}
+            fetchPriority={current === 0 ? 'high' : 'auto'}
+            onError={(e) => { (e.target as HTMLImageElement).src = '/hero-lens-1.png' }}
+          />
+
+          {/* Tarjeta de precio + CTA — sobre la zona limpia del diseño */}
+          <div
+            className="absolute z-10 flex flex-col gap-1.5 sm:gap-2"
+            style={{ right: '4%', top: '64%', width: 'min(34%, 280px)' }}
+          >
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg p-2.5 sm:p-4 border border-black/5">
+              <div className="flex items-baseline gap-1 mb-1.5 sm:mb-2">
+                <span className="text-gray-400 text-[9px] sm:text-xs">Desde</span>
+                <span className="text-[#0B3D66] font-black text-base sm:text-2xl leading-none">
+                  RD${price.toLocaleString('es-DO')}
+                </span>
+              </div>
+              <Link
+                href={s.ctaHref}
+                onClick={() => { if (autoRef.current) clearInterval(autoRef.current) }}
+                className="block bg-[#0B3D66] hover:bg-[#0d4a7c] text-white text-[10px] sm:text-sm font-bold py-1.5 sm:py-2.5 px-2 sm:px-4 rounded-lg sm:rounded-xl text-center active:scale-[0.98] transition-all"
+              >
+                {s.ctaLabel}
+              </Link>
+              <Link
+                href={s.cta2Href}
+                className="block text-center text-[#0B3D66]/70 hover:text-[#0B3D66] text-[9px] sm:text-xs font-semibold mt-1 sm:mt-1.5 underline underline-offset-2"
+              >
+                {s.cta2Label}
+              </Link>
+            </div>
+          </div>
+
+          {/* Controles — dots + flechas, en barra flotante inferior */}
+          <div className="absolute bottom-2 sm:bottom-4 left-0 right-0 z-10 flex items-center justify-center gap-3">
+            <div className="flex items-center gap-2 bg-black/20 backdrop-blur-sm rounded-full px-3 py-1.5">
+              <Dots />
+              <span className="text-white/70 text-[9px] font-mono tabular-nums hidden sm:inline">{current + 1}/{SLIDES.length}</span>
+            </div>
+          </div>
+
+          {/* Flechas — solo desktop */}
+          <div className="hidden md:flex absolute inset-y-0 left-3 right-3 items-center justify-between z-10 pointer-events-none">
+            {[
+              { fn: prev, label: 'Anterior', path: 'M15 19l-7-7 7-7' },
+              { fn: next, label: 'Siguiente', path: 'M9 5l7 7-7 7' },
+            ].map(({ fn, label, path }) => (
+              <button
+                key={label}
+                onClick={() => { fn(); resetAuto() }}
+                aria-label={label}
+                className="pointer-events-auto w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white bg-black/25 backdrop-blur-sm border border-white/20"
+              >
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d={path} />
+                </svg>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // SLIDE LEGACY — el diseño original (badge / título / subtítulo separados
+  // + imagen pequeña de producto). Se conserva intacto para el slide general.
+  // ═══════════════════════════════════════════════════════════════════════
+  const bgStyle = {
+    background:  `linear-gradient(135deg, ${s.bg.from} 0%, ${s.bg.via} 55%, ${s.bg.to} 100%)`,
+    transition:  'background 600ms ease',
+  }
 
   return (
     <section
@@ -178,50 +351,37 @@ export default function HeroSlider({ lentesCount = 4200, precioOasys }: { lentes
       </div>
 
       {/* ═══════════════════════════════════════════════════════
-          MOBILE LAYOUT — diseñado específicamente para mobile
-          Oculto en ≥md. Arquitectura independiente del desktop.
+          MOBILE LAYOUT
           ═══════════════════════════════════════════════════════ */}
-      <div className="relative z-10 md:hidden px-5 pt-5 pb-4">
+      <div className="relative z-10 md:hidden px-5 pt-6 pb-4">
         <div
-          className="transition-all duration-260 ease-out"
+          className="flex flex-col gap-3 transition-all duration-260 ease-out"
           style={{
             opacity:   transitioning ? 0 : 1,
             transform: transitioning
-              ? `translateY(${direction === 'next' ? '8px' : '-8px'})`
-              : 'translateY(0)',
+              ? `translateX(${direction === 'next' ? '-12px' : '12px'})`
+              : 'translateX(0)',
           }}
         >
-          {/* 1. Badge + tag */}
-          <div className="flex items-center gap-1.5 flex-wrap mb-3">
-            <span className="inline-flex items-center bg-white/10 text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/12 leading-none">
+          {/* Badge */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="inline-flex items-center bg-white/10 text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/15">
               {s.badge}
             </span>
             {s.tag && (
-              <span className="bg-amber-400 text-amber-950 text-[10px] font-black px-2 py-0.5 rounded-full leading-none">
+              <span className="bg-amber-400 text-amber-950 text-[10px] font-black px-2.5 py-1 rounded-full">
                 {s.tag}
               </span>
             )}
           </div>
 
-          {/* 2. Título — heading accesible sin emitir un 2º <h1> literal (el <h1> canónico vive en el bloque desktop). Evita el doble-H1 en el HTML servido. */}
-          <p role="heading" aria-level={1} className="font-display text-[1.65rem] font-black text-white leading-[1.08] tracking-tight whitespace-pre-line mb-1">
+          {/* 2. Título */}
+          <h1 className="font-display text-3xl font-black text-white leading-[1.08] tracking-tight whitespace-pre-line">
             {s.title}
-          </p>
+          </h1>
 
-          {/* 3. Subtítulo corto — mobile copy */}
-          <p className="text-white/55 text-[13px] leading-snug mb-4">
-            {s.sub}
-          </p>
-
-          {/* 4. PRODUCTO GRANDE — protagonista visual */}
-          <div className="relative flex justify-center items-center mb-4">
-            {/* Glow mínimo detrás del producto */}
-            <div
-              className="absolute inset-0 rounded-full blur-2xl opacity-25"
-              style={{ background: s.glow }}
-              aria-hidden="true"
-            />
-            {/* Card del producto */}
+          {/* 3. Imagen producto */}
+          <div className="flex justify-center py-1">
             <div
               className="relative rounded-2xl overflow-hidden"
               style={{
@@ -253,11 +413,11 @@ export default function HeroSlider({ lentesCount = 4200, precioOasys }: { lentes
           </div>
 
           {/* 5 + 6. CTAs */}
-          <div className="flex flex-col gap-2 mb-4">
+          <div className="flex flex-col gap-2">
             <Link
               href={s.cta.href}
               onClick={() => { if (autoRef.current) clearInterval(autoRef.current) }}
-              className="w-full flex items-center justify-center gap-1.5 bg-white text-gray-900 font-black py-3 rounded-xl text-sm shadow-lg shadow-black/25 active:scale-[0.98] transition-all"
+              className="w-full flex items-center justify-center gap-1.5 bg-white text-gray-900 font-black py-3 rounded-xl active:scale-[0.98] transition-all text-sm"
             >
               {s.cta.label}
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

@@ -18,7 +18,7 @@ import type { Product } from '@/types'
 
 export const revalidate = 60
 
-async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount: number, precioOasys: number }> {
+async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount: number, precioOasys: number, preciosHero: Record<string, number> }> {
   const sb = createServerSupabaseClient()
   // CRÍTICO-1: count:'exact' forzaba dynamic (ƒ). Valor cosmético → hardcoded.
   // select:'*' traía 17MB de arrays SPH/CYL. Campos específicos reducen payload.
@@ -38,10 +38,31 @@ async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount
     .eq('activo', true)
     .single()
 
+  // Precios reales de los productos destacados del HeroSlider (6 slides nuevos)
+  // Fuente única: Supabase — así si Mario cambia el precio en el admin, el hero se actualiza solo.
+  const HERO_SLUGS = [
+    'acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana',
+    '1-day-acuvue-moist-lentes-contacto-diarios-dominicana',
+    'air-optix-colors-lentes-contacto-color-dominicana',
+    'air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana',
+    'biofinity-lentes-contacto-mensuales-coopervision-dominicana',
+    'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana',
+  ]
+  const { data: heroPrices } = await sb.from('products')
+    .select('slug, precio')
+    .in('slug', HERO_SLUGS)
+    .eq('activo', true)
+
+  const preciosHero: Record<string, number> = {}
+  for (const p of heroPrices ?? []) {
+    preciosHero[p.slug] = Number(p.precio)
+  }
+
   return {
     products: (data ?? []) as unknown as Product[],
     ordersCount: 95,
     precioOasys: oasysData ? Number(oasysData.precio) : 3875,
+    preciosHero,
   }
 }
 
@@ -57,7 +78,7 @@ const SCHEMA_ORG = {
 }
 
 export default async function HomePage() {
-  const { products: featured, ordersCount, precioOasys } = await getFeaturedProducts()
+  const { products: featured, ordersCount, precioOasys, preciosHero } = await getFeaturedProducts()
 
   return (
     <>
@@ -66,7 +87,7 @@ export default async function HomePage() {
       <main id="main-content">
 
         {/* ── HERO ── */}
-        <HeroSlider lentesCount={ordersCount > 0 ? ordersCount * 6 + 4200 : 4200} precioOasys={precioOasys} />
+        <HeroSlider lentesCount={ordersCount > 0 ? ordersCount * 6 + 4200 : 4200} precioOasys={precioOasys} preciosHero={preciosHero} />
 
         {/* ── Buscador rápido — el cliente lo necesita en mobile ─────────── */}
         <section className="bg-white px-4 py-3 border-b border-gray-50 sticky top-14 z-30 shadow-sm">
