@@ -225,15 +225,15 @@ export default function HeroSlider({
           Un solo contenedor exterior (con la altura correcta por breakpoint) contiene
           AMBAS imágenes apiladas (una visible a la vez) + el texto/controles compartidos,
           que se posicionan relativos a este contenedor sin importar cuál imagen se ve. */}
-      <div className="relative w-full h-[220px] sm:h-[300px] md:h-[360px] lg:h-[400px] xl:h-[430px]">
+      <div className="relative w-full h-[220px] sm:h-[300px] md:h-[360px] lg:h-[400px] xl:h-[430px] bg-white">
 
         {/* Imagen MOBILE/TABLET — proporción 1000x560 (1.8:1) */}
         <Image
           src={s.imageMobile}
           alt={s.imageAlt}
           fill
-          className="object-cover transition-opacity duration-300 md:hidden"
-          style={{ opacity: transitioning ? 0 : 1, objectPosition: 'center 22%' }}
+          className="object-contain transition-opacity duration-300 md:hidden"
+          style={{ opacity: transitioning ? 0 : 1 }}
           sizes="100vw"
           quality={88}
           priority={current === 0}
@@ -246,8 +246,8 @@ export default function HeroSlider({
           src={s.image}
           alt={s.imageAlt}
           fill
-          className="object-cover transition-opacity duration-300 hidden md:block"
-          style={{ opacity: transitioning ? 0 : 1, objectPosition: 'center 22%' }}
+          className="object-contain transition-opacity duration-300 hidden md:block"
+          style={{ opacity: transitioning ? 0 : 1 }}
           sizes="100vw"
           quality={88}
           priority={current === 0}
