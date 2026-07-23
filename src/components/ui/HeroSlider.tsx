@@ -213,18 +213,19 @@ export default function HeroSlider({
         aria-hidden="true"
       />
 
-      {/* Proporción EXACTA de las imágenes (16:9, como se generaron: 1600x900) — nunca
-          recorta nada porque el marco siempre calza perfecto con la foto, en cualquier
-          pantalla. Ancho máximo para que en monitores grandes no crezca sin control:
-          queda centrado, tamaño razonable, en vez de gigante o recortado. */}
-      <div className="relative w-full max-w-[1280px] mx-auto" style={{ aspectRatio: '16 / 9' }}>
+      {/* Edge-to-edge (sin márgenes laterales) + altura compacta y fija por pantalla —
+          no "gigante". Esto SÍ recorta un poco los lados de la foto en pantallas anchas
+          (matemáticamente inevitable si se quiere compacto Y de borde a borde con fotos
+          16:9) — exactamente como funciona el 99% de los banners hero en internet.
+          object-position sube el foco hacia arriba para nunca cortar la cara. */}
+      <div className="relative w-full h-[220px] sm:h-[300px] md:h-[360px] lg:h-[400px] xl:h-[430px]">
         <Image
           src={s.image}
           alt={s.imageAlt}
           fill
           className="object-cover transition-opacity duration-300"
-          style={{ opacity: transitioning ? 0 : 1 }}
-          sizes="(max-width: 1280px) 100vw, 1280px"
+          style={{ opacity: transitioning ? 0 : 1, objectPosition: 'center 22%' }}
+          sizes="100vw"
           quality={88}
           priority={current === 0}
           fetchPriority={current === 0 ? 'high' : 'auto'}
