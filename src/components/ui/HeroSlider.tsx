@@ -23,32 +23,15 @@ type Slide = {
 }
 
 const OASYS_SLUG = 'acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana'
+const COLORS_SLUG = 'air-optix-colors-lentes-contacto-color-dominicana'
+const MULTIFOCAL_SLUG = 'biofinity-multifocal-lentes-presbicia-coopervision-dominicana'
 
 const SLIDES: Slide[] = [
   {
-    badge:      '🇩🇴 Entregamos en toda República Dominicana',
-    title:      'Tus lentes,\nen tu puerta.',
-    sub:        'Los mejores lentes del mundo. En tu puerta mañana.',
-    subtitle:   'Elige, paga y recibe en 24h. Sin filas, sin citas, sin complicaciones. La forma más sencilla de cuidar tu salud visual en RD.',
-    cta:        { label: 'Encontrar mi lente ideal', href: '/catalogo' },
-    cta2:       { label: 'Calcular mi receta gratis', href: '/receta' },
-    accent:     '#0d6efd',
-    bg:         { from: '#020d1e', via: '#021535', to: '#031d4a' },
-    glow:       'rgba(13,110,253,0.22)',
-    image:      '/hero-lens-1.png',
-    imageAlt:   'Lentes de contacto certificados República Dominicana',
-    stats:      [
-      { num: 'DYNAMIC', label: 'lentes entregados' },
-      { num: '24h',     label: 'entrega SD' },
-      { num: '100%',    label: 'certificados' },
-    ],
-    tag: null, precio: null,
-  },
-  {
-    badge:      '⭐ El más vendido',
-    title:      'Comodidad que\ndura todo el día',
-    sub:        'El lente más elegido en República Dominicana.',
-    subtitle:   'ACUVUE® OASYS® con tecnología HYDRACLEAR® Plus. Uso quincenal, comodidad todo el día. Disponible hoy, en tu puerta mañana.',
+    badge:      '⭐ El más pedido en RD',
+    title:      'Ponte tus lentes\ny sal volando',
+    sub:        'Comodidad todo el día, uso quincenal.',
+    subtitle:   'ACUVUE® OASYS con tecnología HYDRACLEAR® Plus. Te lo llevamos hasta la puerta, listo para usar.',
     cta:        { label: 'Pedir ACUVUE OASYS', href: '/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana' },
     cta2:       { label: 'Ver toda ACUVUE', href: '/catalogo?marca=acuvue' },
     accent:     '#2563eb',
@@ -61,83 +44,83 @@ const SLIDES: Slide[] = [
     stats:      null,
   },
   {
-    badge:      '☀️ Uso diario',
-    title:      'Lentes diarios,\ncero complicaciones',
-    sub:        'Un lente nuevo cada día. Máxima simplicidad.',
-    subtitle:   '1-DAY ACUVUE® MOIST® con tecnología LACREON®. Ábrelo, úsalo, deséchalo. Sin soluciones, sin estuches, sin complicaciones.',
-    cta:        { label: 'Pedir ACUVUE MOIST', href: '/producto/1-day-acuvue-moist-lentes-contacto-diarios-dominicana' },
-    cta2:       { label: 'Ver toda ACUVUE', href: '/catalogo?marca=acuvue' },
-    accent:     '#0ea5e9',
-    bg:         { from: '#010c1a', via: '#021d33', to: '#032b47' },
-    glow:       'rgba(14,165,233,0.22)',
-    image:      '/hero-acuvue-moist.jpg',
-    imageAlt:   '1-DAY ACUVUE MOIST — lentes diarios',
+    badge:      '🇩🇴 La tienda de lentes más completa de RD',
+    title:      'Todas las marcas,\nun solo lugar',
+    sub:        'ACUVUE, Air Optix, Biofinity, Bausch+Lomb y más.',
+    subtitle:   'Con o sin graduación. Todo lo que necesitas para tus ojos, en un mismo pedido, sin correr de tienda en tienda.',
+    cta:        { label: 'Ver catálogo completo', href: '/catalogo' },
+    cta2:       { label: 'Buscar con mi receta', href: '/receta' },
+    accent:     '#4f46e5',
+    bg:         { from: '#050818', via: '#0b1030', to: '#141a42' },
+    glow:       'rgba(79,70,229,0.22)',
+    image:      '/hero-general.jpg',
+    imageAlt:   'Todas las marcas de lentes de contacto en ContactGo',
     tag: null,
-    precio:     { slug: '1-day-acuvue-moist-lentes-contacto-diarios-dominicana', fallback: 3800 },
+    precio: null,
     stats: null,
   },
   {
-    badge:      '🎨 +12 colores disponibles',
-    title:      'Cambia tu look\ncon colores.',
+    badge:      '🎨 +12 tonos disponibles',
+    title:      'Otro color,\notra tú',
     sub:        'Con o sin graduación. Envío en 24h.',
-    subtitle:   'AIR OPTIX® COLORS en 12 tonos únicos. Con o sin graduación. Entrega en 24h donde estés.',
+    subtitle:   'AIR OPTIX® COLORS en 12 tonos únicos. Cambia tu mirada cuando quieras, sin complicarte.',
     cta:        { label: 'Pedir AIR OPTIX Colors', href: '/producto/air-optix-colors-lentes-contacto-color-dominicana' },
     cta2:       { label: 'Ver todos los colores', href: '/catalogo?tipo=color' },
-    accent:     '#7c3aed',
-    bg:         { from: '#0d0618', via: '#130a28', to: '#1a1035' },
-    glow:       'rgba(124,58,237,0.22)',
-    image:      '/hero-air-optix-colors.jpg',
-    imageAlt:   'Lentes de contacto de colores AIR OPTIX COLORS Alcon',
-    tag:        '✨ Sin graduación disponible',
-    precio:     { slug: 'air-optix-colors-lentes-contacto-color-dominicana', fallback: 2500 },
-    stats: null,
-  },
-  {
-    badge:      '💧 Hidratación todo el mes',
-    title:      'Hidratación que\ndura todo el mes',
-    sub:        'Tecnología SmartShield. Uso mensual.',
-    subtitle:   'AIR OPTIX® plus HydraGlyde® con tecnología SmartShield. Hidratación duradera para todo el mes, sin resequedad.',
-    cta:        { label: 'Pedir Air Optix HydraGlyde', href: '/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana' },
-    cta2:       { label: 'Ver marca Alcon', href: '/catalogo?marca=alcon' },
-    accent:     '#0891b2',
-    bg:         { from: '#01141c', via: '#02222f', to: '#033242' },
-    glow:       'rgba(8,145,178,0.22)',
-    image:      '/hero-air-optix-hydraglyde.jpg',
-    imageAlt:   'AIR OPTIX plus HydraGlyde',
-    tag: null,
-    precio:     { slug: 'air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana', fallback: 4400 },
-    stats: null,
-  },
-  {
-    badge:      '🌿 CooperVision',
-    title:      'Un mes de visión\nclara y cómoda',
-    sub:        'Aquaform Comfort Science. Uso mensual.',
-    subtitle:   'Biofinity® con tecnología Aquaform® Comfort Science. Un mes completo de visión clara y comodidad natural.',
-    cta:        { label: 'Pedir Biofinity', href: '/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana' },
-    cta2:       { label: 'Ver CooperVision', href: '/catalogo?marca=coopervision' },
     accent:     '#9333ea',
-    bg:         { from: '#0b0614', via: '#180a28', to: '#221038' },
-    glow:       'rgba(147,51,234,0.20)',
-    image:      '/hero-biofinity.jpg',
-    imageAlt:   'Biofinity CooperVision',
-    tag: null,
-    precio:     { slug: 'biofinity-lentes-contacto-mensuales-coopervision-dominicana', fallback: 4750 },
+    bg:         { from: '#0d0618', via: '#180a28', to: '#221038' },
+    glow:       'rgba(147,51,234,0.22)',
+    image:      '/hero-air-optix-colors.jpg',
+    imageAlt:   'AIR OPTIX COLORS — cambia el color de tus ojos',
+    tag:        '✨ Sin graduación disponible',
+    precio:     { slug: COLORS_SLUG, fallback: 2500 },
     stats: null,
   },
   {
-    badge:      '💙 Lentes para astigmatismo',
-    title:      'Visión nítida con\nastigmatismo.',
-    sub:        'Estabilización avanzada. Disponible en RD.',
-    subtitle:   'ACUVUE® OASYS® for Astigmatism. Visión nítida desde el primer segundo, estabilización avanzada para astigmatismo.',
-    cta:        { label: 'Pedir lentes tóricos', href: '/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana' },
-    cta2:       { label: 'Ver todos los tóricos', href: '/catalogo?tipo=torico' },
-    accent:     '#0d9488',
-    bg:         { from: '#011210', via: '#01201e', to: '#012a28' },
-    glow:       'rgba(13,148,136,0.22)',
-    image:      '/hero-oasys-astig.jpg',
-    imageAlt:   'ACUVUE OASYS for Astigmatism — lentes tóricos',
+    badge:      '🛵 Directo a tu puerta',
+    title:      'Tocan la puerta,\ny son tus lentes',
+    sub:        'Sin filas, sin salir de casa.',
+    subtitle:   'Pides hoy, llegan mañana. Entrega en 24-48h en Santo Domingo y Santiago, 2-3 días al resto del país.',
+    cta:        { label: 'Ver catálogo', href: '/catalogo' },
+    cta2:       { label: '¿Cómo funciona?', href: '/envios-y-entregas' },
+    accent:     '#d97706',
+    bg:         { from: '#160e01', via: '#241a02', to: '#332504' },
+    glow:       'rgba(217,119,6,0.20)',
+    image:      '/hero-entrega.jpg',
+    imageAlt:   'Entrega de lentes de contacto en toda República Dominicana',
     tag: null,
-    precio:     { slug: 'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana', fallback: 6250 },
+    precio: null,
+    stats: null,
+  },
+  {
+    badge:      '👓 Para ver de cerca y de lejos',
+    title:      'Lee, maneja y vive\nsin cambiar de lente',
+    sub:        'Visión nítida a todas las distancias.',
+    subtitle:   'Biofinity® Multifocal. Olvídate de los lentes de armazón para leer — un solo lente para todo tu día.',
+    cta:        { label: 'Pedir Biofinity Multifocal', href: '/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana' },
+    cta2:       { label: 'Ver multifocales', href: '/catalogo?tipo=multifocal' },
+    accent:     '#7c3aed',
+    bg:         { from: '#0b0614', via: '#160a26', to: '#201036' },
+    glow:       'rgba(124,58,237,0.20)',
+    image:      '/hero-multifocal.jpg',
+    imageAlt:   'Biofinity Multifocal — visión de cerca y de lejos',
+    tag: null,
+    precio:     { slug: MULTIFOCAL_SLUG, fallback: 9500 },
+    stats: null,
+  },
+  {
+    badge:      '✅ Para toda la familia',
+    title:      'Aquí siempre\nhay para ti',
+    sub:        'Sin importar tu graduación o marca.',
+    subtitle:   'En ContactGo casi siempre tenemos lo que buscas — y si no, te avisamos rápido por WhatsApp.',
+    cta:        { label: 'Ver catálogo', href: '/catalogo' },
+    cta2:       { label: 'Escríbenos por WhatsApp', href: 'https://wa.me/18096942268?text=Hola%20ContactGo%20%F0%9F%91%8B' },
+    accent:     '#059669',
+    bg:         { from: '#010f0c', via: '#021d17', to: '#032a22' },
+    glow:       'rgba(5,150,105,0.22)',
+    image:      '/hero-garantia.jpg',
+    imageAlt:   'ContactGo — lentes de contacto para toda la familia',
+    tag: null,
+    precio: null,
     stats: null,
   },
 ]
@@ -348,8 +331,28 @@ export default function HeroSlider({
             </Link>
           </div>
 
-          {/* 7. Dots discretos — sin flechas en mobile */}
-          <Dots className="mb-1" />
+          {/* 7. Dots + flechas — esquina derecha para navegar con el dedo */}
+          <div className="flex items-center justify-between">
+            <Dots />
+            <div className="flex gap-1.5">
+              {[
+                { fn: prev, label: 'Anterior', path: 'M15 19l-7-7 7-7' },
+                { fn: next, label: 'Siguiente', path: 'M9 5l7 7-7 7' },
+              ].map(({ fn, label, path }) => (
+                <button
+                  key={label}
+                  onClick={() => { fn(); resetAuto() }}
+                  aria-label={label}
+                  className="w-7 h-7 rounded-full flex items-center justify-center active:scale-90 transition-all"
+                  style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.15)' }}
+                >
+                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d={path} />
+                  </svg>
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* 8. Stats / beneficios (solo slide 1) */}
           {s.stats && (

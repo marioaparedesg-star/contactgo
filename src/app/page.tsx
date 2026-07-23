@@ -42,11 +42,8 @@ async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount
   // Fuente única: Supabase — así si Mario cambia el precio en el admin, el hero se actualiza solo.
   const HERO_SLUGS = [
     'acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana',
-    '1-day-acuvue-moist-lentes-contacto-diarios-dominicana',
     'air-optix-colors-lentes-contacto-color-dominicana',
-    'air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana',
-    'biofinity-lentes-contacto-mensuales-coopervision-dominicana',
-    'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana',
+    'biofinity-multifocal-lentes-presbicia-coopervision-dominicana',
   ]
   const { data: heroPrices } = await sb.from('products')
     .select('slug, precio')
