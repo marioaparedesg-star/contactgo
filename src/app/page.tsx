@@ -101,27 +101,63 @@ export default async function HomePage() {
           </a>
         </section>
 
-        {/* ── Stats reales — prueba social ────────────────────────────────── */}
-        <section className="bg-white border-b border-gray-100 py-5 px-4">
-          <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        {/* ── CATEGORÍAS — reordenado: justo debajo del slider ── */}
+        <PersonalizedSection />
+
+        <section className="max-w-7xl mx-auto px-4 py-6 md:py-10">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-display text-xl md:text-2xl font-bold text-gray-900">Compra por tipo</h2>
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
-              { num: '4.7★', label: 'Calificación promedio', sub: '94 reseñas verificadas' },
-              { num: '35+',  label: 'Productos disponibles', sub: 'Marcas líderes mundiales' },
-              { num: '24h',  label: 'Entrega a domicilio',   sub: 'Santo Domingo · Santiago' },
-              { num: '🔒',   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD' },
-            ].map(({ num, label, sub }) => (
-              <div key={label} className="space-y-0.5">
-                <p className="font-black text-2xl text-gray-900 tracking-tight">{num}</p>
-                <p className="text-xs font-bold text-gray-700">{label}</p>
-                <p className="text-[10px] text-gray-400">{sub}</p>
-              </div>
+              { label: 'Esféricos',    slug: 'esferico',   emoji: '👁️',  desc: 'Miopía e hipermetropía — lo más pedido' },
+              { label: 'Tóricos',      slug: 'torico',     emoji: '🎯',  desc: 'Visión nítida con astigmatismo' },
+              { label: 'Multifocales', slug: 'multifocal', emoji: '🔭',  desc: 'Para ver de cerca y de lejos' },
+              { label: 'Color',        slug: 'color',      emoji: '🎨',  desc: 'Cambia tu look, con o sin graduación' },
+              { label: 'Soluciones',   slug: 'solucion',   emoji: '💧',  desc: 'Limpieza y cuidado', href: '/soluciones' },
+              { label: 'Gotas',        slug: 'gota',       emoji: '💊',  desc: 'Lubricación ocular', href: '/gotas' },
+            ].map(cat => (
+              <Link key={cat.slug} href={cat.href ?? `/catalogo?tipo=${cat.slug}`}
+                className="card p-3 md:p-4 text-center hover:border-primary-200 hover:-translate-y-0.5 group transition-all">
+                <div className="text-2xl md:text-3xl mb-1.5">{cat.emoji}</div>
+                <p className="font-semibold text-gray-900 text-xs md:text-sm">{cat.label}</p>
+                <p className="text-[10px] md:text-xs text-gray-400 mt-0.5 hidden md:block">{cat.desc}</p>
+              </Link>
             ))}
           </div>
         </section>
 
+        {/* ── BANNER RECETA — reordenado: segundo ── */}
+        <section className="bg-gradient-to-r from-primary-600 to-teal-600 relative overflow-hidden mx-4 md:mx-8 rounded-3xl mb-8">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-white/5" />
+            <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5" />
+          </div>
+          <div className="relative max-w-7xl mx-auto px-6 py-10 md:py-14 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">🧠</span>
+                <span className="bg-white/20 text-white text-xs font-bold px-2.5 py-1 rounded-full border border-white/30">Gratis · Sin registro</span>
+              </div>
+              <h2 className="font-display text-2xl md:text-3xl font-black text-white mb-2">
+                Encuentra tus lentes exactos
+              </h2>
+              <p className="text-white/80 max-w-md text-sm md:text-base">
+                En menos de 2 minutos sabes exactamente qué lentes son para ti. Sin visitar ningún lugar.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+              <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-2xl hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2 justify-center">
+                <Zap className="w-4 h-4" /> Buscar con mi receta
+              </Link>
+              <Link href="/catalogo" className="border-2 border-white/50 text-white font-semibold px-6 py-3 rounded-2xl hover:bg-white/10 transition-all flex items-center gap-2 justify-center">
+                Ver catálogo <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
 
-
-        {/* ── TRUST BAR ── */}
+        {/* ── TRUST BAR — reordenado: tercero ── */}
         <section className="bg-white border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
@@ -145,7 +181,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── CONFIANZA MÉDICA — PRODUCTOS ORIGINALES ── */}
+        {/* ── CONFIANZA MÉDICA — PRODUCTOS ORIGINALES — reordenado: tercero (continuación) ── */}
         <section className="bg-gradient-to-b from-gray-50 to-white border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
             <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
@@ -197,59 +233,21 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── CATEGORÍAS ── */}
-        <PersonalizedSection />
-
-        <section className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="font-display text-xl md:text-2xl font-bold text-gray-900">Compra por tipo</h2>
-          </div>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+        {/* ── Stats reales — prueba social — reordenado: cuarto (calificaciones/entrega/beneficios) ── */}
+        <section className="bg-white border-b border-gray-100 py-5 px-4">
+          <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             {[
-              { label: 'Esféricos',    slug: 'esferico',   emoji: '👁️',  desc: 'Miopía e hipermetropía — lo más pedido' },
-              { label: 'Tóricos',      slug: 'torico',     emoji: '🎯',  desc: 'Visión nítida con astigmatismo' },
-              { label: 'Multifocales', slug: 'multifocal', emoji: '🔭',  desc: 'Para ver de cerca y de lejos' },
-              { label: 'Color',        slug: 'color',      emoji: '🎨',  desc: 'Cambia tu look, con o sin graduación' },
-              { label: 'Soluciones',   slug: 'solucion',   emoji: '💧',  desc: 'Limpieza y cuidado', href: '/soluciones' },
-              { label: 'Gotas',        slug: 'gota',       emoji: '💊',  desc: 'Lubricación ocular', href: '/gotas' },
-            ].map(cat => (
-              <Link key={cat.slug} href={cat.href ?? `/catalogo?tipo=${cat.slug}`}
-                className="card p-3 md:p-4 text-center hover:border-primary-200 hover:-translate-y-0.5 group transition-all">
-                <div className="text-2xl md:text-3xl mb-1.5">{cat.emoji}</div>
-                <p className="font-semibold text-gray-900 text-xs md:text-sm">{cat.label}</p>
-                <p className="text-[10px] md:text-xs text-gray-400 mt-0.5 hidden md:block">{cat.desc}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* ── BANNER RECETA ── */}
-        <section className="bg-gradient-to-r from-primary-600 to-teal-600 relative overflow-hidden mx-4 md:mx-8 rounded-3xl mb-8">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-white/5" />
-            <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5" />
-          </div>
-          <div className="relative max-w-7xl mx-auto px-6 py-10 md:py-14 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">🧠</span>
-                <span className="bg-white/20 text-white text-xs font-bold px-2.5 py-1 rounded-full border border-white/30">Gratis · Sin registro</span>
+              { num: '4.7★', label: 'Calificación promedio', sub: '94 reseñas verificadas' },
+              { num: '35+',  label: 'Productos disponibles', sub: 'Marcas líderes mundiales' },
+              { num: '24h',  label: 'Entrega a domicilio',   sub: 'Santo Domingo · Santiago' },
+              { num: '🔒',   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD' },
+            ].map(({ num, label, sub }) => (
+              <div key={label} className="space-y-0.5">
+                <p className="font-black text-2xl text-gray-900 tracking-tight">{num}</p>
+                <p className="text-xs font-bold text-gray-700">{label}</p>
+                <p className="text-[10px] text-gray-400">{sub}</p>
               </div>
-              <h2 className="font-display text-2xl md:text-3xl font-black text-white mb-2">
-                Encuentra tus lentes exactos
-              </h2>
-              <p className="text-white/80 max-w-md text-sm md:text-base">
-                En menos de 2 minutos sabes exactamente qué lentes son para ti. Sin visitar ningún lugar.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-              <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-2xl hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2 justify-center">
-                <Zap className="w-4 h-4" /> Buscar con mi receta
-              </Link>
-              <Link href="/catalogo" className="border-2 border-white/50 text-white font-semibold px-6 py-3 rounded-2xl hover:bg-white/10 transition-all flex items-center gap-2 justify-center">
-                Ver catálogo <ChevronRight className="w-4 h-4" />
-              </Link>
-            </div>
+            ))}
           </div>
         </section>
 
