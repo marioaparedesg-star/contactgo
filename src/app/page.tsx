@@ -67,7 +67,7 @@ const SCHEMA_ORG = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias." } },
+    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en toda República Dominicana." } },
     { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todos los productos de ContactGo son directo del fabricante, directo del fabricante y con garantía de autenticidad. Nunca vendemos imitaciones." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
     { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
@@ -236,7 +236,7 @@ export default async function HomePage() {
             {[
               { num: '4.7★', label: 'Calificación promedio', sub: '94 reseñas verificadas' },
               { num: '35+',  label: 'Productos disponibles', sub: 'Marcas líderes mundiales' },
-              { num: '24h',  label: 'Entrega a domicilio',   sub: 'Santo Domingo · Santiago' },
+              { num: '24h',  label: 'Entrega a domicilio',   sub: 'En toda República Dominicana' },
               { num: '🔒',   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD' },
             ].map(({ num, label, sub }) => (
               <div key={label} className="space-y-0.5">
@@ -394,7 +394,7 @@ export default async function HomePage() {
             {[
               { n: '1', icon: '🔍', t: 'Encuentra tu lente', d: 'Usa nuestra calculadora gratuita o dinos qué marca usas. Si tienes dudas, te asesoramos por WhatsApp al instante.' },
               { n: '2', icon: '💳', t: 'Paga seguro', d: 'Tarjeta de crédito o débito con AZUL de Banco Popular. Pago 100% protegido con 3D Secure. Nunca guardamos los datos de tu tarjeta.' },
-              { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Entrega en 24-48h en Santo Domingo y Santiago, 2-3 días al resto del país. Sin filas, sin citas, sin salir de casa.' },
+              { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Entrega en 24-48h a todo el país. Sin filas, sin citas, sin salir de casa.' },
             ].map(p => (
               <div key={p.n} className="relative bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
                 <div className="absolute -top-3 -left-1 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-black text-sm shadow-md">{p.n}</div>
@@ -417,7 +417,7 @@ export default async function HomePage() {
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-3">
             {[
-              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago. 2-3 días para otras provincias. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
+              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en todo el país. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
               { q: '¿Son directo del fabricante?', a: 'Sí. Trabajamos directo con los distribuidores oficiales de cada marca. Recibes tu producto sellado, con su empaque original de fábrica. Nunca vendemos imitaciones.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados recomendamos tener una receta actualizada. Nuestra calculadora gratuita te ayuda a identificar el tipo correcto de lente. Para lentes de color sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },

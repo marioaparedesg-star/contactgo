@@ -69,7 +69,7 @@ const SLIDES: Slide[] = [
     badge:      '🛵 Directo a tu puerta',
     tag:        null,
     title:      'Tocan la puerta,\ny son tus lentes',
-    subtitle:   'Pides hoy, llegan mañana. Entrega en 24-48h en Santo Domingo y Santiago, 2-3 días al resto del país.',
+    subtitle:   'Pides hoy, llegan mañana. Entregamos en 24-48h a todo el país, sin filas ni complicaciones.',
     cta:        { label: 'Ver catálogo', href: '/catalogo' },
     cta2:       { label: '¿Cómo funciona?', href: '/envios-y-entregas' },
     glow:       'rgba(217,119,6,0.22)',
