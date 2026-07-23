@@ -33,8 +33,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Ver toda ACUVUE', href: '/catalogo?marca=acuvue' },
     glow:       'rgba(37,99,235,0.25)',
     accent:     '#1d4ed8',
-    image:      '/hero-oasys-v2.jpg',
-    imageMobile: '/hero-oasys-mobile-v2.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-oasys-v3.jpg',
+    imageMobile: '/hero-oasys-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'ACUVUE OASYS con HYDRACLEAR Plus',
     precio:     { slug: OASYS_SLUG, fallback: 3700 },
     textColor:  'dark',
@@ -48,8 +48,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Buscar con mi receta', href: '/receta' },
     glow:       'rgba(79,70,229,0.25)',
     accent:     '#4338ca',
-    image:      '/hero-general-v2.jpg',
-    imageMobile: '/hero-general-mobile-v2.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-general-v3.jpg',
+    imageMobile: '/hero-general-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'Todas las marcas de lentes de contacto en ContactGo',
     precio:     null,
     textColor:  'dark',
@@ -63,8 +63,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Ver todos los colores', href: '/catalogo?tipo=color' },
     glow:       'rgba(147,51,234,0.25)',
     accent:     '#9333ea',
-    image:      '/hero-air-optix-colors-v2.jpg',
-    imageMobile: '/hero-air-optix-colors-mobile-v2.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-air-optix-colors-v3.jpg',
+    imageMobile: '/hero-air-optix-colors-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'AIR OPTIX COLORS — cambia el color de tus ojos',
     precio:     null,
     textColor:  'dark',
@@ -78,8 +78,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: '¿Cómo funciona?', href: '/envios-y-entregas' },
     glow:       'rgba(217,119,6,0.22)',
     accent:     '#c2620a',
-    image:      '/hero-entrega-v2.jpg',
-    imageMobile: '/hero-entrega-mobile-v2.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-entrega-v3.jpg',
+    imageMobile: '/hero-entrega-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'Entrega de lentes de contacto en toda República Dominicana',
     precio:     null,
     textColor:  'dark',
@@ -93,24 +93,24 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Ver multifocales', href: '/catalogo?tipo=multifocal' },
     glow:       'rgba(124,58,237,0.22)',
     accent:     '#7c3aed',
-    image:      '/hero-multifocal-v2.jpg',
-    imageMobile: '/hero-multifocal-mobile-v2.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-multifocal-v3.jpg',
+    imageMobile: '/hero-multifocal-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'Biofinity Multifocal — visión de cerca y de lejos',
     precio:     null,
     textColor:  'dark',
   },
   {
-    badge:      '✅ Para toda la familia',
+    badge:      '💧 Cuidado completo para tus lentes',
     tag:        null,
-    title:      'Aquí siempre\nhay para ti',
-    subtitle:   'Sin importar tu graduación o marca. Y si no lo tenemos, te avisamos rápido por WhatsApp.',
-    cta:        { label: 'Ver catálogo', href: '/catalogo' },
-    cta2:       { label: 'Escríbenos por WhatsApp', href: 'https://wa.me/18096942268?text=Hola%20ContactGo%20%F0%9F%91%8B' },
-    glow:       'rgba(5,150,105,0.25)',
-    accent:     '#047857',
-    image:      '/hero-garantia-v2.jpg',
-    imageMobile: '/hero-garantia-mobile-v2.jpg', // versión 1000x560 dedicada para mobile/tablet
-    imageAlt:   'ContactGo — lentes de contacto para toda la familia',
+    title:      'Tus lentes duran\nmás y se sienten mejor',
+    subtitle:   'Soluciones y gotas de las mejores marcas: OPTI-FREE, Biotrue, renu, Boston y Clear Care. Limpieza y comodidad todos los días.',
+    cta:        { label: 'Pedir soluciones', href: '/soluciones' },
+    cta2:       { label: 'Ver todas las gotas', href: '/gotas' },
+    glow:       'rgba(37,99,235,0.22)',
+    accent:     '#0B3D66',
+    image:      '/hero-soluciones-v3.jpg',
+    imageMobile: '/hero-soluciones-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
+    imageAlt:   'Soluciones y gotas para lentes de contacto — OPTI-FREE, Biotrue, renu, Boston, Clear Care',
     precio:     null,
     textColor:  'dark',
   },
