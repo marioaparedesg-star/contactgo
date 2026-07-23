@@ -200,6 +200,22 @@ export default function VentaWhatsAppAdmin() {
     }
   }
 
+  const quitarItemExistente = async (link: any, itemId: string | null, itemIndex: number | null) => {
+    if (!confirm('¿Quitar este producto del pedido?')) return
+    const body: any = { accion: 'quitar_item' }
+    if (link.order_id) { body.order_id = link.order_id; body.item_id = itemId }
+    else { body.link_id = link.id; body.item_index = itemIndex }
+
+    const r = await fetch('/api/venta-wa/admin', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    const j = await r.json()
+    if (!r.ok) { toast.error(j.error ?? 'No se pudo quitar'); return }
+    toast.success(`Producto quitado — nuevo total ${fmtRD(j.total)}`)
+    cargarLinks()
+  }
+
   const ESTADO_BADGE: Record<string, { cls: string; icon: any; label: string }> = {
     pendiente:  { cls: 'bg-amber-50 text-amber-700 border-amber-200',  icon: Clock,       label: 'Esperando cliente' },
     completado: { cls: 'bg-blue-50 text-blue-700 border-blue-200',     icon: CheckCircle, label: 'Datos completados' },
@@ -385,8 +401,20 @@ export default function VentaWhatsAppAdmin() {
                       {l.order && <span className="text-xs font-bold text-[#0B3D66]">{l.order.numero_orden}</span>}
                       <span className="text-xs text-gray-400">{new Date(l.created_at).toLocaleString('es-DO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
-                    <div className="text-sm text-gray-700 mt-1.5">
-                      {(l.items ?? []).map((i: any) => `${i.cantidad}× ${i.nombre}`).join(' · ')}
+                    <div className="text-sm text-gray-700 mt-1.5 space-y-0.5">
+                      {(l.order ? (l.orderItems ?? []) : (l.items ?? [])).map((i: any, idx: number) => (
+                        <div key={i.id ?? idx} className="flex items-center gap-1.5 group">
+                          <span>{i.cantidad}× {i.nombre}</span>
+                          {!pagado && l.estado !== 'cancelado' && (l.order ? (l.orderItems ?? []).length > 1 : (l.items ?? []).length > 1) && (
+                            <button
+                              onClick={() => quitarItemExistente(l, i.id ?? null, idx)}
+                              className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 transition-opacity"
+                              title="Quitar producto">
+                              <XCircle className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
                     </div>
                     {l.order && (
                       <div className="text-xs text-gray-500 mt-0.5">

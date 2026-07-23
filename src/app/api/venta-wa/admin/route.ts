@@ -34,12 +34,22 @@ export async function GET(req: NextRequest) {
     // Traer info de órdenes asociadas
     const orderIds = (links ?? []).map(l => l.order_id).filter(Boolean)
     let ordersMap: Record<string, any> = {}
+    let itemsMap: Record<string, any[]> = {}
     if (orderIds.length) {
       const { data: orders } = await sb
         .from('orders')
         .select('id, numero_orden, cliente_nombre, cliente_telefono, cliente_email, pago_estado, estado, total')
         .in('id', orderIds)
       ordersMap = Object.fromEntries((orders ?? []).map(o => [o.id, o]))
+
+      const { data: orderItems } = await sb
+        .from('order_items')
+        .select('id, order_id, nombre, precio, cantidad')
+        .in('order_id', orderIds)
+      for (const it of orderItems ?? []) {
+        if (!itemsMap[it.order_id]) itemsMap[it.order_id] = []
+        itemsMap[it.order_id].push(it)
+      }
     }
 
     return NextResponse.json({
@@ -47,6 +57,7 @@ export async function GET(req: NextRequest) {
         ...l,
         url: `${BASE}/venta/${l.token}`,
         order: l.order_id ? ordersMap[l.order_id] ?? null : null,
+        orderItems: l.order_id ? (itemsMap[l.order_id] ?? []) : null,
       })),
     })
   } catch (err: any) {
@@ -192,6 +203,69 @@ export async function POST(req: NextRequest) {
         if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 })
 
         return NextResponse.json({ ok: true, tipo: 'link', total: nuevoTotal, url: `${BASE}/venta/${link.token}` })
+      }
+
+      return NextResponse.json({ error: 'order_id o link_id requerido' }, { status: 400 })
+    }
+
+    // Quitar un producto de un link pendiente o de una orden ya creada.
+    // Protecciones: no se puede tocar una orden pagada, y no se puede dejar
+    // el pedido en cero productos (mínimo 1 siempre).
+    if (accion === 'quitar_item') {
+      const { item_id, item_index } = body
+
+      if (order_id) {
+        if (!item_id) return NextResponse.json({ error: 'item_id requerido' }, { status: 400 })
+
+        const { data: order, error: orderErr } = await sb
+          .from('orders').select('id, envio, pago_estado').eq('id', order_id).single()
+        if (orderErr || !order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 })
+        if (order.pago_estado === 'pagado') {
+          return NextResponse.json({ error: 'Esta orden ya está pagada — no se puede modificar.' }, { status: 409 })
+        }
+
+        const { data: allItems } = await sb.from('order_items').select('id, precio, cantidad').eq('order_id', order_id)
+        if ((allItems ?? []).length <= 1) {
+          return NextResponse.json({ error: 'No puedes quitar el único producto del pedido. Cancela el pedido en su lugar.' }, { status: 400 })
+        }
+
+        const { error: delErr } = await sb.from('order_items').delete().eq('id', item_id).eq('order_id', order_id)
+        if (delErr) return NextResponse.json({ error: delErr.message }, { status: 500 })
+
+        const restantes = (allItems ?? []).filter(i => i.id !== item_id)
+        const nuevoSubtotal = restantes.reduce((s, i) => s + Number(i.precio) * Number(i.cantidad), 0)
+        const nuevoTotal = nuevoSubtotal + Number(order.envio ?? 0)
+
+        const { error: updErr } = await sb.from('orders').update({ subtotal: nuevoSubtotal, total: nuevoTotal }).eq('id', order_id)
+        if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 })
+
+        return NextResponse.json({ ok: true, total: nuevoTotal })
+      }
+
+      if (link_id) {
+        if (item_index == null) return NextResponse.json({ error: 'item_index requerido' }, { status: 400 })
+
+        const { data: link, error: linkErr } = await sb
+          .from('venta_whatsapp_links').select('id, items, envio, estado').eq('id', link_id).single()
+        if (linkErr || !link) return NextResponse.json({ error: 'Link no encontrado' }, { status: 404 })
+        if (link.estado !== 'pendiente') return NextResponse.json({ error: 'Este link ya no está pendiente' }, { status: 409 })
+
+        const itemsActuales = link.items ?? []
+        if (itemsActuales.length <= 1) {
+          return NextResponse.json({ error: 'No puedes quitar el único producto del link. Cancela el link en su lugar.' }, { status: 400 })
+        }
+
+        const itemsNuevos = itemsActuales.filter((_: any, idx: number) => idx !== Number(item_index))
+        const nuevoSubtotal = itemsNuevos.reduce((s: number, i: any) => s + Number(i.precio) * Number(i.cantidad), 0)
+        const nuevoTotal = nuevoSubtotal + Number(link.envio ?? 0)
+
+        const { error: updErr } = await sb
+          .from('venta_whatsapp_links')
+          .update({ items: itemsNuevos, subtotal: nuevoSubtotal, total: nuevoTotal })
+          .eq('id', link_id)
+        if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 })
+
+        return NextResponse.json({ ok: true, total: nuevoTotal })
       }
 
       return NextResponse.json({ error: 'order_id o link_id requerido' }, { status: 400 })
