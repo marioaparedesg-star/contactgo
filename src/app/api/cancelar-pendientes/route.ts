@@ -42,6 +42,7 @@ export async function GET(req: NextRequest) {
     .lt('created_at', limite)
     .neq('estado', 'entregado')
     .neq('estado', 'cancelado')
+    .or('canal.is.null,canal.neq.whatsapp') // Ventas por WhatsApp las gestiona Mario manualmente — nunca auto-cancelar
 
   if (fetchError) {
     return NextResponse.json({ error: fetchError.message }, { status: 500 })
