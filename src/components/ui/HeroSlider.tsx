@@ -213,18 +213,18 @@ export default function HeroSlider({
         aria-hidden="true"
       />
 
-      {/* Proporción ÚNICA en todas las pantallas (2.74:1, como 1920x700) — nunca recorta
-          nada porque el marco SIEMPRE tiene la misma forma que la imagen, sin importar
-          el ancho de pantalla. Esta es la altura que corresponde a esa proporción del
-          diseño que te gustó: ancha, no muy alta. */}
-      <div className="relative w-full" style={{ aspectRatio: '1920 / 700' }}>
+      {/* Proporción EXACTA de las imágenes (16:9, como se generaron: 1600x900) — nunca
+          recorta nada porque el marco siempre calza perfecto con la foto, en cualquier
+          pantalla. Ancho máximo para que en monitores grandes no crezca sin control:
+          queda centrado, tamaño razonable, en vez de gigante o recortado. */}
+      <div className="relative w-full max-w-[1280px] mx-auto" style={{ aspectRatio: '16 / 9' }}>
         <Image
           src={s.image}
           alt={s.imageAlt}
           fill
           className="object-cover transition-opacity duration-300"
-          style={{ opacity: transitioning ? 0 : 1, objectPosition: 'center 40%' }}
-          sizes="100vw"
+          style={{ opacity: transitioning ? 0 : 1 }}
+          sizes="(max-width: 1280px) 100vw, 1280px"
           quality={88}
           priority={current === 0}
           fetchPriority={current === 0 ? 'high' : 'auto'}
@@ -352,11 +352,13 @@ export default function HeroSlider({
           </div>
         </div>
 
-        {/* ── Controles — esquina inferior derecha, sobre la foto ── */}
-        <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 flex items-center gap-2 z-10">
-          <div className="flex items-center gap-2 bg-black/30 backdrop-blur-sm rounded-full pl-3 pr-1.5 py-1.5 sm:pl-4 sm:pr-2 sm:py-2">
+        {/* ── Controles — esquina inferior derecha, sobre la foto ──
+            Mobile: solo puntos, chip chico (ya existe swipe para deslizar).
+            Desktop: puntos + flechas, chip normal. */}
+        <div className="absolute bottom-2 right-2 sm:bottom-5 sm:right-5 flex items-center gap-2 z-10">
+          <div className="flex items-center gap-1.5 bg-black/25 backdrop-blur-sm rounded-full px-2 py-1 sm:gap-2 sm:pl-4 sm:pr-2 sm:py-2">
             <Dots />
-            <div className="flex gap-1">
+            <div className="hidden sm:flex gap-1">
               {[
                 { fn: prev, label: 'Anterior', path: 'M15 19l-7-7 7-7' },
                 { fn: next, label: 'Siguiente', path: 'M9 5l7 7-7 7' },
@@ -365,9 +367,9 @@ export default function HeroSlider({
                   key={label}
                   onClick={() => { fn(); resetAuto() }}
                   aria-label={label}
-                  className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center active:scale-90 transition-all hover:bg-white/10"
+                  className="w-7 h-7 rounded-full flex items-center justify-center active:scale-90 transition-all hover:bg-white/10"
                 >
-                  <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d={path} />
                   </svg>
                 </button>
