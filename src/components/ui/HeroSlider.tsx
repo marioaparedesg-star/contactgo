@@ -34,7 +34,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(37,99,235,0.25)',
     accent:     '#1d4ed8',
     image:      '/hero-oasys.jpg',
-    imageMobile: '/hero-oasys.jpg', // TODO: reemplazar por versión 1000x560 dedicada
+    imageMobile: '/hero-oasys-mobile.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'ACUVUE OASYS con HYDRACLEAR Plus',
     precio:     { slug: OASYS_SLUG, fallback: 3700 },
     textColor:  'dark',
@@ -49,7 +49,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(79,70,229,0.25)',
     accent:     '#4338ca',
     image:      '/hero-general.jpg',
-    imageMobile: '/hero-general.jpg', // TODO: reemplazar por versión 1000x560 dedicada
+    imageMobile: '/hero-general-mobile.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'Todas las marcas de lentes de contacto en ContactGo',
     precio:     null,
     textColor:  'dark',
@@ -64,7 +64,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(147,51,234,0.25)',
     accent:     '#9333ea',
     image:      '/hero-air-optix-colors.jpg',
-    imageMobile: '/hero-air-optix-colors.jpg', // TODO: reemplazar por versión 1000x560 dedicada
+    imageMobile: '/hero-air-optix-colors-mobile.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'AIR OPTIX COLORS — cambia el color de tus ojos',
     precio:     null,
     textColor:  'dark',
@@ -79,7 +79,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(217,119,6,0.22)',
     accent:     '#c2620a',
     image:      '/hero-entrega.jpg',
-    imageMobile: '/hero-entrega.jpg', // TODO: reemplazar por versión 1000x560 dedicada
+    imageMobile: '/hero-entrega-mobile.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'Entrega de lentes de contacto en toda República Dominicana',
     precio:     null,
     textColor:  'dark',
@@ -94,7 +94,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(124,58,237,0.22)',
     accent:     '#7c3aed',
     image:      '/hero-multifocal.jpg',
-    imageMobile: '/hero-multifocal.jpg', // TODO: reemplazar por versión 1000x560 dedicada
+    imageMobile: '/hero-multifocal-mobile.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'Biofinity Multifocal — visión de cerca y de lejos',
     precio:     null,
     textColor:  'dark',
@@ -109,7 +109,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(5,150,105,0.25)',
     accent:     '#047857',
     image:      '/hero-garantia.jpg',
-    imageMobile: '/hero-garantia.jpg', // TODO: reemplazar por versión 1000x560 dedicada
+    imageMobile: '/hero-garantia-mobile.jpg', // versión 1000x560 dedicada para mobile/tablet
     imageAlt:   'ContactGo — lentes de contacto para toda la familia',
     precio:     null,
     textColor:  'dark',
