@@ -152,6 +152,54 @@ export default function VentaWhatsAppAdmin() {
     else toast.error('Error al cancelar')
   }
 
+  // ── Agregar producto a un pedido/link YA existente (aunque el cliente ya llenó sus datos) ──
+  const [editandoId, setEditandoId] = useState<string | null>(null)
+  const [busquedaEdit, setBusquedaEdit] = useState('')
+  const [agregando, setAgregando] = useState(false)
+
+  const resultadosEdit = useMemo(() => {
+    const q = busquedaEdit.trim().toLowerCase()
+    if (q.length < 2) return []
+    return productos.filter(p =>
+      p.nombre.toLowerCase().includes(q) || (p.marca ?? '').toLowerCase().includes(q)
+    ).slice(0, 6)
+  }, [busquedaEdit, productos])
+
+  const agregarItemExistente = async (link: any, producto: any) => {
+    setAgregando(true)
+    try {
+      const body: any = { accion: 'agregar_item', product_id: producto.id, cantidad: 1 }
+      if (link.order_id) body.order_id = link.order_id
+      else body.link_id = link.id
+
+      const r = await fetch('/api/venta-wa/admin', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      const j = await r.json()
+      if (!r.ok) { toast.error(j.error ?? 'No se pudo agregar'); return }
+
+      toast.success(`${producto.nombre} agregado — nuevo total ${fmtRD(j.total)}`)
+      setBusquedaEdit('')
+      setEditandoId(null)
+      cargarLinks()
+
+      // Si ya es una orden (cliente completó sus datos), ofrecer reenviar resumen actualizado
+      if (j.tipo === 'orden' && j.cliente_telefono) {
+        const resumen = `Hola ${j.cliente_nombre?.split(' ')[0] ?? ''} 👋 Actualicé tu pedido *#${j.numero_orden}* — le agregué *${producto.nombre}*.\n\nNuevo total: *${fmtRD(j.total)}*\n\nEn cuanto confirmes te envío el link de pago. 💙`
+        setTimeout(() => {
+          if (confirm('Producto agregado a la orden. ¿Abrir WhatsApp para avisarle al cliente del nuevo total?')) {
+            window.open(`https://wa.me/1${j.cliente_telefono}?text=${encodeURIComponent(resumen)}`, '_blank')
+          }
+        }, 300)
+      }
+    } catch {
+      toast.error('Error de conexión')
+    } finally {
+      setAgregando(false)
+    }
+  }
+
   const ESTADO_BADGE: Record<string, { cls: string; icon: any; label: string }> = {
     pendiente:  { cls: 'bg-amber-50 text-amber-700 border-amber-200',  icon: Clock,       label: 'Esperando cliente' },
     completado: { cls: 'bg-blue-50 text-blue-700 border-blue-200',     icon: CheckCircle, label: 'Datos completados' },
@@ -368,8 +416,45 @@ export default function VentaWhatsAppAdmin() {
                         <DollarSign className="w-4 h-4" /> Marcar pagado
                       </button>
                     )}
+                    {!pagado && l.estado !== 'cancelado' && (
+                      <button
+                        onClick={() => { setEditandoId(editandoId === l.id ? null : l.id); setBusquedaEdit('') }}
+                        className="p-2 border rounded-lg hover:bg-blue-50 text-[#0B3D66]" title="Agregar producto">
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
+
+                {/* Panel de agregar producto — funciona tanto en links pendientes como en órdenes ya creadas */}
+                {editandoId === l.id && (
+                  <div className="mt-3 pt-3 border-t relative">
+                    <p className="text-xs font-semibold text-gray-500 mb-2">
+                      {l.order ? 'Agregar producto a esta orden — se recalcula el total y puedes avisarle al cliente' : 'Agregar producto a este link — el cliente lo verá cuando abra su link'}
+                    </p>
+                    <div className="relative">
+                      <Search className="w-4 h-4 absolute left-3 top-2.5 text-gray-400" />
+                      <input
+                        autoFocus
+                        className="w-full pl-9 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D66]/30"
+                        placeholder="Buscar producto (ej: solución, gotas)…"
+                        value={busquedaEdit}
+                        onChange={e => setBusquedaEdit(e.target.value)}
+                      />
+                      {resultadosEdit.length > 0 && (
+                        <div className="absolute z-20 mt-1 w-full bg-white border rounded-xl shadow-lg overflow-hidden">
+                          {resultadosEdit.map(p => (
+                            <button key={p.id} disabled={agregando} onClick={() => agregarItemExistente(l, p)}
+                              className="w-full text-left px-4 py-2.5 hover:bg-gray-50 flex justify-between items-center text-sm disabled:opacity-50">
+                              <span>{p.nombre} <span className="text-gray-400 text-xs">· {p.marca}</span></span>
+                              <span className="font-semibold text-[#0B3D66]">{fmtRD(p.precio)}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )
           })}
