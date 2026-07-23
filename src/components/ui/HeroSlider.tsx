@@ -213,15 +213,17 @@ export default function HeroSlider({
         aria-hidden="true"
       />
 
-      {/* Altura FIJA por dispositivo (no depende del ancho) — así nunca se dispara
-          en monitores grandes ni exige scroll de más para ver el resto de la página */}
-      <div className="relative w-full h-[300px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[540px]">
+      {/* Proporción ÚNICA en todas las pantallas (2.74:1, como 1920x700) — nunca recorta
+          nada porque el marco SIEMPRE tiene la misma forma que la imagen, sin importar
+          el ancho de pantalla. Esta es la altura que corresponde a esa proporción del
+          diseño que te gustó: ancha, no muy alta. */}
+      <div className="relative w-full" style={{ aspectRatio: '1920 / 700' }}>
         <Image
           src={s.image}
           alt={s.imageAlt}
           fill
           className="object-cover transition-opacity duration-300"
-          style={{ opacity: transitioning ? 0 : 1 }}
+          style={{ opacity: transitioning ? 0 : 1, objectPosition: 'center 40%' }}
           sizes="100vw"
           quality={88}
           priority={current === 0}
