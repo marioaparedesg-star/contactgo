@@ -82,6 +82,8 @@ export async function POST(
     const email   = String(body.email ?? '').trim().toLowerCase()
     const dir     = String(body.direccion ?? '').trim()
     const ciudad  = String(body.ciudad ?? '').trim()
+    const disclaimerAcceptanceId = body.disclaimer_acceptance_id ? String(body.disclaimer_acceptance_id) : null
+    const disclaimerVersion = body.disclaimer_version ? String(body.disclaimer_version) : null
 
     // Validaciones
     if (nombre.length < 3) return NextResponse.json({ error: 'Nombre inválido' }, { status: 400 })
@@ -116,6 +118,8 @@ export async function POST(
         pago_estado: 'pendiente',
         numero_orden: orderNum,
         canal: 'whatsapp',
+        disclaimer_acceptance_id: disclaimerAcceptanceId,
+        disclaimer_version: disclaimerVersion,
         notas_admin: link.notas ? `[Venta WhatsApp] ${link.notas}` : '[Venta WhatsApp]',
       })
       .select()

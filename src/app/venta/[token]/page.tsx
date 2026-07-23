@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { ShoppingBag, CheckCircle, Clock, User, CreditCard, Phone, Mail, MapPin, Calendar } from 'lucide-react'
+import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
 
 const CIUDADES = [
   'Santo Domingo', 'Santo Domingo Este', 'Santo Domingo Norte', 'Santo Domingo Oeste',
@@ -46,6 +47,7 @@ export default function VentaWhatsAppPage() {
   const [loading, setLoading] = useState(true)
   const [enviando, setEnviando] = useState(false)
   const [ordenCreada, setOrdenCreada] = useState<string | null>(null)
+  const [showDisclaimer, setShowDisclaimer] = useState(false)
 
   const [form, setForm] = useState({
     nombre: '', cedula: '', fecha_nacimiento: '', telefono: '',
@@ -86,8 +88,35 @@ export default function VentaWhatsAppPage() {
     const ciudadFinal = form.ciudad === 'Otra ciudad' ? form.ciudadPersonalizada.trim() : form.ciudad
     if (!ciudadFinal || ciudadFinal.length < 3) return toast.error('Selecciona tu ciudad')
 
+    // Antes de crear la orden, el cliente debe aceptar el aviso médico —
+    // igual que en el checkout normal de la web.
+    setShowDisclaimer(true)
+  }
+
+  const handleDisclaimerAceptado = async (dData: DisclaimerData) => {
+    setShowDisclaimer(false)
+    const cedulaDigits = form.cedula.replace(/\D/g, '')
+    const telDigits = form.telefono.replace(/\D/g, '')
+    const ciudadFinal = form.ciudad === 'Otra ciudad' ? form.ciudadPersonalizada.trim() : form.ciudad
+
     setEnviando(true)
     try {
+      // 1. Registrar la aceptación del descargo (igual que en checkout — sin order_id todavía)
+      let disclaimerId: string | null = null
+      try {
+        const rd = await fetch('/api/disclaimer', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            version: dData.version, tipo: 'compra_whatsapp',
+            user_agent: dData.user_agent, items_snapshot: dData.items_snapshot,
+            accepted_at: dData.accepted_at,
+          }),
+        })
+        const rj = await rd.json()
+        disclaimerId = rj.disclaimer_id ?? null
+      } catch { /* si falla el log, igual dejamos continuar la compra */ }
+
+      // 2. Crear la orden, incluyendo la referencia del descargo aceptado
       const r = await fetch(`/api/venta-wa/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -99,6 +128,8 @@ export default function VentaWhatsAppPage() {
           email: form.email.trim(),
           direccion: form.direccion.trim(),
           ciudad: ciudadFinal,
+          disclaimer_acceptance_id: disclaimerId,
+          disclaimer_version: dData.version,
         }),
       })
       const j = await r.json()
@@ -247,6 +278,15 @@ export default function VentaWhatsAppPage() {
           </div>
         </div>
       </div>
+
+      {showDisclaimer && (
+        <DisclaimerMedico
+          showModal
+          items={data?.items ?? []}
+          onAceptar={handleDisclaimerAceptado}
+          onCancelar={() => setShowDisclaimer(false)}
+        />
+      )}
     </div>
   )
 }
