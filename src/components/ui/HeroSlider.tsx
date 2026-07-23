@@ -15,6 +15,7 @@ type Slide = {
   glow:       string
   accent:     string   // color sólido de marca para el CTA y el acento del título
   image:      string
+  imageMobile: string  // versión recortada 1000x560 para mobile/tablet — si no existe, cae a `image`
   imageAlt:   string
   precio:     PriceSpec
   textColor:  'dark' | 'light'   // color del texto según el fondo de CADA imagen
@@ -33,6 +34,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(37,99,235,0.25)',
     accent:     '#1d4ed8',
     image:      '/hero-oasys.jpg',
+    imageMobile: '/hero-oasys.jpg', // TODO: reemplazar por versión 1000x560 dedicada
     imageAlt:   'ACUVUE OASYS con HYDRACLEAR Plus',
     precio:     { slug: OASYS_SLUG, fallback: 3700 },
     textColor:  'dark',
@@ -47,6 +49,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(79,70,229,0.25)',
     accent:     '#4338ca',
     image:      '/hero-general.jpg',
+    imageMobile: '/hero-general.jpg', // TODO: reemplazar por versión 1000x560 dedicada
     imageAlt:   'Todas las marcas de lentes de contacto en ContactGo',
     precio:     null,
     textColor:  'dark',
@@ -61,6 +64,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(147,51,234,0.25)',
     accent:     '#9333ea',
     image:      '/hero-air-optix-colors.jpg',
+    imageMobile: '/hero-air-optix-colors.jpg', // TODO: reemplazar por versión 1000x560 dedicada
     imageAlt:   'AIR OPTIX COLORS — cambia el color de tus ojos',
     precio:     null,
     textColor:  'dark',
@@ -75,6 +79,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(217,119,6,0.22)',
     accent:     '#c2620a',
     image:      '/hero-entrega.jpg',
+    imageMobile: '/hero-entrega.jpg', // TODO: reemplazar por versión 1000x560 dedicada
     imageAlt:   'Entrega de lentes de contacto en toda República Dominicana',
     precio:     null,
     textColor:  'dark',
@@ -89,6 +94,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(124,58,237,0.22)',
     accent:     '#7c3aed',
     image:      '/hero-multifocal.jpg',
+    imageMobile: '/hero-multifocal.jpg', // TODO: reemplazar por versión 1000x560 dedicada
     imageAlt:   'Biofinity Multifocal — visión de cerca y de lejos',
     precio:     null,
     textColor:  'dark',
@@ -103,6 +109,7 @@ const SLIDES: Slide[] = [
     glow:       'rgba(5,150,105,0.25)',
     accent:     '#047857',
     image:      '/hero-garantia.jpg',
+    imageMobile: '/hero-garantia.jpg', // TODO: reemplazar por versión 1000x560 dedicada
     imageAlt:   'ContactGo — lentes de contacto para toda la familia',
     precio:     null,
     textColor:  'dark',
@@ -213,17 +220,33 @@ export default function HeroSlider({
         aria-hidden="true"
       />
 
-      {/* Edge-to-edge (sin márgenes laterales) + altura compacta y fija por pantalla —
-          no "gigante". Esto SÍ recorta un poco los lados de la foto en pantallas anchas
-          (matemáticamente inevitable si se quiere compacto Y de borde a borde con fotos
-          16:9) — exactamente como funciona el 99% de los banners hero en internet.
-          object-position sube el foco hacia arriba para nunca cortar la cara. */}
+      {/* ART DIRECTION: dos imágenes distintas, cada una con la proporción exacta que
+          necesita su rango de pantalla — así ninguna se recorta de más.
+          Un solo contenedor exterior (con la altura correcta por breakpoint) contiene
+          AMBAS imágenes apiladas (una visible a la vez) + el texto/controles compartidos,
+          que se posicionan relativos a este contenedor sin importar cuál imagen se ve. */}
       <div className="relative w-full h-[220px] sm:h-[300px] md:h-[360px] lg:h-[400px] xl:h-[430px]">
+
+        {/* Imagen MOBILE/TABLET — proporción 1000x560 (1.8:1) */}
+        <Image
+          src={s.imageMobile}
+          alt={s.imageAlt}
+          fill
+          className="object-cover transition-opacity duration-300 md:hidden"
+          style={{ opacity: transitioning ? 0 : 1, objectPosition: 'center 22%' }}
+          sizes="100vw"
+          quality={88}
+          priority={current === 0}
+          fetchPriority={current === 0 ? 'high' : 'auto'}
+          onError={(e) => { (e.target as HTMLImageElement).src = '/hero-lens-1.png' }}
+        />
+
+        {/* Imagen DESKTOP — proporción 1920x480 (4:1) */}
         <Image
           src={s.image}
           alt={s.imageAlt}
           fill
-          className="object-cover transition-opacity duration-300"
+          className="object-cover transition-opacity duration-300 hidden md:block"
           style={{ opacity: transitioning ? 0 : 1, objectPosition: 'center 22%' }}
           sizes="100vw"
           quality={88}
