@@ -13,6 +13,7 @@ type Slide = {
   cta:        { label: string; href: string }
   cta2:       { label: string; href: string } | null
   glow:       string
+  accent:     string   // color sólido de marca para el CTA y el acento del título
   image:      string
   imageAlt:   string
   precio:     PriceSpec
@@ -30,6 +31,7 @@ const SLIDES: Slide[] = [
     cta:        { label: 'Pedir ACUVUE OASYS', href: '/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana' },
     cta2:       { label: 'Ver toda ACUVUE', href: '/catalogo?marca=acuvue' },
     glow:       'rgba(37,99,235,0.25)',
+    accent:     '#1d4ed8',
     image:      '/hero-oasys.jpg',
     imageAlt:   'ACUVUE OASYS con HYDRACLEAR Plus',
     precio:     { slug: OASYS_SLUG, fallback: 3700 },
@@ -43,6 +45,7 @@ const SLIDES: Slide[] = [
     cta:        { label: 'Ver catálogo completo', href: '/catalogo' },
     cta2:       { label: 'Buscar con mi receta', href: '/receta' },
     glow:       'rgba(79,70,229,0.25)',
+    accent:     '#4338ca',
     image:      '/hero-general.jpg',
     imageAlt:   'Todas las marcas de lentes de contacto en ContactGo',
     precio:     null,
@@ -56,6 +59,7 @@ const SLIDES: Slide[] = [
     cta:        { label: 'Pedir AIR OPTIX Colors', href: '/producto/air-optix-colors-lentes-contacto-color-dominicana' },
     cta2:       { label: 'Ver todos los colores', href: '/catalogo?tipo=color' },
     glow:       'rgba(147,51,234,0.25)',
+    accent:     '#9333ea',
     image:      '/hero-air-optix-colors.jpg',
     imageAlt:   'AIR OPTIX COLORS — cambia el color de tus ojos',
     precio:     null,
@@ -69,6 +73,7 @@ const SLIDES: Slide[] = [
     cta:        { label: 'Ver catálogo', href: '/catalogo' },
     cta2:       { label: '¿Cómo funciona?', href: '/envios-y-entregas' },
     glow:       'rgba(217,119,6,0.22)',
+    accent:     '#c2620a',
     image:      '/hero-entrega.jpg',
     imageAlt:   'Entrega de lentes de contacto en toda República Dominicana',
     precio:     null,
@@ -82,6 +87,7 @@ const SLIDES: Slide[] = [
     cta:        { label: 'Pedir Biofinity Multifocal', href: '/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana' },
     cta2:       { label: 'Ver multifocales', href: '/catalogo?tipo=multifocal' },
     glow:       'rgba(124,58,237,0.22)',
+    accent:     '#7c3aed',
     image:      '/hero-multifocal.jpg',
     imageAlt:   'Biofinity Multifocal — visión de cerca y de lejos',
     precio:     null,
@@ -95,6 +101,7 @@ const SLIDES: Slide[] = [
     cta:        { label: 'Ver catálogo', href: '/catalogo' },
     cta2:       { label: 'Escríbenos por WhatsApp', href: 'https://wa.me/18096942268?text=Hola%20ContactGo%20%F0%9F%91%8B' },
     glow:       'rgba(5,150,105,0.25)',
+    accent:     '#047857',
     image:      '/hero-garantia.jpg',
     imageAlt:   'ContactGo — lentes de contacto para toda la familia',
     precio:     null,
@@ -206,9 +213,9 @@ export default function HeroSlider({
         aria-hidden="true"
       />
 
-      {/* Contenedor a proporción EXACTA 16:9 — sin min/max-height que compitan,
-          así object-cover nunca recorta nada (el contenedor siempre calza con la imagen) */}
-      <div className="relative w-full" style={{ aspectRatio: '16 / 9' }}>
+      {/* Altura FIJA por dispositivo (no depende del ancho) — así nunca se dispara
+          en monitores grandes ni exige scroll de más para ver el resto de la página */}
+      <div className="relative w-full h-[300px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[540px]">
         <Image
           src={s.image}
           alt={s.imageAlt}
@@ -222,11 +229,15 @@ export default function HeroSlider({
           onError={(e) => { (e.target as HTMLImageElement).src = '/hero-lens-1.png' }}
         />
 
-        {/* Glow ambiental sutil, para dar vida sin tapar la foto */}
+        {/* Scrim de legibilidad — degradado suave detrás del texto, se adapta a cada foto */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
           <div
-            className="absolute top-0 left-0 w-[45%] h-full opacity-40 transition-colors duration-500"
-            style={{ background: `radial-gradient(ellipse at 15% 45%, ${s.glow} 0%, transparent 65%)` }}
+            className="absolute inset-y-0 left-0 w-[58%]"
+            style={{ background: `linear-gradient(90deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.22) 60%, transparent 100%)` }}
+          />
+          <div
+            className="absolute top-0 left-0 w-[45%] h-full opacity-50 transition-colors duration-500"
+            style={{ background: `radial-gradient(ellipse at 15% 40%, ${s.glow} 0%, transparent 68%)` }}
           />
         </div>
 
@@ -234,15 +245,15 @@ export default function HeroSlider({
         <div
           className="absolute inset-y-0 left-0 flex flex-col justify-center transition-opacity duration-300"
           style={{
-            width: 'min(46%, 620px)',
-            paddingLeft: 'clamp(1rem, 4vw, 3.5rem)',
-            paddingRight: 'clamp(0.75rem, 2vw, 1.5rem)',
+            width: 'min(44%, 560px)',
+            paddingLeft: 'clamp(1rem, 3.5vw, 3rem)',
+            paddingRight: 'clamp(0.75rem, 1.8vw, 1.25rem)',
             opacity: transitioning ? 0 : 1,
           }}
         >
           <p
-            className="font-semibold uppercase hidden sm:block"
-            style={{ color: textFaint, fontSize: 'clamp(0.55rem, 0.9vw, 0.7rem)', letterSpacing: '0.1em', marginBottom: 'clamp(0.3rem, 1vw, 0.6rem)' }}
+            className="font-bold uppercase hidden sm:block"
+            style={{ color: textFaint, fontSize: 'clamp(0.55rem, 0.85vw, 0.68rem)', letterSpacing: '0.1em', marginBottom: 'clamp(0.3rem, 0.9vw, 0.5rem)' }}
           >
             {s.badge}
           </p>
@@ -251,9 +262,9 @@ export default function HeroSlider({
             <span
               className="hidden md:inline-flex items-center font-black rounded-full w-fit"
               style={{
-                fontSize: 'clamp(0.55rem, 0.85vw, 0.7rem)',
+                fontSize: 'clamp(0.55rem, 0.8vw, 0.68rem)',
                 padding: '0.3em 0.8em',
-                marginBottom: 'clamp(0.4rem, 1.2vw, 0.75rem)',
+                marginBottom: 'clamp(0.35rem, 1vw, 0.6rem)',
                 background: '#fbbf24',
                 color: '#451a03',
               }}
@@ -264,49 +275,57 @@ export default function HeroSlider({
 
           <h1
             className="font-display font-black whitespace-pre-line"
-            style={{
-              color: textMain,
-              fontSize: 'clamp(1.15rem, 3.4vw, 2.75rem)',
-              lineHeight: 1.08,
-              letterSpacing: '-0.01em',
-            }}
+            style={{ lineHeight: 1.06, letterSpacing: '-0.01em' }}
           >
-            {s.title}
+            {s.title.split('\n').map((line, i) => (
+              <span
+                key={i}
+                style={{
+                  display: 'block',
+                  color: i === 0 ? textMain : s.accent,
+                  fontSize: 'clamp(1.2rem, 3.1vw, 2.5rem)',
+                  textShadow: isDark ? '0 1px 12px rgba(255,255,255,0.4)' : '0 1px 12px rgba(0,0,0,0.25)',
+                }}
+              >
+                {line}
+              </span>
+            ))}
           </h1>
 
           <p
             className="hidden sm:block"
             style={{
               color: textSub,
-              fontSize: 'clamp(0.7rem, 1.15vw, 1rem)',
-              lineHeight: 1.45,
-              marginTop: 'clamp(0.4rem, 1.2vw, 0.85rem)',
-              maxWidth: '34ch',
+              fontSize: 'clamp(0.68rem, 1.05vw, 0.9rem)',
+              lineHeight: 1.4,
+              marginTop: 'clamp(0.4rem, 1vw, 0.7rem)',
+              maxWidth: '32ch',
             }}
           >
             {s.subtitle}
           </p>
 
           {precioTexto && (
-            <div className="flex items-baseline gap-1.5" style={{ marginTop: 'clamp(0.5rem, 1.5vw, 1rem)' }}>
-              <span style={{ color: textFaint, fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)' }}>Desde</span>
-              <span style={{ color: textMain, fontWeight: 900, fontSize: 'clamp(1rem, 2vw, 1.6rem)' }}>{precioTexto}</span>
+            <div className="flex items-baseline gap-1.5" style={{ marginTop: 'clamp(0.5rem, 1.3vw, 0.9rem)' }}>
+              <span style={{ color: textFaint, fontSize: 'clamp(0.6rem, 0.85vw, 0.72rem)' }}>Desde</span>
+              <span style={{ color: s.accent, fontWeight: 900, fontSize: 'clamp(1.05rem, 1.9vw, 1.5rem)' }}>{precioTexto}</span>
             </div>
           )}
 
           <div
             className="flex flex-col items-start"
-            style={{ gap: 'clamp(0.35rem, 1vw, 0.6rem)', marginTop: 'clamp(0.6rem, 1.8vw, 1.25rem)' }}
+            style={{ gap: 'clamp(0.35rem, 0.9vw, 0.55rem)', marginTop: 'clamp(0.55rem, 1.5vw, 1.1rem)' }}
           >
             <Link
               href={s.cta.href}
               onClick={() => { if (autoRef.current) clearInterval(autoRef.current) }}
-              className="inline-flex items-center gap-1.5 font-black rounded-lg sm:rounded-xl active:scale-[0.97] transition-all shadow-lg"
+              className="inline-flex items-center gap-1.5 font-black rounded-lg sm:rounded-xl active:scale-[0.97] hover:brightness-110 transition-all"
               style={{
-                background: '#0B3D66',
+                background: s.accent,
                 color: '#ffffff',
-                fontSize: 'clamp(0.65rem, 1vw, 0.875rem)',
-                padding: 'clamp(0.5rem, 1.3vw, 0.85rem) clamp(0.8rem, 2.2vw, 1.5rem)',
+                fontSize: 'clamp(0.66rem, 0.95vw, 0.85rem)',
+                padding: 'clamp(0.5rem, 1.15vw, 0.8rem) clamp(0.85rem, 2vw, 1.4rem)',
+                boxShadow: `0 8px 24px -6px ${s.accent}99, 0 2px 8px -2px rgba(0,0,0,0.15)`,
               }}
             >
               {s.cta.label}
