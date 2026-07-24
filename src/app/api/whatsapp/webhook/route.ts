@@ -118,36 +118,48 @@ export async function POST(req: NextRequest) {
           // Respuestas a los botones del menú
           const buttonId = msg.interactive?.button_reply?.id ?? ''
 
+          // Guarda la auto-respuesta en la bandeja del admin (antes se perdía sin dejar rastro)
+          const logAutoReply = async (texto: string) => {
+            try {
+              await sb.from('whatsapp_messages').insert({
+                phone: from, direction: 'outbound', message_type: 'text',
+                body: texto, status: 'sent', read: true,
+              })
+            } catch { /* no bloquea el flujo si falla el log */ }
+          }
+
           if (buttonId === 'btn_receta') {
-            await waSendText(from,
-              '📋 ¡Perfecto! Envíanos una foto clara de tu receta y te cotizamos en minutos.\n\n' +
+            const texto = '📋 ¡Perfecto! Envíanos una foto clara de tu receta y te cotizamos en minutos.\n\n' +
               'Si no tienes la receta a mano, dinos la marca y graduación que usas y te ayudamos.\n\n' +
               '👨‍⚕️ Mario te responde personalmente.'
-            )
+            await waSendText(from, texto)
+            await logAutoReply(texto)
           } else if (buttonId === 'btn_color') {
-            await waSendText(from,
-              '🎨 ¡Excelente elección!\n\n' +
+            const texto = '🎨 ¡Excelente elección!\n\n' +
               'Tenemos AIR OPTIX COLORS (12 colores) desde RD$2,100 sin graduación.\n\n' +
               '👉 Ve los colores aquí: www.contactgo.net/producto/air-optix-colors-lentes-contacto-color-dominicana\n\n' +
               'O dime qué color te interesa y te ayudo directo. 😊'
-            )
+            await waSendText(from, texto)
+            await logAutoReply(texto)
           } else if (buttonId === 'btn_pedido') {
-            await waSendText(from,
-              '📦 Dime tu nombre o número de pedido y te doy el estado al instante.\n\n' +
+            const texto = '📦 Dime tu nombre o número de pedido y te doy el estado al instante.\n\n' +
               '👨‍⚕️ Mario te responde en minutos.'
-            )
+            await waSendText(from, texto)
+            await logAutoReply(texto)
           } else if (msgType === 'image' || msgType === 'document') {
-            // Envió una foto (probable receta)
-            await waSendText(from,
-              '📸 ¡Recibido! Estoy revisando tu receta.\n\n' +
-              'Te respondo con la cotización en minutos. ⏱️'
-            )
+            // Envió una foto — puede ser receta, o puede ser otra cosa (ej. screenshot de un error).
+            // El texto deja claro que un humano lo revisa, sin asumir que es receta.
+            const texto = '📸 ¡Recibido! Ya Mario está revisando tu mensaje.\n\n' +
+              'Te responde en minutos. Si es algo urgente, dinos brevemente de qué se trata. ⏱️'
+            await waSendText(from, texto)
+            await logAutoReply(texto)
           } else if (isFirstMessage || msgBody.toLowerCase().match(/^(hola|hi|buenos?\s*d[ií]as?|buenas?\s*tardes?|buenas?\s*noches?|hey|ey|saludos?)$/i)) {
             // Primer mensaje o saludo genérico → menú de botones
             const nombre = contactName ? contactName.split(' ')[0] : ''
+            const texto = `¡Hola${nombre ? ' ' + nombre : ''}! 👋 Bienvenido/a a ContactGo, tu tienda de lentes de contacto en RD.\n\n¿En qué te puedo ayudar?`
             await sendButtons(
               from,
-              `¡Hola${nombre ? ' ' + nombre : ''}! 👋 Bienvenido/a a ContactGo, tu tienda de lentes de contacto en RD.\n\n¿En qué te puedo ayudar?`,
+              texto,
               [
                 { id: 'btn_receta', title: '📋 Cotizar con receta' },
                 { id: 'btn_color', title: '🎨 Lentes de color' },
@@ -156,6 +168,7 @@ export async function POST(req: NextRequest) {
               'ContactGo 👁️',
               'Te contestamos en minutos'
             )
+            await logAutoReply(`${texto}\n\n[Menú: 📋 Cotizar con receta | 🎨 Lentes de color | 📦 Estado de pedido]`)
           }
           // Si no es ninguno de los anteriores (mensaje libre), no auto-responde —
           // solo llega la notificación al admin para que Mario conteste personalmente.
