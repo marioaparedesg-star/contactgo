@@ -33,8 +33,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Ver toda ACUVUE', href: '/catalogo?marca=acuvue' },
     glow:       'rgba(37,99,235,0.25)',
     accent:     '#1d4ed8',
-    image:      '/hero-oasys-v3.jpg',
-    imageMobile: '/hero-oasys-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-oasys-v4.jpg',
+    imageMobile: '/hero-oasys-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'ACUVUE OASYS con HYDRACLEAR Plus',
     precio:     { slug: OASYS_SLUG, fallback: 3700 },
     textColor:  'dark',
@@ -48,8 +48,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Buscar con mi receta', href: '/receta' },
     glow:       'rgba(79,70,229,0.25)',
     accent:     '#4338ca',
-    image:      '/hero-general-v3.jpg',
-    imageMobile: '/hero-general-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-general-v4.jpg',
+    imageMobile: '/hero-general-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'Todas las marcas de lentes de contacto en ContactGo',
     precio:     null,
     textColor:  'dark',
@@ -63,8 +63,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Ver todos los colores', href: '/catalogo?tipo=color' },
     glow:       'rgba(147,51,234,0.25)',
     accent:     '#9333ea',
-    image:      '/hero-air-optix-colors-v3.jpg',
-    imageMobile: '/hero-air-optix-colors-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-air-optix-colors-v4.jpg',
+    imageMobile: '/hero-air-optix-colors-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'AIR OPTIX COLORS — cambia el color de tus ojos',
     precio:     null,
     textColor:  'dark',
@@ -78,8 +78,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: '¿Cómo funciona?', href: '/envios-y-entregas' },
     glow:       'rgba(217,119,6,0.22)',
     accent:     '#c2620a',
-    image:      '/hero-entrega-v3.jpg',
-    imageMobile: '/hero-entrega-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-entrega-v4.jpg',
+    imageMobile: '/hero-entrega-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'Entrega de lentes de contacto en toda República Dominicana',
     precio:     null,
     textColor:  'dark',
@@ -93,8 +93,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Ver multifocales', href: '/catalogo?tipo=multifocal' },
     glow:       'rgba(124,58,237,0.22)',
     accent:     '#7c3aed',
-    image:      '/hero-multifocal-v3.jpg',
-    imageMobile: '/hero-multifocal-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-multifocal-v4.jpg',
+    imageMobile: '/hero-multifocal-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'Biofinity Multifocal — visión de cerca y de lejos',
     precio:     null,
     textColor:  'dark',
@@ -108,8 +108,8 @@ const SLIDES: Slide[] = [
     cta2:       { label: 'Ver todas las gotas', href: '/gotas' },
     glow:       'rgba(37,99,235,0.22)',
     accent:     '#0B3D66',
-    image:      '/hero-soluciones-v3.jpg',
-    imageMobile: '/hero-soluciones-mobile-v3.jpg', // versión 1000x560 dedicada para mobile/tablet
+    image:      '/hero-soluciones-v4.jpg',
+    imageMobile: '/hero-soluciones-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'Soluciones y gotas para lentes de contacto — OPTI-FREE, Biotrue, renu, Boston, Clear Care',
     precio:     null,
     textColor:  'dark',
