@@ -19,7 +19,10 @@ import { Shield, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, MapPin, User,
 const schema = z.object({
   nombre:               z.string().min(3, 'Nombre requerido'),
   email:                z.string().email('Email inválido'),
-  telefono:             z.string().min(10, 'Teléfono requerido'),
+  telefono:             z.string().min(10, 'Teléfono requerido').refine(
+                            (v) => (v.match(/\d/g) ?? []).length >= 10,
+                            'Ese no parece un número de teléfono válido — debe tener al menos 10 dígitos'
+                          ),
   direccion:            z.string().min(5, 'Dirección requerida'),
   ciudad:               z.string().min(2, 'Ciudad requerida'),
   ciudadPersonalizada:  z.string().optional(),
