@@ -225,15 +225,18 @@ export default function HeroSlider({
           Un solo contenedor exterior (con la altura correcta por breakpoint) contiene
           AMBAS imágenes apiladas (una visible a la vez) + el texto/controles compartidos,
           que se posicionan relativos a este contenedor sin importar cuál imagen se ve. */}
-      <div className="relative w-full h-[220px] sm:h-[300px] md:h-[360px] lg:h-[400px] xl:h-[430px] bg-white">
+      <div
+        className="relative w-full h-[220px] sm:h-[300px] md:h-[360px] lg:h-[400px] xl:h-[430px] transition-all duration-500"
+        style={{ background: `linear-gradient(100deg, ${s.glow.replace(/[\d.]+\)$/, '0.14)')} 0%, #fbfcfe 42%, #ffffff 68%)` }}
+      >
 
-        {/* Imagen MOBILE/TABLET — proporción 1000x560 (1.8:1) */}
+        {/* Imagen MOBILE/TABLET — proporción 1000x560 (1.8:1), pegada a la derecha */}
         <Image
           src={s.imageMobile}
           alt={s.imageAlt}
           fill
           className="object-contain transition-opacity duration-300 md:hidden"
-          style={{ opacity: transitioning ? 0 : 1 }}
+          style={{ opacity: transitioning ? 0 : 1, objectPosition: 'right center' }}
           sizes="100vw"
           quality={88}
           priority={current === 0}
@@ -241,13 +244,13 @@ export default function HeroSlider({
           onError={(e) => { (e.target as HTMLImageElement).src = '/hero-lens-1.png' }}
         />
 
-        {/* Imagen DESKTOP — proporción 1920x480 (4:1) */}
+        {/* Imagen DESKTOP — proporción 1920x480 (4:1), pegada a la derecha */}
         <Image
           src={s.image}
           alt={s.imageAlt}
           fill
           className="object-contain transition-opacity duration-300 hidden md:block"
-          style={{ opacity: transitioning ? 0 : 1 }}
+          style={{ opacity: transitioning ? 0 : 1, objectPosition: 'right center' }}
           sizes="100vw"
           quality={88}
           priority={current === 0}
@@ -258,11 +261,7 @@ export default function HeroSlider({
         {/* Scrim de legibilidad — degradado suave detrás del texto, se adapta a cada foto */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
           <div
-            className="absolute inset-y-0 left-0 w-[58%]"
-            style={{ background: `linear-gradient(90deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.22) 60%, transparent 100%)` }}
-          />
-          <div
-            className="absolute top-0 left-0 w-[45%] h-full opacity-50 transition-colors duration-500"
+            className="absolute top-0 left-0 w-[45%] h-full opacity-40 transition-colors duration-500"
             style={{ background: `radial-gradient(ellipse at 15% 40%, ${s.glow} 0%, transparent 68%)` }}
           />
         </div>
