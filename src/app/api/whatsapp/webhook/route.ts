@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
           if (buttonId === 'btn_receta') {
             const texto = '📋 ¡Perfecto! Envíanos una foto clara de tu receta y te cotizamos en minutos.\n\n' +
               'Si no tienes la receta a mano, dinos la marca y graduación que usas y te ayudamos.\n\n' +
-              '👨‍⚕️ Mario te responde personalmente.'
+              '👨‍⚕️ Nuestro equipo te responde personalmente.'
             await waSendText(from, texto)
             await logAutoReply(texto)
           } else if (buttonId === 'btn_color') {
@@ -143,13 +143,13 @@ export async function POST(req: NextRequest) {
             await logAutoReply(texto)
           } else if (buttonId === 'btn_pedido') {
             const texto = '📦 Dime tu nombre o número de pedido y te doy el estado al instante.\n\n' +
-              '👨‍⚕️ Mario te responde en minutos.'
+              '👨‍⚕️ Nuestro equipo te responde en minutos.'
             await waSendText(from, texto)
             await logAutoReply(texto)
           } else if (msgType === 'image' || msgType === 'document') {
             // Envió una foto — puede ser receta, o puede ser otra cosa (ej. screenshot de un error).
             // El texto deja claro que un humano lo revisa, sin asumir que es receta.
-            const texto = '📸 ¡Recibido! Ya Mario está revisando tu mensaje.\n\n' +
+            const texto = '📸 ¡Recibido! Ya nuestro equipo está revisando tu mensaje.\n\n' +
               'Te responde en minutos. Si es algo urgente, dinos brevemente de qué se trata. ⏱️'
             await waSendText(from, texto)
             await logAutoReply(texto)
