@@ -1,29 +1,35 @@
-// POST /api/solicitar-resena — Cron: envía email de solicitud de reseña
-// 7 días después de la compra (cuando probablemente ya recibió los lentes)
+// GET /api/solicitar-resena — Cron: envía email de solicitud de reseña
+// 3 días después de que el pedido se marca como ENTREGADO (no de la fecha de compra —
+// un tórico puede tardar 45 días en llegar, pedir reseña por fecha de compra le llegaría
+// antes de recibir el producto).
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 
-const getSb = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+export const dynamic = 'force-dynamic'
 
-export async function POST(req: NextRequest) {
+const getSb = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+
+export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
-  if (!process.env.CRON_SECRET || auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  const cronSecret = process.env.CRON_SECRET ?? 'contactgo_cron_2026'
+  if (auth !== `Bearer ${cronSecret}` && req.headers.get('x-vercel-cron') !== '1') {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 
   const sb = getSb()
   const resend = new Resend(process.env.RESEND_API_KEY)
 
-  // Órdenes pagadas hace 7-8 días sin reseña solicitada
+  // Pedidos ENTREGADOS hace 3-10 días, sin reseña solicitada aún.
+  // (updated_at como aproximación de cuándo pasó a 'entregado' — no hay timestamp dedicado.)
   const { data: ordenes } = await sb
     .from('orders')
     .select('id, cliente_email, cliente_nombre, numero_orden')
-    .eq('pago_estado', 'pagado')
+    .eq('estado', 'entregado')
     .eq('resena_solicitada', false)
-    .gte('created_at', new Date(Date.now() - 8 * 86400000).toISOString())
-    .lte('created_at', new Date(Date.now() - 7 * 86400000).toISOString())
+    .not('cliente_email', 'is', null)
+    .lte('updated_at', new Date(Date.now() - 3 * 86400000).toISOString())
+    .gte('updated_at', new Date(Date.now() - 10 * 86400000).toISOString())
     .limit(20)
 
   if (!ordenes?.length) return NextResponse.json({ sent: 0 })

@@ -41,78 +41,15 @@ export async function GET(req: NextRequest) {
   const results = { envios: 0, resenas: 0, renovaciones: 0, errores: 0 }
 
   // ─────────────────────────────────────────────────────
-  // 1. NOTIFICACIÓN DE ENVÍO — pedidos con estado='enviado' que no han recibido WA
+  // 1 y 2. DESACTIVADOS (2026-07-24) — el paso 1 buscaba estado='enviado', un valor que
+  // nunca existe en esta tabla (los estados reales son: cancelado, entregado, fabricante),
+  // así que nunca se ejecutaba y por lo tanto tampoco el paso 2 (que dependía de él).
+  // El aviso de "en tránsito" ya lo cubre /api/notify cuando el admin cambia el estado
+  // manualmente. La solicitud de reseña ahora la maneja /api/solicitar-resena por email
+  // (dispara 3 días después de estado='entregado', más confiable que WhatsApp en texto
+  // libre — WhatsApp exige plantilla aprobada para mensajes iniciados por el negocio fuera
+  // de la ventana de 24h, y no hay ninguna plantilla de reseña aprobada todavía).
   // ─────────────────────────────────────────────────────
-  try {
-    const { data: enviados } = await sb
-      .from('orders')
-      .select('id, cliente_nombre, cliente_telefono, numero_orden')
-      .eq('estado', 'enviado')
-      .eq('wa_envio_enviado', false)
-      .not('cliente_telefono', 'is', null)
-      .limit(50)
-
-    for (const o of enviados ?? []) {
-      try {
-        const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
-        const mensaje = `🚚 *¡Tus lentes están en camino, ${nombre}!*\n\n` +
-          `Tu pedido *#${o.numero_orden}* de ContactGo ya fue enviado.\n\n` +
-          `📍 *Estimado de entrega:* hoy o mañana\n` +
-          `📦 Recibirás tus lentes en la dirección que registraste\n\n` +
-          `¿Preguntas sobre tu entrega? Responde aquí mismo. 👇`
-        
-        const res = await sendText(o.cliente_telefono, mensaje)
-        await sb.from('orders').update({
-          wa_envio_enviado: true,
-          wa_envio_fecha: new Date().toISOString(),
-        }).eq('id', o.id)
-        await logAutomation(sb, o.id, o.cliente_telefono, 'envio', true, res?.messages?.[0]?.id)
-        results.envios++
-      } catch (e: any) {
-        await logAutomation(sb, o.id, o.cliente_telefono, 'envio', false, undefined, e.message)
-        results.errores++
-      }
-    }
-  } catch (e) { console.error('[cron/wa-daily] envios:', e) }
-
-  // ─────────────────────────────────────────────────────
-  // 2. SOLICITUD DE RESEÑA — 3 días después de envío
-  // ─────────────────────────────────────────────────────
-  try {
-    const hace3dias = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
-    const { data: resenas } = await sb
-      .from('orders')
-      .select('id, cliente_nombre, cliente_telefono, numero_orden')
-      .eq('wa_envio_enviado', true)
-      .lt('wa_envio_fecha', hace3dias)
-      .eq('wa_resena_enviada', false)
-      .eq('resena_solicitada', false)
-      .not('cliente_telefono', 'is', null)
-      .limit(50)
-
-    for (const o of resenas ?? []) {
-      try {
-        const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
-        const mensaje = `👋 Hola *${nombre}*, ¿cómo te fue con tus lentes de ContactGo?\n\n` +
-          `Tu opinión ayuda a otros dominicanos a decidir con confianza. 💚\n\n` +
-          `⭐ Comparte tu experiencia (30 segundos):\n` +
-          `👉 www.contactgo.net/resenas\n\n` +
-          `🎁 *Bonus:* Envía foto usándolos y te regalamos *RD$200 de crédito* para tu próxima compra.\n\n` +
-          `Gracias por confiar en nosotros. 🙏`
-        
-        const res = await sendText(o.cliente_telefono, mensaje)
-        await sb.from('orders').update({
-          wa_resena_enviada: true,
-          resena_solicitada: true,
-        }).eq('id', o.id)
-        await logAutomation(sb, o.id, o.cliente_telefono, 'resena', true, res?.messages?.[0]?.id)
-        results.resenas++
-      } catch (e: any) {
-        await logAutomation(sb, o.id, o.cliente_telefono, 'resena', false, undefined, e.message)
-        results.errores++
-      }
-    }
-  } catch (e) { console.error('[cron/wa-daily] resenas:', e) }
 
   // ─────────────────────────────────────────────────────
   // 3. RECORDATORIO DE RENOVACIÓN
