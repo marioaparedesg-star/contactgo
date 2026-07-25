@@ -177,23 +177,26 @@ export async function POST(req: NextRequest) {
           // Si falla la auto-respuesta, no importa — el admin recibe la notificación igual
         }
 
-        // ── Notificación al admin ──
+        // ── Notificación al admin (829-408-9097) y al número de servicio personal de Mario (809-694-2268) ──
         const displayPhone = from.length === 11 && from.startsWith('1')
           ? `(${from.slice(1,4)}) ${from.slice(4,7)}-${from.slice(7)}`
           : from
         const nombre = contactName ?? displayPhone
         const preview = msgBody || (mediaUrl ? `[${msgType}]` : '[mensaje]')
+        const NOTIFY_PHONES = [ADMIN_PHONE, '18096942268']
 
-        await fetch(`${WA_API}/${PHONE_ID}/messages`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messaging_product: 'whatsapp',
-            to: ADMIN_PHONE,
-            type: 'text',
-            text: { body: `📩 *Nuevo mensaje en ContactGo*\n\n👤 *${nombre}*\n📱 ${displayPhone}\n💬 ${preview.slice(0, 300)}\n\n👉 Responder: https://www.contactgo.net/admin/whatsapp` },
-          }),
-        })
+        for (const notifyTo of NOTIFY_PHONES) {
+          await fetch(`${WA_API}/${PHONE_ID}/messages`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              messaging_product: 'whatsapp',
+              to: notifyTo,
+              type: 'text',
+              text: { body: `📩 *Nuevo mensaje en ContactGo (API)*\n\n👤 *${nombre}*\n📱 ${displayPhone}\n💬 ${preview.slice(0, 300)}\n\n👉 Responder: https://www.contactgo.net/admin/whatsapp` },
+            }),
+          })
+        }
       }
     }
 
