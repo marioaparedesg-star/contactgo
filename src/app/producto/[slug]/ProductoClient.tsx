@@ -947,7 +947,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BLOQUE 5: CTA MOBILE (inline, arriba de la sticky bar) */}
             <div className="px-4 pb-4 space-y-2">
-              <EntregaHoy />
+              <EntregaHoy especial={getEntregaInfo.especial} />
               <button onClick={handleAdd} disabled={product.stock===0||faltaModalidad}
                 className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 text-white font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-primary-200/50 transition-all">
                 <ShoppingCart className="w-5 h-5" />
@@ -1209,7 +1209,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
                   {/* ── Botones de acción — arriba, apenas se sabe cantidad y entrega ── */}
                   <div className="border-t border-gray-100 pt-2.5">
-                    <EntregaHoy />
+                    <EntregaHoy especial={getEntregaInfo.especial} />
                     <div className="flex items-baseline justify-between mb-2.5 mt-2">
                       <p className="text-xs text-gray-400">Total</p>
                       <p className="text-xl font-black text-gray-900">RD${(price*(isGota?1:qty)).toLocaleString()}</p>

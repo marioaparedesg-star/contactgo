@@ -2,14 +2,25 @@
 import { useState, useEffect } from 'react'
 
 /**
- * Muestra "Pide antes de las 3:00 PM y llega mañana"
- * con cuenta regresiva si falta menos de 2 horas
+ * Muestra "Pide antes de las 3:00 PM y llega mañana" con cuenta regresiva.
+ *
+ * Si el producto es de fabricación/pedido especial (tóricos, multifocales, XR —
+ * los que NO se despachan al día siguiente porque se piden al fabricante o se
+ * fabrican a medida), este componente NO debe decir "sale mañana": eso
+ * contradice el estimado real (25-45 días) que ya se muestra arriba. En ese
+ * caso solo confirma que el pedido se procesa de inmediato, sin prometer fecha.
  */
-export default function EntregaHoy() {
+export default function EntregaHoy({ especial = false }: { especial?: boolean }) {
   const [texto, setTexto] = useState<string | null>(null)
   const [urgente, setUrgente] = useState(false)
 
   useEffect(() => {
+    if (especial) {
+      setTexto('📋 Tu pedido se procesa de inmediato — el tiempo de entrega es el de arriba')
+      setUrgente(false)
+      return
+    }
+
     const calcular = () => {
       const ahora = new Date()
       const hora  = ahora.getHours()
@@ -46,7 +57,7 @@ export default function EntregaHoy() {
     calcular()
     const interval = setInterval(calcular, 60000) // actualizar cada minuto
     return () => clearInterval(interval)
-  }, [])
+  }, [especial])
 
   if (!texto) return null
 

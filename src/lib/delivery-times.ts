@@ -53,6 +53,14 @@ const T_25_30D: EntregaInfo = {
   icono:    '⏱️',
 }
 
+const T_25_45D: EntregaInfo = {
+  etiqueta: 'Fabricación especial · 25-45 días',
+  detalle:  'Lente tórico fabricado a medida. Entrega estimada de 25 a 45 días laborables, según disponibilidad de tu graduación exacta.',
+  dias_min: 25, dias_max: 45,
+  especial: true,
+  icono:    '⏱️',
+}
+
 /** Detecta si el producto es XR / alta graduación */
 function esXR(nombre: string): boolean {
   return /\bxr\b/i.test(nombre) || /alta.gradu/i.test(nombre)
@@ -95,7 +103,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
     return T_24H
   }
 
-  if (tipo === 'torico')     return T_25_30D
+  if (tipo === 'torico')     return T_25_45D
   if (tipo === 'multifocal') return T_5_10D
   if (tipo === 'solucion')   return T_24H
   if (tipo === 'gota')       return T_24H
