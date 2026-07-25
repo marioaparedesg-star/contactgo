@@ -21,7 +21,7 @@ import { getEntrega, getFechaEntrega } from '@/lib/delivery-times'
 import EntregaHoy from '@/components/shop/EntregaHoy'
 import { buildSPHOptions } from '@/components/shop/SPHPicker'
 import EyeFlowSelector, { type EyeFlowState, initialEyeFlow } from '@/components/shop/EyeFlowSelector'
-import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES } from '@/lib/subscription-utils'
+import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES, FRECUENCIAS, mejorFrecuencia } from '@/lib/subscription-utils'
 
 const TIPO_LABELS: Record<string, string> = {
   esferico: 'Esférico', torico: 'Tórico', multifocal: 'Multifocal',
@@ -1187,43 +1187,7 @@ export default function ProductoClient({ product, variants }: Props) {
             {/* COL 3: BUY BOX STICKY DESKTOP */}
             <div className="sticky top-20 self-start">
               <div className="bg-white border-2 border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-                <div className="bg-gray-50 border-b border-gray-100 px-4 py-2.5 flex items-center justify-between">
-                  <p className="text-[11px] font-black text-gray-500 uppercase tracking-wider">¿Cada cuánto necesitas reponer?</p>
-                  <p className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Sin compromiso</p>
-                </div>
                 <div className="p-3 space-y-2.5">
-                  {isLente && (
-                    <div className="space-y-1.5">
-                      {([
-                        {val:null, label:'Compra única', sublabel:'Solo esta vez', beneficio:null, popular:false},
-                        {val:'mensual', label:'Cada 30 días', sublabel:'Ideal para lentes diarios', beneficio:'Te avisamos por WhatsApp', popular:false},
-                        {val:'trimestral', label:'Cada 90 días', sublabel:'Ideal para lentes mensuales', beneficio:'Reordena en 1 clic', popular:true},
-                        {val:'semestral', label:'Cada 6 meses', sublabel:'Ideal para lentes trimestrales', beneficio:'Nunca se te olvida reponer', popular:false},
-                      ] as Array<{val:string|null;label:string;sublabel:string;beneficio:string|null;popular:boolean}>).map(op => {
-                        const isSel = suscripcion===op.val
-                        return (
-                          <label key={String(op.val)} className={`flex items-start gap-2 p-2 rounded-xl border-2 cursor-pointer transition-all ${isSel?'border-primary-500 bg-primary-50':'border-gray-200 hover:border-gray-300 bg-white'}`}>
-                            <input type="radio" name="sub_desktop" checked={isSel} onChange={()=>setSuscripcion(op.val)} className="mt-0.5 accent-primary-600 shrink-0" />
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between gap-1">
-                                <p className={`text-[11px] font-bold flex items-center gap-1 ${isSel?'text-primary-700':'text-gray-800'}`}>
-                                  {op.label}
-                                  {op.popular && <span className="text-[7px] font-black bg-amber-400 text-white px-1.5 py-0.5 rounded-full">★ Popular</span>}
-                                </p>
-                              </div>
-                              <p className={`text-[9px] ${isSel?'text-primary-400':'text-gray-400'}`}>{op.sublabel}</p>
-                              {op.beneficio && <p className="text-[9px] text-blue-600 font-bold mt-0.5">💬 {op.beneficio}</p>}
-                            </div>
-                          </label>
-                        )
-                      })}
-                      {suscripcion && (
-                        <p className="text-[9px] text-gray-400 leading-tight px-1 pt-1">
-                          Te escribimos por WhatsApp cuando se acerque la fecha. Tú decides si reordenas — no hacemos ningún cobro automático.
-                        </p>
-                      )}
-                    </div>
-                  )}
                   {!isLente && <div className="text-center py-2"><p className="text-2xl font-black text-gray-900">RD${price.toLocaleString()}</p>{product.contenido && <p className="text-xs text-gray-400 mt-0.5">{product.contenido}</p>}</div>}
                   <div className="bg-gray-50 rounded-xl px-3 py-2 space-y-0.5">
                     {(()=>{const fi=getFechaEntrega(tipo,product.nombre);const ei=getEntrega(tipo,product.nombre);return(<>
@@ -1242,6 +1206,8 @@ export default function ProductoClient({ product, variants }: Props) {
                       {isLente&&!isColor&&qty>=2&&<span className="text-[10px] text-green-600 font-black bg-green-50 px-1.5 py-0.5 rounded-full">5% OFF</span>}
                     </div>
                   )}
+
+                  {/* ── Botones de acción — arriba, apenas se sabe cantidad y entrega ── */}
                   <div className="border-t border-gray-100 pt-2.5">
                     <EntregaHoy />
                     <div className="flex items-baseline justify-between mb-2.5 mt-2">
@@ -1251,7 +1217,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     <button onClick={handleAdd} disabled={product.stock===0||sinVariante}
                       className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-primary-200/50">
                       <ShoppingCart className="w-4 h-4" />
-                      {product.stock===0?'Sin stock':sinVariante?'Consultar':isColor?'Agregar al carrito':'Agregar al carrito'}
+                      {product.stock===0?'Sin stock':sinVariante?'Consultar':'Agregar al carrito'}
                     </button>
                     <button onClick={handleBuyNow} disabled={product.stock===0||sinVariante}
                       className="w-full mt-1.5 bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-40 text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all text-sm">
@@ -1265,11 +1231,49 @@ export default function ProductoClient({ product, variants }: Props) {
                         ? '¿No sabes tu graduación? Escríbenos'
                         : 'Consultar por WhatsApp'}
                     </a>
-                    <div className="border-t border-gray-100 pt-2 mt-2 space-y-1">
-                      {['✅ Directo del fabricante','🔒 Pago seguro AZUL','🚚 Entrega 24-48h en toda RD'].map(g => (
-                        <p key={g} className="text-[10px] text-gray-400 font-medium">{g}</p>
-                      ))}
-                    </div>
+                  </div>
+
+                  {/* ── Reposición — compacta, 4 cuadritos, calculada según ESTE producto ── */}
+                  {isLente && (() => {
+                    const recomendada = mejorFrecuencia((product as any).dias_uso)
+                    const opciones: Array<{val:string|null; label:string}> = [
+                      {val:null, label:'Única'},
+                      {val:'mensual', label:FRECUENCIAS.mensual.label.replace('Cada ','')},
+                      {val:'trimestral', label:FRECUENCIAS.trimestral.label.replace('Cada ','')},
+                      {val:'semestral', label:FRECUENCIAS.semestral.label.replace('Cada ','')},
+                    ]
+                    return (
+                      <div className="border-t border-gray-100 pt-2.5">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <p className="text-[10px] font-black text-gray-500 uppercase tracking-wider">¿Cada cuánto reponer?</p>
+                          <p className="text-[9px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-full">Sin compromiso</p>
+                        </div>
+                        <div className="grid grid-cols-4 gap-1.5">
+                          {opciones.map(op => {
+                            const isSel = suscripcion === op.val
+                            const isReco = op.val === recomendada
+                            return (
+                              <button key={String(op.val)} type="button" onClick={() => setSuscripcion(op.val)}
+                                className={`relative flex flex-col items-center justify-center gap-0.5 py-2 px-1 rounded-lg border-2 text-center transition-all ${isSel ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                                {isReco && !isSel && <span className="absolute -top-1.5 -right-1 text-[7px] font-black bg-amber-400 text-white px-1 py-0.5 rounded-full">★</span>}
+                                <span className={`text-[10px] font-bold leading-tight ${isSel ? 'text-primary-700' : 'text-gray-700'}`}>{op.label}</span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                        {suscripcion && (
+                          <p className="text-[9px] text-gray-400 leading-tight px-0.5 pt-1.5">
+                            💬 Te escribimos por WhatsApp cuando se acerque la fecha — tú decides si reordenas, sin cobro automático.
+                          </p>
+                        )}
+                      </div>
+                    )
+                  })()}
+
+                  <div className="border-t border-gray-100 pt-2 mt-1 space-y-1">
+                    {['✅ Directo del fabricante','🔒 Pago seguro AZUL','🚚 Entrega 24-48h en toda RD'].map(g => (
+                      <p key={g} className="text-[10px] text-gray-400 font-medium">{g}</p>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1284,6 +1288,7 @@ export default function ProductoClient({ product, variants }: Props) {
               )}
             </div>
           </div>
+
 
           {/* BELOW FOLD DESKTOP */}
           <div className="hidden lg:block px-6 xl:px-8 pb-8 mt-6 space-y-6">

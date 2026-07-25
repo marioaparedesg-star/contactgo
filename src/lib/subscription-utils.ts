@@ -7,12 +7,30 @@
  */
 
 export const FRECUENCIAS = {
-  'mensual':    { label: 'Cada 30 días',  sublabel: 'Ideal para lentes diarios',      dias: 30,  descuento: 0, badge: 'Te avisamos por WhatsApp',       puntos: 0,   popular: false },
-  'trimestral': { label: 'Cada 90 días',  sublabel: 'Ideal para lentes mensuales',    dias: 90,  descuento: 0, badge: 'Reordena en 1 clic',              puntos: 0,   popular: true  },
-  'semestral':  { label: 'Cada 6 meses',  sublabel: 'Ideal para lentes trimestrales', dias: 180, descuento: 0, badge: 'Nunca se te olvida reponer',       puntos: 0,   popular: false },
+  'mensual':    { label: 'Cada 30 días',  sublabel: 'Repones más seguido',   dias: 30,  descuento: 0, badge: 'Te avisamos por WhatsApp',   puntos: 0 },
+  'trimestral': { label: 'Cada 90 días',  sublabel: 'El equilibrio ideal',   dias: 90,  descuento: 0, badge: 'Reordena en 1 clic',          puntos: 0 },
+  'semestral':  { label: 'Cada 6 meses',  sublabel: 'Repones menos seguido', dias: 180, descuento: 0, badge: 'Nunca se te olvida reponer',  puntos: 0 },
 } as const
 
 export type Frecuencia = keyof typeof FRECUENCIAS
+
+/**
+ * Cuál de las 3 frecuencias le queda mejor a este producto específico,
+ * según cuántos días realmente dura (dias_uso). Antes se marcaba "Cada 90 días"
+ * como recomendado en TODOS los productos por igual, sin importar si el lente
+ * era diario, quincenal o mensual — esto lo calcula de verdad por producto.
+ */
+export function mejorFrecuencia(diasUso: number | null | undefined): Frecuencia {
+  const d = diasUso ?? 30
+  const opciones: [Frecuencia, number][] = [['mensual', 30], ['trimestral', 90], ['semestral', 180]]
+  let mejor: Frecuencia = 'trimestral'
+  let menorDiff = Infinity
+  for (const [key, dias] of opciones) {
+    const diff = Math.abs(dias - d * Math.round(dias / d || 1))
+    if (diff < menorDiff) { menorDiff = diff; mejor = key }
+  }
+  return mejor
+}
 
 export const DESCUENTOS: Record<string, number> = {
   'mensual': 0, 'trimestral': 0, 'semestral': 0,
