@@ -64,6 +64,7 @@ export default function CheckoutPage() {
   const [cupon, setCupon] = useState(() => cuponCodigo ?? '')
   const [cuponAplicado, setCuponAplicado] = useState(() => !!cuponCodigo)
   const [descuento, setDescuento] = useState(() => cuponDescuento)
+  const [cuponEnvioGratis, setCuponEnvioGratis] = useState(false)
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
   const [showDisclaimer, setShowDisclaimer] = useState(false)
@@ -84,8 +85,8 @@ export default function CheckoutPage() {
   const metodoPago = 'tarjeta' as const
 
   const sub = subtotal()
-  const envio = sub >= 8000 ? 0 : 200
-  const envioGratis = sub >= 8000
+  const envioGratis = sub >= 8000 || cuponEnvioGratis
+  const envio = envioGratis ? 0 : 200
   const totalFinal = sub + envio - descuento
 
   const { register, handleSubmit, getValues, setValue, trigger, watch, formState: { errors } } = useForm<FormData>({
@@ -131,10 +132,12 @@ export default function CheckoutPage() {
         toast.error(result.mensaje ?? 'Cupón no válido')
         setCuponAplicado(false)
         setDescuento(0)
+        setCuponEnvioGratis(false)
         return
       }
       setDescuento(result.descuento)
       setCuponAplicado(true)
+      setCuponEnvioGratis(!!result.envio_gratis)
       toast.success(result.mensaje ?? 'Cupón aplicado ✓')
     } catch {
       toast.error('Error al validar cupón')
@@ -982,7 +985,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-black text-green-700">−RD${descuento.toLocaleString()}</span>
-                        <button onClick={() => { setCupon(''); setCuponAplicado(false); setDescuento(0); clearCupon() }}
+                        <button onClick={() => { setCupon(''); setCuponAplicado(false); setDescuento(0); setCuponEnvioGratis(false); clearCupon() }}
                           className="text-gray-400 hover:text-red-500 text-xs">✕</button>
                       </div>
                     </div>

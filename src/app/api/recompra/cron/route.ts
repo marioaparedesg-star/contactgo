@@ -1,66 +1,64 @@
 import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-const FROM = process.env.RESEND_FROM ?? 'ContactGo <info@contactgo.net>'
+const SERVICIO_WA = '18096942268' // número de servicio al cliente, para reclamar el cupón
 
-function emailTemplate(
-  nombre: string, producto: string, dias: number,
-  cupon: string, descuento: number,
-  alerta: '7dias' | '3dias' | 'hoy',
-  tipoProducto: string
-) {
+// ── Ventana permitida para enviar mensajes: 9:00am–7:00pm hora de República Dominicana (UTC-4) ──
+// Esta comprobación es independiente del horario programado del cron: si Vercel reintenta o
+// alguien lo dispara manualmente fuera de horario, el cron NO envía nada, solo lo reporta.
+function dentroDeHorarioPermitido(): boolean {
+  const horaRD = new Date(Date.now() - 4 * 60 * 60 * 1000).getUTCHours()
+  return horaRD >= 9 && horaRD < 19
+}
+
+// Mensaje iniciado por el negocio → debe ir por plantilla aprobada de Meta (no texto libre),
+// porque el cliente probablemente no escribió en las últimas 24h. Usamos la plantilla ya
+// aprobada 'renovacion_lentes' (parámetros: nombre, producto), variando el texto del segundo
+// parámetro según la etapa. Sin saltos de línea — Meta rechaza parámetros con \n (error 132018).
+function textoProducto(
+  producto: string, cupon: string, descuento: number,
+  alerta: '7dias' | '3dias' | 'hoy', tipoProducto: string
+): string {
   const esGota = tipoProducto === 'gota'
   const esSolucion = tipoProducto === 'solucion'
-  const icono = esGota ? '💧' : esSolucion ? '🧴' : '👁️'
   const objeto = esGota ? 'gotas' : esSolucion ? 'solución' : 'lentes'
 
-  const mensajes = {
-    '7dias': {
-      titulo: `${nombre}, tus ${producto} se terminan en 7 días ${icono}`,
-      urgencia: `Tienes tiempo, pero actúa ahora para no quedarte sin ${objeto}.`,
-    },
-    '3dias': {
-      titulo: `¡Solo 3 días! Tus ${producto} se acaban pronto ⚠️`,
-      urgencia: `Actúa ya — en 3 días te quedas sin ${objeto}.`,
-    },
-    'hoy': {
-      titulo: `Hoy se terminan tus ${producto} 🔴`,
-      urgencia: `Hoy es el último día de uso estimado. Pide ahora y evita quedarte sin ${objeto}.`,
-    },
-  }
-  const { titulo, urgencia } = mensajes[alerta]
+  if (alerta === '7dias') return `${producto} (te quedan ~7 días de uso)`
+  if (alerta === '3dias') return `${producto} — últimos 3 días de ${objeto}. Cupón ${cupon}: ${descuento}% + envío gratis. Escríbenos: wa.me/${SERVICIO_WA}`
+  return `${producto} — se terminan hoy. Cupón ${cupon}: ${descuento}% + envío gratis. Escríbenos: wa.me/${SERVICIO_WA}`
+}
 
-  return `
-  <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
-    <div style="background:linear-gradient(135deg,#0a4d8c,#0d6efd);padding:30px;text-align:center;border-radius:12px 12px 0 0;">
-      <h1 style="color:white;margin:0;font-size:22px;">ContactGo</h1>
-      <p style="color:rgba(255,255,255,0.8);margin:5px 0 0;font-size:13px;">Lentes de Contacto República Dominicana</p>
-    </div>
-    <div style="padding:32px 24px;">
-      <h2 style="color:#1a1a1a;font-size:20px;margin-bottom:8px;">${titulo}</h2>
-      <p style="color:#555;font-size:15px;line-height:1.6;">${urgencia}</p>
-      <div style="background:#f8faff;border:2px solid #0d6efd;border-radius:12px;padding:20px;margin:24px 0;text-align:center;">
-        <p style="color:#555;font-size:13px;margin:0 0 8px;">Tu descuento de cliente frecuente:</p>
-        <p style="color:#0d6efd;font-size:28px;font-weight:900;margin:0;letter-spacing:4px;">${cupon}</p>
-        <p style="color:#0d6efd;font-size:14px;margin:6px 0 0;font-weight:bold;">${descuento}% de descuento en tu próxima orden</p>
-      </div>
-      <div style="text-align:center;margin:28px 0;">
-        <a href="${BASE}/catalogo?recompra=${cupon}" 
-           style="background:#0d6efd;color:white;padding:14px 32px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:16px;display:inline-block;">
-          Pedir ahora →
-        </a>
-      </div>
-      <hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
-      <p style="color:#999;font-size:12px;text-align:center;">
-        Recordatorio automático basado en los ${dias} días de duración de tu producto.<br>
-        Si ya hiciste tu pedido, ignora este mensaje.
-      </p>
-    </div>
-  </div>`
+async function enviarTemplate(telefono: string, nombre: string, producto: string) {
+  const PHONE_ID = process.env.WHATSAPP_PHONE_ID ?? '1237770472751989'
+  const TOKEN = process.env.WHATSAPP_TOKEN ?? ''
+  let phone = telefono.replace(/[^0-9+]/g, '').replace(/^\+/, '')
+  if (/^(809|829|849)/.test(phone) && phone.length === 10) phone = '1' + phone
+
+  const res = await fetch(`https://graph.facebook.com/v21.0/${PHONE_ID}/messages`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messaging_product: 'whatsapp',
+      to: phone,
+      type: 'template',
+      template: {
+        name: 'renovacion_lentes',
+        language: { code: 'es' },
+        components: [{
+          type: 'body',
+          parameters: [
+            { type: 'text', text: nombre?.split(' ')[0] || 'Cliente' },
+            { type: 'text', text: producto },
+          ],
+        }],
+      },
+    }),
+  })
+  const data = await res.json()
+  if (!data.messages?.[0]?.id) throw new Error(JSON.stringify(data.error ?? data))
+  return data
 }
 
 export async function GET(req: NextRequest) {
@@ -72,33 +70,40 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY!)
+  if (!dentroDeHorarioPermitido()) {
+    return NextResponse.json({
+      ok: true, enviados: 0,
+      motivo: 'Fuera de la ventana permitida (9am-7pm hora RD) — no se envía nada.',
+    })
+  }
+
   const ahora = new Date()
   let enviados = 0
+  let fallidos = 0
 
   async function procesarLista(lista: any[], campo: 'notificado_7' | 'notificado_3' | 'notificado_0', alerta: '7dias' | '3dias' | 'hoy') {
     for (const n of lista || []) {
+      if (!n.telefono) {
+        // Sin teléfono no podemos avisar por WhatsApp — se marca igual para no reintentar en vano
+        await getSb().from('recompra_notifications').update({ [campo]: true }).eq('id', n.id)
+        continue
+      }
       try {
-        await resend.emails.send({
-          from: FROM,
-          to: n.email,
-          subject: alerta === '7dias'
-            ? `Tus ${n.product_nombre} se terminan en 7 días`
-            : alerta === '3dias'
-            ? `¡Solo 3 días! Tus ${n.product_nombre} se acaban`
-            : `Hoy se terminan tus ${n.product_nombre}`,
-          html: emailTemplate(
-            n.nombre, n.product_nombre, n.dias_uso,
-            n.cupon_generado, n.descuento_ofrecido,
-            alerta, n.tipo_producto || 'esferico'
-          ),
-        })
+        const producto = textoProducto(
+          n.product_nombre, n.cupon_generado, n.descuento_ofrecido,
+          alerta, n.tipo_producto || 'esferico'
+        )
+        await enviarTemplate(n.telefono, n.nombre, producto)
         await getSb().from('recompra_notifications').update({ [campo]: true }).eq('id', n.id)
         if (alerta === '7dias') {
           await getSb().from('coupons').update({ activo: true }).eq('codigo', n.cupon_generado)
         }
         enviados++
-      } catch (e) { console.error('[recompra cron]', e) }
+      } catch (e) {
+        console.error('[recompra cron]', e)
+        fallidos++
+      }
+      await new Promise(r => setTimeout(r, 1500))
     }
   }
 
@@ -114,5 +119,5 @@ export async function GET(req: NextRequest) {
     .select('*').eq('notificado_0', false).lte('fecha_notificacion_0', ahora.toISOString())
   await procesarLista(l0 || [], 'notificado_0', 'hoy')
 
-  return NextResponse.json({ ok: true, enviados, timestamp: ahora.toISOString() })
+  return NextResponse.json({ ok: true, enviados, fallidos, timestamp: ahora.toISOString() })
 }

@@ -35,10 +35,11 @@ export async function POST(req: NextRequest) {
     const result = Array.isArray(data) ? data[0] : data
 
     return NextResponse.json({
-      valido:    result?.valido    ?? false,
-      descuento: result?.descuento ?? 0,
-      tipo:      result?.tipo      ?? '',
-      mensaje:   result?.mensaje   ?? 'Cupón no válido',
+      valido:       result?.valido       ?? false,
+      descuento:    result?.descuento    ?? 0,
+      tipo:         result?.tipo         ?? '',
+      mensaje:      result?.mensaje      ?? 'Cupón no válido',
+      envio_gratis: result?.envio_gratis ?? false,
     })
   } catch (err) {
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })

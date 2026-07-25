@@ -9,8 +9,8 @@
       "schedule": "0 7 * * *"
     },
     {
-      "path": "/api/cron/renewal",
-      "schedule": "0 12 * * *"
+      "path": "/api/recompra/cron",
+      "schedule": "0 14 * * *"
     }
   ]
 }
