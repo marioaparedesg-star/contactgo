@@ -15,6 +15,41 @@ type Conversation = {
   last_message: string | null
 }
 
+/**
+ * Reproductor de audio para notas de voz de WhatsApp, que llegan en OGG/Opus.
+ * iOS/Safari (y "Chrome iOS", que corre sobre el motor de Safari) no soporta ese
+ * códec. Si dejamos que el <audio> nativo lo intente, el navegador rechaza la
+ * promesa interna de play() con NotSupportedError como excepción no manejada
+ * (Sentry JAVASCRIPT-NEXTJS-G). Por eso comprobamos el soporte ANTES de montar
+ * el reproductor — si no hay soporte, solo mostramos el link de descarga.
+ */
+function AudioMessage({ src }: { src: string }) {
+  const [soportado, setSoportado] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    const el = document.createElement('audio')
+    const puede = el.canPlayType('audio/ogg; codecs=opus')
+    setSoportado(puede === 'probably' || puede === 'maybe')
+  }, [])
+
+  if (soportado === null) return null // esperar la comprobación, sin parpadeo
+
+  return (
+    <div>
+      {soportado && (
+        <audio src={src} controls className="w-full" preload="metadata"
+          onError={(e) => { e.currentTarget.style.display = 'none' }} />
+      )}
+      {!soportado && (
+        <p className="text-xs text-gray-500 mb-1">🎤 Nota de voz (tu navegador no puede reproducirla aquí)</p>
+      )}
+      <a href={src} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-500 hover:underline">
+        {soportado ? '¿No reproduce? Descargar audio' : 'Descargar audio'}
+      </a>
+    </div>
+  )
+}
+
 type Message = {
   id: string
   wa_message_id: string | null
@@ -353,14 +388,15 @@ export default function WhatsAppInbox() {
                           )}
                           {msg.media_url && msg.message_type === 'audio' && (
                             <div className="px-3 py-2">
-                              {/* iOS/Safari no soporta el códec Opus/OGG de WhatsApp — onError oculta
-                                  el reproductor roto en vez de dejar una excepción sin manejar
-                                  (Sentry: JAVASCRIPT-NEXTJS-G, DOMException code 9 NotSupportedError) */}
-                              <audio src={`/api/whatsapp/media?id=${msg.media_url}`} controls className="w-full" preload="metadata"
-                                onError={(e) => { e.currentTarget.style.display = 'none' }} />
-                              <a href={`/api/whatsapp/media?id=${msg.media_url}`} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-500 hover:underline">
-                                ¿No reproduce? Descargar audio
-                              </a>
+                              {/* iOS/Safari (incluye "Chrome iOS", que usa el motor de Safari por
+                                  requisito de Apple) no soporta el códec Opus/OGG que usa WhatsApp
+                                  para notas de voz. Detectamos el soporte ANTES de renderizar el
+                                  reproductor nativo: si no hay soporte, el navegador intenta el
+                                  play() de los controles nativos y la promesa se rechaza con
+                                  NotSupportedError como excepción NO manejada (no es un evento
+                                  'error' del elemento, por eso onError solo no bastaba).
+                                  Sentry: JAVASCRIPT-NEXTJS-G, DOMException code 9. */}
+                              <AudioMessage src={`/api/whatsapp/media?id=${msg.media_url}`} />
                             </div>
                           )}
                           {msg.media_url && msg.message_type === 'document' && (
