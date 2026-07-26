@@ -24,17 +24,41 @@ function fmtRD(n: number) {
 
 function recetaTexto(i: any): string {
   const parts: string[] = []
-  if (i.sph_od != null || i.sph_oi != null) {
-    if (i.sph_od != null) parts.push(`OD: ${i.sph_od > 0 ? '+' : ''}${i.sph_od}`)
-    if (i.sph_oi != null) parts.push(`OI: ${i.sph_oi > 0 ? '+' : ''}${i.sph_oi}`)
-  } else if (i.sph != null) {
-    parts.push(`SPH: ${i.sph > 0 ? '+' : ''}${i.sph}`)
-  }
-  if (i.cyl != null) parts.push(`CYL: ${i.cyl}`)
-  if (i.axis != null) parts.push(`EJE: ${i.axis}°`)
-  if (i.add_power) parts.push(`ADD: ${i.add_power}`)
+
+  if (i.size) parts.push(i.size)
   if (i.color) parts.push(`Color: ${i.color}`)
-  if (i.size) parts.push(`${i.size}`)
+  if (i.modalidad === 'plano') parts.push('Plano')
+
+  const buildOjo = (ojo: 'od' | 'oi'): string | null => {
+    const sph = i[`sph_${ojo}`]
+    const cyl = i[`cyl_${ojo}`]
+    const axis = i[`axis_${ojo}`]
+    const add = i[`add_${ojo}`]
+    const bits: string[] = []
+    if (sph != null && sph !== '') bits.push(`${Number(sph) > 0 ? '+' : ''}${sph}`)
+    if (cyl != null && cyl !== '') bits.push(`CYL ${cyl}`)
+    if (axis != null && axis !== '') bits.push(`EJE ${axis}°`)
+    if (add != null && add !== '') bits.push(`ADD ${add}`)
+    return bits.length ? bits.join(' ') : null
+  }
+  const od = buildOjo('od')
+  const oi = buildOjo('oi')
+
+  if (od || oi) {
+    if (i.ojo_mode === 'OD' && od) parts.push(`OD: ${od}`)
+    else if (i.ojo_mode === 'OI' && oi) parts.push(`OI: ${oi}`)
+    else {
+      if (od) parts.push(`OD: ${od}`)
+      if (oi) parts.push(`OI: ${oi}`)
+    }
+  } else {
+    // Fallback compat con datos viejos (sph/cyl/axis a secas)
+    if (i.sph != null) parts.push(`SPH: ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
+    if (i.cyl != null) parts.push(`CYL: ${i.cyl}`)
+    if (i.axis != null) parts.push(`EJE: ${i.axis}°`)
+    if (i.add_power) parts.push(`ADD: ${i.add_power}`)
+  }
+
   return parts.join(' · ')
 }
 

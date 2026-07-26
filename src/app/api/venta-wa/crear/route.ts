@@ -69,6 +69,9 @@ export async function POST(req: NextRequest) {
           cyl_oi: i.cyl_oi != null && i.cyl_oi !== '' ? Number(i.cyl_oi) : null,
           axis_od: i.axis_od != null && i.axis_od !== '' ? Number(i.axis_od) : null,
           axis_oi: i.axis_oi != null && i.axis_oi !== '' ? Number(i.axis_oi) : null,
+          add_od: i.add_od ?? null,
+          add_oi: i.add_oi ?? null,
+          modalidad: i.modalidad ?? null,
           color: i.color ?? null,
           size: i.size ?? null,
         }
