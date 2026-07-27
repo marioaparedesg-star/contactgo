@@ -64,15 +64,27 @@ export function trackEcommerce(
     ecommerce: { currency, value, items: data.items, transaction_id: data.transaction_id },
   })
 
-  // Meta Pixel — eventID como 3er argumento habilita la deduplicación con CAPI
+  // Meta Pixel — eventID como 3er argumento habilita la deduplicación con CAPI.
+  // external_id: MISMO valor que enviamos en sendCAPI (para permitir deduplicación
+  // por identificador externo además de por event_id — Meta lo recomienda).
   const fbEvent = FB_MAP[event]
   if (fbEvent && window.fbq) {
+    let externalId: string | undefined
+    try {
+      externalId = sessionStorage.getItem('cg_ext_id') ?? undefined
+      if (!externalId) {
+        externalId = 'cg_' + Math.random().toString(36).slice(2) + Date.now().toString(36)
+        sessionStorage.setItem('cg_ext_id', externalId)
+      }
+    } catch { /* private browsing / SSR */ }
+
     window.fbq('track', fbEvent, {
       content_ids: data.items.map(i => i.item_id),
       content_type: 'product',
       value,
       currency,
       num_items: data.items.length,
+      ...(externalId ? { external_id: externalId } : {}),
     }, eventId ? { eventID: eventId } : undefined)
   }
 }

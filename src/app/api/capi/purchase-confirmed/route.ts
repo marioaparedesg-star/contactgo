@@ -56,6 +56,9 @@ export async function POST(req: NextRequest) {
 
     const event: any = {
       event_name: 'Purchase',
+      // event_id determinístico basado en numero_orden — MISMO que dispara el pixel
+      // browser desde /confirmacion, permitiendo deduplicación por event_id
+      event_id: `purchase_${order.numero_orden ?? order_id}`,
       event_time: Math.floor(new Date(order.pagado_en ?? order.created_at).getTime() / 1000),
       action_source: 'website',
       event_source_url: 'https://www.contactgo.net/confirmacion',
@@ -64,6 +67,14 @@ export async function POST(req: NextRequest) {
     if (order.cliente_email) event.user_data.em = [hashValue(order.cliente_email)]
     if (order.cliente_telefono) event.user_data.ph = [hashValue(order.cliente_telefono.replace(/\D/g, ''))]
     if (order.cliente_nombre) event.user_data.fn = [hashValue(order.cliente_nombre.split(' ')[0])]
+    // fbp/fbc capturados del navegador al crear la orden (checkout/page.tsx)
+    if (order.fbp) event.user_data.fbp = order.fbp
+    if (order.fbc) event.user_data.fbc = order.fbc
+    // external_id determinístico — usamos numero_orden hasheado como identificador estable.
+    // Nota: el pixel browser usa un ID de sessionStorage distinto, por lo que la
+    // deduplicación por external_id no coincidirá; nos apoyamos en event_id (deterministic)
+    // y en em/ph/fbp para el match. Enviar external_id igual mejora Event Match Quality.
+    event.user_data.external_id = [hashValue(String(order.numero_orden ?? order_id))]
 
     event.custom_data = {
       currency: 'DOP',

@@ -172,6 +172,15 @@ export default function CheckoutPage() {
 
     // ─── TARJETA: crear orden PRIMERO, luego preparar AZUL con ID real ──
     if (metodoPago === 'tarjeta') {
+      // Leer cookies _fbp / _fbc del navegador para pasarlos al CAPI server-side (Purchase)
+      const getCookie = (name: string): string | null => {
+        if (typeof document === 'undefined') return null
+        const m = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.$?*|{}()[\]\\/+^]/g, '\\$&') + '=([^;]*)'))
+        return m ? decodeURIComponent(m[1]) : null
+      }
+      const fbp = getCookie('_fbp')
+      const fbc = getCookie('_fbc')
+
       // 1. Crear la orden en Supabase primero (necesitamos el ID para la URL de retorno)
       const orderNum = `CG-${Date.now().toString().slice(-8)}`
       const { data: order, error } = await sb.from('orders').insert({
@@ -184,6 +193,9 @@ export default function CheckoutPage() {
         cupon_aplicado: cuponAplicado && cupon.trim() ? cupon.trim().toUpperCase() : null,
         cupon_descuento: cuponAplicado && descuento > 0 ? descuento : null,
         disclaimer_acceptance_id: disclaimerId || null, disclaimer_version: DISCLAIMER_VERSION,
+        // Cookies de atribución Meta — para deduplicación CAPI server-side
+        ...(fbp ? { fbp } : {}),
+        ...(fbc ? { fbc } : {}),
         // Coordenadas de la dirección seleccionada
         ...(() => {
           const sel = savedAddresses.find((a:any) => a.id === selectedAddrId)
