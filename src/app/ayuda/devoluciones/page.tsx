@@ -27,11 +27,12 @@ export default function DevolucionesPage() {
         </div>
         <div className="space-y-6">
           {[
-            { title: '✅ ¿Cuándo puedo devolver un producto?', body: 'Aceptamos devoluciones dentro de las 7 días posteriores a la entrega, siempre que el producto esté sellado, sin abrir y en su empaque original.' },
-            { title: '❌ ¿Qué productos NO son devolvibles?', body: 'No aceptamos devoluciones de lentes de contacto que hayan sido abiertos o usados, por razones de higiene y salud.' },
-            { title: '📦 ¿Cómo hago una devolución?', body: 'Contáctanos por WhatsApp al 809-694-2268 dentro de las 7 días con tu número de pedido y foto del producto. Coordinamos la devolución sin costo adicional.' },
-            { title: '💰 ¿Cómo recibo mi reembolso?', body: 'El reembolso se procesa por el mismo método de pago original dentro de 3 a 5 días hábiles tras recibir el producto devuelto.' },
-            { title: '🔄 ¿Puedo cambiar por otro producto?', body: 'Sí. Si prefieres un cambio en lugar de reembolso, lo gestionamos sin costo adicional de envío.' },
+            { title: '✅ ¿Cuándo puedo devolver un producto?', body: 'Aceptamos devoluciones dentro de los 7 días posteriores a la entrega, siempre que la caja esté completamente sellada, sin abrir y en su empaque original. Si la caja fue abierta —aunque sea parcialmente— la devolución no procede por normas de higiene y salud.' },
+            { title: '🔶 Lentes tóricos: política especial de 48 horas', body: 'Los lentes tóricos (para astigmatismo) se solicitan a proveedor bajo tu graduación específica y no forman parte del inventario estándar. Cuentas con 48 horas desde la confirmación de tu orden para cancelarla y recibir reembolso completo. Después de ese plazo, la orden no admite cancelación ni devolución, aun cuando la caja llegue sellada.' },
+            { title: '❌ ¿Qué productos NO son devolvibles?', body: 'No aceptamos devoluciones de: (1) cualquier caja de lentes de contacto o solución que haya sido abierta, ni siquiera parcialmente; (2) lentes tóricos cuya orden supere las 48 horas de cancelación; (3) productos con graduación incorrecta indicada por el cliente al momento del pedido.' },
+            { title: '📦 ¿Cómo hago una devolución?', body: 'Contáctanos por WhatsApp al 809-694-2268 dentro del plazo (7 días para productos regulares, 48 horas para tóricos) con tu número de pedido y foto del producto. Coordinamos la devolución sin costo adicional.' },
+            { title: '💰 ¿Cómo recibo mi reembolso?', body: 'El reembolso se procesa por el mismo método de pago original dentro de 3 a 5 días hábiles tras recibir el producto devuelto y verificar su estado.' },
+            { title: '🔄 ¿Puedo cambiar por otro producto?', body: 'Sí, siempre que el producto cumpla las mismas condiciones de devolución (caja sellada, dentro de plazo). Si prefieres un cambio en lugar de reembolso, lo gestionamos sin costo adicional de envío.' },
             { title: '⚠️ Producto dañado o incorrecto', body: 'Si recibiste un producto dañado o diferente al pedido, contáctanos inmediatamente. Lo reemplazamos sin ningún costo para ti.' },
             { title: '🛡️ Garantía de autenticidad', body: 'Todos nuestros productos son directo del fabricante y certificados. Garantizamos la autenticidad de cada producto vendido en ContactGo.' },
           ].map(({ title, body }) => (
