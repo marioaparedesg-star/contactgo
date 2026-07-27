@@ -45,11 +45,26 @@ export async function POST(req: NextRequest) {
     }
 
     if (accion === 'cancelar') {
-      const { error } = await sb.from('orders')
-        .update({ estado: 'cancelado', pago_estado: 'cancelado' })
+      // NOTA: el check constraint orders_pago_estado_check solo permite:
+      // pendiente | pagado | declinado | verificado | rechazado.
+      // Usamos 'declinado' (semanticamente = pago no completado) — antes
+      // intentaba 'cancelado' y fallaba silenciosamente.
+      const { data: order, error } = await sb.from('orders')
+        .update({ estado: 'cancelado', pago_estado: 'declinado' })
         .eq('id', order_id)
+        .select('numero_orden, cliente_telefono, cliente_email')
+        .single()
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-      return NextResponse.json({ ok: true })
+
+      // Notificar al cliente (WhatsApp + email) — server-side para no depender del frontend.
+      // Falla silenciosa: si notify no responde no bloqueamos la cancelación.
+      const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+      fetch(`${base}/api/notify`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado: 'cancelado' }),
+      }).catch(err => console.error('[admin/pedidos cancelar] notify falló:', err))
+
+      return NextResponse.json({ ok: true, order })
     }
 
     if (accion === 'eliminar') {

@@ -381,15 +381,16 @@ export default function PedidosPage() {
                         </button>
                         <button
                           onClick={async () => {
-                            if (!confirm(`¿CANCELAR el pedido #${selected.numero_orden}?`)) return
+                            if (!confirm(`¿CANCELAR el pedido #${selected.numero_orden}?\n\nSe le enviará una notificación al cliente por WhatsApp y email.`)) return
                             const r = await fetch('/api/admin/pedidos', {
                               method:'POST', headers:{'Content-Type':'application/json'},
                               body: JSON.stringify({ accion:'cancelar', order_id:selected.id })
                             })
-                            if (!r.ok) { toast.error('No se pudo cancelar'); return }
-                            setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, estado:'cancelado', pago_estado:'cancelado'} : p))
-                            setSelected((s:any) => ({...s, estado:'cancelado', pago_estado:'cancelado'}))
-                            toast.success('🗑️ Pedido cancelado')
+                            const j = await r.json().catch(() => ({}))
+                            if (!r.ok) { toast.error(j.error ?? 'No se pudo cancelar'); return }
+                            setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, estado:'cancelado', pago_estado:'declinado'} : p))
+                            setSelected((s:any) => ({...s, estado:'cancelado', pago_estado:'declinado'}))
+                            toast.success('🗑️ Pedido cancelado — cliente notificado')
                           }}
                           className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-red-100 text-red-700 border border-red-200 hover:bg-red-200 transition-colors">
                           🗑️ Cancelar pedido
