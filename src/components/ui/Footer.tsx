@@ -13,7 +13,7 @@ export default function Footer() {
         {/* Fila superior: logo + redes sociales */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex flex-col gap-0.5">
-            <span className="text-white font-bold text-base tracking-tight">ContactGo</span>
+            <span className="text-white font-bold text-base tracking-tight">ContactGo<sup className="text-[9px] font-normal text-gray-400 ml-0.5">®</sup></span>
             {/* MEJORA-7: Ubicación física visible */}
             <span className="text-gray-500 text-[10px]">La única tienda 100% especializada en lentes · RD</span>
             {/* WhatsApp clickeable */}
@@ -132,7 +132,10 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex flex-col gap-0.5 order-2 sm:order-1">
             <p className="text-[11px] text-gray-700">
-              © {new Date().getFullYear()} ContactGo — República Dominicana · WhatsApp: (809) 694-2268
+              © {new Date().getFullYear()} ContactGo<sup className="text-[8px]">®</sup> — República Dominicana · WhatsApp: (809) 694-2268
+            </p>
+            <p className="text-[10px] text-gray-700">
+              ContactGo<sup className="text-[7px]">®</sup> es un nombre comercial registrado — ONAPI Núm. 944205
             </p>
             {/* RNC pendiente de aprobación DGII — descomentar cuando esté activo */}
             {/* <p className="text-[10px] text-gray-800">
