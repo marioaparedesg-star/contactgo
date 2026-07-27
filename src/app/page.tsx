@@ -111,12 +111,12 @@ export default async function HomePage() {
                 label: 'Esféricos', slug: 'esferico',
                 desc: 'Miopía e hipermetropía — lo más pedido',
                 bg: 'bg-primary-50', fg: 'text-primary-600',
-                // Ojo estilizado — el clásico para lentes de graduación
+                // LENTE DE CONTACTO simple — disco con anillo interno y highlight de curvatura
                 svg: (
-                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 16s5-9 14-9 14 9 14 9-5 9-14 9S2 16 2 16z"/>
-                    <circle cx="16" cy="16" r="4.5"/>
-                    <circle cx="14.5" cy="14.5" r="1.2" fill="currentColor"/>
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="16" cy="16" r="12"/>
+                    <circle cx="16" cy="16" r="8" opacity="0.45"/>
+                    <path d="M9 11 Q 13 7 19 8" strokeWidth="1.4" opacity="0.75"/>
                   </svg>
                 ),
               },
@@ -124,13 +124,14 @@ export default async function HomePage() {
                 label: 'Tóricos', slug: 'torico',
                 desc: 'Visión nítida con astigmatismo',
                 bg: 'bg-violet-50', fg: 'text-violet-600',
-                // Lente con marca de eje inclinada — señal visual del astigmatismo
+                // LENTE DE CONTACTO tórico — con marca de eje inclinada + punto de orientación
                 svg: (
-                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="16" cy="16" r="11"/>
-                    <circle cx="16" cy="16" r="5"/>
-                    <line x1="7" y1="22" x2="25" y2="10" strokeDasharray="1.5 2.5" opacity="0.7"/>
-                    <path d="M6 6 L9 9 M26 6 L23 9" opacity="0.5"/>
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="16" cy="16" r="12"/>
+                    <circle cx="16" cy="16" r="8" opacity="0.35"/>
+                    <line x1="8" y1="20" x2="24" y2="12" strokeWidth="1.4" opacity="0.75"/>
+                    <circle cx="16" cy="28" r="1.1" fill="currentColor"/>
+                    <path d="M9 11 Q 13 7 19 8" strokeWidth="1.2" opacity="0.5"/>
                   </svg>
                 ),
               },
@@ -138,14 +139,14 @@ export default async function HomePage() {
                 label: 'Multifocales', slug: 'multifocal',
                 desc: 'Para ver de cerca y de lejos',
                 bg: 'bg-teal-50', fg: 'text-teal-600',
-                // Lente bifocal — dos zonas de graduación separadas
+                // LENTE DE CONTACTO multifocal — anillos concéntricos (zonas de graduación)
                 svg: (
-                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="16" cy="16" r="11"/>
-                    <path d="M5.5 18.5h21" opacity="0.6"/>
-                    <circle cx="16" cy="16" r="5.5"/>
-                    <circle cx="16" cy="12" r="1.5" opacity="0.5" fill="currentColor"/>
-                    <circle cx="16" cy="20.5" r="1" opacity="0.7" fill="currentColor"/>
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="16" cy="16" r="12"/>
+                    <circle cx="16" cy="16" r="9" opacity="0.55"/>
+                    <circle cx="16" cy="16" r="6" opacity="0.4"/>
+                    <circle cx="16" cy="16" r="3" opacity="0.3"/>
+                    <path d="M9 11 Q 13 7 19 8" strokeWidth="1.2" opacity="0.6"/>
                   </svg>
                 ),
               },
@@ -153,13 +154,15 @@ export default async function HomePage() {
                 label: 'Color', slug: 'color',
                 desc: 'Cambia tu look, con o sin graduación',
                 bg: 'bg-rose-50', fg: 'text-rose-500',
-                // Iris con patrón radial — representa lente cosmético coloreado
+                // LENTE DE CONTACTO cosmético — disco con iris coloreado y patrón radial
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="16" cy="16" r="11"/>
-                    <circle cx="16" cy="16" r="6" strokeWidth="1.8"/>
-                    <circle cx="16" cy="16" r="2.5" fill="currentColor"/>
-                    <path d="M16 6 L16 10 M16 22 L16 26 M6 16 L10 16 M22 16 L26 16 M9 9 L11.5 11.5 M20.5 20.5 L23 23 M23 9 L20.5 11.5 M11.5 20.5 L9 23" opacity="0.5"/>
+                    <circle cx="16" cy="16" r="12"/>
+                    <circle cx="16" cy="16" r="7" fill="currentColor" fillOpacity="0.15"/>
+                    <circle cx="16" cy="16" r="7" strokeWidth="1.3"/>
+                    <circle cx="16" cy="16" r="2.3" fill="currentColor"/>
+                    <path d="M16 9.5 L16 11.5 M16 20.5 L16 22.5 M9.5 16 L11.5 16 M20.5 16 L22.5 16 M11.5 11.5 L12.9 12.9 M19.1 19.1 L20.5 20.5 M20.5 11.5 L19.1 12.9 M12.9 19.1 L11.5 20.5" strokeWidth="1.2" opacity="0.6"/>
+                    <path d="M9 11 Q 13 7 19 8" strokeWidth="1.2" opacity="0.5"/>
                   </svg>
                 ),
               },
@@ -167,13 +170,13 @@ export default async function HomePage() {
                 label: 'Soluciones', slug: 'solucion', href: '/soluciones',
                 desc: 'Limpieza y cuidado',
                 bg: 'bg-sky-50', fg: 'text-sky-600',
-                // Frasco de solución multipropósito
+                // Frasco de solución para lentes de contacto
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 4 h8 v3 h-8 z"/>
                     <path d="M11 7 h10 l1 3 v15 a3 3 0 0 1 -3 3 h-6 a3 3 0 0 1 -3 -3 v-15 z"/>
                     <path d="M11 15 h10" opacity="0.5"/>
-                    <path d="M14 20 v3 M18 19 v4" opacity="0.5"/>
+                    <circle cx="16" cy="20" r="2" opacity="0.55"/>
                   </svg>
                 ),
               },
@@ -181,13 +184,13 @@ export default async function HomePage() {
                 label: 'Gotas', slug: 'gota', href: '/gotas',
                 desc: 'Lubricación ocular',
                 bg: 'bg-cyan-50', fg: 'text-cyan-600',
-                // Gotero con gota cayendo — específico de producto oftálmico, no pastilla
+                // Gotero oftálmico con gota cayendo
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M13 3 h6 v4 h-6 z"/>
                     <path d="M14 7 h4 v8 h-4 z"/>
                     <path d="M15 15 h2 l0.5 3 h-3 z"/>
-                    <path d="M16 21 c -1.5 2 -2.5 3.5 -2.5 5 a 2.5 2.5 0 0 0 5 0 c 0 -1.5 -1 -3 -2.5 -5 z" fill="currentColor" fillOpacity="0.15"/>
+                    <path d="M16 21 c -1.5 2 -2.5 3.5 -2.5 5 a 2.5 2.5 0 0 0 5 0 c 0 -1.5 -1 -3 -2.5 -5 z" fill="currentColor" fillOpacity="0.2"/>
                   </svg>
                 ),
               },
