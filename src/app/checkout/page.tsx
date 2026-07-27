@@ -208,6 +208,12 @@ export default function CheckoutPage() {
         setLoading(false)
         return
       }
+      // Guardar identidad del cliente para enriquecer eventos futuros (Contact / WhatsApp)
+      // Meta usa estos hasheados server-side para mejorar Event Match Quality
+      try {
+        if (data.email) localStorage.setItem('cg_last_email', data.email)
+        if (data.telefono) localStorage.setItem('cg_last_phone', data.telefono)
+      } catch { /* private browsing */ }
       // Marcar carrito como recuperado (usuario completó el checkout)
       try {
         const email = data.email

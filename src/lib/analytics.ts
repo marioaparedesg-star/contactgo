@@ -230,13 +230,43 @@ export function trackWhatsappHelp(source: 'no_seguro' | 'pdp' | 'cart' | 'checko
 
   const eventId = generateEventId()
 
+  // Recuperar identidad del usuario (si ya hizo checkout en esta sesión o compras previas).
+  // Meta usa email/phone hasheados como fuerte señal de match — sube Event Match Quality
+  // y el diagnóstico oficial recomienda enviarlos siempre que existan.
+  let userEmail: string | undefined
+  let userPhone: string | undefined
+  try {
+    userEmail = localStorage.getItem('cg_last_email') || undefined
+    userPhone = localStorage.getItem('cg_last_phone') || undefined
+  } catch { /* private browsing */ }
+
+  // external_id — mismo que usan Purchase/AddToCart para que Meta pueda cruzarlos
+  let externalId: string | undefined
+  try {
+    externalId = sessionStorage.getItem('cg_ext_id') ?? undefined
+    if (!externalId) {
+      externalId = 'cg_' + Math.random().toString(36).slice(2) + Date.now().toString(36)
+      sessionStorage.setItem('cg_ext_id', externalId)
+    }
+  } catch { /* private browsing */ }
+
   if (window.fbq) {
     // Evento estándar — usable directamente en optimización de campañas de Meta
-    window.fbq('track', 'Contact', { content_name: 'whatsapp_click', source }, { eventID: eventId })
+    window.fbq('track', 'Contact', {
+      content_name: 'whatsapp_click',
+      source,
+      ...(externalId ? { external_id: externalId } : {}),
+    }, { eventID: eventId })
   }
 
-  // CAPI server-side — mismo eventId para que Meta lo deduplique con el del Pixel
-  sendCAPI('Contact', { content_ids: [source] }, undefined, eventId)
+  // CAPI server-side — mismo eventId para que Meta lo deduplique con el del Pixel.
+  // Incluir email/phone si están disponibles (Meta los hashea en /api/fb-events).
+  sendCAPI(
+    'Contact',
+    { content_ids: [source] },
+    { email: userEmail, phone: userPhone },
+    eventId,
+  )
 }
 
 // ── Facebook Conversions API (CAPI) — server-side duplicate ──────────────
