@@ -30,24 +30,42 @@ function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)
 }
 
+// Normaliza y valida un WhatsApp de Rep. Dominicana.
+// Acepta: "8091234567", "829-123-4567", "+1 809 123 4567", "1 809 123 4567".
+// Devuelve E.164 sin '+' (ej "18091234567") o null si es inválido.
+function normalizeRDPhone(input: string): string | null {
+  const digits = String(input ?? '').replace(/\D/g, '')
+  // Casos aceptados: 10 dígitos (809/829/849 + 7) o 11 dígitos (1 + 809/829/849 + 7)
+  let phone = digits
+  if (phone.length === 11 && phone.startsWith('1')) phone = phone.slice(1)
+  if (phone.length !== 10) return null
+  const areaCode = phone.slice(0, 3)
+  if (!['809', '829', '849'].includes(areaCode)) return null
+  return `1${phone}` // formato E.164 sin '+'
+}
+
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const email = String(body.email ?? '').trim().toLowerCase()
+    const phone = normalizeRDPhone(body.phone ?? '')
     const source = ['popup', 'exit_intent', 'footer_form'].includes(body.source) ? body.source : 'popup'
 
     if (!isValidEmail(email)) {
-      return NextResponse.json({ error: 'Email invalido' }, { status: 400 })
+      return NextResponse.json({ error: 'Email inválido' }, { status: 400 })
+    }
+    if (!phone) {
+      return NextResponse.json({ error: 'Número de WhatsApp inválido (usa un número dominicano 809/829/849)' }, { status: 400 })
     }
 
     const db = sb()
 
-    // ¿Ya existe cupón para este email? — idempotente
+    // ¿Ya existe cupón para este email o teléfono? — idempotente
     const { data: existing } = await db.from('welcome_coupons')
       .select('codigo, usado')
-      .ilike('email', email)
+      .or(`email.eq.${email},phone.eq.${phone}`)
       .maybeSingle()
 
     if (existing) {
@@ -56,8 +74,8 @@ export async function POST(req: NextRequest) {
         codigo: existing.codigo,
         already_registered: true,
         message: existing.usado
-          ? 'Ya usaste tu cupon de bienvenida'
-          : 'Ya tienes tu cupon guardado — revisa tu correo',
+          ? 'Ya usaste tu cupón de bienvenida'
+          : 'Ya tienes tu cupón guardado — revisa tu correo',
       })
     }
 
@@ -87,7 +105,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Registrar en welcome_coupons para trazabilidad y evitar duplicados
-    const { error: wcErr } = await db.from('welcome_coupons').insert({ codigo, email, source })
+    const { error: wcErr } = await db.from('welcome_coupons').insert({ codigo, email, phone, source })
     if (wcErr) console.error('[welcome-coupon] error en welcome_coupons:', wcErr)
 
     // Enviar email de bienvenida con el cupón — falla silenciosa (el cupón ya está creado)
@@ -100,9 +118,24 @@ export async function POST(req: NextRequest) {
           html: emailBienvenidaHTML(codigo),
         })
       } catch (err) {
-        console.error('[welcome-coupon] Resend fallo (cupon ya creado):', err)
+        console.error('[welcome-coupon] Resend falló (cupón ya creado):', err)
       }
     }
+
+    // TODO: Envío WhatsApp instantáneo — activar cuando exista template aprobado 'welcome_coupon'.
+    // Meta NO permite iniciar conversación con número nuevo sin template aprobado.
+    // Cuando se apruebe, descomentar:
+    //
+    // try {
+    //   await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/whatsapp/enviar`, {
+    //     method: 'POST', headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({
+    //       to: phone,
+    //       template: 'welcome_coupon',
+    //       params: { codigo, descuento: `${DISCOUNT_PCT}%` },
+    //     }),
+    //   })
+    // } catch (err) { console.error('[welcome-coupon] WhatsApp fallo:', err) }
 
     return NextResponse.json({
       ok: true,

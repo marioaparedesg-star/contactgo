@@ -9,7 +9,7 @@
 // ============================================================
 import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { X, Mail, Sparkles, Copy, Check } from 'lucide-react'
+import { X, Mail, Phone, Sparkles, Copy, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const STORAGE_KEY = 'cg_welcome_popup_state'  // 'completed' | 'dismissed_YYYY-MM-DD'
@@ -21,10 +21,20 @@ export default function WelcomePopup() {
   const pathname = usePathname()
   const [visible, setVisible] = useState(false)
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [codigo, setCodigo] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const shownRef = useRef(false)
+
+  // Formatea "8091234567" -> "(809) 123-4567" mientras el usuario escribe
+  const formatPhone = (raw: string): string => {
+    const d = raw.replace(/\D/g, '').slice(0, 10)
+    if (d.length === 0) return ''
+    if (d.length <= 3) return `(${d}`
+    if (d.length <= 6) return `(${d.slice(0, 3)}) ${d.slice(3)}`
+    return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`
+  }
 
   useEffect(() => {
     if (EXCLUDED_PATHS.some(p => pathname?.startsWith(p))) return
@@ -74,12 +84,17 @@ export default function WelcomePopup() {
       toast.error('Ingresa un correo válido')
       return
     }
+    const phoneDigits = phone.replace(/\D/g, '')
+    if (phoneDigits.length !== 10 || !['809', '829', '849'].includes(phoneDigits.slice(0, 3))) {
+      toast.error('WhatsApp inválido (usa 809, 829 o 849)')
+      return
+    }
     setLoading(true)
     try {
       const r = await fetch('/api/welcome-coupon', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: emailClean, source: 'popup' }),
+        body: JSON.stringify({ email: emailClean, phone: phoneDigits, source: 'popup' }),
       })
       const j = await r.json()
       if (!r.ok) { toast.error(j.error ?? 'No se pudo procesar'); return }
@@ -87,6 +102,7 @@ export default function WelcomePopup() {
       try {
         localStorage.setItem(STORAGE_KEY, 'completed')
         localStorage.setItem('cg_last_email', emailClean)
+        localStorage.setItem('cg_last_phone', phoneDigits)
       } catch { /* ignore */ }
     } catch {
       toast.error('Error de conexión')
@@ -142,11 +158,31 @@ export default function WelcomePopup() {
                   placeholder="tucorreo@ejemplo.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') submit() }}
                   disabled={loading} />
               </div>
-              <button onClick={submit} disabled={loading || !email}
-                className="w-full mt-3 bg-[#0B3D66] hover:bg-[#0d4a7c] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg text-sm transition-colors">
+
+              <label htmlFor="cg-welcome-phone" className="text-xs font-semibold text-gray-500 block mt-3 mb-1.5">
+                Tu WhatsApp <span className="text-gray-400 font-normal">(para ofertas exclusivas)</span>
+              </label>
+              <div className="relative flex items-stretch">
+                <span className="inline-flex items-center gap-1 pl-3 pr-2.5 border border-r-0 border-gray-300 rounded-l-lg bg-gray-50 text-sm text-gray-600 font-medium">
+                  🇩🇴 <span className="text-xs">+1</span>
+                </span>
+                <div className="relative flex-1">
+                  <Phone className="absolute left-2.5 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <input id="cg-welcome-phone" type="tel" inputMode="numeric" autoComplete="tel-national"
+                    className="w-full pl-8 pr-3 py-2.5 border border-gray-300 rounded-r-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D66]/30 focus:border-[#0B3D66]"
+                    placeholder="(809) 123-4567"
+                    value={phone}
+                    onChange={e => setPhone(formatPhone(e.target.value))}
+                    onKeyDown={e => { if (e.key === 'Enter') submit() }}
+                    disabled={loading}
+                    maxLength={16} />
+                </div>
+              </div>
+
+              <button onClick={submit} disabled={loading || !email || !phone}
+                className="w-full mt-4 bg-[#0B3D66] hover:bg-[#0d4a7c] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg text-sm transition-colors">
                 {loading ? 'Enviando…' : 'Recibir mi 10% de descuento'}
               </button>
 
