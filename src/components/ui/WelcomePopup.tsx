@@ -1,241 +1,189 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase'
-import { X, Tag } from 'lucide-react'
+// ============================================================
+// WelcomePopup — captura solo email a cambio de cupon 10% off
+// Triggers: 20s de permanencia O exit intent (cursor hacia arriba)
+// Anti-fatiga: localStorage — no vuelve a aparecer si:
+//   1) El usuario completo (nunca mas)
+//   2) El usuario lo cerro (7 dias de cooldown)
+//   3) Esta en checkout/admin/cuenta/venta/confirmacion
+// ============================================================
+import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { X, Mail, Sparkles, Copy, Check } from 'lucide-react'
+import toast from 'react-hot-toast'
+
+const STORAGE_KEY = 'cg_welcome_popup_state'  // 'completed' | 'dismissed_YYYY-MM-DD'
+const SHOW_AFTER_MS = 20_000
+const DISMISS_COOLDOWN_DAYS = 7
+const EXCLUDED_PATHS = ['/checkout', '/admin', '/cuenta', '/venta/', '/confirmacion', '/gracias', '/auth']
 
 export default function WelcomePopup() {
-  const [visible, setVisible]   = useState(false)
-  const [email, setEmail]       = useState('')
-  const [nombre, setNombre]     = useState('')
-  const [password, setPassword] = useState('')
-  const [paso, setPaso]         = useState<'email'|'registro'|'exito'>('email')
-  const [loading, setLoading]   = useState(false)
-  const [error, setError]       = useState('')
-  const [countdown, setCountdown] = useState(5) // auto-cierre en 5s
-  const countdownRef = useRef<NodeJS.Timeout | null>(null)
-  const router = useRouter()
+  const pathname = usePathname()
+  const [visible, setVisible] = useState(false)
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [codigo, setCodigo] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
+  const shownRef = useRef(false)
 
   useEffect(() => {
-    try { if (sessionStorage.getItem('popup_visto')) return } catch {}
+    if (EXCLUDED_PATHS.some(p => pathname?.startsWith(p))) return
+    if (shownRef.current) return
 
-    const sb = createClient()
-    // Guard: Sentry undefined.then — getUser puede ser undefined si Supabase no inicializa
-    const authPromise = sb?.auth?.getUser?.()
-    if (!authPromise || typeof authPromise.then !== 'function') return
-    authPromise.then(({ data: { user } }) => {
-      if (user) return
-
-      // Mostrar a los 5 segundos
-      const timer = setTimeout(() => {
-        setVisible(true)
-        // Auto-cerrar a los 5 segundos de aparecer (solo si no interactuó)
-        startCountdown()
-      }, 5000)
-
-      // Exit intent en desktop
-      const exit = (e: MouseEvent) => {
-        if (e.clientY < 10) {
-          clearTimeout(timer)
-          setVisible(true)
-          startCountdown()
-        }
-      }
-      document.addEventListener('mouseleave', exit)
-      return () => { clearTimeout(timer); document.removeEventListener('mouseleave', exit) }
-    })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const startCountdown = () => {
-    setCountdown(5)
-    countdownRef.current = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(countdownRef.current!)
-          cerrar()
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-  }
-
-  const stopCountdown = () => {
-    if (countdownRef.current) {
-      clearInterval(countdownRef.current)
-      countdownRef.current = null
-    }
-    setCountdown(0) // 0 = no mostrar countdown
-  }
-
-  const cerrar = () => {
-    setVisible(false)
-    stopCountdown()
-    try { sessionStorage.setItem('popup_visto', '1') } catch {}
-  }
-
-  const onInteract = () => stopCountdown() // si el usuario interactúa, cancela el auto-cierre
-
-  const onEmail = (e: React.FormEvent) => {
-    e.preventDefault()
-    onInteract()
-    if (!email.includes('@')) { setError('Email inválido'); return }
-    setError(''); setPaso('registro')
-  }
-
-  const onRegistro = async (e: React.FormEvent) => {
-    e.preventDefault()
-    onInteract()
-    if (!nombre.trim())      { setError('Ingresa tu nombre'); return }
-    if (password.length < 6) { setError('Mínimo 6 caracteres'); return }
-    setLoading(true); setError('')
+    // Anti-fatiga
+    let blocked = false
     try {
-      const sb = createClient()
-      const { data: signUpData, error: err } = await sb.auth.signUp({
-        email, password,
-        options: { data: { full_name: nombre } }
-      })
-      if (err) { setError(err.message); return }
-      await fetch('/api/welcome-coupon', { method: 'POST' })
-      // Buscar teléfono del profile si ya existe
-      let telefonoUser: string | null = null
-      try {
-        const { data: p } = await sb.from('profiles').select('telefono').eq('id', signUpData?.user?.id ?? '').maybeSingle()
-        telefonoUser = p?.telefono ?? null
-      } catch {}
-      fetch('/api/auth/welcome', {
+      const state = localStorage.getItem(STORAGE_KEY)
+      if (state === 'completed') blocked = true
+      else if (state?.startsWith('dismissed_')) {
+        const days = (Date.now() - new Date(state.slice(10)).getTime()) / 86_400_000
+        if (days < DISMISS_COOLDOWN_DAYS) blocked = true
+      }
+    } catch { /* private browsing */ }
+    if (blocked) return
+
+    const delayTimer = setTimeout(() => {
+      if (!shownRef.current) { shownRef.current = true; setVisible(true) }
+    }, SHOW_AFTER_MS)
+
+    const onMouseOut = (e: MouseEvent) => {
+      if (e.clientY <= 0 && !shownRef.current) {
+        shownRef.current = true; setVisible(true)
+      }
+    }
+    if (typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches) {
+      document.addEventListener('mouseout', onMouseOut)
+    }
+
+    return () => {
+      clearTimeout(delayTimer)
+      document.removeEventListener('mouseout', onMouseOut)
+    }
+  }, [pathname])
+
+  const dismiss = () => {
+    setVisible(false)
+    try {
+      localStorage.setItem(STORAGE_KEY, `dismissed_${new Date().toISOString().slice(0, 10)}`)
+    } catch { /* ignore */ }
+  }
+
+  const submit = async () => {
+    const emailClean = email.trim().toLowerCase()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailClean)) {
+      toast.error('Ingresa un correo válido')
+      return
+    }
+    setLoading(true)
+    try {
+      const r = await fetch('/api/welcome-coupon', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, nombre, telefono: telefonoUser, user_id: signUpData?.user?.id }),
-      }).catch(() => {})
-      setPaso('exito')
-      try { sessionStorage.setItem('popup_visto', '1') } catch {}
-    } catch { setError('Error al crear cuenta') }
-    finally { setLoading(false) }
+        body: JSON.stringify({ email: emailClean, source: 'popup' }),
+      })
+      const j = await r.json()
+      if (!r.ok) { toast.error(j.error ?? 'No se pudo procesar'); return }
+      setCodigo(j.codigo)
+      try {
+        localStorage.setItem(STORAGE_KEY, 'completed')
+        localStorage.setItem('cg_last_email', emailClean)
+      } catch { /* ignore */ }
+    } catch {
+      toast.error('Error de conexión')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const copyCode = () => {
+    if (!codigo) return
+    navigator.clipboard.writeText(codigo)
+    setCopied(true)
+    toast.success('Código copiado ✓')
+    setTimeout(() => setCopied(false), 2000)
   }
 
   if (!visible) return null
 
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center"
-      style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(3px)' }}
-      onClick={e => { if (e.target === e.currentTarget) cerrar() }}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={dismiss}>
+      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+        onClick={e => e.stopPropagation()}>
 
-      <div
-        className="relative w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl animate-slide-up"
-        onMouseEnter={onInteract}
-        onTouchStart={onInteract}>
-
-        {/* Botón X — siempre visible y grande para mobile */}
-        <button
-          onClick={cerrar}
-          className="absolute top-3 right-3 z-10 w-9 h-9 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition-all"
+        <button onClick={dismiss}
+          className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors shadow-sm"
           aria-label="Cerrar">
-          <X className="w-5 h-5 text-white" strokeWidth={2.5} />
+          <X className="w-4 h-4" />
         </button>
 
-        {/* Countdown ring — solo si está corriendo */}
-        {countdown > 0 && paso === 'email' && (
-          <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-full px-2.5 py-1">
-            <div className="w-4 h-4 relative">
-              <svg className="w-4 h-4 -rotate-90" viewBox="0 0 16 16">
-                <circle cx="8" cy="8" r="6" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2"/>
-                <circle cx="8" cy="8" r="6" fill="none" stroke="white" strokeWidth="2"
-                  strokeDasharray={`${(countdown/5)*37.7} 37.7`}
-                  style={{ transition: 'stroke-dasharray 1s linear' }}/>
-              </svg>
-            </div>
-            <span className="text-[10px] font-bold text-white">{countdown}s</span>
-          </div>
-        )}
-
-        {/* Header verde */}
-        <div className="bg-gradient-to-br from-primary-600 to-primary-700 px-6 pt-7 pb-6 text-center">
-          {paso === 'exito' ? (
-            <>
-              <div className="text-4xl mb-2">🎉</div>
-              <h2 className="text-2xl font-black text-white">¡Listo!</h2>
-              <p className="text-primary-100 text-sm mt-1">Tu cupón está en tu email</p>
-            </>
-          ) : (
-            <>
-              <div className="inline-flex items-center gap-1.5 bg-amber-400 text-amber-900 text-xs font-black px-3 py-1 rounded-full mb-3">
-                <Tag className="w-3 h-3" /> SOLO PARA NUEVOS CLIENTES
+        {!codigo ? (
+          <>
+            <div className="bg-gradient-to-br from-[#0B3D66] to-[#0d4a7c] text-white px-6 pt-8 pb-6 text-center">
+              <div className="w-14 h-14 mx-auto mb-3 bg-white/15 rounded-2xl flex items-center justify-center">
+                <Sparkles className="w-7 h-7 text-white" />
               </div>
-              <h2 className="text-3xl font-black text-white leading-tight">10% OFF<br />tu primera compra</h2>
-              <p className="text-primary-100 text-sm mt-2">Regístrate gratis • Solo toma 30 segundos</p>
-            </>
-          )}
-        </div>
-
-        {/* Body */}
-        <div className="px-6 py-5">
-          {paso === 'exito' && (
-            <div className="text-center space-y-4">
-              <div className="bg-green-50 border-2 border-dashed border-green-300 rounded-2xl p-5">
-                <p className="text-xs text-gray-500 mb-1">Tu cupón de bienvenida</p>
-                <p className="text-2xl font-black text-primary-600 tracking-widest">BIEN10-★★★★★</p>
-                <p className="text-xs text-gray-400 mt-1">Revisa tu email — llega en segundos</p>
-              </div>
-              <button onClick={() => { router.push('/catalogo'); cerrar() }}
-                className="w-full bg-primary-600 text-white font-black py-3.5 rounded-2xl text-sm hover:bg-primary-700 transition-colors">
-                Ver lentes →
-              </button>
-            </div>
-          )}
-
-          {paso === 'email' && (
-            <form onSubmit={onEmail} className="space-y-3" onClick={onInteract}>
-              <input type="email" placeholder="tu@email.com" value={email}
-                onChange={e => setEmail(e.target.value)} autoComplete="email" required
-                className="w-full border-2 border-gray-200 focus:border-primary-400 rounded-xl px-4 py-3 text-sm outline-none transition-colors"
-                style={{ fontSize: '16px' }} />
-              {error && <p className="text-red-500 text-xs">{error}</p>}
-              <button type="submit"
-                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-black py-3.5 rounded-2xl text-sm shadow-md transition-colors">
-                Quiero mi 10% →
-              </button>
-              <button type="button" onClick={cerrar}
-                className="w-full text-xs text-gray-400 hover:text-gray-600 transition-colors py-1">
-                No gracias, prefiero precio completo
-              </button>
-            </form>
-          )}
-
-          {paso === 'registro' && (
-            <form onSubmit={onRegistro} className="space-y-2.5" onClick={onInteract}>
-              <p className="text-xs text-gray-500 text-center mb-1">
-                Creando cuenta con <strong className="text-primary-600">{email}</strong>
+              <h2 className="font-display text-2xl font-bold leading-tight">
+                Bienvenido a ContactGo®
+              </h2>
+              <p className="text-white/85 text-sm mt-1.5">
+                Llévate <strong className="text-white">10% de descuento</strong> en tu primera compra
               </p>
-              <input type="text" placeholder="Tu nombre completo" value={nombre}
-                onChange={e => setNombre(e.target.value)} autoComplete="name" required
-                className="w-full border-2 border-gray-200 focus:border-primary-400 rounded-xl px-4 py-3 text-sm outline-none transition-colors"
-                style={{ fontSize: '16px' }} />
-              <input type="password" placeholder="Contraseña (mín. 6 caracteres)" value={password}
-                onChange={e => setPassword(e.target.value)} autoComplete="new-password" required
-                className="w-full border-2 border-gray-200 focus:border-primary-400 rounded-xl px-4 py-3 text-sm outline-none transition-colors"
-                style={{ fontSize: '16px' }} />
-              {error && <p className="text-red-500 text-xs">{error}</p>}
-              <button type="submit" disabled={loading}
-                className="w-full bg-primary-600 disabled:opacity-50 text-white font-black py-3.5 rounded-2xl text-sm shadow-md hover:bg-primary-700 transition-colors">
-                {loading ? 'Creando cuenta...' : 'Crear cuenta y obtener 10% OFF 🎉'}
-              </button>
-              <button type="button" onClick={() => setPaso('email')}
-                className="w-full text-xs text-gray-400 hover:text-gray-600 transition-colors py-1">
-                ← Cambiar email
-              </button>
-            </form>
-          )}
-        </div>
+            </div>
 
-        {/* Trust footer */}
-        {paso !== 'exito' && (
-          <div className="bg-gray-50 border-t px-6 py-3 flex items-center justify-center gap-4">
-            {['🔒 Gratis', '📦 Envío a RD', '✅ Certificados'].map(t => (
-              <span key={t} className="text-[10px] text-gray-500 font-medium">{t}</span>
-            ))}
+            <div className="p-6">
+              <label htmlFor="cg-welcome-email" className="text-xs font-semibold text-gray-500 block mb-1.5">
+                Tu correo electrónico
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
+                <input id="cg-welcome-email" type="email" autoComplete="email" autoFocus
+                  className="w-full pl-9 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D66]/30 focus:border-[#0B3D66]"
+                  placeholder="tucorreo@ejemplo.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') submit() }}
+                  disabled={loading} />
+              </div>
+              <button onClick={submit} disabled={loading || !email}
+                className="w-full mt-3 bg-[#0B3D66] hover:bg-[#0d4a7c] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg text-sm transition-colors">
+                {loading ? 'Enviando…' : 'Recibir mi 10% de descuento'}
+              </button>
+
+              <p className="text-[11px] text-gray-400 text-center mt-3 leading-relaxed">
+                Solo te enviaremos ofertas y novedades de ContactGo®.<br />
+                Sin spam. Puedes darte de baja cuando quieras.
+              </p>
+            </div>
+          </>
+        ) : (
+          <div className="p-8 text-center">
+            <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+              <Check className="w-8 h-8 text-green-600" strokeWidth={3} />
+            </div>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-1.5">
+              ¡Listo! 🎉
+            </h2>
+            <p className="text-sm text-gray-600 mb-5">
+              Te enviamos el código a tu correo. Aquí lo tienes también:
+            </p>
+
+            <div className="bg-gradient-to-br from-[#0B3D66] to-[#0d4a7c] rounded-xl p-5 mb-4">
+              <p className="text-white/70 text-[10px] font-bold uppercase tracking-widest mb-1.5">Tu código</p>
+              <p className="text-white text-2xl font-black font-mono tracking-wider">{codigo}</p>
+              <p className="text-white/70 text-[10px] mt-2">Válido 60 días · 10% off · Un solo uso</p>
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={copyCode}
+                className="flex-1 bg-white border-2 border-gray-200 hover:border-[#0B3D66] text-gray-700 font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors">
+                {copied ? <><Check className="w-4 h-4" /> Copiado</> : <><Copy className="w-4 h-4" /> Copiar</>}
+              </button>
+              <a href="/catalogo"
+                className="flex-1 bg-[#0B3D66] hover:bg-[#0d4a7c] text-white font-bold py-2.5 rounded-lg text-sm flex items-center justify-center transition-colors">
+                Ver catálogo →
+              </a>
+            </div>
           </div>
         )}
       </div>
