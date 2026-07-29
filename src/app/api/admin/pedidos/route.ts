@@ -44,6 +44,92 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true })
     }
 
+    // ── Registrar pago o abono parcial ──────────────────────────────────
+    // Reemplaza a marcar_pagado para casos que necesitan control fino:
+    //   - Pagos parciales (cliente pagó 50%, resto contra entrega)
+    //   - Marcar como pagado SIN notificar al cliente
+    //   - Trazabilidad completa de pagos por método
+    if (accion === 'registrar_pago') {
+      const monto = Number(body.monto)
+      const metodo = String(body.metodo ?? 'efectivo')
+      const nota = body.nota ? String(body.nota).slice(0, 500) : null
+      const notificar = body.notificar !== false // default true
+
+      if (!monto || monto <= 0) return NextResponse.json({ error: 'Monto inválido' }, { status: 400 })
+      if (!['efectivo', 'transferencia', 'tarjeta', 'otro', 'azul'].includes(metodo)) {
+        return NextResponse.json({ error: 'Método inválido' }, { status: 400 })
+      }
+
+      // Traer orden actual + suma de pagos previos
+      const { data: order, error: orderErr } = await sb.from('orders')
+        .select('id, numero_orden, total, pago_estado')
+        .eq('id', order_id).single()
+      if (orderErr || !order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
+
+      const { data: pagosPrevios } = await sb.from('order_payments')
+        .select('monto').eq('order_id', order_id)
+      const totalPagadoPrevio = (pagosPrevios ?? []).reduce((s, p: any) => s + Number(p.monto), 0)
+      const totalPagadoNuevo = totalPagadoPrevio + monto
+
+      // No permitir exceder el total del pedido (evita errores de captura)
+      if (totalPagadoNuevo > Number(order.total) + 0.01) {
+        return NextResponse.json({
+          error: `El pago excede el total. Ya pagado: RD$${totalPagadoPrevio.toLocaleString()} · Total pedido: RD$${Number(order.total).toLocaleString()} · Puedes registrar hasta RD$${(Number(order.total) - totalPagadoPrevio).toLocaleString()}`
+        }, { status: 400 })
+      }
+
+      // Insertar el pago
+      const { error: payErr } = await sb.from('order_payments').insert({
+        order_id, monto, metodo, nota, notified: notificar,
+      })
+      if (payErr) return NextResponse.json({ error: payErr.message }, { status: 500 })
+
+      // Determinar si el pedido queda totalmente pagado (tolerancia RD$1)
+      const totalPedido = Number(order.total)
+      const cubrio100 = totalPagadoNuevo >= totalPedido - 0.5
+      const nuevoPagoEstado = cubrio100 ? 'pagado' : 'pendiente'
+
+      // Solo cambiamos el estado del pedido si:
+      //   - Se completó el 100% → pagado + confirmado
+      //   - Sigue en pendiente → no hacemos nada
+      if (cubrio100) {
+        await sb.from('orders').update({
+          pago_estado: 'pagado',
+          estado: 'confirmado',
+          pagado_en: new Date().toISOString(),
+        }).eq('id', order_id)
+      }
+
+      // Notificar al cliente solo si el usuario lo pidió Y el pedido llegó a 100%
+      // (si es abono parcial, no tiene sentido notificar 'tu pedido está pagado')
+      if (notificar && cubrio100) {
+        const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+        fetch(`${base}/api/notify`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado: 'confirmado' }),
+        }).catch(err => console.error('[admin/pedidos registrar_pago] notify falló:', err))
+      }
+
+      return NextResponse.json({
+        ok: true,
+        pago_estado: nuevoPagoEstado,
+        total_pagado: totalPagadoNuevo,
+        total_pedido: totalPedido,
+        cubrio_total: cubrio100,
+        pendiente: Math.max(0, totalPedido - totalPagadoNuevo),
+      })
+    }
+
+    // Consulta: obtener historial de pagos de un pedido
+    if (accion === 'listar_pagos') {
+      const { data, error } = await sb.from('order_payments')
+        .select('id, monto, metodo, nota, notified, created_at')
+        .eq('order_id', order_id)
+        .order('created_at', { ascending: true })
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ ok: true, pagos: data ?? [] })
+    }
+
     if (accion === 'cancelar') {
       // NOTA: el check constraint orders_pago_estado_check solo permite:
       // pendiente | pagado | declinado | verificado | rechazado.

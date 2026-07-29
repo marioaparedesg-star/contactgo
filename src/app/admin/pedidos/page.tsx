@@ -69,6 +69,16 @@ export default function PedidosPage() {
   const [filtroPago, setFiltroPago] = useState('todos')
   const [loading, setLoading] = useState(true)
 
+  // Modal de registrar pago (soporta pago completo, abono parcial, con o sin notificación)
+  const [payModalOpen, setPayModalOpen] = useState(false)
+  const [payType, setPayType] = useState<'completo' | 'parcial'>('completo')
+  const [payMonto, setPayMonto] = useState<string>('')
+  const [payMetodo, setPayMetodo] = useState<'efectivo' | 'transferencia' | 'tarjeta' | 'otro' | 'azul'>('efectivo')
+  const [payNota, setPayNota] = useState('')
+  const [payNotificar, setPayNotificar] = useState(true)
+  const [paySaving, setPaySaving] = useState(false)
+  const [pagosHist, setPagosHist] = useState<any[]>([])
+
 
   useEffect(()=>{
     sb.from('orders').select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,cliente_cedula,cliente_fecha_nacimiento,direccion_texto,ciudad,canal,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin').order('created_at', { ascending: false }).limit(200)
@@ -382,22 +392,22 @@ export default function PedidosPage() {
                       <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wide">⚠️ Pago pendiente — acciones</p>
                       <div className="flex gap-2">
                         <button
-                          onClick={async () => {
-                            if (!confirm(`¿Marcar el pedido #${selected.numero_orden} como PAGADO manualmente?`)) return
-                            const r = await fetch('/api/admin/pedidos', {
-                              method:'POST', headers:{'Content-Type':'application/json'},
-                              body: JSON.stringify({ accion:'marcar_pagado', order_id:selected.id })
-                            })
-                            if (!r.ok) { toast.error('No se pudo marcar como pagado'); return }
-                            setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, pago_estado:'pagado', estado:'confirmado'} : p))
-                            setSelected((s:any) => ({...s, pago_estado:'pagado', estado:'confirmado'}))
-                            toast.success('✅ Marcado como pagado')
-                            // Notificar al cliente (email + WhatsApp) como pedido confirmado
-                            fetch('/api/notify',{ method:'POST', headers:{'Content-Type':'application/json'},
-                              body: JSON.stringify({order_id:selected.id, evento:'estado_cambio', nuevo_estado:'confirmado'}) }).catch(()=>{})
+                          onClick={() => {
+                            // Abrir modal con defaults sensatos
+                            setPayType('completo')
+                            setPayMonto(String(selected.total ?? ''))
+                            setPayMetodo('efectivo')
+                            setPayNota('')
+                            setPayNotificar(true)
+                            // Cargar historial de pagos previos
+                            fetch('/api/admin/pedidos', {
+                              method: 'POST', headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ accion: 'listar_pagos', order_id: selected.id }),
+                            }).then(r => r.json()).then(j => setPagosHist(j.pagos ?? [])).catch(() => setPagosHist([]))
+                            setPayModalOpen(true)
                           }}
                           className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
-                          💳 Marcar como pagado
+                          💳 Registrar pago
                         </button>
                         <button
                           onClick={async () => {
@@ -464,6 +474,182 @@ export default function PedidosPage() {
             )}
           </div>
         </div>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          MODAL: Registrar pago (soporta completo, parcial, con o sin notificación)
+          ═══════════════════════════════════════════════════════════════ */}
+      {payModalOpen && selected && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+             onClick={() => !paySaving && setPayModalOpen(false)}>
+          <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+               onClick={e => e.stopPropagation()}>
+
+            {/* Header */}
+            <div className="px-5 py-4 border-b bg-gradient-to-br from-green-50 to-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-900 text-base">💰 Registrar pago</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Pedido #{selected.numero_orden} · Total RD${Number(selected.total).toLocaleString()}</p>
+                </div>
+                <button onClick={() => !paySaving && setPayModalOpen(false)} className="text-gray-400 hover:text-gray-700 p-1">
+                  <X className="w-4 h-4"/>
+                </button>
+              </div>
+            </div>
+
+            {/* Body scrolleable */}
+            <div className="px-5 py-4 space-y-4 overflow-y-auto">
+
+              {/* Historial de pagos previos */}
+              {pagosHist.length > 0 && (
+                <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+                  <p className="text-[10px] font-bold text-blue-800 uppercase tracking-wide mb-2">📋 Pagos previos</p>
+                  <div className="space-y-1">
+                    {pagosHist.map((p, i) => (
+                      <div key={p.id ?? i} className="flex items-center justify-between text-xs">
+                        <div>
+                          <span className="font-mono font-bold text-gray-800">RD${Number(p.monto).toLocaleString()}</span>
+                          <span className="text-gray-500 ml-1.5">· {p.metodo}</span>
+                          {p.nota && <span className="text-gray-400 italic ml-1.5">"{p.nota}"</span>}
+                        </div>
+                        <span className="text-[10px] text-gray-400">{new Date(p.created_at).toLocaleDateString('es-DO', {day:'2-digit',month:'short'})}</span>
+                      </div>
+                    ))}
+                    <div className="flex items-center justify-between pt-1.5 mt-1.5 border-t border-blue-200 text-xs font-bold">
+                      <span className="text-blue-800">Total abonado</span>
+                      <span className="font-mono text-blue-900">RD${pagosHist.reduce((s, p) => s + Number(p.monto), 0).toLocaleString()} / {Number(selected.total).toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Tipo de pago */}
+              <div>
+                <label className="text-[11px] font-bold text-gray-600 uppercase tracking-wide block mb-1.5">Tipo de pago</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button type="button" onClick={() => { setPayType('completo'); setPayMonto(String(Number(selected.total) - pagosHist.reduce((s, p) => s + Number(p.monto), 0))) }}
+                    className={`text-xs font-semibold py-2.5 px-3 rounded-lg border transition-colors ${payType==='completo' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}>
+                    ✅ Pago completo
+                  </button>
+                  <button type="button" onClick={() => { setPayType('parcial'); setPayMonto('') }}
+                    className={`text-xs font-semibold py-2.5 px-3 rounded-lg border transition-colors ${payType==='parcial' ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}>
+                    💵 Abono parcial
+                  </button>
+                </div>
+              </div>
+
+              {/* Monto */}
+              <div>
+                <label className="text-[11px] font-bold text-gray-600 uppercase tracking-wide block mb-1.5">
+                  Monto {payType === 'parcial' && <span className="text-amber-600 font-normal normal-case">(saldo pendiente después: RD${Math.max(0, Number(selected.total) - pagosHist.reduce((s, p) => s + Number(p.monto), 0) - (Number(payMonto) || 0)).toLocaleString()})</span>}
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-sm text-gray-500 font-medium">RD$</span>
+                  <input type="number" min="0" step="0.01"
+                    className="w-full pl-11 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500"
+                    value={payMonto}
+                    onChange={e => setPayMonto(e.target.value)}
+                    disabled={paySaving}
+                    autoFocus/>
+                </div>
+              </div>
+
+              {/* Método */}
+              <div>
+                <label className="text-[11px] font-bold text-gray-600 uppercase tracking-wide block mb-1.5">Método</label>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {([
+                    { v: 'efectivo', l: '💵 Efectivo' },
+                    { v: 'transferencia', l: '🏦 Transfer.' },
+                    { v: 'tarjeta', l: '💳 Tarjeta' },
+                    { v: 'otro', l: '📝 Otro' },
+                  ] as const).map(m => (
+                    <button key={m.v} type="button" onClick={() => setPayMetodo(m.v as any)}
+                      className={`text-xs font-semibold py-2 px-3 rounded-lg border transition-colors ${payMetodo===m.v ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}>
+                      {m.l}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Nota */}
+              <div>
+                <label className="text-[11px] font-bold text-gray-600 uppercase tracking-wide block mb-1.5">Nota interna (opcional)</label>
+                <textarea rows={2} maxLength={500}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500 resize-none"
+                  placeholder="Ej: Pagó 50% adelantado, resto contra entrega"
+                  value={payNota}
+                  onChange={e => setPayNota(e.target.value)}
+                  disabled={paySaving}/>
+              </div>
+
+              {/* Toggle notificar */}
+              <label className="flex items-start gap-2.5 cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <input type="checkbox"
+                  className="mt-0.5 w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer"
+                  checked={payNotificar}
+                  onChange={e => setPayNotificar(e.target.checked)}
+                  disabled={paySaving}/>
+                <div className="flex-1">
+                  <p className="text-xs font-semibold text-gray-800">Notificar al cliente</p>
+                  <p className="text-[10.5px] text-gray-500 leading-snug mt-0.5">
+                    {payType === 'parcial'
+                      ? 'Los abonos parciales nunca notifican al cliente (solo se notifica cuando se completa el 100%).'
+                      : 'Si el pago cubre el 100%, el cliente recibirá WhatsApp + email confirmando su pedido.'}
+                  </p>
+                </div>
+              </label>
+            </div>
+
+            {/* Footer */}
+            <div className="px-5 py-3 border-t bg-gray-50 flex gap-2">
+              <button onClick={() => setPayModalOpen(false)} disabled={paySaving}
+                className="flex-1 text-xs font-semibold py-2.5 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors disabled:opacity-50">
+                Cancelar
+              </button>
+              <button
+                onClick={async () => {
+                  const monto = Number(payMonto)
+                  if (!monto || monto <= 0) { toast.error('Monto inválido'); return }
+                  setPaySaving(true)
+                  try {
+                    const r = await fetch('/api/admin/pedidos', {
+                      method: 'POST', headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        accion: 'registrar_pago',
+                        order_id: selected.id,
+                        monto, metodo: payMetodo, nota: payNota.trim() || null,
+                        notificar: payNotificar,
+                      }),
+                    })
+                    const j = await r.json()
+                    if (!r.ok) { toast.error(j.error ?? 'No se pudo registrar el pago'); return }
+
+                    // Actualizar UI local
+                    if (j.cubrio_total) {
+                      setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, pago_estado:'pagado', estado:'confirmado'} : p))
+                      setSelected((s:any) => ({...s, pago_estado:'pagado', estado:'confirmado'}))
+                      toast.success(payNotificar
+                        ? `✅ Pago completo — cliente notificado (${payMetodo})`
+                        : `✅ Pago completo registrado — SIN notificar (${payMetodo})`)
+                    } else {
+                      toast.success(`💵 Abono RD$${monto.toLocaleString()} registrado · Pendiente: RD$${j.pendiente.toLocaleString()}`)
+                    }
+                    setPayModalOpen(false)
+                  } catch {
+                    toast.error('Error de conexión')
+                  } finally {
+                    setPaySaving(false)
+                  }
+                }}
+                disabled={paySaving || !payMonto}
+                className="flex-1 text-xs font-bold py-2.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                {paySaving ? 'Guardando…' : payType === 'parcial' ? 'Registrar abono' : 'Registrar pago'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
