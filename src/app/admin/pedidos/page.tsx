@@ -7,6 +7,48 @@ import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import toast from 'react-hot-toast'
 
 const ESTADOS = ['activos','pagados','declinados','todos','pendiente','confirmado','preparando','enviado','entregado','cancelado']
+
+// ============================================================
+// formatReceta — helper universal que muestra la receta de un item.
+// Soporta AMBOS formatos:
+//   - Legacy: sph, cyl, axis, add_power (campos únicos)
+//   - Nuevo:  sph_od/oi, cyl_od/oi, axis_od/oi, add_od/oi (por ojo)
+// Devuelve string listo para render, o '' si no hay receta.
+// ============================================================
+function formatReceta(i: any): string {
+  const parts: string[] = []
+  if (i.size) parts.push(i.size)
+  if (i.color) parts.push(`🎨 ${i.color}`)
+  if (i.modalidad === 'plano') parts.push('Plano')
+
+  const buildOjo = (ojo: 'od' | 'oi'): string | null => {
+    const sph = i[`sph_${ojo}`], cyl = i[`cyl_${ojo}`], axis = i[`axis_${ojo}`], add = i[`add_${ojo}`]
+    const bits: string[] = []
+    if (sph != null && sph !== '') bits.push(`${Number(sph) > 0 ? '+' : ''}${sph}`)
+    if (cyl != null && cyl !== '') bits.push(`CYL ${cyl}`)
+    if (axis != null && axis !== '') bits.push(`EJE ${axis}°`)
+    if (add != null && add !== '') bits.push(`ADD +${add}`)
+    return bits.length ? bits.join(' ') : null
+  }
+  const od = buildOjo('od'), oi = buildOjo('oi')
+
+  if (od || oi) {
+    if (i.ojo_mode === 'OD' && od) parts.push(`👁 OD: ${od}`)
+    else if (i.ojo_mode === 'OI' && oi) parts.push(`👁 OI: ${oi}`)
+    else {
+      if (od) parts.push(`OD: ${od}`)
+      if (oi) parts.push(`OI: ${oi}`)
+    }
+  } else {
+    // Fallback formato legacy
+    if (i.sph != null) parts.push(`SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
+    if (i.cyl) parts.push(`CYL ${i.cyl}`)
+    if (i.axis) parts.push(`EJE ${i.axis}°`)
+    if (i.add_power) parts.push(`ADD +${i.add_power}`)
+  }
+  return parts.join(' · ')
+}
+
 const ESTADO_COLOR: Record<string,string> = {
   pendiente:'bg-amber-50 text-amber-700 border-amber-200', confirmado:'bg-blue-50 text-blue-700 border-blue-200',
   preparando:'bg-purple-50 text-purple-700 border-purple-200', enviado:'bg-indigo-50 text-indigo-700 border-indigo-200',
@@ -114,17 +156,7 @@ export default function PedidosPage() {
     ${its.map((i:any)=>{
       const subMap={mensual:'📦Mensual',trimestral:'⭐Trim.',semestral:'💎Sem.',['15_dias']:'📦15d'}
       const subLabel=i.suscripcion?(subMap[i.suscripcion]??i.suscripcion):null
-      const rx=[
-        i.ojo_mode==='AMBOS'&&i.sph!=null?`👀 Ambos SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
-        i.ojo_mode==='AMBOS'&&i.sph_od?`OD:${i.sph_od}`:null,
-        i.ojo_mode==='AMBOS'&&i.sph_oi?`OI:${i.sph_oi}`:null,
-        i.ojo_mode==='OD'&&i.sph!=null?`👁 OD SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
-        i.ojo_mode==='OI'&&i.sph!=null?`👁 OI SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
-        (!i.ojo_mode&&i.sph!=null)?`SPH ${Number(i.sph)>0?'+':''}${i.sph}`:null,
-        i.cyl?`CYL ${i.cyl}`:null,i.axis?`${i.axis}°`:null,
-        i.add_power?`ADD ${i.add_power}`:null,
-        i.color?`🎨 ${i.color}`:null,
-      ].filter(Boolean).join(' ')
+      const rx = formatReceta(i)
       return `<tr>
         <td style="padding:5px 8px;font-size:11px">
           <strong>${i.nombre}${i.size?` (${i.size})`:''}</strong>
@@ -293,26 +325,14 @@ export default function PedidosPage() {
                   <div className="mb-4">
                     <p className="text-xs font-bold text-gray-500 uppercase mb-2">Productos</p>
                     <div className="space-y-2">
-                      {(items[selected.id]??[]).map((i:any,idx:number)=>(
+                      {(items[selected.id]??[]).map((i:any,idx:number)=>{
+                        const rx = formatReceta(i)
+                        return (
                         <div key={idx} className="flex gap-2 text-sm">
                           <div className="flex-1">
                             <p className="font-medium text-gray-800 text-xs">{i.nombre}</p>
-                            {(i.sph!=null||i.cyl||i.axis||i.color||i.add_power) && (
-                              <p className="text-[10px] text-blue-600 font-mono">
-                                {(() => {
-                                  const parts = []
-                                  if (i.ojo_mode === 'AMBOS' && i.sph != null) parts.push(`👀 Ambos · SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
-                                  else if (i.ojo_mode === 'AMBOS' && i.sph_od) { parts.push(`OD: ${i.sph_od}`); if (i.sph_oi) parts.push(`OI: ${i.sph_oi}`) }
-                                  else if (i.ojo_mode === 'OD' && i.sph != null) parts.push(`👁 OD · SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
-                                  else if (i.ojo_mode === 'OI' && i.sph != null) parts.push(`👁 OI · SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
-                                  else if (i.sph != null) parts.push(`SPH ${Number(i.sph) > 0 ? '+' : ''}${i.sph}`)
-                                  if (i.cyl) parts.push(`CYL ${i.cyl}`)
-                                  if (i.axis) parts.push(`${i.axis}°`)
-                                  if (i.add_power) parts.push(`ADD +${i.add_power}`)
-                                  if (i.color) parts.push(`🎨 ${i.color}`)
-                                  return parts.filter(Boolean).join(' · ') || '—'
-                                })()}
-                              </p>
+                            {rx && (
+                              <p className="text-[10px] text-blue-600 font-mono">{rx}</p>
                             )}
                           </div>
                           <div className="text-right">
@@ -320,7 +340,7 @@ export default function PedidosPage() {
                             <p className="text-[10px] text-gray-400">×{i.cantidad}</p>
                           </div>
                         </div>
-                      ))}
+                      )})}
                     </div>
                     <div className="border-t border-gray-100 mt-3 pt-2 flex justify-between">
                       <span className="text-xs font-bold text-gray-700">Total</span>

@@ -505,6 +505,9 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded }: { produc
           {off > 0 && <p className="text-[9px] text-green-600 font-bold">-{off}% off</p>}
           <p className="text-[9px] text-gray-400">≈ RD${Math.round(precio/12).toLocaleString()}/mes</p>
         </div>
+
+        {/* Receta que le corresponde a ESTE producto (estilo OptiExpert de CooperVision) */}
+        <RecetaMini result={result} />
       </div>
       <div className="px-3 pb-3 space-y-1.5">
         {/* CTA principal */}
@@ -526,6 +529,54 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded }: { produc
           Ver detalles →
         </Link>
       </div>
+    </div>
+  )
+}
+
+// ── RecetaMini — muestra la receta correspondiente a cada producto ──────────
+// Estilo inspirado en OptiExpert de CooperVision: caja sutil con formato
+// compacto por ojo, para que el cliente vea exactamente qué graduación pedir.
+function RecetaMini({ result }: { result: ConvertedRx }) {
+  const od = result.od
+  const oi = result.oi
+  const tipo = result.tipo
+
+  // Solo esféricos con la misma graduación en ambos ojos se pueden colapsar
+  const sameSph = od?.sph === oi?.sph
+  const sameCyl = od?.cyl === oi?.cyl
+  const sameAxis = od?.axis === oi?.axis
+  const sameAdd = od?.add === oi?.add
+  const iguales = sameSph && sameCyl && sameAxis && sameAdd
+
+  const fmtOjo = (o: any): string => {
+    if (!o) return '—'
+    const bits: string[] = []
+    if (o.sph != null) bits.push(`${Number(o.sph) > 0 ? '+' : ''}${o.sph}`)
+    if (o.cyl != null && o.cyl !== 0) bits.push(`CYL ${o.cyl}`)
+    if (o.axis != null && (tipo === 'torico' || tipo === 'multifocal_torico' || (o.cyl != null && o.cyl !== 0))) bits.push(`×${o.axis}°`)
+    if (o.add != null) bits.push(`ADD +${o.add}`)
+    return bits.join(' ')
+  }
+
+  return (
+    <div className="mt-2 pt-2 border-t border-dashed border-gray-200 bg-blue-50/40 -mx-3 px-3 pb-2 rounded-b-lg">
+      <p className="text-[8px] font-bold text-blue-700 uppercase tracking-wider mb-1">Tu receta para este lente</p>
+      {iguales ? (
+        <p className="text-[11px] font-mono font-bold text-gray-900">
+          👀 Ambos: <span className="text-primary-700">{fmtOjo(od)}</span>
+        </p>
+      ) : (
+        <div className="text-[10.5px] font-mono leading-snug">
+          <p className="text-gray-900">
+            <span className="text-gray-500 font-sans font-semibold">OD:</span>{' '}
+            <span className="font-bold text-primary-700">{fmtOjo(od)}</span>
+          </p>
+          <p className="text-gray-900">
+            <span className="text-gray-500 font-sans font-semibold">OI:</span>{' '}
+            <span className="font-bold text-primary-700">{fmtOjo(oi)}</span>
+          </p>
+        </div>
+      )}
     </div>
   )
 }
