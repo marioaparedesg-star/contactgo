@@ -625,7 +625,6 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
         <div className="mt-2 pt-2 border-t border-gray-100">
           <p className={`font-black text-sm ${featured?'text-primary-600':'text-gray-900'}`}>RD${precio.toLocaleString()}</p>
           {off > 0 && <p className="text-[9px] text-green-600 font-bold">-{off}% off</p>}
-          <p className="text-[9px] text-gray-400">≈ RD${Math.round(precio/12).toLocaleString()}/mes</p>
         </div>
 
         {/* Receta que le corresponde a ESTE producto (estilo OptiExpert de CooperVision) */}
