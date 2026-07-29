@@ -10,6 +10,7 @@ import {
   convertGlassesToContacts, fmtCyl, fmtAxis,
   SPH_GLASSES, CYL_GLASSES, AXIS_VALS, ADD_VALS,
   type GlassesRx, type ConvertedRx,
+  detectarCasoMixto, type CasoMixto, type TipoLenteOjo,
 } from '@/lib/prescription'
 import type { Product } from '@/types'
 import { Eye, RotateCcw, Sparkles, Info, AlertTriangle, ChevronRight, Mail, CheckCircle, ShoppingCart, ArrowRight } from 'lucide-react'
@@ -49,6 +50,10 @@ export default function RecetaPage() {
   const [rxSource, setRxSource] = useState<'contacto' | 'gafas' | null>(null)
   const [result, setResult] = useState<ConvertedRx | null>(null)
   const [products, setProducts] = useState<any[]>([])
+  // Caso mixto: cada ojo requiere un tipo distinto de lente
+  const [productsOd, setProductsOd] = useState<any[]>([])
+  const [productsOi, setProductsOi] = useState<any[]>([])
+  const [casoMixto, setCasoMixto] = useState<CasoMixto | null>(null)
   const [loadingP, setLoadingP] = useState(false)
   const [totalDisp, setTotalDisp] = useState(0)
   const [showLead, setShowLead] = useState(false)
@@ -64,7 +69,43 @@ export default function RecetaPage() {
   // ── Motor de recomendación ────────────────────────────────────────────────
   const cargarProductos = async (conv: ConvertedRx): Promise<any[]> => {
     setLoadingP(true)
+    // Reset estado mixto en cada calculo
+    setProductsOd([]); setProductsOi([]); setCasoMixto(null)
+
+    const mixto = detectarCasoMixto(conv)
+
     try {
+      // ── CASO MIXTO: cargar productos separadamente por ojo ─────────────
+      if (mixto.esMixto) {
+        setCasoMixto(mixto)
+        // Fetch simultaneo para OD y OI, cada uno con su tipo real
+        const fetchOjo = async (tipo: TipoLenteOjo, rx: any) => {
+          try {
+            const res = await fetch('/api/receta/recomendar', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' },
+              // Enviamos la misma receta a od_sph y oi_sph para pasar filtros de rango
+              body: JSON.stringify({
+                tipo,
+                od_sph: rx.sph ?? 0, oi_sph: rx.sph ?? 0,
+                od_cyl: rx.cyl ?? 0,
+              })
+            })
+            const json = await res.json()
+            return json.productos ?? []
+          } catch { return [] }
+        }
+        const [listaOd, listaOi] = await Promise.all([
+          fetchOjo(mixto.od.tipo, mixto.od.rx),
+          fetchOjo(mixto.oi.tipo, mixto.oi.rx),
+        ])
+        setProductsOd(listaOd)
+        setProductsOi(listaOi)
+        setProducts([]) // limpia el modo simple
+        setTotalDisp(listaOd.length + listaOi.length)
+        return [...listaOd, ...listaOi]
+      }
+
+      // ── CASO ESTANDAR: 1 tipo de producto para ambos ojos ─────────────
       const res = await fetch('/api/receta/recomendar', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0 })
@@ -152,19 +193,24 @@ export default function RecetaPage() {
       }).catch(() => {})
     }
   }
-  const resetear = () => { setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null); setProducts([]); setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null) }
+  const resetear = () => {
+    setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null)
+    setProducts([]); setProductsOd([]); setProductsOi([]); setCasoMixto(null)
+    setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null)
+  }
 
-  // ── Agregar al carrito DIRECTO (para esférico y color) ────────────────────
-  const handleAddToCart = (product: any) => {
+  // ── Agregar al carrito DIRECTO (esférico y color) o via PDP ────────────────
+  // soloOjo: cuando viene de una card del modo mixto, agrega SOLO 1 caja para ese ojo
+  const handleAddToCart = (product: any, soloOjo?: 'OD' | 'OI') => {
     if (!result) return
-    const isSimple = result.tipo === 'esferico'
+    const isSimple = result.tipo === 'esferico' && !casoMixto
+    // Modo mixto o tipos complejos → ir al PDP con la receta correcta
     if (!isSimple) {
-      // Tórico, multifocal, etc. → ir al PDP con rx pre-llenada
-      saveRxToSession()
-      router.push(`/producto/${product.slug}`)
+      saveRxToSession(soloOjo)
+      router.push(`/producto/${product.slug}${soloOjo ? `?ojo=${soloOjo}` : ''}`)
       return
     }
-    // Esférico: agregar directo al carrito
+    // Esférico puro: agregar directo al carrito con la receta calculada
     const prod: Partial<Product> = {
       id: product.id, nombre: product.nombre, marca: product.marca,
       precio: Number(product.precio), tipo: product.tipo,
@@ -185,9 +231,15 @@ export default function RecetaPage() {
     toast.success(`¡${product.nombre} agregado con tu receta! 🛒`, { duration: 3000 })
   }
 
-  const saveRxToSession = () => {
+  const saveRxToSession = (soloOjo?: 'OD' | 'OI') => {
     if (!result) return
-    try { sessionStorage.setItem('cg_rx_pending', JSON.stringify({ od: result.od, oi: result.oi, tipo: result.tipo, timestamp: Date.now() })) } catch {}
+    try {
+      sessionStorage.setItem('cg_rx_pending', JSON.stringify({
+        od: result.od, oi: result.oi, tipo: result.tipo,
+        soloOjo: soloOjo ?? null, // el PDP puede pre-seleccionar solo ese ojo
+        timestamp: Date.now()
+      }))
+    } catch {}
   }
 
   const buildWA = (r: ConvertedRx) => {
@@ -340,47 +392,113 @@ export default function RecetaPage() {
 
               {/* PRODUCTOS — foco principal CRO */}
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <p className="font-black text-gray-900 text-base">{tipoLabel(result.tipo)}</p>
-                    {totalDisp > 3 && <p className="text-xs text-gray-500">{totalDisp} disponibles · mejores 3</p>}
-                  </div>
-                  {result.tipo === 'esferico' && (
-                    <span className="text-[10px] bg-green-100 text-green-700 font-bold px-2 py-1 rounded-full">Agregar directo al carrito</span>
-                  )}
-                </div>
-
                 {loadingP ? (
                   <div className="flex flex-col items-center gap-3 py-12 text-gray-400">
                     <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"/>
                     <p className="text-sm">Buscando productos compatibles...</p>
                   </div>
-                ) : products.length === 0 ? (
-                  <FallbackProductos result={result} buildWA={buildWA}/>
-                ) : (
+                ) : casoMixto ? (
+                  // ═══════════ CASO MIXTO — 2 columnas OD/OI ═══════════
                   <>
-                    {/* Mobile: cards apiladas — Desktop: 3 columnas */}
-                    <div className="flex flex-col gap-3 md:hidden">
-                      {/* Featured primero en mobile */}
-                      {products[1] && <ProductCard product={products[1]} result={result} tier="rec" onAction={handleAddToCart} cartAdded={cartAdded}/>}
-                      <div className="grid grid-cols-2 gap-2">
-                        {products[0] && <ProductCard product={products[0]} result={result} tier="eco" onAction={handleAddToCart} cartAdded={cartAdded}/>}
-                        {products[2] && <ProductCard product={products[2]} result={result} tier="prem" onAction={handleAddToCart} cartAdded={cartAdded}/>}
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
+                      <p className="text-xs font-bold text-amber-900 mb-0.5">📋 Tu receta necesita lentes distintos por ojo</p>
+                      <p className="text-[11px] text-amber-800 leading-snug">
+                        Cada ojo tiene una necesidad diferente. Te mostramos las mejores opciones separadamente — puedes comprar
+                        <strong> 1 caja para OD</strong> y <strong>1 caja para OI</strong>. En el carrito llegan por separado.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* ── Columna OJO DERECHO ─────────────────────── */}
+                      <div className="bg-white rounded-2xl border border-primary-100 p-3">
+                        <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
+                          <div>
+                            <p className="text-[10px] font-black text-primary-700 uppercase tracking-wider">Ojo Derecho</p>
+                            <p className="font-black text-gray-900 text-sm">{tipoLabel(casoMixto.od.tipo)}</p>
+                          </div>
+                          <span className="text-[9px] bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded-full">OD</span>
+                        </div>
+                        {productsOd.length === 0 ? (
+                          <p className="text-xs text-gray-400 text-center py-6">Sin productos compatibles — contáctanos por WhatsApp</p>
+                        ) : (
+                          <div className="grid grid-cols-1 gap-2">
+                            {productsOd.slice(0, 3).map((p, i) => (
+                              <ProductCard key={`od-${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'}
+                                onAction={(prod) => handleAddToCart(prod, 'OD')} cartAdded={cartAdded} soloOjo="OD" compact/>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* ── Columna OJO IZQUIERDO ───────────────────── */}
+                      <div className="bg-white rounded-2xl border border-primary-100 p-3">
+                        <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
+                          <div>
+                            <p className="text-[10px] font-black text-primary-700 uppercase tracking-wider">Ojo Izquierdo</p>
+                            <p className="font-black text-gray-900 text-sm">{tipoLabel(casoMixto.oi.tipo)}</p>
+                          </div>
+                          <span className="text-[9px] bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded-full">OI</span>
+                        </div>
+                        {productsOi.length === 0 ? (
+                          <p className="text-xs text-gray-400 text-center py-6">Sin productos compatibles — contáctanos por WhatsApp</p>
+                        ) : (
+                          <div className="grid grid-cols-1 gap-2">
+                            {productsOi.slice(0, 3).map((p, i) => (
+                              <ProductCard key={`oi-${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'}
+                                onAction={(prod) => handleAddToCart(prod, 'OI')} cartAdded={cartAdded} soloOjo="OI" compact/>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    {/* Desktop: 3 columnas */}
-                    <div className="hidden md:grid grid-cols-3 gap-3">
-                      {products.map((p, i) => (
-                        <ProductCard key={`${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'} onAction={handleAddToCart} cartAdded={cartAdded}/>
-                      ))}
+
+                    <div className="mt-3 bg-green-50 border border-green-200 rounded-xl p-3">
+                      <p className="text-xs text-green-900 leading-relaxed">
+                        <strong>💡 Tip:</strong> si prefieres que armemos tu pedido personalizado y te enviemos el link de pago,{' '}
+                        <a href={`https://wa.me/18096942268?text=${buildWA(result)}`} target="_blank" rel="noopener noreferrer" className="underline font-bold">contáctanos por WhatsApp</a>.
+                      </p>
                     </div>
                   </>
-                )}
+                ) : (
+                  // ═══════════ CASO ESTANDAR — flujo original ═══════════
+                  <>
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <p className="font-black text-gray-900 text-base">{tipoLabel(result.tipo)}</p>
+                        {totalDisp > 3 && <p className="text-xs text-gray-500">{totalDisp} disponibles · mejores 3</p>}
+                      </div>
+                      {result.tipo === 'esferico' && (
+                        <span className="text-[10px] bg-green-100 text-green-700 font-bold px-2 py-1 rounded-full">Agregar directo al carrito</span>
+                      )}
+                    </div>
 
-                <Link href={`/${tipoSlug(result.tipo)}`}
-                  className="mt-3 flex items-center justify-center gap-1 text-primary-600 text-xs font-semibold hover:underline py-2">
-                  Ver todos los {tipoLabel(result.tipo).split(' ').slice(1).join(' ')} disponibles <ChevronRight className="w-3.5 h-3.5"/>
-                </Link>
+                    {products.length === 0 ? (
+                      <FallbackProductos result={result} buildWA={buildWA}/>
+                    ) : (
+                      <>
+                        {/* Mobile: cards apiladas — Desktop: 3 columnas */}
+                        <div className="flex flex-col gap-3 md:hidden">
+                          {products[1] && <ProductCard product={products[1]} result={result} tier="rec" onAction={handleAddToCart} cartAdded={cartAdded}/>}
+                          <div className="grid grid-cols-2 gap-2">
+                            {products[0] && <ProductCard product={products[0]} result={result} tier="eco" onAction={handleAddToCart} cartAdded={cartAdded}/>}
+                            {products[2] && <ProductCard product={products[2]} result={result} tier="prem" onAction={handleAddToCart} cartAdded={cartAdded}/>}
+                          </div>
+                        </div>
+                        {/* Desktop: 3 columnas */}
+                        <div className="hidden md:grid grid-cols-3 gap-3">
+                          {products.map((p, i) => (
+                            <ProductCard key={`${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'} onAction={handleAddToCart} cartAdded={cartAdded}/>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    <Link href={`/${tipoSlug(result.tipo)}`}
+                      className="mt-3 flex items-center justify-center gap-1 text-primary-600 text-xs font-semibold hover:underline py-2">
+                      Ver todos los {tipoLabel(result.tipo).split(' ').slice(1).join(' ')} disponibles <ChevronRight className="w-3.5 h-3.5"/>
+                    </Link>
+                  </>
+                )}
               </div>
 
               {/* Ahorro vs óptica */}
@@ -484,12 +602,16 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
 }
 
 // ── ProductCard ───────────────────────────────────────────────────────────────
-function ProductCard({ product: p, result, tier, onAction, cartAdded }: { product: any; result: ConvertedRx; tier: 'eco'|'rec'|'prem'; onAction: (p: any) => void; cartAdded: string|null }) {
+function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, compact }: {
+  product: any; result: ConvertedRx; tier: 'eco'|'rec'|'prem';
+  onAction: (p: any) => void; cartAdded: string|null;
+  soloOjo?: 'OD' | 'OI'; compact?: boolean
+}) {
   const precio = Number(p.precio)
   const precioAnt = Number(p.precio_anterior ?? 0)
   const off = precioAnt > precio ? Math.round((1 - precio/precioAnt)*100) : 0
   const featured = tier === 'rec'
-  const isSimple = result.tipo === 'esferico'
+  const isSimple = result.tipo === 'esferico' && !soloOjo
   const wasAdded = cartAdded === p.id
   const tierLabel = {eco:'ECONÓMICO',rec:'⭐ MEJOR OPCIÓN',prem:'PREMIUM'}[tier]
   const tierColor = {eco:'bg-gray-100 text-gray-600',rec:'bg-primary-600 text-white',prem:'bg-gray-800 text-white'}[tier]
@@ -497,7 +619,7 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded }: { produc
     <div className={`flex flex-col bg-white rounded-2xl border overflow-hidden transition-all ${featured?'border-primary-400 shadow-md ring-2 ring-primary-100':'border-gray-100 shadow-sm'}`}>
       <div className={`text-[10px] font-black text-center py-1.5 ${tierColor}`}>{tierLabel}</div>
       <div className="p-3 flex-1 flex flex-col">
-        {p.imagen_url&&<img src={p.imagen_url} alt={p.nombre} className="w-full h-14 object-contain mb-2 rounded-lg bg-gray-50"/>}
+        {p.imagen_url&&<img src={p.imagen_url} alt={p.nombre} className={`w-full ${compact?'h-12':'h-14'} object-contain mb-2 rounded-lg bg-gray-50`}/>}
         <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wide">{p.marca}</p>
         <p className="text-xs font-bold text-gray-900 leading-tight mt-0.5 flex-1 line-clamp-2">{p.nombre}</p>
         <div className="mt-2 pt-2 border-t border-gray-100">
@@ -507,21 +629,22 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded }: { produc
         </div>
 
         {/* Receta que le corresponde a ESTE producto (estilo OptiExpert de CooperVision) */}
-        <RecetaMini result={result} />
+        <RecetaMini result={result} soloOjo={soloOjo} />
       </div>
       <div className="px-3 pb-3 space-y-1.5">
-        {/* CTA principal */}
         <button onClick={() => onAction(p)}
           className={`w-full py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${wasAdded ? 'bg-green-500 text-white' : featured ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-800 text-white hover:bg-gray-700'}`}>
-          {wasAdded ? (<><CheckCircle className="w-3.5 h-3.5"/> ¡En tu carrito!</>) : isSimple ? (<><ShoppingCart className="w-3.5 h-3.5"/> Agregar al carrito</>) : (<><ArrowRight className="w-3.5 h-3.5"/> Ver con mi receta</>)}
+          {wasAdded ? (<><CheckCircle className="w-3.5 h-3.5"/> ¡En tu carrito!</>)
+           : soloOjo ? (<><ArrowRight className="w-3.5 h-3.5"/> Elegir para {soloOjo}</>)
+           : isSimple ? (<><ShoppingCart className="w-3.5 h-3.5"/> Agregar al carrito</>)
+           : (<><ArrowRight className="w-3.5 h-3.5"/> Ver con mi receta</>)}
         </button>
-        {/* Link al PDP — siempre lleva la receta */}
-        <Link href={`/producto/${p.slug}`}
+        <Link href={`/producto/${p.slug}${soloOjo ? `?ojo=${soloOjo}` : ''}`}
           onClick={() => {
-            // Guardar receta en session antes de navegar
             try {
               sessionStorage.setItem('cg_rx_pending', JSON.stringify({
-                od: result.od, oi: result.oi, tipo: result.tipo, timestamp: Date.now()
+                od: result.od, oi: result.oi, tipo: result.tipo,
+                soloOjo: soloOjo ?? null, timestamp: Date.now()
               }))
             } catch {}
           }}
@@ -536,7 +659,7 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded }: { produc
 // ── RecetaMini — muestra la receta correspondiente a cada producto ──────────
 // Estilo inspirado en OptiExpert de CooperVision: caja sutil con formato
 // compacto por ojo, para que el cliente vea exactamente qué graduación pedir.
-function RecetaMini({ result }: { result: ConvertedRx }) {
+function RecetaMini({ result, soloOjo }: { result: ConvertedRx; soloOjo?: 'OD' | 'OI' }) {
   const od = result.od
   const oi = result.oi
   const tipo = result.tipo
@@ -561,7 +684,13 @@ function RecetaMini({ result }: { result: ConvertedRx }) {
   return (
     <div className="mt-2 pt-2 border-t border-dashed border-gray-200 bg-blue-50/40 -mx-3 px-3 pb-2 rounded-b-lg">
       <p className="text-[8px] font-bold text-blue-700 uppercase tracking-wider mb-1">Tu receta para este lente</p>
-      {iguales ? (
+      {soloOjo ? (
+        // Modo mixto: mostrar SOLO el ojo específico
+        <p className="text-[11px] font-mono font-bold text-gray-900">
+          <span className="text-gray-500 font-sans">{soloOjo}:</span>{' '}
+          <span className="text-primary-700">{fmtOjo(soloOjo === 'OD' ? od : oi)}</span>
+        </p>
+      ) : iguales ? (
         <p className="text-[11px] font-mono font-bold text-gray-900">
           👀 Ambos: <span className="text-primary-700">{fmtOjo(od)}</span>
         </p>

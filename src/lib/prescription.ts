@@ -298,3 +298,37 @@ export const AXIS_VALS = Array.from({ length: 180 }, (_, i) => i + 1)
 export const ADD_VALS = [
   0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 2.25, 2.50, 2.75, 3.00, 3.50
 ]
+
+// ─── Caso mixto: 2 productos distintos por ojo ────────────────────────────────
+// Detecta cuando cada ojo necesita un TIPO diferente de lente.
+// Casos comunes:
+//   - Astigmatismo solo en un ojo → tórico (ojo A) + esférico (ojo B)
+//   - Presbicia asimétrica         → multifocal (ojo A) + esférico (ojo B)
+export type TipoLenteOjo = 'esferico' | 'torico' | 'multifocal' | 'multifocal_torico'
+
+export interface CasoMixto {
+  esMixto: boolean
+  od: { tipo: TipoLenteOjo; rx: ContactRx }
+  oi: { tipo: TipoLenteOjo; rx: ContactRx }
+}
+
+const CYL_UMBRAL = 0.75 // CYL >= 0.75 requiere tórico (mismo umbral que convertGlassesToContacts)
+
+function tipoDeOjo(o: ContactRx): TipoLenteOjo {
+  const tieneCyl = o.cyl != null && Math.abs(o.cyl) >= CYL_UMBRAL
+  const tieneAdd = o.add != null && o.add > 0
+  if (tieneCyl && tieneAdd) return 'multifocal_torico'
+  if (tieneCyl) return 'torico'
+  if (tieneAdd) return 'multifocal'
+  return 'esferico'
+}
+
+export function detectarCasoMixto(conv: ConvertedRx): CasoMixto {
+  const tOd = tipoDeOjo(conv.od)
+  const tOi = tipoDeOjo(conv.oi)
+  return {
+    esMixto: tOd !== tOi,
+    od: { tipo: tOd, rx: conv.od },
+    oi: { tipo: tOi, rx: conv.oi },
+  }
+}
