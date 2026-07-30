@@ -84,6 +84,24 @@ export async function POST(req: NextRequest) {
       })
       if (payErr) return NextResponse.json({ error: payErr.message }, { status: 500 })
 
+      // Registrar el movimiento de caja INMEDIATAMENTE.
+      // Esto asegura que abonos parciales aparezcan en las ventas del día
+      // aunque la orden siga en 'pendiente'. Sin esto, el dinero real cobrado
+      // no aparecería en /admin/caja hasta completar el 100%.
+      const notaCaja = `Venta ${order.numero_orden}${nota ? ` — ${nota}` : ''}${totalPagadoNuevo < Number(order.total) - 0.5 ? ' (abono parcial)' : ''}`
+      await sb.from('cash_movements').insert({
+        tipo: 'ingreso',
+        categoria: 'venta',
+        descripcion: notaCaja,
+        monto,
+        metodo,
+        referencia: order.numero_orden,
+        order_id,
+        fecha: new Date().toISOString().split('T')[0],
+      }).then(({ error }) => {
+        if (error) console.error('[registrar_pago] cash_movements insert falló (no bloquea):', error.message)
+      })
+
       // Determinar si el pedido queda totalmente pagado (tolerancia RD$1)
       const totalPedido = Number(order.total)
       const cubrio100 = totalPagadoNuevo >= totalPedido - 0.5
