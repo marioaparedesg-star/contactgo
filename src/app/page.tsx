@@ -11,6 +11,7 @@ import { ChevronRight, Truck, Shield, Star, Clock, Zap, RefreshCw, Award, Users,
 import Navbar from '@/components/ui/Navbar'
 import HeroSlider from '@/components/ui/HeroSlider'
 import Footer from '@/components/ui/Footer'
+import AzulLogo from '@/components/ui/AzulLogo'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import ProductCard from '@/components/shop/ProductCard'
 import PersonalizedSection from '@/components/shop/PersonalizedSection'
@@ -320,10 +321,14 @@ export default async function HomePage() {
               { num: '4.7★', label: 'Calificación promedio', sub: '94 reseñas verificadas' },
               { num: '35+',  label: 'Productos disponibles', sub: 'Marcas líderes mundiales' },
               { num: '24h',  label: 'Entrega a domicilio',   sub: 'En toda República Dominicana' },
-              { num: '🔒',   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD' },
-            ].map(({ num, label, sub }) => (
-              <div key={label} className="space-y-0.5">
-                <p className="font-black text-2xl text-gray-900 tracking-tight">{num}</p>
+              { num: null,   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD', azul: true },
+            ].map(({ num, label, sub, azul }, i) => (
+              <div key={i} className="space-y-0.5">
+                {azul ? (
+                  <div className="flex justify-center items-center h-8"><AzulLogo size="lg" /></div>
+                ) : (
+                  <p className="font-black text-2xl text-gray-900 tracking-tight">{num}</p>
+                )}
                 <p className="text-xs font-bold text-gray-700">{label}</p>
                 <p className="text-[10px] text-gray-400">{sub}</p>
               </div>
@@ -476,12 +481,16 @@ export default async function HomePage() {
           <div className="grid md:grid-cols-3 gap-4">
             {[
               { n: '1', icon: '🔍', t: 'Encuentra tu lente', d: 'Usa nuestra calculadora gratuita o dinos qué marca usas. Si tienes dudas, te asesoramos por WhatsApp al instante.' },
-              { n: '2', icon: '💳', t: 'Paga seguro', d: 'Tarjeta de crédito o débito con AZUL de Banco Popular. Pago 100% protegido con 3D Secure. Nunca guardamos los datos de tu tarjeta.' },
+              { n: '2', azul: true, t: 'Paga seguro', d: 'Tarjeta de crédito o débito con AZUL de Banco Popular. Pago 100% protegido con 3D Secure. Nunca guardamos los datos de tu tarjeta.' },
               { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Entrega en 24-48h a todo el país. Sin filas, sin citas, sin salir de casa.' },
-            ].map(p => (
+            ].map((p:any) => (
               <div key={p.n} className="relative bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
                 <div className="absolute -top-3 -left-1 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-black text-sm shadow-md">{p.n}</div>
-                <div className="text-3xl mb-2">{p.icon}</div>
+                {p.azul ? (
+                  <div className="mb-2"><AzulLogo size="lg" /></div>
+                ) : (
+                  <div className="text-3xl mb-2">{p.icon}</div>
+                )}
                 <h3 className="font-black text-gray-900 text-base mb-1">{p.t}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{p.d}</p>
               </div>

@@ -7,6 +7,7 @@ import { fmtSph, fmtReceta } from '@/lib/sph-utils'
 import { useCartStore } from '@/lib/cart-store'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
+import AzulLogo from '@/components/ui/AzulLogo'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye, Tag, Shield, Truck, RotateCcw, ChevronRight } from 'lucide-react'
@@ -411,9 +412,11 @@ export default function CartPage() {
                 Ir al pago · RD${tot.toLocaleString()} <ChevronRight className="w-5 h-5" />
               </Link>
 
-              <p className="text-center text-[11px] text-gray-400">
-                🔒 Pago seguro con AZUL · Banco Popular
-              </p>
+              <div className="flex items-center justify-center gap-2 text-[11px] text-gray-500">
+                <span>Pago seguro con</span>
+                <AzulLogo size="sm" />
+                <span>· Banco Popular</span>
+              </div>
             </div>
           </div>
         </div>

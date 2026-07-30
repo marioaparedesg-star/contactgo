@@ -2,6 +2,8 @@ export const revalidate = 86400
 
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
+import AzulLogo from '@/components/ui/AzulLogo'
+import { ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -89,18 +91,20 @@ export default function EnviosPage() {
 
           {/* Métodos de pago */}
           <div>
-            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">💳 Métodos de pago</h2>
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Métodos de pago</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              {[
-                { icon: '💳', titulo: 'Tarjeta (AZUL)', desc: 'Pago con tarjeta de crédito/débito Visa y Mastercard via AZUL — Banco Popular.' },
-                { icon: '🔒', titulo: 'Pago 100% seguro', desc: 'Tecnología 3D Secure. ContactGo no almacena datos de tu tarjeta.' },
-              ].map((m, i) => (
-                <div key={i} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm text-center">
-                  <span className="text-3xl mb-2 block">{m.icon}</span>
-                  <p className="font-bold text-gray-900 text-sm mb-1">{m.titulo}</p>
-                  <p className="text-gray-500 text-xs">{m.desc}</p>
+              <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm text-center">
+                <div className="flex justify-center mb-2">
+                  <AzulLogo size="xl" />
                 </div>
-              ))}
+                <p className="font-bold text-gray-900 text-sm mb-1">Tarjeta con AZUL</p>
+                <p className="text-gray-500 text-xs">Pago con tarjeta de crédito/débito Visa y Mastercard vía AZUL — Banco Popular.</p>
+              </div>
+              <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm text-center">
+                <ShieldCheck className="w-10 h-10 text-primary-600 mx-auto mb-2" strokeWidth={1.8} />
+                <p className="font-bold text-gray-900 text-sm mb-1">Pago 100% seguro</p>
+                <p className="text-gray-500 text-xs">Tecnología 3D Secure. ContactGo no almacena datos de tu tarjeta.</p>
+              </div>
             </div>
           </div>
 

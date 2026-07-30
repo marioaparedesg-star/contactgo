@@ -8,6 +8,7 @@ import FrequentlyBoughtTogether from '@/components/shop/FrequentlyBoughtTogether
 import CrossSelling from '@/components/shop/CrossSelling'
 import ProductFAQ from '@/components/shop/ProductFAQ'
 import Navbar from '@/components/ui/Navbar'
+import AzulLogo from '@/components/ui/AzulLogo'
 import Footer from '@/components/ui/Footer'
 import { useCartStore } from '@/lib/cart-store'
 import { trackEcommerce, trackBuyNow, trackEyeFlow, sendCAPI, generateEventId } from '@/lib/analytics'
@@ -884,12 +885,14 @@ export default function ProductoClient({ product, variants }: Props) {
             )}
 
             {/* BLOQUE 3: TRUST BAR — scroll horizontal */}
-            <div className="flex gap-2 px-4 py-2 overflow-x-auto scrollbar-hide border-y border-gray-100">
-              {['✅ Directo del fabricante','🔒 Pago AZUL','🚚 Envío RD','↩️ 7 días dev.','💬 WA 24/7'].map(t => (
-                <span key={t} className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">
-                  {t}
-                </span>
-              ))}
+            <div className="flex gap-2 px-4 py-2 overflow-x-auto scrollbar-hide border-y border-gray-100 items-center">
+              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">✅ Directo del fabricante</span>
+              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 pl-1 pr-2.5 py-0.5 rounded-full border border-gray-100 whitespace-nowrap inline-flex items-center gap-1">
+                <AzulLogo size="xs" /> Pago con AZUL
+              </span>
+              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">🚚 Envío RD</span>
+              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">↩️ 7 días dev.</span>
+              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">💬 WA 24/7</span>
             </div>
 
             {/* BLOQUE 4: CONFIGURADOR DE RECETA */}
@@ -1059,12 +1062,22 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               )}
               <div className="grid grid-cols-2 gap-1.5 mt-3">
-                {[{icon:'✅',label:'Directo del fabricante'},{icon:'🚚',label:'Entrega rápida'},{icon:'🔒',label:'Pago AZUL'},{icon:'↩️',label:'7 días dev.'}].map(b => (
-                  <div key={b.label} className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
-                    <span className="text-sm shrink-0">{b.icon}</span>
-                    <span className="text-[10px] text-gray-600 font-medium leading-tight">{b.label}</span>
-                  </div>
-                ))}
+                <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
+                  <span className="text-sm shrink-0">✅</span>
+                  <span className="text-[10px] text-gray-600 font-medium leading-tight">Directo del fabricante</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
+                  <span className="text-sm shrink-0">🚚</span>
+                  <span className="text-[10px] text-gray-600 font-medium leading-tight">Entrega rápida</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
+                  <AzulLogo size="xs" />
+                  <span className="text-[10px] text-gray-600 font-medium leading-tight">Pago AZUL</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
+                  <span className="text-sm shrink-0">↩️</span>
+                  <span className="text-[10px] text-gray-600 font-medium leading-tight">7 días dev.</span>
+                </div>
               </div>
             </div>
 
@@ -1252,9 +1265,11 @@ export default function ProductoClient({ product, variants }: Props) {
                   })()}
 
                   <div className="border-t border-gray-100 pt-2 mt-1 space-y-1">
-                    {['✅ Directo del fabricante','🔒 Pago seguro AZUL','🚚 Entrega 24-48h en toda RD'].map(g => (
-                      <p key={g} className="text-[10px] text-gray-400 font-medium">{g}</p>
-                    ))}
+                    <p className="text-[10px] text-gray-400 font-medium">✅ Directo del fabricante</p>
+                    <p className="text-[10px] text-gray-400 font-medium inline-flex items-center gap-1">
+                      <AzulLogo size="xs" /> Pago seguro con AZUL
+                    </p>
+                    <p className="text-[10px] text-gray-400 font-medium">🚚 Entrega 24-48h en toda RD</p>
                   </div>
                 </div>
               </div>
@@ -1274,9 +1289,14 @@ export default function ProductoClient({ product, variants }: Props) {
           {/* BELOW FOLD DESKTOP */}
           <div className="hidden lg:block px-6 xl:px-8 pb-8 mt-6 space-y-6">
             <div className="grid grid-cols-4 gap-3 bg-gray-50 rounded-2xl p-4 border border-gray-100">
-              {[{icon:'🚚',t:'Envío gratis',d:'Desde RD$2,500'},{icon:'🔒',t:'Pago AZUL',d:'100% protegido'},{icon:'↩️',t:'7 días dev.',d:'Sin preguntas'},{icon:'✅',t:'Originales',d:'Dist. oficial'}].map(b => (
+              {([
+                {icon:'🚚',t:'Envío gratis',d:'Desde RD$2,500', azul:false},
+                {icon:null,t:'Pago AZUL',d:'100% protegido', azul:true},
+                {icon:'↩️',t:'7 días dev.',d:'Sin preguntas', azul:false},
+                {icon:'✅',t:'Originales',d:'Dist. oficial', azul:false},
+              ] as any[]).map(b => (
                 <div key={b.t} className="flex items-center gap-2.5">
-                  <span className="text-2xl shrink-0">{b.icon}</span>
+                  {b.azul ? <AzulLogo size="md" /> : <span className="text-2xl shrink-0">{b.icon}</span>}
                   <div><p className="text-xs font-bold text-gray-800">{b.t}</p><p className="text-[10px] text-gray-400">{b.d}</p></div>
                 </div>
               ))}

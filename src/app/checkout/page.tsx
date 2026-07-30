@@ -14,7 +14,7 @@ import EntregaBadge from '@/components/shop/EntregaBadge'
 import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
 import toast from 'react-hot-toast'
 import Image from 'next/image'
-import { Shield, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, MapPin, User, Phone, Mail } from 'lucide-react'
+import { Shield, ShieldCheck, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, MapPin, User, Phone, Mail } from 'lucide-react'
 
 const schema = z.object({
   nombre:               z.string().min(3, 'Nombre requerido'),
@@ -895,9 +895,10 @@ export default function CheckoutPage() {
                       <img src="/mastercard-id-check.png" alt="Mastercard ID Check" width={52} height={20} className="h-5 object-contain opacity-60" />
                     </div>
 
-                    <p className="text-center text-[11px] text-gray-400">
-                      🔒 Pago 100% seguro · SSL · 3D Secure · ContactGo no almacena datos de tarjetas
-                    </p>
+                    <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-500">
+                      <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2} />
+                      <span>Pago 100% seguro · SSL · 3D Secure · ContactGo no almacena datos de tarjetas</span>
+                    </div>
 
                   </div>
                 )}
