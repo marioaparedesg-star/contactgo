@@ -527,6 +527,12 @@ export default function CuentaPage() {
     if (error) { setMsg(error.message); setLoading(false); return }
     if (data.user) {
       await sb.from('profiles').upsert({ id: data.user.id, email, nombre, telefono, role: 'customer' })
+      // Evento estándar para GTM (X Ads "GTM Sign up", GA4, y cualquier otra
+      // plataforma que escuche este nombre de evento en el dataLayer)
+      if (typeof window !== 'undefined') {
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({ event: 'sign_up', method: 'email' })
+      }
       window.location.reload()
     }
     setLoading(false)
