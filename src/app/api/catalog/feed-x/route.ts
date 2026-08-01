@@ -13,6 +13,7 @@
 // ============================================================
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { descripcionParaFeed } from '@/lib/feed-descriptions'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -129,7 +130,7 @@ export async function GET() {
       return [
         escapeCSV(p.id),
         escapeCSV(fixUppercaseTitle(p.nombre)),
-        escapeCSV(p.descripcion?.slice(0, 5000)),
+        escapeCSV(descripcionParaFeed(p.nombre, p.descripcion)?.slice(0, 5000)),
         mapAvailability(p.stock ?? 0),
         mapCondition(p.tipo),
         escapeCSV(priceStr),
