@@ -67,7 +67,9 @@ export async function GET(req: NextRequest) {
 
   // ─────────────────────────────────────────────────────
   // 3b. RECORDATORIOS DE REPOSICIÓN — suscripciones activas (tabla subscriptions)
-  // Selección del cliente en "¿Cada cuánto necesitas reponer?" en la página de producto.
+  // Se crean automáticamente al completar el pago (ver /api/suscripciones/auto-crear),
+  // calculando la duración EXACTA según producto × cantidad — o manualmente si el
+  // cliente elige "¿Cada cuánto necesitas reponer?" en la página de producto.
   // NO es cobro automático — solo envía WhatsApp con link para reordenar manualmente.
   // Usa template ya aprobado (renovacion_lentes), no texto libre, para garantizar entrega.
   // ─────────────────────────────────────────────────────
@@ -75,7 +77,7 @@ export async function GET(req: NextRequest) {
     const hoy = new Date().toISOString().split('T')[0]
     const { data: subsVencidas } = await sb
       .from('subscriptions')
-      .select('id, cliente_nombre, cliente_telefono, items, proximo_envio')
+      .select('id, cliente_nombre, cliente_telefono, items, proximo_envio, frecuencia, dias_ciclo')
       .eq('activa', true)
       .eq('cancelada', false)
       .lte('proximo_envio', hoy)
@@ -90,9 +92,11 @@ export async function GET(req: NextRequest) {
           producto: nombreProducto,
         })
         if (res.ok) {
-          // Calcular siguiente fecha de recordatorio (mismo ciclo, se repite)
-          const { data: freqRow } = await sb.from('subscriptions').select('frecuencia').eq('id', s.id).single()
-          const dias = freqRow?.frecuencia === 'trimestral' ? 90 : freqRow?.frecuencia === 'semestral' ? 180 : 30
+          // Calcular siguiente fecha de recordatorio (mismo ciclo, se repite).
+          // Prioridad: dias_ciclo (duración exacta calculada del producto real)
+          // sobre frecuencia (solo 3 categorías fijas, usada como fallback para
+          // suscripciones manuales antiguas que no tienen dias_ciclo).
+          const dias = (s as any).dias_ciclo ?? (s.frecuencia === 'trimestral' ? 90 : s.frecuencia === 'semestral' ? 180 : 30)
           const siguiente = new Date()
           siguiente.setDate(siguiente.getDate() + dias)
           await sb.from('subscriptions').update({

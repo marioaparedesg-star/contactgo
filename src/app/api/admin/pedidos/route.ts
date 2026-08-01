@@ -150,6 +150,14 @@ export async function POST(req: NextRequest) {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ order_id }),
         }).catch(err => console.error('[admin/pedidos registrar_pago] recompra/registrar falló:', err))
+
+        // Reposición automática: crea la suscripción calculando la duración
+        // exacta según producto × cantidad — sin que el cliente tenga que
+        // elegir nada manualmente. Ver /api/suscripciones/auto-crear.
+        fetch(`${base}/api/suscripciones/auto-crear`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id }),
+        }).catch(err => console.error('[admin/pedidos registrar_pago] auto-crear suscripcion falló:', err))
       }
 
       return NextResponse.json({

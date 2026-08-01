@@ -129,6 +129,12 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({ order_id }),
       }).catch(() => {})
 
+      // Reposición automática: suscripción con duración exacta calculada
+      fetch(`${BASE}/api/suscripciones/auto-crear`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id }),
+      }).catch(() => {})
+
       return NextResponse.json({ ok: true, numero_orden: order.numero_orden })
     }
 

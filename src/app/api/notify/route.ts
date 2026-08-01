@@ -517,6 +517,15 @@ export async function POST(req: NextRequest) {
         })
       } catch (e) { /* no bloquear si falla */ }
 
+      // Reposición automática: suscripción con duración exacta calculada
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'}/api/suscripciones/auto-crear`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id })
+        })
+      } catch (e) { /* no bloquear si falla */ }
+
       // Marcar como convertido el lead de la calculadora que originó esta compra
       // (match por email o teléfono). No bloqueante: si falla, el pedido sigue su curso.
       try {
