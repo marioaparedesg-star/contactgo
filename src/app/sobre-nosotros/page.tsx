@@ -3,6 +3,7 @@ export const revalidate = 3600
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
+import MailLink from '@/components/ui/MailLink'
 import type { Metadata } from 'next'
 
 // canonical agregado
@@ -166,9 +167,9 @@ export default function SobreNosotrosPage() {
           </div>
           <p className="text-sm text-gray-400 mt-8">
             ¿Preguntas? Escríbenos a{' '}
-            <a href="mailto:info@contactgo.net" className="text-primary-600 font-semibold hover:underline">
+            <MailLink className="text-primary-600 font-semibold hover:underline">
               info@contactgo.net
-            </a>
+            </MailLink>
           </p>
         </section>
 

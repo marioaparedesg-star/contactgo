@@ -3,6 +3,7 @@ export const revalidate = 86400
 import type { Metadata } from 'next'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
+import MailLink from '@/components/ui/MailLink'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -83,7 +84,7 @@ export default function PrivacidadPage() {
 
         <div className="mt-10 bg-gray-50 rounded-2xl p-5 text-sm text-gray-500">
           <p>¿Preguntas sobre tu privacidad? Escríbenos a{' '}
-            <a href="mailto:info@contactgo.net" className="text-primary-600 font-semibold">info@contactgo.net</a>
+            <MailLink className="text-primary-600 font-semibold">info@contactgo.net</MailLink>
           </p>
         </div>
       </main>

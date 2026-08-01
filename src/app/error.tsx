@@ -1,6 +1,7 @@
 // app/error.tsx — Página de error global
 'use client'
 import Link from 'next/link'
+import MailLink from '@/components/ui/MailLink'
 import { useEffect } from 'react'
 
 export default function Error({
@@ -40,9 +41,9 @@ export default function Error({
         </div>
         <p className="text-sm text-gray-400 mt-6">
           ¿Persiste el error? Escríbenos a{' '}
-          <a href="mailto:info@contactgo.net" className="text-primary-600 hover:underline">
+          <MailLink className="text-primary-600 hover:underline">
             info@contactgo.net
-          </a>
+          </MailLink>
         </p>
       </div>
     </main>
