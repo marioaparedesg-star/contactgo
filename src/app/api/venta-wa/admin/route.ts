@@ -117,6 +117,18 @@ export async function POST(req: NextRequest) {
         })
       } catch { /* silencioso */ }
 
+      // Confirmación completa de pedido por WhatsApp (dedup incorporado, seguro de llamar siempre)
+      fetch(`${BASE}/api/wa/dispatch`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
+      }).catch(() => {})
+
+      // Registrar recordatorios de recompra (7/3/0 días) — dedup incorporado por order_id
+      fetch(`${BASE}/api/recompra/registrar`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id }),
+      }).catch(() => {})
+
       return NextResponse.json({ ok: true, numero_orden: order.numero_orden })
     }
 

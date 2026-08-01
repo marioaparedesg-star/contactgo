@@ -20,8 +20,14 @@ export async function GET(req: NextRequest) {
   const sb = getSb()
   const resend = new Resend(process.env.RESEND_API_KEY)
 
-  // Pedidos ENTREGADOS hace 3-10 días, sin reseña solicitada aún.
+  // Pedidos ENTREGADOS hace 3+ días, sin reseña solicitada aún.
   // (updated_at como aproximación de cuándo pasó a 'entregado' — no hay timestamp dedicado.)
+  //
+  // FIX: antes tenía tope superior de 10 días — si el cron no corría el día exacto en que
+  // un pedido caía en la ventana de 3-10 días (por ejemplo si el cron estuvo caído, o el
+  // pedido se marcó "entregado" con retraso), esa solicitud se perdía PARA SIEMPRE, sin
+  // ninguna forma de recuperarla. Ahora el límite superior es 45 días — cualquier pedido
+  // atrasado se recupera en la próxima ejecución en vez de perderse.
   const { data: ordenes } = await sb
     .from('orders')
     .select('id, cliente_email, cliente_nombre, numero_orden')
@@ -29,7 +35,7 @@ export async function GET(req: NextRequest) {
     .eq('resena_solicitada', false)
     .not('cliente_email', 'is', null)
     .lte('updated_at', new Date(Date.now() - 3 * 86400000).toISOString())
-    .gte('updated_at', new Date(Date.now() - 10 * 86400000).toISOString())
+    .gte('updated_at', new Date(Date.now() - 45 * 86400000).toISOString())
     .limit(20)
 
   if (!ordenes?.length) return NextResponse.json({ sent: 0 })

@@ -25,9 +25,9 @@ function textoProducto(
   const esSolucion = tipoProducto === 'solucion'
   const objeto = esGota ? 'gotas' : esSolucion ? 'solución' : 'lentes'
 
-  if (alerta === '7dias') return `${producto} (te quedan ~7 días de uso)`
-  if (alerta === '3dias') return `${producto} — últimos 3 días de ${objeto}. Cupón ${cupon}: ${descuento}% + envío gratis. Escríbenos: wa.me/${SERVICIO_WA}`
-  return `${producto} — se terminan hoy. Cupón ${cupon}: ${descuento}% + envío gratis. Escríbenos: wa.me/${SERVICIO_WA}`
+  if (alerta === '7dias') return `${producto} — ya casi se te acaban, te quedan ~7 días de uso 😊`
+  if (alerta === '3dias') return `${producto} — se te acaban en 3 días. Usa ${cupon}: ${descuento}% off + envío gratis 🎁. Escríbenos: wa.me/${SERVICIO_WA}`
+  return `${producto} — se terminan hoy 👀. Usa ${cupon}: ${descuento}% off + envío gratis. Escríbenos: wa.me/${SERVICIO_WA}`
 }
 
 async function enviarTemplate(telefono: string, nombre: string, producto: string) {

@@ -21,6 +21,18 @@ export async function POST(req: NextRequest) {
 
     if (!order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
 
+    // ── Idempotencia: si ya se registraron recordatorios de recompra para
+    // este pedido (por ejemplo, ya se llamó desde /confirmacion y ahora se
+    // vuelve a llamar desde el admin al marcar el pago), no duplicar filas
+    // ni generar cupones repetidos. ──
+    const { count: yaRegistrado } = await getSb()
+      .from('recompra_notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('order_id', order_id)
+    if (yaRegistrado && yaRegistrado > 0) {
+      return NextResponse.json({ ok: true, registros: 0, skipped: 'ya_registrado' })
+    }
+
     // ── El cliente acaba de comprar de nuevo: silenciar cualquier recordatorio
     // pendiente de una compra ANTERIOR (mismo teléfono o email) para que no le
     // sigan avisando de un ciclo que ya renovó. ──

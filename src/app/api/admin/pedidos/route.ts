@@ -126,6 +126,30 @@ export async function POST(req: NextRequest) {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado: 'confirmado' }),
         }).catch(err => console.error('[admin/pedidos registrar_pago] notify falló:', err))
+
+        // Confirmación completa de pedido por WhatsApp (nombre + # orden + productos + total).
+        // Antes solo se enviaba automáticamente para pagos AZUL vía /confirmacion — los pedidos
+        // pagados manualmente aquí (venta WhatsApp, transferencia, efectivo) nunca la recibían.
+        // Tiene dedup incorporado por evento_id, así que es seguro llamarla siempre sin
+        // riesgo de duplicar el mensaje si ya se envió por otra vía.
+        fetch(`${base}/api/wa/dispatch`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
+        }).catch(err => console.error('[admin/pedidos registrar_pago] wa/dispatch falló:', err))
+      }
+
+      // Registrar recordatorios de recompra (7/3/0 días antes de que se acaben los lentes)
+      // SIEMPRE que el pedido se complete al 100%, sin importar el canal ni el toggle de
+      // notificar — son recordatorios de un evento futuro (reponer producto), no una
+      // notificación de esta compra. Antes solo se registraba para pagos AZUL vía
+      // /confirmacion, dejando fuera pedidos de venta WhatsApp y pagos manuales — que
+      // es la mayoría del volumen real. Tiene dedup incorporado por order_id.
+      if (cubrio100) {
+        const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+        fetch(`${base}/api/recompra/registrar`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id }),
+        }).catch(err => console.error('[admin/pedidos registrar_pago] recompra/registrar falló:', err))
       }
 
       return NextResponse.json({

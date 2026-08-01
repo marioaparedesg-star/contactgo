@@ -52,68 +52,18 @@ export async function GET(req: NextRequest) {
   // ─────────────────────────────────────────────────────
 
   // ─────────────────────────────────────────────────────
-  // 3. RECORDATORIO DE RENOVACIÓN
-  // Diario: día 25 (cajas de 30)
-  // Mensual: día 25 post-compra
-  // Quincenal: día 12 post-compra (más frecuente, mismo criterio)
-  // Trigger conservador: 25 días desde pagado_en, tenga producto renovable
+  // 3. RECORDATORIO DE RENOVACIÓN — DESACTIVADO (2026-08-02)
+  // Este bloque enviaba texto libre 25-60 días después de la compra. Dos problemas:
+  //   1. Duplicaba lo que ya hace /api/recompra/cron correctamente, con plantilla
+  //      aprobada de Meta y cálculo real por producto (dias_uso), no una ventana
+  //      genérica de 25-60 días igual para lentes diarios que mensuales.
+  //   2. WhatsApp RECHAZA mensajes de texto libre iniciados por el negocio fuera
+  //      de la ventana de 24h de conversación — a los 25+ días de la compra, casi
+  //      con certeza el cliente no ha escrito nada reciente, así que Meta habría
+  //      devuelto error y el mensaje nunca habría llegado.
+  // El sistema de recompra real y funcional es /api/recompra/cron (7/3/0 días
+  // antes de que se agote el producto, con plantilla 'renovacion_lentes' aprobada).
   // ─────────────────────────────────────────────────────
-  try {
-    const hace25dias = new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString()
-    const hace60dias = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString()
-
-    const { data: renovaciones } = await sb
-      .from('orders')
-      .select(`
-        id, cliente_nombre, cliente_telefono, numero_orden, pagado_en,
-        order_items(nombre, tipo)
-      `)
-      .eq('pago_estado', 'aprobado')
-      .eq('wa_renovacion_enviada', false)
-      .lt('pagado_en', hace25dias)
-      .gt('pagado_en', hace60dias) // solo pedidos entre 25-60 días atrás
-      .not('cliente_telefono', 'is', null)
-      .limit(50)
-
-    for (const o of renovaciones ?? []) {
-      try {
-        // Solo enviar si el pedido tiene lentes (no solo soluciones/gotas)
-        const items = (o as any).order_items ?? []
-        const tieneLentes = items.some((i: any) => 
-          ['esferico', 'torico', 'multifocal', 'color'].includes(i.tipo)
-        )
-        if (!tieneLentes) {
-          await sb.from('orders').update({ wa_renovacion_enviada: true }).eq('id', o.id)
-          continue
-        }
-
-        const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
-        const primerLente = items.find((i: any) => 
-          ['esferico', 'torico', 'multifocal', 'color'].includes(i.tipo)
-        )
-        const producto = primerLente?.nombre ?? 'tus lentes de contacto'
-
-        const mensaje = `👁️ Hola *${nombre}*, ¿cómo van tus lentes?\n\n` +
-          `Ya casi es momento de reponer *${producto}*.\n\n` +
-          `🔄 Renuévalos hoy y te llegan antes de que se acaben:\n` +
-          `👉 www.contactgo.net\n\n` +
-          `🎁 *10% de descuento* para clientes recurrentes con el código:\n` +
-          `*RENUEVA10*\n\n` +
-          `¿Los mismos o quieres probar algo nuevo? Responde aquí y te ayudo. 😊`
-        
-        const res = await sendText(o.cliente_telefono, mensaje)
-        await sb.from('orders').update({
-          wa_renovacion_enviada: true,
-          wa_renovacion_fecha: new Date().toISOString(),
-        }).eq('id', o.id)
-        await logAutomation(sb, o.id, o.cliente_telefono, 'renovacion', true, res?.messages?.[0]?.id)
-        results.renovaciones++
-      } catch (e: any) {
-        await logAutomation(sb, o.id, o.cliente_telefono, 'renovacion', false, undefined, e.message)
-        results.errores++
-      }
-    }
-  } catch (e) { console.error('[cron/wa-daily] renovaciones:', e) }
 
   // ─────────────────────────────────────────────────────
   // 3b. RECORDATORIOS DE REPOSICIÓN — suscripciones activas (tabla subscriptions)
@@ -207,25 +157,37 @@ export async function GET(req: NextRequest) {
   } catch (e) { console.error('[cron/wa-daily] carritos:', e) }
 
   // ─────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────
   // 5. CROSS-SELL — 15 días post-compra
-  // Cliente compró lentes → sugerir solución/gotas si no las tiene
+  // Cliente compró lentes → sugerir solución/gotas si no las tiene.
+  //
+  // FIX (2026-08-02): antes se enviaba por WhatsApp con texto libre (sendText),
+  // que Meta rechaza fuera de la ventana de 24h de conversación — a los 15 días
+  // de la compra casi seguro el cliente no ha escrito nada reciente, así que el
+  // mensaje nunca llegaba (fallaba en silencio). Cambiado a email vía Resend,
+  // que no tiene esa restricción y ya es el canal probado para reseñas.
+  // También se corrigió el cupón COMPLETO10 mencionado en el mensaje, que no
+  // existía en la base de datos — un cliente que lo intentara usar habría
+  // recibido error de "cupón inválido".
   // ─────────────────────────────────────────────────────
   const resultsCross = { cross_sell: 0 }
   try {
+    const { Resend } = await import('resend')
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
     const hace15dias = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
     const hace20dias = new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
 
-    // Añadir columna wa_crosssell_enviado dinámicamente si no existe (via query try/catch)
     const { data: ventasLentes } = await sb
       .from('orders')
       .select(`
-        id, cliente_nombre, cliente_telefono, numero_orden,
+        id, cliente_nombre, cliente_email, numero_orden,
         order_items(nombre, tipo)
       `)
-      .eq('pago_estado', 'aprobado')
+      .eq('pago_estado', 'pagado')
       .lt('pagado_en', hace15dias)
       .gt('pagado_en', hace20dias)
-      .not('cliente_telefono', 'is', null)
+      .not('cliente_email', 'is', null)
       .limit(30)
 
     for (const o of ventasLentes ?? []) {
@@ -246,32 +208,56 @@ export async function GET(req: NextRequest) {
 
       try {
         const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
-        let sugerencia = ''
+        let sugerenciaHtml = ''
         if (!tieneSolucion && !tieneGotas) {
-          sugerencia = `Complementa tus lentes con:\n\n` +
-            `💧 *Opti-Free Puremoist* (solución) — RD$750\n` +
-            `👁️ *Refresh Tears* (gotas) — RD$800\n\n` +
-            `Mantén tus lentes limpios y tus ojos frescos todo el día.`
+          sugerenciaHtml = `
+            <p style="color:#374151;font-size:14px">Complementa tus lentes con:</p>
+            <ul style="color:#374151;font-size:14px;padding-left:20px">
+              <li>💧 <strong>Opti-Free Puremoist</strong> (solución) — RD$750</li>
+              <li>👁️ <strong>Refresh Tears</strong> (gotas) — RD$800</li>
+            </ul>
+            <p style="color:#374151;font-size:14px">Mantén tus lentes limpios y tus ojos frescos todo el día.</p>`
         } else if (!tieneSolucion) {
-          sugerencia = `💧 Notamos que no compraste solución de limpieza.\n\n` +
-            `*Opti-Free Puremoist* (RD$750) protege tus lentes y prolonga su vida útil.`
+          sugerenciaHtml = `
+            <p style="color:#374151;font-size:14px">💧 Notamos que no llevaste solución de limpieza.</p>
+            <p style="color:#374151;font-size:14px"><strong>Opti-Free Puremoist</strong> (RD$750) protege tus lentes y prolonga su vida útil.</p>`
         } else {
-          sugerencia = `👁️ Notamos que no compraste gotas lubricantes.\n\n` +
-            `*Refresh Tears* (RD$800) alivia la sequedad al usar lentes todo el día.`
+          sugerenciaHtml = `
+            <p style="color:#374151;font-size:14px">👁️ Notamos que no llevaste gotas lubricantes.</p>
+            <p style="color:#374151;font-size:14px"><strong>Refresh Tears</strong> (RD$800) alivia la sequedad al usar lentes todo el día.</p>`
         }
 
-        const mensaje = `Hola *${nombre}* 👋\n\n` +
-          `Han pasado 2 semanas desde tu compra. ¿Cómo van tus lentes?\n\n` +
-          `${sugerencia}\n\n` +
-          `🎁 *10% OFF* con el código *COMPLETO10*\n` +
-          `👉 www.contactgo.net\n\n` +
-          `¿Preguntas? Responde aquí. 💚`
+        await resend.emails.send({
+          from: `ContactGo <info@contactgo.net>`,
+          to: o.cliente_email,
+          subject: `¿Cómo van tus lentes, ${nombre}? 👁️`,
+          html: `
+<div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
+  <div style="background:#16a34a;padding:20px;border-radius:12px 12px 0 0;text-align:center">
+    <p style="color:white;font-weight:900;font-size:20px;margin:0">ContactGo</p>
+  </div>
+  <div style="background:#f9fafb;padding:24px;border-radius:0 0 12px 12px">
+    <h2 style="color:#111;font-size:18px">¡Hola, ${nombre}! 👋</h2>
+    <p style="color:#374151;font-size:14px">
+      Ya pasaron 2 semanas desde tu pedido <strong>${o.numero_orden}</strong>.
+      Esperamos que estés disfrutando tus lentes.
+    </p>
+    ${sugerenciaHtml}
+    <a href="https://www.contactgo.net?cupon=COMPLETO10"
+      style="display:block;background:#16a34a;color:white;font-weight:700;padding:14px 24px;border-radius:10px;text-align:center;text-decoration:none;font-size:15px;margin:20px 0">
+      🎁 10% OFF con el código COMPLETO10
+    </a>
+    <p style="color:#9ca3af;font-size:12px;text-align:center">
+      ¿Alguna pregunta? Escríbenos por WhatsApp: +1 809 694-2268
+    </p>
+  </div>
+</div>`,
+        })
 
-        const res = await sendText(o.cliente_telefono, mensaje)
-        await logAutomation(sb, o.id, o.cliente_telefono, 'cross_sell', true, res?.messages?.[0]?.id)
+        await logAutomation(sb, o.id, o.cliente_email, 'cross_sell', true)
         resultsCross.cross_sell++
       } catch (e: any) {
-        await logAutomation(sb, o.id, o.cliente_telefono, 'cross_sell', false, undefined, e.message)
+        await logAutomation(sb, o.id, o.cliente_email, 'cross_sell', false, undefined, e.message)
         results.errores++
       }
     }
