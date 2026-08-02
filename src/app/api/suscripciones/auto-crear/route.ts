@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     const sb = getSb()
 
     const { data: order } = await sb.from('orders')
-      .select('id, user_id, cliente_email, cliente_nombre, cliente_telefono, direccion, ciudad')
+      .select('id, user_id, cliente_email, cliente_nombre, cliente_telefono, direccion_texto, ciudad')
       .eq('id', order_id).single()
     if (!order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
     if (!order.cliente_telefono) return NextResponse.json({ ok: true, creadas: 0, motivo: 'sin_telefono' })
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
       .eq('order_id', order_id)
     if (!items?.length) return NextResponse.json({ ok: true, creadas: 0 })
 
-    const direccionTexto = [order.direccion, order.ciudad].filter(Boolean).join(', ')
+    const direccionTexto = [order.direccion_texto, order.ciudad].filter(Boolean).join(', ')
     let creadas = 0
 
     for (const item of items) {
