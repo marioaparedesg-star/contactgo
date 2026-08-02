@@ -74,7 +74,7 @@ export default function VentaWhatsAppPage() {
   const [showDisclaimer, setShowDisclaimer] = useState(false)
 
   const [form, setForm] = useState({
-    nombre: '', cedula: '', fecha_nacimiento: '', telefono: '',
+    nombre: '', fecha_nacimiento: '', telefono: '',
     email: '', direccion: '', ciudad: '', ciudadPersonalizada: '',
   })
 
@@ -93,18 +93,9 @@ export default function VentaWhatsAppPage() {
 
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }))
 
-  const formatCedula = (v: string) => {
-    const d = v.replace(/\D/g, '').slice(0, 11)
-    if (d.length <= 3) return d
-    if (d.length <= 10) return `${d.slice(0,3)}-${d.slice(3)}`
-    return `${d.slice(0,3)}-${d.slice(3,10)}-${d.slice(10)}`
-  }
-
   const submit = async () => {
-    const cedulaDigits = form.cedula.replace(/\D/g, '')
     const telDigits = form.telefono.replace(/\D/g, '')
     if (form.nombre.trim().length < 3) return toast.error('Escribe tu nombre completo')
-    if (cedulaDigits.length !== 11) return toast.error('La cédula debe tener 11 dígitos')
     if (!form.fecha_nacimiento) return toast.error('Selecciona tu fecha de nacimiento')
     if (telDigits.length < 10) return toast.error('Escribe tu número de WhatsApp (10 dígitos)')
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) return toast.error('Escribe un correo válido')
@@ -119,7 +110,6 @@ export default function VentaWhatsAppPage() {
 
   const handleDisclaimerAceptado = async (dData: DisclaimerData) => {
     setShowDisclaimer(false)
-    const cedulaDigits = form.cedula.replace(/\D/g, '')
     const telDigits = form.telefono.replace(/\D/g, '')
     const ciudadFinal = form.ciudad === 'Otra ciudad' ? form.ciudadPersonalizada.trim() : form.ciudad
 
@@ -146,7 +136,6 @@ export default function VentaWhatsAppPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: form.nombre.trim(),
-          cedula: cedulaDigits,
           fecha_nacimiento: form.fecha_nacimiento,
           telefono: telDigits,
           email: form.email.trim(),
@@ -247,18 +236,11 @@ export default function VentaWhatsAppPage() {
               <input className={inputCls} placeholder="Ej: María Rodríguez" value={form.nombre}
                 onChange={e => set('nombre', e.target.value)} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1 block">Cédula</label>
-                <input className={inputCls} placeholder="000-0000000-0" inputMode="numeric" value={form.cedula}
-                  onChange={e => set('cedula', formatCedula(e.target.value))} />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1 block">Fecha de nacimiento</label>
-                <input type="date" className={inputCls} value={form.fecha_nacimiento}
-                  max={new Date().toISOString().slice(0, 10)}
-                  onChange={e => set('fecha_nacimiento', e.target.value)} />
-              </div>
+            <div>
+              <label className="text-xs font-semibold text-gray-600 mb-1 block">Fecha de nacimiento</label>
+              <input type="date" className={inputCls} value={form.fecha_nacimiento}
+                max={new Date().toISOString().slice(0, 10)}
+                onChange={e => set('fecha_nacimiento', e.target.value)} />
             </div>
             <div>
               <label className="text-xs font-semibold text-gray-600 mb-1 block">WhatsApp</label>

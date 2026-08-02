@@ -81,7 +81,6 @@ export async function POST(
 
     const body = await req.json()
     const nombre  = String(body.nombre ?? '').trim()
-    const cedula  = String(body.cedula ?? '').replace(/\D/g, '')
     const fnac    = String(body.fecha_nacimiento ?? '').trim()
     const tel     = String(body.telefono ?? '').replace(/\D/g, '')
     const email   = String(body.email ?? '').trim().toLowerCase()
@@ -92,7 +91,6 @@ export async function POST(
 
     // Validaciones
     if (nombre.length < 3) return NextResponse.json({ error: 'Nombre inválido' }, { status: 400 })
-    if (cedula.length !== 11) return NextResponse.json({ error: 'La cédula debe tener 11 dígitos' }, { status: 400 })
     if (!fnac || isNaN(Date.parse(fnac))) return NextResponse.json({ error: 'Fecha de nacimiento inválida' }, { status: 400 })
     const edad = (Date.now() - Date.parse(fnac)) / (365.25 * 24 * 3600 * 1000)
     if (edad < 16 || edad > 110) return NextResponse.json({ error: 'Fecha de nacimiento fuera de rango' }, { status: 400 })
@@ -110,7 +108,6 @@ export async function POST(
         cliente_nombre: nombre,
         cliente_email: email,
         cliente_telefono: tel,
-        cliente_cedula: cedula,
         cliente_fecha_nacimiento: fnac,
         direccion_texto: `${dir}, ${ciudad}`,
         ciudad,
