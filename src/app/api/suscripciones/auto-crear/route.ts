@@ -21,18 +21,21 @@
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { mejorFrecuencia } from '@/lib/subscription-utils'
 
 function getSb() {
   return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 }
 
-// Convierte días exactos a la etiqueta más cercana, solo para mostrar en el
-// admin de suscripciones (que ya tiene labels bonitos por frecuencia).
+// BUG CORREGIDO (2026-08-02): esta función generaba '15_dias' y 'bimestral',
+// valores que NO existen en el check constraint subscriptions_frecuencia_check
+// (solo permite 'mensual' | 'trimestral' | 'semestral'). Cualquier producto de
+// 14 días (ACUVUE® 2, ACUVUE® OASYS® y su familia) o 60 días (Sprainer) fallaba
+// el INSERT en silencio — el error se atrapaba y no se sumaba a "creadas".
+// Ahora reutiliza mejorFrecuencia() de subscription-utils.ts, la misma fuente
+// de verdad que ya usan el selector de suscripción del PDP y la cuenta del cliente.
 function etiquetaMasCercana(dias: number): string {
-  if (dias <= 20) return '15_dias'
-  if (dias <= 75) return 'mensual'
-  if (dias <= 135) return 'bimestral'
-  return 'trimestral'
+  return mejorFrecuencia(dias)
 }
 
 export async function POST(req: NextRequest) {
@@ -48,11 +51,15 @@ export async function POST(req: NextRequest) {
     if (!order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
     if (!order.cliente_telefono) return NextResponse.json({ ok: true, creadas: 0, motivo: 'sin_telefono' })
 
-    // Idempotencia: si este pedido ya generó suscripciones automáticas, no duplicar
+    // Idempotencia: si este pedido YA tiene una suscripción — automática o
+    // manual (el cliente pudo haberla elegido en el checkout, ver
+    // src/app/checkout/page.tsx) — no duplicar. Antes este chequeo solo
+    // miraba creada_automaticamente=true, así que un pedido con suscripción
+    // manual + notify() disparado después terminaba con DOS suscripciones
+    // para el mismo pedido.
     const { count: yaExiste } = await sb.from('subscriptions')
       .select('*', { count: 'exact', head: true })
       .eq('order_id_origen', order_id)
-      .eq('creada_automaticamente', true)
     if (yaExiste && yaExiste > 0) {
       return NextResponse.json({ ok: true, creadas: 0, skipped: 'ya_existian' })
     }
@@ -64,6 +71,7 @@ export async function POST(req: NextRequest) {
 
     const direccionTexto = [order.direccion_texto, order.ciudad].filter(Boolean).join(', ')
     let creadas = 0
+    const errores: string[] = []
 
     for (const item of items) {
       const product = item.products as any
@@ -92,10 +100,19 @@ export async function POST(req: NextRequest) {
         creada_automaticamente: true,
       })
 
-      if (!error) creadas++
+      // Antes este error se descartaba en silencio (if (!error) creadas++ y ya).
+      // Ahora queda registrado en logs de Vercel Y en la respuesta del endpoint,
+      // para que un fallo futuro (constraint, columna, tipo de dato, etc.) sea
+      // visible de inmediato en vez de descubrirse semanas después.
+      if (error) {
+        console.error('[suscripciones/auto-crear] insert falló:', order_id, product.nombre, error.message)
+        errores.push(`${product.nombre}: ${error.message}`)
+      } else {
+        creadas++
+      }
     }
 
-    return NextResponse.json({ ok: true, creadas })
+    return NextResponse.json({ ok: true, creadas, ...(errores.length ? { errores } : {}) })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }

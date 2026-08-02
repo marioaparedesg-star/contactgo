@@ -234,20 +234,44 @@ async function handleReturn(req: NextRequest) {
           if (updateErr) {
             console.error('[AZUL/retorno] ERROR actualizando orden:', updateErr.message)
           }
-          // Activar suscripciones pendientes de esta orden
+          // Activar suscripciones pendientes de esta orden (las que el cliente
+          // eligió manualmente en el checkout, insertadas con activa:false)
           if (!updateErr) {
             await sb.from('subscriptions')
               .update({ activa: true })
               .eq('order_id_origen', orderId)
               .eq('activa', false)
               .is('cancelada', false)
-            // Marcar orden con flag de suscripción
-            await sb.from('orders')
-              .update({ tiene_suscripcion: true })
-              .eq('id', orderId)
-              .in('id', (
-                await sb.from('subscriptions').select('order_id_origen').eq('order_id_origen', orderId).then(r => [orderId])
-              ).filter(Boolean))
+
+            const { count: tieneSub } = await sb.from('subscriptions')
+              .select('*', { count: 'exact', head: true })
+              .eq('order_id_origen', orderId)
+            if (tieneSub && tieneSub > 0) {
+              await sb.from('orders').update({ tiene_suscripcion: true }).eq('id', orderId)
+            }
+          }
+
+          // ── Reposición automática: disparo server-to-server, confiable ──────
+          // ANTES esto solo se disparaba desde el navegador del cliente en
+          // /confirmacion (fetch "fire and forget" con .catch(()=>{})). Si el
+          // cliente cerraba la pestaña justo después de pagar, o el fetch
+          // fallaba por cualquier razón, la suscripción nunca se creaba y
+          // nadie se enteraba — exactamente el patrón de fallos silenciosos
+          // que ya afectó recompra/cron, reseñas y confirmaciones de WhatsApp.
+          // Ahora se dispara aquí, en el servidor, en el mismo request donde
+          // AZUL confirma el pago — no depende del navegador del cliente.
+          // El endpoint es idempotente, así que si /confirmacion también lo
+          // dispara del lado del cliente, no se duplica nada.
+          if (!updateErr) {
+            try {
+              await fetch(`${BASE}/api/suscripciones/auto-crear`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id: orderId }),
+              })
+            } catch (e) {
+              console.error('[AZUL/retorno] auto-crear suscripción falló:', e)
+            }
           }
 
           // El notify lo dispara el cliente desde /confirmacion (más confiable en Vercel)
