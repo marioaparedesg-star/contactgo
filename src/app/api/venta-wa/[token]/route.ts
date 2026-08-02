@@ -99,12 +99,74 @@ export async function POST(
     if (dir.length < 8) return NextResponse.json({ error: 'Dirección demasiado corta' }, { status: 400 })
     if (ciudad.length < 3) return NextResponse.json({ error: 'Ciudad requerida' }, { status: 400 })
 
+    // ── Registrar al cliente como cuenta real (o reutilizar si ya existe) ──
+    // Antes, los pedidos de venta por WhatsApp quedaban con user_id: null —
+    // el cliente nunca aparecía en /admin/clientes aunque hubiera comprado y
+    // dado todos sus datos. Ahora cada persona que completa este formulario
+    // se convierte en un cliente registrado real de la web, igual que si se
+    // hubiera registrado desde /cuenta.
+    let userId: string | null = null
+    try {
+      // 1. ¿Ya existe un perfil de cliente con este email? (compra repetida
+      //    por WhatsApp, o ya tiene cuenta creada desde la web)
+      const { data: perfilExistente } = await sb
+        .from('profiles')
+        .select('id')
+        .eq('email', email)
+        .eq('role', 'customer')
+        .maybeSingle()
+
+      if (perfilExistente) {
+        userId = perfilExistente.id
+        // Mantener sus datos actualizados con lo último que escribió
+        await sb.from('profiles').update({
+          nombre, telefono: tel, direccion: dir, ciudad,
+          fecha_nacimiento: fnac, updated_at: new Date().toISOString(),
+        }).eq('id', userId)
+      } else {
+        // 2. Crear cuenta nueva de Auth con contraseña aleatoria — el cliente
+        //    no la necesita para comprar por WhatsApp, pero si más adelante
+        //    quiere entrar a "Mi cuenta" en la web, usa "Olvidé mi contraseña"
+        //    con este mismo email para ponerle una.
+        const passwordTemporal = crypto.randomUUID()
+        const { data: authUser, error: authErr } = await sb.auth.admin.createUser({
+          email,
+          password: passwordTemporal,
+          email_confirm: true,
+          user_metadata: { nombre, origen: 'venta_whatsapp' },
+        })
+
+        if (authErr) {
+          // Caso raro: el email ya existe en Auth pero no tiene perfil de
+          // cliente (por ejemplo, quedó a medias en otro flujo). Buscarlo
+          // y reutilizar su id en vez de fallar el pedido completo.
+          const { data: lista } = await sb.auth.admin.listUsers()
+          const existente = lista?.users?.find((u: any) => u.email?.toLowerCase() === email)
+          if (existente) userId = existente.id
+        } else {
+          userId = authUser.user.id
+        }
+
+        if (userId) {
+          await sb.from('profiles').upsert({
+            id: userId, nombre, email, telefono: tel,
+            direccion: dir, ciudad, fecha_nacimiento: fnac,
+            role: 'customer', activo: true,
+          })
+        }
+      }
+    } catch (e) {
+      // Si algo falla registrando al cliente, NO bloqueamos la venta —
+      // el pedido se crea igual, solo queda sin cuenta asociada.
+      console.error('[venta-wa] Error registrando cliente:', e)
+    }
+
     // Crear orden — misma estructura que el checkout web
     const orderNum = `CG-${Date.now().toString().slice(-8)}`
     const { data: order, error: orderErr } = await sb
       .from('orders')
       .insert({
-        user_id: null,
+        user_id: userId,
         cliente_nombre: nombre,
         cliente_email: email,
         cliente_telefono: tel,
