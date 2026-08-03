@@ -3,7 +3,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
-import { getEntrega } from '@/lib/delivery-times'
+import { getEntrega, getFechaEntregaISO } from '@/lib/delivery-times'
 import { CheckCircle, Package, MapPin, CreditCard, ChevronRight, XCircle } from 'lucide-react'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import { fmtSph } from '@/lib/sph-utils'
@@ -105,7 +105,7 @@ function ConfirmacionContent() {
     const loadOrder = () => {
       Promise.all([
         sb.from('orders').select('*').eq('id', orderId).single(),
-        sb.from('order_items').select('*').eq('order_id', orderId),
+        sb.from('order_items').select('*, products(gtin)').eq('order_id', orderId),
       ]).then(([{ data: o }, { data: i }]) => {
         if (!o) { router.push('/'); return }
         // Si viene de AZUL y aún pendiente, reintentar (retorno puede tardar)
@@ -397,16 +397,24 @@ function ConfirmacionContent() {
           </div>
         )}
 
-        {/* Google Customer Reviews Opt-In — solo cuando pago confirmado */}
+        {/* Google Customer Reviews Opt-In — solo cuando pago confirmado.
+            Fecha real de entrega (no un +1 día fijo): usa la misma fuente de
+            verdad que la card de "Tiempo de entrega" de arriba (dias_max, el
+            extremo conservador, para no disparar la encuesta antes de que el
+            cliente reciba su pedido). GTINs opcionales de los productos
+            comprados, cuando el catálogo los tiene cargados. */}
         {order.pago_estado === 'pagado' &&
          order.cliente_email && order.numero_orden && (() => {
-           const d = new Date(); d.setDate(d.getDate() + 1)
-           const isoFecha = d.toISOString().split('T')[0]
+           const isoFecha = getFechaEntregaISO(tipoDominante, tieneXR ? 'XR' : '')
+           const gtins = items
+             .map((i: any) => i.products?.gtin)
+             .filter((g: any): g is string => typeof g === 'string' && g.length > 0)
            return (
              <GoogleCustomerReviewsOptIn
                orderId={order.numero_orden}
                email={order.cliente_email}
                estimatedDeliveryDate={isoFecha}
+               gtins={gtins.length > 0 ? gtins : undefined}
              />
            )
          })()

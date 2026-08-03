@@ -177,3 +177,24 @@ export function getFechaEntrega(
 export function getEntregaTextoEmail(tipo: string, nombre = '', sph?: string | number | null): string {
   return getEntrega(tipo, nombre, sph).detalle
 }
+
+/**
+ * Fecha estimada de entrega en formato ISO (YYYY-MM-DD), saltando fines de
+ * semana. Usa dias_max (el extremo más conservador del rango) a propósito:
+ * para integraciones como Google Customer Reviews es preferible que la
+ * encuesta llegue un poco tarde a que llegue ANTES de que el cliente reciba
+ * el pedido — Google penaliza estimated_delivery_date poco fiables.
+ */
+export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | number | null): string {
+  const info = getEntrega(tipo, nombre, sph)
+  const ahora = new Date()
+  const d = new Date(ahora)
+  let added = 0
+  if (ahora.getHours() >= 15) d.setDate(d.getDate() + 1)
+  while (added < info.dias_max) {
+    d.setDate(d.getDate() + 1)
+    const dow = d.getDay()
+    if (dow !== 0 && dow !== 6) added++
+  }
+  return d.toISOString().split('T')[0]
+}
