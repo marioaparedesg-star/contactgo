@@ -2,8 +2,14 @@
 /**
  * Google Seller Rating Badge (Merchant Widget)
  * Merchant ID: 5786261428
- * Implementación exacta según Google Merchant Center docs (junio 2026)
+ * Implementación exacta según Google Merchant Center docs (agosto 2026)
  * Usa merchantwidget.js — el método actual oficial
+ *
+ * BUG CORREGIDO (2026-08-02): el valor de "position" era 'BOTTOM_RIGHT',
+ * que no existe en la API de Google (solo acepta 'RIGHT_BOTTOM' o
+ * 'LEFT_BOTTOM'). Un valor no reconocido probablemente hacía que el
+ * widget cayera al comportamiento por defecto en vez de respetar la
+ * posición configurada — silencioso, sin error visible.
  */
 import { useEffect } from 'react'
 
@@ -28,7 +34,7 @@ export default function GoogleSellerRatingBadge() {
       if (typeof window.merchantwidget?.start !== 'function') return
       window.merchantwidget.start({
         merchant_id: 5786261428,
-        position: 'BOTTOM_RIGHT',
+        position: 'RIGHT_BOTTOM',
       })
     }
 
