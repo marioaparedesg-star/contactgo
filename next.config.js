@@ -1,20 +1,30 @@
 /** @type {import('next').NextConfig} */
 
 // Content Security Policy — permite Supabase, GTM, Meta Pixel, AZUL, Resend, X Ads
+// 2026-08-02: agregados apis.google.com y www.gstatic.com — el survey opt-in
+// (GoogleCustomerReviews.tsx) y la insignia de vendedor (GoogleSellerRatingBadge.tsx)
+// llevaban semanas "implementados" pero el CSP nunca los dejaba cargar: el navegador
+// bloqueaba ambos scripts en silencio (sin error visible en la página, solo en la
+// consola) porque sus dominios no estaban en la lista blanca. Confirmado con
+// curl -I contra contactgo.net: el header content-security-policy no traía ni
+// apis.google.com ni www.gstatic.com (solo maps.gstatic.com, un subdominio distinto).
 const csp = [
   "default-src 'self'",
-  // Scripts — GTM, Meta Pixel, Google Ads, Cloudflare Insights, X (Twitter) Ads pixel
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://maps.gstatic.com https://googleads.g.doubleclick.net https://static.cloudflareinsights.com https://www.googleadservices.com https://static.ads-twitter.com",
+  // Scripts — GTM, Meta Pixel, Google Ads, Cloudflare Insights, X (Twitter) Ads pixel,
+  // Google Customer Reviews (apis.google.com = survey opt-in, gstatic.com = merchant widget)
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://pruebas.azul.com.do https://pagos.azul.com.do https://www.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://maps.gstatic.com https://apis.google.com https://www.gstatic.com https://googleads.g.doubleclick.net https://static.cloudflareinsights.com https://www.googleadservices.com https://static.ads-twitter.com",
   // Estilos
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com https://maps.googleapis.com",
   // Fuentes
   "font-src 'self' https://fonts.gstatic.com",
   // Imágenes — Google Ads, Clarity GIF, DoubleClick, Bing (Clarity sync), X Ads (pixel de conversión vía imagen)
   "img-src 'self' data: blob: https://atendbjolicwcsqfyiyh.supabase.co https://*.supabase.co https://atendbjolicwcsqfyiyh.supabase.co/storage https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://pixel.wp.com https://contactgo.net https://www.contactgo.net https://maps.googleapis.com https://maps.gstatic.com https://*.googleapis.com https://*.gstatic.com https://googleads.g.doubleclick.net https://www.google.com https://c.clarity.ms https://*.clarity.ms https://www.googleadservices.com https://c.bing.com https://*.cdninstagram.com https://*.instagram.com https://*.xx.fbcdn.net https://t.co https://analytics.twitter.com https://ads-twitter.com https://ads-api.twitter.com",
-  // Conexiones — Google Ads (DoubleClick), CAPI FB, Google Ads remarketing, Google Merchant Center, X Ads pixel/API
-  "connect-src 'self' https://atendbjolicwcsqfyiyh.supabase.co wss://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pruebas.azul.com.do https://pagos.azul.com.do https://api.resend.com https://e.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://*.googleapis.com https://www.facebook.com https://connect.facebook.net https://ad.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com https://www.googleadservices.com https://region1.google-analytics.com https://*.sentry.io https://*.ingest.us.sentry.io https://t.co https://analytics.twitter.com https://ads-twitter.com https://ads-api.twitter.com https://www.merchant-center-analytics.goog https://stats.g.doubleclick.net",
-  // Frames — Google para merchant widget (futuro)
-  "frame-src 'self' https://pruebas.azul.com.do https://pagos.azul.com.do https://www.googletagmanager.com https://www.google.com",
+  // Conexiones — Google Ads (DoubleClick), CAPI FB, Google Ads remarketing, Google Merchant Center,
+  // Google Customer Reviews (apis.google.com, gstatic.com), X Ads pixel/API
+  "connect-src 'self' https://atendbjolicwcsqfyiyh.supabase.co wss://atendbjolicwcsqfyiyh.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pruebas.azul.com.do https://pagos.azul.com.do https://api.resend.com https://e.clarity.ms https://*.clarity.ms https://maps.googleapis.com https://*.googleapis.com https://apis.google.com https://www.gstatic.com https://www.facebook.com https://connect.facebook.net https://ad.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com https://www.googleadservices.com https://region1.google-analytics.com https://*.sentry.io https://*.ingest.us.sentry.io https://t.co https://analytics.twitter.com https://ads-twitter.com https://ads-api.twitter.com https://www.merchant-center-analytics.goog https://stats.g.doubleclick.net",
+  // Frames — AZUL, GTM, y Google Customer Reviews (survey opt-in + merchant widget
+  // renderizan su UI dentro de iframes servidos desde google.com/gstatic.com)
+  "frame-src 'self' https://pruebas.azul.com.do https://pagos.azul.com.do https://www.googletagmanager.com https://www.google.com https://www.gstatic.com",
   "frame-ancestors 'self'",
   "form-action 'self' https://pruebas.azul.com.do https://pagos.azul.com.do",
   "media-src 'self'",
