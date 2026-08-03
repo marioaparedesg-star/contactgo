@@ -66,13 +66,33 @@ export async function GET(req: NextRequest) {
   // ─────────────────────────────────────────────────────
 
   // ─────────────────────────────────────────────────────
-  // 3b. RECORDATORIOS DE REPOSICIÓN — suscripciones activas (tabla subscriptions)
-  // Se crean automáticamente al completar el pago (ver /api/suscripciones/auto-crear),
-  // calculando la duración EXACTA según producto × cantidad — o manualmente si el
-  // cliente elige "¿Cada cuánto necesitas reponer?" en la página de producto.
-  // NO es cobro automático — solo envía WhatsApp con link para reordenar manualmente.
-  // Usa template ya aprobado (renovacion_lentes), no texto libre, para garantizar entrega.
+  // 3b. RECORDATORIOS DE REPOSICIÓN — DESACTIVADO DE EMERGENCIA (2026-08-03)
+  // Mario reportó clientes recibiendo el mismo recordatorio 3 veces (ej. Christie
+  // Jordan, tel. 8098739955, 3 mensajes en 2 segundos, mismo cron run).
+  //
+  // CAUSA RAÍZ (confirmada con datos reales, no hipótesis):
+  //   1. dias_uso en la tabla products representa cuánto dura UN PAR de lentes,
+  //      no la caja completa. Para productos DIARIOS (contenido: "30 lentes"),
+  //      dias_uso = 1 — correcto como "dato del lente", pero el cálculo de
+  //      dias_ciclo (dias_uso × cantidad de CAJAS compradas) nunca multiplicó
+  //      por la cantidad de pares que trae la caja. Resultado: dias_ciclo = 1
+  //      para TODO producto diario → el cron cree que hay que recordar CADA DÍA,
+  //      para siempre, a cualquiera que compró un diario.
+  //   2. El backfill de suscripciones históricas (2026-08-02) usó un INSERT...
+  //      SELECT masivo cuyo NOT EXISTS no protege contra pedidos con más de un
+  //      order_item del mismo producto (evalúa una sola foto del estado, no fila
+  //      por fila) → se duplicó una suscripción para al menos un pedido.
+  //      Ambos problemas juntos = 3 suscripciones erróneas para el mismo cliente,
+  //      todas con dias_ciclo=1, todas vencidas el mismo día → 3 mensajes seguidos.
+  //   Confirmado en producción: 6 suscripciones activas con dias_ciclo de 1-2 días
+  //   (4 clientes distintos) que se iban a re-disparar TODOS LOS DÍAS sin parar.
+  //
+  // Bloque apagado hasta corregir el cálculo real de dias_ciclo (necesita el
+  // número de lentes/pares por caja, no solo dias_uso) y limpiar las filas de
+  // datos ya dañadas. No reactivar sin probar con una sola suscripción real
+  // primero y confirmar que proximo_envio cae donde debe.
   // ─────────────────────────────────────────────────────
+  /*
   try {
     const hoy = new Date().toISOString().split('T')[0]
     const { data: subsVencidas } = await sb
@@ -92,10 +112,6 @@ export async function GET(req: NextRequest) {
           producto: nombreProducto,
         })
         if (res.ok) {
-          // Calcular siguiente fecha de recordatorio (mismo ciclo, se repite).
-          // Prioridad: dias_ciclo (duración exacta calculada del producto real)
-          // sobre frecuencia (solo 3 categorías fijas, usada como fallback para
-          // suscripciones manuales antiguas que no tienen dias_ciclo).
           const dias = (s as any).dias_ciclo ?? (s.frecuencia === 'trimestral' ? 90 : s.frecuencia === 'semestral' ? 180 : 30)
           const siguiente = new Date()
           siguiente.setDate(siguiente.getDate() + dias)
@@ -111,6 +127,7 @@ export async function GET(req: NextRequest) {
       }
     }
   } catch (e) { console.error('[cron/wa-daily] recordatorios suscripcion:', e) }
+  */
 
   // ─────────────────────────────────────────────────────
   // 4. CARRITOS ABANDONADOS — de las últimas 24h
