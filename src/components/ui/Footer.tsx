@@ -123,10 +123,10 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Google Seller Rating — activar cuando tengamos reviews verificadas de Google */}
-        {/* <div className="border-t border-gray-800 pt-4 flex items-center justify-center min-h-[32px]">
+        {/* Google Seller Rating */}
+        <div className="border-t border-gray-800 pt-4 flex items-center justify-center min-h-[32px]">
           <GoogleSellerRatingBadge />
-        </div> */}
+        </div>
 
         {/* Pagos + copyright en una sola fila */}
         <div className="border-t border-gray-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
