@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { data: items } = await sb.from('order_items')
-      .select('nombre, cantidad, product_id, products(id, nombre, tipo, dias_uso)')
+      .select('nombre, cantidad, product_id, products(id, nombre, tipo, dias_uso, pares_por_caja)')
       .eq('order_id', order_id)
     if (!items?.length) return NextResponse.json({ ok: true, creadas: 0 })
 
@@ -77,10 +77,16 @@ export async function POST(req: NextRequest) {
       const product = item.products as any
       if (!product?.dias_uso) continue // sin duración conocida, no se puede calcular
 
-      // Duración real: días de uso del producto × cantidad comprada en esta línea.
-      // Esto respeta exactamente el caso que describiste: 1 caja = 3 meses,
-      // 2 cajas = 6 meses — porque cantidad multiplica directamente los días.
-      const diasCiclo = product.dias_uso * (item.cantidad || 1)
+      // BUG CORREGIDO (2026-08-03): dias_uso es cuánto dura UN PAR de lentes
+      // (uno por ojo), no la caja completa. Una caja trae pares_por_caja pares
+      // (ej. 30 lentes ÷ 2 = 15 pares para diarios; 6 lentes ÷ 2 = 3 pares para
+      // mensuales/quincenales). Confirmado con Mario: 1 caja de diario (30
+      // lentes) = 15 días, 2 cajas = 30 días. Fórmula anterior ignoraba
+      // pares_por_caja por completo → todo producto diario quedaba con un
+      // ciclo de 1 día, generando un recordatorio de WhatsApp CADA DÍA para
+      // siempre. Para soluciones/gotas, pares_por_caja=1 (no aplica el
+      // concepto de "par"), así que la fórmula no cambia para esos productos.
+      const diasCiclo = product.dias_uso * (product.pares_por_caja || 1) * (item.cantidad || 1)
       const proximoEnvio = new Date(Date.now() + diasCiclo * 24 * 60 * 60 * 1000)
 
       const { error } = await sb.from('subscriptions').insert({
