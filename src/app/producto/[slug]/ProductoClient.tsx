@@ -524,7 +524,7 @@ export default function ProductoClient({ product, variants }: Props) {
       return sphMatch && cylMatch && axisMatch && addMatch && colorMatch && (v.stock ?? 1) > 0
     })
   }
-  // Tóricos (25-30 días) y multifocales (5-10 días) son fabricación especial a medida
+  // Tóricos (25-40 días) y multifocales (2-6 días) son fabricación especial a medida
   // → siempre mostramos "Agregar". El cliente gestiona el inventario desde el admin.
   // Esféricos y color: mantienen la validación de stock real.
   // Color: ahora también se valida el stock. Si color+SPH agotado → sinVariante=true → botón 'Agotado'

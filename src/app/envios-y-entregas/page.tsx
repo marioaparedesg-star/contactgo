@@ -11,7 +11,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/envios-y-entregas' },
   title: 'Envíos y Entregas | ContactGo — Lentes de Contacto RD',
-  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Entrega en 24-72 horas a todo el país.',
+  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos en 24-48 horas, multifocales en 2-6 días, tóricos en 25-40 días — a todo el país.',
 }
 
 export default function EnviosPage() {
@@ -28,43 +28,47 @@ export default function EnviosPage() {
 
           {/* Tiempos */}
           <div>
-            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">⏱️ Tiempos de entrega</h2>
-            <div className="grid md:grid-cols-2 gap-4">
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">⏱️ Tiempos de entrega por tipo de lente</h2>
+            <p className="text-gray-500 text-sm mb-4">Aplican a toda la República Dominicana — el tiempo depende del tipo de lente, no de tu zona.</p>
+            <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-green-50 border border-green-200 rounded-2xl p-5">
-                <p className="font-bold text-green-800 text-lg mb-1">🚀 24 horas</p>
-                <p className="text-green-700 text-sm font-semibold mb-2">Lentes con graduación negativa (SPH -)</p>
-                <p className="text-gray-600 text-sm">Miopía y astigmatismo con SPH negativo. Procesamiento y despacho inmediato.</p>
+                <p className="font-bold text-green-800 text-lg mb-1">🚀 24 a 48 horas</p>
+                <p className="text-green-700 text-sm font-semibold mb-2">Lentes esféricos</p>
+                <p className="text-gray-600 text-sm">Miopía o hipermetropía simple. Alta disponibilidad, procesamiento y despacho inmediato.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 24 a 72 horas</p>
-                <p className="text-amber-700 text-sm font-semibold mb-2">Lentes con graduación positiva (SPH +)</p>
-                <p className="text-gray-600 text-sm">Hipermetropía y presbicia con SPH positivo. Requieren procesamiento especial.</p>
+                <p className="font-bold text-amber-800 text-lg mb-1">📦 2 a 6 días</p>
+                <p className="text-amber-700 text-sm font-semibold mb-2">Lentes multifocales</p>
+                <p className="text-gray-600 text-sm">Presbicia / vista cansada. Se piden al distribuidor según tu graduación exacta.</p>
+              </div>
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 40 días</p>
+                <p className="text-amber-700 text-sm font-semibold mb-2">Lentes tóricos</p>
+                <p className="text-gray-600 text-sm">Astigmatismo. Fabricados a medida (cilindro + eje exactos) — por eso el plazo es mayor.</p>
               </div>
             </div>
           </div>
 
           {/* Zonas */}
           <div>
-            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">📍 Zonas de entrega</h2>
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">📍 Costo de envío por zona</h2>
+            <p className="text-gray-500 text-sm mb-4">El tiempo de entrega no varía por zona (ver tiempos por tipo de lente arriba) — esto es solo el costo del envío.</p>
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               {[
-                { zona: 'Santo Domingo y Gran Santo Domingo', tiempo: '24-48h', costo: 'RD$200' },
-                { zona: 'Santiago de los Caballeros', tiempo: '24-48h', costo: 'RD$350' },
-                { zona: 'La Romana / San Pedro de Macorís', tiempo: '24-48h', costo: 'RD$350' },
-                { zona: 'Punta Cana / Bávaro', tiempo: '48-72h', costo: 'RD$350' },
-                { zona: 'Puerto Plata', tiempo: '48-72h', costo: 'RD$350' },
-                { zona: 'Otras provincias', tiempo: '48-72h', costo: 'RD$350' },
+                { zona: 'Santo Domingo y Gran Santo Domingo', costo: 'RD$200' },
+                { zona: 'Santiago de los Caballeros', costo: 'RD$350' },
+                { zona: 'La Romana / San Pedro de Macorís', costo: 'RD$350' },
+                { zona: 'Punta Cana / Bávaro', costo: 'RD$350' },
+                { zona: 'Puerto Plata', costo: 'RD$350' },
+                { zona: 'Otras provincias', costo: 'RD$350' },
               ].map((z, i) => (
                 <div key={i} className={`flex items-center justify-between px-5 py-4 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">{z.zona}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">Tiempo estimado: {z.tiempo}</p>
-                  </div>
+                  <p className="font-semibold text-gray-900 text-sm">{z.zona}</p>
                   <p className="font-bold text-primary-600 text-sm">{z.costo}</p>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-400 mt-2">* Los tiempos son estimados y pueden variar según disponibilidad del courier.</p>
+            <p className="text-xs text-gray-400 mt-2">* Los costos son estimados y pueden variar según disponibilidad del courier.</p>
           </div>
 
           {/* Proceso */}

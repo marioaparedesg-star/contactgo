@@ -1,15 +1,14 @@
 /**
- * FUENTE ÚNICA DE VERDAD — Tiempos de entrega por categoría y graduación
+ * FUENTE ÚNICA DE VERDAD — Tiempos de entrega por categoría
  *
- * REGLAS DE NEGOCIO:
+ * REGLAS DE NEGOCIO (definidas por Mario, 2026-08-03 — aplican a TODO el país,
+ * ya no varían por zona ni por signo de graduación):
+ *  - Esférico   → 24-48 horas
+ *  - Multifocal → 2-6 días
+ *  - Tórico     → 25-40 días
  *  - Color CON graduación (SPH ≠ 0)  → 24-72 h  (pedido especial al distribuidor)
  *  - Color SIN graduación / plano     → 24 h     (stock disponible)
- *  - Esférico POSITIVO (SPH > 0)      → 24-72 h  (hipermetropía, menor rotación)
- *  - Esférico NEGATIVO o plano        → 24 h     (alta rotación, siempre en stock)
- *  - Tórico                           → 25-30 días (fabricación especial)
- *  - Multifocal                       → 5-10 días (pedido al distribuidor)
  *  - Solución / Gota                  → 24 h
- *  - XR (alta graduación)             → 25-30 días
  */
 
 export interface EntregaInfo {
@@ -37,56 +36,44 @@ const T_24_72H: EntregaInfo = {
   icono:    '📦',
 }
 
-const T_5_10D: EntregaInfo = {
-  etiqueta: 'Pedido especial · 5-15 días',
-  detalle:  'Disponible bajo pedido especial. Entrega estimada de 5 a 15 días laborables.',
-  dias_min: 5, dias_max: 15,
-  especial: true,
-  icono:    '⚗️',
+const T_ESFERICO: EntregaInfo = {
+  etiqueta: 'Entrega 24-48 h',
+  detalle:  'Entrega estimada: entre 24 y 48 horas laborables, en toda la República Dominicana.',
+  dias_min: 1, dias_max: 2,
+  especial: false,
+  icono:    '🚀',
 }
 
-const T_25_30D: EntregaInfo = {
-  etiqueta: 'Fabricación especial · 25-30 días',
-  detalle:  'Producto especializado disponible bajo pedido. Entrega estimada de 25 a 30 días laborables.',
-  dias_min: 25, dias_max: 30,
+const T_MULTIFOCAL: EntregaInfo = {
+  etiqueta: 'Entrega 2-6 días',
+  detalle:  'Entrega estimada: entre 2 y 6 días laborables, en toda la República Dominicana.',
+  dias_min: 2, dias_max: 6,
+  especial: true,
+  icono:    '📦',
+}
+
+const T_TORICO: EntregaInfo = {
+  etiqueta: 'Fabricación especial · 25-40 días',
+  detalle:  'Lente tórico fabricado a medida. Entrega estimada de 25 a 40 días laborables, en toda la República Dominicana.',
+  dias_min: 25, dias_max: 40,
   especial: true,
   icono:    '⏱️',
-}
-
-const T_25_45D: EntregaInfo = {
-  etiqueta: 'Fabricación especial · 25-45 días',
-  detalle:  'Lente tórico fabricado a medida. Entrega estimada de 25 a 45 días laborables, según disponibilidad de tu graduación exacta.',
-  dias_min: 25, dias_max: 45,
-  especial: true,
-  icono:    '⏱️',
-}
-
-/** Detecta si el producto es XR / alta graduación */
-function esXR(nombre: string): boolean {
-  return /\bxr\b/i.test(nombre) || /alta.gradu/i.test(nombre)
 }
 
 /**
- * Retorna la info de entrega considerando tipo, nombre Y graduación seleccionada.
+ * Retorna la info de entrega según tipo de producto y graduación seleccionada.
  *
  * @param tipo    - Tipo de producto: esferico | torico | multifocal | color | solucion | gota
- * @param nombre  - Nombre del producto (para detectar XR)
- * @param sph     - Graduación seleccionada por el usuario (ej: "-2.75", "+1.50", "0.00")
+ * @param nombre  - Nombre del producto (sin uso actualmente; se conserva por compatibilidad de firma)
+ * @param sph     - Graduación seleccionada por el usuario (ej: "-2.75", "+1.50", "0.00") — solo aplica a color
  */
 export function getEntrega(tipo: string, nombre = '', sph?: string | number | null): EntregaInfo {
 
-  // XR siempre fabricación especial
-  if (esXR(nombre) && ['torico','esferico','multifocal'].includes(tipo)) {
-    return {
-      etiqueta: 'Fabricación bajo pedido · 25-30 días',
-      detalle:  'Disponible bajo pedido especial. Entrega estimada de 25 a 30 días laborables.',
-      dias_min: 25, dias_max: 30,
-      especial: true,
-      icono:    '🔬',
-    }
-  }
+  if (tipo === 'esferico')   return T_ESFERICO
+  if (tipo === 'multifocal') return T_MULTIFOCAL
+  if (tipo === 'torico')     return T_TORICO
 
-  // Parsear SPH
+  // Parsear SPH (solo relevante para color: plano vs. con graduación)
   const sphNum = sph != null ? parseFloat(String(sph)) : null
 
   if (tipo === 'color') {
@@ -96,15 +83,6 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
     return T_24H
   }
 
-  if (tipo === 'esferico') {
-    // Esférico POSITIVO (hipermetropía) → 24-72h
-    // Esférico negativo o plano → 24h
-    if (sphNum != null && sphNum > 0) return T_24_72H
-    return T_24H
-  }
-
-  if (tipo === 'torico')     return T_25_45D
-  if (tipo === 'multifocal') return T_5_10D
   if (tipo === 'solucion')   return T_24H
   if (tipo === 'gota')       return T_24H
 

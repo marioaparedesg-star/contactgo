@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
  * Si el producto es de fabricación/pedido especial (tóricos, multifocales, XR —
  * los que NO se despachan al día siguiente porque se piden al fabricante o se
  * fabrican a medida), este componente NO debe decir "sale mañana": eso
- * contradice el estimado real (25-45 días) que ya se muestra arriba. En ese
+ * contradice el estimado real (25-40 días) que ya se muestra arriba. En ese
  * caso solo confirma que el pedido se procesa de inmediato, sin prometer fecha.
  */
 export default function EntregaHoy({ especial = false }: { especial?: boolean }) {
