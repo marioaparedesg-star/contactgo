@@ -231,8 +231,9 @@ export async function POST(
 
     // Notificar al admin por WhatsApp (mejor esfuerzo, no bloquea)
     try {
+      const ADMIN_PHONE = process.env.WHATSAPP_ADMIN_PHONE
+      if (!ADMIN_PHONE) throw new Error('WHATSAPP_ADMIN_PHONE no configurado')
       const { sendText } = await import('@/lib/whatsapp')
-      const ADMIN_PHONE = process.env.WHATSAPP_ADMIN_PHONE ?? '18294089097'
       const resumen = (link.items ?? [])
         .map((i: any) => `• ${i.cantidad}x ${i.nombre}`)
         .join('\n')

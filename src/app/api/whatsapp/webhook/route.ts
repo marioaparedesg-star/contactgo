@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     // ── Handle incoming messages ──
     const messages = changes?.messages
     if (messages?.length > 0) {
-      const ADMIN_PHONE = process.env.WHATSAPP_ADMIN_PHONE ?? '18294089097'
+      const ADMIN_PHONE = process.env.WHATSAPP_ADMIN_PHONE ?? ''
       const WA_API = 'https://graph.facebook.com/v20.0'
       const PHONE_ID = process.env.WHATSAPP_PHONE_ID ?? ''
       const TOKEN = process.env.WHATSAPP_TOKEN ?? ''
@@ -177,13 +177,13 @@ export async function POST(req: NextRequest) {
           // Si falla la auto-respuesta, no importa — el admin recibe la notificación igual
         }
 
-        // ── Notificación al admin (829-408-9097) y al número de servicio personal de Mario (809-694-2268) ──
+        // ── Notificación al admin y al número de servicio personal de Mario ──
         const displayPhone = from.length === 11 && from.startsWith('1')
           ? `(${from.slice(1,4)}) ${from.slice(4,7)}-${from.slice(7)}`
           : from
         const nombre = contactName ?? displayPhone
         const preview = msgBody || (mediaUrl ? `[${msgType}]` : '[mensaje]')
-        const NOTIFY_PHONES = [ADMIN_PHONE, '18096942268']
+        const NOTIFY_PHONES = [ADMIN_PHONE, '18096942268'].filter(Boolean)
 
         for (const notifyTo of NOTIFY_PHONES) {
           await fetch(`${WA_API}/${PHONE_ID}/messages`, {
