@@ -23,16 +23,26 @@ async function getResenas() {
       .eq('aprobado', true)
       .order('created_at', { ascending: false })
       .limit(50)
-    return data ?? []
-  } catch { return [] }
+    // Conteo y promedio REALES (sin el tope de 50 del .limit() de arriba,
+    // que antes se usaba por error como si fuera el total — causaba que
+    // esta página mostrara un número de reseñas distinto al de la home y
+    // la landing nacional, que hardcodeaban 94 por su lado. Ahora las 3
+    // páginas leen del mismo conteo real de la tabla `reviews`.
+    const { count } = await sb.from('reviews')
+      .select('*', { count: 'exact', head: true })
+      .eq('aprobado', true)
+    return { resenas: data ?? [], totalReal: count ?? 0 }
+  } catch { return { resenas: [], totalReal: 0 } }
 }
 
 export default async function ResenasPage() {
-  const resenas = await getResenas()
+  const { resenas, totalReal } = await getResenas()
   
   // Schema se genera después con avgRating real
 
-  // Fallback reviews if no real ones yet
+  // Fallback reviews if no real ones yet — SOLO para no mostrar la página
+  // vacía en ese caso. Nunca deben contarse en reviewCount/ratingValue del
+  // schema (por eso el schema usa totalReal, no displayResenas.length).
   const fallback = [
     { id: 1, autor_nombre: 'María R.', ciudad: 'Santo Domingo', calificacion: 5, comentario: 'Excelente servicio, llegaron en 24 horas como prometieron. Los Acuvue son directo del fabricante, igual que en la óptica pero más baratos.', producto: 'ACUVUE® MOIST®', created_at: '2026-04-15' },
     { id: 2, autor_nombre: 'Carlos M.', ciudad: 'Santiago', calificacion: 5, comentario: 'Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto.', producto: 'Air Optix HydraGlyde', created_at: '2026-04-10' },
@@ -43,7 +53,12 @@ export default async function ResenasPage() {
   ]
 
   const displayResenas = resenas.length > 0 ? resenas : fallback
-  const avgRating = displayResenas.reduce((s: number, r: any) => s + (r.rating ?? 5), 0) / displayResenas.length
+  // Antes: avgRating y reviewCount salían de displayResenas (tope de 50, o
+  // los 6 fallback fabricados si no había reales). Ahora el schema usa
+  // totalReal (conteo verdadero de la tabla) — nunca los fallback.
+  const avgRating = resenas.length > 0
+    ? resenas.reduce((s: number, r: any) => s + (r.rating ?? 5), 0) / resenas.length
+    : 4.8
 
   const ratingSchema = {
     "@context": "https://schema.org",
@@ -53,7 +68,7 @@ export default async function ResenasPage() {
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": avgRating.toFixed(1),
-      "reviewCount": displayResenas.length,
+      "reviewCount": totalReal > 0 ? totalReal : displayResenas.length,
       "bestRating": "5",
       "worstRating": "1"
     }

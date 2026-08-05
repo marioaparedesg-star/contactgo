@@ -11,6 +11,7 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import AzulLogo from '@/components/ui/AzulLogo'
 import Link from 'next/link'
+import { createClient } from '@supabase/supabase-js'
 import { ChevronRight, ShieldCheck, Truck, Award, Users, Clock, MapPin, CheckCircle, Star } from 'lucide-react'
 import type { Metadata } from 'next'
 
@@ -39,7 +40,8 @@ export const metadata: Metadata = {
 }
 
 // ─── Schema estructurado (JSON-LD) — clave para Google + IAs ────────────
-const schemas = [
+function getSchemas(reseñasCount: number, reseñasAvg: number) {
+return [
   // Organización
   {
     '@context': 'https://schema.org',
@@ -96,10 +98,14 @@ const schemas = [
         { '@type': 'OfferCatalog', name: 'Gotas Lubricantes', url: 'https://www.contactgo.net/gotas' },
       ],
     },
+    // Antes hardcodeado a 4.7 / 94 sin relación con la tabla `reviews` real
+    // (y distinto del número que usaban page.tsx y resenas/page.tsx — la
+    // inconsistencia entre páginas que detectó Mario). Ahora viene de la
+    // misma fuente real en las 3 páginas: reviews.aprobado=true.
     aggregateRating: {
       '@type': 'AggregateRating',
-      ratingValue: '4.7',
-      reviewCount: '94',
+      ratingValue: reseñasAvg.toFixed(1),
+      reviewCount: String(reseñasCount),
       bestRating: '5',
     },
     priceRange: 'RD$600 - RD$18,500',
@@ -187,6 +193,7 @@ const schemas = [
     ],
   },
 ]
+}
 
 const marcasData = [
   { nombre: 'Acuvue', fabricante: 'Johnson & Johnson', linea: 'Oasys, Moist, Oasys for Astigmatism, Oasys Multifocal', desde: 3900 },
@@ -216,7 +223,17 @@ const ciudadesData = [
   { ciudad: 'Moca', tiempo: '24-48 horas*', slug: 'moca' },
 ]
 
-export default function LentesRDPage() {
+export default async function LentesRDPage() {
+  const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const { count: reseñasCount } = await sb.from('reviews')
+    .select('*', { count: 'exact', head: true })
+    .eq('aprobado', true)
+  const { data: reseñasData } = await sb.from('reviews').select('rating').eq('aprobado', true)
+  const reseñasAvg = reseñasData?.length
+    ? reseñasData.reduce((s, r: any) => s + (r.rating ?? 5), 0) / reseñasData.length
+    : 4.8
+  const schemas = getSchemas(reseñasCount ?? 0, reseñasAvg)
+
   return (
     <>
       {schemas.map((s, i) => (
@@ -251,7 +268,7 @@ export default function LentesRDPage() {
             </div>
             <div className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 rounded-full px-3 py-1.5">
               <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-              <span className="text-xs font-semibold text-amber-700">4.7★ · 94 reseñas</span>
+              <span className="text-xs font-semibold text-amber-700">{reseñasAvg.toFixed(1)}★ · {reseñasCount} reseñas</span>
             </div>
             <div className="flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-full px-3 py-1.5">
               <Truck className="w-4 h-4 text-green-600" />

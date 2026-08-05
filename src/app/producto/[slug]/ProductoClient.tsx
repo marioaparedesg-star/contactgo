@@ -835,7 +835,6 @@ export default function ProductoClient({ product, variants }: Props) {
                     <span className="text-xs font-bold text-gray-800 ml-1">{Number((product as any).avg_rating).toFixed(1)}</span>
                   </div>
                   <span className="text-[10px] text-gray-400">({(product as any).review_count ?? 0} reseñas)</span>
-                  <span className="text-[10px] font-semibold text-green-600">2,100+ clientes</span>
                 </div>
               )}
 
@@ -1094,8 +1093,6 @@ export default function ProductoClient({ product, variants }: Props) {
                     <span className="font-black text-gray-900 ml-1">{Number((product as any).avg_rating).toFixed(1)}</span>
                   </div>
                   <span className="text-gray-400 text-xs">{(product as any).review_count??0} reseñas</span>
-                  <span className="text-gray-300">|</span>
-                  <span className="text-green-600 font-semibold text-xs">2,100+ clientes</span>
                 </div>
               )}
               <div>

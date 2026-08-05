@@ -19,10 +19,8 @@ import type { Product } from '@/types'
 
 export const revalidate = 60
 
-async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount: number, precioOasys: number, preciosHero: Record<string, number> }> {
+async function getFeaturedProducts(): Promise<{ products: Product[], reseñasCount: number, reseñasAvg: number, precioOasys: number, preciosHero: Record<string, number> }> {
   const sb = createServerSupabaseClient()
-  // CRÍTICO-1: count:'exact' forzaba dynamic (ƒ). Valor cosmético → hardcoded.
-  // select:'*' traía 17MB de arrays SPH/CYL. Campos específicos reducen payload.
   const { data } = await sb.from('products')
     .select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, precio_anterior')
     .eq('activo', true)
@@ -56,9 +54,25 @@ async function getFeaturedProducts(): Promise<{ products: Product[], ordersCount
     preciosHero[p.slug] = Number(p.precio)
   }
 
+  // Reseñas reales — antes esto era un número fabricado con una fórmula
+  // (pedidos_falsos * 6 + 4200) que no tenía ninguna relación con la
+  // realidad. Ahora se cuenta directo de la tabla `reviews` (aprobadas).
+  // revalidate=60 en esta página evita el problema de rendering dinámico
+  // que la versión anterior intentaba resolver hardcodeando el número.
+  const { count: reseñasCount } = await sb.from('reviews')
+    .select('*', { count: 'exact', head: true })
+    .eq('aprobado', true)
+  const { data: reseñasData } = await sb.from('reviews')
+    .select('rating')
+    .eq('aprobado', true)
+  const reseñasAvg = reseñasData?.length
+    ? reseñasData.reduce((s, r: any) => s + (r.rating ?? 5), 0) / reseñasData.length
+    : 4.8
+
   return {
     products: (data ?? []) as unknown as Product[],
-    ordersCount: 95,
+    reseñasCount: reseñasCount ?? 0,
+    reseñasAvg,
     precioOasys: oasysData ? Number(oasysData.precio) : 3875,
     preciosHero,
   }
@@ -76,7 +90,7 @@ const SCHEMA_ORG = {
 }
 
 export default async function HomePage() {
-  const { products: featured, ordersCount, precioOasys, preciosHero } = await getFeaturedProducts()
+  const { products: featured, reseñasCount, reseñasAvg, precioOasys, preciosHero } = await getFeaturedProducts()
 
   return (
     <>
@@ -85,7 +99,7 @@ export default async function HomePage() {
       <main id="main-content">
 
         {/* ── HERO ── */}
-        <HeroSlider lentesCount={ordersCount > 0 ? ordersCount * 6 + 4200 : 4200} precioOasys={precioOasys} preciosHero={preciosHero} />
+        <HeroSlider precioOasys={precioOasys} preciosHero={preciosHero} />
 
         {/* ── Buscador rápido — el cliente lo necesita en mobile ─────────── */}
         <section className="bg-white px-4 py-3 border-b border-gray-50 sticky top-14 z-30 shadow-sm">
@@ -244,8 +258,8 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
                 { icon: Truck,    title: 'Entrega en 24-48h',  desc: 'A cualquier punto de RD',    color: 'text-blue-600',   bg: 'bg-blue-50' },
-                { icon: Shield,   title: 'Directo del fabricantees',   desc: 'Directo del fabricante',        color: 'text-green-600',  bg: 'bg-green-50' },
-                { icon: Star,     title: `${ordersCount > 0 ? (ordersCount * 6 + 4200).toLocaleString() + '+' : '4,200+'} pedidos`,  desc: 'Clientes satisfechos',   color: 'text-amber-500',  bg: 'bg-amber-50' },
+                { icon: Shield,   title: 'Directo del fabricante',   desc: 'Directo del fabricante',        color: 'text-green-600',  bg: 'bg-green-50' },
+                { icon: Star,     title: `${reseñasAvg.toFixed(1)}★ · ${reseñasCount}+ reseñas`,  desc: 'Clientes satisfechos',   color: 'text-amber-500',  bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
                 <div key={title} className="flex items-center gap-3">
@@ -318,7 +332,7 @@ export default async function HomePage() {
         <section className="bg-white border-b border-gray-100 py-5 px-4">
           <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             {[
-              { num: '4.7★', label: 'Calificación promedio', sub: '94 reseñas verificadas' },
+              { num: `${reseñasAvg.toFixed(1)}★`, label: 'Calificación promedio', sub: `${reseñasCount} reseñas verificadas` },
               { num: '35+',  label: 'Productos disponibles', sub: 'Marcas líderes mundiales' },
               { num: '24h',  label: 'Entrega a domicilio',   sub: 'En toda República Dominicana' },
               { num: null,   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD', azul: true },
