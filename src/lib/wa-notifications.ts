@@ -182,8 +182,17 @@ export async function notificarRenovacion(data: { telefono: string; nombre?: str
 
 export async function notificarResena(data: { telefono: string; nombre?: string; order_id?: string }) {
   const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
-  return notificar(`resena_${data.order_id ?? normalizePhone(data.telefono)}`, data.telefono, 'resena',
+  const res = await notificar(`resena_${data.order_id ?? normalizePhone(data.telefono)}`, data.telefono, 'resena',
     'solicitar_resena', [nombre], { order_id: data.order_id })
+  // BUG CORREGIDO (2026-08-06): esta función nunca marcaba resena_solicitada=true
+  // en la orden — solo el cron de email (/api/solicitar-resena) lo hacía. Un
+  // cliente al que se le pedía reseña por WhatsApp recibía la MISMA solicitud
+  // otra vez por email 3 días después, porque el cron no tenía forma de saber
+  // que ya se le había pedido por otro canal.
+  if (res.ok && data.order_id) {
+    await getSb().from('orders').update({ resena_solicitada: true }).eq('id', data.order_id)
+  }
+  return res
 }
 
 // Para mensajes que NO tienen template (cambios de perfil, etc.)
