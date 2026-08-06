@@ -36,9 +36,14 @@ export default function CajaPage() {
   // Sincronizar ventas pagadas al cargar
   useEffect(() => {
     const syncVentas = async () => {
+      // BUG CORREGIDO (2026-08-05): sin filtro de es_prueba, esta sincronización
+      // automática ya había insertado 3 compras de prueba de Mario (RD$16,118,
+      // tel. personal) en cash_movements como si fueran ventas reales — se
+      // limpiaron esas filas por separado. Este filtro evita que se repita.
       const {data:ventas} = await sb.from('orders')
         .select('id,numero_orden,total,pagado_en,cliente_nombre')
         .eq('pago_estado','pagado')
+        .eq('es_prueba', false)
         .not('id','in',
           `(SELECT order_id FROM cash_movements WHERE order_id IS NOT NULL)`
         )

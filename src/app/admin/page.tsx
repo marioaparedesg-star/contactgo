@@ -41,14 +41,19 @@ export default function AdminDashboard() {
 
     const [all, ordRecent, items, stockLow] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
-        .eq('pago_estado','pagado').not('numero_orden','like','CG-TEST%').not('numero_orden','like','CG-SIM%')
+        .eq('pago_estado','pagado').eq('es_prueba', false)
         .gte('fecha',since30),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
-        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
       sb.from('order_items')
-        .select('nombre,cantidad,precio,order_id,orders!inner(pago_estado,metodo_pago)')
-        .eq('orders.pago_estado','pagado')
+        // BUG CORREGIDO (2026-08-05): esta consulta no tenía filtro de fecha NI
+        // de pedidos de prueba — 3 compras de prueba de Mario (RD$16,118, con
+        // su propio teléfono personal) se contaban como ventas reales en "Top
+        // productos" para siempre, sin importar cuánto tiempo pasara. Ahora
+        // excluye es_prueba igual que las otras dos consultas del dashboard.
+        .select('nombre,cantidad,precio,order_id,orders!inner(pago_estado,metodo_pago,es_prueba)')
+        .eq('orders.pago_estado','pagado').eq('orders.es_prueba', false)
         .limit(600),
       sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
     ])

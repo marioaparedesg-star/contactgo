@@ -18,9 +18,13 @@ export default function ReportesPage() {
     const [k, r, items] = await Promise.all([
       sb.from('admin_kpis').select('*').single(),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,created_at')
-        .not('pago_estado','eq','declinado').not('numero_orden','like','CG-TEST%')
+        .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(10),
-      sb.from('order_items').select('nombre,cantidad,precio').limit(500),
+      // BUG CORREGIDO (2026-08-05): sin filtro de fecha, de estado de pago NI
+      // de pedidos de prueba — "Top productos" contaba pedidos pendientes/
+      // cancelados y las 3 compras de prueba de Mario (RD$16,118) como si
+      // fueran ventas reales, para siempre.
+      sb.from('order_items').select('nombre,cantidad,precio,order_id,orders!inner(pago_estado,es_prueba)').eq('orders.pago_estado','pagado').eq('orders.es_prueba', false).limit(500),
     ])
     if (k.data) setKpis(k.data)
     if (r.data) setRecent(r.data)

@@ -64,11 +64,14 @@ export async function GET(req: Request) {
     const totalEgresos = (egresosHoy ?? []).reduce((s, m) => s + Number(m.monto), 0)
 
     // ═══ 3. PEDIDOS GENERADOS HOY (nuevas órdenes, sin importar si ya se pagaron) ═══
+    // es_prueba=false: evita que una compra de prueba tuya aparezca en tu
+    // propio correo de ventas del día como si fuera un cliente real.
     const { data: pedidosHoy } = await sb
       .from('orders')
       .select('numero_orden, cliente_nombre, total, pago_estado, canal, created_at')
       .gte('created_at', inicioDiaUTC)
       .lt('created_at', finDiaUTC)
+      .eq('es_prueba', false)
       .order('created_at', { ascending: true })
 
     const totalValorPedidosHoy = (pedidosHoy ?? []).reduce((s, o) => s + Number(o.total), 0)
@@ -80,7 +83,7 @@ export async function GET(req: Request) {
     let productosVendidos: { nombre: string; cantidad: number; ingreso: number }[] = []
     if ((pedidosHoy?.length ?? 0) > 0) {
       const { data: ordersConId } = await sb
-        .from('orders').select('id').gte('created_at', inicioDiaUTC).lt('created_at', finDiaUTC)
+        .from('orders').select('id').gte('created_at', inicioDiaUTC).lt('created_at', finDiaUTC).eq('es_prueba', false)
       const orderIds = (ordersConId ?? []).map((o: any) => o.id)
       if (orderIds.length > 0) {
         const { data: items } = await sb
@@ -105,6 +108,7 @@ export async function GET(req: Request) {
       .from('orders')
       .select('id, numero_orden, cliente_nombre, total, created_at')
       .eq('pago_estado', 'pendiente')
+      .eq('es_prueba', false)
       .order('created_at', { ascending: true })
 
     const detallePendientes: { numero_orden: string; cliente: string; total: number; abonado: number; saldo: number; dias: number }[] = []
