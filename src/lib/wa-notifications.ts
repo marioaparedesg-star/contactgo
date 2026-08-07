@@ -36,7 +36,7 @@ function cuerpoLegible(templateName: string, params: string[], tipo: string): st
       return `🛒 Recordatorio de carrito enviado — ${p[1] ?? ''}`
     case 'renovacion_lentes':
       return `🔄 Recordatorio de renovación enviado — ${p[1] ?? ''}`
-    case 'solicitar_resena':
+    case 'solicitar_resena_v2':
       return `⭐ Solicitud de reseña enviada a ${p[0] ?? 'cliente'}`
     default:
       return `📤 Mensaje automático enviado (${templateName})`
@@ -202,7 +202,7 @@ export async function notificarRecompraPrevio(
 export async function notificarResena(data: { telefono: string; nombre?: string; order_id?: string }) {
   const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
   const res = await notificar(`resena_${data.order_id ?? normalizePhone(data.telefono)}`, data.telefono, 'resena',
-    'solicitar_resena', [nombre], { order_id: data.order_id })
+    'solicitar_resena_v2', [nombre], { order_id: data.order_id })
   // BUG CORREGIDO (2026-08-06): esta función nunca marcaba resena_solicitada=true
   // en la orden — solo el cron de email (/api/solicitar-resena) lo hacía. Un
   // cliente al que se le pedía reseña por WhatsApp recibía la MISMA solicitud

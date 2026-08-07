@@ -204,7 +204,7 @@ export async function sendReviewRequest(data: {
   nombre?: string
 }) {
   const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
-  return sendTemplate(data.telefono, 'solicitar_resena', [nombre])
+  return sendTemplate(data.telefono, 'solicitar_resena_v2', [nombre])
 }
 
 // ─── Enviar mensaje interactivo con botones (máx 3) ───
