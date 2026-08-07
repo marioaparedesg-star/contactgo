@@ -17,6 +17,35 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json()
 
+  if (body.accion === 'diagnosticar') {
+    const results: any = {}
+
+    // 1. ¿El token es válido en general? ¿Qué permisos tiene?
+    const debugRes = await fetch(
+      `${GRAPH_URL}/debug_token?input_token=${token}&access_token=${token}`
+    )
+    results.debug_token = await debugRes.json()
+
+    // 2. ¿El Phone Number ID configurado responde? ¿Cuál es su WABA real?
+    const phoneId = process.env.WHATSAPP_PHONE_ID
+    if (phoneId) {
+      const phoneRes = await fetch(
+        `${GRAPH_URL}/${phoneId}?fields=whatsapp_business_account,display_phone_number`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      results.phone_info = await phoneRes.json()
+    }
+
+    // 3. ¿El WABA_ID configurado en env responde a algo básico (nombre)?
+    const wabaRes = await fetch(`${GRAPH_URL}/${wabaId}?fields=name,id`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    results.waba_configurado = await wabaRes.json()
+    results.waba_id_usado = wabaId
+
+    return NextResponse.json(results)
+  }
+
   if (body.accion === 'listar') {
     const res = await fetch(`${GRAPH_URL}/${wabaId}/message_templates?limit=100`, {
       headers: { Authorization: `Bearer ${token}` },
