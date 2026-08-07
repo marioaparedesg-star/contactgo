@@ -4,6 +4,7 @@ import {
   notificarPedidoConfirmado, notificarEstado, notificarEnviado,
   notificarEntregado, notificarCancelado, notificarBienvenida,
   notificarCarritoAbandonado, notificarRenovacion, notificarResena,
+  notificarRecompraPrevio,
 } from '@/lib/wa-notifications'
 
 export const dynamic = 'force-dynamic'
@@ -75,6 +76,14 @@ export async function POST(req: NextRequest) {
         break
       case 'resena':
         result = await notificarResena(data)
+        break
+      // Solo para pruebas manuales — el envío real automático de estos vive
+      // en el cron wa-daily, detrás del interruptor RECOMPRA_AVISOS_PREVIOS_ACTIVO.
+      case 'recompra_7d':
+        result = await notificarRecompraPrevio(7, data)
+        break
+      case 'recompra_3d':
+        result = await notificarRecompraPrevio(3, data)
         break
       default:
         return NextResponse.json({ error: 'tipo_no_soportado', tipo }, { status: 400 })
