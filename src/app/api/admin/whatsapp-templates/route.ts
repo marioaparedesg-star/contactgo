@@ -10,7 +10,7 @@ const GRAPH_URL = 'https://graph.facebook.com/v21.0'
 
 export async function POST(req: NextRequest) {
   const token = process.env.WHATSAPP_TOKEN
-  const wabaId = process.env.WHATSAPP_BUSINESS_ID
+  const wabaId = process.env.WHATSAPP_BUSINESS_ID ?? '998977189800215'
   if (!token || !wabaId) {
     return NextResponse.json({ error: 'faltan_credenciales' }, { status: 500 })
   }
