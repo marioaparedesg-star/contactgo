@@ -37,6 +37,19 @@ export async function POST(req: NextRequest) {
     })
     results.app_info = await appRes.json()
 
+    // Vía directa: la app suele exponer su WABA conectada
+    const appWabaRes = await fetch(`${GRAPH_URL}/${appId}?fields=whatsapp_business_account{id,name}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    results.app_whatsapp_business_account = await appWabaRes.json()
+
+    // Vía system user: assets asignados directamente
+    const suId = '122112535653316119'
+    const suRes = await fetch(`${GRAPH_URL}/${suId}/assigned_business_asset_groups`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    results.system_user_assets = await suRes.json()
+
     // 3. Negocios a los que tiene acceso este system user
     const bizRes = await fetch(`${GRAPH_URL}/me/businesses`, {
       headers: { Authorization: `Bearer ${token}` },
