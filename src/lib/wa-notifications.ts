@@ -180,6 +180,25 @@ export async function notificarRenovacion(data: { telefono: string; nombre?: str
     'renovacion_lentes', [nombre, producto], { order_id: data.order_id })
 }
 
+// Avisos previos a la recompra (7 y 3 días antes de que se acabe el producto).
+// Requiere las plantillas 'recompra_7dias' y 'recompra_3dias' aprobadas en Meta
+// Business Manager — mientras no existan, notificar() devolverá el error de
+// Meta (plantilla no encontrada) y no se enviará nada; no rompe el cron.
+export async function notificarRecompraPrevio(
+  dias: 7 | 3,
+  data: { subscription_id: string; telefono: string; nombre?: string; producto?: string; proximo_envio: string }
+) {
+  const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
+  const producto = data.producto ?? 'tus lentes de contacto'
+  const template = dias === 7 ? 'recompra_7dias' : 'recompra_3dias'
+  // El evento_id incluye proximo_envio (no solo subscription_id) porque la
+  // misma suscripción vuelve a generar este mismo aviso en CADA ciclo futuro
+  // — sin la fecha, el dedup de notificar() bloquearía el aviso para siempre
+  // después del primer envío.
+  return notificar(`${template}_${data.subscription_id}_${data.proximo_envio}`, data.telefono, `recompra_${dias}d`,
+    template, [nombre, producto])
+}
+
 export async function notificarResena(data: { telefono: string; nombre?: string; order_id?: string }) {
   const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
   const res = await notificar(`resena_${data.order_id ?? normalizePhone(data.telefono)}`, data.telefono, 'resena',

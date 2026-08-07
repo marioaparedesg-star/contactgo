@@ -6,7 +6,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendText, normalizePhone } from '@/lib/whatsapp'
-import { notificarRenovacion } from '@/lib/wa-notifications'
+import { notificarRenovacion, notificarRecompraPrevio } from '@/lib/wa-notifications'
+
+// ═══ INTERRUPTOR DE SEGURIDAD ═══
+// Apagado por defecto a propósito (Mario: "no envíe nada a nadie" hasta
+// confirmar). Se activa poniendo RECOMPRA_AVISOS_PREVIOS_ACTIVO=true en las
+// variables de entorno de Vercel — así no hace falta otro deploy para
+// prenderlo, y se puede apagar igual de rápido si algo sale mal.
+// Requiere además que las plantillas 'recompra_7dias' y 'recompra_3dias'
+// estén aprobadas en Meta Business Manager — si no existen, notificar()
+// simplemente falla ese envío sin tumbar el cron.
+const AVISOS_PREVIOS_ACTIVO = process.env.RECOMPRA_AVISOS_PREVIOS_ACTIVO === 'true'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -38,7 +48,7 @@ export async function GET(req: NextRequest) {
   }
 
   const sb = getSb()
-  const results = { envios: 0, resenas: 0, renovaciones: 0, errores: 0 }
+  const results = { envios: 0, resenas: 0, renovaciones: 0, errores: 0, avisos7d: 0, avisos3d: 0 }
 
   // ─────────────────────────────────────────────────────
   // 1 y 2. DESACTIVADOS (2026-07-24) — el paso 1 buscaba estado='enviado', un valor que
@@ -108,6 +118,10 @@ export async function GET(req: NextRequest) {
           siguiente.setDate(siguiente.getDate() + dias)
           await sb.from('subscriptions').update({
             proximo_envio: siguiente.toISOString().split('T')[0],
+            // Nuevo ciclo empieza -> los avisos previos deben poder dispararse
+            // otra vez cuando se acerque esta nueva fecha.
+            aviso_7d_enviado: false,
+            aviso_3d_enviado: false,
             updated_at: new Date().toISOString(),
           }).eq('id', s.id)
           results.renovaciones++
@@ -115,6 +129,56 @@ export async function GET(req: NextRequest) {
       } catch (e: any) {
         console.error('[cron/wa-daily] recordatorio suscripción:', s.id, e.message)
         results.errores++
+      }
+    }
+
+    // ── Avisos previos (7 y 3 días antes) — NUEVO, apagado hasta confirmar ──
+    if (AVISOS_PREVIOS_ACTIVO) {
+      const en7dias = new Date(); en7dias.setDate(en7dias.getDate() + 7)
+      const en3dias = new Date(); en3dias.setDate(en3dias.getDate() + 3)
+      const fecha7 = en7dias.toISOString().split('T')[0]
+      const fecha3 = en3dias.toISOString().split('T')[0]
+
+      const { data: sub7 } = await sb.from('subscriptions')
+        .select('id, cliente_nombre, cliente_telefono, items, proximo_envio')
+        .eq('activa', true).eq('cancelada', false).eq('aviso_7d_enviado', false)
+        .eq('proximo_envio', fecha7)
+      for (const s of sub7 ?? []) {
+        try {
+          const nombreProducto = (Array.isArray(s.items) ? s.items[0]?.nombre : null) ?? 'tus lentes de contacto'
+          const res = await notificarRecompraPrevio(7, {
+            subscription_id: s.id, telefono: s.cliente_telefono, nombre: s.cliente_nombre,
+            producto: nombreProducto, proximo_envio: s.proximo_envio,
+          })
+          if (res.ok) {
+            await sb.from('subscriptions').update({ aviso_7d_enviado: true }).eq('id', s.id)
+            results.avisos7d = (results.avisos7d ?? 0) + 1
+          }
+        } catch (e: any) {
+          console.error('[cron/wa-daily] aviso 7d:', s.id, e.message)
+          results.errores++
+        }
+      }
+
+      const { data: sub3 } = await sb.from('subscriptions')
+        .select('id, cliente_nombre, cliente_telefono, items, proximo_envio')
+        .eq('activa', true).eq('cancelada', false).eq('aviso_3d_enviado', false)
+        .eq('proximo_envio', fecha3)
+      for (const s of sub3 ?? []) {
+        try {
+          const nombreProducto = (Array.isArray(s.items) ? s.items[0]?.nombre : null) ?? 'tus lentes de contacto'
+          const res = await notificarRecompraPrevio(3, {
+            subscription_id: s.id, telefono: s.cliente_telefono, nombre: s.cliente_nombre,
+            producto: nombreProducto, proximo_envio: s.proximo_envio,
+          })
+          if (res.ok) {
+            await sb.from('subscriptions').update({ aviso_3d_enviado: true }).eq('id', s.id)
+            results.avisos3d = (results.avisos3d ?? 0) + 1
+          }
+        } catch (e: any) {
+          console.error('[cron/wa-daily] aviso 3d:', s.id, e.message)
+          results.errores++
+        }
       }
     }
   } catch (e) { console.error('[cron/wa-daily] recordatorios suscripcion:', e) }
