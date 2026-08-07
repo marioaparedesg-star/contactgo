@@ -36,7 +36,7 @@ const SLIDES: Slide[] = [
     image:      '/hero-oasys-v4.jpg',
     imageMobile: '/hero-oasys-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'ACUVUE OASYS con HYDRACLEAR Plus',
-    precio:     { slug: OASYS_SLUG, fallback: 3700 },
+    precio:     { slug: OASYS_SLUG, fallback: 3800 },
     textColor:  'dark',
   },
   {
