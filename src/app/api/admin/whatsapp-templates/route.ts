@@ -19,29 +19,41 @@ export async function POST(req: NextRequest) {
 
   if (body.accion === 'diagnosticar') {
     const results: any = {}
-
-    // 1. ¿El token es válido en general? ¿Qué permisos tiene?
-    const debugRes = await fetch(
-      `${GRAPH_URL}/debug_token?input_token=${token}&access_token=${token}`
-    )
-    results.debug_token = await debugRes.json()
-
-    // 2. ¿El Phone Number ID configurado responde? ¿Cuál es su WABA real?
     const phoneId = process.env.WHATSAPP_PHONE_ID
+
+    // 1. Info básica del Phone Number ID que SÍ funciona para enviar mensajes
     if (phoneId) {
       const phoneRes = await fetch(
-        `${GRAPH_URL}/${phoneId}?fields=whatsapp_business_account,display_phone_number`,
+        `${GRAPH_URL}/${phoneId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
-      results.phone_info = await phoneRes.json()
+      results.phone_info_basico = await phoneRes.json()
     }
 
-    // 3. ¿El WABA_ID configurado en env responde a algo básico (nombre)?
-    const wabaRes = await fetch(`${GRAPH_URL}/${wabaId}?fields=name,id`, {
+    // 2. Info de la app
+    const appId = process.env.WHATSAPP_APP_ID ?? '988873594144729'
+    const appRes = await fetch(`${GRAPH_URL}/${appId}?fields=name,id`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-    results.waba_configurado = await wabaRes.json()
-    results.waba_id_usado = wabaId
+    results.app_info = await appRes.json()
+
+    // 3. Negocios a los que tiene acceso este system user
+    const bizRes = await fetch(`${GRAPH_URL}/me/businesses`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    results.negocios_accesibles = await bizRes.json()
+
+    // 4. Intentar listar WABAs owned por cada negocio encontrado
+    if (results.negocios_accesibles?.data?.length) {
+      results.wabas_por_negocio = {}
+      for (const b of results.negocios_accesibles.data) {
+        const wRes = await fetch(
+          `${GRAPH_URL}/${b.id}/owned_whatsapp_business_accounts`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        results.wabas_por_negocio[b.id] = await wRes.json()
+      }
+    }
 
     return NextResponse.json(results)
   }
