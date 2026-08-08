@@ -301,12 +301,31 @@ async function waitForCookie(name: string, maxWaitMs = 1200, stepMs = 150): Prom
 // pero si el script todavía no cargó podemos construirlo nosotros mismos con
 // el mismo formato que usa Meta (fb.1.<timestamp>.<fbclid>) — no depende de
 // que fbevents.js haya corrido, solo de la URL actual.
+//
+// GAP REAL (detectado por Meta: solo 88.76% de cobertura de fbc, agosto 2026):
+// esta función solo miraba window.location.search en el momento EXACTO del
+// evento. Si el clic del anuncio aterriza en una página (ej. Home con
+// ?fbclid=...) y el evento que realmente nos interesa se dispara después de
+// navegar a otra (ej. el visitante entra a un producto), el fbclid ya no está
+// en la URL de esa segunda página — ni la cookie _fbc (si el Pixel no llegó a
+// escribirla a tiempo) ni este fallback lo capturaban. Ahora el fbclid se
+// guarda en sessionStorage la PRIMERA vez que aparece en cualquier página, y
+// se reutiliza durante toda la sesión aunque el usuario navegue a otras
+// páginas sin el parámetro en la URL.
 function getFbcFallback(): string | undefined {
   if (typeof window === 'undefined') return undefined
   try {
-    const fbclid = new URLSearchParams(window.location.search).get('fbclid')
-    if (!fbclid) return undefined
-    return `fb.1.${Date.now()}.${fbclid}`
+    const fbclidActual = new URLSearchParams(window.location.search).get('fbclid')
+    if (fbclidActual) {
+      sessionStorage.setItem('cg_fbclid', fbclidActual)
+      sessionStorage.setItem('cg_fbclid_ts', Date.now().toString())
+      return `fb.1.${Date.now()}.${fbclidActual}`
+    }
+    // No hay fbclid en la URL actual — usar el guardado al inicio de la sesión
+    const fbclidGuardado = sessionStorage.getItem('cg_fbclid')
+    const ts = sessionStorage.getItem('cg_fbclid_ts')
+    if (fbclidGuardado && ts) return `fb.1.${ts}.${fbclidGuardado}`
+    return undefined
   } catch {
     return undefined
   }
