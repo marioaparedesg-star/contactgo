@@ -395,5 +395,110 @@ export async function GET(req: NextRequest) {
     }
   } catch (e) { console.error('[cron/wa-daily] retry:', e) }
 
-  return NextResponse.json({ ok: true, ...results, ...resultsCarritos, ...resultsCross, ...resultsRetry, ejecutado_at: new Date().toISOString() })
+  // ─────────────────────────────────────────────────────
+  // SECUENCIA EDUCATIVA POR EMAIL — nueva (2026-08-08)
+  // 3 correos post-entrega con contenido de cuidado/higiene, no ventas.
+  // Mismo patrón de flags que resena_solicitada — evita duplicados sin
+  // necesitar una tabla de eventos nueva. No se bloquea por incidencia
+  // abierta (es contenido de ayuda, no comercial).
+  // ─────────────────────────────────────────────────────
+  const resultsEducativo = { dia3: 0, dia7: 0, dia14: 0 }
+  try {
+    const { Resend } = await import('resend')
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
+    const ETAPAS: { dias: number; campo: 'educativo_dia3_enviado' | 'educativo_dia7_enviado' | 'educativo_dia14_enviado'; asunto: string; contenido: (nombre: string) => string }[] = [
+      {
+        dias: 3, campo: 'educativo_dia3_enviado',
+        asunto: 'Cómo poner y quitar tus lentes correctamente 👁️',
+        contenido: (nombre) => `
+          <h2 style="color:#111;font-size:18px">¡Hola, ${nombre}! 👋</h2>
+          <p style="color:#374151;font-size:14px">Aquí tienes lo básico para empezar bien con tus lentes de contacto:</p>
+          <ul style="color:#374151;font-size:14px;padding-left:20px;line-height:1.8">
+            <li>✅ Lávate y sécate bien las manos antes de tocarlos</li>
+            <li>✅ Revisa que el lente no esté al revés — el borde debe verse liso, no volteado</li>
+            <li>✅ Colócatelo mirando hacia arriba, apoyando el párpado inferior</li>
+            <li>✅ Si sientes molestia los primeros 1-2 días, es normal (período de adaptación)</li>
+            <li>⚠️ Nunca uses agua del grifo ni saliva — solo solución para lentes de contacto</li>
+          </ul>
+          <p style="color:#374151;font-size:14px">Si algo no se siente bien, no fuerces el lente — quítatelo y escríbenos por WhatsApp.</p>`,
+      },
+      {
+        dias: 7, campo: 'educativo_dia7_enviado',
+        asunto: 'El error más común con el estuche de tus lentes 🧴',
+        contenido: (nombre) => `
+          <h2 style="color:#111;font-size:18px">${nombre}, hablemos de tu estuche 🧴</h2>
+          <p style="color:#374151;font-size:14px">Un estuche mal cuidado es la causa más común de infecciones oculares evitables:</p>
+          <ul style="color:#374151;font-size:14px;padding-left:20px;line-height:1.8">
+            <li>✅ Cambia la solución del estuche cada vez que lo uses — nunca "rellenes" la de ayer</li>
+            <li>✅ Enjuaga el estuche con solución (no agua) y déjalo secar boca abajo al aire</li>
+            <li>✅ Cambia el estuche completo cada 3 meses</li>
+            <li>⚠️ Si usas lentes diarios (1-DAY), no necesitas estuche ni solución — se descartan cada día</li>
+          </ul>`,
+      },
+      {
+        dias: 14, campo: 'educativo_dia14_enviado',
+        asunto: '¿Cuándo debes ver a un optometrista? 👀',
+        contenido: (nombre) => `
+          <h2 style="color:#111;font-size:18px">${nombre}, esto es importante 👀</h2>
+          <p style="color:#374151;font-size:14px">ContactGo no reemplaza a tu optometrista. Consulta a un profesional si notas:</p>
+          <ul style="color:#374151;font-size:14px;padding-left:20px;line-height:1.8">
+            <li>🔴 Ojo rojo que no mejora en 24 horas</li>
+            <li>🔴 Dolor (no solo molestia leve de adaptación)</li>
+            <li>🔴 Visión borrosa que no se corrige parpadeando</li>
+            <li>🔴 Sensibilidad fuerte a la luz o secreción inusual</li>
+          </ul>
+          <p style="color:#374151;font-size:14px">Ante cualquiera de estas señales, quítate el lente y acude a un oftalmólogo u optometrista — no esperes a que pase solo.</p>`,
+      },
+    ]
+
+    for (const etapa of ETAPAS) {
+      const desde = new Date(Date.now() - (etapa.dias + 1) * 86400000).toISOString()
+      const hasta = new Date(Date.now() - etapa.dias * 86400000).toISOString()
+
+      const { data: ordenes } = await sb
+        .from('orders')
+        .select('id, cliente_nombre, cliente_email')
+        .eq('estado', 'entregado')
+        .eq('es_prueba', false)
+        .eq(etapa.campo, false)
+        .not('cliente_email', 'is', null)
+        .gte('updated_at', desde)
+        .lte('updated_at', hasta)
+        .limit(30)
+
+      for (const o of ordenes ?? []) {
+        try {
+          const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+          await resend.emails.send({
+            from: 'ContactGo <info@contactgo.net>',
+            to: o.cliente_email,
+            subject: etapa.asunto,
+            html: `
+<div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
+  <div style="background:#0f766e;padding:20px;border-radius:12px 12px 0 0;text-align:center">
+    <p style="color:white;font-weight:900;font-size:20px;margin:0">ContactGo</p>
+    <p style="color:#99f6e4;font-size:11px;margin:2px 0 0">Cuidado de tus lentes</p>
+  </div>
+  <div style="background:#f9fafb;padding:24px;border-radius:0 0 12px 12px">
+    ${etapa.contenido(nombre)}
+    <p style="color:#9ca3af;font-size:12px;text-align:center;margin-top:20px">
+      ¿Dudas? Escríbenos por WhatsApp: +1 809 694-2268
+    </p>
+  </div>
+</div>`,
+          })
+          await sb.from('orders').update({ [etapa.campo]: true }).eq('id', o.id)
+          if (etapa.dias === 3) resultsEducativo.dia3++
+          else if (etapa.dias === 7) resultsEducativo.dia7++
+          else resultsEducativo.dia14++
+        } catch (e: any) {
+          console.error(`[cron/wa-daily] educativo día ${etapa.dias}:`, o.id, e.message)
+          results.errores++
+        }
+      }
+    }
+  } catch (e) { console.error('[cron/wa-daily] secuencia educativa:', e) }
+
+  return NextResponse.json({ ok: true, ...results, ...resultsCarritos, ...resultsCross, ...resultsRetry, ...resultsEducativo, ejecutado_at: new Date().toISOString() })
 }
