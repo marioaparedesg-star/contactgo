@@ -396,22 +396,45 @@ export async function GET(req: NextRequest) {
   } catch (e) { console.error('[cron/wa-daily] retry:', e) }
 
   // ─────────────────────────────────────────────────────
-  // SECUENCIA EDUCATIVA POR EMAIL — nueva (2026-08-08)
+  // SECUENCIA EDUCATIVA POR EMAIL — personalizada por producto (2026-08-08)
   // 3 correos post-entrega con contenido de cuidado/higiene, no ventas.
+  // Antes el texto era idéntico para todos — ahora varía según:
+  //   - esDiario: si el producto es de reemplazo diario, NO se le habla de
+  //     estuche/solución (no aplica) sino de por qué nunca debe reusarlo.
+  //   - tipoPrincipal: tórico (nota de orientación/rotación), multifocal
+  //     (nota de adaptación cerca/lejos), color (higiene de compartir),
+  //     esferico (mensaje base).
+  //   - Si el pedido es SOLO solución/gotas (sin lentes), se omite toda la
+  //     secuencia — no tiene sentido explicarle a alguien "cómo ponerse
+  //     lentes" si no compró lentes.
   // Mismo patrón de flags que resena_solicitada — evita duplicados sin
   // necesitar una tabla de eventos nueva. No se bloquea por incidencia
   // abierta (es contenido de ayuda, no comercial).
   // ─────────────────────────────────────────────────────
-  const resultsEducativo = { dia3: 0, dia7: 0, dia14: 0 }
+  const resultsEducativo = { dia3: 0, dia7: 0, dia14: 0, sin_lentes_omitidos: 0 }
   try {
     const { Resend } = await import('resend')
     const resend = new Resend(process.env.RESEND_API_KEY)
 
-    const ETAPAS: { dias: number; campo: 'educativo_dia3_enviado' | 'educativo_dia7_enviado' | 'educativo_dia14_enviado'; asunto: string; contenido: (nombre: string) => string }[] = [
+    type TipoPrincipal = 'torico' | 'multifocal' | 'color' | 'esferico'
+
+    function notaAplicacion(tipo: TipoPrincipal): string {
+      if (tipo === 'torico') return `<li>🔄 Es normal que el lente gire levemente al parpadear — está diseñado para volver solo a su posición (por eso es tórico). Si la visión se siente inestable los primeros días, es parte de la adaptación.</li>`
+      if (tipo === 'multifocal') return `<li>👓 Los multifocales necesitan un poco más de paciencia: tu cerebro tarda entre unos días y 2 semanas en acostumbrarse a ver de cerca y lejos con el mismo lente.</li>`
+      if (tipo === 'color') return `<li>🎨 Nunca compartas tus lentes de color con nadie, aunque sean "de un solo uso estético" — es la misma regla de higiene que un lente graduado.</li>`
+      return ''
+    }
+    function notaAlerta(tipo: TipoPrincipal): string {
+      if (tipo === 'multifocal') return `<p style="color:#374151;font-size:14px">Si después de 2 semanas tu visión de cerca o lejos sigue sin sentirse nítida, escríbenos — a veces hace falta ajustar la potencia ADD.</p>`
+      if (tipo === 'torico') return `<p style="color:#374151;font-size:14px">Un poco de fluctuación visual al mover los ojos es normal en tóricos durante la adaptación — pero si persiste después de 2 semanas, avísanos.</p>`
+      return ''
+    }
+
+    const ETAPAS_DEF = [
       {
-        dias: 3, campo: 'educativo_dia3_enviado',
+        dias: 3, campo: 'educativo_dia3_enviado' as const,
         asunto: 'Cómo poner y quitar tus lentes correctamente 👁️',
-        contenido: (nombre) => `
+        contenido: (nombre: string, tipo: TipoPrincipal) => `
           <h2 style="color:#111;font-size:18px">¡Hola, ${nombre}! 👋</h2>
           <p style="color:#374151;font-size:14px">Aquí tienes lo básico para empezar bien con tus lentes de contacto:</p>
           <ul style="color:#374151;font-size:14px;padding-left:20px;line-height:1.8">
@@ -419,27 +442,34 @@ export async function GET(req: NextRequest) {
             <li>✅ Revisa que el lente no esté al revés — el borde debe verse liso, no volteado</li>
             <li>✅ Colócatelo mirando hacia arriba, apoyando el párpado inferior</li>
             <li>✅ Si sientes molestia los primeros 1-2 días, es normal (período de adaptación)</li>
+            ${notaAplicacion(tipo)}
             <li>⚠️ Nunca uses agua del grifo ni saliva — solo solución para lentes de contacto</li>
           </ul>
           <p style="color:#374151;font-size:14px">Si algo no se siente bien, no fuerces el lente — quítatelo y escríbenos por WhatsApp.</p>`,
       },
       {
-        dias: 7, campo: 'educativo_dia7_enviado',
-        asunto: 'El error más común con el estuche de tus lentes 🧴',
-        contenido: (nombre) => `
+        dias: 7, campo: 'educativo_dia7_enviado' as const,
+        asunto: (esDiario: boolean) => esDiario ? 'Un tip importante sobre tus lentes diarios 🗓️' : 'El error más común con el estuche de tus lentes 🧴',
+        contenido: (nombre: string, _tipo: TipoPrincipal, esDiario: boolean) => esDiario ? `
+          <h2 style="color:#111;font-size:18px">${nombre}, un recordatorio rápido 🗓️</h2>
+          <p style="color:#374151;font-size:14px">Tus lentes son de reemplazo diario — eso significa:</p>
+          <ul style="color:#374151;font-size:14px;padding-left:20px;line-height:1.8">
+            <li>✅ Se usan una sola vez y se descartan al final del día — no los reutilices ni los guardes en solución para el día siguiente</li>
+            <li>✅ No necesitas estuche ni solución de limpieza para este producto</li>
+            <li>⚠️ Reusar un lente diario aumenta muchísimo el riesgo de infección — el material no está diseñado para limpiarse y durar más de un día</li>
+          </ul>` : `
           <h2 style="color:#111;font-size:18px">${nombre}, hablemos de tu estuche 🧴</h2>
           <p style="color:#374151;font-size:14px">Un estuche mal cuidado es la causa más común de infecciones oculares evitables:</p>
           <ul style="color:#374151;font-size:14px;padding-left:20px;line-height:1.8">
             <li>✅ Cambia la solución del estuche cada vez que lo uses — nunca "rellenes" la de ayer</li>
             <li>✅ Enjuaga el estuche con solución (no agua) y déjalo secar boca abajo al aire</li>
             <li>✅ Cambia el estuche completo cada 3 meses</li>
-            <li>⚠️ Si usas lentes diarios (1-DAY), no necesitas estuche ni solución — se descartan cada día</li>
           </ul>`,
       },
       {
-        dias: 14, campo: 'educativo_dia14_enviado',
+        dias: 14, campo: 'educativo_dia14_enviado' as const,
         asunto: '¿Cuándo debes ver a un optometrista? 👀',
-        contenido: (nombre) => `
+        contenido: (nombre: string, tipo: TipoPrincipal) => `
           <h2 style="color:#111;font-size:18px">${nombre}, esto es importante 👀</h2>
           <p style="color:#374151;font-size:14px">ContactGo no reemplaza a tu optometrista. Consulta a un profesional si notas:</p>
           <ul style="color:#374151;font-size:14px;padding-left:20px;line-height:1.8">
@@ -448,17 +478,18 @@ export async function GET(req: NextRequest) {
             <li>🔴 Visión borrosa que no se corrige parpadeando</li>
             <li>🔴 Sensibilidad fuerte a la luz o secreción inusual</li>
           </ul>
+          ${notaAlerta(tipo)}
           <p style="color:#374151;font-size:14px">Ante cualquiera de estas señales, quítate el lente y acude a un oftalmólogo u optometrista — no esperes a que pase solo.</p>`,
       },
     ]
 
-    for (const etapa of ETAPAS) {
+    for (const etapa of ETAPAS_DEF) {
       const desde = new Date(Date.now() - (etapa.dias + 1) * 86400000).toISOString()
       const hasta = new Date(Date.now() - etapa.dias * 86400000).toISOString()
 
       const { data: ordenes } = await sb
         .from('orders')
-        .select('id, cliente_nombre, cliente_email')
+        .select('id, cliente_nombre, cliente_email, order_items(nombre, products(tipo, reemplazo))')
         .eq('estado', 'entregado')
         .eq('es_prueba', false)
         .eq(etapa.campo, false)
@@ -469,11 +500,32 @@ export async function GET(req: NextRequest) {
 
       for (const o of ordenes ?? []) {
         try {
+          const items = ((o as any).order_items ?? []) as { nombre: string; products: { tipo: string; reemplazo: string } | null }[]
+          const tiposComprados = items.map(i => i.products?.tipo).filter(Boolean)
+
+          // Si compró SOLO solución/gotas (sin lentes reales), esta secuencia
+          // no le sirve — "cómo ponerte los lentes" no aplica.
+          const soloAccesorios = tiposComprados.length > 0 && tiposComprados.every(t => t === 'solucion' || t === 'gota')
+          if (soloAccesorios) {
+            await sb.from('orders').update({ [etapa.campo]: true }).eq('id', o.id)
+            resultsEducativo.sin_lentes_omitidos++
+            continue
+          }
+
+          // Prioridad de mensaje si el carrito mezcla varios tipos: el más
+          // "especializado" primero, porque necesita la nota más específica.
+          const prioridad: TipoPrincipal[] = ['torico', 'multifocal', 'color', 'esferico']
+          const tipoPrincipal = prioridad.find(t => tiposComprados.includes(t)) ?? 'esferico'
+          const esDiario = items.some(i => i.products?.reemplazo?.toLowerCase() === 'diario')
+
           const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
+          const asunto = typeof etapa.asunto === 'function' ? etapa.asunto(esDiario) : etapa.asunto
+          const contenidoHtml = etapa.contenido(nombre, tipoPrincipal, esDiario)
+
           await resend.emails.send({
             from: 'ContactGo <info@contactgo.net>',
             to: o.cliente_email,
-            subject: etapa.asunto,
+            subject: asunto,
             html: `
 <div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
   <div style="background:#0f766e;padding:20px;border-radius:12px 12px 0 0;text-align:center">
@@ -481,7 +533,7 @@ export async function GET(req: NextRequest) {
     <p style="color:#99f6e4;font-size:11px;margin:2px 0 0">Cuidado de tus lentes</p>
   </div>
   <div style="background:#f9fafb;padding:24px;border-radius:0 0 12px 12px">
-    ${etapa.contenido(nombre)}
+    ${contenidoHtml}
     <p style="color:#9ca3af;font-size:12px;text-align:center;margin-top:20px">
       ¿Dudas? Escríbenos por WhatsApp: +1 809 694-2268
     </p>
