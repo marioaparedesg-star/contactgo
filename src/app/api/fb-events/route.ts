@@ -27,7 +27,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, reason: 'missing_event_name' }, { status: 200 })
     }
 
-    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 
+    // Meta señaló (recomendación CAPI, agosto 2026) que estábamos enviando
+    // siempre IPv4 en eventos ViewContent aunque el visitante se conectó por
+    // IPv6. Causa: x-forwarded-for puede perder/reescribir la IP real al
+    // pasar por Cloudflare (que está delante de Vercel en nuestra
+    // arquitectura). cf-connecting-ip es el header que Cloudflare agrega con
+    // la IP real del visitante tal cual llegó a su borde — v4 o v6, sin
+    // reescribir — así que se prioriza sobre x-forwarded-for/x-real-ip.
+    const clientIp = req.headers.get('cf-connecting-ip') ??
+                     req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
                      req.headers.get('x-real-ip') ?? ''
     const userAgent = req.headers.get('user-agent') ?? ''
     const eventSourceUrl = req.headers.get('referer') ?? 'https://www.contactgo.net'
