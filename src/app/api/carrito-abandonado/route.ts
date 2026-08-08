@@ -121,13 +121,18 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 
+  // Con el plan Hobby de Vercel, este cron solo puede correr 1 vez al día
+  // (no cada 2h como sería ideal para "carrito abandonado"). Para no perder
+  // carritos entre corridas, la ventana cubre las últimas ~26 horas en vez
+  // de solo 2-6h. Si más adelante se sube a plan Pro, reducir esta ventana
+  // y volver a la frecuencia de cada 2h.
   const hace2h = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-  const hace6h = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
+  const hace26h = new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString()
 
   const { data: carritos, error } = await getSb()
     .from('abandoned_carts')
     .select('*')
-    .gte('updated_at', hace6h)
+    .gte('updated_at', hace26h)
     .lte('updated_at', hace2h)
     .eq('recuperado', false)
     .or('whatsapp_enviado.eq.false,email_sent.eq.false')
