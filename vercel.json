@@ -9,12 +9,12 @@
       "schedule": "0 7 * * *"
     },
     {
-      "path": "/api/recompra/cron",
-      "schedule": "0 14 * * *"
-    },
-    {
       "path": "/api/solicitar-resena",
       "schedule": "30 14 * * *"
+    },
+    {
+      "path": "/api/carrito-abandonado",
+      "schedule": "0 */2 * * *"
     },
     {
       "path": "/api/cron/reporte-diario",

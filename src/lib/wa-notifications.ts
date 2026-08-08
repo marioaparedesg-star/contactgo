@@ -43,6 +43,13 @@ function cuerpoLegible(templateName: string, params: string[], tipo: string): st
   }
 }
 
+// Plantillas que SIEMPRE deben llegar aunque haya una incidencia abierta —
+// información esencial del pedido, no promocional (ver principio de separar
+// "transaccional" de "comercial").
+const TEMPLATES_TRANSACCIONALES = new Set([
+  'confirmacion_pedido', 'cg_estado_pedido', 'cg_envio', 'cg_entregado', 'cg_cancelado',
+])
+
 export async function notificar(
   eventoId: string,
   telefono: string | null | undefined,
@@ -56,6 +63,19 @@ export async function notificar(
   if (phone.length < 10) return { ok: false, skipped: 'telefono_invalido' }
 
   const sb = getSb()
+
+  // Si el cliente tiene una incidencia abierta, no se le manda NADA comercial
+  // (recompra, carrito abandonado, reseña, cross-sell) hasta resolverla.
+  // Los mensajes transaccionales del pedido sí pasan siempre.
+  if (!TEMPLATES_TRANSACCIONALES.has(templateName)) {
+    const { data: incidenciaAbierta } = await sb
+      .from('incidencias')
+      .select('id')
+      .eq('cliente_telefono', phone)
+      .neq('estado', 'resuelta')
+      .maybeSingle()
+    if (incidenciaAbierta) return { ok: false, skipped: 'incidencia_abierta' }
+  }
 
   // Dedup
   const { data: yaEnviado } = await sb
