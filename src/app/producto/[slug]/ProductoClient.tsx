@@ -12,6 +12,7 @@ import AzulLogo from '@/components/ui/AzulLogo'
 import Footer from '@/components/ui/Footer'
 import { useCartStore } from '@/lib/cart-store'
 import { trackEcommerce, trackBuyNow, trackEyeFlow, sendCAPI, generateEventId } from '@/lib/analytics'
+import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 import toast from 'react-hot-toast'
 import SuscripcionSelector from '@/components/shop/SuscripcionSelector'
@@ -596,6 +597,13 @@ export default function ProductoClient({ product, variants }: Props) {
     // ViewContent con Pixel + CAPI. Sin CAPI, los bloqueadores, iOS y el
     // navegador interno de Instagram matan ~94% del evento: Meta no se entera
     // de que la persona vio el producto y no puede optimizar ni retargetear.
+    //
+    // Meta recomendó (agosto 2026) enviar Email en ViewContent para mejorar
+    // el Event Match Quality — antes se mandaba userData: undefined siempre,
+    // incluso cuando el visitante YA tenía sesión iniciada y su email estaba
+    // disponible sin costo (no hace falta pedírselo, ya lo tenemos). Solo
+    // aplica a visitantes con sesión activa — un visitante anónimo sigue sin
+    // email hasta que lo dé voluntariamente (normal, no se le puede inventar).
     const viewEventId = generateEventId()
     trackEcommerce('view_item', {
       items: [{
@@ -607,14 +615,21 @@ export default function ProductoClient({ product, variants }: Props) {
         quantity:      1,
       }],
     }, viewEventId)
-    sendCAPI('ViewContent', {
-      value: product.precio ?? 0,
-      currency: 'DOP',
-      content_ids: [product.id],
-      content_type: 'product',
-      content_name: product.nombre,
-      content_category: product.tipo ?? '',
-    }, undefined, viewEventId)
+    ;(async () => {
+      let email: string | undefined
+      try {
+        const { data: { user } } = await createClient().auth.getUser()
+        email = user?.email ?? undefined
+      } catch { /* visitante anónimo, sin sesión — normal */ }
+      sendCAPI('ViewContent', {
+        value: product.precio ?? 0,
+        currency: 'DOP',
+        content_ids: [product.id],
+        content_type: 'product',
+        content_name: product.nombre,
+        content_category: product.tipo ?? '',
+      }, email ? { email } : undefined, viewEventId)
+    })()
   }, [product.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -745,13 +760,21 @@ export default function ProductoClient({ product, variants }: Props) {
         item_brand: (product as any).marca ?? '',
         price, quantity: qty }],
     }, addToCartEventId)
-    // CAPI server-side — mismo eventId que el Pixel para deduplicación en Meta
-    sendCAPI('AddToCart', {
-      value: price * qty,
-      currency: 'DOP',
-      content_ids: [product.id],
-      num_items: qty,
-    }, undefined, addToCartEventId)
+    // CAPI server-side — mismo eventId que el Pixel para deduplicación en Meta.
+    // Mismo fix que ViewContent: si hay sesión iniciada, se manda el email real.
+    ;(async () => {
+      let email: string | undefined
+      try {
+        const { data: { user } } = await createClient().auth.getUser()
+        email = user?.email ?? undefined
+      } catch { /* visitante anónimo */ }
+      sendCAPI('AddToCart', {
+        value: price * qty,
+        currency: 'DOP',
+        content_ids: [product.id],
+        num_items: qty,
+      }, email ? { email } : undefined, addToCartEventId)
+    })()
     return true
   }
 
