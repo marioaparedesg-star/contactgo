@@ -33,6 +33,20 @@ export async function POST(req: NextRequest) {
     const changes = entry?.changes?.[0]?.value
     const sb = getSb()
 
+    // ── PROTECCIÓN: número personal de servicio manual ──────────────────
+    // +1 809-694-2268 (Phone Number ID 1174240852444859) es el número que
+    // Mario usa para responder manualmente y donde vive el Meta Business
+    // Agent (IA nativa de Meta, configurada directo en WhatsApp Manager —
+    // no es código nuestro). Este webhook NUNCA debe procesar ni
+    // auto-responder mensajes de este número: si lo hiciera, se dispararía
+    // sin que el Meta Business Agent ni Mario se enteren, duplicando o
+    // interfiriendo con lo que ya está pasando ahí. Cualquier mensaje que
+    // llegue con este phone_number_id se ignora por completo, de inmediato.
+    const NUMERO_MANUAL_PROTEGIDO = '1174240852444859'
+    if (changes?.metadata?.phone_number_id === NUMERO_MANUAL_PROTEGIDO) {
+      return NextResponse.json({ ok: true, ignorado: 'numero_manual_protegido' })
+    }
+
     // ── Handle incoming messages ──
     const messages = changes?.messages
     if (messages?.length > 0) {
