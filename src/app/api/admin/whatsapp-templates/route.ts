@@ -10,12 +10,39 @@ const GRAPH_URL = 'https://graph.facebook.com/v21.0'
 
 export async function POST(req: NextRequest) {
   const token = process.env.WHATSAPP_TOKEN
-  const wabaId = process.env.WHATSAPP_BUSINESS_ID ?? '998977189800215'
-  if (!token || !wabaId) {
+  if (!token) {
     return NextResponse.json({ error: 'faltan_credenciales' }, { status: 500 })
   }
 
   const body = await req.json()
+  const wabaId = body.waba_id ?? process.env.WHATSAPP_BUSINESS_ID ?? '998977189800215'
+
+  if (body.accion === 'diagnosticar_numero_nuevo') {
+    const results: any = {}
+    const phoneId = body.phone_id ?? '1174240852444859'
+    const possibleWaba = body.waba_id ?? '1544493937232309'
+
+    // 1. Info básica del Phone Number ID nuevo (809-694-2268)
+    const phoneRes = await fetch(`${GRAPH_URL}/${phoneId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    results.phone_info = await phoneRes.json()
+
+    // 2. ¿El WABA (asset_id de la URL de Mario) responde con este token?
+    const wabaRes = await fetch(`${GRAPH_URL}/${possibleWaba}?fields=id,name`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    results.waba_info = await wabaRes.json()
+
+    // 3. Plantillas ya existentes bajo ese WABA (el "robot" puede estar usando alguna)
+    const tplRes = await fetch(`${GRAPH_URL}/${possibleWaba}/message_templates?limit=100`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    results.plantillas = await tplRes.json()
+
+    // 4. Confirmar qué WABA es dueño real de este Phone Number (vía el propio phone_info si trae el campo)
+    return NextResponse.json(results)
+  }
 
   if (body.accion === 'diagnosticar') {
     const results: any = {}
