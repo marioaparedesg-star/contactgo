@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { requireAdmin } from '@/lib/admin-guard'
 import {
   notificarPedidoConfirmado, notificarEstado, notificarEnviado,
   notificarEntregado, notificarCancelado, notificarBienvenida,
@@ -23,6 +24,18 @@ async function fetchOrder(orderId: string) {
 }
 
 export async function POST(req: NextRequest) {
+  // FIX CRÍTICO AUDITORÍA (2026-08-09): este endpoint no tenía NINGUNA
+  // verificación — cualquiera en internet que conociera la URL podía
+  // enviar un WhatsApp real desde la cuenta de negocio de ContactGo a
+  // CUALQUIER número del mundo (spam, contenido inapropiado que parece
+  // venir de ContactGo, riesgo de que Meta baje la calificación de calidad
+  // del número o lo bloquee). Único uso legítimo confirmado en todo el
+  // código: admin/pedidos/page.tsx, que ya requiere sesión de admin para
+  // cargar. Se agrega requireAdmin() — no rompe ese uso porque quien
+  // llama ya tiene sesión válida cuando usa el panel.
+  const auth = await requireAdmin()
+  if (auth.ok === false) return auth.response
+
   try {
     const body = await req.json()
     const { tipo, ...data } = body

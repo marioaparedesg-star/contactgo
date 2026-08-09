@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendText, sendShippingNotification, sendRenewalReminder, normalizePhone } from '@/lib/whatsapp'
 import { createClient } from '@supabase/supabase-js'
+import { requireAdmin } from '@/lib/admin-guard'
 
 function getSb() {
   return createClient(
@@ -14,6 +15,14 @@ function getSb() {
 }
 
 export async function POST(req: NextRequest) {
+  // FIX CRÍTICO AUDITORÍA (2026-08-09): este endpoint aceptaba texto libre
+  // arbitrario y lo enviaba a cualquier número, sin ninguna verificación —
+  // más grave que wa/dispatch porque ni siquiera estaba limitado a
+  // plantillas aprobadas. Único uso legítimo confirmado:
+  // admin/whatsapp/page.tsx (ya requiere sesión de admin para cargar).
+  const auth = await requireAdmin()
+  if (auth.ok === false) return auth.response
+
   try {
     const body = await req.json()
     const { telefono, mensaje, tipo, order_id } = body
