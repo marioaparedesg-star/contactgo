@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
         // Tiene dedup incorporado por evento_id, así que es seguro llamarla siempre sin
         // riesgo de duplicar el mensaje si ya se envió por otra vía.
         fetch(`${base}/api/wa/dispatch`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
           body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
         }).catch(err => console.error('[admin/pedidos registrar_pago] wa/dispatch falló:', err))
       }

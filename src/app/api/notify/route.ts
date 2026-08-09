@@ -347,13 +347,22 @@ export async function POST(req: NextRequest) {
     const { data: order } = await getSb().from('orders').select('*').eq('id', order_id).single()
     if (!order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 })
 
+    // FIX AUDITORÍA (2026-08-09): antes se usaba nuevo_estado tal cual lo
+    // mandara quien llamara al endpoint, sin comparar contra el estado REAL
+    // de la orden — alguien con un order_id válido podía hacer que un
+    // cliente real recibiera una notificación de "tu pedido fue cancelado"
+    // (o cualquier otro estado) sin que eso fuera cierto de verdad. Ahora se
+    // ignora cualquier nuevo_estado que no coincida con order.estado —
+    // el mensaje siempre refleja el estado real guardado en la base de datos.
+    const nuevoEstadoSeguro = (nuevo_estado && nuevo_estado === order.estado) ? nuevo_estado : order.estado
+
     const { data: items } = await getSb().from('order_items')
       .select('*, products(tipo)')
       .eq('order_id', order_id)
     const itemsList = items ?? []
 
     const pedidoId = order.id.slice(-8).toUpperCase()
-    const estadoLabel = ESTADO_LABEL[nuevo_estado ?? order.estado] ?? (nuevo_estado ?? order.estado)
+    const estadoLabel = ESTADO_LABEL[nuevoEstadoSeguro] ?? nuevoEstadoSeguro
 
     const subject = evento === 'nuevo_pedido'
       ? `✅ Pedido #${pedidoId} recibido — ContactGo`
@@ -417,7 +426,7 @@ export async function POST(req: NextRequest) {
         try {
           const r = await fetch(`${BASE}/api/wa/dispatch`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
             body: JSON.stringify({ tipo: tipoWA, order_id }),
           })
           const d = await r.json()
@@ -439,7 +448,7 @@ export async function POST(req: NextRequest) {
       try {
         const r = await fetch(`${BASE}/api/wa/dispatch`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
           body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
         })
         const d = await r.json()

@@ -24,17 +24,20 @@ async function fetchOrder(orderId: string) {
 }
 
 export async function POST(req: NextRequest) {
-  // FIX CRÍTICO AUDITORÍA (2026-08-09): este endpoint no tenía NINGUNA
-  // verificación — cualquiera en internet que conociera la URL podía
-  // enviar un WhatsApp real desde la cuenta de negocio de ContactGo a
-  // CUALQUIER número del mundo (spam, contenido inapropiado que parece
-  // venir de ContactGo, riesgo de que Meta baje la calificación de calidad
-  // del número o lo bloquee). Único uso legítimo confirmado en todo el
-  // código: admin/pedidos/page.tsx, que ya requiere sesión de admin para
-  // cargar. Se agrega requireAdmin() — no rompe ese uso porque quien
-  // llama ya tiene sesión válida cuando usa el panel.
-  const auth = await requireAdmin()
-  if (auth.ok === false) return auth.response
+  // FIX AUDITORÍA (2026-08-09) + CORRECCIÓN INMEDIATA: la primera versión de
+  // este fix usaba solo requireAdmin(), pero este endpoint también lo llaman
+  // internamente OTRAS rutas del servidor (notify, auth/welcome,
+  // welcome-coupon) sin sesión de navegador — esas llamadas se habrían
+  // bloqueado por error. Ahora se acepta CUALQUIERA de las dos:
+  // (a) sesión de admin real (panel), o (b) el secreto interno servidor-a-
+  // servidor (mismo patrón que ya usan los crons). Sigue bloqueando a
+  // cualquiera en internet que no tenga ni lo uno ni lo otro.
+  const internalSecret = req.headers.get('x-internal-secret')
+  const esLlamadaInterna = !!process.env.CRON_SECRET && internalSecret === process.env.CRON_SECRET
+  if (!esLlamadaInterna) {
+    const auth = await requireAdmin()
+    if (auth.ok === false) return auth.response
+  }
 
   try {
     const body = await req.json()

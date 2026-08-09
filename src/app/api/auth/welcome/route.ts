@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
       fetch(`${BASE}/api/wa/dispatch`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
         body: JSON.stringify({ tipo: 'bienvenida', user_id, nombre, telefono }),
       }).catch(() => {})
     }

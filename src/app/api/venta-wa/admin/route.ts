@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
 
       // Confirmación completa de pedido por WhatsApp (dedup incorporado, seguro de llamar siempre)
       fetch(`${BASE}/api/wa/dispatch`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
         body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
       }).catch(() => {})
 
