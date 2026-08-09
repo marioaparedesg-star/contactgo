@@ -134,7 +134,7 @@ async function handleReturn(req: NextRequest) {
   }
 
   // En producción el hash es obligatorio para aprobar
-  const esAprobado = isProduction
+  let esAprobado = isProduction
     ? isoAprobado && hashValido
     : isoAprobado  // sandbox: solo IsoCode (AZUL sandbox puede no enviar hash)
 
@@ -198,14 +198,12 @@ async function handleReturn(req: NextRequest) {
           }
 
           // ── Obtener próximo NCF ──────────────────────────────────────────
-          let ncf: string | null = null
-          try {
-            const { data: ncfData, error: ncfErr } = await sb.rpc('get_next_ncf', { p_serie: 'E02' })
-            if (ncfErr) console.error('[AZUL/retorno] NCF error:', ncfErr.message)
-            else { ncf = ncfData as string }
-          } catch (e) { console.error('[AZUL/retorno] NCF excepción:', e) }
-
-          // ── Guardar TODOS los datos de AZUL + NCF en la orden ───────────
+          // FIX AUDITORÍA (2026-08-09): antes se generaba el NCF ANTES de
+          // saber si el UPDATE de la orden iba a tener éxito — si fallaba
+          // después, ese número de NCF quedaba "saltado" en la secuencia
+          // fiscal sin ninguna orden real asociada (riesgo ante DGII).
+          // Ahora primero se hace el UPDATE (sin NCF), y solo si tiene éxito
+          // se pide el NCF y se guarda en un segundo paso.
           const { error: updateErr } = await sb.from('orders').update({
             pago_estado:        'pagado',
             estado:             'confirmado',
@@ -216,9 +214,34 @@ async function handleReturn(req: NextRequest) {
             azul_response_code: responseCode || null,
             azul_iso_code:      isoCode      || null,
             pagado_en:          new Date().toISOString(),
-            ncf:                ncf,
-            ncf_tipo:           'E02',
           }).eq('id', orderId)
+
+          if (updateErr) {
+            // FIX CRÍTICO AUDITORÍA (2026-08-09): antes, si este UPDATE
+            // fallaba, el código seguía adelante igual y el cliente terminaba
+            // viendo "pago aprobado" en /confirmacion mientras la orden en la
+            // base de datos seguía en pago_estado='pendiente' — un pedido
+            // pagado de verdad en AZUL que ContactGo nunca registraba como
+            // pagado. Ahora, si el guardado falla, se marca esAprobado=false
+            // explícitamente antes de redirigir, y se registra el error con
+            // máxima prioridad para revisión manual inmediata — el cliente
+            // ve un estado honesto en vez de una confirmación falsa.
+            console.error('[AZUL/retorno] 🔴 CRÍTICO — pago aprobado por AZUL pero UPDATE de la orden FALLÓ:', {
+              orderNumber, orderId, error: updateErr.message,
+            })
+            esAprobado = false
+          } else {
+            // Solo se genera NCF y se dispara todo lo demás si el UPDATE fue exitoso
+            let ncf: string | null = null
+            try {
+              const { data: ncfData, error: ncfErr } = await sb.rpc('get_next_ncf', { p_serie: 'E02' })
+              if (ncfErr) console.error('[AZUL/retorno] NCF error:', ncfErr.message)
+              else { ncf = ncfData as string }
+            } catch (e) { console.error('[AZUL/retorno] NCF excepción:', e) }
+
+            if (ncf) {
+              await sb.from('orders').update({ ncf, ncf_tipo: 'E02' }).eq('id', orderId)
+            }
 
             // ── Loyalty: 1 punto por cada RD$10 gastado ───────────────────
             try {
@@ -231,12 +254,8 @@ async function handleReturn(req: NextRequest) {
               }
             } catch { /* loyalty no bloquea el flujo */ }
 
-          if (updateErr) {
-            console.error('[AZUL/retorno] ERROR actualizando orden:', updateErr.message)
-          }
-          // Activar suscripciones pendientes de esta orden (las que el cliente
-          // eligió manualmente en el checkout, insertadas con activa:false)
-          if (!updateErr) {
+            // Activar suscripciones pendientes de esta orden (las que el cliente
+            // eligió manualmente en el checkout, insertadas con activa:false)
             await sb.from('subscriptions')
               .update({ activa: true })
               .eq('order_id_origen', orderId)
@@ -249,20 +268,18 @@ async function handleReturn(req: NextRequest) {
             if (tieneSub && tieneSub > 0) {
               await sb.from('orders').update({ tiene_suscripcion: true }).eq('id', orderId)
             }
-          }
 
-          // ── Reposición automática: disparo server-to-server, confiable ──────
-          // ANTES esto solo se disparaba desde el navegador del cliente en
-          // /confirmacion (fetch "fire and forget" con .catch(()=>{})). Si el
-          // cliente cerraba la pestaña justo después de pagar, o el fetch
-          // fallaba por cualquier razón, la suscripción nunca se creaba y
-          // nadie se enteraba — exactamente el patrón de fallos silenciosos
-          // que ya afectó recompra/cron, reseñas y confirmaciones de WhatsApp.
-          // Ahora se dispara aquí, en el servidor, en el mismo request donde
-          // AZUL confirma el pago — no depende del navegador del cliente.
-          // El endpoint es idempotente, así que si /confirmacion también lo
-          // dispara del lado del cliente, no se duplica nada.
-          if (!updateErr) {
+            // ── Reposición automática: disparo server-to-server, confiable ──────
+            // ANTES esto solo se disparaba desde el navegador del cliente en
+            // /confirmacion (fetch "fire and forget" con .catch(()=>{})). Si el
+            // cliente cerraba la pestaña justo después de pagar, o el fetch
+            // fallaba por cualquier razón, la suscripción nunca se creaba y
+            // nadie se enteraba — exactamente el patrón de fallos silenciosos
+            // que ya afectó recompra/cron, reseñas y confirmaciones de WhatsApp.
+            // Ahora se dispara aquí, en el servidor, en el mismo request donde
+            // AZUL confirma el pago — no depende del navegador del cliente.
+            // El endpoint es idempotente, así que si /confirmacion también lo
+            // dispara del lado del cliente, no se duplica nada.
             try {
               await fetch(`${BASE}/api/suscripciones/auto-crear`, {
                 method: 'POST',
@@ -272,9 +289,8 @@ async function handleReturn(req: NextRequest) {
             } catch (e) {
               console.error('[AZUL/retorno] auto-crear suscripción falló:', e)
             }
+            // El notify lo dispara el cliente desde /confirmacion (más confiable en Vercel)
           }
-
-          // El notify lo dispara el cliente desde /confirmacion (más confiable en Vercel)
 
         } else {
           // Pago declinado — registrar el intento y cancelar la orden
