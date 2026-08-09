@@ -145,19 +145,19 @@ export async function POST(req: NextRequest) {
           if (buttonId === 'btn_receta') {
             const texto = '📋 ¡Perfecto! Envíanos una foto clara de tu receta y te cotizamos en minutos.\n\n' +
               'Si no tienes la receta a mano, dinos la marca y graduación que usas y te ayudamos.\n\n' +
-              '👨‍⚕️ Nuestro equipo te responde personalmente.'
+              '👨‍⚕️ Nuestro equipo te responde personalmente. Si necesitas ayuda ahora mismo, escríbenos directo al 809-694-2268.'
             await waSendText(from, texto)
             await logAutoReply(texto)
           } else if (buttonId === 'btn_color') {
             const texto = '🎨 ¡Excelente elección!\n\n' +
               'Tenemos AIR OPTIX COLORS (12 colores) desde RD$2,100 sin graduación.\n\n' +
               '👉 Ve los colores aquí: www.contactgo.net/producto/air-optix-colors-lentes-contacto-color-dominicana\n\n' +
-              'O dime qué color te interesa y te ayudo directo. 😊'
+              'O dime qué color te interesa y te ayudo directo. Si prefieres hablar ya, escríbenos al 809-694-2268. 😊'
             await waSendText(from, texto)
             await logAutoReply(texto)
           } else if (buttonId === 'btn_pedido') {
             const texto = '📦 Dime tu nombre o número de pedido y te doy el estado al instante.\n\n' +
-              '👨‍⚕️ Nuestro equipo te responde en minutos.'
+              '👨‍⚕️ Nuestro equipo te responde en minutos. Si es urgente, escríbenos directo al 809-694-2268.'
             await waSendText(from, texto)
             await logAutoReply(texto)
           } else if (msgType === 'image' || msgType === 'document') {
@@ -167,8 +167,19 @@ export async function POST(req: NextRequest) {
               'Te responde en minutos. Si es algo urgente, dinos brevemente de qué se trata. ⏱️'
             await waSendText(from, texto)
             await logAutoReply(texto)
-          } else if (isFirstMessage || msgBody.toLowerCase().match(/^(hola|hi|buenos?\s*d[ií]as?|buenas?\s*tardes?|buenas?\s*noches?|hey|ey|saludos?)$/i)) {
-            // Primer mensaje o saludo genérico → menú de botones
+          } else if (isFirstMessage || (msgBody.toLowerCase().match(/^(hola|hi|buenos?\s*d[ií]as?|buenas?\s*tardes?|buenas?\s*noches?|hey|ey|saludos?)$/i) && !buttonId)) {
+            // BUG CORREGIDO (2026-08-08): antes, un simple "Hola" a mitad de
+            // una conversación ya en curso volvía a mostrar el menú desde
+            // cero — el cliente sentía que el bot "se trababa y repetía todo
+            // otra vez" aunque ya hubiera avanzado (ej. dado su número de
+            // pedido). Ahora solo se re-muestra el menú si además es de
+            // verdad su primer mensaje reciente — un saludo de cortesía en
+            // medio de la conversación ya no reinicia nada.
+            if (!isFirstMessage) {
+              // Saludo de cortesía a mitad de conversación → seguimos sin
+              // responder automáticamente (mismo camino que un mensaje libre)
+              // para no repetir el menú ni interrumpir el hilo real.
+            } else {
             const nombre = contactName ? contactName.split(' ')[0] : ''
             const texto = `¡Hola${nombre ? ' ' + nombre : ''}! 👋 Bienvenido/a a ContactGo, tu tienda de lentes de contacto en RD.\n\n¿En qué te puedo ayudar?`
             await sendButtons(
@@ -183,6 +194,7 @@ export async function POST(req: NextRequest) {
               'Te contestamos en minutos'
             )
             await logAutoReply(`${texto}\n\n[Menú: 📋 Cotizar con receta | 🎨 Lentes de color | 📦 Estado de pedido]`)
+            }
           }
           // Si no es ninguno de los anteriores (mensaje libre), no auto-responde —
           // solo llega la notificación al admin para que Mario conteste personalmente.
@@ -192,6 +204,14 @@ export async function POST(req: NextRequest) {
         }
 
         // ── Notificación al admin y al número de servicio personal de Mario ──
+        // BUG CORREGIDO (2026-08-08): se mandaba como texto libre, que
+        // WhatsApp solo entrega si ese número le escribió a este mismo
+        // número de automatización en las últimas 24h. El número de
+        // servicio personal de Mario casi nunca cumple esa condición, así
+        // que la notificación fallaba en silencio (el fetch no revisaba la
+        // respuesta ni registraba el error). Ahora usa una plantilla
+        // aprobada (aviso_nuevo_mensaje_admin), que Meta entrega siempre,
+        // sin depender de ninguna ventana de tiempo.
         const displayPhone = from.length === 11 && from.startsWith('1')
           ? `(${from.slice(1,4)}) ${from.slice(4,7)}-${from.slice(7)}`
           : from
@@ -200,16 +220,31 @@ export async function POST(req: NextRequest) {
         const NOTIFY_PHONES = [ADMIN_PHONE, '18096942268'].filter(Boolean)
 
         for (const notifyTo of NOTIFY_PHONES) {
-          await fetch(`${WA_API}/${PHONE_ID}/messages`, {
+          const res = await fetch(`${WA_API}/${PHONE_ID}/messages`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
               messaging_product: 'whatsapp',
               to: notifyTo,
-              type: 'text',
-              text: { body: `📩 *Nuevo mensaje en ContactGo (API)*\n\n👤 *${nombre}*\n📱 ${displayPhone}\n💬 ${preview.slice(0, 300)}\n\n👉 Responder: https://www.contactgo.net/admin/whatsapp` },
+              type: 'template',
+              template: {
+                name: 'aviso_nuevo_mensaje_admin',
+                language: { code: 'es' },
+                components: [{
+                  type: 'body',
+                  parameters: [
+                    { type: 'text', text: nombre },
+                    { type: 'text', text: displayPhone },
+                    { type: 'text', text: preview.slice(0, 300) },
+                  ],
+                }],
+              },
             }),
           })
+          const resData = await res.json().catch(() => null)
+          if (resData?.error) {
+            console.error(`[WA/webhook] Notificación admin falló para ${notifyTo}:`, JSON.stringify(resData.error))
+          }
         }
       }
     }
