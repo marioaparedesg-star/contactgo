@@ -12,16 +12,23 @@
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { requireAdmin } from '@/lib/admin-guard'
 
 function getSb() {
   return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 }
 
 export async function POST(req: NextRequest) {
-  // Protección mínima — no es un endpoint público de negocio, es una
-  // utilidad de mantenimiento de un solo uso.
+  // FIX AUDITORÍA (2026-08-09): el secreto vivía escrito literal en el
+  // código fuente (visible para cualquiera con acceso al repo, aunque sea
+  // privado — mala práctica de todas formas). Ahora vive en variable de
+  // entorno, y se agrega requireAdmin() como segunda capa: aunque el
+  // secreto se filtrara, hace falta ADEMÁS una sesión de admin real.
+  const auth = await requireAdmin()
+  if (auth.ok === false) return auth.response
+
   const secret = req.nextUrl.searchParams.get('secret')
-  if (secret !== 'contactgo-backfill-2026') {
+  if (!process.env.BACKFILL_SECRET || secret !== process.env.BACKFILL_SECRET) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 
