@@ -1,14 +1,13 @@
 'use client'
 export const dynamic = 'force-dynamic'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import {
   TrendingUp, ShoppingBag, Users, RefreshCw,
   Package, Truck, CheckCircle, Clock, CreditCard,
-  ArrowRight, AlertTriangle
+  ArrowRight, AlertTriangle, Calendar, ChevronDown
 } from 'lucide-react'
-
 
 const ESTADO_COLOR: Record<string,string> = {
   pendiente:  'bg-amber-100 text-amber-700',
@@ -19,6 +18,58 @@ const ESTADO_COLOR: Record<string,string> = {
   cancelado:  'bg-red-100 text-red-700',
 }
 
+// ═══════════════════════════════════════════════════════════════
+// SELECTOR DE RANGO DE FECHAS — nuevo
+// Cada preset calcula { desde, hasta } en hora local de RD.
+// 'trimestre' = últimos 3 meses corridos (más útil para un negocio
+// pequeño que el trimestre calendario Q1/Q2/Q3/Q4).
+// ═══════════════════════════════════════════════════════════════
+type PresetKey = 'hoy' | 'mes_actual' | 'mes_anterior' | 'trimestre' | 'anio_actual' | 'anio_anterior' | 'personalizado'
+
+const PRESETS: { key: PresetKey; label: string }[] = [
+  { key: 'hoy',            label: 'Hoy' },
+  { key: 'mes_actual',     label: 'Mes actual' },
+  { key: 'mes_anterior',   label: 'Mes anterior' },
+  { key: 'trimestre',      label: 'Últimos 3 meses' },
+  { key: 'anio_actual',    label: 'Año actual' },
+  { key: 'anio_anterior',  label: 'Año anterior' },
+  { key: 'personalizado',  label: 'Fecha personalizada' },
+]
+
+function rangoDePreset(preset: PresetKey, customDesde?: string, customHasta?: string): { desde: Date; hasta: Date; label: string } {
+  const ahora = new Date()
+  const hoy0 = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), 0, 0, 0)
+  const finHoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), 23, 59, 59)
+
+  switch (preset) {
+    case 'hoy':
+      return { desde: hoy0, hasta: finHoy, label: 'Hoy' }
+    case 'mes_actual':
+      return { desde: new Date(ahora.getFullYear(), ahora.getMonth(), 1), hasta: finHoy, label: 'Mes actual' }
+    case 'mes_anterior': {
+      const desde = new Date(ahora.getFullYear(), ahora.getMonth() - 1, 1)
+      const hasta = new Date(ahora.getFullYear(), ahora.getMonth(), 0, 23, 59, 59)
+      return { desde, hasta, label: desde.toLocaleDateString('es-DO', { month: 'long', year: 'numeric' }) }
+    }
+    case 'trimestre':
+      return { desde: new Date(ahora.getFullYear(), ahora.getMonth() - 2, 1), hasta: finHoy, label: 'Últimos 3 meses' }
+    case 'anio_actual':
+      return { desde: new Date(ahora.getFullYear(), 0, 1), hasta: finHoy, label: `Año ${ahora.getFullYear()}` }
+    case 'anio_anterior': {
+      const y = ahora.getFullYear() - 1
+      return { desde: new Date(y, 0, 1), hasta: new Date(y, 11, 31, 23, 59, 59), label: `Año ${y}` }
+    }
+    case 'personalizado':
+      return {
+        desde: customDesde ? new Date(customDesde + 'T00:00:00') : hoy0,
+        hasta: customHasta ? new Date(customHasta + 'T23:59:59') : finHoy,
+        label: customDesde && customHasta
+          ? `${new Date(customDesde).toLocaleDateString('es-DO')} — ${new Date(customHasta).toLocaleDateString('es-DO')}`
+          : 'Personalizado',
+      }
+  }
+}
+
 export default function AdminDashboard() {
   const sb = createClient()
   const router = useRouter()
@@ -26,51 +77,55 @@ export default function AdminDashboard() {
   const [recent, setRecent]   = useState<any[]>([])
   const [top, setTop]         = useState<any[]>([])
   const [stock, setStock]     = useState<any[]>([])
-  const [ords7Raw, setOrds7Raw] = useState<any[]>([])
+  const [chartRaw, setChartRaw] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [updated, setUpdated] = useState(new Date())
+
+  // ── Estado del selector de fechas ──
+  const [preset, setPreset] = useState<PresetKey>('mes_actual')
+  const [customDesde, setCustomDesde] = useState('')
+  const [customHasta, setCustomHasta] = useState('')
+  const [selectorAbierto, setSelectorAbierto] = useState(false)
+
+  const rango = useMemo(() => rangoDePreset(preset, customDesde, customHasta), [preset, customDesde, customHasta])
 
   const fmt = (n:number) => `RD$${Math.round(n).toLocaleString('es-DO')}`
   const hoy = new Date().toLocaleDateString('es-DO',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
 
   const cargar = async () => {
     setLoading(true)
-    const since30 = new Date(Date.now()-30*24*3600*1000).toISOString()
-    const since7  = new Date(Date.now()-7*24*3600*1000).toISOString()
-    const since1  = new Date(new Date().setHours(0,0,0,0)).toISOString()
+    const desdeISO = rango.desde.toISOString()
+    const hastaISO = rango.hasta.toISOString()
+    // "Hoy" siempre se muestra aparte, sin importar el rango elegido —
+    // es información operativa del día, no del análisis histórico.
+    const hoy0ISO = new Date(new Date().setHours(0,0,0,0)).toISOString()
 
-    const [all, ordRecent, items, stockLow] = await Promise.all([
+    const [periodo, hoyData, ordRecent, items, stockLow] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
         .eq('pago_estado','pagado').eq('es_prueba', false)
-        .gte('fecha',since30),
+        .gte('fecha', desdeISO).lte('fecha', hastaISO),
+      sb.from('orders').select('id,total')
+        .eq('pago_estado','pagado').eq('es_prueba', false)
+        .gte('fecha', hoy0ISO),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
+      // Top productos ahora respeta el rango seleccionado (antes era
+      // siempre "todo el historial", sin filtro de fecha)
       sb.from('order_items')
-        // BUG CORREGIDO (2026-08-05): esta consulta no tenía filtro de fecha NI
-        // de pedidos de prueba — 3 compras de prueba de Mario (RD$16,118, con
-        // su propio teléfono personal) se contaban como ventas reales en "Top
-        // productos" para siempre, sin importar cuánto tiempo pasara. Ahora
-        // excluye es_prueba igual que las otras dos consultas del dashboard.
-        .select('nombre,cantidad,precio,order_id,orders!inner(pago_estado,metodo_pago,es_prueba)')
+        .select('nombre,cantidad,precio,order_id,orders!inner(pago_estado,es_prueba,fecha)')
         .eq('orders.pago_estado','pagado').eq('orders.es_prueba', false)
-        .limit(600),
+        .gte('orders.fecha', desdeISO).lte('orders.fecha', hastaISO)
+        .limit(1000),
       sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
     ])
 
-    const ords    = all.data ?? []
-    // Los datasets de 7 días y hoy son subconjuntos del de 30 días —
-    // se derivan en memoria en vez de hacer 2 llamadas adicionales a Supabase
-    // (elimina el patrón N+1 detectado en Sentry: JAVASCRIPT-NEXTJS-4)
-    const ords7   = ords.filter(o => o.fecha >= since7)
-    const ordsHoy = ords.filter(o => o.fecha >= since1)
-
-    const ventas30  = ords.reduce((s,o)=>s+Number(o.total??0),0)
-    const ventas7   = ords7.reduce((s,o)=>s+Number(o.total??0),0)
-    const ventasHoy = ordsHoy.reduce((s,o)=>s+Number(o.total??0),0)
-    const tickets   = ords.length > 0 ? ventas30/ords.length : 0
-    const entregados = ords.filter(o=>o.estado==='entregado').length
-    const conversion = ords.length > 0 ? Math.round((entregados/ords.length)*100) : 0
+    const ords = periodo.data ?? []
+    const ventasPeriodo  = ords.reduce((s,o)=>s+Number(o.total??0),0)
+    const ventasHoy      = (hoyData.data ?? []).reduce((s,o)=>s+Number(o.total??0),0)
+    const ticketProm     = ords.length > 0 ? ventasPeriodo/ords.length : 0
+    const entregados     = ords.filter(o=>o.estado==='entregado').length
+    const conversion     = ords.length > 0 ? Math.round((entregados/ords.length)*100) : 0
 
     const agg: Record<string,{nombre:string,u:number,rev:number}> = {}
     ;(items.data??[]).forEach((i:any)=>{
@@ -82,47 +137,66 @@ export default function AdminDashboard() {
 
     const { count: clientes } = await sb.from('profiles').select('*',{count:'exact',head:true}).eq('role','customer')
 
-    // FASE 9: KPIs de inventario
     const { data: invStats } = await sb.from('v_stock_disponible').select('id,nombre,tipo,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock,precio')
     const invAll = invStats ?? []
-    const invAgotados   = invAll.filter((p:any) => p.alerta_stock === 'agotado').length
     const invCriticos   = invAll.filter((p:any) => p.alerta_stock === 'critico').length
     const invBajoMin    = invAll.filter((p:any) => p.alerta_stock === 'bajo_minimo').length
-    const invValorTotal = invAll.reduce((s:number, p:any) => s + Number(p.stock??0) * Number(p.precio??0), 0)
 
-    setData({ ventas30, ventas7, ventasHoy, tickets, entregados, conversion, pedidos30:ords.length, pedidos7:ords7.length, clientes: clientes??0,
-      invAgotados, invCriticos, invBajoMin, invValorTotal, invTotal: invAll.length })
+    setData({ ventasPeriodo, ventasHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
+      invCriticos, invBajoMin, invTotal: invAll.length })
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
-    setOrds7Raw(ords7)
+    setChartRaw(ords)
     setUpdated(new Date())
     setLoading(false)
   }
 
-  useEffect(()=>{ cargar() },[])
+  useEffect(()=>{ cargar() },[rango.desde.getTime(), rango.hasta.getTime()]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Mini bar chart 7 días
+  // ── Gráfica: agrupa por día, semana o mes según cuánto abarque el rango ──
   const [bars, setBars] = useState<{d:string,v:number}[]>([])
   useEffect(()=>{
     if (!data) return
-    const dias = Array.from({length:7},(_,i)=>{
-      const d = new Date(Date.now()-(6-i)*86400000)
-      return { d: d.toLocaleDateString('es-DO',{weekday:'short'}), v: 0, date: d.toDateString() }
-    })
-    // Usa los datos de 7 días ya obtenidos en cargar() — evita una 4ta
-    // llamada redundante a Supabase con el mismo filtro (Sentry JAVASCRIPT-NEXTJS-4)
-    ords7Raw.forEach((ord:any)=>{
-      const od = new Date(ord.fecha).toDateString()
-      const bar = dias.find(d=>d.date===od)
-      if (bar) bar.v += Number(ord.total??0)
-    })
-    setBars(dias.map(d=>({d:d.d,v:d.v})))
-  },[data, ords7Raw])
+    const diasEnRango = Math.max(1, Math.round((rango.hasta.getTime()-rango.desde.getTime())/86400000))
+    const modo: 'dia'|'semana'|'mes' = diasEnRango <= 35 ? 'dia' : diasEnRango <= 120 ? 'semana' : 'mes'
+
+    const buckets = new Map<string, { label: string; v: number; orden: number }>()
+
+    if (modo === 'dia') {
+      for (let i = 0; i < diasEnRango; i++) {
+        const d = new Date(rango.desde.getTime() + i*86400000)
+        const key = d.toDateString()
+        buckets.set(key, { label: d.toLocaleDateString('es-DO',{day:'numeric',month:'short'}), v: 0, orden: i })
+      }
+      chartRaw.forEach((ord:any)=>{
+        const key = new Date(ord.fecha).toDateString()
+        const b = buckets.get(key)
+        if (b) b.v += Number(ord.total??0)
+      })
+    } else if (modo === 'semana') {
+      chartRaw.forEach((ord:any)=>{
+        const d = new Date(ord.fecha)
+        const semanaInicio = new Date(d); semanaInicio.setDate(d.getDate() - d.getDay())
+        const key = semanaInicio.toDateString()
+        if (!buckets.has(key)) buckets.set(key, { label: `Sem. ${semanaInicio.toLocaleDateString('es-DO',{day:'numeric',month:'short'})}`, v: 0, orden: semanaInicio.getTime() })
+        buckets.get(key)!.v += Number(ord.total??0)
+      })
+    } else {
+      chartRaw.forEach((ord:any)=>{
+        const d = new Date(ord.fecha)
+        const key = `${d.getFullYear()}-${d.getMonth()}`
+        if (!buckets.has(key)) buckets.set(key, { label: d.toLocaleDateString('es-DO',{month:'short',year:'2-digit'}), v: 0, orden: d.getFullYear()*12+d.getMonth() })
+        buckets.get(key)!.v += Number(ord.total??0)
+      })
+    }
+
+    setBars(Array.from(buckets.values()).sort((a,b)=>a.orden-b.orden).map(b=>({d:b.label,v:b.v})))
+  },[data, chartRaw, rango])
 
   const maxBar = Math.max(...bars.map(b=>b.v),1)
 
-  if (loading) return (
+  if (loading && !data) return (
     <div className="flex items-center justify-center h-64">
       <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"/>
     </div>
@@ -149,15 +223,48 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* KPIs principales */}
+      {/* ═══ SELECTOR DE RANGO DE FECHAS ═══ */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Calendar className="w-4 h-4 text-gray-400 shrink-0"/>
+            {PRESETS.map(p => (
+              <button key={p.key}
+                onClick={() => { setPreset(p.key); setSelectorAbierto(p.key === 'personalizado') }}
+                className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                  preset === p.key ? 'bg-primary-600 text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                }`}>
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-gray-400 shrink-0">
+            {rango.desde.toLocaleDateString('es-DO')} — {rango.hasta.toLocaleDateString('es-DO')}
+          </p>
+        </div>
+        {selectorAbierto && (
+          <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100">
+            <div>
+              <label className="text-[10px] font-semibold text-gray-400 uppercase block mb-1">Desde</label>
+              <input type="date" value={customDesde} onChange={e=>setCustomDesde(e.target.value)}
+                className="text-xs border border-gray-200 rounded-lg px-2 py-1.5"/>
+            </div>
+            <div>
+              <label className="text-[10px] font-semibold text-gray-400 uppercase block mb-1">Hasta</label>
+              <input type="date" value={customHasta} onChange={e=>setCustomHasta(e.target.value)}
+                className="text-xs border border-gray-200 rounded-lg px-2 py-1.5"/>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* KPIs del período seleccionado */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon:TrendingUp,  label:'Ventas hoy',    val:fmt(data?.ventasHoy??0),  sub:`${data?.pedidos30??0} pedidos total`,  color:'text-green-600',  bg:'bg-green-50' },
-          { icon:ShoppingBag, label:'Ventas 30 días', val:fmt(data?.ventas30??0),  sub:`${data?.pedidos30??0} pedidos`,         color:'text-blue-600',   bg:'bg-blue-50'  },
-          { icon:CreditCard,  label:'Ticket promedio',val:fmt(data?.tickets??0),   sub:'por pedido',                            color:'text-purple-600', bg:'bg-purple-50'},
-          { icon:Users,       label:'Clientes',       val:String(data?.clientes??0),sub:'registrados',                         color:'text-indigo-600', bg:'bg-indigo-50'},
-          { icon:Package,     label:'Productos activos',val:String((data as any)?.invTotal??0),sub:'en catálogo',              color:'text-gray-600',   bg:'bg-gray-50'   },
-          { icon:AlertTriangle,label:'Bajo mínimo',      val:String(((data as any)?.invCriticos??0)+((data as any)?.invBajoMin??0)),sub:'requieren atención', color:'text-amber-600',  bg:'bg-amber-50'  },
+          { icon:TrendingUp,  label:'Ventas hoy',              val:fmt(data?.ventasHoy??0),      sub:'siempre del día de hoy',           color:'text-green-600',  bg:'bg-green-50' },
+          { icon:ShoppingBag, label:`Ventas · ${rango.label}`, val:fmt(data?.ventasPeriodo??0),  sub:`${data?.pedidosPeriodo??0} pedidos`, color:'text-blue-600',   bg:'bg-blue-50'  },
+          { icon:Package,     label:'Ticket promedio',         val:fmt(data?.ticketProm??0),     sub:rango.label,                        color:'text-purple-600', bg:'bg-purple-50' },
+          { icon:AlertTriangle,label:'Bajo mínimo',            val:String((data?.invCriticos??0)+(data?.invBajoMin??0)), sub:'requieren atención', color:'text-amber-600',  bg:'bg-amber-50'  },
         ].map(({icon:Icon,label,val,sub,color,bg})=>(
           <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center mb-4`}>
@@ -177,8 +284,8 @@ export default function AdminDashboard() {
             <Clock className="w-5 h-5 text-amber-600"/>
           </div>
           <div>
-            <p className="text-xl font-black text-gray-900">{data?.pedidos7??0}</p>
-            <p className="text-xs text-gray-400">Pedidos esta semana</p>
+            <p className="text-xl font-black text-gray-900">{data?.pedidosPeriodo??0}</p>
+            <p className="text-xs text-gray-400">Pedidos · {rango.label}</p>
           </div>
         </div>
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
@@ -187,7 +294,7 @@ export default function AdminDashboard() {
           </div>
           <div>
             <p className="text-xl font-black text-gray-900">{data?.entregados??0}</p>
-            <p className="text-xs text-gray-400">Entregados total</p>
+            <p className="text-xs text-gray-400">Entregados · {rango.label} ({data?.conversion??0}%)</p>
           </div>
         </div>
         <button onClick={()=>router.push('/admin/calculadora')}
@@ -205,30 +312,32 @@ export default function AdminDashboard() {
       {/* Gráfica + Top productos */}
       <div className="grid lg:grid-cols-5 gap-4">
 
-        {/* Gráfica 7 días */}
+        {/* Gráfica del período (día/semana/mes según el rango) */}
         <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between mb-1">
-            <h2 className="font-bold text-gray-900 text-sm">Ventas últimos 7 días</h2>
+            <h2 className="font-bold text-gray-900 text-sm">Ventas · {rango.label}</h2>
             <span className="text-xs text-gray-400">RD$</span>
           </div>
-          <p className="text-2xl font-black text-primary-600 mb-5">{fmt(data?.ventas7??0)}</p>
-          <div className="flex items-end gap-2 h-28">
+          <p className="text-2xl font-black text-primary-600 mb-5">{fmt(data?.ventasPeriodo??0)}</p>
+          <div className="flex items-end gap-1.5 h-28 overflow-x-auto">
             {bars.map((b,i)=>(
-              <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
+              <div key={i} className="flex-1 min-w-[24px] flex flex-col items-center gap-1.5">
                 <div className="w-full rounded-t-lg transition-all"
                   style={{
                     height: `${Math.max(4, Math.round((b.v/maxBar)*100))}%`,
                     background: b.v>0 ? '#16a34a' : '#e5e7eb'
                   }}/>
-                <span className="text-[10px] text-gray-400 capitalize">{b.d}</span>
+                <span className="text-[9px] text-gray-400 capitalize whitespace-nowrap">{b.d}</span>
               </div>
             ))}
+            {bars.length===0 && <p className="text-xs text-gray-400 w-full text-center">Sin datos en este período</p>}
           </div>
         </div>
 
-        {/* Top productos */}
+        {/* Top productos del período */}
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <h2 className="font-bold text-gray-900 text-sm mb-4">Top productos</h2>
+          <h2 className="font-bold text-gray-900 text-sm mb-1">Top productos</h2>
+          <p className="text-[11px] text-gray-400 mb-4">{rango.label}</p>
           <div className="space-y-3">
             {top.slice(0,5).map((p,i)=>(
               <div key={p.nombre} className="flex items-center gap-3">
@@ -236,21 +345,20 @@ export default function AdminDashboard() {
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-gray-800 truncate">{p.nombre}</p>
                   <div className="mt-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-primary-500 rounded-full" style={{width:`${Math.round((p.u/Math.max(...top.map(t=>t.u)))*100)}%`}}/>
+                    <div className="h-full bg-primary-500 rounded-full" style={{width:`${Math.round((p.u/Math.max(...top.map(t=>t.u),1))*100)}%`}}/>
                   </div>
                 </div>
                 <span className="text-xs font-bold text-gray-700 shrink-0">{p.u}u</span>
               </div>
             ))}
-            {top.length===0&&<p className="text-xs text-gray-400 text-center py-4">Sin datos aún</p>}
+            {top.length===0&&<p className="text-xs text-gray-400 text-center py-4">Sin ventas en este período</p>}
           </div>
         </div>
       </div>
 
-      {/* Pedidos recientes + Alertas stock */}
+      {/* Pedidos recientes + Alertas stock (siempre en tiempo real, no dependen del selector) */}
       <div className="grid lg:grid-cols-5 gap-4">
 
-        {/* Pedidos recientes */}
         <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold text-gray-900 text-sm">Pedidos recientes</h2>
@@ -280,7 +388,6 @@ export default function AdminDashboard() {
           )}
         </div>
 
-        {/* Alertas stock */}
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold text-gray-900 text-sm">Alertas de stock</h2>
