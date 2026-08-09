@@ -60,19 +60,41 @@ export async function POST(req: NextRequest) {
     // Generar pedido si aplica
     let pedidoGenerado = null
     if (confirmar_pedido && proxEnvio && diasRestantes !== null && diasRestantes <= 7 && diasRestantes >= 0) {
+      // FIX AUDITORÍA (2026-08-09): sub.items viene de la fila subscriptions,
+      // que el propio dueño puede actualizar (política RLS subs_update
+      // permite user_id=auth.uid()). Sin esto, alguien podría editar el
+      // precio guardado en su suscripción antes de cancelar y generar un
+      // pedido final fraudulento — mismo tipo de problema que ya se corrigió
+      // en insert_order_items_secure. Aquí se relee el precio REAL de
+      // products.precio para cada item antes de crear la orden.
+      const sbAdmin = getSb()
+      const itemsConPrecioReal: any[] = []
+      let totalBrutoReal = 0
+      for (const i of items) {
+        let precioReal = Number(i.precio ?? 0)
+        if (i.product_id) {
+          const { data: prod } = await sbAdmin.from('products').select('precio').eq('id', i.product_id).single()
+          if (prod?.precio != null) precioReal = Number(prod.precio)
+        }
+        const cant = Number(i.cantidad ?? 1)
+        totalBrutoReal += precioReal * cant
+        itemsConPrecioReal.push({ ...i, precio: precioReal, cantidad: cant })
+      }
+      const totalConDescuentoReal = Math.round(totalBrutoReal * (1 - (sub.descuento_pct ?? 0) / 100))
+
       const subOrderNum = `CG-${Date.now().toString().slice(-8)}`
-      const { data: order } = await getSb().from('orders').insert({
+      const { data: order } = await sbAdmin.from('orders').insert({
         user_id: sub.user_id, cliente_nombre: sub.cliente_nombre,
         cliente_email: sub.cliente_email, cliente_telefono: sub.cliente_telefono,
         direccion_texto: sub.direccion_texto, estado: 'pendiente',
-        subtotal: totalConDescuento, envio: 0, descuento: totalBruto - totalConDescuento,
-        total: totalConDescuento, metodo_pago: 'tarjeta', pago_estado: 'pendiente',
+        subtotal: totalConDescuentoReal, envio: 0, descuento: totalBrutoReal - totalConDescuentoReal,
+        total: totalConDescuentoReal, metodo_pago: 'tarjeta', pago_estado: 'pendiente',
         numero_orden: subOrderNum,
         notas_admin: `Auto-generado al cancelar suscripción #${subscription_id.slice(0,8).toUpperCase()}`,
       }).select().single()
 
       if (order) {
-        await getSb().from('order_items').insert(items.map((i: any) => ({
+        await sbAdmin.from('order_items').insert(itemsConPrecioReal.map((i: any) => ({
           order_id: order.id, product_id: i.product_id ?? null,
           nombre: i.nombre, precio: Number(i.precio ?? 0), cantidad: Number(i.cantidad ?? 1),
           sph: i.sph != null ? Number(i.sph) : null, cyl: i.cyl != null ? Number(i.cyl) : null,

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { guardRequest } from '@/lib/api-guard'
 
 const OCR_PROMPT = `Eres un optometrista experto en lectura de recetas ópticas. Analiza esta imagen con MÁXIMA precisión.
 
@@ -27,6 +28,12 @@ Responde SOLO con JSON válido:
 }`
 
 export async function POST(req: NextRequest) {
+  // FIX AUDITORÍA (2026-08-09): sin límite de tasa, cualquiera podía
+  // saturar este endpoint (llama a la API de Gemini, que cuesta dinero
+  // por uso real) sin ningún costo para el atacante.
+  const guardErr = guardRequest(req, { limitPerMin: 10, requireOrigin: false })
+  if (guardErr) return guardErr
+
   let image: string, mimeType: string
   try {
     const body = await req.json()
