@@ -733,7 +733,7 @@ export default function CheckoutPage() {
                     {items.some(i => i.product.tipo === 'torico') && (
                       <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-2 items-start">
                         <span className="text-amber-500 shrink-0">⏱️</span>
-                        <p className="text-xs text-amber-700 leading-relaxed"><strong>Tu pedido incluye lentes tóricos.</strong> Tiempo de fabricación: 20-30 días.</p>
+                        <p className="text-xs text-amber-700 leading-relaxed"><strong>Tu pedido incluye lentes tóricos.</strong> Tiempo de fabricación: 25-40 días.</p>
                       </div>
                     )}
 
