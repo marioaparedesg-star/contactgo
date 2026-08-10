@@ -156,8 +156,14 @@ export async function notificarEstado(order: any, estado: string) {
   }
   const desc = mensajes[estado] ?? `Estado actualizado: ${estado}`
 
+  // NOTA (2026-08-10): el texto de arriba ya se mejoró (más cálido). La
+  // plantilla en sí (cg_estado_pedido_v2, sin el prefijo repetitivo) está
+  // creada y pendiente de aprobación de Meta — hasta que se apruebe, se usa
+  // la plantilla vieja para no dejar a los clientes sin notificación ni un
+  // solo minuto. En cuanto Meta la apruebe, cambiar esta línea a
+  // 'cg_estado_pedido_v2' y listo.
   return notificar(`order_${order.id}_${estado}`, order.cliente_telefono, `estado_${estado}`,
-    'cg_estado_pedido_v2', [nombre, num, desc], { order_id: order.id })
+    'cg_estado_pedido', [nombre, num, desc], { order_id: order.id })
 }
 
 export async function notificarEnviado(order: any) {
