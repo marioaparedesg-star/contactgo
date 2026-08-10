@@ -23,6 +23,7 @@ function cuerpoLegible(templateName: string, params: string[], tipo: string): st
     case 'confirmacion_pedido':
       return `✅ Confirmación de pedido enviada — ${p[1] ?? ''} · ${p[2] ?? ''} · Total ${p[3] ?? ''}`
     case 'cg_estado_pedido':
+    case 'cg_estado_pedido_v2':
       return `📦 Actualización de estado — pedido ${p[1] ?? ''}: ${p[2] ?? ''}`
     case 'cg_envio':
       return `🚚 Aviso de envío enviado — pedido ${p[1] ?? ''}`
@@ -47,7 +48,7 @@ function cuerpoLegible(templateName: string, params: string[], tipo: string): st
 // información esencial del pedido, no promocional (ver principio de separar
 // "transaccional" de "comercial").
 const TEMPLATES_TRANSACCIONALES = new Set([
-  'confirmacion_pedido', 'cg_estado_pedido', 'cg_envio', 'cg_entregado', 'cg_cancelado',
+  'confirmacion_pedido', 'cg_estado_pedido', 'cg_estado_pedido_v2', 'cg_envio', 'cg_entregado', 'cg_cancelado',
 ])
 
 export async function notificar(
@@ -140,18 +141,23 @@ export async function notificarEstado(order: any, estado: string) {
   const nombre = order.cliente_nombre?.split(' ')[0] ?? 'Cliente'
   const num = order.numero_orden ?? String(order.id).slice(0, 8)
 
+  // FIX (2026-08-10): antes decían solo "Estado actualizado: X" pegado a un
+  // prefijo repetitivo ("📦 Actualización de estado — pedido X:") — se veía
+  // robótico y frío, siempre la misma frase cambiando solo el final. Ahora
+  // cada mensaje se siente como si alguien real te estuviera avisando, con
+  // calidez y sin sonar a plantilla genérica.
   const mensajes: Record<string, string> = {
-    recibido:      '✅ Recibimos tu pedido y ya lo tenemos en nuestro sistema.',
-    pago_aprobado: '💳 Tu pago fue aprobado. Comenzamos a preparar tu pedido.',
-    confirmado:    '✅ Pedido confirmado. Ya estamos trabajando en él.',
-    preparando:    '🔬 Estamos preparando cuidadosamente tus lentes.',
-    fabricante:    '🏭 Estamos coordinando con el fabricante para tu producto.',
-    transito:      '🚛 Tu pedido va en camino hacia tu dirección.',
+    recibido:      '🎉 ¡Ya recibimos tu pedido! Lo tenemos en nuestro sistema y en breve empezamos a prepararlo con todo el cuidado.',
+    pago_aprobado: '✅ ¡Tu pago quedó aprobado! Ya estamos alistando todo para que tus lentes lleguen lo antes posible.',
+    confirmado:    '👍 Tu pedido está confirmado — nuestro equipo ya está trabajando en él, un paso más cerca de tus lentes nuevos.',
+    preparando:    '🔬 Estamos preparando tus lentes con mucho cuidado, verificando cada detalle antes de enviarlos.',
+    fabricante:    '🏭 Tu pedido está en fabricación a tu medida exacta — por eso toma un poco más de tiempo, pero vale la pena.',
+    transito:      '🚛 ¡Tus lentes ya van en camino! Muy pronto los vas a tener en tus manos.',
   }
   const desc = mensajes[estado] ?? `Estado actualizado: ${estado}`
 
   return notificar(`order_${order.id}_${estado}`, order.cliente_telefono, `estado_${estado}`,
-    'cg_estado_pedido', [nombre, num, desc], { order_id: order.id })
+    'cg_estado_pedido_v2', [nombre, num, desc], { order_id: order.id })
 }
 
 export async function notificarEnviado(order: any) {
