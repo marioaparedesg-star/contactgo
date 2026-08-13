@@ -17,6 +17,7 @@ export default function Navbar() {
     { href: '/multifocales', label: 'Multifocales' },
     { href: '/catalogo?tipo=color', label: 'Color' },
     { href: '/soluciones', label: 'Soluciones' },
+    { href: '/comparar', label: 'Comparar' },
     { href: '/receta', label: 'Mi Receta' },
   ]
 

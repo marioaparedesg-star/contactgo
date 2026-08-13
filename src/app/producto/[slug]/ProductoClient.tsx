@@ -1,8 +1,9 @@
 'use client'
 import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import Image from 'next/image'
-import { ShoppingCart, ArrowLeft, Eye, AlertCircle } from 'lucide-react'
+import { ShoppingCart, ArrowLeft, Eye, AlertCircle, Scale } from 'lucide-react'
 import Reviews from '@/components/ui/Reviews'
 import FrequentlyBoughtTogether from '@/components/shop/FrequentlyBoughtTogether'
 import CrossSelling from '@/components/shop/CrossSelling'
@@ -876,6 +877,10 @@ export default function ProductoClient({ product, variants }: Props) {
                   )
                 })()}
               </div>
+              <Link href={`/comparar?p=${product.slug}`}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 hover:text-primary-700 mt-2">
+                <Scale className="w-3.5 h-3.5" /> Comparar con otros lentes
+              </Link>
               {product.contenido && <p className="text-[11px] text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>}
 
               {/* Disponibilidad + entrega */}
