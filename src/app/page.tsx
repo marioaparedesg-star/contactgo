@@ -73,7 +73,7 @@ async function getFeaturedProducts(): Promise<{ products: Product[], reseñasCou
     products: (data ?? []) as unknown as Product[],
     reseñasCount: reseñasCount ?? 0,
     reseñasAvg,
-    precioOasys: oasysData ? Number(oasysData.precio) : 3313,
+    precioOasys: oasysData ? Number(oasysData.precio) : 3350,
     preciosHero,
   }
 }
