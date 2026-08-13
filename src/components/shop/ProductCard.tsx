@@ -158,10 +158,19 @@ export default function ProductCard({ product, isBestseller }: Props) {
 
       {/* ── Info ── */}
       <div className="p-3 flex flex-col flex-1 gap-1">
-        {/* Marca */}
-        <p className="text-[10px] font-bold text-primary-700 uppercase tracking-widest truncate">
-          {product.marca}
-        </p>
+        {/* Marca + Comparar */}
+        <div className="flex items-center justify-between gap-1">
+          <p className="text-[10px] font-bold text-primary-700 uppercase tracking-widest truncate">
+            {product.marca}
+          </p>
+          <Link
+            href={`/comparar?p=${product.slug}`}
+            onClick={e => e.stopPropagation()}
+            className="text-[9px] font-bold text-gray-400 hover:text-primary-600 uppercase tracking-wide shrink-0 transition-colors"
+          >
+            Comparar
+          </Link>
+        </div>
 
         {/* Nombre */}
         <h3 className="font-semibold text-gray-900 text-sm leading-snug min-h-[2.5rem]">
