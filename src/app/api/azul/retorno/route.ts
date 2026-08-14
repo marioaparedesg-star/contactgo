@@ -289,7 +289,29 @@ async function handleReturn(req: NextRequest) {
             } catch (e) {
               console.error('[AZUL/retorno] auto-crear suscripción falló:', e)
             }
-            // El notify lo dispara el cliente desde /confirmacion (más confiable en Vercel)
+            // ── Comprobante de pago: disparo server-to-server, confiable ────────
+            // FIX CRÍTICO (2026-08-13): el comentario que estaba aquí decía "el
+            // notify lo dispara el cliente desde /confirmacion (más confiable en
+            // Vercel)" — los datos reales lo desmienten: de 20 pedidos pagados,
+            // solo 5 (25%) habían recibido su comprobante por correo. Mismo
+            // patrón de falla silenciosa ya corregido antes para las
+            // suscripciones (auto-crear, arriba) — si el cliente cierra la
+            // pestaña justo después de pagar, o el fetch del navegador falla
+            // por cualquier razón, el comprobante nunca se manda y nadie se
+            // entera. Ahora se dispara aquí también, en el servidor, en el
+            // mismo request donde AZUL confirma el pago. /api/notify ya tiene
+            // protección real contra duplicados (revisa email_log antes de
+            // enviar), así que si /confirmacion también lo dispara del lado
+            // del cliente, no se manda dos veces.
+            try {
+              await fetch(`${BASE}/api/notify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id: orderId, evento: 'nuevo_pedido' }),
+              })
+            } catch (e) {
+              console.error('[AZUL/retorno] notify comprobante falló:', e)
+            }
           }
 
         } else {
