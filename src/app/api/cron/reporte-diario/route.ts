@@ -256,6 +256,40 @@ export async function GET(req: Request) {
       html,
     })
 
+    // ── Resumen también por WhatsApp al número de servicio ────────────────
+    // Mario pidió recibirlo también ahí. Este número (809-694-2268) NUNCA
+    // procesa mensajes entrantes de forma automática (protección aparte en
+    // el webhook) — esto es distinto: es SOLO un mensaje saliente de
+    // administración hacia Mario, mismo patrón ya usado para
+    // aviso_nuevo_mensaje_admin. No toca nada del trato con clientes.
+    try {
+      const WA_API = 'https://graph.facebook.com/v20.0'
+      await fetch(`${WA_API}/${process.env.WHATSAPP_PHONE_ID}/messages`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messaging_product: 'whatsapp',
+          to: '18096942268',
+          type: 'template',
+          template: {
+            name: 'reporte_diario_ventas',
+            language: { code: 'es' },
+            components: [{
+              type: 'body',
+              parameters: [
+                { type: 'text', text: fmt(ventasHoy) },
+                { type: 'text', text: asuntoTendencia || 'sin datos de ayer' },
+                { type: 'text', text: String(pedidosHoyCount) },
+                { type: 'text', text: fmt(totalPorCobrar) },
+              ],
+            }],
+          },
+        }),
+      })
+    } catch (e) {
+      console.error('[reporte-diario] WhatsApp falló (el email ya se mandó):', e)
+    }
+
     return NextResponse.json({
       ok: true, fecha: hoyDR,
       ventas_hoy: ventasHoy, pedidos_hoy: pedidosHoyCount,
