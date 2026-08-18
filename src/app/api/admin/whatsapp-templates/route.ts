@@ -17,6 +17,24 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const wabaId = body.waba_id ?? process.env.WHATSAPP_BUSINESS_ID ?? '998977189800215'
 
+  if (body.accion === 'subir_media_meta') {
+    const metaAppId = '988873564144729'
+    const initRes = await fetch(`${GRAPH_URL}/${metaAppId}/uploads?file_length=${body.file_length}&file_type=${encodeURIComponent(body.file_type)}&access_token=${token}`, {
+      method: 'POST',
+    })
+    const initData = await initRes.json()
+    if (initData.error) return NextResponse.json({ paso: 'init', error: initData.error })
+
+    const buffer = Buffer.from(body.base64, 'base64')
+    const uploadRes = await fetch(`${GRAPH_URL}/${initData.id}`, {
+      method: 'POST',
+      headers: { Authorization: `OAuth ${token}`, 'file_offset': '0' },
+      body: buffer,
+    })
+    const uploadData = await uploadRes.json()
+    return NextResponse.json(uploadData)
+  }
+
   if (body.accion === 'enviar_prueba') {
     // Solo para pruebas dirigidas por Mario — envía UNA plantilla a UN
     // número específico, nunca a clientes reales. El número y los
