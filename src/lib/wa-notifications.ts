@@ -216,13 +216,24 @@ export async function notificarRenovacion(data: { telefono: string; nombre?: str
 // Requiere las plantillas 'recompra_7dias' y 'recompra_3dias' aprobadas en Meta
 // Business Manager — mientras no existan, notificar() devolverá el error de
 // Meta (plantilla no encontrada) y no se enviará nada; no rompe el cron.
+//
+// REDISEÑO (2026-08-17): Mario pidió plantillas más cálidas, con más
+// personalidad. Nuevas versiones ya creadas y pendientes de aprobación de
+// Meta: 'recompra_7dias_v3' y 'recompra_3dias_v2'. Mientras se aprueban,
+// se sigue usando la versión vieja (ya aprobada, funcional) para no dejar
+// a ningún cliente sin su aviso — mismo patrón ya usado antes para
+// cg_estado_pedido_v2. En cuanto Meta apruebe, cambiar USAR_TEMPLATE_V2
+// a true y listo, sin tocar nada más.
+const USAR_TEMPLATE_V2 = false
 export async function notificarRecompraPrevio(
   dias: 7 | 3,
   data: { subscription_id: string; telefono: string; nombre?: string; producto?: string; proximo_envio: string }
 ) {
   const nombre = data.nombre?.split(' ')[0] ?? 'Cliente'
   const producto = data.producto ?? 'tus lentes de contacto'
-  const template = dias === 7 ? 'recompra_7dias' : 'recompra_3dias'
+  const template = USAR_TEMPLATE_V2
+    ? (dias === 7 ? 'recompra_7dias_v3' : 'recompra_3dias_v2')
+    : (dias === 7 ? 'recompra_7dias' : 'recompra_3dias')
   // El evento_id incluye proximo_envio (no solo subscription_id) porque la
   // misma suscripción vuelve a generar este mismo aviso en CADA ciclo futuro
   // — sin la fecha, el dedup de notificar() bloquearía el aviso para siempre
