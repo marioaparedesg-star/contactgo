@@ -17,6 +17,28 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const wabaId = body.waba_id ?? process.env.WHATSAPP_BUSINESS_ID ?? '998977189800215'
 
+  if (body.accion === 'enviar_prueba') {
+    // Solo para pruebas dirigidas por Mario — envía UNA plantilla a UN
+    // número específico, nunca a clientes reales. El número y los
+    // parámetros los decide quien llama, siempre de forma explícita.
+    const r = await fetch(`${GRAPH_URL}/${process.env.WHATSAPP_PHONE_ID}/messages`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messaging_product: 'whatsapp',
+        to: body.telefono,
+        type: 'template',
+        template: {
+          name: body.template,
+          language: { code: 'es' },
+          components: [{ type: 'body', parameters: (body.parametros ?? []).map((t: string) => ({ type: 'text', text: t })) }],
+        },
+      }),
+    })
+    const data = await r.json()
+    return NextResponse.json(data)
+  }
+
   if (body.accion === 'diagnosticar_numero_nuevo') {
     const results: any = {}
     const phoneId = body.phone_id ?? '1174240852444859'
