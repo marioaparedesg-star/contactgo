@@ -97,6 +97,12 @@ export async function POST(req: NextRequest) {
         }
 
         // ── Guardar mensaje ──
+        // FIX (2026-08-18): se agrega captura del "referral" — el dato REAL
+        // que manda WhatsApp cuando el mensaje viene de un clic en un
+        // anuncio (ID del anuncio, título, URL). Antes no se guardaba nada
+        // de esto, así que no había forma de confirmar con certeza si un
+        // mensaje venía de publicidad o de otro lado — solo evidencia
+        // circunstancial (horarios, patrones). Ahora queda el dato real.
         await sb.from('whatsapp_messages').insert({
           wa_message_id: msg.id ?? null,
           phone: from,
@@ -107,7 +113,12 @@ export async function POST(req: NextRequest) {
           media_url: mediaUrl,
           status: 'received',
           read: false,
+          referral: msg.referral ?? null,
         })
+
+        if (msg.referral) {
+          console.log('[WA/webhook] Mensaje con origen de anuncio confirmado:', JSON.stringify(msg.referral))
+        }
 
         // ── Skip auto-reply para admin y reacciones ──
         if (from === ADMIN_PHONE.replace(/^1/, '') || msgType === 'reaction') continue
