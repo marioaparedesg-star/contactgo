@@ -5,6 +5,10 @@
       "schedule": "0 13 * * *"
     },
     {
+      "path": "/api/cron/pedidos-sin-entregar",
+      "schedule": "30 12 * * *"
+    },
+    {
       "path": "/api/cancelar-pendientes",
       "schedule": "0 7 * * *"
     },
