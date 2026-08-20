@@ -545,7 +545,7 @@ function ItemRow({
         </button>
       </div>
 
-      {/* Fila 1: Precio + Cantidad + campos específicos del tipo */}
+      {/* Fila 1: Precio + Descuento + Cantidad + campos específicos del tipo */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-3">
         <div>
           <label className={labelCls}>Precio (RD$)</label>
@@ -553,6 +553,24 @@ function ItemRow({
             onChange={e => onChange({ precio: Number(e.target.value) })} />
           {item.precio !== item.precio_catalogo && (
             <div className="text-[10px] text-amber-600 mt-0.5">Catálogo: {fmtRD(item.precio_catalogo)}</div>
+          )}
+        </div>
+        <div>
+          <label className={labelCls}>
+            Descuento — {item.precio_catalogo > 0 ? Math.round((1 - item.precio / item.precio_catalogo) * 100) : 0}%
+          </label>
+          <input
+            type="range" min={0} max={100} step={1}
+            value={item.precio_catalogo > 0 ? Math.round((1 - item.precio / item.precio_catalogo) * 100) : 0}
+            className="w-full accent-primary-600 h-9"
+            onChange={e => {
+              const pct = Number(e.target.value)
+              const nuevoPrecio = Math.round(item.precio_catalogo * (1 - pct / 100))
+              onChange({ precio: nuevoPrecio })
+            }}
+          />
+          {item.precio === 0 && (
+            <div className="text-[10px] text-red-500 mt-0.5 font-semibold">Gratis (100%)</div>
           )}
         </div>
         <div>
