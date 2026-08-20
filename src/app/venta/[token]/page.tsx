@@ -196,7 +196,7 @@ export default function VentaWhatsAppPage() {
       {/* Header */}
       <div className="bg-[#0B3D66] text-white py-5 px-6 text-center">
         <div className="text-2xl font-extrabold">Contact<span className="text-[#0FB5AE]">Go</span></div>
-        <div className="text-xs text-blue-100 mt-1">Confirma tus datos para completar tu pedido</div>
+        <div className="text-xs text-blue-100 mt-1">📋 Tu cotización — completa tus datos para generar tu orden</div>
       </div>
 
       <div className="max-w-lg mx-auto px-4 mt-6 space-y-5">
@@ -204,18 +204,35 @@ export default function VentaWhatsAppPage() {
         <div className="bg-white rounded-2xl shadow-sm border p-5">
           <div className="flex items-center gap-2 mb-4">
             <ShoppingBag className="w-5 h-5 text-[#0B3D66]" />
-            <h2 className="font-bold text-gray-900">Tu pedido</h2>
+            <h2 className="font-bold text-gray-900">Tu cotización</h2>
           </div>
           <div className="space-y-3">
-            {data.items.map((i: any, idx: number) => (
-              <div key={idx} className="flex justify-between items-start gap-3 pb-3 border-b border-dashed last:border-0 last:pb-0">
-                <div>
-                  <div className="font-medium text-gray-900 text-sm">{i.cantidad}× {i.nombre}</div>
-                  {recetaTexto(i) && <div className="text-xs text-gray-500 mt-0.5">{recetaTexto(i)}</div>}
+            {data.items.map((i: any, idx: number) => {
+              const original = Number(i.precio_original ?? i.precio)
+              const tieneDescuento = original > Number(i.precio)
+              const pctDescuento = tieneDescuento ? Math.round((1 - Number(i.precio) / original) * 100) : 0
+              return (
+                <div key={idx} className="flex justify-between items-start gap-3 pb-3 border-b border-dashed last:border-0 last:pb-0">
+                  <div>
+                    <div className="font-medium text-gray-900 text-sm">{i.cantidad}× {i.nombre}</div>
+                    {recetaTexto(i) && <div className="text-xs text-gray-500 mt-0.5">{recetaTexto(i)}</div>}
+                    {tieneDescuento && (
+                      <span className="inline-block mt-1 text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
+                        🎉 {pctDescuento}% de descuento
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-right whitespace-nowrap">
+                    {tieneDescuento && (
+                      <div className="text-xs text-gray-400 line-through">{fmtRD(original * i.cantidad)}</div>
+                    )}
+                    <div className={`font-semibold text-sm ${tieneDescuento ? 'text-green-700' : 'text-gray-900'}`}>
+                      {fmtRD(i.precio * i.cantidad)}
+                    </div>
+                  </div>
                 </div>
-                <div className="font-semibold text-gray-900 text-sm whitespace-nowrap">{fmtRD(i.precio * i.cantidad)}</div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           <div className="mt-4 pt-3 border-t space-y-1.5 text-sm">
             <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>{fmtRD(data.subtotal)}</span></div>
@@ -223,6 +240,7 @@ export default function VentaWhatsAppPage() {
             <div className="flex justify-between font-bold text-gray-900 text-base pt-1"><span>Total</span><span>{fmtRD(data.total)}</span></div>
           </div>
         </div>
+
 
         {/* Formulario */}
         <div className="bg-white rounded-2xl shadow-sm border p-5">
