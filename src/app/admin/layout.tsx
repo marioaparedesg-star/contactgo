@@ -17,24 +17,54 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       return
     }
     const sb = createClient()
-    sb.auth.getUser().then(async ({ data: { user } }) => {
-      if (!user) {
+
+    // FIX (2026-08-19): Mario reportó que el admin a veces se queda "pensando"
+    // sin entrar nunca. Causa real: esta verificación de sesión usaba
+    // .then() SIN .catch() — si sb.auth.getUser() o la consulta de
+    // profiles fallaban por cualquier motivo (hipo de red, token vencido,
+    // lo que sea), la promesa rechazada quedaba sin manejar, setChecking(false)
+    // nunca se ejecutaba, y la pantalla se quedaba con el círculo girando
+    // para siempre — sin error visible, sin redirección, sin nada.
+    //
+    // También se agrega un timeout de respaldo: si la verificación tarda
+    // más de 10 segundos por cualquier razón, se manda a login en vez de
+    // dejar a la persona esperando indefinidamente.
+    let resuelto = false
+    const timeoutRespaldo = setTimeout(() => {
+      if (!resuelto) {
+        console.error('[admin/layout] Verificación de sesión tardó demasiado — mandando a login')
         router.replace('/admin/login')
-        return
       }
-      // Verificar rol admin
-      const { data: profile } = await sb
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-      if (!profile || profile.role !== 'admin') {
+    }, 10000)
+
+    sb.auth.getUser()
+      .then(async ({ data: { user }, error: userError }) => {
+        if (userError || !user) {
+          router.replace('/admin/login')
+          return
+        }
+        const { data: profile, error: profileError } = await sb
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+        if (profileError || !profile || profile.role !== 'admin') {
+          router.replace('/admin/login')
+          return
+        }
+        setAuthorized(true)
+        setChecking(false)
+      })
+      .catch((err) => {
+        console.error('[admin/layout] Error verificando sesión:', err)
         router.replace('/admin/login')
-        return
-      }
-      setAuthorized(true)
-      setChecking(false)
-    })
+      })
+      .finally(() => {
+        resuelto = true
+        clearTimeout(timeoutRespaldo)
+      })
+
+    return () => clearTimeout(timeoutRespaldo)
   }, [pathname, router])
 
   if (pathname === '/admin/login') return <>{children}</>
