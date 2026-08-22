@@ -54,8 +54,10 @@ return [
     description: 'Tienda especializada exclusivamente en lentes de contacto en República Dominicana. Marcas originales con entrega a todo el país.',
     address: {
       '@type': 'PostalAddress',
+      streetAddress: 'Av. Winston Churchill No. 95, Torre Empresarial Blue Mall, Piso 23',
+      addressLocality: 'Santo Domingo',
+      addressRegion: 'Distrito Nacional',
       addressCountry: 'DO',
-      addressRegion: 'Santo Domingo',
     },
     contactPoint: {
       '@type': 'ContactPoint',

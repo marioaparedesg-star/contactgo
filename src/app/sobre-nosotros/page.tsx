@@ -49,7 +49,9 @@ export default function SobreNosotrosPage() {
         "foundingDate": "2026",
         "address": {
           "@type": "PostalAddress",
+          "streetAddress": "Av. Winston Churchill No. 95, Torre Empresarial Blue Mall, Piso 23",
           "addressLocality": "Santo Domingo",
+          "addressRegion": "Distrito Nacional",
           "addressCountry": "DO"
         },
         "contactPoint": {

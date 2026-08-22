@@ -101,7 +101,11 @@ export default function Footer() {
                   info@contactgo.net
                 </a>
               </li>
-              <li className="text-gray-600">Santo Domingo, RD</li>
+              <li className="text-gray-600 leading-relaxed">
+                🏢 Oficina: Av. Winston Churchill No. 95<br />
+                Torre Empresarial Blue Mall, Piso 23<br />
+                Santo Domingo, RD
+              </li>
             </ul>
           </div>
 
