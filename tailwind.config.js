@@ -4,23 +4,37 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Paleta oficial de marca ContactGo (2026-08-19) — reemplaza la
+        // escala verde que se usaba antes, que no coincidía con el logo
+        // real (azul marino #002455 + turquesa #01B2B7). primary-600
+        // queda anclado exacto al azul de marca porque es el tono que
+        // usan la mayoría de botones y CTAs en todo el sitio.
         primary: {
-          50:  '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
-          950: '#052e16',
+          50:  '#EEF2F8',
+          100: '#D8E1EE',
+          200: '#B1C3DD',
+          300: '#8AA5CC',
+          400: '#4D74A8',
+          500: '#1A4A83',
+          600: '#002455',  // ← Azul ContactGo oficial, exacto del logo
+          700: '#001C42',
+          800: '#00142F',
+          900: '#000C1C',
+          950: '#00060E',
         },
         teal: {
-          500: '#14b8a6',
-          600: '#0d9488',
-        }
+          50:  '#E6FBFB',
+          100: '#CCF7F8',
+          200: '#99EFF0',
+          300: '#66E6E8',
+          400: '#33DDDF',
+          500: '#01B2B7',  // ← Turquesa ContactGo oficial, exacto del logo
+          600: '#018E92',
+          700: '#016A6D',
+          800: '#014749',
+          900: '#002324',
+          950: '#001213',
+        },
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],

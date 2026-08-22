@@ -135,7 +135,7 @@ export default function WelcomePopup() {
 
         {!codigo ? (
           <>
-            <div className="bg-gradient-to-br from-[#0B3D66] to-[#0d4a7c] text-white px-6 pt-8 pb-6 text-center">
+            <div className="bg-gradient-to-br from-[#002455] to-[#01B2B7] text-white px-6 pt-8 pb-6 text-center">
               <div className="w-14 h-14 mx-auto mb-3 bg-white/15 rounded-2xl flex items-center justify-center">
                 <Sparkles className="w-7 h-7 text-white" />
               </div>
@@ -154,7 +154,7 @@ export default function WelcomePopup() {
               <div className="relative">
                 <Mail className="absolute left-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
                 <input id="cg-welcome-email" type="email" autoComplete="email" autoFocus
-                  className="w-full pl-9 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D66]/30 focus:border-[#0B3D66]"
+                  className="w-full pl-9 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#002455]/30 focus:border-[#002455]"
                   placeholder="tucorreo@ejemplo.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
@@ -171,7 +171,7 @@ export default function WelcomePopup() {
                 <div className="relative flex-1">
                   <Phone className="absolute left-2.5 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
                   <input id="cg-welcome-phone" type="tel" inputMode="numeric" autoComplete="tel-national"
-                    className="w-full pl-8 pr-3 py-2.5 border border-gray-300 rounded-r-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B3D66]/30 focus:border-[#0B3D66]"
+                    className="w-full pl-8 pr-3 py-2.5 border border-gray-300 rounded-r-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#002455]/30 focus:border-[#002455]"
                     placeholder="(809) 123-4567"
                     value={phone}
                     onChange={e => setPhone(formatPhone(e.target.value))}
@@ -182,7 +182,7 @@ export default function WelcomePopup() {
               </div>
 
               <button onClick={submit} disabled={loading || !email || !phone}
-                className="w-full mt-4 bg-[#0B3D66] hover:bg-[#0d4a7c] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg text-sm transition-colors">
+                className="w-full mt-4 bg-[#002455] hover:bg-[#01B2B7] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg text-sm transition-colors">
                 {loading ? 'Enviando…' : 'Recibir mi 10% de descuento'}
               </button>
 
@@ -204,7 +204,7 @@ export default function WelcomePopup() {
               Te enviamos el código a tu correo. Aquí lo tienes también:
             </p>
 
-            <div className="bg-gradient-to-br from-[#0B3D66] to-[#0d4a7c] rounded-xl p-5 mb-4">
+            <div className="bg-gradient-to-br from-[#002455] to-[#01B2B7] rounded-xl p-5 mb-4">
               <p className="text-white/70 text-[10px] font-bold uppercase tracking-widest mb-1.5">Tu código</p>
               <p className="text-white text-2xl font-black font-mono tracking-wider">{codigo}</p>
               <p className="text-white/70 text-[10px] mt-2">Válido 60 días · 10% off · Un solo uso</p>
@@ -212,11 +212,11 @@ export default function WelcomePopup() {
 
             <div className="flex gap-2">
               <button onClick={copyCode}
-                className="flex-1 bg-white border-2 border-gray-200 hover:border-[#0B3D66] text-gray-700 font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors">
+                className="flex-1 bg-white border-2 border-gray-200 hover:border-[#002455] text-gray-700 font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors">
                 {copied ? <><Check className="w-4 h-4" /> Copiado</> : <><Copy className="w-4 h-4" /> Copiar</>}
               </button>
               <a href="/catalogo"
-                className="flex-1 bg-[#0B3D66] hover:bg-[#0d4a7c] text-white font-bold py-2.5 rounded-lg text-sm flex items-center justify-center transition-colors">
+                className="flex-1 bg-[#002455] hover:bg-[#01B2B7] text-white font-bold py-2.5 rounded-lg text-sm flex items-center justify-center transition-colors">
                 Ver catálogo →
               </a>
             </div>

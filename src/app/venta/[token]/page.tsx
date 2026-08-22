@@ -179,7 +179,7 @@ export default function VentaWhatsAppPage() {
         <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
         <h1 className="text-xl font-bold text-gray-900">¡Pedido registrado!</h1>
         <p className="text-gray-600 mt-2">
-          Tu número de pedido es <span className="font-bold text-[#0B3D66]">{ordenCreada}</span>.
+          Tu número de pedido es <span className="font-bold text-[#002455]">{ordenCreada}</span>.
         </p>
         <p className="text-gray-600 mt-3 text-sm">
           En unos minutos te enviaremos por WhatsApp el <b>link de pago seguro</b> para completar tu compra. 💙
@@ -188,13 +188,13 @@ export default function VentaWhatsAppPage() {
     </div>
   )
 
-  const inputCls = 'w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0B3D66]/30 focus:border-[#0B3D66]'
+  const inputCls = 'w-full border border-gray-300 rounded-xl px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#002455]/30 focus:border-[#002455]'
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
       <Toaster position="top-center" />
       {/* Header */}
-      <div className="bg-[#0B3D66] text-white py-5 px-6 text-center">
+      <div className="bg-[#002455] text-white py-5 px-6 text-center">
         <div className="text-2xl font-extrabold">Contact<span className="text-[#0FB5AE]">Go</span></div>
         <div className="text-xs text-blue-100 mt-1">📋 Tu cotización — completa tus datos para generar tu orden</div>
       </div>
@@ -203,7 +203,7 @@ export default function VentaWhatsAppPage() {
         {/* Resumen del pedido */}
         <div className="bg-white rounded-2xl shadow-sm border p-5">
           <div className="flex items-center gap-2 mb-4">
-            <ShoppingBag className="w-5 h-5 text-[#0B3D66]" />
+            <ShoppingBag className="w-5 h-5 text-[#002455]" />
             <h2 className="font-bold text-gray-900">Tu cotización</h2>
           </div>
           <div className="space-y-3">
@@ -245,7 +245,7 @@ export default function VentaWhatsAppPage() {
         {/* Formulario */}
         <div className="bg-white rounded-2xl shadow-sm border p-5">
           <div className="flex items-center gap-2 mb-4">
-            <User className="w-5 h-5 text-[#0B3D66]" />
+            <User className="w-5 h-5 text-[#002455]" />
             <h2 className="font-bold text-gray-900">Tus datos</h2>
           </div>
           <div className="space-y-3.5">
@@ -292,7 +292,7 @@ export default function VentaWhatsAppPage() {
           </div>
 
           <button onClick={submit} disabled={enviando}
-            className="w-full mt-5 bg-[#0B3D66] hover:bg-[#0d4a7c] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition">
+            className="w-full mt-5 bg-[#002455] hover:bg-[#01B2B7] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition">
             {enviando ? 'Registrando…' : 'Confirmar mis datos'}
           </button>
 

@@ -156,7 +156,7 @@ function emailBienvenidaHTML(codigo: string): string {
     <tr><td align="center">
       <table role="presentation" width="520" cellspacing="0" cellpadding="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
         <tr><td style="padding:32px 32px 8px 32px;text-align:center">
-          <p style="margin:0;color:#0B3D66;font-size:14px;font-weight:600;letter-spacing:0.5px">CONTACTGO&reg;</p>
+          <p style="margin:0;color:#002455;font-size:14px;font-weight:600;letter-spacing:0.5px">CONTACTGO&reg;</p>
           <h1 style="margin:16px 0 8px 0;font-size:26px;font-weight:800;color:#1a1a1a;line-height:1.2">
             ${DISCOUNT_PCT}% OFF tu primera compra
           </h1>
@@ -166,7 +166,7 @@ function emailBienvenidaHTML(codigo: string): string {
         </td></tr>
         <tr><td style="padding:24px 32px">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
-            style="background:linear-gradient(135deg,#0B3D66 0%,#0d4a7c 100%);border-radius:12px;padding:28px 20px;text-align:center">
+            style="background:linear-gradient(135deg,#002455 0%,#01B2B7 100%);border-radius:12px;padding:28px 20px;text-align:center">
             <tr><td>
               <p style="margin:0 0 8px 0;color:rgba(255,255,255,0.75);font-size:12px;font-weight:600;letter-spacing:1.5px">TU CODIGO</p>
               <p style="margin:0;color:#ffffff;font-size:32px;font-weight:900;letter-spacing:2px;font-family:'SF Mono',Menlo,Consolas,monospace">
@@ -177,7 +177,7 @@ function emailBienvenidaHTML(codigo: string): string {
           </table>
         </td></tr>
         <tr><td style="padding:8px 32px 32px 32px;text-align:center">
-          <a href="https://www.contactgo.net/catalogo" style="display:inline-block;background:#0B3D66;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 32px;border-radius:10px">
+          <a href="https://www.contactgo.net/catalogo" style="display:inline-block;background:#002455;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 32px;border-radius:10px">
             Empezar a comprar &rarr;
           </a>
           <p style="margin:24px 0 0 0;color:#999;font-size:12px;line-height:1.6">

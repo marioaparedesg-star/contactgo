@@ -150,7 +150,7 @@ export async function GET(req: Request) {
 
     const html = `
 <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:640px;margin:0 auto;background:#F3F4F6">
-  <div style="background:linear-gradient(135deg,#0B3D66,#0F5A94);padding:28px 24px;text-align:center">
+  <div style="background:linear-gradient(135deg,#002455,#01B2B7);padding:28px 24px;text-align:center">
     <p style="color:white;font-weight:900;font-size:20px;margin:0;letter-spacing:1px">CONTACTGO</p>
     <p style="color:#9CC5E8;font-size:13px;margin:6px 0 0;text-transform:capitalize">Reporte de ventas · ${fechaBonita}</p>
   </div>
@@ -160,7 +160,7 @@ export async function GET(req: Request) {
     <!-- ═══ HERO: VENTAS DEL DÍA — la única cifra que importa arriba de todo ═══ -->
     <div style="background:white;border-radius:16px;padding:26px 24px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);text-align:center">
       <p style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.6px;margin:0 0 8px">Ventas de hoy</p>
-      <p style="font-size:44px;font-weight:900;color:${ventasHoy > 0 ? '#0B3D66' : '#9CA3AF'};margin:0;line-height:1">${fmt(ventasHoy)}</p>
+      <p style="font-size:44px;font-weight:900;color:${ventasHoy > 0 ? '#002455' : '#9CA3AF'};margin:0;line-height:1">${fmt(ventasHoy)}</p>
       <p style="font-size:13px;color:#6B7280;margin:8px 0 14px">${pedidosHoyCount} pedido${pedidosHoyCount === 1 ? '' : 's'} pagado${pedidosHoyCount === 1 ? '' : 's'} · ticket promedio ${fmt(ticketPromedioHoy)}</p>
       <div>${tendenciaBadge(cambioVsAyer, 'vs. ayer')}${tendenciaBadge(cambioVsPromedio, 'vs. promedio 7 días')}</div>
     </div>
@@ -185,7 +185,7 @@ export async function GET(req: Request) {
     <div style="background:white;border-radius:14px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06);display:flex;justify-content:space-between;align-items:center">
       <div>
         <p style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 4px">Este mes (día ${diaDelMes})</p>
-        <p style="font-size:22px;font-weight:900;color:#0B3D66;margin:0">${fmt(ventasMes)}</p>
+        <p style="font-size:22px;font-weight:900;color:#002455;margin:0">${fmt(ventasMes)}</p>
       </div>
       <div style="text-align:right">
         <p style="font-size:11px;color:#9CA3AF;margin:0 0 4px">${pedidosMesCount} pedidos · promedio</p>
@@ -242,7 +242,7 @@ export async function GET(req: Request) {
     </div>
 
     <p style="text-align:center;font-size:11px;color:#9CA3AF;margin:16px 0 0">
-      Reporte automático diario · ContactGo® · <a href="https://www.contactgo.net/admin" style="color:#0B3D66;font-weight:600">Ver panel de administración →</a>
+      Reporte automático diario · ContactGo® · <a href="https://www.contactgo.net/admin" style="color:#002455;font-weight:600">Ver panel de administración →</a>
     </p>
   </div>
 </div>`

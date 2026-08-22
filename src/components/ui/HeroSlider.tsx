@@ -107,7 +107,7 @@ const SLIDES: Slide[] = [
     cta:        { label: 'Pedir soluciones', href: '/soluciones' },
     cta2:       { label: 'Ver todas las gotas', href: '/gotas' },
     glow:       'rgba(37,99,235,0.22)',
-    accent:     '#0B3D66',
+    accent:     '#002455',
     image:      '/hero-soluciones-v4.jpg',
     imageMobile: '/hero-soluciones-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'Soluciones y gotas para lentes de contacto — OPTI-FREE, Biotrue, renu, Boston, Clear Care',
