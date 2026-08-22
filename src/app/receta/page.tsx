@@ -299,13 +299,13 @@ export default function RecetaPage() {
               </div>
               <div className="space-y-3 mb-4">
                 <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre completo *"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
                 <input value={leadTelefono} onChange={e => setLeadTelefono(e.target.value)} type="tel" placeholder="WhatsApp * (ej: 809-555-1234)"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
                 <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico (opcional)"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-green-400" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
               </div>
-              <button onClick={handleLeadSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
+              <button onClick={handleLeadSubmit} className="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
                 Ver mi resultado →
               </button>
               <p className="text-[10px] text-gray-400 text-center">🔒 Tus datos están seguros. Nunca spam.</p>

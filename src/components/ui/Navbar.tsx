@@ -47,7 +47,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center relative" aria-label="ContactGo — Ir al inicio">
-          <NextImage src="/logo.png" alt="ContactGo" width={140} height={50} className="h-10 w-auto object-contain" />
+          <NextImage src="/logo.png" alt="ContactGo" width={200} height={33} className="h-8 sm:h-10 w-auto object-contain" priority />
           <span className="text-[10px] font-semibold text-gray-400 ml-0.5 -mt-4 select-none" aria-hidden="true">®</span>
         </Link>
 

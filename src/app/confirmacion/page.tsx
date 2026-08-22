@@ -424,12 +424,12 @@ function ConfirmacionContent() {
         <div className="space-y-3 pt-1">
           {order?.numero_orden ? (
             <Link href={`/pedido/${order.numero_orden}`}
-              className="w-full bg-green-500 hover:bg-green-600 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200">
+              className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-primary-200">
               <Package className="w-5 h-5" /> Seguir mi pedido
             </Link>
           ) : (
             <Link href="/cuenta"
-              className="w-full bg-green-500 hover:bg-green-600 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200">
+              className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-primary-200">
               <Package className="w-5 h-5" /> Seguir mi pedido
             </Link>
           )}
