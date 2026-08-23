@@ -544,22 +544,22 @@ export default async function HomePage() {
         {/* ── MARCAS ── */}
         <section className="bg-gray-50 border-y border-gray-100 py-8">
           <div className="max-w-7xl mx-auto px-4">
-            <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">Directo del fabricante</p>
+            <p className="text-center text-xs font-bold text-gray-500 uppercase tracking-widest mb-5">Directo del fabricante</p>
             <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 mb-5">
               {['ACUVUE®', 'AIR OPTIX®', 'FreshLook®', 'Bausch+Lomb', 'CooperVision®', 'Biofinity®', 'Opti-Free®', 'Prolub®'].map(m => (
-                <span key={m} className="text-gray-500 font-bold text-sm">{m}</span>
+                <span key={m} className="text-gray-700 font-bold text-sm">{m}</span>
               ))}
             </div>
             {/* Logos tarjetas en homepage — Requerido por Visa/Mastercard/AZUL */}
-            <div className="flex items-center justify-center gap-3 pt-3 border-t border-gray-100 flex-wrap">
-              <span className="text-xs text-gray-400 font-semibold">Pagos seguros:</span>
+            <div className="flex items-center justify-center gap-3 pt-3 border-t border-gray-200 flex-wrap">
+              <span className="text-xs text-gray-600 font-semibold">Pagos seguros:</span>
               <img src="/visa-blue.png" alt="Visa" width={40} height={16} style={{height:"1rem",width:"auto",objectFit:"contain"}} />
               <img src="/visa-secure.png" alt="Visa Secure" width={40} height={16} style={{height:"1rem",width:"auto",objectFit:"contain"}} />
               <img src="/mastercard-id-check.png" alt="Mastercard ID Check" width={50} height={20} style={{height:"1.25rem",width:"auto",objectFit:"contain"}} />
               <img src="/mastercard.png" alt="Mastercard" width={50} height={20} style={{height:"1.25rem",width:"auto",objectFit:"contain"}} />
-              <span className="text-[9px] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded font-medium">Verified by VISA</span>
-              <span className="text-[9px] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded font-medium">Mastercard ID Check</span>
-              <span className="text-[9px] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded font-medium">🔒 SSL</span>
+              <span className="text-[9px] border border-gray-400 text-gray-600 px-1.5 py-0.5 rounded font-medium">Verified by VISA</span>
+              <span className="text-[9px] border border-gray-400 text-gray-600 px-1.5 py-0.5 rounded font-medium">Mastercard ID Check</span>
+              <span className="text-[9px] border border-gray-400 text-gray-600 px-1.5 py-0.5 rounded font-medium">🔒 SSL</span>
             </div>
           </div>
         </section>
