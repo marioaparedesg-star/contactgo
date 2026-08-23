@@ -31,10 +31,10 @@ export default function Page() {
         </div>
 
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
-        <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">Astigmatismo</span>
+        <span className="text-xs font-semibold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">Astigmatismo</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Lentes de contacto para astigmatismo en República Dominicana</h1>
                 <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -81,7 +81,7 @@ export default function Page() {
               <div key={m.marca} className="bg-white border border-gray-100 rounded-2xl p-5 mb-3">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <h3 className="font-bold text-gray-900">{m.marca}</h3>
-                  <span className="text-xs bg-primary-50 text-primary-700 font-bold px-2 py-1 rounded-lg shrink-0">{m.precio}</span>
+                  <span className="text-xs bg-teal-50 text-primary-700 font-bold px-2 py-1 rounded-lg shrink-0">{m.precio}</span>
                 </div>
                 <p className="text-xs text-gray-500 mb-1">Reemplazo: {m.tipo} · {m.material}</p>
                 <p className="text-sm text-gray-700 mb-3">{m.ventaja}</p>
@@ -108,7 +108,7 @@ export default function Page() {
             <p className="text-sm mt-3">Si tu CYL es mayor a -2.75, es posible que necesites los <Link href="/producto/biofinity-xr-toric-lentes-alta-graduacion-dominicana" className="text-primary-600 font-semibold">Biofinity XR Toric</Link> para astigmatismo de alta graduación.</p>
           </div>
 
-          <div className="bg-primary-600 rounded-2xl p-6 text-white text-center">
+          <div className="bg-teal-500 rounded-2xl p-6 text-white text-center">
             <h3 className="font-bold text-xl mb-2">¿Tienes astigmatismo? Encuentra tu lente exacto</h3>
             <p className="text-white/80 text-sm mb-4">Ingresa tu receta y te mostramos el lente tórico correcto para ti.</p>
             <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-2xl inline-block hover:bg-gray-50 transition-all">
@@ -157,9 +157,9 @@ export default function Page() {
             <strong>⚠️ Aviso médico:</strong> Este artículo es informativo y no sustituye la consulta con un profesional óptico u oftalmólogo. Los lentes de contacto son productos sanitarios que requieren prescripción. Si experimentas molestias, suspende su uso y consulta a tu especialista.
           </div>
       
-        <div className="mt-10 bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <p className="text-sm text-gray-600 mb-3">ACUVUE Oasys, Biofinity Toric y más</p>
-          <a href="/toricos" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
+          <a href="/toricos" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
             Ver lentes tóricos →
           </a>
         </div>
@@ -182,12 +182,12 @@ export default function Page() {
           </div>
         </section>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

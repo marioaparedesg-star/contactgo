@@ -84,7 +84,7 @@ export default function FrequentlyBoughtTogether({ productId, tipo, precio }: Pr
               })
               toast.success(`${sugeridos.length} productos agregados al carrito`, { duration: 3000 })
             }}
-            className="bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm px-4 py-2.5 rounded-xl flex items-center gap-2 transition-colors shadow-sm shadow-primary-200/60"
+            className="bg-teal-500 hover:bg-teal-600 text-white font-bold text-sm px-4 py-2.5 rounded-xl flex items-center gap-2 transition-colors shadow-sm shadow-teal-100/60"
           >
             <ShoppingCart className="w-4 h-4" />
             Agregar todo al carrito

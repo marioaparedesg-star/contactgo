@@ -160,7 +160,7 @@ function EyeSelector({ eye, onChange }: { eye: string; onChange: (v: string) => 
           <button key={o.val} onClick={() => onChange(o.val)}
             className={`relative py-2.5 px-1.5 rounded-xl border-2 text-center transition-all ${
               eye === o.val
-                ? 'bg-primary-600 text-white border-primary-600 shadow-sm shadow-primary-200'
+                ? 'bg-teal-500 text-white border-primary-600 shadow-sm shadow-teal-100'
                 : 'bg-white text-gray-700 border-gray-200 hover:border-primary-300'
             }`}>
             {o.badge && (
@@ -228,7 +228,7 @@ function ModalidadSelector({
               aria-pressed={activo}
               className={`relative rounded-2xl border-2 p-3 text-left transition-all ${
                 activo
-                  ? 'border-primary-600 bg-primary-50 ring-2 ring-primary-200'
+                  ? 'border-primary-600 bg-teal-50 ring-2 ring-teal-100'
                   : 'border-gray-200 bg-white hover:border-gray-300'
               }`}
               style={{ minHeight: '104px' }}
@@ -341,7 +341,7 @@ function WhyBlock({ tipo, proteccion_uv }: { tipo: string; proteccion_uv?: boole
   const b = BENEFITS[tipo] ?? BENEFITS.esferico
   const bullets = proteccion_uv ? b.bullets.map((bl, i) => i === 3 ? 'Protección UV Clase II incluida' : bl) : b.bullets
   return (
-    <div className="bg-gradient-to-br from-primary-50 to-green-50 border border-primary-100 rounded-2xl p-4">
+    <div className="bg-gradient-to-br from-teal-50 to-green-50 border border-primary-100 rounded-2xl p-4">
       <p className="text-xs font-black text-primary-700 uppercase tracking-wide mb-3">{b.title}</p>
       <ul className="space-y-1.5">
         {bullets.map(bullet => (
@@ -950,7 +950,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   <div className="flex flex-wrap gap-2">
                     {sizes.map(s => (
                       <button key={s} onClick={()=>setSize(s)}
-                        className={`px-3 py-2 rounded-xl border text-xs font-bold transition-all ${size===s ? 'bg-primary-600 text-white border-primary-600' : 'border-gray-200 text-gray-700'}`}>
+                        className={`px-3 py-2 rounded-xl border text-xs font-bold transition-all ${size===s ? 'bg-teal-500 text-white border-primary-600' : 'border-gray-200 text-gray-700'}`}>
                         {s}{SOLUTION_PRICES[sku]?.[s] ? ` · RD$${SOLUTION_PRICES[sku][s].toLocaleString()}` : ''}
                       </button>
                     ))}
@@ -965,7 +965,7 @@ export default function ProductoClient({ product, variants }: Props) {
             <div className="px-4 pb-4 space-y-2">
               <EntregaHoy especial={getEntregaInfo.especial} />
               <button onClick={handleAdd} disabled={product.stock===0||faltaModalidad}
-                className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 text-white font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-primary-200/50 transition-all">
+                className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-teal-100/50 transition-all">
                 <ShoppingCart className="w-5 h-5" />
                 {sinVariante ? 'Elegir graduación primero' : 'Agregar al carrito'}
               </button>
@@ -1168,7 +1168,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   <label className="text-sm font-bold text-gray-700">Tamaño</label>
                   <div className="flex flex-wrap gap-2">
                     {sizes.map(s => (
-                      <button key={s} onClick={()=>setSize(s)} className={`px-4 py-2 rounded-xl border text-sm font-semibold transition-all ${size===s?'bg-primary-600 text-white border-primary-600':'border-gray-200 text-gray-700 hover:border-primary-400'}`}>
+                      <button key={s} onClick={()=>setSize(s)} className={`px-4 py-2 rounded-xl border text-sm font-semibold transition-all ${size===s?'bg-teal-500 text-white border-primary-600':'border-gray-200 text-gray-700 hover:border-primary-400'}`}>
                         {s}{SOLUTION_PRICES[sku]?.[s]?` · RD$${SOLUTION_PRICES[sku][s].toLocaleString()}`:''}
                       </button>
                     ))}
@@ -1234,7 +1234,7 @@ export default function ProductoClient({ product, variants }: Props) {
                       <p className="text-xl font-black text-gray-900">RD${(price*(isGota?1:qty)).toLocaleString()}</p>
                     </div>
                     <button onClick={handleAdd} disabled={product.stock===0||sinVariante}
-                      className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.98] disabled:opacity-40 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-primary-200/50">
+                      className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-teal-100/50">
                       <ShoppingCart className="w-4 h-4" />
                       {product.stock===0?'Sin stock':sinVariante?'Consultar':'Agregar al carrito'}
                     </button>
@@ -1273,7 +1273,7 @@ export default function ProductoClient({ product, variants }: Props) {
                             const isReco = op.val === recomendada
                             return (
                               <button key={String(op.val)} type="button" onClick={() => setSuscripcion(op.val)}
-                                className={`relative flex flex-col items-center justify-center gap-0.5 py-2 px-1 rounded-lg border-2 text-center transition-all ${isSel ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                                className={`relative flex flex-col items-center justify-center gap-0.5 py-2 px-1 rounded-lg border-2 text-center transition-all ${isSel ? 'border-primary-500 bg-teal-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
                                 {isReco && !isSel && <span className="absolute -top-1.5 -right-1 text-[7px] font-black bg-amber-400 text-white px-1 py-0.5 rounded-full">★</span>}
                                 <span className={`text-[10px] font-bold leading-tight ${isSel ? 'text-primary-700' : 'text-gray-700'}`}>{op.label}</span>
                               </button>

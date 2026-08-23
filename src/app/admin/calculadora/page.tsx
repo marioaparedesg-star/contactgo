@@ -100,7 +100,7 @@ export default function AdminCalculadoraPage() {
                 <div key={i} className="flex items-center gap-3 mb-2">
                   <span className="text-[11px] text-gray-500 w-24 shrink-0">{s.step}</span>
                   <div className="flex-1 bg-gray-100 rounded-full h-2.5">
-                    <div className="bg-primary-500 h-2.5 rounded-full transition-all" style={{ width: `${Math.max(pct,2)}%` }}/>
+                    <div className="bg-teal-400 h-2.5 rounded-full transition-all" style={{ width: `${Math.max(pct,2)}%` }}/>
                   </div>
                   <span className="text-xs font-bold text-gray-700 w-8 text-right">{s.n}</span>
                   {drop != null && <span className={`text-[9px] font-bold w-12 ${drop>60?'text-red-500':drop>30?'text-amber-500':'text-green-500'}`}>-{drop}%</span>}

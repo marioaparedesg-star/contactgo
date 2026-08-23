@@ -80,7 +80,7 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Precios actualizados junio 2026 · Toda la línea Biofinity</p></div>
         </div>
 
@@ -250,7 +250,7 @@ export default function Page() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-3 text-sm">¿Tienes dudas? Usa nuestra <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
+            <p className="mt-3 text-sm">¿Tienes dudas? Usa nuestra <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
             <a href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta gratuita</a> o escríbenos por WhatsApp y te ayudamos a identificar el Biofinity correcto para tu prescripción.</p>
           </section>
 
@@ -263,7 +263,7 @@ export default function Page() {
               { href: '/blog/air-optix-hydraglyde-precio-republica-dominicana', titulo: '→ Air Optix HydraGlyde precio RD', desc: 'Otra opción mensual premium' },
               { href: '/blog/lentes-diarios-vs-mensuales', titulo: '→ Lentes diarios vs mensuales', desc: '¿Cuál tipo es para ti?' },
             ].map(({ href, titulo, desc }) => (
-              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
               </Link>

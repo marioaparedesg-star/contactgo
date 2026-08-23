@@ -38,7 +38,7 @@ export default function CatalogoGrid({ products }: Props) {
       <p className="text-5xl mb-4">🔍</p>
       <p className="text-gray-600 font-semibold text-lg">No encontramos productos</p>
       <p className="text-gray-400 text-sm mt-1">Intenta con otros filtros</p>
-      <a href="/catalogo" className="mt-4 bg-primary-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold">Ver todos los productos</a>
+      <a href="/catalogo" className="mt-4 bg-teal-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold">Ver todos los productos</a>
     </div>
   )
 

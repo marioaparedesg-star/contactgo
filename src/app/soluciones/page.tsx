@@ -34,7 +34,7 @@ export default async function Page() {
           <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span>
           <span className="text-gray-700 font-medium">Soluciones y Gotas</span>
         </nav>
-        <section className="bg-gradient-to-br from-teal-700 via-primary-600 to-blue-600 text-white py-14 px-4 text-center mt-2">
+        <section className="bg-gradient-to-br from-teal-700 via-teal-500 to-blue-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Cuidado ocular</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Soluciones y Gotas para Lentes en RD</h1>
           <p className="text-teal-100 text-lg max-w-xl mx-auto">ReNu, Opti-Free, Systane, Refresh y más. Todo para el cuidado y confort de tus lentes de contacto.</p>

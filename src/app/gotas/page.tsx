@@ -123,7 +123,7 @@ export default async function Page() {
               <p className="text-xs text-gray-500 mt-0.5">Para limpiar y guardar tus lentes de contacto</p>
             </div>
             <Link href="/soluciones"
-              className="shrink-0 bg-primary-600 hover:bg-primary-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-colors">
+              className="shrink-0 bg-teal-500 hover:bg-teal-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-colors">
               Ver soluciones →
             </Link>
           </div>
@@ -157,7 +157,7 @@ export default async function Page() {
               { href: '/soluciones',  label: '🧴 Soluciones'         },
             ].map(c => (
               <Link key={c.href} href={c.href}
-                className="text-xs font-semibold bg-gray-50 hover:bg-primary-50 border border-gray-200 hover:border-primary-200 text-gray-600 hover:text-primary-700 px-3 py-2 rounded-xl transition-colors">
+                className="text-xs font-semibold bg-gray-50 hover:bg-teal-50 border border-gray-200 hover:border-primary-200 text-gray-600 hover:text-primary-700 px-3 py-2 rounded-xl transition-colors">
                 {c.label}
               </Link>
             ))}

@@ -56,7 +56,7 @@ export default function AdminLogin() {
           </a>
         </div>
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mb-4">
+          <div className="w-16 h-16 bg-teal-400 rounded-2xl flex items-center justify-center mb-4">
             <Eye className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">ContactGo</h1>
@@ -69,7 +69,7 @@ export default function AdminLogin() {
             <div className="relative">
               <Mail className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
-                className="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-2.5 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-2.5 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
                 placeholder="admin@email.com" />
             </div>
           </div>
@@ -78,12 +78,12 @@ export default function AdminLogin() {
             <div className="relative">
               <Lock className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
               <input type="password" value={pass} onChange={e => setPass(e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-2.5 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-2.5 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
                 placeholder="••••••••" />
             </div>
           </div>
           <button type="submit" disabled={loading}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 mt-2">
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 mt-2">
             {loading ? 'Entrando...' : 'Entrar al panel'}
           </button>
         </form>

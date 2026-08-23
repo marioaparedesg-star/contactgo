@@ -223,10 +223,10 @@ export default function PedidosPage() {
             <div className="relative flex-1 min-w-48">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400"/>
               <input placeholder="Buscar por nombre, email o # orden..." value={search} onChange={e=>setSearch(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white"/>
+                className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-300 bg-white"/>
             </div>
             <select value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}
-              className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-400">
+              className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-teal-300">
               <option value="todos">Todos los estados</option>
               {ESTADOS.map(e=><option key={e} value={e}>{
               e==='activos'   ? 'Activos' :
@@ -237,7 +237,7 @@ export default function PedidosPage() {
             }</option>)}
             </select>
             <select value={filtroPago} onChange={e=>setFiltroPago(e.target.value)}
-              className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-400">
+              className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-teal-300">
               <option value="todos">Todos</option>
               <option value="tarjeta">💳 Tarjeta AZUL</option>
             </select>
@@ -253,7 +253,7 @@ export default function PedidosPage() {
                 const isSelected = selected?.id===p.id
                 return (
                   <button key={p.id} onClick={()=>abrirPedido(p)}
-                    className={`w-full text-left p-4 rounded-2xl border transition-all ${isSelected?'border-primary-400 bg-primary-50/50 shadow-md':'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}>
+                    className={`w-full text-left p-4 rounded-2xl border transition-all ${isSelected?'border-primary-400 bg-teal-50/50 shadow-md':'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}>
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
@@ -378,7 +378,7 @@ export default function PedidosPage() {
                     ].map(({k:e,i})=>(
                       <button key={e} onClick={()=>cambiarEstado(selected.id,e)}
                         className={`text-[10px] font-bold py-2 rounded-lg border transition-all ${
-                          selected.estado===e ? 'bg-primary-600 text-white border-primary-600' : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-primary-300 hover:text-primary-600'
+                          selected.estado===e ? 'bg-teal-500 text-white border-primary-600' : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-primary-300 hover:text-primary-600'
                         }`}>
                         <span className="block text-base">{i}</span>
                         <span className="block truncate">{e}</span>

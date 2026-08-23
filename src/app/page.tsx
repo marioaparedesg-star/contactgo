@@ -109,7 +109,7 @@ export default async function HomePage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <span className="text-sm text-gray-400 flex-1">Busca ACUVUE, Air Optix, graduación...</span>
-            <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full flex-shrink-0">Buscar</span>
+            <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full flex-shrink-0">Buscar</span>
           </a>
         </section>
 
@@ -125,7 +125,7 @@ export default async function HomePage() {
               {
                 label: 'Esféricos', slug: 'esferico',
                 desc: 'Miopía e hipermetropía — lo más pedido',
-                bg: 'bg-primary-50', fg: 'text-primary-600',
+                bg: 'bg-teal-50', fg: 'text-primary-600',
                 // LENTE DE CONTACTO simple — disco con anillo interno y highlight de curvatura
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -223,7 +223,7 @@ export default async function HomePage() {
         </section>
 
         {/* ── BANNER RECETA — reordenado: segundo ── */}
-        <section className="bg-gradient-to-r from-primary-600 to-teal-600 relative overflow-hidden mx-4 md:mx-8 rounded-3xl mb-8">
+        <section className="bg-gradient-to-r from-teal-500 to-teal-600 relative overflow-hidden mx-4 md:mx-8 rounded-3xl mb-8">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-white/5" />
             <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5" />
@@ -477,7 +477,7 @@ export default async function HomePage() {
                         <p className="text-xs text-gray-400">{t.ciudad} · {t.fecha}</p>
                       </div>
                     </div>
-                    <span className="text-xs bg-primary-50 text-primary-700 font-medium px-2 py-1 rounded-lg">{t.producto}</span>
+                    <span className="text-xs bg-teal-50 text-primary-700 font-medium px-2 py-1 rounded-lg">{t.producto}</span>
                   </div>
                 </div>
               ))}
@@ -499,7 +499,7 @@ export default async function HomePage() {
               { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Entrega en 24-48h a todo el país. Sin filas, sin citas, sin salir de casa.' },
             ].map((p:any) => (
               <div key={p.n} className="relative bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-                <div className="absolute -top-3 -left-1 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-black text-sm shadow-md">{p.n}</div>
+                <div className="absolute -top-3 -left-1 w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-sm shadow-md">{p.n}</div>
                 {p.azul ? (
                   <div className="mb-2"><AzulLogo size="lg" /></div>
                 ) : (
@@ -511,7 +511,7 @@ export default async function HomePage() {
             ))}
           </div>
           <div className="text-center mt-6">
-            <a href="/receta" className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors">
+            <a href="/receta" className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors">
               Calcular mi receta gratis
               <ChevronRight className="w-4 h-4" />
             </a>

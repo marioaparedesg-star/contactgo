@@ -50,7 +50,7 @@ export default function ProductCard({ product, isBestseller }: Props) {
       <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-sm w-full bg-white shadow-xl rounded-2xl border border-green-100 flex items-center gap-3 p-4`}>
         <span className="text-xl flex-shrink-0">✅</span>
         <p className="text-sm font-bold text-gray-900 flex-1 truncate">{product.nombre} agregado</p>
-        <a href="/cart" className="text-xs font-black text-primary-600 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-xl flex-shrink-0">Ver →</a>
+        <a href="/cart" className="text-xs font-black text-primary-600 bg-teal-50 hover:bg-teal-50 px-3 py-1.5 rounded-xl flex-shrink-0">Ver →</a>
       </div>
     ), { duration: 3500, position: 'top-center' })
     trackEcommerce('add_to_cart', {

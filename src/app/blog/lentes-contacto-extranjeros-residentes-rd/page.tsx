@@ -58,11 +58,11 @@ export default function Page() {
           <span className="text-gray-600">Lentes de contacto para extranjeros que viven en República Dominicana</span>
         </div>
 
-        <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">🌍 Para expatriados</span>
+        <span className="text-xs font-semibold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">🌍 Para expatriados</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Lentes de contacto para extranjeros que viven en República Dominicana</h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div>
             <p className="text-sm font-bold text-gray-900">Equipo ContactGo</p>
             <p className="text-xs text-gray-500">Actualizado julio 2026 · Entrega en toda RD</p>
@@ -119,18 +119,18 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900">También puede interesarte</h3>
-            <a href="/blog/como-leer-receta-optica-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo leer tu receta óptica</p><p className="text-xs text-gray-500 mt-0.5">Qué significa cada valor de tu prescripción</p></a>
-            <a href="/blog/comprar-lentes-contacto-online-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Comprar lentes de contacto online en RD</p><p className="text-xs text-gray-500 mt-0.5">Guía segura de compra</p></a>
-            <a href="/blog/seguro-medico-ars-lentes-contacto-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ ¿El seguro médico ARS cubre lentes de contacto?</p><p className="text-xs text-gray-500 mt-0.5">Guía de cobertura óptica en RD</p></a>
+            <a href="/blog/como-leer-receta-optica-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo leer tu receta óptica</p><p className="text-xs text-gray-500 mt-0.5">Qué significa cada valor de tu prescripción</p></a>
+            <a href="/blog/comprar-lentes-contacto-online-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Comprar lentes de contacto online en RD</p><p className="text-xs text-gray-500 mt-0.5">Guía segura de compra</p></a>
+            <a href="/blog/seguro-medico-ars-lentes-contacto-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ ¿El seguro médico ARS cubre lentes de contacto?</p><p className="text-xs text-gray-500 mt-0.5">Guía de cobertura óptica en RD</p></a>
           </div>
         </div>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana en 24-48h</h3>
           <p className="text-sm text-gray-500 mb-4">Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</a>
             <a href="https://wa.me/18096942268?text=Hola%2C%20tengo%20una%20consulta%20sobre%20lentes%20de%20contacto" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

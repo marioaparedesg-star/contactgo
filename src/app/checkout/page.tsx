@@ -506,7 +506,7 @@ export default function CheckoutPage() {
               <input type="email" autoComplete="email" placeholder="Email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="input w-full" />
               <input type="password" autoComplete="current-password" placeholder="Contraseña" value={authPass} onChange={e => setAuthPass(e.target.value)} className="input w-full" />
               {authMsg && <p className="text-red-500 text-xs">{authMsg}</p>}
-              <button onClick={handleAuth} disabled={authLoading} className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-60">
+              <button onClick={handleAuth} disabled={authLoading} className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-60">
                 {authLoading ? 'Procesando...' : authMode === 'register' ? 'Crear cuenta y continuar' : 'Entrar y continuar'}
               </button>
               {/* Magic Link — F7 UX FIX: sin contraseña para usuarios que no recuerdan */}
@@ -525,7 +525,7 @@ export default function CheckoutPage() {
                     setAuthMsg('✅ Enlace enviado a tu email. Ábrelo para entrar sin contraseña.')
                   }}
                   disabled={authLoading}
-                  className="w-full text-xs text-primary-600 hover:text-primary-700 font-semibold py-2 border border-primary-100 rounded-xl hover:bg-primary-50 transition-colors"
+                  className="w-full text-xs text-primary-600 hover:text-primary-700 font-semibold py-2 border border-primary-100 rounded-xl hover:bg-teal-50 transition-colors"
                 >
                   ✉️ Entrar sin contraseña (link al email)
                 </button>
@@ -551,7 +551,7 @@ export default function CheckoutPage() {
                 <div key={s.n} className="flex items-center gap-1.5">
                   <button onClick={() => step > s.n && setStep(s.n)}
                     className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-black transition-all ${
-                      step === s.n ? 'bg-primary-600 text-white shadow-md scale-105' :
+                      step === s.n ? 'bg-teal-500 text-white shadow-md scale-105' :
                       step > s.n ? 'bg-green-100 text-green-700 cursor-pointer' :
                       'bg-gray-100 text-gray-400'
                     }`}>
@@ -582,7 +582,7 @@ export default function CheckoutPage() {
               }`}>
                 <div className="p-5 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 1 ? 'bg-green-500 text-white' : step === 1 ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 1 ? 'bg-green-500 text-white' : step === 1 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 1 ? <Check className="w-4 h-4" /> : '1'}
                     </div>
                     <div>
@@ -590,7 +590,7 @@ export default function CheckoutPage() {
                       {step > 1 && <p className="text-xs text-gray-400 mt-0.5">{getValues('nombre')} · {getValues('email')}</p>}
                     </div>
                   </div>
-                  {step > 1 && <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2.5 py-1 rounded-full">Editar</span>}
+                  {step > 1 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
 
                 {step === 1 && (
@@ -622,7 +622,7 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                     <button type="button" onClick={nextStep}
-                      className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-primary-200">
+                      className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-100">
                       Continuar <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -637,7 +637,7 @@ export default function CheckoutPage() {
               }`}>
                 <div className="p-5 flex items-center justify-between cursor-pointer" onClick={() => step > 2 && setStep(2)} role="button" tabIndex={step > 2 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 2 && setStep(2)} aria-label="Volver al paso 2">
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 2 ? 'bg-green-500 text-white' : step === 2 ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 2 ? 'bg-green-500 text-white' : step === 2 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 2 ? <Check className="w-4 h-4" /> : '2'}
                     </div>
                     <div>
@@ -645,7 +645,7 @@ export default function CheckoutPage() {
                       {step > 2 && <p className="text-xs text-gray-400 mt-0.5">{getValues('direccion')}, {getValues('ciudad')}</p>}
                     </div>
                   </div>
-                  {step > 2 && <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2.5 py-1 rounded-full">Editar</span>}
+                  {step > 2 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
 
                 {step === 2 && (
@@ -665,20 +665,20 @@ export default function CheckoutPage() {
                                 setValue('direccion', addr.direccion)
                                 if (addr.ciudad) setValue('ciudad', addr.ciudad)
                               }}
-                              className={`w-full text-left p-3 rounded-xl border-2 transition-all ${isSelected ? 'border-primary-500 bg-primary-50/50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                              className={`w-full text-left p-3 rounded-xl border-2 transition-all ${isSelected ? 'border-primary-500 bg-teal-50/50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
                               <div className="flex items-start gap-2">
                                 <span className="text-base shrink-0 mt-0.5">{ICON[addr.etiqueta ?? 'Casa'] ?? '📍'}</span>
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-bold text-gray-900 flex items-center gap-2">
                                     {addr.etiqueta ?? 'Dirección'}
-                                    {addr.principal && <span className="text-[10px] font-semibold text-primary-600 bg-primary-50 px-1.5 py-0.5 rounded-full">Principal</span>}
+                                    {addr.principal && <span className="text-[10px] font-semibold text-primary-600 bg-teal-50 px-1.5 py-0.5 rounded-full">Principal</span>}
                                     {addr.lat && <span className="text-[10px] text-green-600">📍 Pin</span>}
                                   </p>
                                   <p className="text-xs text-gray-600 truncate">{addr.direccion}</p>
                                   <p className="text-xs text-gray-400">{addr.ciudad}</p>
                                   {addr.referencias && <p className="text-xs text-gray-400 italic">{addr.referencias}</p>}
                                 </div>
-                                {isSelected && <div className="w-5 h-5 bg-primary-600 rounded-full flex items-center justify-center shrink-0"><svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/></svg></div>}
+                                {isSelected && <div className="w-5 h-5 bg-teal-500 rounded-full flex items-center justify-center shrink-0"><svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/></svg></div>}
                               </div>
                               {/* Mini mapa preview si tiene pin */}
                               {isSelected && addr.lat && addr.lng && process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY && (
@@ -738,7 +738,7 @@ export default function CheckoutPage() {
                     )}
 
                     <button type="button" onClick={nextStep}
-                      className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-primary-200">
+                      className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-100">
                       Continuar <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -748,7 +748,7 @@ export default function CheckoutPage() {
               {/* Paso 3 */}
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${step === 3 ? 'border-primary-500 shadow-lg' : 'border-gray-100 opacity-50'}`}>
                 <div className="p-5 flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
                   <p className="font-bold text-gray-900 text-sm">Confirmar y pagar</p>
                 </div>
 
@@ -758,7 +758,7 @@ export default function CheckoutPage() {
                     {/* Resumen cliente */}
                     <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 bg-primary-100 rounded-xl flex items-center justify-center shrink-0">
+                        <div className="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center shrink-0">
                           <User className="w-4 h-4 text-primary-600" />
                         </div>
                         <div>
@@ -800,7 +800,7 @@ export default function CheckoutPage() {
                             )}
                             {mode && (
                               <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                                mode === 'AMBOS' ? 'bg-primary-100 text-primary-700' :
+                                mode === 'AMBOS' ? 'bg-teal-50 text-primary-700' :
                                 mode === 'OD'    ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
                               }`}>
                                 {mode === 'AMBOS' ? '👀 Ambos ojos' : mode === 'OD' ? '👁 Ojo derecho' : '👁 Ojo izquierdo'}
@@ -853,7 +853,7 @@ export default function CheckoutPage() {
 
                     {/* T&C */}
                     <div className="flex items-start gap-3 cursor-pointer" onClick={() => setAceptaTerminos(!aceptaTerminos)} role="checkbox" aria-checked={aceptaTerminos} tabIndex={0} onKeyDown={e => e.key === 'Enter' || e.key === ' ' ? setAceptaTerminos(!aceptaTerminos) : null}>
-                      <div className={`w-5 h-5 rounded-lg border-2 shrink-0 mt-0.5 flex items-center justify-center transition-all ${aceptaTerminos ? 'bg-primary-600 border-primary-600' : 'border-gray-300 hover:border-primary-400'}`}>
+                      <div className={`w-5 h-5 rounded-lg border-2 shrink-0 mt-0.5 flex items-center justify-center transition-all ${aceptaTerminos ? 'bg-teal-500 border-primary-600' : 'border-gray-300 hover:border-primary-400'}`}>
                         {aceptaTerminos && <Check className="w-3 h-3 text-white" />}
                       </div>
                       <p className="text-xs text-gray-500 leading-relaxed select-none">

@@ -43,7 +43,7 @@ export default function Page() {
         Cómo leer tu receta óptica para lentes de contacto en RD
       </h1>
                 <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -102,7 +102,7 @@ export default function Page() {
             {terminos.map(t => (
               <div key={t.sigla} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
                 <div className="flex items-start gap-3">
-                  <span className="shrink-0 w-12 h-12 bg-primary-50 text-primary-700 rounded-xl flex items-center justify-center font-black text-sm">{t.sigla}</span>
+                  <span className="shrink-0 w-12 h-12 bg-teal-50 text-primary-700 rounded-xl flex items-center justify-center font-black text-sm">{t.sigla}</span>
                   <div>
                     <p className="font-bold text-gray-900 text-sm">{t.nombre}</p>
                     <p className="text-sm text-gray-600 mt-1">{t.desc}</p>
@@ -133,10 +133,10 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5">
+        <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5">
           <h2 className="font-bold text-gray-900 mb-2">¿No estás seguro? Usa nuestra calculadora</h2>
           <p className="text-sm text-gray-700 mb-4">Ingresa los datos de tu receta y te decimos exactamente qué lentes necesitas. Gratis y sin registro.</p>
-          <Link href="/receta" className="bg-primary-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm inline-block">
+          <Link href="/receta" className="bg-teal-500 text-white px-4 py-2.5 rounded-xl font-bold text-sm inline-block">
             Usar calculadora de receta →
           </Link>
         </div>
@@ -182,9 +182,9 @@ export default function Page() {
             <strong>⚠️ Aviso médico:</strong> Este artículo es informativo y no sustituye la consulta con un profesional óptico u oftalmólogo. Los lentes de contacto son productos sanitarios que requieren prescripción. Si experimentas molestias, suspende su uso y consulta a tu especialista.
           </div>
       
-        <div className="mt-10 bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <p className="text-sm text-gray-600 mb-3">Encuentra el lente exacto según tu prescripción</p>
-          <a href="/receta" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
+          <a href="/receta" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
             Usar mi calculadora de receta →
           </a>
         </div>
@@ -215,12 +215,12 @@ export default function Page() {
           </div>
         </section>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

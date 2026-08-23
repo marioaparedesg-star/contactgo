@@ -69,7 +69,7 @@ interface Props {
 function StepLabel({ n, label }: { n: number; label: string }) {
   return (
     <div className="flex items-center gap-1.5 mb-2">
-      <span className="w-5 h-5 rounded-full bg-primary-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">
+      <span className="w-5 h-5 rounded-full bg-teal-500 text-white text-[10px] font-black flex items-center justify-center shrink-0">
         {n}
       </span>
       <span className="text-xs font-bold text-gray-700">{label}</span>
@@ -87,11 +87,11 @@ function OptionCard({
     <button type="button" onClick={onClick}
       className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all duration-150 min-h-[48px] w-full text-left ${
         selected
-          ? 'border-primary-600 bg-primary-50 shadow-sm shadow-primary-100'
+          ? 'border-primary-600 bg-teal-50 shadow-sm shadow-teal-50'
           : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
       } ${highlight && !selected ? 'border-amber-200 bg-amber-50' : ''}`}>
       <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-        selected ? 'border-primary-600 bg-primary-600' : 'border-gray-300'
+        selected ? 'border-primary-600 bg-teal-500' : 'border-gray-300'
       }`}>
         {selected && <span className="w-2 h-2 rounded-full bg-white block" />}
       </span>
@@ -123,7 +123,7 @@ function SelectField({
       <label className="block text-xs font-bold text-gray-700">{label}</label>
       {hint && <p className="text-[10px] text-gray-400">{hint}</p>}
       <select value={value} onChange={e => onChange(e.target.value)}
-        className={`w-full border-2 rounded-xl px-3 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors appearance-none bg-white ${
+        className={`w-full border-2 rounded-xl px-3 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-teal-400 transition-colors appearance-none bg-white ${
           value ? 'border-primary-300 text-gray-900' : 'border-gray-200 text-gray-400'
         }`}
         style={{ fontSize: '16px', minHeight: '48px' }}>
@@ -368,7 +368,7 @@ export default function EyeFlowSelector({
           <button key={col} type="button" onClick={() => set({ color: col })}
             className={`py-2.5 px-2 rounded-xl border-2 text-xs font-bold transition-all ${
               s.color === col
-                ? 'border-primary-600 bg-primary-50 text-primary-700'
+                ? 'border-primary-600 bg-teal-50 text-primary-700'
                 : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
             }`}>
             {col}
@@ -400,7 +400,7 @@ export default function EyeFlowSelector({
           <button
             type="button"
             onClick={() => { set({ mismaReceta: true, noEstaSeguro: false }); trackEyeFlow('misma_receta') }}
-            className="bg-primary-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-primary-700 transition-colors">
+            className="bg-teal-500 text-white font-bold py-3 rounded-xl text-sm hover:bg-teal-600 transition-colors">
             ✓ Son iguales
           </button>
           <button
@@ -482,7 +482,7 @@ export default function EyeFlowSelector({
           <p className="text-[10px] font-black text-primary-600">{doneSteps}/{totalSteps} pasos</p>
         </div>
         <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-primary-400 to-primary-600 rounded-full transition-all duration-500"
+          <div className="h-full bg-gradient-to-r from-teal-300 to-teal-500 rounded-full transition-all duration-500"
                style={{width: `${progressPct}%`}} />
         </div>
         {progressPct === 100 && (

@@ -162,7 +162,7 @@ export default function SPHPicker({
         onClick={() => setOpen(o => !o)}
         className={`w-full flex items-center justify-between gap-3 px-4 py-3.5 rounded-2xl border-2 text-sm font-semibold transition-all ${
           open
-            ? 'border-primary-500 bg-primary-50 shadow-sm'
+            ? 'border-primary-500 bg-teal-50 shadow-sm'
             : normValue
               ? 'border-primary-300 bg-white text-gray-900'
               : 'border-gray-200 bg-white text-gray-400 hover:border-gray-300'

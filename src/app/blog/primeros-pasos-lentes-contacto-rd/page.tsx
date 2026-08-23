@@ -34,7 +34,7 @@ export default function Page() {
         <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Principiantes</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Primeros pasos con lentes de contacto en República Dominicana</h1>
                 <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -107,7 +107,7 @@ export default function Page() {
                 <div key={t.tipo} className="bg-white border border-gray-100 rounded-2xl p-4">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h3 className="font-bold text-gray-900 text-sm">{t.tipo}</h3>
-                    <span className="text-xs bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full shrink-0">{t.badge}</span>
+                    <span className="text-xs bg-teal-50 text-primary-700 px-2 py-0.5 rounded-full shrink-0">{t.badge}</span>
                   </div>
                   <p className="text-xs text-gray-600 mb-2">{t.desc}</p>
                   <Link href={t.href} className="text-xs text-primary-600 font-semibold">Ver opciones →</Link>
@@ -123,7 +123,7 @@ export default function Page() {
                 { item: 'Solución multipropósito', desc: 'Para limpiar y almacenar', href: '/catalogo?tipo=solucion', emoji: '🧴' },
                 { item: 'Gotas lubricantes', desc: 'Para cuando sientas sequedad', href: '/catalogo?tipo=gota', emoji: '💧' },
               ].map(i => (
-                <Link key={i.item} href={i.href} className="bg-gray-50 rounded-2xl p-4 text-center hover:bg-primary-50 transition-all">
+                <Link key={i.item} href={i.href} className="bg-gray-50 rounded-2xl p-4 text-center hover:bg-teal-50 transition-all">
                   <span className="text-2xl block mb-1">{i.emoji}</span>
                   <p className="font-semibold text-sm text-gray-900">{i.item}</p>
                   <p className="text-xs text-gray-500">{i.desc}</p>
@@ -145,7 +145,7 @@ export default function Page() {
             </ul>
           </div>
 
-          <div className="bg-primary-600 rounded-2xl p-5 text-white">
+          <div className="bg-teal-500 rounded-2xl p-5 text-white">
             <h3 className="font-bold text-lg mb-2">¿Listo para tu primera compra?</h3>
             <p className="text-sm text-white/80 mb-3">En ContactGo tenemos soporte por WhatsApp para ayudarte a elegir el primer lente correcto según tu receta.</p>
             <div className="flex flex-col sm:flex-row gap-2">

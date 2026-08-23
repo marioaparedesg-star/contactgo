@@ -264,7 +264,7 @@ export default async function LentesRDPage() {
 
           {/* Trust bar */}
           <div className="mt-6 flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-1.5 bg-primary-50 border border-primary-100 rounded-full px-3 py-1.5">
+            <div className="flex items-center gap-1.5 bg-teal-50 border border-primary-100 rounded-full px-3 py-1.5">
               <ShieldCheck className="w-4 h-4 text-primary-600" />
               <span className="text-xs font-semibold text-primary-700">ONAPI Núm. 944205</span>
             </div>
@@ -279,10 +279,10 @@ export default async function LentesRDPage() {
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <Link href="/catalogo" className="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl text-sm text-center transition-colors">
+            <Link href="/catalogo" className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-6 py-3 rounded-xl text-sm text-center transition-colors">
               Ver catálogo completo
             </Link>
-            <Link href="/receta" className="bg-white border border-primary-200 text-primary-700 hover:bg-primary-50 font-bold px-6 py-3 rounded-xl text-sm text-center transition-colors">
+            <Link href="/receta" className="bg-white border border-primary-200 text-primary-700 hover:bg-teal-50 font-bold px-6 py-3 rounded-xl text-sm text-center transition-colors">
               Convertir mi receta de gafas
             </Link>
           </div>
@@ -422,7 +422,7 @@ export default async function LentesRDPage() {
                 { n: '4', t: 'Recibe en casa', d: 'Esféricos en 24-48h, multifocales en 2-6 días, tóricos en 25-40 días — en toda República Dominicana. Incluye tracking.' },
               ].map((p) => (
                 <div key={p.n} className="p-5 rounded-2xl border border-gray-100">
-                  <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-black text-sm mb-3">{p.n}</div>
+                  <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-sm mb-3">{p.n}</div>
                   <h3 className="font-bold text-gray-900 text-sm mb-1">{p.t}</h3>
                   <p className="text-xs text-gray-500 leading-relaxed">{p.d}</p>
                 </div>
@@ -496,10 +496,10 @@ export default async function LentesRDPage() {
               Sin visitar ninguna óptica.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/receta" className="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors">
+              <Link href="/receta" className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors">
                 Calcular con mi receta →
               </Link>
-              <Link href="/catalogo" className="bg-white border border-primary-200 text-primary-700 hover:bg-primary-50 font-bold px-6 py-3 rounded-xl text-sm transition-colors">
+              <Link href="/catalogo" className="bg-white border border-primary-200 text-primary-700 hover:bg-teal-50 font-bold px-6 py-3 rounded-xl text-sm transition-colors">
                 Ver todo el catálogo
               </Link>
             </div>

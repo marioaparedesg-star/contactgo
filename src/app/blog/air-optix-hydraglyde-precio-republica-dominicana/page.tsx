@@ -77,7 +77,7 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div>
             <p className="text-sm font-bold text-gray-900">Equipo ContactGo</p>
             <p className="text-xs text-gray-500">Precios actualizados junio 2026 · Entrega en toda RD</p>
@@ -262,14 +262,14 @@ export default function Page() {
                 { paso: '5', titulo: 'Recibe en 24-48h', desc: 'Te contactamos para coordinar la entrega. Santo Domingo y Santiago: entrega en 24h. Resto del país: 24-48h.' },
               ].map(({ paso, titulo, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                  <div className="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{paso}</div>
+                  <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{paso}</div>
                   <div><p className="font-bold text-gray-900 text-sm">{titulo}</p><p className="text-xs text-gray-600">{desc}</p></div>
                 </div>
               ))}
             </div>
             <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm">
               <p className="font-bold text-blue-800 mb-1">¿No tienes tu receta? Sin problema</p>
-              <p className="text-blue-700">Usa nuestra <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
+              <p className="text-blue-700">Usa nuestra <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
             <a href="/receta" className="font-bold hover:underline">calculadora gratuita de receta</a> — ingresa tu prescripción de gafas y te ayudamos a encontrar el Air Optix más compatible.</p>
             </div>
           </section>
@@ -283,7 +283,7 @@ export default function Page() {
               { href: '/blog/lentes-diarios-vs-mensuales', titulo: '→ Lentes diarios vs mensuales', desc: '¿Cuál es la mejor opción para ti?' },
               { href: '/marca/alcon', titulo: '→ Todos los productos Alcon en ContactGo', desc: 'Air Optix, COLORS, Multifocal' },
             ].map(({ href, titulo, desc }) => (
-              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
               </Link>

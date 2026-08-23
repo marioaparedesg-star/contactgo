@@ -217,7 +217,7 @@ export default function AdminDashboard() {
             <RefreshCw className={`w-3.5 h-3.5 ${loading?'animate-spin':''}`}/>Actualizar
           </button>
           <button onClick={()=>router.push('/admin/pedidos')}
-            className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl bg-primary-600 text-white hover:bg-primary-700">
+            className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl bg-teal-500 text-white hover:bg-teal-600">
             Ver pedidos <ArrowRight className="w-3.5 h-3.5"/>
           </button>
         </div>
@@ -232,7 +232,7 @@ export default function AdminDashboard() {
               <button key={p.key}
                 onClick={() => { setPreset(p.key); setSelectorAbierto(p.key === 'personalizado') }}
                 className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
-                  preset === p.key ? 'bg-primary-600 text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                  preset === p.key ? 'bg-teal-500 text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                 }`}>
                 {p.label}
               </button>
@@ -345,7 +345,7 @@ export default function AdminDashboard() {
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-gray-800 truncate">{p.nombre}</p>
                   <div className="mt-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-primary-500 rounded-full" style={{width:`${Math.round((p.u/Math.max(...top.map(t=>t.u),1))*100)}%`}}/>
+                    <div className="h-full bg-teal-400 rounded-full" style={{width:`${Math.round((p.u/Math.max(...top.map(t=>t.u),1))*100)}%`}}/>
                   </div>
                 </div>
                 <span className="text-xs font-bold text-gray-700 shrink-0">{p.u}u</span>

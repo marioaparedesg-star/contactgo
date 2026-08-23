@@ -250,7 +250,7 @@ export default function InventarioPage() {
         <div className="relative flex-1 min-w-48">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400"/>
           <input placeholder="Buscar producto o marca..." value={busqueda} onChange={e=>setBusqueda(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white"/>
+            className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-300 bg-white"/>
         </div>
         {[['todos','Todos'],['esferico','Esféricos'],['color','Color'],['torico','Tóricos'],['multifocal','Multifocales'],['solucion','Soluciones'],['gota','Gotas']].map(([v,l])=>(
           <button key={v} onClick={()=>setTipoFiltro(v)}
@@ -316,7 +316,7 @@ export default function InventarioPage() {
                         onChange={e=>setStockEdit(prev=>({...prev,[p.id]:parseInt(e.target.value)||0}))}
                         onBlur={()=>guardarStockDirecto(p.id)}
                         onKeyDown={e=>e.key==='Enter'&&guardarStockDirecto(p.id)}
-                        className="w-16 text-center text-sm font-bold border border-gray-200 rounded-lg py-1 focus:outline-none focus:ring-2 focus:ring-primary-400"/>
+                        className="w-16 text-center text-sm font-bold border border-gray-200 rounded-lg py-1 focus:outline-none focus:ring-2 focus:ring-teal-300"/>
                       <span className="text-xs text-gray-400">u</span>
                     </div>
                   )}
@@ -336,7 +336,7 @@ export default function InventarioPage() {
                   {/* Guardar dioptrías pendientes */}
                   {pendientes>0&&(
                     <button onClick={e=>{e.stopPropagation();guardarTodos(p.id)}} disabled={guardando===p.id}
-                      className="flex items-center gap-1.5 bg-primary-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg">
+                      className="flex items-center gap-1.5 bg-teal-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg">
                       <Save className="w-3 h-3"/>Guardar {pendientes}
                     </button>
                   )}
@@ -369,7 +369,7 @@ export default function InventarioPage() {
                           const val=editando[key]??item.stock
                           const modificado=editando[key]!==undefined
                           const sphLabel=`${item.sph>0?'+':''}${item.sph}${item.cyl!=null?`/${item.cyl}`:''}`
-                          const bgClass=val===0?'bg-red-50 border-red-200':val<=umbral?'bg-amber-50 border-amber-200':modificado?'bg-primary-50 border-primary-200':'bg-white border-gray-200'
+                          const bgClass=val===0?'bg-red-50 border-red-200':val<=umbral?'bg-amber-50 border-amber-200':modificado?'bg-teal-50 border-primary-200':'bg-white border-gray-200'
                           const textClass=val===0?'text-red-600':val<=umbral?'text-amber-600':modificado?'text-primary-700':'text-gray-800'
                           return (
                             <div key={item.id} className={`border rounded-xl p-2 text-center transition-all ${bgClass}`}>
@@ -378,7 +378,7 @@ export default function InventarioPage() {
                                 onChange={e=>setEditando(prev=>({...prev,[key]:Math.max(0,parseInt(e.target.value)||0)}))}
                                 onBlur={()=>guardarItem(item)}
                                 onKeyDown={e=>e.key==='Enter'&&guardarItem(item)}
-                                className={`w-full text-center text-sm font-bold bg-transparent border-0 outline-none focus:ring-1 focus:ring-primary-400 rounded ${textClass}`}/>
+                                className={`w-full text-center text-sm font-bold bg-transparent border-0 outline-none focus:ring-1 focus:ring-teal-300 rounded ${textClass}`}/>
                               {guardando===key&&<div className="w-2 h-2 border border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mt-0.5"/>}
                             </div>
                           )
@@ -403,7 +403,7 @@ export default function InventarioPage() {
                           onChange={e=>setStockEdit(prev=>({...prev,[p.id]:parseInt(e.target.value)||0}))}
                           onBlur={()=>guardarStockDirecto(p.id)}
                           onKeyDown={e=>e.key==='Enter'&&guardarStockDirecto(p.id)}
-                          className="w-24 text-center text-lg font-black border-2 border-gray-200 rounded-xl py-2 focus:outline-none focus:ring-2 focus:ring-primary-400"/>
+                          className="w-24 text-center text-lg font-black border-2 border-gray-200 rounded-xl py-2 focus:outline-none focus:ring-2 focus:ring-teal-300"/>
                         <span className="text-sm text-gray-500">unidades</span>
                         {guardando===p.id&&<div className="w-4 h-4 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"/>}
                       </div>

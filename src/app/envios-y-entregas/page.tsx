@@ -19,7 +19,7 @@ export default function EnviosPage() {
     <>
       <Navbar />
       <main className="pb-20">
-        <section className="bg-gradient-to-br from-primary-700 to-teal-600 text-white py-14 px-4 text-center">
+        <section className="bg-gradient-to-br from-teal-600 to-teal-600 text-white py-14 px-4 text-center">
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">Envíos y Entregas</h1>
           <p className="text-primary-100 max-w-xl mx-auto">Entregamos tus lentes de contacto en toda la República Dominicana de forma rápida y segura.</p>
         </section>
@@ -83,7 +83,7 @@ export default function EnviosPage() {
                 { paso: '5', titulo: 'Recibes', desc: 'Tu pedido llega a la dirección indicada en el tiempo estimado.' },
               ].map((s, i) => (
                 <div key={i} className="flex gap-4 items-start">
-                  <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">{s.paso}</div>
+                  <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">{s.paso}</div>
                   <div>
                     <p className="font-semibold text-gray-900 text-sm">{s.titulo}</p>
                     <p className="text-gray-500 text-sm">{s.desc}</p>
@@ -113,7 +113,7 @@ export default function EnviosPage() {
           </div>
 
           {/* CTA */}
-          <div className="bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
+          <div className="bg-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
             <p className="font-bold text-gray-900 mb-2">¿Tienes alguna pregunta?</p>
             <p className="text-gray-500 text-sm mb-4">Nuestro equipo está disponible por WhatsApp para ayudarte.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -121,7 +121,7 @@ export default function EnviosPage() {
                 className="bg-green-500 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-green-600 transition-colors">
                 WhatsApp
               </a>
-              <Link href="/catalogo" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-primary-700 transition-colors">
+              <Link href="/catalogo" className="bg-teal-500 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-teal-600 transition-colors">
                 Ver catálogo
               </Link>
             </div>

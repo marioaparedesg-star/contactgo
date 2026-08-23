@@ -34,7 +34,7 @@ export default async function Page() {
           <span className="text-gray-700 font-medium">Lentes Esféricos</span>
         </nav>
 
-        <section className="bg-gradient-to-br from-blue-700 via-primary-600 to-teal-600 text-white py-14 px-4 text-center mt-2">
+        <section className="bg-gradient-to-br from-blue-700 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para miopía e hipermetropía</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto Esféricos en RD</h1>
           <p className="text-blue-100 text-lg max-w-xl mx-auto">ACUVUE, Air Optix, Biofinity y más. directo del fabricante, entrega en 24-48h en toda República Dominicana.</p>

@@ -170,7 +170,7 @@ export default function AdminNav() {
       {/* Footer */}
       <div className="border-t border-gray-800 p-3 space-y-1">
         <a href="/" target="_blank" rel="noopener noreferrer"
-          className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold bg-primary-600/20 text-primary-400 hover:bg-primary-600/30 hover:text-primary-300 transition-all border border-primary-600/30 ${collapsed && !mobile ? 'justify-center' : ''}`}>
+          className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold bg-teal-500/20 text-primary-400 hover:bg-teal-500/30 hover:text-primary-300 transition-all border border-primary-600/30 ${collapsed && !mobile ? 'justify-center' : ''}`}>
           <ExternalLink className="w-4 h-4 shrink-0 text-primary-400" />
           {(!collapsed || mobile) && <span className="text-primary-300">Ir a la tienda</span>}
         </a>

@@ -133,7 +133,7 @@ export default function DormirConLentesPage() {
             </div>
           </section>
 
-          <section className="mt-10 bg-gradient-to-br from-primary-600 to-teal-600 rounded-2xl p-6 text-white text-center">
+          <section className="mt-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-6 text-white text-center">
             <h3 className="font-black text-xl mb-2">¿Buscas lentes más seguros para tu rutina?</h3>
             <p className="text-white/80 text-sm mb-5">Lentes diarios de silicona hidrogel con entrega en 24–48h en toda la República Dominicana.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">

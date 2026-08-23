@@ -74,7 +74,7 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -359,7 +359,7 @@ export default function Page() {
               { href: '/blog/biofinity-vs-acuvue-comparacion', titulo: '→ Biofinity vs ACUVUE: comparación completa', desc: 'Los dos mensuales líderes frente a frente' },
               { href: '/soluciones', titulo: '→ Soluciones para lentes mensuales', desc: 'Opti-Free, Dream Eye y Prolub en ContactGo' },
             ].map(({ href, titulo, desc }) => (
-              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
               </Link>
@@ -367,16 +367,16 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Ya sabes cuál quieres? Pídelos hoy.</h3>
           <p className="text-sm text-gray-600 mb-1">Diarios, quincenales y mensuales — todos disponibles con entrega 24-48h en toda la RD.</p>
           <p className="text-xs text-gray-400 mb-4">directo del fabricante · Pago seguro AZUL · Sin complicaciones</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
+            <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
               Ver todos los lentes disponibles →
             </Link>
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">
               Calcular mi receta gratis
             </a>
             <a href="https://wa.me/18096942268?text=Hola%2C%20no%20s%C3%A9%20si%20elegir%20lentes%20diarios%20o%20mensuales%2C%20%C2%BFme%20asesoran%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">

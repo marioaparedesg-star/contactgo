@@ -68,7 +68,7 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Especialistas en lentes tóricos · Actualizado junio 2026</p></div>
         </div>
 
@@ -243,7 +243,7 @@ export default function Page() {
               { href: '/blog/acuvue-oasys-precio-republica-dominicana', titulo: '→ ACUVUE Oasys precio en RD', desc: 'Para miopía/hipermetropía sin astigmatismo' },
               { href: '/blog/como-leer-receta-optica-rd', titulo: '→ Cómo leer tu receta óptica', desc: 'SPH, CYL, AXIS — qué significa cada valor' },
             ].map(({ href, titulo, desc }) => (
-              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
               </Link>
@@ -280,7 +280,7 @@ export default function Page() {
           <p className="text-sm text-gray-600 mb-4">ACUVUE Oasys y 1-DAY MOIST for Astigmatism certificados de J&J · Toda la línea tórica disponible</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/toricos" className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">Ver lentes tóricos →</Link>
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo →</a>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-red-200 text-red-700 font-bold px-6 py-3 rounded-xl hover:bg-red-50 transition-colors text-sm">Calcular mi receta</a>
             <a href="https://wa.me/18096942268?text=Hola%2C%20quiero%20ACUVUE%20Oasys%20for%20Astigmatism%20en%20RD" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>

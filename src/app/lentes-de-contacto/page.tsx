@@ -66,8 +66,8 @@ export default async function LentesContactoPage() {
               La tienda especializada #1 en lentes de contacto certificados en RD. Acuvue, Air Optix, Biofinity y más marcas premium. Entrega en 24-48 horas.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/catalogo" className="bg-primary-600 text-white font-bold px-6 py-3 rounded-2xl hover:bg-primary-700 transition-all">Ver catálogo completo</Link>
-              <Link href="/receta" className="border-2 border-primary-600 text-primary-600 font-bold px-6 py-3 rounded-2xl hover:bg-primary-50 transition-all">Buscar con mi receta</Link>
+              <Link href="/catalogo" className="bg-teal-500 text-white font-bold px-6 py-3 rounded-2xl hover:bg-teal-600 transition-all">Ver catálogo completo</Link>
+              <Link href="/receta" className="border-2 border-primary-600 text-primary-600 font-bold px-6 py-3 rounded-2xl hover:bg-teal-50 transition-all">Buscar con mi receta</Link>
             </div>
           </div>
         </section>
@@ -93,7 +93,7 @@ export default async function LentesContactoPage() {
           <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Explora por tipo de lente</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {SEO_LINKS.map(l => (
-              <Link key={l.href} href={l.href} className="text-primary-600 hover:text-primary-700 text-sm font-medium py-2 px-3 rounded-xl hover:bg-primary-50 transition-all">
+              <Link key={l.href} href={l.href} className="text-primary-600 hover:text-primary-700 text-sm font-medium py-2 px-3 rounded-xl hover:bg-teal-50 transition-all">
                 → {l.label}
               </Link>
             ))}

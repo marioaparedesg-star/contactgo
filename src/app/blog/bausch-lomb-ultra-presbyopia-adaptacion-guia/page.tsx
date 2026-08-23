@@ -60,7 +60,7 @@ export default function Page() {
           <h2 className="font-display text-xl font-bold text-gray-900 mt-8 mb-3">Cuidado diario</h2>
           <p>Bausch+Lomb ULTRA for Presbyopia es de reemplazo <strong>mensual</strong>. Cada noche, límpialos con solución multipropósito como Opti-Free Puremoist y guárdalos en su estuche. Nunca duermas con ellos puestos salvo indicación médica.</p>
 
-          <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5 my-8">
+          <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5 my-8">
             <p className="font-bold text-gray-900 mb-2">💧 Complementa tu experiencia</p>
             <p className="text-sm text-gray-600 mb-3">Mantén tus lentes frescos e hidratados todo el día con <Link href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="text-primary-600 font-semibold hover:underline">Opti-Free Puremoist</Link>.</p>
           </div>

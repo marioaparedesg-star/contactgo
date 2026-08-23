@@ -38,7 +38,7 @@ export default async function Page() {
           <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span>
           <span className="text-gray-700 font-medium">Lentes Multifocales</span>
         </nav>
-        <section className="bg-gradient-to-br from-amber-600 via-primary-600 to-teal-600 text-white py-14 px-4 text-center mt-2">
+        <section className="bg-gradient-to-br from-amber-600 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para presbicia</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes Multifocales para Presbicia en RD</h1>
           <p className="text-amber-100 text-lg max-w-xl mx-auto">Ve de cerca y de lejos con el mismo lente. Sin gafas de lectura. Envío a domicilio en toda la República Dominicana.</p>

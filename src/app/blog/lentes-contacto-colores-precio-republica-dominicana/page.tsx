@@ -53,7 +53,7 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-purple-50 border border-purple-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Precios actualizados junio 2026 · Con y sin graduación</p></div>
         </div>
 
@@ -65,14 +65,14 @@ export default function Page() {
             <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
               <td className="py-3 pr-3">
                 <a href="/producto/air-optix-colors-lentes-contacto-color-dominicana" className="font-medium text-primary-600 hover:underline text-sm">AIR OPTIX® COLORS 2u</a>
-                <span className="ml-2 text-[10px] bg-primary-50 text-primary-600 px-1.5 py-0.5 rounded-full font-bold">12 colores · Mensual</span>
+                <span className="ml-2 text-[10px] bg-teal-50 text-primary-600 px-1.5 py-0.5 rounded-full font-bold">12 colores · Mensual</span>
               </td>
               <td className="py-3 text-right font-black text-gray-900">RD$2,625</td>
             </tr>
             <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
               <td className="py-3 pr-3">
                 <a href="/producto/lunare-tri-kolor-lentes-contacto-color-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Lunare Tri-Kolor 2u</a>
-                <span className="ml-2 text-[10px] bg-primary-50 text-primary-600 px-1.5 py-0.5 rounded-full font-bold">Accesible · Mensual</span>
+                <span className="ml-2 text-[10px] bg-teal-50 text-primary-600 px-1.5 py-0.5 rounded-full font-bold">Accesible · Mensual</span>
               </td>
               <td className="py-3 text-right font-black text-gray-900">RD$2,250</td>
             </tr>
@@ -152,7 +152,7 @@ export default function Page() {
                 { nombre: 'Opti-Free Puremoist 90ml', precio: 'RD$750', slug: 'opti-free-puremoist-solucion-multiproposito-dominicana' },
                 { nombre: 'Dream Eye Solución 80ml', precio: 'RD$750', slug: 'dream-eye-solucion-lentes-contacto-dominicana' },
               ].map(s => (
-                <Link key={s.slug} href={`/producto/${s.slug}`} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+                <Link key={s.slug} href={`/producto/${s.slug}`} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                   <p className="text-sm font-medium text-primary-600">{s.nombre}</p>
                   <span className="font-bold text-gray-900 text-sm">{s.precio}</span>
                 </Link>
@@ -194,10 +194,10 @@ export default function Page() {
           <section>
             <h3 className="font-bold text-gray-900 text-lg mb-3">Artículos relacionados</h3>
                       <div className="grid gap-2 mt-3">
-            <a href="/blog/lentes-contacto-colores-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Guía completa de lentes de color en RD</p><p className="text-xs text-gray-500 mt-0.5">Cómo elegir y usar lentes de color</p></a>
-            <a href="/color" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todos los lentes de color disponibles</p><p className="text-xs text-gray-500 mt-0.5">Air Optix Colors y Lunare en ContactGo</p></a>
-            <a href="/blog/como-usar-lentes-de-contacto-primera-vez" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Primera vez con lentes de contacto</p><p className="text-xs text-gray-500 mt-0.5">Guía para principiantes</p></a>
-            <a href="/soluciones" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Soluciones para lentes de color</p><p className="text-xs text-gray-500 mt-0.5">Opti-Free y Dream Eye disponibles</p></a>
+            <a href="/blog/lentes-contacto-colores-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Guía completa de lentes de color en RD</p><p className="text-xs text-gray-500 mt-0.5">Cómo elegir y usar lentes de color</p></a>
+            <a href="/color" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todos los lentes de color disponibles</p><p className="text-xs text-gray-500 mt-0.5">Air Optix Colors y Lunare en ContactGo</p></a>
+            <a href="/blog/como-usar-lentes-de-contacto-primera-vez" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Primera vez con lentes de contacto</p><p className="text-xs text-gray-500 mt-0.5">Guía para principiantes</p></a>
+            <a href="/soluciones" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Soluciones para lentes de color</p><p className="text-xs text-gray-500 mt-0.5">Opti-Free y Dream Eye disponibles</p></a>
           </div>
           </section>
         </div>
@@ -218,12 +218,12 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda República Dominicana</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>

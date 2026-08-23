@@ -39,7 +39,7 @@ export default async function Page() {
           <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span>
           <span className="text-gray-700 font-medium">Lentes Tóricos</span>
         </nav>
-        <section className="bg-gradient-to-br from-purple-700 via-primary-600 to-teal-600 text-white py-14 px-4 text-center mt-2">
+        <section className="bg-gradient-to-br from-purple-700 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para astigmatismo</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes Tóricos para Astigmatismo en RD</h1>
           <p className="text-purple-100 text-lg max-w-xl mx-auto">Fabricados a medida según tu SPH, CYL y AXIS. Entrega en 20-30 días en República Dominicana.</p>

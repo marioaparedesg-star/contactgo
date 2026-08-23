@@ -31,10 +31,10 @@ export default function Page() {
         </div>
 
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
-        <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">Educación</span>
+        <span className="text-xs font-semibold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">Educación</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Tipos de lentes de contacto: ¿cuál es el correcto para ti?</h1>
                 <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -107,7 +107,7 @@ export default function Page() {
                 <span className="text-2xl">{item.emoji}</span>
                 <div>
                   <h2 className="font-bold text-gray-900">{item.tipo}</h2>
-                  <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">Para: {item.para}</span>
+                  <span className="text-xs font-semibold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">Para: {item.para}</span>
                 </div>
               </div>
               <p className="text-sm text-gray-600 mb-3">{item.descripcion}</p>
@@ -126,7 +126,7 @@ export default function Page() {
           <div className="bg-green-50 border border-green-200 rounded-2xl p-5 text-center">
             <p className="font-bold text-gray-900 mb-2">¿No sabes cuál necesitas?</p>
             <p className="text-sm text-gray-600 mb-4">Ingresa tu receta y te mostramos los lentes correctos automáticamente.</p>
-            <Link href="/receta" className="inline-block bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-primary-700 transition-colors">
+            <Link href="/receta" className="inline-block bg-teal-500 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-teal-600 transition-colors">
               Buscar por mi receta →
             </Link>
           </div>

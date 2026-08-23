@@ -61,7 +61,7 @@ export default function Page() {
           <span className="text-gray-600">Lentes en República Dominicana</span>
         </div>
 
-        <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">📍 Entrega en República Dominicana</span>
+        <span className="text-xs font-semibold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">📍 Entrega en República Dominicana</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Lentes de contacto con entrega en toda República Dominicana — 2026</h1>
 
         <div className="flex items-center gap-3 mb-5 p-4 bg-green-50 border border-green-100 rounded-2xl">
@@ -79,7 +79,7 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Productos más vendidos disponibles en República Dominicana</h2>
             <div className="space-y-2">
               {MARCAS.map(m => (
-                <a key={m.slug} href={`/producto/${m.slug}`} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-primary-50/20 transition-all group">
+                <a key={m.slug} href={`/producto/${m.slug}`} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group">
                   <div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">{m.nombre}</p><p className="text-xs text-gray-500">{m.tipo}</p></div>
                   <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900 text-sm">{m.precio}</p><p className="text-[11px] text-primary-600">Ver →</p></div>
                 </a>
@@ -98,7 +98,7 @@ export default function Page() {
                 { paso: '4', titulo: 'Recibe en 24-48h', desc: 'El mensajero te contacta para coordinar. Sin necesidad de estar en un lugar fijo.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                  <div className="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
+                  <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
                   <div><p className="font-bold text-gray-900 text-sm">{s.titulo}</p><p className="text-xs text-gray-600">{s.desc}</p></div>
                 </div>
               ))}
@@ -124,18 +124,18 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900">También puede interesarte</h3>
-            <a href="/blog/comprar-lentes-contacto-online-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo comprar lentes online en RD con seguridad</p><p className="text-xs text-gray-500 mt-0.5">Guía completa de compra segura</p></a>
-            <a href="/blog/acuvue-oasys-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ ACUVUE Oasys precio en RD</p><p className="text-xs text-gray-500 mt-0.5">Los más vendidos con precio actualizado</p></a>
-            <a href="/blog/como-leer-receta-optica-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo leer tu receta óptica</p><p className="text-xs text-gray-500 mt-0.5">Qué significa cada valor</p></a>
+            <a href="/blog/comprar-lentes-contacto-online-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo comprar lentes online en RD con seguridad</p><p className="text-xs text-gray-500 mt-0.5">Guía completa de compra segura</p></a>
+            <a href="/blog/acuvue-oasys-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ ACUVUE Oasys precio en RD</p><p className="text-xs text-gray-500 mt-0.5">Los más vendidos con precio actualizado</p></a>
+            <a href="/blog/como-leer-receta-optica-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo leer tu receta óptica</p><p className="text-xs text-gray-500 mt-0.5">Qué significa cada valor</p></a>
           </div>
         </div>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en República Dominicana en 24-48h</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</a>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</a>
             <a href="https://wa.me/18096942268?text=Hola%2C%20quiero%20lentes%20con%20entrega%20en%20República%20Dominicana" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>

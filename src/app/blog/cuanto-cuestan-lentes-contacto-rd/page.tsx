@@ -32,7 +32,7 @@ export default function Page() {
         ¿Cuánto cuestan los lentes de contacto en República Dominicana en 2026?
       </h1>
                 <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -118,11 +118,11 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5">
+        <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5">
           <h2 className="font-bold text-gray-900 mb-2">¿Listo para ahorrar?</h2>
           <p className="text-sm text-gray-700 mb-4">Revisa nuestro catálogo completo con todos los precios. Envío gratis en pedidos superiores a RD$6,000.</p>
           <div className="flex gap-3">
-            <Link href="/catalogo" className="bg-primary-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm">Ver catálogo y precios</Link>
+            <Link href="/catalogo" className="bg-teal-500 text-white px-4 py-2.5 rounded-xl font-bold text-sm">Ver catálogo y precios</Link>
             <Link href="/receta" className="border border-primary-300 text-primary-700 px-4 py-2.5 rounded-xl font-bold text-sm">Usar mi receta</Link>
           </div>
         </div>

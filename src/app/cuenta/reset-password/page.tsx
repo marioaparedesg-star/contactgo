@@ -101,7 +101,7 @@ function ResetContent() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 pb-24">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-4">
+          <div className="w-14 h-14 bg-teal-50 rounded-2xl flex items-center justify-center mb-4">
             <Lock className="w-7 h-7 text-primary-600" />
           </div>
           <h1 className="text-xl font-black text-gray-900">
@@ -131,7 +131,7 @@ function ResetContent() {
                   className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary-500 transition-colors" />
               </div>
               <button type="submit" disabled={loading}
-                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-2xl text-sm transition-colors disabled:opacity-60">
+                className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 rounded-2xl text-sm transition-colors disabled:opacity-60">
                 {loading ? 'Enviando...' : 'Enviar enlace de recuperación'}
               </button>
             </form>
@@ -150,7 +150,7 @@ function ResetContent() {
                   className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary-500 transition-colors" />
               </div>
               <button type="submit" disabled={loading}
-                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-2xl text-sm transition-colors disabled:opacity-60">
+                className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 rounded-2xl text-sm transition-colors disabled:opacity-60">
                 {loading ? 'Guardando...' : 'Cambiar contraseña'}
               </button>
             </form>

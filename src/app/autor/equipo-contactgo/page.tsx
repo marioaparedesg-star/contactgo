@@ -50,7 +50,7 @@ export default function AutorPage() {
         </div>
 
         <div className="flex items-center gap-4 mb-8">
-          <div className="w-20 h-20 rounded-2xl bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-20 h-20 rounded-2xl bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-black text-2xl">CG</span>
           </div>
           <div>
@@ -64,7 +64,7 @@ export default function AutorPage() {
 
           <p>Nuestros artículos siguen las guías de la <strong>American Academy of Optometry (AAO)</strong>, la <strong>American Optometric Association (AOA)</strong> y las regulaciones de la <strong>Dirección General de Medicamentos, Alimentos y Productos Sanitarios de la República Dominicana (DIGEMAPS)</strong>.</p>
 
-          <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5 mt-6">
+          <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5 mt-6">
             <h2 className="font-bold text-primary-900 mb-3">Proceso editorial</h2>
             <ol className="space-y-2 text-sm text-primary-800 list-decimal list-inside">
               <li>Investigación basada en evidencia científica actualizada</li>

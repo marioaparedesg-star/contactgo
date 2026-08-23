@@ -141,7 +141,7 @@ export default function ComprasPage() {
             <p className="text-gray-500 text-sm">Órdenes de compra · Costo promedio ponderado · Margen real</p>
           </div>
           <button onClick={()=>setTab('nueva')}
-            className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-primary-700">
+            className="flex items-center gap-2 bg-teal-500 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-teal-600">
             <Plus className="w-4 h-4"/> Nueva orden
           </button>
         </div>
@@ -150,7 +150,7 @@ export default function ComprasPage() {
         <div className="flex gap-2">
           {(['ordenes','costos','nueva'] as const).map(t=>(
             <button key={t} onClick={()=>setTab(t)}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${tab===t?'bg-primary-600 text-white':'bg-white text-gray-600 border border-gray-200 hover:border-primary-300'}`}>
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${tab===t?'bg-teal-500 text-white':'bg-white text-gray-600 border border-gray-200 hover:border-primary-300'}`}>
               {t==='ordenes'?'📋 Órdenes':t==='costos'?'💰 Costos':'➕ Nueva orden'}
             </button>
           ))}
@@ -322,7 +322,7 @@ export default function ComprasPage() {
                   <p className="text-xl font-black text-gray-900">Total: RD${total.toLocaleString()}</p>
                 </div>
                 <button onClick={crearOrden}
-                  className="bg-primary-600 text-white px-6 py-3 rounded-xl font-black hover:bg-primary-700">
+                  className="bg-teal-500 text-white px-6 py-3 rounded-xl font-black hover:bg-teal-600">
                   Crear orden de compra
                 </button>
               </div>

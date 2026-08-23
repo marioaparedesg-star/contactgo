@@ -565,7 +565,7 @@ export default function CuentaPage() {
           </a>
         </div>
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mb-4">
+          <div className="w-16 h-16 bg-teal-400 rounded-2xl flex items-center justify-center mb-4">
             <User className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Mi cuenta</h1>
@@ -605,26 +605,26 @@ export default function CuentaPage() {
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Nombre</label>
                 <input type="text" autoComplete="name" value={nombre} onChange={e => setNombre(e.target.value)} required
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
                   placeholder="Tu nombre" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Teléfono</label>
                 <input type="tel" autoComplete="tel" value={telefono} onChange={e => setTelefono(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
                   placeholder="809-000-0000" />
               </div>
             </>)}
             <div>
               <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Email</label>
               <input type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} required
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
                 placeholder="tu@email.com" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Contraseña</label>
               <input type="password" autoComplete="current-password" value={pass} onChange={e => setPass(e.target.value)} required minLength={6}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
                 placeholder="••••••••" />
             </div>
 
@@ -637,7 +637,7 @@ export default function CuentaPage() {
             )}
 
             <button type="submit" disabled={loading}
-              className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
+              className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
               {loading ? 'Cargando...' : modo==='login' ? 'Iniciar sesión' : 'Crear cuenta'}
             </button>
           </form>
@@ -698,7 +698,7 @@ export default function CuentaPage() {
                 </svg>
               </button>
             )}
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-sm shadow-primary-200">
+            <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-500 rounded-2xl flex items-center justify-center shadow-sm shadow-teal-100">
               <span className="text-white font-black text-base">{(perfil?.nombre || user.email)[0].toUpperCase()}</span>
             </div>
             <div>
@@ -709,13 +709,13 @@ export default function CuentaPage() {
           <div className="flex items-center gap-2">
             {/* Volver a la tienda — visible siempre */}
             <a href="/catalogo"
-              className="hidden sm:flex items-center gap-1.5 text-xs text-gray-500 hover:text-primary-600 transition-colors px-3 py-2 rounded-xl hover:bg-primary-50 font-medium border border-gray-200 hover:border-primary-200">
+              className="hidden sm:flex items-center gap-1.5 text-xs text-gray-500 hover:text-primary-600 transition-colors px-3 py-2 rounded-xl hover:bg-teal-50 font-medium border border-gray-200 hover:border-primary-200">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
               Tienda
             </a>
-            <a href="/" className="sm:hidden flex items-center justify-center w-8 h-8 rounded-xl bg-gray-100 hover:bg-primary-50 transition-colors">
+            <a href="/" className="sm:hidden flex items-center justify-center w-8 h-8 rounded-xl bg-gray-100 hover:bg-teal-50 transition-colors">
               <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                 <polyline strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} points="9 22 9 12 15 12 15 22" />
@@ -755,7 +755,7 @@ export default function CuentaPage() {
               const proxDias = s.proximo_envio ? Math.ceil((new Date(s.proximo_envio).getTime() - Date.now()) / 86400000) : null
               return (
                 <button onClick={() => setTab('suscripciones')}
-                  className="w-full bg-gradient-to-r from-primary-600 to-emerald-600 rounded-2xl p-4 text-left text-white shadow-md shadow-primary-100 hover:shadow-lg transition-all">
+                  className="w-full bg-gradient-to-r from-teal-500 to-emerald-600 rounded-2xl p-4 text-left text-white shadow-md shadow-teal-50 hover:shadow-lg transition-all">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-primary-200">Suscripción activa</span>
                     <span className="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-full font-bold">-{s.descuento_pct}%</span>
@@ -836,7 +836,7 @@ export default function CuentaPage() {
               <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
                 <Package className="w-12 h-12 text-gray-200 mx-auto mb-3" />
                 <p className="text-gray-500 font-medium">No tienes pedidos aún</p>
-                <a href="/catalogo" className="mt-4 inline-block bg-primary-600 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors">Ver catálogo</a>
+                <a href="/catalogo" className="mt-4 inline-block bg-teal-500 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-teal-600 transition-colors">Ver catálogo</a>
               </div>
             ) : pedidos.map(p => (
               <button key={p.id} onClick={() => verPedido(p)}
@@ -869,7 +869,7 @@ export default function CuentaPage() {
                           <div className="flex flex-col items-center flex-1">
                             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all ${
                               i <= activeIdx
-                                ? 'bg-primary-600 text-white'
+                                ? 'bg-teal-500 text-white'
                                 : 'bg-gray-100 text-gray-300'
                             }`}>
                               {i <= activeIdx ? paso.icon : i + 1}
@@ -879,7 +879,7 @@ export default function CuentaPage() {
                             </p>
                           </div>
                           {i < PASOS.length - 1 && (
-                            <div className={`h-0.5 flex-1 mb-3 ${i < activeIdx ? 'bg-primary-400' : 'bg-gray-100'}`} />
+                            <div className={`h-0.5 flex-1 mb-3 ${i < activeIdx ? 'bg-teal-300' : 'bg-gray-100'}`} />
                           )}
                         </div>
                       ))}
@@ -893,14 +893,14 @@ export default function CuentaPage() {
                     <a
                       href={`/pedido/${p.numero_orden}`}
                       onClick={e => e.stopPropagation()}
-                      className="text-xs border border-primary-200 text-primary-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-primary-50 transition-colors">
+                      className="text-xs border border-primary-200 text-primary-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-teal-50 transition-colors">
                       {p.pago_estado === 'pagado' ? '📦 Ver detalles' : '👁️ Ver pedido'}
                     </a>
                     {p.pago_estado === 'pagado' && (
                       <button
                         onClick={e => reorderPedido(e, p.id)}
                         disabled={reordering === p.id}
-                        className="text-xs bg-primary-600 text-white px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-primary-700 disabled:opacity-50 transition-colors shadow-sm">
+                        className="text-xs bg-teal-500 text-white px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-teal-600 disabled:opacity-50 transition-colors shadow-sm">
                         <RefreshCw className={`w-3 h-3 ${reordering===p.id?'animate-spin':''}`} />
                         {reordering === p.id ? 'Añadiendo...' : 'Repetir pedido'}
                       </button>
@@ -933,7 +933,7 @@ export default function CuentaPage() {
                   Activa la suscripción al comprar y recibe tus lentes automáticamente con hasta 15% de descuento.
                 </p>
                 <a href="/catalogo"
-                  className="mt-5 inline-flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-primary-700 transition-colors">
+                  className="mt-5 inline-flex items-center gap-2 bg-teal-500 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-teal-600 transition-colors">
                   Ver catálogo →
                 </a>
               </div>
@@ -951,7 +951,7 @@ export default function CuentaPage() {
                 <div key={s.id} className={`rounded-2xl border overflow-hidden shadow-sm transition-all ${s.activa ? 'bg-white border-gray-100' : 'bg-gray-50 border-gray-200 opacity-70'}`}>
 
                   {/* Banda superior de estado */}
-                  <div className={`px-4 py-2 flex items-center justify-between ${s.activa ? 'bg-gradient-to-r from-primary-600 to-emerald-600' : 'bg-gray-200'}`}>
+                  <div className={`px-4 py-2 flex items-center justify-between ${s.activa ? 'bg-gradient-to-r from-teal-500 to-emerald-600' : 'bg-gray-200'}`}>
                     <div className="flex items-center gap-2">
                       <div className={`w-1.5 h-1.5 rounded-full ${s.activa ? 'bg-white animate-pulse' : 'bg-gray-400'}`} />
                       <span className="text-xs font-bold text-white/90">
@@ -975,7 +975,7 @@ export default function CuentaPage() {
                     <div className="space-y-2 mb-3">
                       {items.map((item: any, i: number) => (
                         <div key={i} className="flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0 text-sm">👁</div>
+                          <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center shrink-0 text-sm">👁</div>
                           <div className="flex-1 min-w-0">
                             <p className="font-bold text-gray-900 text-sm leading-tight">{item.nombre}{item.size ? ` · ${item.size}` : ''}</p>
                             {(item.sph != null || item.ojo) && (
@@ -1149,7 +1149,7 @@ export default function CuentaPage() {
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-bold text-gray-900 text-sm">{r.nombre}</p>
                     <div className="flex items-center gap-1.5">
-                      {r.diagnostico && <span className="text-xs font-semibold px-2 py-0.5 bg-primary-50 text-primary-700 rounded-full capitalize">{r.diagnostico}</span>}
+                      {r.diagnostico && <span className="text-xs font-semibold px-2 py-0.5 bg-teal-50 text-primary-700 rounded-full capitalize">{r.diagnostico}</span>}
                       {fechaEmision && <span className="text-xs text-gray-400">{fechaEmision.getFullYear()}</span>}
                     </div>
                   </div>
@@ -1171,7 +1171,7 @@ export default function CuentaPage() {
                   {/* Botones acción */}
                   <div className="flex gap-2">
                     <a href={`/receta?od_sph=${r.od_sph}&od_cyl=${r.od_cyl}&oi_sph=${r.oi_sph}&oi_cyl=${r.oi_cyl}`}
-                      className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-primary-700 transition-colors">
+                      className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-teal-600 transition-colors">
                       🛒 Ver mis lentes
                     </a>
                     <button onClick={() => eliminarReceta(r.id)}
@@ -1233,7 +1233,7 @@ export default function CuentaPage() {
                       {recetaAnalizada.notas && <p className="text-xs text-amber-600 mt-2 italic">💡 {recetaAnalizada.notas}</p>}
                       <div className="flex gap-2 mt-3">
                         <button onClick={() => { setAgregandoReceta(true) }}
-                          className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-xs font-bold transition-colors hover:bg-primary-700">
+                          className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-xs font-bold transition-colors hover:bg-teal-600">
                           Revisar y guardar receta
                         </button>
                         <a href={`/receta?od_sph=${recetaAnalizada.od_sph}&oi_sph=${recetaAnalizada.oi_sph}&od_cyl=${recetaAnalizada.od_cyl}&oi_cyl=${recetaAnalizada.oi_cyl}`}
@@ -1261,12 +1261,12 @@ export default function CuentaPage() {
                   {recetaAnalizada && <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">🤖 Completada por IA</span>}
                 </div>
                 <input value={recetaForm.nombre} onChange={e => setRecetaForm(f => ({...f,nombre:e.target.value}))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-400"
                   placeholder="Nombre (ej: Receta 2025)" />
                 <div>
                   <label className="text-xs font-semibold text-gray-500 mb-1 block">Fecha de emisión de la receta</label>
                   <input type="date" value={fechaEmisionForm} onChange={e => setFechaEmisionForm(e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
                     max={new Date().toISOString().slice(0,10)} />
                   <p className="text-xs text-gray-400 mt-1">Si tiene más de 1 año, te avisaremos que necesitas una revisión</p>
                 </div>
@@ -1291,7 +1291,7 @@ export default function CuentaPage() {
                             <p className="text-xs text-gray-500 font-semibold mb-0.5">{fieldLabel}</p>
                             <p className="text-[9px] text-gray-400 mb-1">{hint}</p>
                             <input value={(recetaForm as any)[k]} onChange={e => setRecetaForm(f => ({...f,[k]:e.target.value}))}
-                              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
                               placeholder={ph} />
                           </div>
                         )
@@ -1315,7 +1315,7 @@ export default function CuentaPage() {
                       setFechaEmisionForm('')
                       setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
                     }
-                  }} className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
+                  }} className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
                   <button onClick={() => { setAgregandoReceta(false); setRecetaAnalizada(null); setFechaEmisionForm('') }}
                     className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
                 </div>
@@ -1385,25 +1385,25 @@ export default function CuentaPage() {
               <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-5 space-y-3">
                 <p className="font-bold text-gray-900 text-sm mb-1">Agregar referencia de tarjeta</p>
                 <input value={pagoForm.titular} onChange={e => setPagoForm(f => ({...f,titular:e.target.value}))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all"
                   placeholder="Nombre del titular" />
                 <input value={pagoForm.ultimos4} onChange={e => setPagoForm(f => ({...f,ultimos4:e.target.value.slice(0,4)}))}
                   maxLength={4} inputMode="numeric"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-mono tracking-widest"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all font-mono tracking-widest"
                   placeholder="Últimos 4 dígitos" />
                 <input value={pagoForm.vencimiento} onChange={e => setPagoForm(f => ({...f,vencimiento:e.target.value}))}
                   maxLength={5}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all"
                   placeholder="MM/AA" />
                 <div className="flex gap-2 pt-1">
-                  <button onClick={guardarPago} className="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-xl text-sm font-bold transition-colors">Guardar</button>
+                  <button onClick={guardarPago} className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-xl text-sm font-bold transition-colors">Guardar</button>
                   <button onClick={() => setAgregandoPago(false)} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 py-3 rounded-xl text-sm font-semibold transition-colors">Cancelar</button>
                 </div>
               </div>
             ) : (
               <button onClick={() => setAgregandoPago(true)}
                 className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2.5 text-gray-400 hover:border-primary-300 hover:text-primary-600 transition-all group">
-                <div className="w-6 h-6 rounded-lg bg-gray-100 group-hover:bg-primary-100 flex items-center justify-center transition-colors">
+                <div className="w-6 h-6 rounded-lg bg-gray-100 group-hover:bg-teal-50 flex items-center justify-center transition-colors">
                   <Plus className="w-3.5 h-3.5" />
                 </div>
                 <span className="text-sm font-semibold">Agregar tarjeta</span>
@@ -1419,7 +1419,7 @@ export default function CuentaPage() {
               <h2 className="font-bold text-gray-900">Información personal</h2>
               {!editando ? (
                 <button onClick={() => setEditando(true)}
-                  className="flex items-center gap-1.5 text-sm text-primary-600 font-semibold bg-primary-50 px-3 py-1.5 rounded-lg hover:bg-primary-100 transition-colors">
+                  className="flex items-center gap-1.5 text-sm text-primary-600 font-semibold bg-teal-50 px-3 py-1.5 rounded-lg hover:bg-teal-50 transition-colors">
                   <Edit2 className="w-3.5 h-3.5" /> Editar
                 </button>
               ) : (
@@ -1434,7 +1434,7 @@ export default function CuentaPage() {
                 <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Nombre completo</label>
                 {editando ? (
                   <input value={form.nombre} onChange={e => setForm(f => ({...f,nombre:e.target.value}))}
-                    className="w-full border border-primary-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500 font-medium" />
+                    className="w-full border border-primary-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-400 font-medium" />
                 ) : <p className="text-gray-900 font-medium py-1">{perfil?.nombre||'Sin nombre'}</p>}
               </div>
               <div className="flex items-center gap-3 py-1">
@@ -1448,7 +1448,7 @@ export default function CuentaPage() {
                 <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Teléfono</label>
                 {editando ? (
                   <input value={form.telefono} onChange={e => setForm(f => ({...f,telefono:e.target.value}))}
-                    className="w-full border border-primary-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500 font-medium"
+                    className="w-full border border-primary-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-400 font-medium"
                     placeholder="809-000-0000" />
                 ) : (
                   <div className="flex items-center gap-2">
@@ -1473,13 +1473,13 @@ export default function CuentaPage() {
                 <div key={d.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${d.principal ? 'border-primary-300' : 'border-gray-100'}`}>
                   {/* Header dirección */}
                   <div className="flex items-start gap-3 p-4">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg ${d.principal ? 'bg-primary-100' : 'bg-gray-100'}`}>
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg ${d.principal ? 'bg-teal-50' : 'bg-gray-100'}`}>
                       {ETIQUETA_ICON[d.etiqueta ?? 'Casa'] ?? '📍'}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="font-bold text-gray-900 text-sm">{d.etiqueta ?? 'Dirección'}</p>
-                        {d.principal && <span className="text-[10px] font-bold text-primary-600 bg-primary-50 border border-primary-200 px-2 py-0.5 rounded-full">Principal</span>}
+                        {d.principal && <span className="text-[10px] font-bold text-primary-600 bg-teal-50 border border-primary-200 px-2 py-0.5 rounded-full">Principal</span>}
                         {d.lat && d.lng && <span className="text-[10px] font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">📍 Mapa</span>}
                       </div>
                       <p className="text-sm text-gray-700 mt-0.5">{d.direccion}</p>
@@ -1495,7 +1495,7 @@ export default function CuentaPage() {
                   <div className="flex gap-2 px-4 pb-3">
                     {!d.principal && (
                       <button onClick={() => marcarPrincipal(d.id)}
-                        className="flex-1 text-xs font-semibold py-1.5 rounded-lg border border-primary-200 text-primary-600 hover:bg-primary-50 transition-colors">
+                        className="flex-1 text-xs font-semibold py-1.5 rounded-lg border border-primary-200 text-primary-600 hover:bg-teal-50 transition-colors">
                         ★ Marcar principal
                       </button>
                     )}
@@ -1561,22 +1561,22 @@ export default function CuentaPage() {
                     <div className="flex gap-2">
                       {['Casa','Trabajo','Otro'].map(e => (
                         <button key={e} onClick={() => setNewDirData(d => ({...d, etiqueta:e}))}
-                          className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition-all ${newDirData.etiqueta===e ? 'bg-primary-600 text-white border-primary-600' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}>
+                          className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition-all ${newDirData.etiqueta===e ? 'bg-teal-500 text-white border-primary-600' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}>
                           {e === 'Casa' ? '🏠' : e === 'Trabajo' ? '💼' : '📍'} {e}
                         </button>
                       ))}
                     </div>
                     <input value={newDirData.direccion} onChange={e => setNewDirData(d => ({...d,direccion:e.target.value}))}
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"
                       placeholder="Calle, número, sector *"/>
                     <select value={newDirData.ciudad} onChange={e => setNewDirData(d => ({...d,ciudad:e.target.value}))}
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white">
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 bg-white">
                       {['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata','Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad'].map(c => (
                         <option key={c} value={c}>{c}</option>
                       ))}
                     </select>
                     <input value={newDirData.referencias} onChange={e => setNewDirData(d => ({...d,referencias:e.target.value}))}
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"
                       placeholder="Referencias: portón azul, cerca del parque... (opcional)"/>
 
                     {/* Preview pin si ya marcó */}
@@ -1598,7 +1598,7 @@ export default function CuentaPage() {
                       </button>
                       <button onClick={agregarDireccion}
                         disabled={!newDirData.direccion.trim()}
-                        className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-40 transition-colors">
+                        className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-teal-500 text-white hover:bg-teal-600 disabled:opacity-40 transition-colors">
                         Guardar
                       </button>
                     </div>
@@ -1640,7 +1640,7 @@ export default function CuentaPage() {
               <button onClick={() => { setShowPassSection(v => !v); setPassMsg(null) }}
                 className="w-full flex items-center justify-between px-6 py-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center">
                     <KeyRound className="w-5 h-5 text-primary-600" />
                   </div>
                   <div className="text-left">
@@ -1672,7 +1672,7 @@ export default function CuentaPage() {
                           value={(passForm as any)[field.key]}
                           onChange={e => setPassForm(f => ({...f,[field.key]:e.target.value}))}
                           required minLength={field.key==='actual'?1:8}
-                          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
                           placeholder={field.ph}
                         />
                         <button type="button"
@@ -1684,7 +1684,7 @@ export default function CuentaPage() {
                     </div>
                   ))}
                   <button type="submit" disabled={loadingPass}
-                    className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm">
+                    className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm">
                     {loadingPass ? 'Verificando...' : 'Cambiar contraseña'}
                   </button>
                 </form>
@@ -1849,7 +1849,7 @@ export default function CuentaPage() {
                       const isLast = i === historialPedido.length - 1
                       return (
                         <div key={h.id ?? i} className="flex items-start gap-3 pl-1">
-                          <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 ${isLast ? 'bg-primary-100 border-2 border-primary-500' : 'bg-gray-100'}`}>
+                          <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 ${isLast ? 'bg-teal-50 border-2 border-primary-500' : 'bg-gray-100'}`}>
                             {ESTADO_ICON[h.estado] ?? '•'}
                           </div>
                           <div>

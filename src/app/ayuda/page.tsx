@@ -174,7 +174,7 @@ export default function AyudaPage() {
                     <details key={i} className="group px-5 py-4">
                       <summary className="flex items-start justify-between gap-3 cursor-pointer list-none">
                         <p className="font-semibold text-gray-900 text-sm leading-snug">{item.q}</p>
-                        <span className="shrink-0 w-5 h-5 rounded-full bg-gray-100 group-open:bg-primary-100 flex items-center justify-center text-xs text-gray-500 group-open:text-primary-600 transition-colors mt-0.5">
+                        <span className="shrink-0 w-5 h-5 rounded-full bg-gray-100 group-open:bg-teal-50 flex items-center justify-center text-xs text-gray-500 group-open:text-primary-600 transition-colors mt-0.5">
                           <svg className="w-3 h-3 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                           </svg>

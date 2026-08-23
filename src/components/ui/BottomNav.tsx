@@ -31,11 +31,11 @@ export default function BottomNav() {
               aria-current={active ? 'page' : undefined}>
               {/* Indicador activo */}
               {active && (
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-primary-600 rounded-full" />
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-teal-500 rounded-full" />
               )}
               {/* Ícono con fondo activo */}
               <div className={`relative flex items-center justify-center w-10 h-7 rounded-xl transition-all duration-200 ${
-                active ? 'bg-primary-50' : 'group-hover:bg-gray-50'
+                active ? 'bg-teal-50' : 'group-hover:bg-gray-50'
               }`}>
                 <Icon className={`w-5 h-5 transition-colors ${
                   active ? 'text-primary-600' : 'text-gray-400 group-hover:text-gray-600'

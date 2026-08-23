@@ -5,7 +5,7 @@ import { trackWhatsappHelp } from '@/lib/analytics'
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-950 text-gray-500 mt-16">
+    <footer className="bg-[#001F4A] text-gray-400 mt-16">
 
       {/* ── Móvil: acordeón compacto / Desktop: 4 columnas ── */}
       <div className="max-w-6xl mx-auto px-4 pt-8 pb-6">
@@ -15,7 +15,7 @@ export default function Footer() {
           <div className="flex flex-col gap-0.5">
             <span className="text-white font-bold text-base tracking-tight">ContactGo<sup className="text-[9px] font-normal text-gray-400 ml-0.5">®</sup></span>
             {/* MEJORA-7: Ubicación física visible */}
-            <span className="text-gray-500 text-[10px]">La única tienda 100% especializada en lentes · RD</span>
+            <span className="text-gray-400 text-[10px]">La única tienda 100% especializada en lentes · RD</span>
             {/* WhatsApp clickeable */}
             <a href="https://wa.me/18096942268?text=Hola%20ContactGo%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsappHelp('footer')} className="text-green-400 text-[11px] font-semibold hover:text-green-300 transition-colors">
               💬 Escríbenos por WhatsApp
@@ -61,7 +61,7 @@ export default function Footer() {
                 ['Soluciones', '/soluciones'],
                 ['Gotas', '/catalogo?tipo=gota'],
               ].map(([l, h]) => (
-                <li key={h}><Link href={h} className="text-xs text-gray-500 hover:text-gray-300 transition-colors">{l}</Link></li>
+                <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
               ))}
             </ul>
           </div>
@@ -79,7 +79,7 @@ export default function Footer() {
                 ['FAQ', '/faq'],
                 ['Blog', '/blog'],
               ].map(([l, h]) => (
-                <li key={h}><Link href={h} className="text-xs text-gray-500 hover:text-gray-300 transition-colors">{l}</Link></li>
+                <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
               ))}
             </ul>
           </div>
@@ -91,17 +91,17 @@ export default function Footer() {
               <li>
                 <a href="https://wa.me/18096942268?text=Hola%20ContactGo%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer"
                   aria-label="WhatsApp ContactGo" onClick={() => trackWhatsappHelp('footer')}
-                  className="text-gray-500 hover:text-gray-300 transition-colors">
+                  className="text-gray-400 hover:text-white transition-colors">
                   💬 WhatsApp
                 </a>
               </li>
               <li>
                 <a href="#" onClick={(e) => { e.preventDefault(); window.location.href = 'mailto:' + 'info' + '@' + 'contactgo.net' }}
-                  className="text-gray-500 hover:text-gray-300 transition-colors">
+                  className="text-gray-400 hover:text-white transition-colors">
                   info@contactgo.net
                 </a>
               </li>
-              <li className="text-gray-600 leading-relaxed">
+              <li className="text-gray-400 leading-relaxed">
                 🏢 Oficina: Av. Winston Churchill No. 95<br />
                 Torre Empresarial Blue Mall, Piso 23<br />
                 Santo Domingo, RD
@@ -121,7 +121,7 @@ export default function Footer() {
                 ['Privacidad', '/privacidad'],
                 ['Términos', '/terminos'],
               ].map(([l, h]) => (
-                <li key={h}><Link href={h} className="text-xs text-gray-500 hover:text-gray-300 transition-colors">{l}</Link></li>
+                <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
               ))}
             </ul>
           </div>
@@ -135,21 +135,21 @@ export default function Footer() {
         {/* Pagos + copyright en una sola fila */}
         <div className="border-t border-gray-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex flex-col gap-0.5 order-2 sm:order-1">
-            <p className="text-[11px] text-gray-700">
+            <p className="text-[11px] text-gray-300">
               © {new Date().getFullYear()} ContactGo<sup className="text-[8px]">®</sup> — República Dominicana · WhatsApp: (809) 694-2268
             </p>
-            <p className="text-[10px] text-gray-700">
+            <p className="text-[10px] text-gray-300">
               ContactGo<sup className="text-[7px]">®</sup> es un nombre comercial registrado — ONAPI Núm. 944205
             </p>
             {/* RNC pendiente de aprobación DGII — descomentar cuando esté activo */}
-            {/* <p className="text-[10px] text-gray-800">
+            {/* <p className="text-[10px] text-gray-300">
               ContactGo SRL · RNC: 1-32-30854-5 · Santo Domingo, DO
             </p> */}
           </div>
           <div className="flex items-center gap-2 order-1 sm:order-2">
             <img src="/visa-blue.png" alt="Visa" width="38" height="12" className="h-4 opacity-50 object-contain" />
             <img src="/mastercard.png" alt="Mastercard" width="24" height="19" className="h-4 opacity-60 object-contain" />
-            <span className="text-[10px] text-gray-700 border border-gray-800 px-1.5 py-0.5 rounded">🔒 SSL</span>
+            <span className="text-[10px] text-gray-300 border border-gray-600 px-1.5 py-0.5 rounded">🔒 SSL</span>
             <img src="/azul-badge.png" alt="Pago seguro AZUL" width="28" height="28" className="h-7 w-7 opacity-80 object-contain rounded" />
           </div>
         </div>

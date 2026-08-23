@@ -145,7 +145,7 @@ export default async function MarcaPage({ params }: { params: { marca: string } 
                     </div>
                   )}
                   {p.tipo && (
-                    <span className="text-[10px] font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-bold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">
                       {TIPO_LABELS[p.tipo] ?? p.tipo}
                     </span>
                   )}

@@ -63,15 +63,15 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Especialistas en lentes de contacto · Actualizado junio 2026</p></div>
         </div>
 
-        <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-5 mb-6">
+        <div className="bg-teal-50 border-2 border-primary-200 rounded-2xl p-5 mb-6">
           <p className="text-sm font-bold text-primary-800 mb-1">⚡ Respuesta directa</p>
           <p className="text-sm text-primary-700 mb-3">La forma más segura y rápida de comprar lentes de contacto online en RD es través de <strong>ContactGo</strong>: la única tienda dominicana especializada 100% en lentes de contacto. Originales, entrega 24-48h y pago con AZUL.</p>
           <div className="flex gap-2">
-            <Link href="/catalogo" className="flex-1 bg-primary-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-primary-700 transition-colors">Ver catálogo completo →</Link>
+            <Link href="/catalogo" className="flex-1 bg-teal-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-teal-600 transition-colors">Ver catálogo completo →</Link>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Comprar por WhatsApp</a>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function Page() {
                 { paso: '7', titulo: 'Recibe tu pedido en 24-48 horas', desc: 'El mensajero te contacta para coordinar la entrega. Sin necesidad de estar en un lugar fijo.' },
               ].map(({ paso, titulo, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
-                  <div className="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{paso}</div>
+                  <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{paso}</div>
                   <div><p className="font-bold text-gray-900 text-sm">{titulo}</p><p className="text-xs text-gray-600 mt-0.5">{desc}</p></div>
                 </div>
               ))}
@@ -218,7 +218,7 @@ export default function Page() {
               { href: '/marca/bausch-lomb', titulo: '→ Bausch+Lomb', desc: 'ULTRA, Ultra Astig, Biotrue ONEday' },
               { href: '/catalogo', titulo: '→ Ver catálogo completo', desc: 'Más de 35 productos disponibles' },
             ].map(({ href, titulo, desc }) => (
-              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
               </Link>
@@ -241,13 +241,13 @@ export default function Page() {
           </section>
         </div>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">La tienda de lentes de contacto online en RD</h3>
           <p className="text-sm text-gray-600 mb-1">Originales · Entrega 24-48h · Pago seguro con AZUL</p>
           <p className="text-xs text-gray-400 mb-4">Más de 35 productos disponibles de ACUVUE, Biofinity, Air Optix y más</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</Link>
-            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</Link>
+            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
+            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</Link>
             <a href="https://wa.me/18096942268?text=Hola%2C%20quiero%20comprar%20lentes%20de%20contacto%20en%20RD" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

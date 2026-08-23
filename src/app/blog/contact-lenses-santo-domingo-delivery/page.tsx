@@ -18,7 +18,7 @@ export default function Page() {
     <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">📍 Delivery · Santo Domingo</span>
     <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Contact Lenses in Santo Domingo — Fast Delivery 2026</h1>
     <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-      <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
+      <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
       <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Contact lens specialists · 5 min · Julio 2026</p></div>
     </div>
     <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -57,24 +57,24 @@ export default function Page() {
       </section>
       <div className="grid gap-2">
         <h3 className="font-bold text-gray-900 text-lg">Related articles</h3>
-        <a href="/blog/contact-lenses-dominican-republic" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Contact Lenses in Dominican Republic</p><p className="text-xs text-gray-500 mt-0.5">Complete guide for tourists</p></a>
-        <a href="/blog/forgot-contact-lenses-punta-cana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Forgot your contact lenses?</p><p className="text-xs text-gray-500 mt-0.5">Emergency delivery guide</p></a>
+        <a href="/blog/contact-lenses-dominican-republic" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Contact Lenses in Dominican Republic</p><p className="text-xs text-gray-500 mt-0.5">Complete guide for tourists</p></a>
+        <a href="/blog/forgot-contact-lenses-punta-cana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Forgot your contact lenses?</p><p className="text-xs text-gray-500 mt-0.5">Emergency delivery guide</p></a>
       </div>
       <section id="productos"><h2 className="font-display text-xl font-bold text-gray-900 mb-4">Available now — 24-48h</h2>
         <div className="space-y-2">
-          <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-primary-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE Oasys 6u</p><p className="text-xs text-gray-500">Most popular worldwide</p></div><span className="font-black text-gray-900 text-sm">RD$3,875</span></a>
-          <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-primary-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Biofinity 6u</p><p className="text-xs text-gray-500">Monthly · CooperVision</p></div><span className="font-black text-gray-900 text-sm">RD$4,750</span></a>
-          <a href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-primary-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Air Optix HydraGlyde 6u</p><p className="text-xs text-gray-500">Monthly · Alcon</p></div><span className="font-black text-gray-900 text-sm">RD$4,375</span></a>
+          <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE Oasys 6u</p><p className="text-xs text-gray-500">Most popular worldwide</p></div><span className="font-black text-gray-900 text-sm">RD$3,875</span></a>
+          <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Biofinity 6u</p><p className="text-xs text-gray-500">Monthly · CooperVision</p></div><span className="font-black text-gray-900 text-sm">RD$4,750</span></a>
+          <a href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Air Optix HydraGlyde 6u</p><p className="text-xs text-gray-500">Monthly · Alcon</p></div><span className="font-black text-gray-900 text-sm">RD$4,375</span></a>
         </div>
         <a href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">View full catalog →</a>
       </section>
     </div>
-    <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+    <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
       <h3 className="font-bold text-gray-900 text-lg mb-2">Receive in Santo Domingo in 24-48h</h3>
       <p className="text-sm text-gray-500 mb-4">direct from manufacturer · Direct from manufacturer · Secure payment</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">View catalog →</a>
-        <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calculate my prescription</a>
+        <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">View catalog →</a>
+        <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calculate my prescription</a>
         <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Order on WhatsApp</a>
       </div>
     </div>

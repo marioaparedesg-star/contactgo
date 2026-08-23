@@ -32,7 +32,7 @@ export default function Page() {
         Lentes de contacto para niños y adolescentes en RD — ¿A qué edad se pueden usar?
       </h1>
                 <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -103,7 +103,7 @@ export default function Page() {
           <p>Para jóvenes que empiezan, siempre recomendamos <strong>lentes diarios</strong>. La razón es simple: no requieren limpieza ni mantenimiento. Se usan y se descartan. El riesgo de infección es mínimo y la higiene está garantizada.</p>
           <div className="mt-4 space-y-3">
             <Link href="/producto/1-day-acuvue-moist-lentes-contacto-diarios-dominicana" className="flex items-center gap-3 bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">
-              <span className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center text-lg">👁️</span>
+              <span className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-lg">👁️</span>
               <div>
                 <p className="font-bold text-gray-900 text-sm">1-DAY ACUVUE® MOIST®</p>
                 <p className="text-xs text-gray-500">Diario · El más recomendado para principiantes · RD$3,875</p>
@@ -133,11 +133,11 @@ export default function Page() {
           </ul>
         </div>
 
-        <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5">
+        <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5">
           <h2 className="font-bold text-gray-900 mb-2">¿Listo para empezar?</h2>
           <p className="text-sm text-gray-700 mb-4">Consulta nuestro catálogo de lentes diarios, perfectos para adolescentes que empiezan. Envío a domicilio en todo RD.</p>
           <div className="flex gap-3 flex-wrap">
-            <Link href="/esfericos" className="bg-primary-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm">Ver lentes esféricos</Link>
+            <Link href="/esfericos" className="bg-teal-500 text-white px-4 py-2.5 rounded-xl font-bold text-sm">Ver lentes esféricos</Link>
             <Link href="/receta" className="border border-primary-300 text-primary-700 px-4 py-2.5 rounded-xl font-bold text-sm">Usar mi receta</Link>
           </div>
         </div>
@@ -201,12 +201,12 @@ export default function Page() {
           </div>
         </section>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

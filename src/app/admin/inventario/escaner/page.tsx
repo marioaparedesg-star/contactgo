@@ -172,7 +172,7 @@ export default function EscanerPage() {
         <div className="ml-auto flex items-center gap-2">
           <button
             onClick={() => setMode(m => m === 'scan' ? 'manual' : 'scan')}
-            className={`text-xs px-3 py-1.5 rounded-xl font-bold transition-colors ${mode === 'scan' ? 'bg-primary-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
+            className={`text-xs px-3 py-1.5 rounded-xl font-bold transition-colors ${mode === 'scan' ? 'bg-teal-500 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
           >
             {mode === 'scan' ? '⚡ Rápido' : '✏️ Manual'}
           </button>
@@ -193,7 +193,7 @@ export default function EscanerPage() {
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && mode === 'scan') { e.preventDefault(); parseScan(input) } }}
               rows={mode === 'scan' ? 4 : 2}
-              className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none placeholder-gray-600"
+              className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none placeholder-gray-600"
               placeholder={mode === 'scan'
                 ? 'ACUVUE OASYS\nD -6.50\nBC 8.4\nDIA 14.0\nLOT B019J6X2BR\nEXP 2031-02-01\n\n[Enter para procesar]'
                 : 'Pega texto o escribe los datos del producto...'}
@@ -203,7 +203,7 @@ export default function EscanerPage() {
             <button
               onClick={() => parseScan(input)}
               disabled={loading || !input.trim()}
-              className="flex-1 bg-primary-600 hover:bg-primary-700 disabled:opacity-40 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm"
+              className="flex-1 bg-teal-500 hover:bg-teal-600 disabled:opacity-40 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm"
             >
               {loading ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Zap className="w-4 h-4" />}
               {loading ? 'Procesando...' : 'Analizar'}
@@ -267,15 +267,15 @@ export default function EscanerPage() {
                 <div className="space-y-2 border-t border-white/10 pt-3">
                   <p className="text-xs font-bold text-amber-400 uppercase tracking-wider">Crear nuevo producto</p>
                   <input value={newProd.nombre} onChange={e => setNewProd(p => ({...p, nombre: e.target.value}))}
-                    className="w-full bg-gray-800 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full bg-gray-800 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
                     placeholder="Nombre del producto *" />
                   <div className="grid grid-cols-2 gap-2">
                     <input value={newProd.precio} onChange={e => setNewProd(p => ({...p, precio: e.target.value}))}
                       type="number" min="0"
-                      className="bg-gray-800 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="bg-gray-800 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
                       placeholder="Precio (RD$)" />
                     <input value={newProd.slug} onChange={e => setNewProd(p => ({...p, slug: e.target.value}))}
-                      className="bg-gray-800 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="bg-gray-800 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
                       placeholder="slug-url" />
                   </div>
                 </div>

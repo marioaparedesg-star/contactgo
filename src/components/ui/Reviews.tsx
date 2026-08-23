@@ -77,7 +77,7 @@ export default function Reviews({ productId, initialReviews }: {
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-bold text-gray-900 text-lg">Reseñas</h3>
           <button onClick={() => setShowForm(true)}
-            className="text-sm font-semibold text-primary-600 border border-primary-200 px-4 py-2 rounded-xl hover:bg-primary-50 transition-colors">
+            className="text-sm font-semibold text-primary-600 border border-primary-200 px-4 py-2 rounded-xl hover:bg-teal-50 transition-colors">
             + Escribir reseña
           </button>
         </div>
@@ -93,16 +93,16 @@ export default function Reviews({ productId, initialReviews }: {
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <input value={form.nombre} onChange={e => setForm(f => ({...f, nombre: e.target.value}))}
-                  className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Tu nombre *" />
+                  className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Tu nombre *" />
                 <input value={form.ciudad} onChange={e => setForm(f => ({...f, ciudad: e.target.value}))}
-                  className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Ciudad" />
+                  className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Ciudad" />
               </div>
               <textarea value={form.texto} onChange={e => setForm(f => ({...f, texto: e.target.value}))}
-                rows={3} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                rows={3} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none"
                 placeholder="¿Cómo fue tu experiencia con este producto? *" />
               <div className="flex gap-2">
                 <button onClick={enviar} disabled={sending || !form.nombre || !form.texto}
-                  className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50">
+                  className="flex-1 bg-teal-500 hover:bg-teal-600 text-white font-bold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50">
                   {sending ? 'Enviando...' : 'Publicar reseña'}
                 </button>
                 <button onClick={() => setShowForm(false)}
@@ -128,7 +128,7 @@ export default function Reviews({ productId, initialReviews }: {
             </p>
           </div>
           <button onClick={() => setShowForm(s => !s)}
-            className="text-sm font-semibold text-primary-600 border border-primary-200 px-4 py-2 rounded-xl hover:bg-primary-50 transition-colors shrink-0">
+            className="text-sm font-semibold text-primary-600 border border-primary-200 px-4 py-2 rounded-xl hover:bg-teal-50 transition-colors shrink-0">
             + Escribir reseña
           </button>
         </div>
@@ -164,16 +164,16 @@ export default function Reviews({ productId, initialReviews }: {
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <input value={form.nombre} onChange={e => setForm(f => ({...f, nombre: e.target.value}))}
-                  className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Tu nombre *" />
+                  className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Tu nombre *" />
                 <input value={form.ciudad} onChange={e => setForm(f => ({...f, ciudad: e.target.value}))}
-                  className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Ciudad" />
+                  className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Ciudad" />
               </div>
               <textarea value={form.texto} onChange={e => setForm(f => ({...f, texto: e.target.value}))}
-                rows={3} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                rows={3} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none"
                 placeholder="¿Cómo fue tu experiencia? *" />
               <div className="flex gap-2">
                 <button onClick={enviar} disabled={sending || !form.nombre || !form.texto}
-                  className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50">
+                  className="flex-1 bg-teal-500 hover:bg-teal-600 text-white font-bold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50">
                   {sending ? 'Enviando...' : 'Publicar reseña'}
                 </button>
                 <button onClick={() => setShowForm(false)}
@@ -205,7 +205,7 @@ export default function Reviews({ productId, initialReviews }: {
             return (
               <div key={r.id ?? i} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-400 to-emerald-500 flex items-center justify-center shrink-0 text-white font-bold text-sm">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-300 to-emerald-500 flex items-center justify-center shrink-0 text-white font-bold text-sm">
                     {(nombre[0] ?? '?').toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">

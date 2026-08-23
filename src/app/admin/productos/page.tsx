@@ -126,7 +126,7 @@ export default function AdminProductos() {
                 <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={importCSV} disabled={importing} />
               </label>
               <button onClick={() => { setEditing(null); setForm({ nombre:'',marca:'',precio:'',costo:'',stock:'',stock_minimo:'5',tipo:'esferico',subcategoria:'',sku:'',descripcion:'' }); setShowForm(true) }}
-                className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors">
+                className="flex items-center gap-2 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-xl text-sm font-semibold transition-colors">
                 <Plus className="w-4 h-4" /> Nuevo producto
               </button>
             </div>
@@ -249,7 +249,7 @@ export default function AdminProductos() {
             </div>
             <div className="flex gap-3 mt-6">
               <button onClick={() => setShowForm(false)} className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50">Cancelar</button>
-              <button onClick={save} className="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold">Guardar</button>
+              <button onClick={save} className="flex-1 px-4 py-2.5 bg-teal-500 hover:bg-teal-600 text-white rounded-xl text-sm font-semibold">Guardar</button>
             </div>
           </div>
         </div>

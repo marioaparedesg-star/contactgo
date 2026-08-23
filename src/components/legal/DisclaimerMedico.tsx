@@ -102,7 +102,7 @@ export default function DisclaimerMedico({ onAceptar, onCancelar, items = [], sh
           <button onClick={handleAceptar} disabled={!aceptado}
             className={`flex-1 font-bold py-3.5 rounded-xl text-sm transition-all ${
               aceptado
-                ? 'bg-primary-600 hover:bg-primary-700 text-white'
+                ? 'bg-teal-500 hover:bg-teal-600 text-white'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}>
             Acepto y continúo

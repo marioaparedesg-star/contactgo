@@ -93,7 +93,7 @@ export default function ClientesPage() {
           <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"/>
             <input placeholder="Buscar por nombre, email o teléfono..." value={search} onChange={e=>setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"/>
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl bg-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"/>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -105,9 +105,9 @@ export default function ClientesPage() {
                 const isSelected=selected?.id===c.id
                 return (
                   <button key={c.id} onClick={()=>abrirCliente(c)}
-                    className={`w-full text-left p-4 rounded-2xl border transition-all ${isSelected?'border-primary-400 bg-primary-50/50 shadow-md':'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}>
+                    className={`w-full text-left p-4 rounded-2xl border transition-all ${isSelected?'border-primary-400 bg-teal-50/50 shadow-md':'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}>
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-primary-100 flex items-center justify-center text-sm font-bold text-primary-600 shrink-0">
+                      <div className="w-9 h-9 rounded-full bg-teal-50 flex items-center justify-center text-sm font-bold text-primary-600 shrink-0">
                         {c.nombre?.charAt(0)?.toUpperCase()??'?'}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -133,7 +133,7 @@ export default function ClientesPage() {
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-4">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-lg font-black text-primary-600">
+                    <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center text-lg font-black text-primary-600">
                       {selected.nombre?.charAt(0)?.toUpperCase()??'?'}
                     </div>
                     <div>

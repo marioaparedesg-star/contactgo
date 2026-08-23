@@ -22,7 +22,7 @@ export default function DevolucionesPage() {
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
 
-          <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5">
+          <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5">
             <h2 className="font-bold text-primary-800 text-lg mb-2">Resumen rápido</h2>
             <ul className="space-y-1 text-sm text-primary-700">
               <li>⏱ <strong>Plazo general:</strong> 7 días desde la recepción del pedido</li>

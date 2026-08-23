@@ -90,7 +90,7 @@ export default function CajaPage() {
             <p className="text-gray-500 text-sm">Movimientos de dinero · Saldo disponible</p>
           </div>
           <button onClick={()=>setShowForm(true)}
-            className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-primary-700">
+            className="flex items-center gap-2 bg-teal-500 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-teal-600">
             <Plus className="w-4 h-4"/> Nuevo movimiento
           </button>
         </div>
@@ -114,7 +114,7 @@ export default function CajaPage() {
             <p className="text-xs text-red-500 font-semibold">Egresos</p>
             <p className="text-xl font-black text-red-600">RD${egresos.toLocaleString()}</p>
           </div>
-          <div className={`${saldo>=0?'bg-primary-50 border-primary-100':'bg-amber-50 border-amber-100'} border rounded-2xl p-4 text-center`}>
+          <div className={`${saldo>=0?'bg-teal-50 border-primary-100':'bg-amber-50 border-amber-100'} border rounded-2xl p-4 text-center`}>
             <DollarSign className={`w-5 h-5 mx-auto mb-1 ${saldo>=0?'text-primary-500':'text-amber-500'}`}/>
             <p className={`text-xs font-semibold ${saldo>=0?'text-primary-600':'text-amber-600'}`}>Saldo neto</p>
             <p className={`text-xl font-black ${saldo>=0?'text-primary-700':'text-amber-700'}`}>RD${saldo.toLocaleString()}</p>
@@ -176,7 +176,7 @@ export default function CajaPage() {
               </div>
             </div>
             <button onClick={guardar}
-              className="w-full bg-primary-600 text-white py-3 rounded-xl font-black hover:bg-primary-700">
+              className="w-full bg-teal-500 text-white py-3 rounded-xl font-black hover:bg-teal-600">
               Guardar movimiento
             </button>
           </div>

@@ -132,7 +132,7 @@ export default function CartPage() {
         <div className="max-w-md mx-auto px-4 py-16 text-center">
           {/* Ícono animado */}
           <div className="relative w-28 h-28 mx-auto mb-6">
-            <div className="absolute inset-0 bg-primary-100 rounded-3xl animate-pulse" />
+            <div className="absolute inset-0 bg-teal-50 rounded-3xl animate-pulse" />
             <div className="absolute inset-0 flex items-center justify-center">
               <ShoppingBag className="w-14 h-14 text-primary-400" />
             </div>
@@ -141,7 +141,7 @@ export default function CartPage() {
           <p className="text-gray-500 mb-6 text-sm">Encuentra los lentes perfectos para ti con entrega a domicilio.</p>
           {/* CTAs claros */}
           <div className="space-y-3">
-            <Link href="/catalogo" className="w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-black py-4 rounded-2xl text-sm transition-colors shadow-md shadow-primary-200/50">
+            <Link href="/catalogo" className="w-full flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-black py-4 rounded-2xl text-sm transition-colors shadow-md shadow-teal-100/50">
               Ver catálogo de lentes →
             </Link>
             <Link href="/esfericos" className="w-full flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-primary-300 text-gray-700 font-bold py-3.5 rounded-2xl text-sm transition-colors">
@@ -230,7 +230,7 @@ export default function CartPage() {
                         <div className="mt-1.5 space-y-1">
                           {/* Badge de ojo */}
                           <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                            mode === 'AMBOS' ? 'bg-primary-100 text-primary-700' :
+                            mode === 'AMBOS' ? 'bg-teal-50 text-primary-700' :
                             mode === 'OD'    ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
                           }`}>
                             {mode === 'AMBOS' ? '👀 Ambos ojos' : mode === 'OD' ? '👁 Ojo derecho' : '👁 Ojo izquierdo'}
@@ -375,7 +375,7 @@ export default function CartPage() {
 
               {/* Cross-sell: solución si no la tienen — Bundle destacado */}
               {solucionSugerida && (
-                <div className="bg-gradient-to-br from-blue-50 to-primary-50 border border-primary-100 rounded-2xl p-3">
+                <div className="bg-gradient-to-br from-blue-50 to-teal-50 border border-primary-100 rounded-2xl p-3">
                   <p className="text-[10px] font-black text-primary-700 uppercase tracking-wide mb-1.5">
                     💧 Agrega tu solución de limpieza
                   </p>
@@ -398,7 +398,7 @@ export default function CartPage() {
                         setSolucionSugerida(null)
                         toast.success('Solución añadida ✓')
                       }}
-                      className="shrink-0 bg-primary-600 hover:bg-primary-700 text-white text-[10px] font-black px-3 py-2 rounded-xl transition-colors active:scale-95">
+                      className="shrink-0 bg-teal-500 hover:bg-teal-600 text-white text-[10px] font-black px-3 py-2 rounded-xl transition-colors active:scale-95">
                       + Agregar
                     </button>
                   </div>

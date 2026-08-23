@@ -41,7 +41,7 @@ export default function EnviosPage() {
             </div>
           ))}
         </div>
-        <div className="mt-10 bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <p className="font-semibold text-gray-900 mb-1">¿Tienes preguntas sobre tu envío?</p>
           <p className="text-gray-500 text-sm mb-4">Escríbenos y te respondemos en minutos.</p>
           <a href="https://wa.me/18096942268" target="_blank"

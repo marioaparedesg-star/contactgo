@@ -93,7 +93,7 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
 
         {/* Category badge */}
         <div className="mb-3">
-          <span className="inline-block text-[10px] font-bold text-primary-700 bg-primary-50 px-2.5 py-1 rounded-full uppercase tracking-wider">
+          <span className="inline-block text-[10px] font-bold text-primary-700 bg-teal-50 px-2.5 py-1 rounded-full uppercase tracking-wider">
             {meta.category}
           </span>
         </div>
@@ -111,7 +111,7 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
 
         {/* Author card */}
         <div className="flex items-center gap-3 mb-8 p-4 bg-blue-50/50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -144,16 +144,16 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
         )}
 
         {/* CTA final */}
-        <section className="mt-12 p-6 bg-gradient-to-br from-primary-50 to-white border border-primary-100 rounded-2xl text-center">
+        <section className="mt-12 p-6 bg-gradient-to-br from-teal-50 to-white border border-primary-100 rounded-2xl text-center">
           <h3 className="font-display text-lg md:text-xl font-black text-gray-900 mb-2">
             ¿Listo para tus lentes de contacto?
           </h3>
           <p className="text-sm text-gray-600 mb-4">Marcas originales, entrega a domicilio en toda RD y pago seguro con AZUL.</p>
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
-            <Link href="/catalogo" className="bg-primary-600 hover:bg-primary-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">
+            <Link href="/catalogo" className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">
               Ver catálogo
             </Link>
-            <Link href="/receta" className="bg-white border border-primary-200 text-primary-700 hover:bg-primary-50 font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">
+            <Link href="/receta" className="bg-white border border-primary-200 text-primary-700 hover:bg-teal-50 font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">
               Calcular mi receta
             </Link>
           </div>

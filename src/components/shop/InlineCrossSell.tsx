@@ -50,7 +50,7 @@ export default function InlineCrossSell({ tipo, currentId }: { tipo: string; cur
   const titleMsg = msgs[tipo] ?? '+ Agrega tu solución'
 
   return (
-    <div className="rounded-2xl border border-dashed border-primary-200 bg-primary-50/50 p-3">
+    <div className="rounded-2xl border border-dashed border-primary-200 bg-teal-50/50 p-3">
       <p className="text-[10px] font-black text-primary-600 uppercase tracking-wide mb-2">{titleMsg}</p>
       <div className="flex items-center gap-3">
         <Link href={`/producto/${product.slug}`} className="shrink-0">
@@ -73,7 +73,7 @@ export default function InlineCrossSell({ tipo, currentId }: { tipo: string; cur
           </span>
         ) : (
           <button onClick={handleAdd}
-            className="shrink-0 bg-primary-600 hover:bg-primary-700 text-white rounded-xl p-2.5 transition-colors active:scale-95"
+            className="shrink-0 bg-teal-500 hover:bg-teal-600 text-white rounded-xl p-2.5 transition-colors active:scale-95"
             aria-label={`Agregar ${product.nombre} al carrito`}>
             <Plus className="w-4 h-4" />
           </button>

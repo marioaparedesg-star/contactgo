@@ -221,7 +221,7 @@ export default function BlogPage({ searchParams }: { searchParams?: { categoria?
         {/* ── HEADER PREMIUM ── */}
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-3">
-            <span className="w-1.5 h-6 bg-primary-600 rounded-full inline-block" />
+            <span className="w-1.5 h-6 bg-teal-500 rounded-full inline-block" />
             <span className="text-xs font-bold text-primary-600 uppercase tracking-widest">ContactGo Blog</span>
           </div>
           <h1 className="font-display text-4xl font-black text-gray-900 leading-tight mb-3">
@@ -239,7 +239,7 @@ export default function BlogPage({ searchParams }: { searchParams?: { categoria?
             <div className="grid sm:grid-cols-3 gap-3">
               {articulosFeatured.map(post => (
                 <Link key={post.slug} href={`/blog/${post.slug}`}
-                  className="group relative bg-gradient-to-br from-primary-600 to-teal-600 rounded-2xl p-4 hover:from-primary-700 hover:to-teal-700 transition-all overflow-hidden">
+                  className="group relative bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-4 hover:from-teal-600 hover:to-teal-700 transition-all overflow-hidden">
                   <div className="absolute top-0 right-0 text-6xl opacity-10 -mt-2 -mr-2">{post.emoji}</div>
                   <span className="text-[10px] font-bold text-primary-200 uppercase tracking-wider">{post.cat}</span>
                   <h2 className="text-white font-bold text-sm leading-tight mt-1 mb-2 line-clamp-2">{post.titulo}</h2>
@@ -289,7 +289,7 @@ export default function BlogPage({ searchParams }: { searchParams?: { categoria?
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{post.cat}</span>
                       {'hot' in post && (post as any).hot && (
-                        <span className="text-[9px] font-black text-primary-600 bg-primary-50 px-1.5 py-0.5 rounded-full">★ TOP</span>
+                        <span className="text-[9px] font-black text-primary-600 bg-teal-50 px-1.5 py-0.5 rounded-full">★ TOP</span>
                       )}
                     </div>
                     <h2 className="font-semibold text-gray-900 text-sm leading-snug mb-0.5 group-hover:text-primary-600 transition-colors line-clamp-1">
@@ -319,7 +319,7 @@ export default function BlogPage({ searchParams }: { searchParams?: { categoria?
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {porCiudad.map(post => (
                 <Link key={post.slug} href={`/blog/${post.slug}`}
-                  className="flex items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-all group">
+                  className="flex items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-teal-50/30 transition-all group">
                   <span className="text-base">{post.emoji}</span>
                   <div className="min-w-0">
                     <p className="text-xs font-semibold text-gray-700 group-hover:text-primary-600 transition-colors truncate">
@@ -341,7 +341,7 @@ export default function BlogPage({ searchParams }: { searchParams?: { categoria?
             <Link href="/catalogo" className="bg-white text-gray-900 font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-gray-100 transition-colors">
               Ver catálogo →
             </Link>
-            <Link href="/receta" className="bg-primary-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-primary-700 transition-colors">
+            <Link href="/receta" className="bg-teal-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-teal-600 transition-colors">
               Calcular mi receta gratis
             </Link>
           </div>

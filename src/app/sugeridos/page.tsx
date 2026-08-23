@@ -117,7 +117,7 @@ export default function SugeridosPage() {
                       <span className="text-green-600 text-xs font-semibold bg-green-50 px-3 py-1.5 rounded-xl shrink-0">✓ Agregado</span>
                     ) : (
                       <button onClick={() => agregar(p)}
-                        className="bg-primary-600 text-white text-xs font-semibold px-3 py-2 rounded-xl hover:bg-primary-700 transition-colors shrink-0">
+                        className="bg-teal-500 text-white text-xs font-semibold px-3 py-2 rounded-xl hover:bg-teal-600 transition-colors shrink-0">
                         + Agregar
                       </button>
                     )}

@@ -70,7 +70,7 @@ export default function SobreNosotrosPage() {
       <main id="main-content" className="pb-20">
 
         {/* Hero */}
-        <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-teal-600 text-white py-20 px-4 text-center">
+        <section className="bg-gradient-to-br from-teal-600 via-teal-500 to-teal-600 text-white py-20 px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <span className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-widest uppercase">La única tienda especializada en RD</span>
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-5 leading-tight">
@@ -111,7 +111,7 @@ export default function SobreNosotrosPage() {
         </section>
 
         {/* Misión */}
-        <section className="bg-primary-50 border-y border-primary-100 py-14 px-4">
+        <section className="bg-teal-50 border-y border-primary-100 py-14 px-4">
           <div className="max-w-2xl mx-auto text-center">
             <span className="text-4xl mb-4 block">🎯</span>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Nuestra misión</h2>

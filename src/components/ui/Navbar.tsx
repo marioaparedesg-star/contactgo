@@ -65,7 +65,7 @@ export default function Navbar() {
                   <nav className="hidden md:flex items-center gap-1" aria-label="Navegación principal">
           {links.map(l => (
             <Link key={l.href} href={l.href}
-              className="px-2 py-2 lg:px-3 rounded-lg text-xs lg:text-sm font-medium text-gray-600 hover:text-primary-700 hover:bg-primary-50 transition-colors whitespace-nowrap">
+              className="px-2 py-2 lg:px-3 rounded-lg text-xs lg:text-sm font-medium text-gray-600 hover:text-primary-700 hover:bg-teal-50 transition-colors whitespace-nowrap">
               {l.label}
             </Link>
           ))}
@@ -85,7 +85,7 @@ export default function Navbar() {
             aria-label={itemCount > 0 ? `Carrito — ${itemCount} producto${itemCount !== 1 ? 's' : ''}` : 'Carrito de compras'}>
             <ShoppingCart className="w-5 h-5 text-gray-700" aria-hidden="true" />
             {itemCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary-600 text-white text-xs font-bold rounded-full flex items-center justify-center"
+              <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-teal-500 text-white text-xs font-bold rounded-full flex items-center justify-center"
                 aria-hidden="true">
                 {itemCount > 9 ? '9+' : itemCount}
               </span>
@@ -115,12 +115,12 @@ export default function Navbar() {
           role="navigation" aria-label="Menú móvil">
           {links.map(l => (
             <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
-              className="px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-700 min-h-[44px] flex items-center">
+              className="px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-teal-50 hover:text-primary-700 min-h-[44px] flex items-center">
               {l.label}
             </Link>
           ))}
           <Link href="/cuenta" onClick={() => setOpen(false)}
-            className="px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-700 flex items-center gap-2 min-h-[44px]">
+            className="px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-teal-50 hover:text-primary-700 flex items-center gap-2 min-h-[44px]">
             <User className="w-4 h-4" aria-hidden="true" /> Mi cuenta
           </Link>
         </div>

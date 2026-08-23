@@ -305,7 +305,7 @@ export default function RecetaPage() {
                 <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico (opcional)"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
               </div>
-              <button onClick={handleLeadSubmit} className="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
+              <button onClick={handleLeadSubmit} className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
                 Ver mi resultado →
               </button>
               <p className="text-[10px] text-gray-400 text-center">🔒 Tus datos están seguros. Nunca spam.</p>
@@ -327,7 +327,7 @@ export default function RecetaPage() {
                 onClick={() => setRxSource('contacto')}
                 className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
                   rxSource === 'contacto' 
-                    ? 'border-primary-500 bg-primary-50 shadow-sm' 
+                    ? 'border-primary-500 bg-teal-50 shadow-sm' 
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
@@ -614,9 +614,9 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
   const isSimple = result.tipo === 'esferico' && !soloOjo
   const wasAdded = cartAdded === p.id
   const tierLabel = {eco:'ECONÓMICO',rec:'⭐ MEJOR OPCIÓN',prem:'PREMIUM'}[tier]
-  const tierColor = {eco:'bg-gray-100 text-gray-600',rec:'bg-primary-600 text-white',prem:'bg-gray-800 text-white'}[tier]
+  const tierColor = {eco:'bg-gray-100 text-gray-600',rec:'bg-teal-500 text-white',prem:'bg-gray-800 text-white'}[tier]
   return (
-    <div className={`flex flex-col bg-white rounded-2xl border overflow-hidden transition-all ${featured?'border-primary-400 shadow-md ring-2 ring-primary-100':'border-gray-100 shadow-sm'}`}>
+    <div className={`flex flex-col bg-white rounded-2xl border overflow-hidden transition-all ${featured?'border-primary-400 shadow-md ring-2 ring-teal-50':'border-gray-100 shadow-sm'}`}>
       <div className={`text-[10px] font-black text-center py-1.5 ${tierColor}`}>{tierLabel}</div>
       <div className="p-3 flex-1 flex flex-col">
         {p.imagen_url&&<img src={p.imagen_url} alt={p.nombre} className={`w-full ${compact?'h-12':'h-14'} object-contain mb-2 rounded-lg bg-gray-50`}/>}
@@ -632,7 +632,7 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
       </div>
       <div className="px-3 pb-3 space-y-1.5">
         <button onClick={() => onAction(p)}
-          className={`w-full py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${wasAdded ? 'bg-green-500 text-white' : featured ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-800 text-white hover:bg-gray-700'}`}>
+          className={`w-full py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${wasAdded ? 'bg-green-500 text-white' : featured ? 'bg-teal-500 text-white hover:bg-teal-600' : 'bg-gray-800 text-white hover:bg-gray-700'}`}>
           {wasAdded ? (<><CheckCircle className="w-3.5 h-3.5"/> ¡En tu carrito!</>)
            : soloOjo ? (<><ArrowRight className="w-3.5 h-3.5"/> Elegir para {soloOjo}</>)
            : isSimple ? (<><ShoppingCart className="w-3.5 h-3.5"/> Agregar al carrito</>)
@@ -760,7 +760,7 @@ function ConsumoCard({ precio, frecuencia, onChange }: { precio: number; frecuen
       <div className="flex gap-1.5 mb-3">
         {(['diario','quincenal','mensual'] as const).map(f=>(
           <button key={f} onClick={()=>onChange(f)}
-            className={`flex-1 py-2 rounded-xl text-[11px] font-semibold transition-all ${frecuencia===f?'bg-primary-600 text-white shadow-sm':'bg-gray-100 text-gray-500'}`}>
+            className={`flex-1 py-2 rounded-xl text-[11px] font-semibold transition-all ${frecuencia===f?'bg-teal-500 text-white shadow-sm':'bg-gray-100 text-gray-500'}`}>
             {d[f].label}
           </button>
         ))}

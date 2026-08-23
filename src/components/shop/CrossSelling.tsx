@@ -44,7 +44,7 @@ export default function CrossSelling({ tipo, currentId }: { tipo: string; curren
           <h3 className="font-bold text-gray-900 text-lg">{titulo}</h3>
           <p className="text-xs text-gray-400 mt-0.5">Seleccionados para tu tipo de lente</p>
         </div>
-        <Link href="/catalogo" className="text-xs text-primary-600 font-bold flex items-center gap-1 hover:text-primary-700 bg-primary-50 px-3 py-1.5 rounded-xl">
+        <Link href="/catalogo" className="text-xs text-primary-600 font-bold flex items-center gap-1 hover:text-primary-700 bg-teal-50 px-3 py-1.5 rounded-xl">
           Ver más <ChevronRight className="w-3 h-3" />
         </Link>
       </div>
@@ -64,7 +64,7 @@ export default function CrossSelling({ tipo, currentId }: { tipo: string; curren
             </Link>
             <button
               onClick={() => addItem(p as any)}
-              className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.97] text-white text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all mt-auto">
+              className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.97] text-white text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all mt-auto">
               <ShoppingCart className="w-3 h-3" /> Agregar
             </button>
           </div>

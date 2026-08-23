@@ -41,7 +41,7 @@ export default function ReferidosPage() {
       <Navbar />
       <main id="main-content" className="max-w-2xl mx-auto px-4 py-10 pb-24">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Gift className="w-8 h-8 text-primary-600" />
           </div>
           <h1 className="font-display text-2xl font-bold text-gray-900 mb-2">Programa de Referidos</h1>
@@ -56,7 +56,7 @@ export default function ReferidosPage() {
             { icon: DollarSign, n: '3', title: 'Ganan los dos', desc: 'Tú RD$300, tu amigo RD$150 de descuento' },
           ].map(s => (
             <div key={s.n} className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
-              <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-black mx-auto mb-2">{s.n}</div>
+              <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black mx-auto mb-2">{s.n}</div>
               <p className="text-xs font-bold text-gray-900 mb-1">{s.title}</p>
               <p className="text-[10px] text-gray-500 leading-snug">{s.desc}</p>
             </div>
@@ -71,7 +71,7 @@ export default function ReferidosPage() {
               <div className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-xs text-gray-700 font-mono truncate">
                 {refLink}
               </div>
-              <button onClick={copiar} className="shrink-0 w-10 h-10 bg-primary-600 text-white rounded-xl flex items-center justify-center hover:bg-primary-700 transition-colors">
+              <button onClick={copiar} className="shrink-0 w-10 h-10 bg-teal-500 text-white rounded-xl flex items-center justify-center hover:bg-teal-600 transition-colors">
                 {copiado ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
@@ -80,7 +80,7 @@ export default function ReferidosPage() {
             </button>
           </div>
         ) : (
-          <div className="bg-primary-50 border border-primary-100 rounded-2xl p-5 text-center mb-6">
+          <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5 text-center mb-6">
             <p className="text-sm text-primary-800 font-semibold mb-3">Inicia sesión para ver tu enlace de referido</p>
             <a href="/cuenta" className="btn-primary px-6 py-2.5 text-sm">Iniciar sesión</a>
           </div>

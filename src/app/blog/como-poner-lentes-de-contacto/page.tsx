@@ -30,10 +30,10 @@ export default function Page() {
           <span className="text-gray-600">como-poner-lentes-de-contacto</span>
         </div>
         <div className="mb-2"><Link href="/blog" className="text-sm text-primary-600 font-semibold">← Blog</Link></div>
-        <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">Tutoriales</span>
+        <span className="text-xs font-semibold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">Tutoriales</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Cómo poner y quitar lentes de contacto por primera vez</h1>
                 <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -79,7 +79,7 @@ export default function Page() {
               ['Suelta los párpados y parpadea', 'El lente debe asentarse solo. Si sientes incomodidad, cierra el ojo y masajea suavemente.'],
             ].map(([titulo, desc], i) => (
               <div key={i} className="flex gap-4 bg-white border border-gray-100 rounded-2xl p-4">
-                <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-sm shrink-0">{i+1}</div>
+                <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold text-sm shrink-0">{i+1}</div>
                 <div>
                   <p className="font-semibold text-gray-900 text-sm mb-1">{titulo}</p>
                   <p className="text-sm text-gray-500">{desc}</p>
@@ -108,7 +108,7 @@ export default function Page() {
 
           <div className="bg-green-50 border border-green-200 rounded-2xl p-5 text-center">
             <p className="font-bold text-gray-900 mb-2">¿Necesitas tu primera caja?</p>
-            <Link href="/catalogo" className="inline-block bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-primary-700 transition-colors">
+            <Link href="/catalogo" className="inline-block bg-teal-500 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-teal-600 transition-colors">
               Ver catálogo →
             </Link>
           </div>
@@ -176,12 +176,12 @@ export default function Page() {
           </div>
         </section>
 
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
+            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

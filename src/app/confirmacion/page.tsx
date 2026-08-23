@@ -300,7 +300,7 @@ function ConfirmacionContent() {
                 const ojolbl = ojoLabel(item.ojo)
                 return (
                   <div key={i} className="flex items-start gap-3 pb-4 border-b border-gray-50 last:border-0 last:pb-0">
-                    <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center shrink-0 text-base">👁</div>
+                    <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 text-base">👁</div>
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-gray-900 text-sm leading-snug">{item.nombre}</p>
                       {ojolbl && (
@@ -424,12 +424,12 @@ function ConfirmacionContent() {
         <div className="space-y-3 pt-1">
           {order?.numero_orden ? (
             <Link href={`/pedido/${order.numero_orden}`}
-              className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-primary-200">
+              className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-100">
               <Package className="w-5 h-5" /> Seguir mi pedido
             </Link>
           ) : (
             <Link href="/cuenta"
-              className="w-full bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-primary-200">
+              className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-100">
               <Package className="w-5 h-5" /> Seguir mi pedido
             </Link>
           )}

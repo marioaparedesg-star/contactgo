@@ -29,7 +29,7 @@ export default async function AcuvuePage() {
     <>
       <Navbar />
       <main className="pb-20">
-        <section className="bg-gradient-to-br from-primary-700 to-teal-600 text-white py-14 px-4 text-center">
+        <section className="bg-gradient-to-br from-teal-600 to-teal-600 text-white py-14 px-4 text-center">
           <p className="text-primary-200 text-sm font-semibold uppercase tracking-wide mb-2">Marca oficial</p>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">Lentes Acuvue en RD</h1>
           <p className="text-primary-100 max-w-xl mx-auto">La marca #1 de lentes de contacto del mundo. Tecnología HYDRACLEAR y BLINK STABILIZED para máxima comodidad.</p>
@@ -40,14 +40,14 @@ export default async function AcuvuePage() {
             {(productos??[]).map((p:any) => (
               <Link key={p.id} href={`/producto/${(p as any).slug || p.id}`} className="bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-shadow">
                 {p.imagen_url && <div className="aspect-square mb-3 flex items-center justify-center"><Image src={p.imagen_url} unoptimized alt={p.nombre} width={120} height={120} className="object-contain" /></div>}
-                <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">{TIPO[p.tipo]??p.tipo}</span>
+                <span className="text-xs font-semibold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">{TIPO[p.tipo]??p.tipo}</span>
                 <p className="font-semibold text-gray-900 text-sm mt-2 leading-tight">{p.nombre}</p>
                 <p className="font-bold text-gray-900 mt-1">RD${p.precio?.toLocaleString()}</p>
               </Link>
             ))}
           </div>
         </section>
-        <section className="bg-primary-50 border-y border-primary-100 py-12 px-4">
+        <section className="bg-teal-50 border-y border-primary-100 py-12 px-4">
           <div className="max-w-3xl mx-auto">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Por qué elegir Acuvue?</h2>
             <div className="grid md:grid-cols-2 gap-4">

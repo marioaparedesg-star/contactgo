@@ -112,7 +112,7 @@ export default async function ResenasPage() {
             </div>
             <p className="text-sm text-gray-700 leading-relaxed">{r.comentario}</p>
             <div className="mt-3 flex items-center justify-between">
-              <span className="text-xs bg-primary-50 text-primary-700 px-2 py-1 rounded-lg font-semibold">
+              <span className="text-xs bg-teal-50 text-primary-700 px-2 py-1 rounded-lg font-semibold">
                 {r.producto ?? r.products?.nombre ?? 'Lentes de contacto'}
               </span>
               <span className="text-xs text-gray-400">
@@ -124,7 +124,7 @@ export default async function ResenasPage() {
       </div>
 
       {/* CTA */}
-      <div className="bg-primary-50 border border-primary-100 rounded-2xl p-6 text-center">
+      <div className="bg-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
         <h2 className="font-bold text-gray-900 text-lg mb-2">¿Ya compraste en ContactGo?</h2>
         <p className="text-sm text-gray-600 mb-4">Tu opinión ayuda a otros dominicanos a tomar la mejor decisión. Solo toma 1 minuto. ⭐</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -132,7 +132,7 @@ export default async function ResenasPage() {
             className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-6 py-3 rounded-xl font-bold text-sm inline-flex items-center justify-center gap-2 transition-colors">
             ⭐ Dejar reseña en Google
           </a>
-          <Link href="/cuenta" className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-bold text-sm inline-flex items-center justify-center gap-2 transition-colors">
+          <Link href="/cuenta" className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-xl font-bold text-sm inline-flex items-center justify-center gap-2 transition-colors">
             Ver mis pedidos
           </Link>
         </div>

@@ -50,7 +50,7 @@ export default function Page() {
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">clariti® 1 day precio en República Dominicana 2026</h1>
 
         <div className="flex items-center gap-3 mb-5 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Precios actualizados junio 2026 · Entrega en toda RD · ⏱ 6 min</p></div>
 
         <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
@@ -121,7 +121,7 @@ export default function Page() {
                 { paso: '4', titulo: 'Recibe en 24-48h', desc: 'Entrega en Santo Domingo y Santiago en 24h. Resto del país en 24-72h.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                  <div className="w-7 h-7 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
+                  <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
                   <div><p className="font-bold text-gray-900 text-sm">{s.titulo}</p><p className="text-xs text-gray-600">{s.desc}</p></div>
                 </div>
               ))}
@@ -153,10 +153,10 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/blog/lentes-diarios-vs-mensuales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes diarios vs mensuales</p><p className="text-xs text-gray-500 mt-0.5">¿Cuál tipo es para ti?</p></a>
-            <a href="/blog/acuvue-moist-1-day-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ 1-DAY ACUVUE Moist precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa diaria J&J</p></a>
-            <a href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual CooperVision</p></a>
-            <a href="/marca/coopervision" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los productos CooperVision</p><p className="text-xs text-gray-500 mt-0.5">Biofinity, Avaira, Proclear y más</p></a>
+            <a href="/blog/lentes-diarios-vs-mensuales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes diarios vs mensuales</p><p className="text-xs text-gray-500 mt-0.5">¿Cuál tipo es para ti?</p></a>
+            <a href="/blog/acuvue-moist-1-day-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ 1-DAY ACUVUE Moist precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa diaria J&J</p></a>
+            <a href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual CooperVision</p></a>
+            <a href="/marca/coopervision" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los productos CooperVision</p><p className="text-xs text-gray-500 mt-0.5">Biofinity, Avaira, Proclear y más</p></a>
 
           </div>
         </div>
@@ -166,12 +166,12 @@ export default function Page() {
           <p className="text-gray-600 text-sm">Precios verificados por el Equipo ContactGo · Actualizado junio 2026</p>
         </div>
 
-        <div className="mt-8 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
           <p className="text-sm text-gray-600 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</Link>
-            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">Calcular mi receta</Link>
+            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
+            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
           </div>
         </div>

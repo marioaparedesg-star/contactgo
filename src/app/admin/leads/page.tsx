@@ -92,7 +92,7 @@ export default function LeadsPage() {
           </div>
           {(['todos','con_email','sin_convertir'] as const).map(f => (
             <button key={f} onClick={() => setFiltro(f)}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-colors ${filtro === f ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border border-gray-200'}`}>
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-colors ${filtro === f ? 'bg-teal-500 text-white' : 'bg-white text-gray-600 border border-gray-200'}`}>
               {f === 'todos' ? 'Todos' : f === 'con_email' ? '📧 Con email' : '⚡ Sin convertir'}
             </button>
           ))}
@@ -145,7 +145,7 @@ export default function LeadsPage() {
                   <div className="flex flex-col gap-1.5 shrink-0">
                     {l.email && (
                       <a href={emailMsg(l)}
-                        className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors">
+                        className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-teal-500 text-white hover:bg-teal-600 transition-colors">
                         <Mail className="w-3.5 h-3.5"/> Email
                       </a>
                     )}

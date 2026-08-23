@@ -43,12 +43,12 @@ export default async function Page() {
           <span className="text-gray-700 font-medium">Punta Cana</span>
         </nav>
 
-        <section className="bg-gradient-to-br from-amber-600 via-primary-600 to-teal-600 text-white py-14 px-4 text-center mt-2">
+        <section className="bg-gradient-to-br from-amber-600 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$350 · 48-72 horas</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Punta Cana</h1>
           <p className="text-white/90 text-lg max-w-xl mx-auto">Entrega a domicilio en Punta Cana y toda la región. ACUVUE, Biofinity, Air Optix directo del fabricante.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
-            <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors">Usar mi receta</Link>
+            <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors">Usar mi receta</Link>
             <Link href="/catalogo" className="border border-white/40 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors">Ver catálogo completo</Link>
           </div>
         </section>

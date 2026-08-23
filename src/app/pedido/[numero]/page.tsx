@@ -77,7 +77,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ numero:
                     <div className="flex flex-col items-center">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0 font-bold ${
                         completado ? 'bg-green-500 text-white' :
-                        esActual   ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-300'}`}>
+                        esActual   ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-300'}`}>
                         {completado ? '✓' : estado.icono}
                       </div>
                       {idx < ESTADOS.length-1 && (
@@ -130,7 +130,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ numero:
 
           {/* CTAs */}
           <a href="/catalogo"
-            className="block w-full bg-primary-600 hover:bg-primary-700 text-white font-black py-4 rounded-2xl text-center text-sm transition-colors">
+            className="block w-full bg-teal-500 hover:bg-teal-600 text-white font-black py-4 rounded-2xl text-center text-sm transition-colors">
             Hacer otro pedido
           </a>
           <a href={`https://wa.me/18096942268?text=Hola, pregunta sobre pedido ${order.numero_orden}`}

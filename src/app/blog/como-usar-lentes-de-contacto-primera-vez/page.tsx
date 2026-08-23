@@ -83,7 +83,7 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -192,7 +192,7 @@ export default function Page() {
               ].map(({ num, titulo, contenido, color }, i) => (
                 <div key={i} className={`border ${color} rounded-2xl p-4`}>
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-black shrink-0">
+                    <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center text-sm font-black shrink-0">
                       {num}
                     </div>
                     <div>
@@ -204,7 +204,7 @@ export default function Page() {
               ))}
             </div>
 
-            <div className="mt-4 bg-primary-50 border border-primary-100 rounded-xl p-4 text-sm">
+            <div className="mt-4 bg-teal-50 border border-primary-100 rounded-xl p-4 text-sm">
               <p className="font-bold text-primary-800 mb-1">💡 Truco para principiantes</p>
               <p className="text-primary-700">Si llevas 5 minutos intentándolo y el lente no entra, respira, pon el lente de vuelta en la solución y descansa 30 segundos. El estrés hace que el ojo parpadee más y sea más difícil. La calma es tu mejor aliada.</p>
             </div>
@@ -250,7 +250,7 @@ export default function Page() {
                 { nombre: 'Dream Eye 80ml', desc: 'Solución multipropósito accesible y efectiva para uso diario.', link: '/producto/dream-eye-solucion-lentes-contacto-dominicana' },
                 { nombre: 'Prolub Hyfresh', desc: 'Opción de alta hidratación para usuarios con ojos secos.', link: '/producto/prolub-hyfresh-solucion-multiproposito-dominicana' },
               ].map(({ nombre, desc, link }) => (
-                <Link key={link} href={link} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+                <Link key={link} href={link} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                   <div>
                     <p className="text-sm font-semibold text-gray-900">{nombre}</p>
                     <p className="text-xs text-gray-500">{desc}</p>
@@ -342,7 +342,7 @@ export default function Page() {
           </section>
 
           {/* Resumen */}
-          <section className="bg-primary-50 border border-primary-100 rounded-2xl p-5">
+          <section className="bg-teal-50 border border-primary-100 rounded-2xl p-5">
             <h2 className="font-bold text-gray-900 mb-3">📝 Resumen para principiantes</h2>
             <ul className="space-y-1.5 text-sm">
               {[
@@ -371,7 +371,7 @@ export default function Page() {
               { href: '/blog/cuanto-tiempo-usar-lentes-de-contacto', titulo: '→ Cuántas horas puedo usar lentes al día', desc: 'Límites de uso según el tipo de lente' },
               { href: '/soluciones', titulo: '→ Soluciones para lentes disponibles en ContactGo', desc: 'Opti-Free, Dream Eye y más' },
             ].map(({ href, titulo, desc }) => (
-              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
               </Link>
@@ -432,14 +432,14 @@ export default function Page() {
         </div>
 
         {/* CTA */}
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Listo para tus primeros lentes de contacto?</h3>
           <p className="text-sm text-gray-600 mb-4">Todos los productos que necesitas: lentes directo del fabricante y soluciones de limpieza. Entrega en 24-48h en toda la República Dominicana.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
+            <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
               Ver lentes esféricos →
             </Link>
-            <Link href="/soluciones" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">
+            <Link href="/soluciones" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">
               Ver soluciones de limpieza
             </Link>
             <a href="https://wa.me/18096942268?text=Hola%2C%20es%20mi%20primera%20vez%20comprando%20lentes%20de%20contacto%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">

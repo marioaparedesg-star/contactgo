@@ -55,7 +55,7 @@ export default function ProductFAQ({ tipo, nombre }: { tipo: string; nombre: str
   return (
     <section className="max-w-6xl mx-auto px-4 pb-10 border-t border-gray-100 pt-10">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-8 h-8 rounded-xl bg-primary-100 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center shrink-0">
           <span className="text-sm">❓</span>
         </div>
         <div>
@@ -66,7 +66,7 @@ export default function ProductFAQ({ tipo, nombre }: { tipo: string; nombre: str
       <div className="space-y-2">
         {faqs.map((faq, i) => (
           <div key={i}
-            className={`border rounded-2xl overflow-hidden transition-colors ${open === i ? 'border-primary-200 bg-primary-50/30' : 'border-gray-100 bg-white hover:border-gray-200'}`}>
+            className={`border rounded-2xl overflow-hidden transition-colors ${open === i ? 'border-primary-200 bg-teal-50/30' : 'border-gray-100 bg-white hover:border-gray-200'}`}>
             <button
               onClick={() => setOpen(open === i ? null : i)}
               className="w-full flex items-center justify-between px-5 py-4 text-left gap-3">
@@ -77,7 +77,7 @@ export default function ProductFAQ({ tipo, nombre }: { tipo: string; nombre: str
             </button>
             {open === i && (
               <div className="px-5 pb-5">
-                <div className="w-full h-px bg-primary-100 mb-3" />
+                <div className="w-full h-px bg-teal-50 mb-3" />
                 <p className="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
               </div>
             )}

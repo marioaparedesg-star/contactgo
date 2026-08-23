@@ -51,7 +51,7 @@ const OPCIONES = [
 const COLORS = {
   gray:    { border: 'border-gray-200',    bg: 'bg-white',         text: 'text-gray-900',  sub: 'text-gray-400',  badge: '' },
   blue:    { border: 'border-blue-300',    bg: 'bg-blue-50',       text: 'text-blue-800',  sub: 'text-blue-400',  badge: 'bg-blue-600' },
-  primary: { border: 'border-primary-400', bg: 'bg-primary-50',    text: 'text-primary-800',sub:'text-primary-400',badge:'bg-primary-600'},
+  primary: { border: 'border-primary-400', bg: 'bg-teal-50',    text: 'text-primary-800',sub:'text-primary-400',badge:'bg-teal-500'},
   purple:  { border: 'border-purple-300',  bg: 'bg-purple-50',     text: 'text-purple-800',sub:'text-purple-400', badge:'bg-purple-600'},
 }
 

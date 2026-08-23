@@ -76,7 +76,7 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -347,7 +347,7 @@ export default function Page() {
               { href: '/blog/cuanto-tiempo-usar-lentes-de-contacto', titulo: '→ Cuántas horas puedo usar lentes al día', desc: 'Los límites de uso recomendados' },
               { href: '/blog/como-usar-lentes-de-contacto-primera-vez', titulo: '→ Guía para principiantes', desc: 'Todo lo que necesitas saber al empezar' },
             ].map(({ href, titulo, desc }) => (
-              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
               </Link>
@@ -406,11 +406,11 @@ export default function Page() {
         </div>
 
         {/* CTA */}
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Cansado de preocuparte por los lentes de la noche anterior?</h3>
           <p className="text-sm text-gray-600 mb-4">Los lentes diarios son la solución más higiénica — al final del día los descartas. Sin estuche, sin solución, sin olvidar quitártelos.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
+            <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
               Ver lentes diarios disponibles →
             </Link>
             <a href="https://wa.me/18096942268?text=Hola%2C%20quiero%20cambiarme%20a%20lentes%20diarios%2C%20%C2%BFme%20pueden%20asesorar%3F" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">

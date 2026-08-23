@@ -18,7 +18,7 @@ export default function NotFound() {
           La página que buscas no existe o fue movida.
         </p>
         <div className="flex flex-col gap-3">
-          <Link href="/catalogo" className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold text-sm">
+          <Link href="/catalogo" className="bg-teal-500 text-white px-6 py-3 rounded-xl font-bold text-sm">
             Ver catálogo de lentes
           </Link>
           <Link href="/" className="border border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold text-sm">

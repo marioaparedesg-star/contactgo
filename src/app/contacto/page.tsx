@@ -59,7 +59,7 @@ export default function ContactoPage() {
             <p className="text-sm font-bold text-gray-900">Escríbenos</p>
           </div>
         </a>
-        <MailLink className="flex items-center gap-3 p-4 border border-gray-100 rounded-2xl hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+        <MailLink className="flex items-center gap-3 p-4 border border-gray-100 rounded-2xl hover:border-primary-200 hover:bg-teal-50/20 transition-all">
           <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center shrink-0">
             <svg className="w-5 h-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
           </div>
@@ -78,7 +78,7 @@ export default function ContactoPage() {
           </div>
           <h2 className="font-bold text-gray-900 text-xl mb-2">¡Mensaje recibido!</h2>
           <p className="text-gray-600 text-sm mb-6">Te responderemos lo antes posible. Si dejaste tu email, también te enviamos una confirmación.</p>
-          <a href="/catalogo" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo de lentes →</a>
+          <a href="/catalogo" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo de lentes →</a>
         </div>
       ) : (
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
@@ -92,7 +92,7 @@ export default function ContactoPage() {
               value={form.nombre}
               onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
               placeholder="Tu nombre completo"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400"
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-primary-400"
             />
           </div>
 
@@ -105,7 +105,7 @@ export default function ContactoPage() {
                 value={form.email}
                 onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                 placeholder="tu@email.com"
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200"
               />
             </div>
             <div>
@@ -115,7 +115,7 @@ export default function ContactoPage() {
                 value={form.telefono}
                 onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))}
                 placeholder="809-000-0000"
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200"
               />
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function ContactoPage() {
             <select
               value={form.tipo}
               onChange={e => setForm(f => ({ ...f, tipo: e.target.value }))}
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white"
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200 bg-white"
             >
               {tipos.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
@@ -140,7 +140,7 @@ export default function ContactoPage() {
               onChange={e => setForm(f => ({ ...f, mensaje: e.target.value }))}
               placeholder="Cuéntanos en qué podemos ayudarte..."
               rows={4}
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none"
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200 resize-none"
             />
           </div>
 
@@ -151,7 +151,7 @@ export default function ContactoPage() {
           <button
             onClick={handleSubmit}
             disabled={estado === 'loading' || !form.nombre || !form.mensaje}
-            className="w-full bg-primary-600 text-white font-bold py-3 rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+            className="w-full bg-teal-500 text-white font-bold py-3 rounded-xl hover:bg-teal-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
           >
             {estado === 'loading' ? 'Enviando...' : 'Enviar mensaje →'}
           </button>
@@ -161,10 +161,10 @@ export default function ContactoPage() {
       )}
 
       {/* CTA catálogo */}
-      <div className="mt-8 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+      <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
         <p className="font-bold text-gray-900 mb-1">¿Buscas lentes de contacto?</p>
         <p className="text-sm text-gray-500 mb-4">Entrega 24-48h en toda República Dominicana · Pago seguro con AZUL</p>
-        <a href="/catalogo" className="inline-flex items-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">Ver catálogo completo →</a>
+        <a href="/catalogo" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
       </div>
 
     </main>

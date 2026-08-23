@@ -75,7 +75,7 @@ export default function AdminAbandonados() {
             <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Buscar por nombre o teléfono..."
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-400" />
           </div>
 
           {/* Tabla */}
@@ -132,7 +132,7 @@ export default function AdminAbandonados() {
                             )}
                             {!c.recuperado && (
                               <button onClick={() => marcarRecuperado(c.id)}
-                                className="px-2 py-1 text-xs font-semibold bg-primary-50 text-primary-600 hover:bg-primary-100 rounded-lg transition-colors">
+                                className="px-2 py-1 text-xs font-semibold bg-teal-50 text-primary-600 hover:bg-teal-50 rounded-lg transition-colors">
                                 ✓ Recuperado
                               </button>
                             )}

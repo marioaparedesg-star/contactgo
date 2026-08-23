@@ -76,7 +76,7 @@ export default function Page() {
         </h1>
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -96,10 +96,10 @@ export default function Page() {
           <p>Encontrar <strong>lentes de contacto certificados en Santo Domingo</strong> solía ser complicado. Largas esperas en clínicas, desplazamientos innecesarios y precios poco transparentes hacían que conseguir los lentes correctos fuera una odisea. En esta guía actualizada para 2026, te explicamos todas las opciones disponibles en la capital dominicana — incluyendo la manera más rápida y conveniente que existe hoy.</p>
 
           {/* Quick answer box */}
-          <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-5">
+          <div className="bg-teal-50 border-2 border-primary-200 rounded-2xl p-5">
             <p className="text-sm font-bold text-primary-800 mb-2">⚡ Respuesta rápida</p>
             <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto certificados en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24-48 horas, más de 35 marcas disponibles, directo del fabricante. Sin necesidad de desplazarte a ningún lugar.</p>
-            <Link href="/catalogo" className="mt-3 inline-block bg-primary-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-primary-700 transition-colors">
+            <Link href="/catalogo" className="mt-3 inline-block bg-teal-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-teal-600 transition-colors">
               Ver catálogo completo →
             </Link>
           </div>
@@ -111,10 +111,10 @@ export default function Page() {
             <div className="space-y-5 mt-4">
 
               {/* Opción 1: Online */}
-              <div className="border-2 border-primary-200 rounded-2xl p-5 bg-primary-50/30">
+              <div className="border-2 border-primary-200 rounded-2xl p-5 bg-teal-50/30">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-bold text-gray-900">1. Compra online con entrega a domicilio</h3>
-                  <span className="text-xs bg-primary-600 text-white font-bold px-2 py-0.5 rounded-full">⭐ Recomendado</span>
+                  <span className="text-xs bg-teal-500 text-white font-bold px-2 py-0.5 rounded-full">⭐ Recomendado</span>
                 </div>
                 <p className="text-sm text-gray-600 mb-3">La opción más conveniente para la mayoría de habitantes de Santo Domingo. Compras desde el teléfono o computadora y recibes los lentes en tu casa u oficina en 24-48 horas.</p>
                 <div className="overflow-x-auto">
@@ -136,7 +136,7 @@ export default function Page() {
                         ['Asesoría', 'WhatsApp + email'],
                         ['Calculadora de receta', '✅ Gratuita'],
                       ].map(([car, val], i) => (
-                        <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-primary-50/20'}>
+                        <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-teal-50/20'}>
                           <td className="p-2 border border-primary-100 font-medium">{car}</td>
                           <td className="p-2 border border-primary-100 text-center text-primary-700 font-medium">{val}</td>
                         </tr>
@@ -249,7 +249,7 @@ export default function Page() {
                 { paso: '4', titulo: 'Recibe en casa u oficina', desc: 'El mensajero te contacta para coordinar la entrega. Sin necesidad de estar en un punto específico.' },
               ].map(({ paso, titulo, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
-                  <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-black shrink-0">
+                  <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center text-sm font-black shrink-0">
                     {paso}
                   </div>
                   <div>
@@ -270,7 +270,7 @@ export default function Page() {
                 { titulo: '📖 Guía para leer tu receta', desc: 'Aprende qué significa cada valor: SPH, CYL, AXIS, BC, DIA.', link: '/blog/como-leer-receta-optica-rd', cta: 'Leer guía' },
                 { titulo: '💬 Asesoría por WhatsApp', desc: 'Escríbenos y te ayudamos a encontrar el lente correcto.', link: '/contacto', cta: 'Escribir ahora' },
               ].map(({ titulo, desc, link, cta }) => (
-                <Link key={link} href={link} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+                <Link key={link} href={link} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                   <div>
                     <p className="font-semibold text-gray-900 text-sm">{titulo}</p>
                     <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
@@ -319,7 +319,7 @@ export default function Page() {
               { href: '/blog/comprar-lentes-de-contacto-online-republica-dominicana', titulo: '→ Cómo comprar lentes online con seguridad', desc: 'Guía de compra segura en RD' },
               { href: '/blog/que-son-los-lentes-de-contacto', titulo: '→ Qué son los lentes de contacto', desc: 'Guía completa para principiantes' },
             ].map(({ href, titulo, desc }) => (
-              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-primary-50/20 transition-all">
+              <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
               </Link>
@@ -328,15 +328,15 @@ export default function Page() {
         </div>
 
         {/* CTA */}
-        <div className="mt-10 bg-gradient-to-br from-primary-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
+        <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Tu pedido llega a Santo Domingo en 24-48h</h3>
           <p className="text-sm text-gray-600 mb-1">Más de 35 directo del fabricante. Pago seguro con AZUL.</p>
           <p className="text-xs text-gray-400 mb-4">Sin salir de casa · Sin esperas · Sin complicaciones</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors text-sm">
+            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
               Ver catálogo y precios →
             </Link>
-            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors text-sm">
+            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">
               Calcular mi receta
             </Link>
             <a href="https://wa.me/18096942268?text=Hola%2C%20quiero%20comprar%20lentes%20de%20contacto%20con%20entrega%20en%20Santo%20Domingo" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">

@@ -107,7 +107,7 @@ export default function ERPDashboard() {
             <input type="month" value={mes} onChange={e=>setMes(e.target.value)}
               className="border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:border-primary-400"/>
             <button onClick={()=>setShowGasto(true)}
-              className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-primary-700">
+              className="flex items-center gap-2 bg-teal-500 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-teal-600">
               <Plus className="w-4 h-4"/> Registrar gasto
             </button>
           </div>
@@ -117,7 +117,7 @@ export default function ERPDashboard() {
         <div className="flex gap-2">
           {(['dashboard','gastos','roi'] as const).map(t=>(
             <button key={t} onClick={()=>setTab(t)}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${tab===t?'bg-primary-600 text-white':'bg-white text-gray-600 border border-gray-200 hover:border-primary-300'}`}>
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${tab===t?'bg-teal-500 text-white':'bg-white text-gray-600 border border-gray-200 hover:border-primary-300'}`}>
               {t==='dashboard'?'📊 P&L':t==='gastos'?'💸 Gastos':'📈 ROI & Canal'}
             </button>
           ))}
@@ -131,7 +131,7 @@ export default function ERPDashboard() {
             {[
               { label:'Ventas netas', value:`RD$${totalVentas.toLocaleString()}`, sub:`${ventas.length} órdenes`, color:'text-green-700', bg:'bg-green-50 border-green-100' },
               { label:'Costo mercancía', value:`RD$${totalCompras.toLocaleString()}`, sub:'Compras recibidas', color:'text-red-600', bg:'bg-red-50 border-red-100' },
-              { label:'Utilidad bruta', value:`RD$${utilidadBruta.toLocaleString()}`, sub:`${margenBruto.toFixed(1)}% margen`, color:utilidadBruta>=0?'text-primary-700':'text-red-700', bg:'bg-primary-50 border-primary-100' },
+              { label:'Utilidad bruta', value:`RD$${utilidadBruta.toLocaleString()}`, sub:`${margenBruto.toFixed(1)}% margen`, color:utilidadBruta>=0?'text-primary-700':'text-red-700', bg:'bg-teal-50 border-primary-100' },
               { label:'Utilidad neta', value:`RD$${utilidadNeta.toLocaleString()}`, sub:`${margenNeto.toFixed(1)}% margen neto`, color:utilidadNeta>=0?'text-gray-900':'text-red-700', bg:'bg-white border-gray-100' },
             ].map(({label,value,sub,color,bg})=>(
               <div key={label} className={`${bg} border rounded-2xl p-4`}>
@@ -251,7 +251,7 @@ export default function ERPDashboard() {
                     const roi = gastoNum>0 ? ((totalVentas/Object.keys(gastosPorCanal).length - gastoNum)/gastoNum*100) : 0
                     return (
                       <div key={canal} className="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                        <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center text-sm">
+                        <div className="w-8 h-8 bg-teal-50 rounded-lg flex items-center justify-center text-sm">
                           {canal==='meta'?'📘':canal==='google'?'🔍':canal==='organico'?'🌿':canal==='whatsapp'?'💬':'📊'}
                         </div>
                         <div className="flex-1">
@@ -394,7 +394,7 @@ export default function ERPDashboard() {
                 </div>
               </div>
               <button onClick={guardarGasto}
-                className="w-full bg-primary-600 text-white py-3 rounded-xl font-black hover:bg-primary-700">
+                className="w-full bg-teal-500 text-white py-3 rounded-xl font-black hover:bg-teal-600">
                 Guardar gasto
               </button>
             </div>
