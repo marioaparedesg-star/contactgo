@@ -211,8 +211,8 @@ export default async function HomePage() {
               },
             ].map(cat => (
               <Link key={cat.slug} href={cat.href ?? `/catalogo?tipo=${cat.slug}`}
-                className="card p-3 md:p-4 text-center hover:border-primary-200 hover:-translate-y-0.5 group transition-all">
-                <div className={`w-11 h-11 md:w-14 md:h-14 mx-auto mb-2 rounded-2xl ${cat.bg} ${cat.fg} flex items-center justify-center transition-transform group-hover:scale-105`}>
+                className="card p-3 md:p-5 text-center hover:border-primary-200 hover:-translate-y-0.5 group transition-all">
+                <div className={`w-11 h-11 md:w-16 md:h-16 mx-auto mb-2 rounded-2xl ${cat.bg} ${cat.fg} flex items-center justify-center transition-transform group-hover:scale-105`}>
                   <div className="w-7 h-7 md:w-9 md:h-9">{cat.svg}</div>
                 </div>
                 <p className="font-semibold text-gray-900 text-xs md:text-sm">{cat.label}</p>

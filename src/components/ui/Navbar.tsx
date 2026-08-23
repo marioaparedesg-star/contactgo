@@ -53,7 +53,7 @@ export default function Navbar() {
 
         {/* Nav desktop */}
           {/* Búsqueda — desktop */}
-          <form onSubmit={handleSearch} className="hidden md:flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 w-48 lg:w-64 hover:border-gray-300 transition-colors">
+          <form onSubmit={handleSearch} className="hidden md:flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 w-56 lg:w-72 hover:border-gray-300 transition-colors">
             <Search className="w-3.5 h-3.5 text-gray-400 shrink-0" />
             <input
               value={searchQuery}

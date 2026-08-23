@@ -6,9 +6,11 @@
 
 @layer base {
   :root {
-    --primary: #16a34a;
-    --primary-light: #22c55e;
-    --primary-dark: #15803d;
+    --primary: #01B2B7;
+    --primary-light: #33DDDF;
+    --primary-dark: #018E92;
+    --brand-blue: #002455;
+    --brand-dark: #001F4A;
   }
   html { scroll-behavior: smooth; }
   body {
@@ -22,7 +24,7 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 active:bg-primary-800
+    @apply bg-teal-500 hover:bg-teal-600 active:bg-teal-700
            text-white font-semibold px-5 py-2.5 rounded-xl
            transition-all duration-150 shadow-sm hover:shadow
            disabled:opacity-50 disabled:cursor-not-allowed;
@@ -83,7 +85,7 @@
 
 /* ── Accesibilidad — Focus visible para teclado ── */
 :focus-visible {
-  outline: 2px solid #16a34a;
+  outline: 2px solid #01B2B7;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -93,7 +95,7 @@
   position: absolute;
   top: -40px;
   left: 0;
-  background: #15803d;
+  background: #01B2B7;
   color: white;
   padding: 8px 16px;
   z-index: 9999;
@@ -164,7 +166,7 @@ button, a, [role="button"] {
 
 /* ── Focus visible para teclado (accesibilidad) ──────────────────────────── */
 :focus-visible {
-  outline: 2px solid #22c55e;
+  outline: 2px solid #01B2B7;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -302,29 +304,30 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /* ── Jerarquía de color ContactGo ──────────────────────────────────────────────
-   VERDE (#16a34a): SOLO acciones de compra: Agregar al carrito, Calcular, Comprar
-   GRIS OSCURO (#111827): Navegación, títulos, acciones secundarias
+   TURQUESA (#01B2B7): Acciones de compra: Agregar al carrito, Calcular, Comprar
+   AZUL MARINO (#002455): Navegación, títulos, textos principales
    NEGRO (#030712): Precios, datos críticos
-   AZUL (#2563eb): Info, links, notificaciones
+   AZUL OSCURO (#001F4A): Footer, fondos oscuros
    Resto: escala de grises
    ──────────────────────────────────────────────────────────────────────────── */
 
-/* Botón de compra — el ÚNICO verde de la UI */
+/* Botón de compra — turquesa oficial de marca (antes era verde fijo,
+   antes de que existiera la identidad de marca actual con logo real) */
 .btn-primary {
-  background-color: #16a34a;
+  background-color: #01B2B7;
   color: white;
   font-weight: 700;
   transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
-  box-shadow: 0 1px 3px rgba(22, 163, 74, 0.3);
+  box-shadow: 0 1px 3px rgba(1, 178, 183, 0.3);
 }
 .btn-primary:hover {
-  background-color: #15803d;
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35);
+  background-color: #018E92;
+  box-shadow: 0 4px 12px rgba(1, 178, 183, 0.35);
   transform: translateY(-1px);
 }
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 1px 3px rgba(22, 163, 74, 0.2);
+  box-shadow: 0 1px 3px rgba(1, 178, 183, 0.2);
 }
 
 /* Botón secundario — nunca verde */
