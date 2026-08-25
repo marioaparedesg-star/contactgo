@@ -4,8 +4,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { Resend } from 'resend'
+import { guardRequest } from '@/lib/api-guard'
 
 export async function POST(req: NextRequest) {
+  // FIX AUDITORÍA (2026-08-23): sin límite, alguien podía bombardear el
+  // correo de cualquier cliente con emails de "recuperar contraseña"
+  // repetidos, o probar en masa si un email existe en el sistema.
+  const guardErr = guardRequest(req, { limitPerMin: 5, requireOrigin: false })
+  if (guardErr) return guardErr
   const { email } = await req.json()
   if (!email) return NextResponse.json({ error: 'Email requerido' }, { status: 400 })
 

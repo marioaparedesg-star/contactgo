@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { guardRequest } from '@/lib/api-guard'
 
 // Endpoint server-side para guardar leads de la calculadora de recetas.
 // Usa SERVICE_ROLE_KEY (bypassa RLS de forma segura) — el cliente en el
@@ -15,6 +16,8 @@ function getSb() {
 }
 
 export async function POST(req: NextRequest) {
+  const guardErr = guardRequest(req, { limitPerMin: 10, requireOrigin: false })
+  if (guardErr) return guardErr
   try {
     const body = await req.json()
     const { nombre, email, telefono, od_sph, od_cyl, od_axis, oi_sph, oi_cyl, oi_axis, tipo_receta, complejidad, condiciones } = body

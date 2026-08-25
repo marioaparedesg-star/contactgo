@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { normalizePhone } from '@/lib/whatsapp'
+import { guardRequest } from '@/lib/api-guard'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +18,8 @@ function getSb() {
 }
 
 export async function POST(req: NextRequest) {
+  const guardErr = guardRequest(req, { limitPerMin: 20, requireOrigin: false })
+  if (guardErr) return guardErr
   try {
     const body = await req.json()
     const { telefono, nombre, email, items, total } = body

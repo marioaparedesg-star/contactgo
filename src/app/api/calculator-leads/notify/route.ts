@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { guardRequest } from '@/lib/api-guard'
 
 // Envía el WhatsApp de resultado de la calculadora con LOS MISMOS productos
 // y precios que la persona vio en pantalla.
@@ -42,6 +43,8 @@ function fmtPrecio(p: any): string {
 }
 
 export async function POST(req: NextRequest) {
+  const guardErr = guardRequest(req, { limitPerMin: 10, requireOrigin: false })
+  if (guardErr) return guardErr
   try {
     const token = process.env.WHATSAPP_TOKEN
     if (!token) return NextResponse.json({ ok: false, reason: 'no_token' }, { status: 500 })

@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { guardRequest } from '@/lib/api-guard'
 
 export async function POST(req: NextRequest) {
+  const guardErr = guardRequest(req, { limitPerMin: 10, requireOrigin: false })
+  if (guardErr) return guardErr
   const { orderId } = await req.json()
   if (!orderId) return NextResponse.json({ error: 'orderId requerido' }, { status: 400 })
   const cookieStore = await cookies()

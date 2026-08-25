@@ -4,8 +4,13 @@
 // Meta requiere token para acceder a los medios — este endpoint lo proxea
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
+import { guardRequest } from '@/lib/api-guard'
 
 export async function GET(req: NextRequest) {
+  // FIX AUDITORÍA (2026-08-23): sin límite, este proxy podía usarse para
+  // descargar medios de WhatsApp en volumen, gastando ancho de banda/costo.
+  const guardErr = guardRequest(req, { limitPerMin: 30, requireOrigin: false })
+  if (guardErr) return guardErr
   const mediaId = req.nextUrl.searchParams.get('id')
   if (!mediaId) return NextResponse.json({ error: 'id required' }, { status: 400 })
 

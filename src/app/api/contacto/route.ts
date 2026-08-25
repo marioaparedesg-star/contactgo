@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { guardRequest } from '@/lib/api-guard'
 
 function getResend() { return new Resend(process.env.RESEND_API_KEY ?? 're_placeholder') }
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'info@contactgo.net'
 
 export async function POST(req: NextRequest) {
+  // FIX AUDITORÍA (2026-08-23): formulario de contacto público sin límite —
+  // sin esto, cualquiera podía saturar la bandeja de info@contactgo.net.
+  const guardErr = guardRequest(req, { limitPerMin: 5, requireOrigin: false })
+  if (guardErr) return guardErr
   try {
     const { nombre, email, telefono, mensaje, tipo } = await req.json()
 

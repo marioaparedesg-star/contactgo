@@ -2,8 +2,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { guardRequest } from '@/lib/api-guard'
 
 export async function POST(req: NextRequest) {
+  const guardErr = guardRequest(req, { limitPerMin: 10, requireOrigin: false })
+  if (guardErr) return guardErr
   const { order_id } = await req.json()
   if (!order_id) return NextResponse.json({ ok: false })
 

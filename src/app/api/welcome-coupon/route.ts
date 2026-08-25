@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
+import { guardRequest } from '@/lib/api-guard'
 
 const DISCOUNT_PCT = 10           // 10% off — cambiar aquí si Mario quiere otro
 const CODE_PREFIX = 'BIENVENIDO'
@@ -47,6 +48,10 @@ function normalizeRDPhone(input: string): string | null {
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function POST(req: NextRequest) {
+  // FIX AUDITORÍA (2026-08-23): sin límite, alguien podía generar cupones
+  // de 10% en masa con emails distintos o reintentos rápidos.
+  const guardErr = guardRequest(req, { limitPerMin: 5, requireOrigin: false })
+  if (guardErr) return guardErr
   try {
     const body = await req.json()
     const email = String(body.email ?? '').trim().toLowerCase()
