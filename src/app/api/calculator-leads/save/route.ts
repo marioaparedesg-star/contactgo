@@ -15,12 +15,25 @@ function getSb() {
   )
 }
 
+// FIX AUDITORÍA (2026-08-23): antes se guardaba cualquier texto como email
+// sin validar formato, y sin límite de longitud en nombre.
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)
+}
+
 export async function POST(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 10, requireOrigin: false })
   if (guardErr) return guardErr
   try {
     const body = await req.json()
     const { nombre, email, telefono, od_sph, od_cyl, od_axis, oi_sph, oi_cyl, oi_axis, tipo_receta, complejidad, condiciones } = body
+
+    if (nombre && String(nombre).length > 100) {
+      return NextResponse.json({ error: 'Nombre demasiado largo' }, { status: 400 })
+    }
+    if (email && !isValidEmail(String(email))) {
+      return NextResponse.json({ error: 'Email inválido' }, { status: 400 })
+    }
 
     const sb = getSb()
     const payload = {

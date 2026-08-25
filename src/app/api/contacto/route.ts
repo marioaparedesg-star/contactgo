@@ -5,17 +5,32 @@ import { guardRequest } from '@/lib/api-guard'
 function getResend() { return new Resend(process.env.RESEND_API_KEY ?? 're_placeholder') }
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'info@contactgo.net'
 
+// FIX AUDITORÍA (2026-08-23): nombre y mensaje se insertaban directo en el
+// HTML del correo sin escapar — alguien podía meter etiquetas <a>, <img> u
+// otro HTML/enlaces falsos dentro del correo que llega a info@contactgo.net.
+function escapeHtml(texto: string): string {
+  return texto
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;')
+}
+
 export async function POST(req: NextRequest) {
   // FIX AUDITORÍA (2026-08-23): formulario de contacto público sin límite —
   // sin esto, cualquiera podía saturar la bandeja de info@contactgo.net.
   const guardErr = guardRequest(req, { limitPerMin: 5, requireOrigin: false })
   if (guardErr) return guardErr
   try {
-    const { nombre, email, telefono, mensaje, tipo } = await req.json()
+    let { nombre, email, telefono, mensaje, tipo } = await req.json()
 
     if (!nombre || !mensaje) {
       return NextResponse.json({ error: 'Nombre y mensaje son requeridos' }, { status: 400 })
     }
+    // Límites de longitud — evita mensajes gigantes o intentos de abuso
+    if (String(nombre).length > 100 || String(mensaje).length > 3000) {
+      return NextResponse.json({ error: 'Nombre o mensaje demasiado largo' }, { status: 400 })
+    }
+    nombre = escapeHtml(String(nombre))
+    mensaje = escapeHtml(String(mensaje))
 
     const resend = getResend()
     await resend.emails.send({
