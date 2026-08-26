@@ -95,8 +95,9 @@ export async function GET(req: Request) {
     const pedidosMesCount = pagadosMes?.length ?? 0
     const promedioDiarioMes = diaDelMes > 0 ? ventasMes / diaDelMes : 0
 
-    // ═══ 3. PRODUCTOS VENDIDOS HOY ═══════════════════════════════════════════
+    // ═══ 3. PRODUCTOS VENDIDOS HOY (+ costo y ganancia real del día) ═══════
     let productosVendidos: { nombre: string; cantidad: number; ingreso: number }[] = []
+    let costoHoyReporte = 0
     if (pedidosHoyCount > 0) {
       const { data: ordersHoyIds } = await sb
         .from('orders').select('id')
@@ -104,16 +105,25 @@ export async function GET(req: Request) {
         .gte('pagado_en', inicioHoyUTC).lt('pagado_en', finHoyUTC)
       const orderIds = (ordersHoyIds ?? []).map((o: any) => o.id)
       if (orderIds.length > 0) {
-        const { data: items } = await sb.from('order_items').select('nombre, cantidad, precio').in('order_id', orderIds)
+        const { data: items } = await sb.from('order_items').select('nombre, cantidad, precio, product_id').in('order_id', orderIds)
         const mapa: Record<string, { cantidad: number; ingreso: number }> = {}
+        const idsProductos = Array.from(new Set((items ?? []).map((i: any) => i.product_id).filter(Boolean)))
+        const { data: costosProd } = idsProductos.length > 0
+          ? await sb.from('products').select('id,costo').in('id', idsProductos)
+          : { data: [] as any[] }
+        const costoPorId: Record<string, number> = {}
+        ;(costosProd ?? []).forEach((p: any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
         for (const it of items ?? []) {
           if (!mapa[it.nombre]) mapa[it.nombre] = { cantidad: 0, ingreso: 0 }
           mapa[it.nombre].cantidad += Number(it.cantidad ?? 1)
           mapa[it.nombre].ingreso += Number(it.precio ?? 0) * Number(it.cantidad ?? 1)
+          const costoUnit = it.product_id ? (costoPorId[it.product_id] ?? 0) : 0
+          costoHoyReporte += costoUnit * Number(it.cantidad ?? 1)
         }
         productosVendidos = Object.entries(mapa).map(([nombre, v]) => ({ nombre, ...v })).sort((a, b) => b.ingreso - a.ingreso)
       }
     }
+    const gananciaHoyReporte = ventasHoy - costoHoyReporte
 
     // ═══ 4. PEDIDOS NUEVOS DE HOY (generados, pagados o no — para contexto operativo) ═══
     const { data: pedidosNuevosHoy } = await sb
@@ -178,6 +188,18 @@ export async function GET(req: Request) {
       <div style="flex:1;background:white;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
         <p style="font-size:20px;font-weight:900;color:${pendientesUrgentes.length > 0 ? '#B91C1C' : '#15803D'};margin:0">${pendientesUrgentes.length}</p>
         <p style="font-size:10px;color:#9CA3AF;margin:2px 0 0;text-transform:uppercase;font-weight:600">Cobros +3 días</p>
+      </div>
+    </div>
+
+    <!-- ═══ COSTO Y GANANCIA DEL DÍA ═══ -->
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <div style="flex:1;background:white;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+        <p style="font-size:20px;font-weight:900;color:#B91C1C;margin:0">${fmtCorto(costoHoyReporte)}</p>
+        <p style="font-size:10px;color:#9CA3AF;margin:2px 0 0;text-transform:uppercase;font-weight:600">Costo de hoy</p>
+      </div>
+      <div style="flex:1;background:white;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+        <p style="font-size:20px;font-weight:900;color:#15803D;margin:0">${fmtCorto(gananciaHoyReporte)}</p>
+        <p style="font-size:10px;color:#9CA3AF;margin:2px 0 0;text-transform:uppercase;font-weight:600">Ganancia de hoy</p>
       </div>
     </div>
 

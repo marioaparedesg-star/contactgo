@@ -112,8 +112,10 @@ export default function AdminDashboard() {
         .order('created_at',{ascending:false}).limit(8),
       // Top productos ahora respeta el rango seleccionado (antes era
       // siempre "todo el historial", sin filtro de fecha)
+      // FIX (2026-08-25): se agrega product_id para poder cruzar contra
+      // products.costo y calcular costo/ganancia real de cada venta.
       sb.from('order_items')
-        .select('nombre,cantidad,precio,order_id,orders!inner(pago_estado,es_prueba,fecha)')
+        .select('nombre,cantidad,precio,product_id,order_id,orders!inner(pago_estado,es_prueba,fecha)')
         .eq('orders.pago_estado','pagado').eq('orders.es_prueba', false)
         .gte('orders.fecha', desdeISO).lte('orders.fecha', hastaISO)
         .limit(1000),
@@ -126,6 +128,37 @@ export default function AdminDashboard() {
     const ticketProm     = ords.length > 0 ? ventasPeriodo/ords.length : 0
     const entregados     = ords.filter(o=>o.estado==='entregado').length
     const conversion     = ords.length > 0 ? Math.round((entregados/ords.length)*100) : 0
+
+    // ── Costo y ganancia real del período (y de hoy) ──────────────────────
+    // Se cruza cada item vendido contra el costo REAL actual del producto
+    // (products.costo). No se guarda un "snapshot" histórico del costo al
+    // momento de la venta — usa el costo vigente ahora. Es una aproximación
+    // razonable mientras los costos no cambien todos los días, pero vale
+    // la pena saberlo: una venta de hace 2 meses con un costo que ya
+    // actualizamos, se recalcula con el costo de HOY, no el de ese momento.
+    const productIds = Array.from(new Set((items.data ?? []).map((i:any) => i.product_id).filter(Boolean)))
+    const { data: costosProductos } = productIds.length > 0
+      ? await sb.from('products').select('id,costo').in('id', productIds)
+      : { data: [] as any[] }
+    const costoPorId: Record<string, number> = {}
+    ;(costosProductos ?? []).forEach((p:any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
+
+    let costoTotalPeriodo = 0
+    ;(items.data ?? []).forEach((i:any) => {
+      const costoUnit = i.product_id ? (costoPorId[i.product_id] ?? 0) : 0
+      costoTotalPeriodo += costoUnit * Number(i.cantidad ?? 1)
+    })
+    const gananciaPeriodo = ventasPeriodo - costoTotalPeriodo
+
+    // Costo/ganancia de HOY: mismo cruce pero solo con los items de pedidos de hoy
+    const idsHoy = new Set((hoyData.data ?? []).map((o:any) => o.id))
+    let costoHoy = 0
+    ;(items.data ?? []).forEach((i:any) => {
+      if (!idsHoy.has(i.order_id)) return
+      const costoUnit = i.product_id ? (costoPorId[i.product_id] ?? 0) : 0
+      costoHoy += costoUnit * Number(i.cantidad ?? 1)
+    })
+    const gananciaHoy = ventasHoy - costoHoy
 
     const agg: Record<string,{nombre:string,u:number,rev:number}> = {}
     ;(items.data??[]).forEach((i:any)=>{
@@ -143,7 +176,8 @@ export default function AdminDashboard() {
     const invBajoMin    = invAll.filter((p:any) => p.alerta_stock === 'bajo_minimo').length
 
     setData({ ventasPeriodo, ventasHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
-      invCriticos, invBajoMin, invTotal: invAll.length })
+      invCriticos, invBajoMin, invTotal: invAll.length,
+      costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy })
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
@@ -275,6 +309,26 @@ export default function AdminDashboard() {
             <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
           </div>
         ))}
+      </div>
+
+      {/* Costo y Ganancia — cruce real contra products.costo, cualquier canal de venta */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center mb-4">
+            <CreditCard className="w-5 h-5 text-red-500"/>
+          </div>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Costo · {rango.label}</p>
+          <p className="text-2xl font-black text-gray-900 mt-1">{fmt(data?.costoTotalPeriodo??0)}</p>
+          <p className="text-xs text-gray-400 mt-0.5">Hoy: {fmt(data?.costoHoy??0)}</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center mb-4">
+            <TrendingUp className="w-5 h-5 text-emerald-600"/>
+          </div>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Ganancia · {rango.label}</p>
+          <p className="text-2xl font-black text-emerald-700 mt-1">{fmt(data?.gananciaPeriodo??0)}</p>
+          <p className="text-xs text-gray-400 mt-0.5">Hoy: {fmt(data?.gananciaHoy??0)}</p>
+        </div>
       </div>
 
       {/* Fila de métricas secundarias */}
