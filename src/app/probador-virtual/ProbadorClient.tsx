@@ -79,7 +79,7 @@ export default function ProbadorClient() {
     const landmarker = await FaceLandmarker.createFromOptions(vision, {
       baseOptions: {
         modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
-        delegate: 'GPU',
+        delegate: 'CPU', // GPU tiene soporte inconsistente en Safari/iPhone — CPU es más lento pero mucho más confiable
       },
       outputFaceBlendshapes: false,
       runningMode: 'IMAGE',
