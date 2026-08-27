@@ -143,6 +143,11 @@ export async function POST(req: NextRequest) {
           // Respuestas a los botones del menú
           const buttonId = msg.interactive?.button_reply?.id ?? ''
 
+          // ── ¿Estábamos esperando algo específico de este número? (ej. número de pedido) ──
+          const { data: estadoSesion } = await sb
+            .from('wa_session_state').select('esperando').eq('phone', from).maybeSingle()
+          const esperandoNumeroPedido = estadoSesion?.esperando === 'numero_pedido' && msgType === 'text' && msgBody.trim().length > 0
+
           // Guarda la auto-respuesta en la bandeja del admin (antes se perdía sin dejar rastro)
           const logAutoReply = async (texto: string) => {
             try {
@@ -159,18 +164,84 @@ export async function POST(req: NextRequest) {
               '👨‍⚕️ Nuestro equipo te responde personalmente. Si necesitas ayuda ahora mismo, escríbenos directo al 809-694-2268.'
             await waSendText(from, texto)
             await logAutoReply(texto)
-          } else if (buttonId === 'btn_color') {
-            const texto = '🎨 ¡Excelente elección!\n\n' +
-              'Tenemos AIR OPTIX COLORS (12 colores) desde RD$2,100 sin graduación.\n\n' +
-              '👉 Ve los colores aquí: www.contactgo.net/producto/air-optix-colors-lentes-contacto-color-dominicana\n\n' +
-              'O dime qué color te interesa y te ayudo directo. Si prefieres hablar ya, escríbenos al 809-694-2268. 😊'
+          } else if (buttonId === 'btn_catalogo') {
+            // CONECTADO DE VERDAD (2026-08-27): antes esto no existía como
+            // botón — se agrega con datos reales del catálogo, no un texto
+            // genérico. Trae los productos activos reales para dar contexto
+            // real de precios, no una promesa vacía de "míralo en la web".
+            const { data: topProductos } = await sb
+              .from('products').select('nombre, precio, tipo')
+              .eq('activo', true).order('precio', { ascending: true }).limit(5)
+            const lista = (topProductos ?? [])
+              .map((p: any) => `• ${p.nombre} — RD$${Number(p.precio).toLocaleString('es-DO')}`)
+              .join('\n')
+            const texto = `🛒 Este es un vistazo de nuestro catálogo (precios reales de hoy):\n\n${lista}\n\n` +
+              `Ve el catálogo completo con todas las marcas y colores: www.contactgo.net/catalogo\n\n` +
+              `¿Buscas algo en específico? Dime la marca o el tipo de lente y te ayudo directo. 😊`
             await waSendText(from, texto)
             await logAutoReply(texto)
           } else if (buttonId === 'btn_pedido') {
-            const texto = '📦 Dime tu nombre o número de pedido y te doy el estado al instante.\n\n' +
-              '👨‍⚕️ Nuestro equipo te responde en minutos. Si es urgente, escríbenos directo al 809-694-2268.'
+            // CONECTADO DE VERDAD (2026-08-27): antes decía "dinos tu pedido
+            // y te respondemos" y ahí quedaba — un humano tenía que leerlo y
+            // buscar manualmente. Ahora se marca el estado de la conversación
+            // para que, cuando la persona responda con su número de pedido o
+            // teléfono, el bot consulte la orden REAL y responda con el
+            // estado verdadero, sin esperar a que alguien lo revise.
+            await sb.from('wa_session_state').upsert({ phone: from, esperando: 'numero_pedido', updated_at: new Date().toISOString() })
+            const texto = '📦 Dime tu número de pedido (ej. CG-12345678) o el número de teléfono con el que compraste, y te doy el estado al instante.'
             await waSendText(from, texto)
             await logAutoReply(texto)
+          } else if (esperandoNumeroPedido) {
+            // ── Ya sabemos que este mensaje es la respuesta a "Rastrear pedido" ──
+            await sb.from('wa_session_state').delete().eq('phone', from)
+            const textoLimpio = msgBody.trim().toUpperCase().replace(/\s+/g, '')
+            const pareceNumeroOrden = /^(CG-?)?\d{5,}$/.test(textoLimpio)
+            const pareceTelefono = /^\d{10}$/.test(msgBody.replace(/\D/g, ''))
+
+              let pedido = null
+              if (pareceNumeroOrden) {
+                const { data } = await sb.from('orders')
+                  .select('numero_orden, estado, pago_estado, total, created_at, cliente_nombre')
+                  .ilike('numero_orden', `%${textoLimpio.replace(/^CG-?/, '')}%`)
+                  .eq('es_prueba', false).order('created_at', { ascending: false }).limit(1).maybeSingle()
+                pedido = data
+              } else if (pareceTelefono) {
+                const tel = msgBody.replace(/\D/g, '').slice(-10)
+                const { data } = await sb.from('orders')
+                  .select('numero_orden, estado, pago_estado, total, created_at, cliente_nombre')
+                  .ilike('cliente_telefono', `%${tel}%`)
+                  .eq('es_prueba', false).order('created_at', { ascending: false }).limit(1).maybeSingle()
+                pedido = data
+              }
+
+              const ESTADO_LABEL: Record<string, string> = {
+                recibido: 'Recibido — lo estamos procesando',
+                confirmado: 'Confirmado, preparando tu pedido',
+                preparando: 'Preparando tus lentes',
+                fabricante: 'En fabricación (pedido especial, puede tardar más)',
+                enviado: 'Enviado — ya va en camino',
+                transito: 'En tránsito — llega pronto',
+                entregado: '✅ Entregado',
+                cancelado: 'Cancelado',
+              }
+
+              if (pedido) {
+                const estadoTexto = pedido.pago_estado !== 'pagado'
+                  ? '⏳ Pendiente de pago'
+                  : (ESTADO_LABEL[pedido.estado] ?? pedido.estado)
+                const texto = `📦 Encontré tu pedido *${pedido.numero_orden}*\n\n` +
+                  `Estado: ${estadoTexto}\n` +
+                  `Total: RD$${Number(pedido.total).toLocaleString('es-DO')}\n\n` +
+                  `¿Alguna otra pregunta sobre tu pedido? Escríbenos, o directo al 809-694-2268.`
+                await waSendText(from, texto)
+                await logAutoReply(texto)
+              } else {
+                const texto = `No encontré ningún pedido con "${msgBody.trim()}" 🤔\n\n` +
+                  `Verifica el número (formato CG-XXXXXXXX) o escríbenos el teléfono exacto con el que compraste. ` +
+                  `Si prefieres, nuestro equipo lo busca por ti — dinos tu nombre completo.`
+                await waSendText(from, texto)
+                await logAutoReply(texto)
+              }
           } else if (msgType === 'image' || msgType === 'document') {
             // Envió una foto — puede ser receta, o puede ser otra cosa (ej. screenshot de un error).
             // El texto deja claro que un humano lo revisa, sin asumir que es receta.
@@ -192,19 +263,20 @@ export async function POST(req: NextRequest) {
               // para no repetir el menú ni interrumpir el hilo real.
             } else {
             const nombre = contactName ? contactName.split(' ')[0] : ''
-            const texto = `¡Hola${nombre ? ' ' + nombre : ''}! 👋 Bienvenido/a a ContactGo, tu tienda de lentes de contacto en RD.\n\n¿En qué te puedo ayudar?`
+            const texto = `👋 ¡Hola${nombre ? ' ' + nombre : ''}! Bienvenido/a a ContactGo 👁️\n\n` +
+              `Somos la tienda 100% online especializada exclusivamente en lentes de contacto en RD — ubicados en Av. Winston Churchill, Torre Blue Mall, Santo Domingo, aunque todo el proceso es por aquí y por contactgo.net.\n\n¿En qué te ayudamos hoy?`
             await sendButtons(
               from,
               texto,
               [
-                { id: 'btn_receta', title: '📋 Cotizar con receta' },
-                { id: 'btn_color', title: '🎨 Lentes de color' },
-                { id: 'btn_pedido', title: '📦 Estado de pedido' },
+                { id: 'btn_catalogo', title: '🛒 Ver catálogo' },
+                { id: 'btn_receta', title: '👁️ Ayuda con receta' },
+                { id: 'btn_pedido', title: '📦 Rastrear pedido' },
               ],
               'ContactGo 👁️',
               'Te contestamos en minutos'
             )
-            await logAutoReply(`${texto}\n\n[Menú: 📋 Cotizar con receta | 🎨 Lentes de color | 📦 Estado de pedido]`)
+            await logAutoReply(`${texto}\n\n[Menú: 🛒 Ver catálogo | 👁️ Ayuda con receta | 📦 Rastrear pedido]`)
             }
           }
           // Si no es ninguno de los anteriores (mensaje libre), no auto-responde —
