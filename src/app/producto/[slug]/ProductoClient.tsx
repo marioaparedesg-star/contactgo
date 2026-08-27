@@ -881,12 +881,6 @@ export default function ProductoClient({ product, variants }: Props) {
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 hover:text-primary-700 mt-2">
                 <Scale className="w-3.5 h-3.5" /> Comparar con otros lentes
               </Link>
-              {product.tipo === 'color' && (
-                <Link href="/probador-virtual"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-600 hover:text-teal-700 mt-2 ml-4">
-                  ✨ Probador virtual — mira cómo te queda
-                </Link>
-              )}
               {product.contenido && <p className="text-[11px] text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>}
 
               {/* Disponibilidad + entrega */}
