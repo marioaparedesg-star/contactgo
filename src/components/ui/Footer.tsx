@@ -136,7 +136,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex flex-col gap-0.5 order-2 sm:order-1">
             <p className="text-[11px] text-gray-300">
-              © {new Date().getFullYear()} ContactGo<sup className="text-[8px]">®</sup> — República Dominicana · WhatsApp: (809) 694-2268
+              © 2026 ContactGo<sup className="text-[8px]">®</sup> — República Dominicana · WhatsApp: (809) 694-2268
             </p>
             <p className="text-[10px] text-gray-300">
               ContactGo<sup className="text-[7px]">®</sup> es un nombre comercial registrado — ONAPI Núm. 944205
