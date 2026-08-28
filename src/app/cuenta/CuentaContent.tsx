@@ -522,6 +522,17 @@ export default function CuentaPage() {
 
   const registro = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true); setMsg('')
+    // FIX (2026-08-27): Mario encontró un cliente real (Gisselle Sánchez)
+    // registrada sin teléfono — el input HTML decía "required" pero eso
+    // por sí solo no es una garantía real (se puede evadir). 34% de los
+    // perfiles existentes (17 de 50) no tenían teléfono guardado. Se
+    // agrega validación real en el código, no solo en el HTML.
+    const telefonoLimpio = telefono.replace(/\D/g, '')
+    if (telefonoLimpio.length < 10) {
+      setMsg('Ingresa un número de teléfono válido (10 dígitos) — lo necesitamos para avisarte sobre tus pedidos.')
+      setLoading(false)
+      return
+    }
     const sb = createClient()
     const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { nombre, telefono } } })
     if (error) { setMsg(error.message); setLoading(false); return }
@@ -609,10 +620,11 @@ export default function CuentaPage() {
                   placeholder="Tu nombre" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Teléfono</label>
-                <input type="tel" autoComplete="tel" value={telefono} onChange={e => setTelefono(e.target.value)}
+                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Teléfono <span className="text-red-500">*</span></label>
+                <input type="tel" autoComplete="tel" value={telefono} onChange={e => setTelefono(e.target.value)} required
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
                   placeholder="809-000-0000" />
+                <p className="text-[11px] text-gray-400 mt-1">Lo usamos para avisarte del estado de tus pedidos</p>
               </div>
             </>)}
             <div>
