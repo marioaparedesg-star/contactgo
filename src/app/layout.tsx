@@ -297,20 +297,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
 
         {/* Meta Pixel — ID: 1516674003159165 */}
-        {/* FIX (2026-08-28): estrategia cambiada de 'afterInteractive' a
-            'lazyOnload' — confirmado con diagnóstico real (modo desarrollo
-            sin scripts externos = cero errores de hidratación) que el
-            propio script de Meta interfería con el DOM justo en el momento
-            en que React termina de hidratar Home y Catálogo, causando los
-            errores React #418/#423. 'lazyOnload' carga el script durante
-            tiempo de inactividad del navegador — sigue disparando PageView
-            para la enorme mayoría de visitas reales, pero ya no compite con
-            React por el DOM en el instante crítico de la carga inicial.
-            Decisión de Mario, con el trade-off conocido: tracking
-            levemente menos inmediato a cambio de eliminar el error. */}
         <Script
           id="meta-pixel"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: `
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
