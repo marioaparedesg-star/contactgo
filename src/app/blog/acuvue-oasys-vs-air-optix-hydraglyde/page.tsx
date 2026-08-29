@@ -147,7 +147,7 @@ export default function Page() {
               <div className="border border-teal-100 rounded-xl p-4 bg-teal-50/30">
                 <h3 className="font-bold text-gray-900 mb-2">Elige Air Optix HydraGlyde si...</h3>
                 <ul className="text-sm space-y-1.5 text-gray-600">
-                  {['Quieres el menor costo por día (~RD$73)','Prefieres lente mensual (menos cambios)','Tienes ojos secos moderados','Quieres lentes de color (hay Air Optix Colors)','Usas los lentes hasta 16 horas diarias'].map((item,i) => <li key={i} className="flex items-start gap-1.5"><span className="text-teal-500">✓</span>{item}</li>)}
+                  {['Quieres el menor costo por día (~RD$2,000)','Prefieres lente mensual (menos cambios)','Tienes ojos secos moderados','Quieres lentes de color (hay Air Optix Colors)','Usas los lentes hasta 16 horas diarias'].map((item,i) => <li key={i} className="flex items-start gap-1.5"><span className="text-teal-500">✓</span>{item}</li>)}
                 </ul>
               </div>
             </div>

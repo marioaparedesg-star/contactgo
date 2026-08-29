@@ -48,9 +48,9 @@ export default function Page() {
 
       <h2>Guía rápida de decisión</h2>
       <ul>
-        <li><strong>Quiero la opción más simple y segura para empezar:</strong> 1-DAY ACUVUE Moist (diario, RD$3,800)</li>
-        <li><strong>Quiero ahorrar sin sacrificar calidad:</strong> Avaira Vitality (mensual, RD$3,600)</li>
-        <li><strong>Tengo tendencia a ojo seco:</strong> Bausch+Lomb Ultra (mensual, RD$4,500)</li>
+        <li><strong>Quiero la opción más simple y segura para empezar:</strong> 1-DAY ACUVUE Moist (diario, RD$3,350)</li>
+        <li><strong>Quiero ahorrar sin sacrificar calidad:</strong> Avaira Vitality (mensual, RD$3,000)</li>
+        <li><strong>Tengo tendencia a ojo seco:</strong> Bausch+Lomb Ultra (mensual, RD$3,750)</li>
         <li><strong>Quiero la opción más popular/probada en el mercado:</strong> Biofinity o ACUVUE Oasys</li>
         <li><strong>Tengo astigmatismo:</strong> ve directo a la versión tórica de cualquiera de las anteriores</li>
       </ul>

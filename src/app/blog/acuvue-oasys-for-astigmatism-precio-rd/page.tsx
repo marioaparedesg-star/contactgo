@@ -214,12 +214,12 @@ export default function Page() {
                 </thead>
                 <tbody>
                   {[
-                    { nombre: 'ACUVUE Oasys for Astig.', precio: 'RD$6,250', tipo: 'Quincenal', cyl: '-2.25', slug: 'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana' },
-                    { nombre: '1-DAY ACUVUE Moist Astig.', precio: 'RD$6,250', tipo: 'Diario', cyl: '-1.75', slug: 'acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana' },
-                    { nombre: 'Biofinity® Toric', precio: 'RD$4,800', tipo: 'Mensual', cyl: '-2.25', slug: 'biofinity-toric-lentes-astigmatismo-coopervision-dominicana' },
+                    { nombre: 'ACUVUE Oasys for Astig.', precio: 'RD$3,350', tipo: 'Quincenal', cyl: '-2.25', slug: 'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana' },
+                    { nombre: '1-DAY ACUVUE Moist Astig.', precio: 'RD$3,350', tipo: 'Diario', cyl: '-1.75', slug: 'acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana' },
+                    { nombre: 'Biofinity® Toric', precio: 'RD$3,650', tipo: 'Mensual', cyl: '-2.25', slug: 'biofinity-toric-lentes-astigmatismo-coopervision-dominicana' },
                     { nombre: 'clariti® 1 day toric', precio: 'RD$4,250', tipo: 'Diario', cyl: '-1.75', slug: 'clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana' },
-                    { nombre: 'Avaira Vitality® Toric', precio: 'RD$3,900', tipo: 'Mensual', cyl: '-2.25', slug: 'avaira-vitality-toric-lentes-astigmatismo-dominicana' },
-                    { nombre: 'Biofinity® XR Toric', precio: 'RD$9,400', tipo: 'Mensual', cyl: '-5.75', slug: 'biofinity-xr-toric-lentes-alta-graduacion-dominicana' },
+                    { nombre: 'Avaira Vitality® Toric', precio: 'RD$3,000', tipo: 'Mensual', cyl: '-2.25', slug: 'avaira-vitality-toric-lentes-astigmatismo-dominicana' },
+                    { nombre: 'Biofinity® XR Toric', precio: 'RD$3,650', tipo: 'Mensual', cyl: '-5.75', slug: 'biofinity-xr-toric-lentes-alta-graduacion-dominicana' },
                   ].map(({ nombre, precio, tipo, cyl, slug }, i) => (
                     <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                       <td className="p-3 border border-gray-100">

@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes de contacto de colores precio en RD 2026 — ContactGo',
-  description: 'Air Optix Colors y Lunare precio en República Dominicana. Desde RD$2,250. Con y sin graduación. Entrega 24-48h. Originales de Alcon y CooperVision.',
+  description: 'Air Optix Colors y Lunare precio en República Dominicana. Desde RD$2,000. Con y sin graduación. Entrega 24-48h. Originales de Alcon y CooperVision.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-colores-precio-republica-dominicana' },
   openGraph: {
     type: 'article',

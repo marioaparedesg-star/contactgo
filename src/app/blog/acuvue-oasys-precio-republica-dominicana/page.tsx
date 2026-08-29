@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'ACUVUE Oasys precio en República Dominicana 2026',
-  description: 'Precio actualizado de ACUVUE Oasys en RD: desde RD$3,875 la caja de 6 lentes. Compara modelos, conoce las diferencias y recibe en 24h en toda la RD.',
+  description: 'Precio actualizado de ACUVUE Oasys en RD: desde RD$3,350 la caja de 6 lentes. Compara modelos, conoce las diferencias y recibe en 24h en toda la RD.',
   alternates: { canonical: 'https://www.contactgo.net/blog/acuvue-oasys-precio-republica-dominicana' },
   openGraph: {
     type: 'article',
@@ -313,7 +313,7 @@ export default function Page() {
                 { q: '¿Cuánto cuesta ACUVUE Oasys en República Dominicana?', a: 'En ContactGo, ACUVUE Oasys (6 lentes quincenales) cuesta RD$3,875. El modelo para astigmatismo está en RD$6,250 y el multifocal en RD$8,200. Los precios incluyen envío en 24-48h en toda la RD.' },
                 { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys directo del fabricante, directo del fabricante, con entrega a domicilio en 24-48 horas. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
                 { q: '¿Cuánto duran los ACUVUE Oasys?', a: 'Son lentes quincenales — se usan durante 14 días consecutivos y luego se descartan. Una caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos.' },
-                { q: '¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?', a: 'ACUVUE Oasys usa silicona hidrogel con HYDRACLEAR Plus (mayor oxígeno, mayor comodidad). ACUVUE 2 usa hidrogel convencional y es una opción más económica a RD$3,600.' },
+                { q: '¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?', a: 'ACUVUE Oasys usa silicona hidrogel con HYDRACLEAR Plus (mayor oxígeno, mayor comodidad). ACUVUE 2 usa hidrogel convencional y es una opción más económica a RD$3,350.' },
                 { q: '¿ACUVUE Oasys sirve para astigmatismo?', a: 'Sí, pero necesitas el modelo específico: ACUVUE Oasys for Astigmatism. Este tiene un diseño tórico que estabiliza el lente para corregir el astigmatismo con precisión. Cuesta RD$6,250 en ContactGo.' },
                 { q: '¿Hay que tener receta para comprar ACUVUE Oasys en RD?', a: 'Sí, necesitas una prescripción médica actualizada con los valores SPH (y CYL/AXIS si tienes astigmatismo) emitida por tu optometrista u oftalmólogo.' },
               ].map(({ q, a }, i) => (
@@ -354,7 +354,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana"
               className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">
-              Comprar ACUVUE Oasys — RD$3,875 →
+              Comprar ACUVUE Oasys — RD$3,350 →
             </Link>
             <Link href="/marca/acuvue" className="inline-flex items-center justify-center gap-2 bg-white border border-red-200 text-red-600 font-bold px-6 py-3 rounded-xl hover:bg-red-50 transition-colors text-sm">
               Ver todos los modelos ACUVUE

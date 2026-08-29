@@ -298,7 +298,7 @@ export default function Page() {
               <li className="flex items-start gap-2"><span className="text-amber-500">-</span> Algunos usuarios olvidan cuándo cambiarlos</li>
             </ul>
             <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="mt-3 inline-flex items-center gap-2 border border-blue-200 text-blue-700 px-4 py-2 rounded-xl text-sm font-bold hover:bg-blue-50 transition-colors">
-              ACUVUE Oasys quincenal — RD$3,875 →
+              ACUVUE Oasys quincenal — RD$3,350 →
             </Link>
           </section>
 

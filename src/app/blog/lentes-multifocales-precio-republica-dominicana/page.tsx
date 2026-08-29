@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes multifocales precio en RD 2026 — Guía completa',
-  description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,100. Entrega 24-48h.',
+  description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$3,650. Entrega 24-48h.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto multifocales — Precios en República Dominicana 2026',
-    description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,100. Entrega 24-48h.',
+    description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$3,650. Entrega 24-48h.',
     url: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Lentes de contacto multifocales — Precios en República Dominicana 2026' }],
@@ -25,7 +25,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Lentes de contacto multifocales — Precios en República Dominicana 2026",
-            "description": "Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,100. Entrega 24-48h.",
+            "description": "Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$3,650. Entrega 24-48h.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",

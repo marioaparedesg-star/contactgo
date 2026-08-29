@@ -55,11 +55,11 @@ export default function Page() {
 
       <h3>🥇 Mejor lente diario: 1-DAY ACUVUE Moist</h3>
       <p>Ganador indiscutible en la categoría "diarios" para uso general. El material HydraClear Plus lo hace muy cómodo durante todo el día y su filtro UV Clase 1 protege tus ojos. Cajas de 30 lentes desde <strong>RD$1,850</strong>. Ideal si tienes ojos ligeramente sensibles o si viajas mucho — no necesitas cargar solución.</p>
-      <p><em>Alternativa premium:</em> Precision1 de Alcon, con tecnología SmartSurface que retiene humedad. Un poco más caro (RD$2,200) pero excelente para uso en aire acondicionado o pantallas.</p>
+      <p><em>Alternativa premium:</em> Precision1 de Alcon, con tecnología SmartSurface que retiene humedad. Un poco más caro (RD$3,000) pero excelente para uso en aire acondicionado o pantallas.</p>
 
       <h3>🥇 Mejor lente mensual: Biofinity de CooperVision</h3>
       <p>El más recomendado por optómetras dominicanos hace más de 5 años. Material Comfilm (hidrogel de silicona) permite alta transmisión de oxígeno. Duran las 4 semanas completas sin sensación de sequedad. Caja de 6 lentes desde <strong>RD$4,025</strong>. Muy buen ratio calidad/precio.</p>
-      <p><em>Alternativa premium:</em> ACUVUE Oasys, con tecnología HydraLuxe y filtro UV. Un poco más caro (RD$4,500) pero superior en confort para usuarios de pantallas o entornos secos.</p>
+      <p><em>Alternativa premium:</em> ACUVUE Oasys, con tecnología HydraLuxe y filtro UV. Un poco más caro (RD$3,350) pero superior en confort para usuarios de pantallas o entornos secos.</p>
 
       <h3>🥇 Mejor lente para astigmatismo: Biofinity Toric</h3>
       <p>Estabilización óptica excelente gracias a su diseño "Optimized Toric Lens Design". Cubre graduaciones hasta CYL -2.25 y prácticamente todos los ejes. Mensual, cómodo, se mantiene estable incluso al parpadear o mirar hacia arriba. Caja de 6 desde <strong>RD$5,750</strong>.</p>
@@ -108,15 +108,15 @@ export default function Page() {
       <h2>Comparativa rápida de precios (2026)</h2>
       <p>Precios de referencia en pesos dominicanos por caja de 6 lentes (mensuales) o 30 lentes (diarios):</p>
       <ul>
-        <li><strong>1-DAY ACUVUE Moist</strong> — RD$1,850 (caja 30)</li>
-        <li><strong>Precision1</strong> — RD$2,200 (caja 30)</li>
+        <li><strong>1-DAY ACUVUE Moist</strong> — RD$3,350 (caja 30)</li>
+        <li><strong>Precision1</strong> — RD$3,000 (caja 30)</li>
         <li><strong>DAILIES Total1</strong> — RD$2,400 (caja 30)</li>
-        <li><strong>Avaira Vitality</strong> — RD$3,600 (caja 6)</li>
-        <li><strong>Biofinity</strong> — RD$4,025 (caja 6)</li>
-        <li><strong>ACUVUE Oasys</strong> — RD$4,500 (caja 6)</li>
-        <li><strong>Bausch+Lomb Ultra</strong> — RD$3,500 (caja 6)</li>
+        <li><strong>Avaira Vitality</strong> — RD$3,000 (caja 6)</li>
+        <li><strong>Biofinity</strong> — RD$3,650 (caja 6)</li>
+        <li><strong>ACUVUE Oasys</strong> — RD$3,350 (caja 6)</li>
+        <li><strong>Bausch+Lomb Ultra</strong> — RD$3,750 (caja 6)</li>
         <li><strong>Biofinity Toric</strong> — RD$5,750 (caja 6)</li>
-        <li><strong>ACUVUE Oasys Astigmatism</strong> — RD$6,250 (caja 6)</li>
+        <li><strong>ACUVUE Oasys Astigmatism</strong> — RD$3,350 (caja 6)</li>
         <li><strong>Biofinity Multifocal</strong> — RD$8,900 (caja 6)</li>
         <li><strong>AIR OPTIX COLORS</strong> — RD$2,100 plano / RD$2,500 graduado (caja 2)</li>
       </ul>

@@ -95,8 +95,8 @@ export default function Page() {
 
       <h3>Sin astigmatismo (esféricos simples)</h3>
       <ul>
-        <li><strong>Diario:</strong> 1-DAY ACUVUE Moist (RD$1,850)</li>
-        <li><strong>Mensual:</strong> Biofinity (RD$4,025)</li>
+        <li><strong>Diario:</strong> 1-DAY ACUVUE Moist (RD$3,350)</li>
+        <li><strong>Mensual:</strong> Biofinity (RD$3,650)</li>
       </ul>
 
       <h3>Con astigmatismo (necesitas tóricos)</h3>

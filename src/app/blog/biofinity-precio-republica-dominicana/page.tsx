@@ -217,7 +217,7 @@ export default function Page() {
             </div>
             <div className="bg-gray-50 rounded-xl p-4 mt-4 text-sm">
               <p className="font-bold text-gray-900 mb-1">💡 Cuándo elegir Biofinity</p>
-              <p>Biofinity gana en <strong>mayor oxígeno (Dk/t 160)</strong> y <strong>menor costo por día (~RD$52)</strong>. Es la elección lógica si usas los lentes todo el día y quieres el máximo cuidado corneal al menor costo de uso.</p>
+              <p>Biofinity gana en <strong>mayor oxígeno (Dk/t 160)</strong> y <strong>menor costo por día (~RD$3,650)</strong>. Es la elección lógica si usas los lentes todo el día y quieres el máximo cuidado corneal al menor costo de uso.</p>
               <p className="mt-2">Elige ACUVUE Oasys si tu optometrista lo ha recomendado específicamente o prefieres el cambio quincenal por mayor higiene.</p>
             </div>
             <Link href="/blog/biofinity-vs-acuvue-comparacion" className="mt-3 inline-block text-xs text-primary-600 font-semibold hover:underline">→ Ver comparativa completa Biofinity vs ACUVUE</Link>
@@ -287,7 +287,7 @@ export default function Page() {
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
-            <p>Los Biofinity son una de las mejores opciones de lentes de contacto mensuales disponibles en República Dominicana — y en ContactGo los encuentras en toda su línea: esférico, XR, Toric, XR Toric y Multifocal, con precios desde RD$4,750 y entrega en 24-48 horas.</p>
+            <p>Los Biofinity son una de las mejores opciones de lentes de contacto mensuales disponibles en República Dominicana — y en ContactGo los encuentras en toda su línea: esférico, XR, Toric, XR Toric y Multifocal, con precios desde RD$3,650 y entrega en 24-48 horas.</p>
             <p className="mt-3">Su Dk/t de 160 y la tecnología Aquaform® los posicionan como uno de los lentes con mejor relación calidad-precio por día de uso disponibles en el mercado dominicano.</p>
           </section>
         </div>

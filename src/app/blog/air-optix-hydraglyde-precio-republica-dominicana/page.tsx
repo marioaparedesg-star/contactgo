@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Air Optix HydraGlyde precio en RD 2026 — ContactGo',
-  description: 'Precio de Air Optix Plus HydraGlyde en República Dominicana. Disponibles desde RD$4,375. Entrega 24-48h. Originales de Alcon con garantía de autenticidad.',
+  description: 'Precio de Air Optix Plus HydraGlyde en República Dominicana. Disponibles desde RD$3,700. Entrega 24-48h. Originales de Alcon con garantía de autenticidad.',
   alternates: { canonical: 'https://www.contactgo.net/blog/air-optix-hydraglyde-precio-republica-dominicana' },
   openGraph: {
     type: 'article',

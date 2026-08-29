@@ -75,8 +75,8 @@ export default function Page() {
             {[
               { marca: 'ACUVUE® OASYS® for Astigmatism', tipo: 'Quincenal', material: 'Senofilcon A (Silicona Hidrogel)', ventaja: 'Tecnología BLINK STABILIZED® — se estabiliza en 2-3 parpadeos. La opción más vendida para astigmatismo en RD.', href: '/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana', precio: 'RD$5,940' },
               { marca: '1-DAY ACUVUE® MOIST® for Astigmatism', tipo: 'Diario', material: 'Etafilcon A', ventaja: 'Ideal si prefieres lentes desechables diarios. Sin mantenimiento, máxima higiene.', href: '/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana', precio: 'RD$5,940' },
-              { marca: 'Biofinity® Toric', tipo: 'Mensual', material: 'Comfilcon A (Silicona Hidrogel)', ventaja: 'Tecnología Aquaform — alta hidratación natural. La más económica por uso diario.', href: '/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana', precio: 'RD$5,520' },
-              { marca: 'Avaira Vitality® Toric', tipo: 'Mensual', material: 'Fanfilcon A', ventaja: 'Buena alternativa económica con alto contenido de agua (48%).', href: '/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana', precio: 'RD$4,680' },
+              { marca: 'Biofinity® Toric', tipo: 'Mensual', material: 'Comfilcon A (Silicona Hidrogel)', ventaja: 'Tecnología Aquaform — alta hidratación natural. La más económica por uso diario.', href: '/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana', precio: 'RD$3,650' },
+              { marca: 'Avaira Vitality® Toric', tipo: 'Mensual', material: 'Fanfilcon A', ventaja: 'Buena alternativa económica con alto contenido de agua (48%).', href: '/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana', precio: 'RD$3,000' },
             ].map(m => (
               <div key={m.marca} className="bg-white border border-gray-100 rounded-2xl p-5 mb-3">
                 <div className="flex items-start justify-between gap-3 mb-2">

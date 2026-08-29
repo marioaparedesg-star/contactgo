@@ -168,7 +168,7 @@ export default function Page() {
         <li><strong>Biofinity Multifocal</strong> (CooperVision) — el más recomendado. RD$8,900</li>
         <li><strong>Air Optix Multifocal</strong> (Alcon) — excelente para ojo seco. RD$7,800</li>
         <li><strong>Bausch+Lomb Ultra for Presbyopia</strong> — el más económico. RD$5,400</li>
-        <li><strong>Proclear Multifocal</strong> (CooperVision) — para ojos muy secos. RD$6,800</li>
+        <li><strong>Proclear Multifocal</strong> (CooperVision) — para ojos muy secos. RD$5,400</li>
       </ul>
 
       <h2>Cómo empezar</h2>

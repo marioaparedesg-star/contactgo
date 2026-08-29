@@ -46,10 +46,10 @@ export default function Page() {
         <thead><tr className="bg-teal-50"><th className="p-3 text-left border border-gray-100">Perfil</th><th className="p-3 text-left border border-gray-100">Lente recomendado</th><th className="p-3 text-right border border-gray-100">Precio RD$</th></tr></thead>
         <tbody>
           {[
-            ['Solo vista (SPH)', 'ACUVUE Oasys® — quincenal, muy cómodo para principiantes', 'RD$3,875'],
+            ['Solo vista (SPH)', 'ACUVUE Oasys® — quincenal, muy cómodo para principiantes', 'RD$3,350'],
             ['Vista + pantallas 8h+', 'Air Optix® HydraGlyde® — hidratación 16h', 'RD$4,375'],
-            ['Astigmatismo (CYL)', 'Biofinity® Toric — mensual, estabilización probada', 'RD$5,750'],
-            ['Presbicia (ADD)', 'Biofinity® Multifocal — ver cerca y lejos', 'RD$9,500'],
+            ['Astigmatismo (CYL)', 'Biofinity® Toric — mensual, estabilización probada', 'RD$3,650'],
+            ['Presbicia (ADD)', 'Biofinity® Multifocal — ver cerca y lejos', 'RD$3,650'],
             ['Quiere diarios (sin solución)', '1-DAY ACUVUE® MOIST® — abres y tiras cada día', 'RD$3,350'],
           ].map(([p,l,r], i) => (
             <tr key={i} className={i%2===0 ? 'bg-white' : 'bg-gray-50'}>
@@ -79,8 +79,8 @@ export default function Page() {
       </ul>
     </section>
       <section id="productos"><h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Entrega 24-48h en toda RD</h2>
-        <div className="space-y-2">            <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE Oasys 6u</p><p className="text-xs text-gray-500">⭐ Ideal para principiantes — quincenal</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,875</span></a>
-            <a href="/producto/1-day-acuvue-moist-lentes-contacto-diarios-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">1-DAY ACUVUE MOIST 30u</p><p className="text-xs text-gray-500">Diarios — sin solución necesaria</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,875</span></a>
+        <div className="space-y-2">            <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE Oasys 6u</p><p className="text-xs text-gray-500">⭐ Ideal para principiantes — quincenal</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,350</span></a>
+            <a href="/producto/1-day-acuvue-moist-lentes-contacto-diarios-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">1-DAY ACUVUE MOIST 30u</p><p className="text-xs text-gray-500">Diarios — sin solución necesaria</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,350</span></a>
             <a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Opti-Free Puremoist</p><p className="text-xs text-gray-500">Solución para mensuales/quincenales</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$750</span></a></div>
         <a href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</a>
       </section>

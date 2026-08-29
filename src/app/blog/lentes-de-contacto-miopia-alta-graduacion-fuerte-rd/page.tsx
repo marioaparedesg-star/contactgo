@@ -75,10 +75,10 @@ export default function Page() {
       <h3>Hasta -8.00 → cualquier marca estándar</h3>
       <p>Todas las marcas líderes cubren rangos hasta -8.00 con sus productos regulares:</p>
       <ul>
-        <li><strong>Biofinity</strong> — RD$4,025 (mensual)</li>
-        <li><strong>ACUVUE Oasys</strong> — RD$4,500 (mensual)</li>
-        <li><strong>Bausch+Lomb Ultra</strong> — RD$3,500 (mensual)</li>
-        <li><strong>1-DAY ACUVUE Moist</strong> — RD$1,850 (diario)</li>
+        <li><strong>Biofinity</strong> — RD$3,650 (mensual)</li>
+        <li><strong>ACUVUE Oasys</strong> — RD$3,350 (mensual)</li>
+        <li><strong>Bausch+Lomb Ultra</strong> — RD$3,750 (mensual)</li>
+        <li><strong>1-DAY ACUVUE Moist</strong> — RD$3,350 (diario)</li>
       </ul>
 
       <h3>De -8.00 a -12.00 → versiones XR (Extended Range)</h3>

@@ -40,7 +40,7 @@ export default function Page() {
       <h2>Presupuesto anual: lentes diarios</h2>
       <p>Con lentes diarios usas uno nuevo cada día — no necesitas solución ni estuche.</p>
       <ul>
-        <li>Caja de 30 lentes (1-DAY ACUVUE Moist) ≈ RD$1,850 = 15 días de uso (un par por ojo cada día)</li>
+        <li>Caja de 30 lentes (1-DAY ACUVUE Moist) ≈ RD$3,350 = 15 días de uso (un par por ojo cada día)</li>
         <li>Al mes necesitas 2 cajas ≈ <strong>RD$3,700/mes</strong></li>
         <li><strong>Total anual: ≈ RD$44,400</strong></li>
       </ul>
@@ -49,7 +49,7 @@ export default function Page() {
       <h2>Presupuesto anual: lentes mensuales</h2>
       <p>Con mensuales, un lente dura 30 días pero necesitas limpieza diaria con solución.</p>
       <ul>
-        <li>4 cajas de 6 lentes al año (Biofinity) ≈ RD$16,100</li>
+        <li>4 cajas de 6 lentes al año (Biofinity) ≈ RD$3,650</li>
         <li>Solución multipropósito: 1 frasco de 300ml dura ~1 mes ≈ RD$1,000/mes = RD$12,000/año</li>
         <li>Estuche nuevo cada 3 meses: RD$150 × 4 = RD$600/año</li>
         <li><strong>Total anual: ≈ RD$28,700</strong></li>

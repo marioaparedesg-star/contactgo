@@ -217,13 +217,13 @@ export default function Page() {
                 </thead>
                 <tbody>
                   {[
-                    ['ACUVUE Oasys 6u', 'Quincenal', 'RD$3,875'],
-                    ['1-DAY ACUVUE Moist 30u', 'Diario', 'RD$3,875'],
-                    ['Air Optix HydraGlyde 6u', 'Mensual', 'RD$4,375'],
-                    ['Biofinity 6u', 'Mensual', 'RD$4,750'],
-                    ['clariti 1 day 30u', 'Diario', 'RD$4,375'],
+                    ['ACUVUE Oasys 6u', 'Quincenal', 'RD$3,350'],
+                    ['1-DAY ACUVUE Moist 30u', 'Diario', 'RD$3,350'],
+                    ['Air Optix HydraGlyde 6u', 'Mensual', 'RD$3,700'],
+                    ['Biofinity 6u', 'Mensual', 'RD$3,650'],
+                    ['clariti 1 day 30u', 'Diario', 'RD$3,050'],
                     ['BL ULTRA 6u', 'Mensual', 'RD$4,500'],
-                    ['Air Optix Colors 2u', 'Mensual/color', 'RD$2,625'],
+                    ['Air Optix Colors 2u', 'Mensual/color', 'RD$2,000'],
                     ['Lunare Tri-Kolor 2u', 'Color', 'RD$2,250'],
                   ].map(([prod, tipo, precio], i) => (
                     <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
