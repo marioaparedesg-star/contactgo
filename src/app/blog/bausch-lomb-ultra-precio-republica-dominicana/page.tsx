@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Bausch+Lomb ULTRA precio en RD 2026 — ContactGo',
-  description: 'Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$4,500 · Astigmatism RD$4,000 · Presbyopia RD$4,100. Biotrue ONEday RD$3,500. Entrega 24-48h.',
+  description: 'Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega 24-48h.',
   alternates: { canonical: 'https://www.contactgo.net/blog/bausch-lomb-ultra-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Bausch+Lomb ULTRA® precio en República Dominicana 2026',
-    description: 'Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$4,500 · Astigmatism RD$4,000 · Presbyopia RD$4,100. Biotrue ONEday RD$3,500. Entrega 24-48h.',
+    description: 'Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega 24-48h.',
     url: 'https://www.contactgo.net/blog/bausch-lomb-ultra-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/bausch-lomb-ultra-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Bausch+Lomb ULTRA® precio en República Dominicana 2026' }],
@@ -25,13 +25,13 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Bausch+Lomb ULTRA® precio en República Dominicana 2026",
-            "description": "Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$4,500 · Astigmatism RD$4,000 · Presbyopia RD$4,100. Biotrue ONEday RD$3,500. Entrega 24-48h.",
+            "description": "Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega 24-48h.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
             "url": "https://www.contactgo.net/blog/bausch-lomb-ultra-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los Bausch+Lomb ULTRA en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo: Bausch+Lomb ULTRA esf\u00e9rico RD$4,500 (6u mensual), ULTRA for Astigmatism RD$4,000 (6u mensual), ULTRA for Presbyopia RD$4,100 (6u mensual), y Biotrue ONEday RD$3,500 (30u diario)."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 tecnolog\u00eda tienen los Bausch+Lomb ULTRA?", "acceptedAnswer": {"@type": "Answer", "text": "Los Bausch+Lomb ULTRA usan la tecnolog\u00eda patentada MoistureSeal\u00ae que retiene 95% de la humedad inicial durante 16 horas de uso. El material es monometacrilato de 2-hidroxietilo (2-HEMA), un hidrogel de silicona de \u00faltima generaci\u00f3n."}}, {"@type": "Question", "name": "\u00bfSon buenos los Bausch+Lomb ULTRA para ojos secos?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed. La tecnolog\u00eda MoistureSeal es especialmente efectiva para personas con tendencia a ojos secos. Es uno de los lentes m\u00e1s recomendados para uso en ambientes de aire acondicionado o frente a pantallas prolongadas."}}, {"@type": "Question", "name": "\u00bfD\u00f3nde comprar Bausch+Lomb ULTRA certificados en RD?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo todos los Bausch+Lomb son directo del fabricante, sellados de f\u00e1brica. Entregamos en 24-48 horas en toda Rep\u00fablica Dominicana con pago seguro mediante AZUL/Banco Popular."}}] },
+            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los Bausch+Lomb ULTRA en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo: Bausch+Lomb ULTRA esf\u00e9rico RD$3,750 (6u mensual), ULTRA for Astigmatism RD$4,500 (6u mensual), ULTRA for Presbyopia RD$4,750 (6u mensual), y Biotrue ONEday RD$3,500 (30u diario)."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 tecnolog\u00eda tienen los Bausch+Lomb ULTRA?", "acceptedAnswer": {"@type": "Answer", "text": "Los Bausch+Lomb ULTRA usan la tecnolog\u00eda patentada MoistureSeal\u00ae que retiene 95% de la humedad inicial durante 16 horas de uso. El material es monometacrilato de 2-hidroxietilo (2-HEMA), un hidrogel de silicona de \u00faltima generaci\u00f3n."}}, {"@type": "Question", "name": "\u00bfSon buenos los Bausch+Lomb ULTRA para ojos secos?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed. La tecnolog\u00eda MoistureSeal es especialmente efectiva para personas con tendencia a ojos secos. Es uno de los lentes m\u00e1s recomendados para uso en ambientes de aire acondicionado o frente a pantallas prolongadas."}}, {"@type": "Question", "name": "\u00bfD\u00f3nde comprar Bausch+Lomb ULTRA certificados en RD?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo todos los Bausch+Lomb son directo del fabricante, sellados de f\u00e1brica. Entregamos en 24-48 horas en toda Rep\u00fablica Dominicana con pago seguro mediante AZUL/Banco Popular."}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -70,15 +70,15 @@ export default function Page() {
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Precios actuales en ContactGo</p>
             <a href="/producto/bausch-lomb-ultra-lentes-contacto-mensuales-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® 6u</p><p className="text-xs text-gray-500">Esférico mensual</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,750</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
             <a href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</p><p className="text-xs text-gray-500">Para astigmatismo</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,000</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
             <a href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</p><p className="text-xs text-gray-500">Para presbicia</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,100</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,750</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
             <a href="/producto/biotrue-oneday-lentes-contacto-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Biotrue® ONEday 30u</p><p className="text-xs text-gray-500">Diario B+L</p></div>
@@ -99,15 +99,15 @@ export default function Page() {
                 <tbody>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/bausch-lomb-ultra-lentes-contacto-mensuales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® 6u</a><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Esférico mensual</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$4,500</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$3,750</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</a><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Para astigmatismo</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$4,000</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$4,500</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</a><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Para presbicia</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$4,100</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$4,750</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/biotrue-oneday-lentes-contacto-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biotrue® ONEday 30u</a><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Diario B+L</span></td>
@@ -142,7 +142,7 @@ export default function Page() {
             <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuestan los Bausch+Lomb ULTRA en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: Bausch+Lomb ULTRA esférico RD$4,500 (6u mensual), ULTRA for Astigmatism RD$4,000 (6u mensual), ULTRA for Presbyopia RD$4,100 (6u mensual), y Biotrue ONEday RD$3,500 (30u diario).</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: Bausch+Lomb ULTRA esférico RD$3,750 (6u mensual), ULTRA for Astigmatism RD$4,500 (6u mensual), ULTRA for Presbyopia RD$4,750 (6u mensual), y Biotrue ONEday RD$3,500 (30u diario).</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué tecnología tienen los Bausch+Lomb ULTRA?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>

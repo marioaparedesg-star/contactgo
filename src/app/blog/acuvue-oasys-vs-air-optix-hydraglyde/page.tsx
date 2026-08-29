@@ -27,7 +27,7 @@ export default function Page() {
     ['Contenido agua', '38%', '33%'],
     ['Tecnología hidrat.', 'HYDRACLEAR® Plus', 'HydraGlyde® + SmartShield®'],
     ['Precio en RD (6u)', 'RD$3,350', 'RD$3,700'],
-    ['Precio por día', '~RD$92', '~RD$73 ⭐'],
+    ['Precio por día', '~RD$80', '~RD$21 ⭐'],
     ['Disponible tórico', '✅ Oasys Astig', '❌ No disponible'],
     ['Disponible multi', '✅ Oasys Multi', '✅ Air Optix Multi'],
     ['Disponible color', '❌ No', '✅ Air Optix Colors'],
@@ -46,7 +46,7 @@ export default function Page() {
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
             "url": "https://www.contactgo.net/blog/acuvue-oasys-vs-air-optix-hydraglyde", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type": "Question", "name": "\u00bfACUVUE Oasys o Air Optix HydraGlyde \u2014 cu\u00e1l es mejor?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del uso. Air Optix HydraGlyde tiene mayor Dk/t (138 vs 147 \u2014 diferencia m\u00ednima) y es mensual con menor costo por d\u00eda (~RD$73 vs ~RD$92). ACUVUE Oasys es quincenal, con tecnolog\u00eda HYDRACLEAR Plus ideal para pantallas. Para uso diario intensivo, Air Optix. Para renovaci\u00f3n m\u00e1s frecuente o uso con pantallas, ACUVUE Oasys."}}, {"@type": "Question", "name": "\u00bfCu\u00e1l es m\u00e1s barato: ACUVUE Oasys o Air Optix HydraGlyde?", "acceptedAnswer": {"@type": "Answer", "text": "Por precio de caja, ACUVUE Oasys es m\u00e1s barato (RD$3,875 vs RD$4,375). Pero por costo por d\u00eda de uso, Air Optix HydraGlyde gana: ~RD$73/d\u00eda mensual vs ~RD$92/d\u00eda quincenal."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 tecnolog\u00eda de hidrataci\u00f3n es mejor, HYDRACLEAR Plus o HydraGlyde?", "acceptedAnswer": {"@type": "Answer", "text": "Son diferentes enfoques. HYDRACLEAR Plus de J&J incorpora un agente humectante interno en la matriz del lente. HydraGlyde de Alcon aplica una capa molecular en la superficie exterior que previene la deshidrataci\u00f3n y la adherencia de dep\u00f3sitos. Ambas son excelentes; el resultado depende de la qu\u00edmica individual de cada ojo."}}, {"@type": "Question", "name": "\u00bfPuedo cambiar de ACUVUE Oasys a Air Optix HydraGlyde?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed, siempre que la graduaci\u00f3n (SPH) est\u00e9 disponible en Air Optix HydraGlyde. Los par\u00e1metros base son ligeramente diferentes (BC 8.6 en ambos, DIA 14.2 en ambos) as\u00ed que la compatibilidad suele ser buena. Te recomendamos consultar a tu optometrista antes del cambio."}}] },
+            "mainEntity": [{"@type": "Question", "name": "\u00bfACUVUE Oasys o Air Optix HydraGlyde \u2014 cu\u00e1l es mejor?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del uso. Air Optix HydraGlyde tiene mayor Dk/t (138 vs 147 \u2014 diferencia m\u00ednima) y es mensual con menor costo por d\u00eda (~RD$21 vs ~RD$80). ACUVUE Oasys es quincenal, con tecnolog\u00eda HYDRACLEAR Plus ideal para pantallas. Para uso diario intensivo, Air Optix. Para renovaci\u00f3n m\u00e1s frecuente o uso con pantallas, ACUVUE Oasys."}}, {"@type": "Question", "name": "\u00bfCu\u00e1l es m\u00e1s barato: ACUVUE Oasys o Air Optix HydraGlyde?", "acceptedAnswer": {"@type": "Answer", "text": "Por precio de caja, ACUVUE Oasys es m\u00e1s barato (RD$3,350 vs RD$3,700). Pero por costo por d\u00eda de uso, Air Optix HydraGlyde gana: ~RD$21/d\u00eda mensual vs ~RD$80/d\u00eda quincenal."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 tecnolog\u00eda de hidrataci\u00f3n es mejor, HYDRACLEAR Plus o HydraGlyde?", "acceptedAnswer": {"@type": "Answer", "text": "Son diferentes enfoques. HYDRACLEAR Plus de J&J incorpora un agente humectante interno en la matriz del lente. HydraGlyde de Alcon aplica una capa molecular en la superficie exterior que previene la deshidrataci\u00f3n y la adherencia de dep\u00f3sitos. Ambas son excelentes; el resultado depende de la qu\u00edmica individual de cada ojo."}}, {"@type": "Question", "name": "\u00bfPuedo cambiar de ACUVUE Oasys a Air Optix HydraGlyde?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed, siempre que la graduaci\u00f3n (SPH) est\u00e9 disponible en Air Optix HydraGlyde. Los par\u00e1metros base son ligeramente diferentes (BC 8.6 en ambos, DIA 14.2 en ambos) as\u00ed que la compatibilidad suele ser buena. Te recomendamos consultar a tu optometrista antes del cambio."}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -83,7 +83,7 @@ export default function Page() {
         <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 mb-6">
           <p className="text-sm font-bold text-indigo-800 mb-2">⚡ Veredicto rápido</p>
           <p className="text-sm text-indigo-700"><strong>Elige ACUVUE Oasys</strong> si usas pantallas intensivamente, prefieres cambiar cada 2 semanas, o tu optometrista lo recomienda específicamente.</p>
-          <p className="text-sm text-indigo-700 mt-2"><strong>Elige Air Optix HydraGlyde</strong> si buscas el menor costo por día de uso (~RD$73 vs ~RD$92), usas los lentes todo el día o prefieres un lente mensual.</p>
+          <p className="text-sm text-indigo-700 mt-2"><strong>Elige Air Optix HydraGlyde</strong> si buscas el menor costo por día de uso (~RD$21 vs ~RD$80), usas los lentes todo el día o prefieres un lente mensual.</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -120,16 +120,16 @@ export default function Page() {
                 <p className="text-xs font-bold text-red-600 mb-1">Johnson & Johnson</p>
                 <p className="font-bold text-gray-900">ACUVUE® Oasys® 6u</p>
                 <p className="text-xs text-gray-500 mt-0.5">Quincenal · 14 días</p>
-                <p className="text-2xl font-black text-gray-900 mt-2">RD$3,875</p>
-                <p className="text-xs text-gray-500">~RD$92/día de uso</p>
+                <p className="text-2xl font-black text-gray-900 mt-2">RD$3,350</p>
+                <p className="text-xs text-gray-500">~RD$80/día de uso</p>
                 <p className="text-xs text-red-600 font-semibold mt-2">Ver producto →</p>
               </Link>
               <Link href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="border-2 border-teal-100 rounded-2xl p-4 hover:border-teal-300 hover:shadow-sm transition-all">
                 <p className="text-xs font-bold text-teal-600 mb-1">Alcon</p>
                 <p className="font-bold text-gray-900">Air Optix® HydraGlyde® 6u</p>
                 <p className="text-xs text-gray-500 mt-0.5">Mensual · 30 días</p>
-                <p className="text-2xl font-black text-gray-900 mt-2">RD$4,375</p>
-                <p className="text-xs text-gray-500">~RD$73/día ⭐ Menor costo</p>
+                <p className="text-2xl font-black text-gray-900 mt-2">RD$3,700</p>
+                <p className="text-xs text-gray-500">~RD$21/día ⭐ Menor costo</p>
                 <p className="text-xs text-teal-600 font-semibold mt-2">Ver producto →</p>
               </Link>
             </div>
@@ -158,11 +158,11 @@ export default function Page() {
             <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿ACUVUE Oasys o Air Optix HydraGlyde — cuál es mejor?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Depende del uso. Air Optix HydraGlyde tiene mayor Dk/t (138 vs 147 — diferencia mínima) y es mensual con menor costo por día (~RD$73 vs ~RD$92). ACUVUE Oasys es quincenal, con tecnología HYDRACLEAR Plus ideal para pantallas. Para uso diario intensivo, Air Optix. Para renovación más frecuente o uso con pantallas, ACUVUE Oasys.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Depende del uso. Air Optix HydraGlyde tiene mayor Dk/t (138 vs 147 — diferencia mínima) y es mensual con menor costo por día (~RD$21 vs ~RD$80). ACUVUE Oasys es quincenal, con tecnología HYDRACLEAR Plus ideal para pantallas. Para uso diario intensivo, Air Optix. Para renovación más frecuente o uso con pantallas, ACUVUE Oasys.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuál es más barato: ACUVUE Oasys o Air Optix HydraGlyde?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Por precio de caja, ACUVUE Oasys es más barato (RD$3,875 vs RD$4,375). Pero por costo por día de uso, Air Optix HydraGlyde gana: ~RD$73/día mensual vs ~RD$92/día quincenal.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Por precio de caja, ACUVUE Oasys es más barato (RD$3,350 vs RD$3,700). Pero por costo por día de uso, Air Optix HydraGlyde gana: ~RD$21/día mensual vs ~RD$80/día quincenal.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué tecnología de hidratación es mejor, HYDRACLEAR Plus o HydraGlyde?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>

@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'clariti 1 day precio en República Dominicana 2026 — ContactGo',
-  description: 'Precio de clariti 1 day en RD: esférico RD$4,375 · tórico RD$5,750 · multifocal RD$6,000. CooperVision certificados. Diarios. Entrega 24-48h en toda RD.',
+  description: 'Precio de clariti 1 day en RD: esférico RD$3,050 · tórico RD$4,250 · multifocal RD$4,450. CooperVision certificados. Diarios. Entrega 24-48h en toda RD.',
   alternates: { canonical: 'https://www.contactgo.net/blog/clariti-1-day-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'clariti® 1 day precio en República Dominicana 2026',
-    description: 'Precio de clariti 1 day en RD: esférico RD$4,375 · tórico RD$5,750 · multifocal RD$6,000. CooperVision certificados. Diarios. Entrega 24-48h en toda RD.',
+    description: 'Precio de clariti 1 day en RD: esférico RD$3,050 · tórico RD$4,250 · multifocal RD$4,450. CooperVision certificados. Diarios. Entrega 24-48h en toda RD.',
     url: 'https://www.contactgo.net/blog/clariti-1-day-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/clariti-1-day-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'clariti® 1 day precio en República Dominicana 2026' }],
@@ -25,13 +25,13 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "clariti® 1 day precio en República Dominicana 2026",
-            "description": "Precio de clariti 1 day en RD: esférico RD$4,375 · tórico RD$5,750 · multifocal RD$6,000. CooperVision certificados. Diarios. Entrega 24-48h en toda RD.",
+            "description": "Precio de clariti 1 day en RD: esférico RD$3,050 · tórico RD$4,250 · multifocal RD$4,450. CooperVision certificados. Diarios. Entrega 24-48h en toda RD.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
             "url": "https://www.contactgo.net/blog/clariti-1-day-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los clariti 1 day en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo: clariti 1 day esf\u00e9rico RD$4,375 (caja 30), clariti 1 day toric RD$5,750 (caja 30) y clariti 1 day multifocal RD$6,000 (caja 30). Todos con entrega en 24-48h en toda Rep\u00fablica Dominicana."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 son los clariti 1 day?", "acceptedAnswer": {"@type": "Answer", "text": "Los clariti 1 day de CooperVision son lentes de contacto desechables diarios fabricados con silicona hidrogel (somofilcon A). Ofrecen alta transmisi\u00f3n de ox\u00edgeno (Dk/t 86) y alto contenido de agua (56%), ideales para uso diario sin mantenimiento."}}, {"@type": "Question", "name": "\u00bfSon mejores los clariti 1 day que los 1-DAY ACUVUE Moist?", "acceptedAnswer": {"@type": "Answer", "text": "Ambos son excelentes lentes diarios. clariti 1 day usa silicona hidrogel (mayor ox\u00edgeno, Dk/t 86) mientras que 1-DAY ACUVUE Moist usa hidrogel est\u00e1ndar (Dk/t 33) pero con la tecnolog\u00eda LACREON de hidrataci\u00f3n. Para uso prolongado, clariti 1 day gana en ox\u00edgeno. Para comodidad inicial, muchos prefieren ACUVUE Moist. Ambos est\u00e1n disponibles en ContactGo."}}, {"@type": "Question", "name": "\u00bfclariti 1 day necesita soluci\u00f3n de limpieza?", "acceptedAnswer": {"@type": "Answer", "text": "No. Al ser lentes desechables diarios, se abren al comenzar el d\u00eda y se descartan al terminar. No necesitan estuche ni soluci\u00f3n. Esto los hace la opci\u00f3n m\u00e1s higi\u00e9nica y conveniente."}}] },
+            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los clariti 1 day en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo: clariti 1 day esf\u00e9rico RD$3,050 (caja 30), clariti 1 day toric RD$4,250 (caja 30) y clariti 1 day multifocal RD$4,450 (caja 30). Todos con entrega en 24-48h en toda Rep\u00fablica Dominicana."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 son los clariti 1 day?", "acceptedAnswer": {"@type": "Answer", "text": "Los clariti 1 day de CooperVision son lentes de contacto desechables diarios fabricados con silicona hidrogel (somofilcon A). Ofrecen alta transmisi\u00f3n de ox\u00edgeno (Dk/t 86) y alto contenido de agua (56%), ideales para uso diario sin mantenimiento."}}, {"@type": "Question", "name": "\u00bfSon mejores los clariti 1 day que los 1-DAY ACUVUE Moist?", "acceptedAnswer": {"@type": "Answer", "text": "Ambos son excelentes lentes diarios. clariti 1 day usa silicona hidrogel (mayor ox\u00edgeno, Dk/t 86) mientras que 1-DAY ACUVUE Moist usa hidrogel est\u00e1ndar (Dk/t 33) pero con la tecnolog\u00eda LACREON de hidrataci\u00f3n. Para uso prolongado, clariti 1 day gana en ox\u00edgeno. Para comodidad inicial, muchos prefieren ACUVUE Moist. Ambos est\u00e1n disponibles en ContactGo."}}, {"@type": "Question", "name": "\u00bfclariti 1 day necesita soluci\u00f3n de limpieza?", "acceptedAnswer": {"@type": "Answer", "text": "No. Al ser lentes desechables diarios, se abren al comenzar el d\u00eda y se descartan al terminar. No necesitan estuche ni soluci\u00f3n. Esto los hace la opci\u00f3n m\u00e1s higi\u00e9nica y conveniente."}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -69,15 +69,15 @@ export default function Page() {
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Precios actuales en ContactGo</p>
             <a href="/producto/clariti-1-day-lentes-contacto-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
               <div><p className="font-bold text-gray-900 text-sm">clariti® 1 day 30u</p><p className="text-xs text-gray-500">Esférico — más popular</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,375</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,050</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
             <a href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
               <div><p className="font-bold text-gray-900 text-sm">clariti® 1 day toric 30u</p><p className="text-xs text-gray-500">Para astigmatismo</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$5,750</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,250</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
             <a href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
               <div><p className="font-bold text-gray-900 text-sm">clariti® 1 day multifocal 30u</p><p className="text-xs text-gray-500">Para presbicia</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$6,000</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,450</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
 
           <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
@@ -94,15 +94,15 @@ export default function Page() {
                 <tbody>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/clariti-1-day-lentes-contacto-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day 30u</a><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Esférico — más popular</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$4,375</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$3,050</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day toric 30u</a><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Para astigmatismo</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$5,750</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$4,250</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day multifocal 30u</a><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Para presbicia</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$6,000</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$4,450</td>
               </tr>
 
                 </tbody>
@@ -133,7 +133,7 @@ export default function Page() {
             <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuestan los clariti 1 day en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: clariti 1 day esférico RD$4,375 (caja 30), clariti 1 day toric RD$5,750 (caja 30) y clariti 1 day multifocal RD$6,000 (caja 30). Todos con entrega en 24-48h en toda República Dominicana.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: clariti 1 day esférico RD$3,050 (caja 30), clariti 1 day toric RD$4,250 (caja 30) y clariti 1 day multifocal RD$4,450 (caja 30). Todos con entrega en 24-48h en toda República Dominicana.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué son los clariti 1 day?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
