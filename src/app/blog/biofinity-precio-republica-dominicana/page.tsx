@@ -201,7 +201,7 @@ export default function Page() {
                     ['Material', 'Comfilcon A', 'Senofilcon A'],
                     ['Dk/t (oxígeno)', '160 ⭐', '147'],
                     ['Agua', '48%', '38%'],
-                    ['Precio en RD (6u)', 'RD$4,750', 'RD$3,875'],
+                    ['Precio en RD (6u)', 'RD$3,650', 'RD$3,350'],
                     ['Precio por día', '~RD$52 ⭐', '~RD$92'],
                     ['Disponible tórico', '✅ Biofinity Toric', '✅ Oasys Astig'],
                     ['Disponible multifocal', '✅ Biofinity Multi', '✅ Oasys Multi'],

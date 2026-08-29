@@ -40,7 +40,7 @@ export default function Page() {
                 ['Contenido agua','48%','38%'],
                 ['Estabilización','OTLG®','BLINK STABILISED®'],
                 ['CYL disponibles','-0.75 a -2.25','-0.75 a -2.25'],
-                ['Precio RD (6u)','RD$5,750','RD$6,250'],
+                ['Precio RD (6u)', 'RD$5,750', 'RD$4,800'],
                 ['Precio por día','~RD$63','~RD$149'],
               ].map(([cat,bio,acu],rowIdx) => (
                 <tr key={rowIdx} className={rowIdx%2===0?'bg-white':'bg-gray-50'}>
@@ -86,8 +86,8 @@ export default function Page() {
           <section id="productos"><h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo</h2>
             <div className="space-y-2">
             <a href="/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Biofinity® Toric 6u</p><p className="text-xs text-gray-500">Mensual · OTLG · ~RD$63/día</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$5,750</span></a>
-            <a href="/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE® Oasys® for Astig 6u</p><p className="text-xs text-gray-500">Quincenal · BLINK STABILISED</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$6,250</span></a>
-            <a href="/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">1-DAY ACUVUE® MOIST® Astig 30u</p><p className="text-xs text-gray-500">Diario · Máxima higiene</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$6,250</span></a>
+            <a href="/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE® Oasys® for Astig 6u</p><p className="text-xs text-gray-500">Quincenal · BLINK STABILISED</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,350</span></a>
+            <a href="/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">1-DAY ACUVUE® MOIST® Astig 30u</p><p className="text-xs text-gray-500">Diario · Máxima higiene</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,350</span></a>
             </div><a href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</a>
           </section>
           <section id="faq"><h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>

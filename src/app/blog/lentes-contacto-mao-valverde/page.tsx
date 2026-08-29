@@ -20,11 +20,11 @@ export const metadata: Metadata = {
 export default function Page() {
   const MARCAS = [
     { nombre: 'ACUVUE® Oasys', precio: 'RD$3,875', slug: 'acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana', tipo: 'Quincenal' },
-    { nombre: 'Air Optix® HydraGlyde', precio: 'RD$4,375', slug: 'air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana', tipo: 'Mensual' },
-    { nombre: 'Biofinity®', precio: 'RD$4,750', slug: 'biofinity-lentes-contacto-mensuales-coopervision-dominicana', tipo: 'Mensual' },
-    { nombre: '1-DAY ACUVUE® MOIST®', precio: 'RD$3,875', slug: '1-day-acuvue-moist-lentes-contacto-diarios-dominicana', tipo: 'Diario' },
-    { nombre: 'Air Optix® COLORS', precio: 'RD$2,625', slug: 'air-optix-colors-lentes-contacto-color-dominicana', tipo: 'Color mensual' },
-    { nombre: 'Bausch+Lomb ULTRA®', precio: 'RD$4,500', slug: 'bausch-lomb-ultra-lentes-contacto-mensuales-dominicana', tipo: 'Mensual' },
+    { nombre: 'Air Optix® HydraGlyde', precio: 'RD$3,700', slug: 'air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana', tipo: 'Mensual' },
+    { nombre: 'Biofinity®', precio: 'RD$3,650', slug: 'biofinity-lentes-contacto-mensuales-coopervision-dominicana', tipo: 'Mensual' },
+    { nombre: '1-DAY ACUVUE® MOIST®', precio: 'RD$3,350', slug: '1-day-acuvue-moist-lentes-contacto-diarios-dominicana', tipo: 'Diario' },
+    { nombre: 'Air Optix® COLORS', precio: 'RD$2,000', slug: 'air-optix-colors-lentes-contacto-color-dominicana', tipo: 'Color mensual' },
+    { nombre: 'Bausch+Lomb ULTRA®', precio: 'RD$3,750', slug: 'bausch-lomb-ultra-lentes-contacto-mensuales-dominicana', tipo: 'Mensual' },
   ]
 
   return (

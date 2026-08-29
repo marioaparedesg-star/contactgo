@@ -26,7 +26,7 @@ export default function Page() {
     ['Dk/t (oxígeno)', '147', '138'],
     ['Contenido agua', '38%', '33%'],
     ['Tecnología hidrat.', 'HYDRACLEAR® Plus', 'HydraGlyde® + SmartShield®'],
-    ['Precio en RD (6u)', 'RD$3,875', 'RD$4,375'],
+    ['Precio en RD (6u)', 'RD$3,350', 'RD$3,700'],
     ['Precio por día', '~RD$92', '~RD$73 ⭐'],
     ['Disponible tórico', '✅ Oasys Astig', '❌ No disponible'],
     ['Disponible multi', '✅ Oasys Multi', '✅ Air Optix Multi'],

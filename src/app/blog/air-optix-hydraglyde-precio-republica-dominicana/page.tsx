@@ -229,7 +229,7 @@ export default function Page() {
                     ['Material', 'Lotrafilcon B', 'Senofilcon A'],
                     ['Dk/t (oxígeno)', '138', '147'],
                     ['Tecnología', 'HydraGlyde + SmartShield', 'HYDRACLEAR Plus'],
-                    ['Precio en RD', 'RD$4,375 (6u)', 'RD$3,875 (6u)'],
+                    ['Precio en RD', 'RD$3,700 (6u)', 'RD$3,350 (6u)'],
                     ['Precio por día de uso', '~RD$73', '~RD$92'],
                     ['Mejor para', 'Uso diario extendido, pantallas', 'Sensibilidad, cambio frecuente'],
                   ].map(([c, ao, ac], i) => (

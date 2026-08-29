@@ -50,7 +50,7 @@ export default function Page() {
             ['Vista + pantallas 8h+', 'Air Optix® HydraGlyde® — hidratación 16h', 'RD$4,375'],
             ['Astigmatismo (CYL)', 'Biofinity® Toric — mensual, estabilización probada', 'RD$5,750'],
             ['Presbicia (ADD)', 'Biofinity® Multifocal — ver cerca y lejos', 'RD$9,500'],
-            ['Quiere diarios (sin solución)', '1-DAY ACUVUE® MOIST® — abres y tiras cada día', 'RD$3,875'],
+            ['Quiere diarios (sin solución)', '1-DAY ACUVUE® MOIST® — abres y tiras cada día', 'RD$3,350'],
           ].map(([p,l,r], i) => (
             <tr key={i} className={i%2===0 ? 'bg-white' : 'bg-gray-50'}>
               <td className="p-3 border border-gray-100 font-medium">{p}</td>

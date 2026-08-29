@@ -81,7 +81,7 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>El <strong>1-DAY ACUVUE® MOIST®</strong> de Johnson & Johnson es uno de los lentes de contacto diarios más populares del mundo — y en República Dominicana no es la excepción. Su tecnología <strong>LACREON®</strong> mantiene la humedad estable durante todo el día, y al ser desechable no requiere solución ni limpieza. En ContactGo los encuentras a RD$3,875 con entrega en 24-48 horas.</p>
+          <p>El <strong>1-DAY ACUVUE® MOIST®</strong> de Johnson & Johnson es uno de los lentes de contacto diarios más populares del mundo — y en República Dominicana no es la excepción. Su tecnología <strong>LACREON®</strong> mantiene la humedad estable durante todo el día, y al ser desechable no requiere solución ni limpieza. En ContactGo los encuentras a RD$3,350 con entrega en 24-48 horas.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios completos — Tabla actualizada junio 2026</h2>

@@ -79,7 +79,7 @@ export default function Page() {
                   ['Contenido de agua', '48%', '38%'],
                   ['Dk/t (oxígeno)', '160', '147'],
                   ['Reemplazo', 'Mensual', 'Quincenal'],
-                  ['Precio en RD', 'RD$4,750', 'RD$3,875'],
+                  ['Precio en RD', 'RD$3,650', 'RD$3,350'],
                   ['Precio por día de uso', '~RD$50', '~RD$88'],
                   ['Disponible en tórico', '✅ Sí', '✅ Sí'],
                   ['Disponible en multifocal', '✅ Sí', '✅ Sí'],

@@ -261,7 +261,7 @@ export default function Page() {
                     ['Material', 'Silicona hidrogel', 'Silicona hidrogel', 'Silicona hidrogel'],
                     ['Dk/t (oxígeno)', '147', '160', '138'],
                     ['Tecnología hidratación', 'HYDRACLEAR Plus', 'Aquaform', 'HydraGlyde'],
-                    ['Precio en ContactGo', 'RD$3,875', 'RD$4,750', 'RD$4,375'],
+                    ['Precio en ContactGo', 'RD$3,350', 'RD$3,650', 'RD$3,700'],
                     ['Precio/día de uso', '~RD$92/día', '~RD$52/día', '~RD$48/día'],
                     ['Protección UV', '✅ Clase 1', '❌', '❌'],
                     ['Mejor para', 'Pantallas + comodidad', 'Precio/mes bajo', 'Ojos secos'],
