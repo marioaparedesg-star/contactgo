@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Opti-Free Puremoist precio en RD 2026 — ContactGo',
-  description: 'Precio de Opti-Free Puremoist en República Dominicana: 90ml RD$750 · 300ml RD$1,450. La mejor solución multipropósito de Alcon. Entrega 24-48h.',
+  description: 'Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24-48h.',
   alternates: { canonical: 'https://www.contactgo.net/blog/opti-free-puremoist-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Opti-Free® Puremoist precio en República Dominicana 2026',
-    description: 'Precio de Opti-Free Puremoist en República Dominicana: 90ml RD$750 · 300ml RD$1,450. La mejor solución multipropósito de Alcon. Entrega 24-48h.',
+    description: 'Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24-48h.',
     url: 'https://www.contactgo.net/blog/opti-free-puremoist-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/opti-free-puremoist-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Opti-Free® Puremoist precio en República Dominicana 2026' }],
@@ -25,13 +25,13 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Opti-Free® Puremoist precio en República Dominicana 2026",
-            "description": "Precio de Opti-Free Puremoist en República Dominicana: 90ml RD$750 · 300ml RD$1,450. La mejor solución multipropósito de Alcon. Entrega 24-48h.",
+            "description": "Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24-48h.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
             "url": "https://www.contactgo.net/blog/opti-free-puremoist-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuesta el Opti-Free Puremoist en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo el Opti-Free Puremoist 90ml cuesta RD$750 y el de 300ml RD$1,450. La presentaci\u00f3n de 300ml ofrece mejor rendimiento por precio \u2014 aproximadamente RD$4.83 por ml vs RD$8.33 del de 90ml."}}, {"@type": "Question", "name": "\u00bfPara qu\u00e9 sirve el Opti-Free Puremoist?", "acceptedAnswer": {"@type": "Answer", "text": "El Opti-Free Puremoist es una soluci\u00f3n multiprop\u00f3sito para lentes de contacto mensuales y quincenales. Limpia, desinfecta, aclara y almacena los lentes. Tambi\u00e9n aporta lubricaci\u00f3n adicional gracias a su f\u00f3rmula con HydraGlyde Moisture Matrix."}}, {"@type": "Question", "name": "\u00bfCu\u00e1nto dura un Opti-Free Puremoist 300ml?", "acceptedAnswer": {"@type": "Answer", "text": "Un frasco de 300ml dura aproximadamente 2-3 meses con uso normal (1-2 lentes mensuales). Es la opci\u00f3n m\u00e1s econ\u00f3mica por uso diario."}}, {"@type": "Question", "name": "\u00bfPuedo usar agua del grifo en lugar de Opti-Free?", "acceptedAnswer": {"@type": "Answer", "text": "No. El agua del grifo puede contener microorganismos como Acanthamoeba que causan infecciones oculares graves. Siempre usa soluci\u00f3n multiprop\u00f3sito espec\u00edfica para lentes de contacto como Opti-Free Puremoist, Dream Eye o Prolub."}}] },
+            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuesta el Opti-Free Puremoist en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo el Opti-Free Puremoist cuesta RD$650, disponible en presentaci\u00f3n de 90ml o 300ml al mismo precio."}}, {"@type": "Question", "name": "\u00bfPara qu\u00e9 sirve el Opti-Free Puremoist?", "acceptedAnswer": {"@type": "Answer", "text": "El Opti-Free Puremoist es una soluci\u00f3n multiprop\u00f3sito para lentes de contacto mensuales y quincenales. Limpia, desinfecta, aclara y almacena los lentes. Tambi\u00e9n aporta lubricaci\u00f3n adicional gracias a su f\u00f3rmula con HydraGlyde Moisture Matrix."}}, {"@type": "Question", "name": "\u00bfCu\u00e1nto dura un Opti-Free Puremoist 300ml?", "acceptedAnswer": {"@type": "Answer", "text": "Un frasco de 300ml dura aproximadamente 2-3 meses con uso normal (1-2 lentes mensuales). Es la opci\u00f3n m\u00e1s econ\u00f3mica por uso diario."}}, {"@type": "Question", "name": "\u00bfPuedo usar agua del grifo en lugar de Opti-Free?", "acceptedAnswer": {"@type": "Answer", "text": "No. El agua del grifo puede contener microorganismos como Acanthamoeba que causan infecciones oculares graves. Siempre usa soluci\u00f3n multiprop\u00f3sito espec\u00edfica para lentes de contacto como Opti-Free Puremoist, Dream Eye o Prolub."}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -69,15 +69,15 @@ export default function Page() {
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Precios actuales en ContactGo</p>
             <a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Opti-Free Puremoist 90ml</p><p className="text-xs text-gray-500">Para llevar</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$750</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$650</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
             <a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Opti-Free Puremoist 300ml</p><p className="text-xs text-gray-500">Mayor rendimiento</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$1,450</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$650</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
             <a href="/producto/dream-eye-solucion-lentes-contacto-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Dream Eye Solución 80ml</p><p className="text-xs text-gray-500">Alternativa accesible</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$750</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$650</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </a>
             <a href="/producto/prolub-hyfresh-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Prolub Hyfresh 60ml</p><p className="text-xs text-gray-500">Alta hidratación</p></div>
@@ -98,15 +98,15 @@ export default function Page() {
                 <tbody>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Opti-Free Puremoist 90ml</a><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Para llevar</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$750</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$650</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Opti-Free Puremoist 300ml</a><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Mayor rendimiento</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$1,450</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$650</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/dream-eye-solucion-lentes-contacto-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Dream Eye Solución 80ml</a><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Alternativa accesible</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$750</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$650</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><a href="/producto/prolub-hyfresh-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Prolub Hyfresh 60ml</a><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Alta hidratación</span></td>
@@ -141,7 +141,7 @@ export default function Page() {
             <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuesta el Opti-Free Puremoist en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo el Opti-Free Puremoist 90ml cuesta RD$750 y el de 300ml RD$1,450. La presentación de 300ml ofrece mejor rendimiento por precio — aproximadamente RD$4.83 por ml vs RD$8.33 del de 90ml.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo el Opti-Free Puremoist cuesta RD$650, disponible en presentación de 90ml o 300ml al mismo precio.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Para qué sirve el Opti-Free Puremoist?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
