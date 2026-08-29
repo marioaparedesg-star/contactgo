@@ -44,7 +44,7 @@ export default function Page() {
             "@type": "FAQPage",
             "mainEntity": [
               { "@type": "Question", "name": "¿Son mejores los lentes diarios o mensuales?", "acceptedAnswer": { "@type": "Answer", "text": "Depende de tu estilo de vida. Los diarios son más higiénicos y convenientes (no necesitan limpieza), ideales para uso 4-5 días por semana o personas con alergias. Los mensuales tienen menor coste diario y son ideales para uso diario intensivo." } },
-              { "@type": "Question", "name": "¿Cuánto más cuestan los lentes diarios vs los mensuales?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo, los lentes diarios cuestan entre RD$3,875-4,375 por caja de 30 (1 mes por ojo), mientras que los mensuales como Biofinity cuestan RD$4,750 por 6 meses por ojo. El coste anual de los diarios suele ser 2-3 veces mayor que los mensuales." } },
+              { "@type": "Question", "name": "¿Cuánto más cuestan los lentes diarios vs los mensuales?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo, los lentes diarios cuestan entre RD$3,050-3,350 por caja de 30 (1 mes por ojo), mientras que los mensuales como Biofinity cuestan RD$3,650 por 6 meses por ojo. El coste anual de los diarios suele ser 4-5 veces mayor que los mensuales." } },
               { "@type": "Question", "name": "¿Los lentes diarios son más saludables?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, en general. Al usar un lente nuevo cada día, eliminamos la acumulación de depósitos de proteínas y bacterias. Son especialmente recomendados para personas con alergias, ojos secos o tendencia a infecciones." } }
             ]
           },
@@ -128,11 +128,11 @@ export default function Page() {
                   {[
                     ['Duración', '1 día (se descartan)', '30 días de uso'],
                     ['Limpieza necesaria', '❌ No', '✅ Sí, cada noche'],
-                    ['Necesita solución', '❌ No', '✅ Sí (RD$750+/mes)'],
+                    ['Necesita solución', '❌ No', '✅ Sí (RD$650+/mes)'],
                     ['Necesita estuche', '❌ No', '✅ Sí'],
                     ['Higiene', '⭐⭐⭐⭐⭐ Máxima', '⭐⭐⭐⭐ Muy buena'],
-                    ['Coste/caja', 'RD$3,875-4,375 (30u)', 'RD$3,500-5,750 (6u)'],
-                    ['Coste anual estimado', 'RD$93,000-105,000', 'RD$25,000-50,000'],
+                    ['Coste/caja', 'RD$3,050-3,350 (30u)', 'RD$3,000-3,750 (6u)'],
+                    ['Coste anual estimado', 'RD$73,200-80,400', 'RD$14,600-18,000'],
                     ['Ideal para alergias', '✅ Muy recomendado', '⚠️ Aceptable'],
                     ['Para ojos secos', '✅ Buena opción', '✅ Silicona hidrogel buena'],
                     ['Para uso ocasional', '⭐⭐⭐⭐⭐ Perfecto', '⚠️ Sale más caro por uso'],
@@ -197,8 +197,8 @@ export default function Page() {
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm">
               <p className="font-bold text-amber-800 mb-2">💰 Coste anual estimado para 2 ojos:</p>
               <div className="space-y-1.5 text-amber-700">
-                <p><strong>Diarios</strong> (1-DAY ACUVUE Moist): 24 cajas × RD$3,875 = <strong>~RD$93,000/año</strong></p>
-                <p><strong>Mensuales</strong> (Biofinity): 4 cajas × RD$4,750 + solución 12 meses ≈ <strong>~RD$28,000/año</strong></p>
+                <p><strong>Diarios</strong> (1-DAY ACUVUE Moist): 24 cajas × RD$3,350 = <strong>~RD$80,400/año</strong></p>
+                <p><strong>Mensuales</strong> (Biofinity): 4 cajas × RD$3,650 + solución 12 meses ≈ <strong>~RD$17,200/año</strong></p>
                 <p className="text-amber-800 font-bold mt-2">Los mensuales pueden ser hasta 3x más económicos anualmente que los diarios.</p>
               </div>
             </div>
@@ -333,10 +333,10 @@ export default function Page() {
             <div className="space-y-3">
               {[
                 { q: '¿Son mejores los lentes diarios o mensuales?', a: 'Depende de tu estilo de vida. Los diarios son más higiénicos y convenientes (sin mantenimiento), mientras que los mensuales tienen un coste anual mucho menor. Si usas lentes todos los días, los mensuales son más económicos. Si los usas ocasionalmente, los diarios pueden ser más rentables.' },
-                { q: '¿Cuánto más cuestan los diarios que los mensuales?', a: 'El coste anual de los diarios puede ser 2-3 veces mayor que los mensuales. En ContactGo: diarios (1-DAY MOIST) cuestan ~RD$93,000/año para 2 ojos; mensuales (Biofinity) cuestan ~RD$19,000/año para 2 ojos (sin contar solución).' },
+                { q: '¿Cuánto más cuestan los diarios que los mensuales?', a: 'El coste anual de los diarios puede ser 2-3 veces mayor que los mensuales. En ContactGo: diarios (1-DAY MOIST) cuestan ~RD$80,400/año para 2 ojos; mensuales (Biofinity) cuestan ~RD$14,600/año para 2 ojos (sin contar solución).' },
                 { q: '¿Puedo cambiar de diarios a mensuales?', a: 'Sí, pero necesitas que tu prescripción sea compatible con el modelo mensual que quieres. Algunos parámetros (BC, DIA) pueden variar entre marcas. Consulta con tu especialista si tienes dudas.' },
                 { q: '¿Los lentes mensuales son peligrosos si no los limpio bien?', a: 'No son peligrosos si se limpian correctamente. El riesgo aumenta cuando no se sigue el protocolo de limpieza, se reutiliza la solución, o se usan más tiempo del indicado. Siguiendo las instrucciones, son completamente seguros.' },
-                { q: '¿Qué necesito comprar además de los lentes mensuales?', a: 'Para lentes mensuales necesitas solución multipropósito (como Opti-Free Puremoist o Dream Eye, disponibles en ContactGo desde RD$750) y un estuche para almacenarlos cada noche. Los diarios no necesitan nada adicional.' },
+                { q: '¿Qué necesito comprar además de los lentes mensuales?', a: 'Para lentes mensuales necesitas solución multipropósito (como Opti-Free Puremoist o Dream Eye, disponibles en ContactGo desde RD$650) y un estuche para almacenarlos cada noche. Los diarios no necesitan nada adicional.' },
               ].map(({ q, a }, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
                   <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">

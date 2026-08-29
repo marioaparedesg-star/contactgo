@@ -80,7 +80,7 @@ export default function Page() {
                   ['Dk/t (oxígeno)', '160', '147'],
                   ['Reemplazo', 'Mensual', 'Quincenal'],
                   ['Precio en RD', 'RD$3,650', 'RD$3,350'],
-                  ['Precio por día de uso', '~RD$50', '~RD$88'],
+                  ['Precio por día de uso', '~RD$20', '~RD$80'],
                   ['Disponible en tórico', '✅ Sí', '✅ Sí'],
                   ['Disponible en multifocal', '✅ Sí', '✅ Sí'],
                   ['Tecnología hidratación', 'Aquaform®', 'HYDRACLEAR® Plus'],
@@ -99,7 +99,7 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">💙 Biofinity — para quién es mejor</h2>
             <ul className="space-y-2 text-sm">
               {[
-                'Si quieres el menor costo por día de uso (~RD$50 vs ~RD$88)',
+                'Si quieres el menor costo por día de uso (~RD$20 vs ~RD$80)',
                 'Si prefieres no tener que comprar lentes tan frecuentemente (mensual)',
                 'Si tienes ojos muy secos — el 48% de agua es mayor',
                 'Si necesitas lentes de alta graduación (XR llega hasta ±20.00)',
@@ -131,7 +131,7 @@ export default function Page() {
 
           <div className="bg-gray-50 rounded-2xl p-5">
             <h2 className="font-bold text-gray-900 mb-2">🏆 Veredicto final</h2>
-            <p className="text-sm"><strong>Si el precio es tu prioridad:</strong> Biofinity gana — ~RD$50 por día vs ~RD$88 (calculado sobre 90 días/caja de 6u vs 42 días/caja de 6u).</p>
+            <p className="text-sm"><strong>Si el precio es tu prioridad:</strong> Biofinity gana — ~RD$20 por día vs ~RD$80 (calculado sobre 180 días/caja de 6u vs 42 días/caja de 6u).</p>
             <p className="text-sm mt-2"><strong>Si la comodidad es tu prioridad:</strong> ACUVUE Oasys gana — especialmente para trabajo digital intenso.</p>
             <p className="text-sm mt-2"><strong>Si no estás seguro:</strong> Pide una muestra de ambas con tu optometrista y comprueba cuál te sienta mejor. Ambas son excelentes opciones — la diferencia real está en cómo responde <em>tu ojo</em> específicamente.</p>
           </div>
@@ -189,11 +189,11 @@ export default function Page() {
           <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Biofinity o ACUVUE Oasys — cuál es mejor?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Depende del uso. Biofinity (mensual, Dk/t 160) ofrece mayor oxígeno y menor costo por día (~RD$52). ACUVUE Oasys (quincenal, Dk/t 147) es ideal para uso con pantallas y renovación frecuente. Para uso diario intensivo, Biofinity. Para quien prefiere cambio cada 2 semanas, ACUVUE Oasys.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Depende del uso. Biofinity (mensual, Dk/t 160) ofrece mayor oxígeno y menor costo por día (~RD$20). ACUVUE Oasys (quincenal, Dk/t 147) es ideal para uso con pantallas y renovación frecuente. Para uso diario intensivo, Biofinity. Para quien prefiere cambio cada 2 semanas, ACUVUE Oasys.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuestan Biofinity y ACUVUE Oasys en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: Biofinity RD$4,750 la caja de 6 (mensual, ~RD$52/día). ACUVUE Oasys RD$3,875 la caja de 6 (quincenal, ~RD$92/día). Por precio de caja, ACUVUE Oasys es más barato, pero por día de uso, Biofinity es más económico.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: Biofinity RD$3,650 la caja de 6 (mensual, ~RD$20/día). ACUVUE Oasys RD$3,350 la caja de 6 (quincenal, ~RD$80/día). Por precio de caja, ACUVUE Oasys es más barato, y también por día de uso resulta más económico.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Biofinity y ACUVUE Oasys son lentes mensuales o quincenales?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
@@ -201,7 +201,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Biofinity y ACUVUE Oasys en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Ambos están disponibles en ContactGo con entrega en 24-48 horas en toda República Dominicana. Biofinity desde RD$4,750 y ACUVUE Oasys desde RD$3,875, directo del fabricante.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Ambos están disponibles en ContactGo con entrega en 24-48 horas en toda República Dominicana. Biofinity desde RD$3,650 y ACUVUE Oasys desde RD$3,350, directo del fabricante.</p>
           </details>
           </div>
         </section>
