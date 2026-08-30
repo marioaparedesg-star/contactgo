@@ -258,7 +258,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
                 { icon: Truck,    title: 'Entrega en 24-48h',  desc: 'A cualquier punto de RD',    color: 'text-blue-600',   bg: 'bg-blue-50' },
-                { icon: Package,  title: '+4,700 cajas vendidas',   desc: 'Desde antes de esta web',        color: 'text-green-600',  bg: 'bg-green-50' },
+                { icon: Package,  title: '+4,700 cajas vendidas',   desc: 'Marcas 100% originales',        color: 'text-green-600',  bg: 'bg-green-50' },
                 { icon: Star,     title: `${reseñasAvg.toFixed(1)}★ · ${reseñasCount}+ reseñas`,  desc: 'Clientes satisfechos',   color: 'text-amber-500',  bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
