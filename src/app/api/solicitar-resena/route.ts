@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
         subject: `¿Cómo fue tu experiencia con ContactGo? 👁`,
         html: `
 <div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
-  <div style="background:#16a34a;padding:20px;border-radius:12px 12px 0 0;text-align:center">
+  <div style="background:#002455;padding:20px;border-radius:12px 12px 0 0;text-align:center">
     <p style="color:white;font-weight:900;font-size:20px;margin:0">ContactGo</p>
   </div>
   <div style="background:#f9fafb;padding:24px;border-radius:0 0 12px 12px">

@@ -308,7 +308,7 @@ export async function GET(req: NextRequest) {
           subject: `¿Cómo van tus lentes, ${nombre}? 👁️`,
           html: `
 <div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
-  <div style="background:#16a34a;padding:20px;border-radius:12px 12px 0 0;text-align:center">
+  <div style="background:#002455;padding:20px;border-radius:12px 12px 0 0;text-align:center">
     <p style="color:white;font-weight:900;font-size:20px;margin:0">ContactGo</p>
   </div>
   <div style="background:#f9fafb;padding:24px;border-radius:0 0 12px 12px">
@@ -319,7 +319,7 @@ export async function GET(req: NextRequest) {
     </p>
     ${sugerenciaHtml}
     <a href="https://www.contactgo.net?cupon=COMPLETO10"
-      style="display:block;background:#16a34a;color:white;font-weight:700;padding:14px 24px;border-radius:10px;text-align:center;text-decoration:none;font-size:15px;margin:20px 0">
+      style="display:block;background:#01B2B7;color:white;font-weight:700;padding:14px 24px;border-radius:10px;text-align:center;text-decoration:none;font-size:15px;margin:20px 0">
       🎁 10% OFF con el código COMPLETO10
     </a>
     <p style="color:#9ca3af;font-size:12px;text-align:center">
@@ -419,13 +419,13 @@ export async function GET(req: NextRequest) {
     type TipoPrincipal = 'torico' | 'multifocal' | 'color' | 'esferico'
 
     function notaAplicacion(tipo: TipoPrincipal): string {
-      if (tipo === 'torico') return `<li>🔄 Es normal que el lente gire levemente al parpadear — está diseñado para volver solo a su posición (por eso es tórico). Si la visión se siente inestable los primeros días, es parte de la adaptación.</li>`
+      if (tipo === 'torico') return `<li>🔄 Si tu lente es tórico, puede experimentar pequeños movimientos al parpadear los primeros días. Si la visión permanece borrosa o inestable más allá de la adaptación inicial, retira el lente y escríbenos para orientarte.</li>`
       if (tipo === 'multifocal') return `<li>👓 Los multifocales necesitan un poco más de paciencia: tu cerebro tarda entre unos días y 2 semanas en acostumbrarse a ver de cerca y lejos con el mismo lente.</li>`
       if (tipo === 'color') return `<li>🎨 Nunca compartas tus lentes de color con nadie, aunque sean "de un solo uso estético" — es la misma regla de higiene que un lente graduado.</li>`
       return ''
     }
     function notaAlerta(tipo: TipoPrincipal): string {
-      if (tipo === 'multifocal') return `<p style="color:#374151;font-size:14px">Si después de 2 semanas tu visión de cerca o lejos sigue sin sentirse nítida, escríbenos — a veces hace falta ajustar la potencia ADD.</p>`
+      if (tipo === 'multifocal') return `<p style="color:#374151;font-size:14px">Si después del período de adaptación tu visión de cerca o lejos continúa sin sentirse nítida, consulta con tu optometrista — en algunos lentes multifocales puede ser necesario ajustar la graduación.</p>`
       if (tipo === 'torico') return `<p style="color:#374151;font-size:14px">Un poco de fluctuación visual al mover los ojos es normal en tóricos durante la adaptación — pero si persiste después de 2 semanas, avísanos.</p>`
       return ''
     }
@@ -459,11 +459,11 @@ export async function GET(req: NextRequest) {
             <li>⚠️ Reusar un lente diario aumenta muchísimo el riesgo de infección — el material no está diseñado para limpiarse y durar más de un día</li>
           </ul>` : `
           <h2 style="color:#111;font-size:18px">${nombre}, hablemos de tu estuche 🧴</h2>
-          <p style="color:#374151;font-size:14px">Un estuche mal cuidado es la causa más común de infecciones oculares evitables:</p>
+          <p style="color:#374151;font-size:14px">Un estuche mal cuidado puede aumentar el riesgo de infecciones oculares. La recomendación es reemplazarlo cada 3-6 meses:</p>
           <ul style="color:#374151;font-size:14px;padding-left:20px;line-height:1.8">
             <li>✅ Cambia la solución del estuche cada vez que lo uses — nunca "rellenes" la de ayer</li>
             <li>✅ Enjuaga el estuche con solución (no agua) y déjalo secar boca abajo al aire</li>
-            <li>✅ Cambia el estuche completo cada 3 meses</li>
+            <li>✅ Cambia el estuche completo cada 3-6 meses</li>
           </ul>`,
       },
       {
