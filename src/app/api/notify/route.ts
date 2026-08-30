@@ -11,6 +11,33 @@ import { createClient } from '@supabase/supabase-js'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 
+function esperar(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+// FIX (2026-08-30): mismo hallazgo que en WhatsApp — un fallo de Resend
+// (caída momentánea, timeout de red) hacía perder el correo de confirmación
+// para siempre, sin ningún reintento. Ahora reintenta hasta 3 veces con
+// espera progresiva antes de registrar el error final. Tiempos cortos
+// deliberadamente (igual que en WhatsApp): esta función se llama con
+// await desde /api/notify, que a su vez AZUL espera antes de redirigir
+// al cliente — no queremos acercarnos al límite de tiempo de la función.
+async function enviarEmailConReintentos(resend: Resend, params: { from: string; to: string; subject: string; html: string }) {
+  const ESPERAS_MS = [800, 1600]
+  let ultimoError: string | undefined
+  for (let intento = 1; intento <= 3; intento++) {
+    try {
+      const { data, error } = await resend.emails.send(params)
+      if (!error) return { resendId: data?.id, error: undefined, intentos: intento }
+      ultimoError = error.message
+    } catch (e: any) {
+      ultimoError = e?.message ?? 'Error desconocido'
+    }
+    if (intento < 3) await esperar(ESPERAS_MS[intento - 1])
+  }
+  return { resendId: undefined, error: ultimoError, intentos: 3 }
+}
+
 const BASE_URL    = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 // Admin recibe notificaciones en este email
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'info@contactgo.net'
@@ -378,20 +405,12 @@ export async function POST(req: NextRequest) {
         .maybeSingle()
 
       if (!yaEnviado) {
-        let resendId: string | undefined
-        let emailError: string | undefined
-        try {
-          const { data: sent, error: sendErr } = await resend.emails.send({
-            from: FROM_EMAIL,
-            to: order.cliente_email,
-            subject,
-            html: emailCliente(order, itemsList, evento, nuevo_estado),
-          })
-          resendId = sent?.id
-          if (sendErr) emailError = sendErr.message
-        } catch (e: any) {
-          emailError = e?.message ?? 'Error desconocido'
-        }
+        const { resendId, error: emailError } = await enviarEmailConReintentos(resend, {
+          from: FROM_EMAIL,
+          to: order.cliente_email,
+          subject,
+          html: emailCliente(order, itemsList, evento, nuevo_estado),
+        })
         // Registrar en email_log para auditoría — nombres de columna correctos
         // (bug anterior: usaba tipo/asunto/enviado/error_msg que no existen en la tabla real)
         await sbAdmin.from('email_log').insert({

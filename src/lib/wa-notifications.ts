@@ -14,6 +14,39 @@ function getSb() {
   )
 }
 
+function esperar(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+// FIX (2026-08-30): antes, si sendTemplate fallaba una sola vez (ej. una
+// caída momentánea de la API de Meta, un timeout de red), el mensaje se
+// perdía para siempre — nadie lo reintentaba. Hallazgo real de la
+// auditoría: 3 envíos fallidos en el historial completo, ninguno al
+// cliente (todos al número interno de admin), pero el riesgo es real a
+// mayor volumen. Ahora se reintenta hasta 3 veces con espera progresiva
+// (0.8s, 1.6s) ANTES de darse por vencido — el cliente recibe su mensaje
+// unos segundos después en vez de nunca recibirlo. Tiempos deliberadamente
+// cortos: esta función se llama con await desde el flujo de confirmación
+// de AZUL, y no queremos acercarnos al límite de tiempo de la función
+// serverless combinando esto con el reintento de email también en el
+// mismo request.
+async function enviarConReintentos(
+  phone: string, templateName: string, params: string[]
+): Promise<{ res: any; intentos: number }> {
+  const ESPERAS_MS = [800, 1600]
+  let ultimoError: any = null
+  for (let intento = 1; intento <= 3; intento++) {
+    try {
+      const res = await sendTemplate(phone, templateName, params)
+      return { res, intentos: intento }
+    } catch (err) {
+      ultimoError = err
+      if (intento < 3) await esperar(ESPERAS_MS[intento - 1])
+    }
+  }
+  throw Object.assign(ultimoError instanceof Error ? ultimoError : new Error(String(ultimoError)), { intentosRealizados: 3 })
+}
+
 // Arma un texto legible del mensaje automático para mostrar en la bandeja.
 // No reconstruye el template exacto (eso vive en Meta), pero da contexto claro
 // al agente de servicio al cliente sobre qué se le envió al cliente.
@@ -88,12 +121,12 @@ export async function notificar(
   if (yaEnviado) return { ok: true, skipped: 'ya_enviado', wa_id: yaEnviado.wa_message_id ?? undefined }
 
   try {
-    const res = await sendTemplate(phone, templateName, params)
+    const { res, intentos } = await enviarConReintentos(phone, templateName, params)
     const wa_id = res?.messages?.[0]?.id ?? null
     await sb.from('wa_automation_log').insert({
       evento_id: eventoId, telefono: phone, tipo, estado: 'sent',
       wa_message_id: wa_id, order_id: opts?.order_id ?? null,
-      user_id: opts?.user_id ?? null, attempt: 1,
+      user_id: opts?.user_id ?? null, attempt: intentos,
     })
     // También registrar en la bandeja de WhatsApp (whatsapp_messages) para que
     // el mensaje automático sea visible en Servicio al Cliente como saliente.
@@ -113,10 +146,11 @@ export async function notificar(
     return { ok: true, wa_id }
   } catch (err: any) {
     const errMsg = err.message?.slice(0, 500) ?? 'unknown'
+    const intentosRealizados = err.intentosRealizados ?? 1
     await sb.from('wa_automation_log').insert({
       evento_id: eventoId, telefono: phone, tipo, estado: 'failed',
       error: errMsg, order_id: opts?.order_id ?? null,
-      user_id: opts?.user_id ?? null, attempt: 1,
+      user_id: opts?.user_id ?? null, attempt: intentosRealizados,
     })
     return { ok: false, error: errMsg }
   }
