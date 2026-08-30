@@ -63,7 +63,7 @@ const ESTADO_MSG: Record<string, string> = {
   cancelado:  'Tu pedido fue cancelado. Escríbenos y lo resolvemos de inmediato.',
 }
 
-export function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: string): string {
+function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: string): string {
   const estado      = nuevoEstado ?? order.estado
   const estadoMsg   = ESTADO_MSG[estado] ?? ''
   const pedidoId    = (order.numero_orden ?? order.id.slice(-8).toUpperCase())
