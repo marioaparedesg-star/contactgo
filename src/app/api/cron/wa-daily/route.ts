@@ -481,6 +481,15 @@ export async function GET(req: NextRequest) {
           ${notaAlerta(tipo)}
           <p style="color:#374151;font-size:14px">Ante cualquiera de estas señales, quítate el lente y acude a un oftalmólogo u optometrista — no esperes a que pase solo.</p>`,
       },
+      {
+        dias: 25, campo: 'educativo_dia25_enviado' as const,
+        asunto: '¿Cómo va tu adaptación? 👁️',
+        contenido: (nombre: string, tipo: TipoPrincipal) => `
+          <h2 style="color:#111;font-size:18px">${nombre}, ya llevas un tiempo con tus lentes 👁️</h2>
+          <p style="color:#374151;font-size:14px">A estas alturas, ya deberías sentirlos completamente cómodos, casi como si no los tuvieras puestos.</p>
+          <p style="color:#374151;font-size:14px">Si todavía sientes molestia frecuente, o la visión no es tan nítida como esperabas, no es algo que debas simplemente aguantar — escríbenos y te ayudamos a revisar qué puede estar pasando.</p>
+          <p style="color:#374151;font-size:14px">Si todo va bien, ¡nos alegra mucho! Solo queríamos saber cómo te ha ido. 😊</p>`,
+      },
     ]
 
     for (const etapa of ETAPAS_DEF) {
