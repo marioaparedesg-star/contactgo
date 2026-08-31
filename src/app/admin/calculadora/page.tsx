@@ -18,7 +18,7 @@ export default function AdminCalculadoraPage() {
       const hace30 = new Date(); hace30.setDate(hace30.getDate() - 30)
       Promise.all([
         sb.from('calculator_sessions').select('evento,tipo_receta,created_at').gte('created_at', hace30.toISOString()),
-        sb.from('calculator_leads').select('id,nombre,email,tipo_receta,complejidad,convertido,created_at').order('created_at', { ascending: false }).limit(50),
+        sb.from('calculator_leads').select('id,nombre,email,telefono,tipo_receta,complejidad,convertido,created_at').order('created_at', { ascending: false }).limit(50),
       ]).then(([{ data: s }, { data: l }]) => {
         setSessions(s ?? [])
         setLeads(l ?? [])
@@ -140,6 +140,7 @@ export default function AdminCalculadoraPage() {
                 <thead><tr className="text-[10px] text-gray-400 uppercase border-b border-gray-100">
                   <th className="text-left py-2 pr-3">Email</th>
                   <th className="text-left py-2 pr-3">Nombre</th>
+                  <th className="text-left py-2 pr-3">Teléfono</th>
                   <th className="text-left py-2 pr-3">Tipo receta</th>
                   <th className="text-left py-2 pr-3">Complejidad</th>
                   <th className="text-left py-2 pr-3">Convirtió</th>
@@ -150,6 +151,12 @@ export default function AdminCalculadoraPage() {
                     <tr key={l.id} className="border-b border-gray-50 hover:bg-gray-50">
                       <td className="py-1.5 pr-3 font-medium">{l.email ?? '—'}</td>
                       <td className="py-1.5 pr-3 text-gray-500">{l.nombre ?? '—'}</td>
+                      <td className="py-1.5 pr-3">
+                        {l.telefono ? (
+                          <a href={`https://wa.me/${l.telefono.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
+                            className="text-teal-600 font-semibold hover:underline">{l.telefono}</a>
+                        ) : <span className="text-gray-300">—</span>}
+                      </td>
                       <td className="py-1.5 pr-3"><span className="capitalize bg-gray-100 px-1.5 py-0.5 rounded-full">{l.tipo_receta?.replace('_',' ')}</span></td>
                       <td className="py-1.5 pr-3">
                         <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${l.complejidad==='verde'?'bg-green-100 text-green-700':l.complejidad==='amarillo'?'bg-amber-100 text-amber-700':'bg-red-100 text-red-700'}`}>
