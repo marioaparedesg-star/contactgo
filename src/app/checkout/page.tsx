@@ -82,7 +82,9 @@ export default function CheckoutPage() {
   const [step, setStep] = useState<1|2|3>(1)
   const [savedAddresses, setSavedAddresses] = useState<any[]>([])
   const [selectedAddrId, setSelectedAddrId] = useState<string|null>(null)
-  const metodoPago = 'tarjeta' as const
+  // Pago contra entrega — solo disponible en Santo Domingo (limitación real
+  // de logística: Mario solo puede coordinar cobro en efectivo ahí mismo)
+  const [metodoPago, setMetodoPago] = useState<'tarjeta' | 'contra_entrega'>('tarjeta')
 
   const sub = subtotal()
   const envioGratis = sub >= 8000 || cuponEnvioGratis
@@ -166,12 +168,21 @@ export default function CheckoutPage() {
   }
 
   const createOrder = async (data: FormData) => {
+    // Blindaje: si el cliente eligió "contra entrega" y luego regresó a
+    // cambiar su ciudad a una distinta a Santo Domingo, no permitir que
+    // ese pedido se cree como contra entrega — se revierte a tarjeta
+    // silenciosamente, ya que es la única opción universalmente válida.
+    const metodoPagoReal: 'tarjeta' | 'contra_entrega' =
+      metodoPago === 'contra_entrega' && data.ciudad === 'Santo Domingo' ? 'contra_entrega' : 'tarjeta'
+
     setLoading(true)
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
 
-    // ─── TARJETA: crear orden PRIMERO, luego preparar AZUL con ID real ──
-    if (metodoPago === 'tarjeta') {
+    // ─── Crear orden PRIMERO (ambos métodos) — luego, solo si es tarjeta,
+    // preparar AZUL con el ID real. "Contra entrega" corta el flujo antes
+    // de llegar a AZUL (ver el return más abajo). ──
+    {
       // Leer cookies _fbp / _fbc del navegador para pasarlos al CAPI server-side (Purchase)
       const getCookie = (name: string): string | null => {
         if (typeof document === 'undefined') return null
@@ -188,7 +199,7 @@ export default function CheckoutPage() {
         cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
         direccion_texto: `${data.direccion}, ${data.ciudad === 'Otra ciudad' && data.ciudadPersonalizada ? data.ciudadPersonalizada : data.ciudad}`,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
-        descuento, metodo_pago: 'tarjeta', pago_estado: 'pendiente',
+        descuento, metodo_pago: metodoPagoReal, pago_estado: 'pendiente',
         numero_orden: orderNum,
         cupon_aplicado: cuponAplicado && cupon.trim() ? cupon.trim().toUpperCase() : null,
         cupon_descuento: cuponAplicado && descuento > 0 ? descuento : null,
@@ -308,7 +319,24 @@ export default function CheckoutPage() {
         }
       }
 
-      // 3. Preparar AZUL con el order.id real — el hash se calcula con la URL final correcta
+      // 3. PAGO CONTRA ENTREGA — nunca toca AZUL. El pedido queda pago_estado='pendiente'
+      // (se cobra en efectivo al momento de la entrega, no antes) y se notifica directo,
+      // sin pasar por la pasarela de tarjeta en absoluto.
+      if (metodoPagoReal === 'contra_entrega') {
+        try {
+          await fetch('/api/notify', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ order_id: order.id, evento: 'nuevo_pedido' }),
+          })
+        } catch (notifErr) {
+          console.error('[checkout] notify contra_entrega falló:', notifErr)
+          // No bloqueamos al cliente por esto — el pedido ya está creado
+        }
+        router.push(`/confirmacion?orden=${order.id}&contra_entrega=1`)
+        return
+      }
+
+      // 3b. Preparar AZUL con el order.id real — el hash se calcula con la URL final correcta
       // Usamos orderNum (numero_orden) porque AZUL devuelve OrderNumber en el retorno
       const approvedUrl = `${window.location.origin}/api/azul/retorno?resultado=aprobado`
       const preRes = await fetch('/api/azul/preparar', {
@@ -866,6 +894,34 @@ export default function CheckoutPage() {
                       </p>
                     </div>
 
+                    {/* ── MÉTODO DE PAGO ────────────────────────────────────────── */}
+                    <div className="space-y-2">
+                      <p className="text-sm font-black text-gray-900">¿Cómo prefieres pagar?</p>
+                      <button type="button" onClick={() => setMetodoPago('tarjeta')}
+                        className={`w-full flex items-center gap-3 p-3.5 rounded-2xl border-2 transition-all text-left ${metodoPago === 'tarjeta' ? 'border-primary-500 bg-teal-50/40' : 'border-gray-100'}`}>
+                        <div className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${metodoPago === 'tarjeta' ? 'border-primary-600' : 'border-gray-300'}`}>
+                          {metodoPago === 'tarjeta' && <div className="w-2.5 h-2.5 bg-primary-600 rounded-full" />}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-bold text-gray-900">💳 Tarjeta — Visa o Mastercard</p>
+                          <p className="text-xs text-gray-400">Pago seguro vía AZUL, Banco Popular</p>
+                        </div>
+                      </button>
+
+                      {getValues('ciudad') === 'Santo Domingo' && (
+                        <button type="button" onClick={() => setMetodoPago('contra_entrega')}
+                          className={`w-full flex items-center gap-3 p-3.5 rounded-2xl border-2 transition-all text-left ${metodoPago === 'contra_entrega' ? 'border-primary-500 bg-teal-50/40' : 'border-gray-100'}`}>
+                          <div className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${metodoPago === 'contra_entrega' ? 'border-primary-600' : 'border-gray-300'}`}>
+                            {metodoPago === 'contra_entrega' && <div className="w-2.5 h-2.5 bg-primary-600 rounded-full" />}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-bold text-gray-900">💵 Pago contra entrega</p>
+                            <p className="text-xs text-gray-400">Pagas en efectivo al recibir — solo disponible en Santo Domingo</p>
+                          </div>
+                        </button>
+                      )}
+                    </div>
+
                     {/* Botón pagar */}
                     <button
                       onClick={handleSubmit(data => {
@@ -877,7 +933,12 @@ export default function CheckoutPage() {
                       {loading ? (
                         <>
                           <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          Conectando con AZUL...
+                          {metodoPago === 'contra_entrega' ? 'Confirmando pedido...' : 'Conectando con AZUL...'}
+                        </>
+                      ) : metodoPago === 'contra_entrega' ? (
+                        <>
+                          <span>✅ Confirmar pedido · RD${totalFinal.toLocaleString()}</span>
+                          <ChevronRight className="w-5 h-5" />
                         </>
                       ) : (
                         <>

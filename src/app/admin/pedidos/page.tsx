@@ -196,7 +196,7 @@ export default function PedidosPage() {
            p.id.toLowerCase().includes(q)
   })
 
-  const METODO_LABEL: Record<string,string> = {tarjeta:'💳 AZUL'}
+  const METODO_LABEL: Record<string,string> = {tarjeta:'💳 AZUL', contra_entrega:'💵 Contra entrega'}
 
   return (
     <div className="max-w-7xl mx-auto w-full">
@@ -240,6 +240,7 @@ export default function PedidosPage() {
               className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-teal-300">
               <option value="todos">Todos</option>
               <option value="tarjeta">💳 Tarjeta AZUL</option>
+              <option value="contra_entrega">💵 Contra entrega</option>
             </select>
           </div>
 
@@ -263,7 +264,8 @@ export default function PedidosPage() {
                           </span>
                           {p.pago_estado==='pagado'    && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Pagado ✅</span>}
                           {p.pago_estado==='declinado' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">Declinado ❌</span>}
-                          {p.pago_estado==='pendiente' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">Pendiente ⏳</span>}
+                          {p.metodo_pago==='contra_entrega' && p.pago_estado!=='pagado' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">💵 Cobrar en efectivo</span>}
+                          {p.pago_estado==='pendiente' && p.metodo_pago!=='contra_entrega' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">Pendiente ⏳</span>}
                         </div>
                         <p className="text-xs text-gray-400 mt-1 flex items-center gap-1.5">
                           {p.metodo_pago==='tarjeta'?<CreditCard className="w-3 h-3"/>:<Truck className="w-3 h-3"/>}

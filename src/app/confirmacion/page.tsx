@@ -43,6 +43,7 @@ function ConfirmacionContent() {
   const origen  = params.get('origen')
   const resultado = params.get('resultado')
   const declinado = resultado === 'declinado'
+  const esContraEntrega = params.get('contra_entrega') === '1'
 
   const [order,   setOrder]   = useState<any>(null)
   const [items,   setItems]   = useState<any[]>([])
@@ -242,6 +243,16 @@ function ConfirmacionContent() {
       </div>
 
       <div className="max-w-lg mx-auto px-4 -mt-10 space-y-4 relative z-10 pb-8">
+
+        {esContraEntrega && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
+            <span className="text-2xl shrink-0">💵</span>
+            <div>
+              <p className="font-black text-amber-900 text-sm">Pago contra entrega</p>
+              <p className="text-amber-700 text-xs mt-0.5">Vas a pagar en efectivo directo al mensajero cuando recibas tu pedido — no se te ha cobrado nada todavía.</p>
+            </div>
+          </div>
+        )}
 
         {/* Tiempo de entrega — card destacada */}
         {/* Tiempo de entrega dinámico por categoría */}
