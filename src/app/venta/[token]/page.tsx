@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
-import { ShoppingBag, CheckCircle, Clock, User, CreditCard, Phone, Mail, MapPin, Calendar } from 'lucide-react'
+import { ShoppingBag, CheckCircle, Clock, User, CreditCard, Phone, Mail, MapPin, Calendar, Truck, Link2 } from 'lucide-react'
 import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
 
 const CIUDADES = [
@@ -17,6 +17,15 @@ const CIUDADES = [
   'San Pedro de Macorís', 'La Romana', 'Higüey', 'Moca', 'San Francisco de Macorís',
   'Baní', 'Bonao', 'Azua', 'Barahona', 'Otra ciudad',
 ]
+
+// Pago contra entrega — solo disponible dentro del Gran Santo Domingo
+// (limitación real de logística: solo ahí se puede coordinar cobro en
+// efectivo al momento de la entrega). Fuera de esa zona, la única opción
+// es el link de pago seguro (AZUL).
+const ZONAS_CONTRA_ENTREGA = ['Santo Domingo', 'Santo Domingo Este', 'Santo Domingo Norte', 'Santo Domingo Oeste', 'Distrito Nacional']
+function esZonaContraEntrega(ciudad: string) {
+  return ZONAS_CONTRA_ENTREGA.includes(ciudad)
+}
 
 function fmtRD(n: number) {
   return 'RD$' + Number(n).toLocaleString('es-DO')
@@ -72,11 +81,25 @@ export default function VentaWhatsAppPage() {
   const [enviando, setEnviando] = useState(false)
   const [ordenCreada, setOrdenCreada] = useState<string | null>(null)
   const [showDisclaimer, setShowDisclaimer] = useState(false)
+  // Pago contra entrega — solo se ofrece si la ciudad seleccionada está
+  // dentro del Gran Santo Domingo. Fuera de ahí, la única opción válida
+  // es el link de pago (tarjeta vía AZUL).
+  const [metodoPago, setMetodoPago] = useState<'tarjeta' | 'contra_entrega'>('tarjeta')
 
   const [form, setForm] = useState({
     nombre: '', fecha_nacimiento: '', telefono: '',
     email: '', direccion: '', ciudad: '', ciudadPersonalizada: '',
   })
+
+  const ciudadFinal = form.ciudad === 'Otra ciudad' ? form.ciudadPersonalizada.trim() : form.ciudad
+  const puedeContraEntrega = esZonaContraEntrega(ciudadFinal)
+
+  // Blindaje: si el cliente había elegido "contra entrega" y luego cambia
+  // la ciudad a una fuera del Gran Santo Domingo, revertir automáticamente
+  // a link de pago — la misma protección que ya existe en el checkout web.
+  useEffect(() => {
+    if (metodoPago === 'contra_entrega' && !puedeContraEntrega) setMetodoPago('tarjeta')
+  }, [puedeContraEntrega, metodoPago])
 
   useEffect(() => {
     if (!token) return
@@ -100,7 +123,6 @@ export default function VentaWhatsAppPage() {
     if (telDigits.length < 10) return toast.error('Escribe tu número de WhatsApp (10 dígitos)')
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) return toast.error('Escribe un correo válido')
     if (form.direccion.trim().length < 8) return toast.error('Escribe tu dirección completa')
-    const ciudadFinal = form.ciudad === 'Otra ciudad' ? form.ciudadPersonalizada.trim() : form.ciudad
     if (!ciudadFinal || ciudadFinal.length < 3) return toast.error('Selecciona tu ciudad')
 
     // Antes de crear la orden, el cliente debe aceptar el aviso médico —
@@ -111,7 +133,6 @@ export default function VentaWhatsAppPage() {
   const handleDisclaimerAceptado = async (dData: DisclaimerData) => {
     setShowDisclaimer(false)
     const telDigits = form.telefono.replace(/\D/g, '')
-    const ciudadFinal = form.ciudad === 'Otra ciudad' ? form.ciudadPersonalizada.trim() : form.ciudad
 
     setEnviando(true)
     try {
@@ -141,6 +162,7 @@ export default function VentaWhatsAppPage() {
           email: form.email.trim(),
           direccion: form.direccion.trim(),
           ciudad: ciudadFinal,
+          metodo_pago: metodoPago,
           disclaimer_acceptance_id: disclaimerId,
           disclaimer_version: dData.version,
         }),
@@ -181,9 +203,15 @@ export default function VentaWhatsAppPage() {
         <p className="text-gray-600 mt-2">
           Tu número de pedido es <span className="font-bold text-[#002455]">{ordenCreada}</span>.
         </p>
-        <p className="text-gray-600 mt-3 text-sm">
-          En unos minutos te enviaremos por WhatsApp el <b>link de pago seguro</b> para completar tu compra. 💙
-        </p>
+        {metodoPago === 'contra_entrega' ? (
+          <p className="text-gray-600 mt-3 text-sm">
+            Pagas en <b>efectivo al recibir</b> tu pedido. Nuestro equipo coordinará contigo la entrega por WhatsApp. 💙
+          </p>
+        ) : (
+          <p className="text-gray-600 mt-3 text-sm">
+            En unos minutos te enviaremos por WhatsApp el <b>link de pago seguro</b> para completar tu compra. 💙
+          </p>
+        )}
       </div>
     </div>
   )
@@ -291,14 +319,54 @@ export default function VentaWhatsAppPage() {
             )}
           </div>
 
+          {/* ── MÉTODO DE PAGO ── */}
+          {ciudadFinal && (
+            <div className="mt-5 space-y-2">
+              <p className="text-xs font-semibold text-gray-600 mb-1">¿Cómo prefieres pagar?</p>
+
+              {puedeContraEntrega && (
+                <button type="button" onClick={() => setMetodoPago('contra_entrega')}
+                  className={`w-full flex items-center gap-3 p-3.5 rounded-xl border-2 transition-all text-left ${metodoPago === 'contra_entrega' ? 'border-[#01B2B7] bg-teal-50/50' : 'border-gray-200'}`}>
+                  <div className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${metodoPago === 'contra_entrega' ? 'border-[#01B2B7]' : 'border-gray-300'}`}>
+                    {metodoPago === 'contra_entrega' && <div className="w-2.5 h-2.5 bg-[#01B2B7] rounded-full" />}
+                  </div>
+                  <Truck className="w-4 h-4 text-gray-500 shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-gray-900">💵 Pago contra entrega</p>
+                    <p className="text-xs text-gray-400">Pagas en efectivo cuando recibas tu pedido</p>
+                  </div>
+                </button>
+              )}
+
+              <button type="button" onClick={() => setMetodoPago('tarjeta')}
+                className={`w-full flex items-center gap-3 p-3.5 rounded-xl border-2 transition-all text-left ${metodoPago === 'tarjeta' ? 'border-[#01B2B7] bg-teal-50/50' : 'border-gray-200'}`}>
+                <div className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${metodoPago === 'tarjeta' ? 'border-[#01B2B7]' : 'border-gray-300'}`}>
+                  {metodoPago === 'tarjeta' && <div className="w-2.5 h-2.5 bg-[#01B2B7] rounded-full" />}
+                </div>
+                <Link2 className="w-4 h-4 text-gray-500 shrink-0" />
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-gray-900">🔗 Pago con link de pago</p>
+                  <p className="text-xs text-gray-400">Te enviamos un link seguro por WhatsApp (tarjeta Visa/Mastercard vía AZUL)</p>
+                </div>
+              </button>
+
+              {!puedeContraEntrega && (
+                <p className="text-[11px] text-gray-400 pl-1">El pago contra entrega solo está disponible en el Gran Santo Domingo.</p>
+              )}
+            </div>
+          )}
+
           <button onClick={submit} disabled={enviando}
             className="w-full mt-5 bg-[#002455] hover:bg-[#01B2B7] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition">
             {enviando ? 'Registrando…' : 'Confirmar mis datos'}
           </button>
 
           <div className="flex items-center justify-center gap-2 mt-4 text-xs text-gray-400">
-            <CreditCard className="w-3.5 h-3.5" />
-            Después de confirmar, recibirás el link de pago seguro por WhatsApp
+            {metodoPago === 'contra_entrega' ? (
+              <><Truck className="w-3.5 h-3.5" />Después de confirmar, coordinamos la entrega y el cobro en efectivo</>
+            ) : (
+              <><CreditCard className="w-3.5 h-3.5" />Después de confirmar, recibirás el link de pago seguro por WhatsApp</>
+            )}
           </div>
         </div>
       </div>

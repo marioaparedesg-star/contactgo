@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Mail, Search, Star, TrendingUp, Users, Eye } from 'lucide-react'
+import { Mail, Phone, Search, Star, TrendingUp, Users, Eye } from 'lucide-react'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 
 const GOOGLE_REVIEW = 'https://g.page/r/Cb-RwE6S9vzgEAE/review'
@@ -26,7 +26,7 @@ export default function LeadsPage() {
     if (filtro === 'sin_convertir' && l.convertido) return false
     if (search) {
       const q = search.toLowerCase()
-      return (l.nombre?.toLowerCase().includes(q) || l.email?.toLowerCase().includes(q))
+      return (l.nombre?.toLowerCase().includes(q) || l.email?.toLowerCase().includes(q) || l.telefono?.includes(search))
     }
     return true
   })
@@ -38,7 +38,10 @@ export default function LeadsPage() {
   const waMsg = (l: any) => {
     const nombre = l.nombre?.split(' ')[0] ?? ''
     const tipo = l.tipo_receta === 'torico' ? 'tóricos' : l.tipo_receta === 'multifocal' ? 'multifocales' : 'esféricos'
-    return `https://wa.me/?text=${encodeURIComponent(
+    // FIX: antes este link no incluía el número del lead (wa.me/ vacío),
+    // así que el botón nunca abría el chat con la persona correcta.
+    const tel = l.telefono?.replace(/\D/g, '') ?? ''
+    return `https://wa.me/${tel}?text=${encodeURIComponent(
       `Hola ${nombre}! 👋 Somos ContactGo. Usaste nuestra calculadora de lentes de contacto. Encontramos los lentes ${tipo} perfectos para tu receta (OD ${l.od_sph ?? '?'} / OI ${l.oi_sph ?? '?'}). ¿Te ayudamos a completar tu pedido? Entregamos en 24-48h 😊`
     )}`
   }
@@ -87,7 +90,7 @@ export default function LeadsPage() {
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Buscar por nombre o email..."
+              placeholder="Buscar por nombre, email o teléfono..."
               className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary-400 bg-white" />
           </div>
           {(['todos','con_email','sin_convertir'] as const).map(f => (
@@ -127,6 +130,7 @@ export default function LeadsPage() {
                       {/* Receta */}
                       <div className="flex items-center gap-3 mt-1.5 flex-wrap">
                         {l.email && <span className="text-xs text-gray-500 flex items-center gap-1"><Mail className="w-3 h-3"/>{l.email}</span>}
+                        {l.telefono && <span className="text-xs text-gray-500 flex items-center gap-1"><Phone className="w-3 h-3"/>{l.telefono}</span>}
                         <span className="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-0.5 rounded-lg">
                           OD {l.od_sph ?? '?'}{l.od_cyl ? ` / ${l.od_cyl}` : ''} · OI {l.oi_sph ?? '?'}{l.oi_cyl ? ` / ${l.oi_cyl}` : ''}
                         </span>
@@ -149,10 +153,12 @@ export default function LeadsPage() {
                         <Mail className="w-3.5 h-3.5"/> Email
                       </a>
                     )}
-                    <a href={waMsg(l)} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
-                      <WhatsAppIcon className="w-3.5 h-3.5"/> WhatsApp
-                    </a>
+                    {l.telefono && (
+                      <a href={waMsg(l)} target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
+                        <WhatsAppIcon className="w-3.5 h-3.5"/> WhatsApp
+                      </a>
+                    )}
                     {l.convertido && (
                       <a href={GOOGLE_REVIEW} target="_blank" rel="noopener noreferrer"
                         className="flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg bg-yellow-400 text-gray-900 hover:bg-yellow-500 transition-colors">

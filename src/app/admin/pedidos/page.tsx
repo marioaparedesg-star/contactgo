@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Search, X, Printer, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation } from 'lucide-react'
+import { Search, X, Printer, Package, CheckCircle, Truck, Clock, XCircle, CreditCard, Hash, Bell, Navigation, Phone } from 'lucide-react'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import toast from 'react-hot-toast'
 
@@ -271,6 +271,11 @@ export default function PedidosPage() {
                           {p.metodo_pago==='tarjeta'?<CreditCard className="w-3 h-3"/>:<Truck className="w-3 h-3"/>}
                           #{(p.numero_orden??p.id.slice(-8)).toUpperCase()} · {new Date(p.created_at).toLocaleDateString('es-DO')}
                         </p>
+                        {p.cliente_telefono && (
+                          <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5">
+                            <Phone className="w-3 h-3"/>{p.cliente_telefono}
+                          </p>
+                        )}
                       </div>
                       <span className="font-black text-sm text-gray-900 shrink-0">RD${p.total?.toLocaleString()}</span>
                     </div>

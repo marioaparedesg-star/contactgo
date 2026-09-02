@@ -113,6 +113,7 @@ export default function ClientesPage() {
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm text-gray-900 truncate">{c.nombre??'Sin nombre'}</p>
                         <p className="text-xs text-gray-400 truncate">{c.email}</p>
+                        {c.telefono && <p className="text-xs text-gray-400 truncate flex items-center gap-1"><Phone className="w-3 h-3 shrink-0"/>{c.telefono}</p>}
                       </div>
                       <div className="text-right shrink-0">
                         {stats?(
