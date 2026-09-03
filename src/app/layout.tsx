@@ -66,7 +66,7 @@ export const viewport = {
 
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": ["Organization", "LocalBusiness"],
+  "@type": ["Organization", "LocalBusiness", "Optician"],
   "@id": "https://www.contactgo.net/#organization",
   "name": "ContactGo",
   "url": "https://www.contactgo.net",
