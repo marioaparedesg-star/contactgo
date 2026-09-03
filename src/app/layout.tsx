@@ -104,7 +104,8 @@ const organizationSchema = {
   "paymentAccepted": "Tarjeta de crédito/débito Visa y Mastercard procesada por AZUL (Banco Popular)",
   "sameAs": [
     "https://www.instagram.com/contactgord",
-    "https://www.facebook.com/profile.php?id=1063834443484441"
+    "https://www.facebook.com/profile.php?id=1063834443484441",
+    "https://maps.app.goo.gl/ExyMCJBXEeptJNDt5"
   ]
 }
 
