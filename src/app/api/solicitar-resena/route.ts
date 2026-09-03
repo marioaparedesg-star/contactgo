@@ -1,10 +1,18 @@
-// GET /api/solicitar-resena — Cron: envía solicitud de reseña por WhatsApp + email
-// 3 días después de que el pedido se marca como ENTREGADO (no de la fecha de compra —
-// un tórico puede tardar 45 días en llegar, pedir reseña por fecha de compra le llegaría
-// antes de recibir el producto).
+// GET /api/solicitar-resena — Cron: envía solicitud de reseña (WhatsApp + email)
+// a TODOS los pedidos marcados 'entregado' el día calendario ANTERIOR (hora RD),
+// una vez al día a una sola hora fija.
+//
+// Usa entregado_at (timestamp exacto capturado en /api/admin/pedidos al marcar
+// el pedido como entregado) en vez de updated_at — cualquier edición posterior
+// del pedido (nota admin, cambio de dirección) movía updated_at y desalineaba
+// la solicitud. Pedidos entregados ANTES de ayer y aún sin 'resena_solicitada'
+// también se incluyen (red de seguridad: si el cron estuvo caído un día, se
+// recuperan en la siguiente corrida en vez de perderse para siempre).
+//
 // WhatsApp usa la plantilla 'solicitar_resena_v2' (APROBADA en Meta, confirmado
-// 2026-09-03). Ambos canales corren siempre — si uno falla, el otro sigue cubriendo,
-// y 'resena_solicitada' solo se marca true si el email se envió con éxito.
+// 2026-09-03 directo contra la API). Ambos canales corren siempre — 'resena_solicitada'
+// se marca true si AL MENOS UNO tuvo éxito, para no reintentar (y duplicar) el canal
+// que sí funcionó solo porque el otro falló.
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
@@ -13,6 +21,15 @@ import { sendReviewRequest } from '@/lib/whatsapp'
 export const dynamic = 'force-dynamic'
 
 const getSb = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+
+// República Dominicana es UTC-4 fijo (sin horario de verano).
+const RD_OFFSET_MS = 4 * 3600000
+
+function inicioDeHoyRD(): Date {
+  const nowRD = new Date(Date.now() - RD_OFFSET_MS)
+  const inicioRD = Date.UTC(nowRD.getUTCFullYear(), nowRD.getUTCMonth(), nowRD.getUTCDate())
+  return new Date(inicioRD + RD_OFFSET_MS)
+}
 
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
@@ -24,48 +41,44 @@ export async function GET(req: NextRequest) {
   const sb = getSb()
   const resend = new Resend(process.env.RESEND_API_KEY)
 
-  // Pedidos ENTREGADOS hace 3+ días, sin reseña solicitada aún.
-  // (updated_at como aproximación de cuándo pasó a 'entregado' — no hay timestamp dedicado.)
-  //
-  // FIX: antes tenía tope superior de 10 días — si el cron no corría el día exacto en que
-  // un pedido caía en la ventana de 3-10 días (por ejemplo si el cron estuvo caído, o el
-  // pedido se marcó "entregado" con retraso), esa solicitud se perdía PARA SIEMPRE, sin
-  // ninguna forma de recuperarla. Ahora el límite superior es 45 días — cualquier pedido
-  // atrasado se recupera en la próxima ejecución en vez de perderse.
+  // Todo lo entregado ANTES de hoy (00:00 RD) y aún sin reseña solicitada.
+  // En la práctica esto es "lo de ayer" en la corrida normal, más cualquier
+  // rezagado de días previos si el cron falló.
   const { data: ordenes } = await sb
     .from('orders')
     .select('id, cliente_email, cliente_nombre, numero_orden, cliente_telefono')
     .eq('estado', 'entregado')
     .eq('resena_solicitada', false)
-    .not('cliente_email', 'is', null)
-    .lte('updated_at', new Date(Date.now() - 3 * 86400000).toISOString())
-    .gte('updated_at', new Date(Date.now() - 45 * 86400000).toISOString())
-    .limit(20)
+    .not('entregado_at', 'is', null)
+    .lt('entregado_at', inicioDeHoyRD().toISOString())
+    .limit(100)
 
-  if (!ordenes?.length) return NextResponse.json({ sent: 0 })
+  if (!ordenes?.length) return NextResponse.json({ sent: 0, sentWhatsapp: 0 })
 
   let sent = 0
   let sentWhatsapp = 0
   for (const o of ordenes) {
     const nombre = (o.cliente_nombre ?? 'Cliente').split(' ')[0]
+    let whatsappOk = false
+    let emailOk = false
 
-    // WhatsApp primero (plantilla 'solicitar_resena_v2', APROBADA en Meta —
-    // verificado 2026-09-03 directo contra la API de Meta, ya trae el link
-    // de reseña de Google embebido). No bloqueante: si falla, el email de
-    // abajo sigue cubriendo el envío igual — nunca dependemos de un solo canal.
+    // WhatsApp (plantilla 'solicitar_resena_v2', APROBADA en Meta — verificado
+    // 2026-09-03 directo contra la API, ya trae el link de reseña de Google).
     if (o.cliente_telefono) {
       try {
         await sendReviewRequest({ telefono: o.cliente_telefono, nombre: o.cliente_nombre })
+        whatsappOk = true
         sentWhatsapp++
-      } catch { /* WhatsApp falló, el email de abajo cubre el envío */ }
+      } catch { /* WhatsApp falló, el email de abajo puede cubrir el envío */ }
     }
 
-    try {
-      await resend.emails.send({
-        from: `ContactGo <info@contactgo.net>`,
-        to: o.cliente_email,
-        subject: `¿Cómo fue tu experiencia con ContactGo? 👁`,
-        html: `
+    if (o.cliente_email) {
+      try {
+        await resend.emails.send({
+          from: `ContactGo <info@contactgo.net>`,
+          to: o.cliente_email,
+          subject: `¿Cómo fue tu experiencia con ContactGo? 👁`,
+          html: `
 <div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
   <div style="background:#002455;padding:20px;border-radius:12px 12px 0 0;text-align:center">
     <p style="color:white;font-weight:900;font-size:20px;margin:0">ContactGo</p>
@@ -92,11 +105,18 @@ export async function GET(req: NextRequest) {
     </p>
   </div>
 </div>`
-      })
+        })
+        emailOk = true
+        sent++
+      } catch { /* email falló, si WhatsApp funcionó igual marcamos resena_solicitada abajo */ }
+    }
+
+    // Se marca 'resena_solicitada' si AL MENOS UN canal tuvo éxito — evita
+    // reintentar (y duplicar) el canal que sí funcionó solo porque el otro falló.
+    if (whatsappOk || emailOk) {
       await sb.from('orders').update({ resena_solicitada: true }).eq('id', o.id)
-      sent++
-    } catch { /* continue */ }
+    }
   }
 
-  return NextResponse.json({ sent, sentWhatsapp })
+  return NextResponse.json({ sent, sentWhatsapp, total: ordenes.length })
 }

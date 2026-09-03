@@ -31,7 +31,11 @@ export async function POST(req: NextRequest) {
 
     if (accion === 'cambiar_estado') {
       if (!nuevo_estado) return NextResponse.json({ error: 'nuevo_estado requerido' }, { status: 400 })
-      const { error } = await sb.from('orders').update({ estado: nuevo_estado }).eq('id', order_id)
+      const updateData: Record<string, any> = { estado: nuevo_estado }
+      // Capturamos el momento exacto de la entrega — es lo que usa el cron
+      // de solicitud de reseña (pedidos entregados el día anterior).
+      if (nuevo_estado === 'entregado') updateData.entregado_at = new Date().toISOString()
+      const { error } = await sb.from('orders').update(updateData).eq('id', order_id)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({ ok: true })
     }
