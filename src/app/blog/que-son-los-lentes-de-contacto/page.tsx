@@ -471,7 +471,7 @@ export default function Page() {
         {/* CTA */}
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Listo para encontrar tus lentes de contacto?</h3>
-          <p className="text-sm text-gray-600 mb-4">Más de 35 directo del fabricante. Entrega en 24-48h en toda República Dominicana.</p>
+          <p className="text-sm text-gray-600 mb-4">Más de 30 productos, directo del fabricante. Entrega en 24-48h en toda República Dominicana.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
               Ver catálogo completo →

@@ -333,7 +333,7 @@ export default async function HomePage() {
           <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             {[
               { num: `${reseñasAvg.toFixed(1)}★`, label: 'Calificación promedio', sub: `${reseñasCount} reseñas verificadas` },
-              { num: '35+',  label: 'Productos disponibles', sub: 'Marcas líderes mundiales' },
+              { num: '30+',  label: 'Productos disponibles', sub: 'Marcas líderes mundiales' },
               { num: '24h',  label: 'Entrega a domicilio',   sub: 'En toda República Dominicana' },
               { num: null,   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD', azul: true },
             ].map(({ num, label, sub, azul }, i) => (

@@ -365,7 +365,7 @@ export default function BlogPage({ searchParams }: { searchParams?: { categoria?
         {/* ── CTA FINAL ── */}
         <div className="mt-12 bg-gray-900 rounded-2xl p-6 text-center">
           <p className="text-white font-bold text-lg mb-1">¿Listo para comprar?</p>
-          <p className="text-gray-400 text-sm mb-4">35+ lentes certificados · Entrega 24-48h · Pago con AZUL</p>
+          <p className="text-gray-400 text-sm mb-4">30+ lentes certificados · Entrega 24-48h · Pago con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
             <Link href="/catalogo" className="bg-white text-gray-900 font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-gray-100 transition-colors">
               Ver catálogo →

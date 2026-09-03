@@ -85,14 +85,14 @@ export default function Page() {
                 </a>
               ))}
             </div>
-            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo (35+ productos) →</Link>
+            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo (30+ productos) →</Link>
           </section>
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Cómo recibir lentes en República Dominicana?</h2>
             <div className="space-y-3">
               {[
-                { paso: '1', titulo: 'Elige tu lente en línea', desc: 'Busca por marca, tipo o graduación. Más de 35 productos disponibles.' },
+                { paso: '1', titulo: 'Elige tu lente en línea', desc: 'Busca por marca, tipo o graduación. Más de 30 productos disponibles.' },
                 { paso: '2', titulo: 'Ingresa tu dirección en República Dominicana', desc: 'Al hacer checkout, ingresa tu dirección exacta en Entrega a todas las provincias y municipios de RD.' },
                 { paso: '3', titulo: 'Paga con AZUL de forma segura', desc: 'Tarjeta VISA o Mastercard. Procesado por AZUL/Banco Popular.' },
                 { paso: '4', titulo: 'Recibe en 24-48h', desc: 'El mensajero te contacta para coordinar. Sin necesidad de estar en un lugar fijo.' },

@@ -73,7 +73,7 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Comprar lentes de contacto en San José de Ocoa nunca fue tan fácil. ContactGo entrega directamente en San José de Ocoa en 24-48 horas — sin necesidad de visitar ninguna óptica física. Aunque es una de las provincias más montañosas del país, nuestra logística llega igual en 24-48h. Más de 35 productos de las marcas más reconocidas del mundo, directo del fabricante, con pago 100% seguro.</p>
+          <p>Comprar lentes de contacto en San José de Ocoa nunca fue tan fácil. ContactGo entrega directamente en San José de Ocoa en 24-48 horas — sin necesidad de visitar ninguna óptica física. Aunque es una de las provincias más montañosas del país, nuestra logística llega igual en 24-48h. Más de 30 productos de las marcas más reconocidas del mundo, directo del fabricante, con pago 100% seguro.</p>
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Productos más vendidos disponibles en San José de Ocoa</h2>
@@ -85,14 +85,14 @@ export default function Page() {
                 </a>
               ))}
             </div>
-            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo (35+ productos) →</Link>
+            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo (30+ productos) →</Link>
           </section>
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Cómo recibir lentes en San José de Ocoa?</h2>
             <div className="space-y-3">
               {[
-                { paso: '1', titulo: 'Elige tu lente en línea', desc: 'Busca por marca, tipo o graduación. Más de 35 productos disponibles.' },
+                { paso: '1', titulo: 'Elige tu lente en línea', desc: 'Busca por marca, tipo o graduación. Más de 30 productos disponibles.' },
                 { paso: '2', titulo: 'Ingresa tu dirección en San José de Ocoa', desc: 'Al hacer checkout, ingresa tu dirección exacta en San José de Ocoa.' },
                 { paso: '3', titulo: 'Paga con AZUL de forma segura', desc: 'Tarjeta VISA o Mastercard. Procesado por AZUL/Banco Popular.' },
                 { paso: '4', titulo: 'Recibe en 24-48h', desc: 'El mensajero te contacta para coordinar. Sin necesidad de estar en un lugar fijo.' },

@@ -216,7 +216,7 @@ export default function Page() {
               { href: '/marca/alcon', titulo: '→ Air Optix® — Alcon', desc: 'HydraGlyde, Colors, Multifocal' },
               { href: '/marca/coopervision', titulo: '→ CooperVision', desc: 'Biofinity, clariti, Proclear, Avaira' },
               { href: '/marca/bausch-lomb', titulo: '→ Bausch+Lomb', desc: 'ULTRA, Ultra Astig, Biotrue ONEday' },
-              { href: '/catalogo', titulo: '→ Ver catálogo completo', desc: 'Más de 35 productos disponibles' },
+              { href: '/catalogo', titulo: '→ Ver catálogo completo', desc: 'Más de 30 productos disponibles' },
             ].map(({ href, titulo, desc }) => (
               <Link key={href} href={href} className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all">
                 <p className="text-sm font-semibold text-primary-600">{titulo}</p>
@@ -244,7 +244,7 @@ export default function Page() {
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">La tienda de lentes de contacto online en RD</h3>
           <p className="text-sm text-gray-600 mb-1">Originales · Entrega 24-48h · Pago seguro con AZUL</p>
-          <p className="text-xs text-gray-400 mb-4">Más de 35 productos disponibles de ACUVUE, Biofinity, Air Optix y más</p>
+          <p className="text-xs text-gray-400 mb-4">Más de 30 productos disponibles de ACUVUE, Biofinity, Air Optix y más</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</Link>

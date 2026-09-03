@@ -73,7 +73,7 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Comprar lentes de contacto en Jimaní nunca fue tan fácil. ContactGo entrega directamente en Jimaní y la provincia de Independencia en 24-48 horas — sin necesidad de visitar ninguna tienda. Más de 35 productos de las marcas más reconocidas del mundo, directo del fabricante.</p>
+          <p>Comprar lentes de contacto en Jimaní nunca fue tan fácil. ContactGo entrega directamente en Jimaní y la provincia de Independencia en 24-48 horas — sin necesidad de visitar ninguna tienda. Más de 30 productos de las marcas más reconocidas del mundo, directo del fabricante.</p>
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Productos más vendidos disponibles en Jimaní</h2>
@@ -85,14 +85,14 @@ export default function Page() {
                 </a>
               ))}
             </div>
-            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo (35+ productos) →</Link>
+            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo (30+ productos) →</Link>
           </section>
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Cómo recibir lentes en Jimaní?</h2>
             <div className="space-y-3">
               {[
-                { paso: '1', titulo: 'Elige tu lente en línea', desc: 'Busca por marca, tipo o graduación. Más de 35 productos disponibles.' },
+                { paso: '1', titulo: 'Elige tu lente en línea', desc: 'Busca por marca, tipo o graduación. Más de 30 productos disponibles.' },
                 { paso: '2', titulo: 'Ingresa tu dirección en Jimaní', desc: 'Al hacer checkout, ingresa tu dirección exacta en Jimaní y la provincia de Independencia.' },
                 { paso: '3', titulo: 'Paga con AZUL de forma segura', desc: 'Tarjeta VISA o Mastercard. Procesado por AZUL/Banco Popular.' },
                 { paso: '4', titulo: 'Recibe en 24-48h', desc: 'El mensajero te contacta para coordinar. Sin necesidad de estar en un lugar fijo.' },
