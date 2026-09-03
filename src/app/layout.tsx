@@ -85,8 +85,15 @@ const organizationSchema = {
   },
   "address": {
     "@type": "PostalAddress",
-    "addressCountry": "DO",
-    "addressRegion": "Santo Domingo"
+    "streetAddress": "Av. Winston Churchill No. 95, Torre Empresarial Blue Mall, Piso 23",
+    "addressLocality": "Santo Domingo",
+    "addressRegion": "Distrito Nacional",
+    "addressCountry": "DO"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 18.4726717,
+    "longitude": -69.9409414
   },
   "areaServed": {
     "@type": "Country",
