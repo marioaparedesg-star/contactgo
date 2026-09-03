@@ -1,10 +1,14 @@
-// GET /api/solicitar-resena — Cron: envía email de solicitud de reseña
+// GET /api/solicitar-resena — Cron: envía solicitud de reseña por WhatsApp + email
 // 3 días después de que el pedido se marca como ENTREGADO (no de la fecha de compra —
 // un tórico puede tardar 45 días en llegar, pedir reseña por fecha de compra le llegaría
 // antes de recibir el producto).
+// WhatsApp usa la plantilla 'solicitar_resena_v2' (APROBADA en Meta, confirmado
+// 2026-09-03). Ambos canales corren siempre — si uno falla, el otro sigue cubriendo,
+// y 'resena_solicitada' solo se marca true si el email se envió con éxito.
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
+import { sendReviewRequest } from '@/lib/whatsapp'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,7 +34,7 @@ export async function GET(req: NextRequest) {
   // atrasado se recupera en la próxima ejecución en vez de perderse.
   const { data: ordenes } = await sb
     .from('orders')
-    .select('id, cliente_email, cliente_nombre, numero_orden')
+    .select('id, cliente_email, cliente_nombre, numero_orden, cliente_telefono')
     .eq('estado', 'entregado')
     .eq('resena_solicitada', false)
     .not('cliente_email', 'is', null)
@@ -41,8 +45,21 @@ export async function GET(req: NextRequest) {
   if (!ordenes?.length) return NextResponse.json({ sent: 0 })
 
   let sent = 0
+  let sentWhatsapp = 0
   for (const o of ordenes) {
     const nombre = (o.cliente_nombre ?? 'Cliente').split(' ')[0]
+
+    // WhatsApp primero (plantilla 'solicitar_resena_v2', APROBADA en Meta —
+    // verificado 2026-09-03 directo contra la API de Meta, ya trae el link
+    // de reseña de Google embebido). No bloqueante: si falla, el email de
+    // abajo sigue cubriendo el envío igual — nunca dependemos de un solo canal.
+    if (o.cliente_telefono) {
+      try {
+        await sendReviewRequest({ telefono: o.cliente_telefono, nombre: o.cliente_nombre })
+        sentWhatsapp++
+      } catch { /* WhatsApp falló, el email de abajo cubre el envío */ }
+    }
+
     try {
       await resend.emails.send({
         from: `ContactGo <info@contactgo.net>`,
@@ -81,5 +98,5 @@ export async function GET(req: NextRequest) {
     } catch { /* continue */ }
   }
 
-  return NextResponse.json({ sent })
+  return NextResponse.json({ sent, sentWhatsapp })
 }
