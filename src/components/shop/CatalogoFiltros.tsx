@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { SlidersHorizontal, X, ChevronDown, Check } from 'lucide-react'
 
 interface Tipo  { value: string; label: string }
@@ -33,11 +34,25 @@ function buildUrl(overrides: Record<string, string | undefined>, base: Record<st
 }
 
 export default function CatalogoFiltros({
-  tipos, marcas, tipoActivo, marcaActiva, duracionActiva,
-  ordenActivo, ordenes, q
+  tipos, marcas, tipoActivo: tipoActivoProp, marcaActiva: marcaActivaProp, duracionActiva: duracionActivaProp,
+  ordenActivo: ordenActivoProp, ordenes, q: qProp
 }: Props) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+
+  // FIX: el Server Component padre siempre pasa estos props vacíos a propósito
+  // (para no leer searchParams ahí y mantener el ISR real de /catalogo — ver
+  // comentario CRÍTICO-1b en page.tsx). Pero este componente los usaba
+  // directamente para resaltar el botón activo, así que ningún filtro se
+  // marcaba nunca como seleccionado aunque el filtrado sí funcionara (el
+  // filtrado real lo hace CatalogoGrid, que sí lee la URL). Ahora leemos la
+  // URL real del navegador aquí también, y esa es la fuente de verdad.
+  const searchParams = useSearchParams()
+  const tipoActivo     = searchParams.get('tipo')     ?? tipoActivoProp
+  const marcaActiva    = searchParams.get('marca')    ?? marcaActivaProp
+  const duracionActiva = searchParams.get('duracion') ?? duracionActivaProp
+  const ordenActivo    = searchParams.get('orden')    ?? ordenActivoProp
+  const q              = searchParams.get('q')        ?? qProp
 
   const base = { tipo: tipoActivo, marca: marcaActiva, duracion: duracionActiva, orden: ordenActivo, q }
 
