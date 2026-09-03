@@ -124,7 +124,7 @@ export default async function HomePage() {
             {[
               {
                 label: 'Esféricos', slug: 'esferico',
-                desc: 'Miopía e hipermetropía — lo más pedido',
+                desc: 'Miopía e hipermetropía',
                 bg: 'bg-teal-50', fg: 'text-primary-600',
                 // LENTE DE CONTACTO simple — disco con anillo interno y highlight de curvatura
                 svg: (
@@ -137,7 +137,7 @@ export default async function HomePage() {
               },
               {
                 label: 'Tóricos', slug: 'torico',
-                desc: 'Visión nítida con astigmatismo',
+                desc: 'Para astigmatismo',
                 bg: 'bg-violet-50', fg: 'text-violet-600',
                 // LENTE DE CONTACTO tórico — con marca de eje inclinada + punto de orientación
                 svg: (
@@ -152,7 +152,7 @@ export default async function HomePage() {
               },
               {
                 label: 'Multifocales', slug: 'multifocal',
-                desc: 'Para ver de cerca y de lejos',
+                desc: 'Cerca y lejos a la vez',
                 bg: 'bg-teal-50', fg: 'text-teal-600',
                 // LENTE DE CONTACTO multifocal — anillos concéntricos (zonas de graduación)
                 svg: (
@@ -216,7 +216,7 @@ export default async function HomePage() {
                   <div className="w-7 h-7 md:w-9 md:h-9">{cat.svg}</div>
                 </div>
                 <p className="font-semibold text-gray-900 text-xs md:text-sm">{cat.label}</p>
-                <p className="text-[10px] md:text-xs text-gray-400 mt-0.5 hidden md:block">{cat.desc}</p>
+                <p className="text-[9.5px] leading-tight md:text-xs text-gray-400 mt-0.5">{cat.desc}</p>
               </Link>
             ))}
           </div>
