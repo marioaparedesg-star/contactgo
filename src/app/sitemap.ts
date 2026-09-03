@@ -1,12 +1,22 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server'
+import fs from 'fs'
+import path from 'path'
 
 export default async function sitemap() {
   const sb = createServerSupabaseClient()
 
   const { data: products } = await sb.from('products').select('slug, id, updated_at').eq('activo', true)
 
-  // Blog: artículos son rutas estáticas Next.js, no tabla blog_posts (no existe en DB)
-  const blogs: null = null
+  // Blog: los artículos son carpetas de rutas estáticas de Next.js (no hay
+  // tabla blog_posts en la DB). Antes esta lista estaba escrita a mano y
+  // solo cubría 40 de 159 artículos reales — 119 artículos (75%) nunca
+  // entraban al sitemap y quedaban invisibles para Google. Ahora se lee
+  // el directorio real en cada build, así que todo artículo nuevo entra
+  // automáticamente sin tener que tocar este archivo.
+  const blogDir = path.join(process.cwd(), 'src/app/blog')
+  const blogSlugs = fs.readdirSync(blogDir, { withFileTypes: true })
+    .filter(d => d.isDirectory() && !d.name.startsWith('[') && !d.name.startsWith('_'))
+    .map(d => d.name)
 
   const now = new Date()
 
@@ -19,32 +29,6 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/toricos',                                     priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/multifocales',                                priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/color',                                       priority: 0.80, changeFrequency: 'weekly'  },
-    { url: 'https://www.contactgo.net/blog/mejores-lentes-de-contacto-republica-dominicana-2026', priority: 0.85, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/suscripcion-mensual-lentes-contacto-como-funciona-rd', priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/cuanto-cuesta-un-ano-completo-lentes-contacto-rd', priority: 0.82, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/como-saber-si-lentes-contacto-son-originales-o-falsos-rd', priority: 0.80, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-contacto-para-eventos-fiestas-halloween-quinceanera-rd', priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/optica-fisica-vs-tienda-online-especializada-lentes-contacto-rd', priority: 0.78, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/regalar-lentes-contacto-idea-original-rd', priority: 0.72, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/examen-visual-antes-de-comprar-lentes-contacto-rd', priority: 0.78, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-contacto-devolucion-cambio-graduacion-incorrecta-rd', priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/como-cambiar-optica-tradicional-a-compra-online-lentes-contacto-rd', priority: 0.78, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/mejor-momento-comprar-lentes-contacto-ahorrar-rd', priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/como-elegir-tu-primera-marca-lentes-contacto-rd', priority: 0.78, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-contacto-conducir-de-noche-rd', priority: 0.72, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/usar-lentes-contacto-y-gafas-de-sol-juntos-rd', priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/cuanto-tiempo-duran-lentes-contacto-sin-abrir-caja-rd', priority: 0.72, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-contacto-blandos-vs-rigidos-diferencia-rd', priority: 0.72, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/como-saber-mi-talla-curvatura-diametro-lentes-contacto-rd', priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/que-hacer-lente-contacto-roto-doblado-rasgado-rd', priority: 0.72, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-contacto-vs-cirugia-lasik-cual-elegir-rd', priority: 0.80, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-contacto-diabetes-condiciones-medicas-rd', priority: 0.72, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/cuando-cambiar-graduacion-lentes-contacto-senales-rd', priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-de-contacto-miopia-alta-graduacion-fuerte-rd', priority: 0.80, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-de-contacto-y-maquillaje-guia-completa', priority: 0.78, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/guia-principiantes-lentes-contacto-rd-2026', priority: 0.85, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/sensacion-arenilla-irritacion-lentes-contacto-causas', priority: 0.78, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/presbicia-despues-40-lentes-contacto-multifocales-vs-gafas', priority: 0.82, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/lentes-de-contacto-republica-dominicana',     priority: 0.95, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/gotas',                                      priority: 0.75, changeFrequency: 'weekly' as const },
     { url: 'https://www.contactgo.net/soluciones',                                  priority: 0.75, changeFrequency: 'weekly'  },
@@ -54,20 +38,6 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/marca/coopervision',                          priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/faq',  priority: 0.65, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/blog',                                        priority: 0.75, changeFrequency: 'weekly'  },
-    { url: 'https://www.contactgo.net/blog/primeros-pasos-lentes-contacto-rd',      priority: 0.70, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-de-contacto-para-astigmatismo-rd', priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-multifocales-presbicia-rd',       priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/biofinity-vs-acuvue-comparacion',        priority: 0.75, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/ojos-secos-lentes-contacto',            priority: 0.70, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-contacto-colores-rd',            priority: 0.70, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/cuanto-duran-lentes-contacto',          priority: 0.70, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/solucion-limpieza-lentes-contacto',     priority: 0.70, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/lentes-contacto-ninos-adolescentes-rd', priority: 0.72, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/cuanto-cuestan-lentes-contacto-rd',     priority: 0.72, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/blog/como-poner-lentes-de-contacto',      priority: 0.75, changeFrequency: 'monthly' as const },
-  { url: 'https://www.contactgo.net/blog/tipos-de-lentes-de-contacto',          priority: 0.75, changeFrequency: 'monthly' as const },
-  { url: 'https://www.contactgo.net/blog/como-leer-receta-optica-rd',            priority: 0.72, changeFrequency: 'monthly' },
-  { url: 'https://www.contactgo.net/blog/dormir-con-lentes-contacto',             priority: 0.70, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo', priority: 0.85, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/lentes-de-contacto/santiago',      priority: 0.85, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/lentes-de-contacto/punta-cana',    priority: 0.80, changeFrequency: 'monthly' },
@@ -94,9 +64,9 @@ export default async function sitemap() {
     priority: 0.85,
   }))
 
-  const blogUrls = (blogs ?? []).map((b: any) => ({
-    url: `https://www.contactgo.net/blog/${b.slug}`,
-    lastModified: b.updated_at ? new Date(b.updated_at) : now,
+  const blogUrls = blogSlugs.map((slug) => ({
+    url: `https://www.contactgo.net/blog/${slug}`,
+    lastModified: now,
     changeFrequency: 'monthly' as const,
     priority: 0.70,
   }))
