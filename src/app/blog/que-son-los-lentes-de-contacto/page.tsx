@@ -425,7 +425,7 @@ export default function Page() {
                 { q: '¿Los lentes de contacto necesitan receta médica?', a: 'Sí, los lentes graduados requieren prescripción de un optometrista u oftalmólogo. Solo los lentes de color puramente estéticos (sin graduación) pueden adquirirse sin receta.' },
                 { q: '¿Cuánto duran los lentes de contacto?', a: 'Depende del tipo: los diarios se descartan al final del día, los quincenales duran 14 días y los mensuales 30 días. Nunca deben usarse más tiempo del indicado.' },
                 { q: '¿Son seguros los lentes de contacto?', a: 'Sí, cuando se usan correctamente y se mantiene una buena higiene. Millones de personas los usan a diario sin problemas. La clave está en seguir las instrucciones del fabricante y tu especialista.' },
-                { q: '¿Dónde comprar lentes de contacto en República Dominicana?', a: 'En ContactGo ofrecemos más de 35 productos de las principales marcas mundiales, directo del fabricante, con entrega en 24-48 horas a todo el país.' },
+                { q: '¿Dónde comprar lentes de contacto en República Dominicana?', a: 'En ContactGo ofrecemos más de 30 productos de las principales marcas mundiales, directo del fabricante, con entrega en 24-48 horas a todo el país.' },
               ].map(({ q, a }, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
                   <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">

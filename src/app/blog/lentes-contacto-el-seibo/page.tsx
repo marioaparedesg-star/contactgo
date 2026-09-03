@@ -45,7 +45,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en El Seibo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en El Seibo y Santa Cruz del Seibo en 24-48 horas. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a El Seibo?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío a El Seibo se calcula al momento del checkout. Los pedidos superiores a RD$8,000 tienen envío gratuito. Consulta el costo exacto al agregar tu dirección de entrega." } },
               { "@type": "Question", "name": "¿Cuánto tarda la entrega en El Seibo?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en El Seibo es en 24-48 horas hábiles para la mayoría de los pedidos. Pedidos realizados antes de las 3pm salen el mismo día." } },
-              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en El Seibo?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 35 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y directo del fabricante." } }
+              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en El Seibo?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 30 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y directo del fabricante." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [

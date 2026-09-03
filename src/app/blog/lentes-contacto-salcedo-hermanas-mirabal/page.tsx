@@ -45,7 +45,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en Salcedo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en Salcedo y toda la provincia Hermanas Mirabal (Tenares y Villa Tapia) en 24-48 horas. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a Salcedo?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío se calcula al momento del checkout según tu dirección exacta. Consulta el costo exacto al agregar tu dirección de entrega." } },
               { "@type": "Question", "name": "¿Cuánto tarda la entrega en Salcedo?", "acceptedAnswer": { "@type": "Answer", "text": "Entre 24 y 48 horas hábiles para la mayoría de los pedidos. Pedidos realizados antes de las 3pm suelen salir el mismo día." } },
-              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en Salcedo?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 35 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y directo del fabricante." } }
+              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en Salcedo?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 30 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y directo del fabricante." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [

@@ -98,7 +98,7 @@ export default function Page() {
           {/* Quick answer box */}
           <div className="bg-teal-50 border-2 border-primary-200 rounded-2xl p-5">
             <p className="text-sm font-bold text-primary-800 mb-2">⚡ Respuesta rápida</p>
-            <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto certificados en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24-48 horas, más de 35 marcas disponibles, directo del fabricante. Sin necesidad de desplazarte a ningún lugar.</p>
+            <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto certificados en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24-48 horas, más de 30 productos disponibles, directo del fabricante. Sin necesidad de desplazarte a ningún lugar.</p>
             <Link href="/catalogo" className="mt-3 inline-block bg-teal-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-teal-600 transition-colors">
               Ver catálogo completo →
             </Link>
