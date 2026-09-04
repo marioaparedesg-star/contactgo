@@ -100,7 +100,7 @@ export default function AdminDashboard() {
     // es información operativa del día, no del análisis histórico.
     const hoy0ISO = new Date(new Date().setHours(0,0,0,0)).toISOString()
 
-    const [periodo, hoyData, ordRecent, items, stockLow, abonosData] = await Promise.all([
+    const [periodo, hoyData, ordRecent, stockLow, abonosData] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
@@ -110,15 +110,6 @@ export default function AdminDashboard() {
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
-      // Top productos ahora respeta el rango seleccionado (antes era
-      // siempre "todo el historial", sin filtro de fecha)
-      // FIX (2026-08-25): se agrega product_id para poder cruzar contra
-      // products.costo y calcular costo/ganancia real de cada venta.
-      sb.from('order_items')
-        .select('nombre,cantidad,precio,product_id,order_id,orders!inner(pago_estado,es_prueba,fecha,estado)')
-        .eq('orders.pago_estado','pagado').eq('orders.es_prueba', false)
-        .gte('orders.fecha', desdeISO).lte('orders.fecha', hastaISO)
-        .limit(1000),
       sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
       // FIX (2026-09-04): "Ventas" solo contaba pedidos con pago_estado='pagado'
       // completo — los abonos parciales que Mario registra en order_payments
@@ -157,6 +148,21 @@ export default function AdminDashboard() {
     })
 
     // ── Costo y ganancia real del período (y de hoy) ──────────────────────
+    // FIX (2026-09-04): antes "items" solo traía pedidos 100% pagados —
+    // así que un pedido con abono parcial sumaba a "Cobrado" (arriba) pero
+    // su costo se quedaba en RD$0, inflando la "Ganancia" mostrada (Mario lo
+    // notó: "Ganancia hoy" RD$10,550 con "Costo hoy" RD$0 no cuadraba).
+    // Ahora se usa el MISMO conjunto de pedidos que ya cuenta como cobrado
+    // (pagado completo O con algún abono), no solo los 100% pagados.
+    const idsConCobro = ords.filter(o => cobradoDe(o) > 0).map((o:any) => o.id)
+    const { data: itemsData } = idsConCobro.length > 0
+      ? await sb.from('order_items')
+          .select('nombre,cantidad,precio,product_id,order_id')
+          .in('order_id', idsConCobro)
+          .limit(1000)
+      : { data: [] as any[] }
+    const items = { data: itemsData }
+
     // Se cruza cada item vendido contra el costo REAL actual del producto
     // (products.costo). No se guarda un "snapshot" histórico del costo al
     // momento de la venta — usa el costo vigente ahora. Es una aproximación
@@ -178,7 +184,7 @@ export default function AdminDashboard() {
     const gananciaPeriodo = ventasPeriodo - costoTotalPeriodo
 
     // Costo/ganancia de HOY: mismo cruce pero solo con los items de pedidos de hoy
-    const idsHoy = new Set((hoyData.data ?? []).map((o:any) => o.id))
+    const idsHoy = new Set((hoyData.data ?? []).filter((o:any) => cobradoDe(o) > 0).map((o:any) => o.id))
     let costoHoy = 0
     ;(items.data ?? []).forEach((i:any) => {
       if (!idsHoy.has(i.order_id)) return
