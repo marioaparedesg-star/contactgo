@@ -17,12 +17,6 @@ function getSb() {
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 
-// Misma zona que el checkout web y el panel admin — pago contra entrega
-// solo se permite dentro del Gran Santo Domingo. Se revalida aquí en el
-// servidor para que nadie pueda forzar "contra_entrega" con otra ciudad
-// manipulando la petición directamente.
-const ZONAS_CONTRA_ENTREGA = ['Santo Domingo', 'Santo Domingo Este', 'Santo Domingo Norte', 'Santo Domingo Oeste', 'Distrito Nacional']
-
 async function getLinkValido(token: string) {
   const sb = getSb()
   const { data: link } = await sb
@@ -93,7 +87,6 @@ export async function POST(
     const email   = String(body.email ?? '').trim().toLowerCase()
     const dir     = String(body.direccion ?? '').trim()
     const ciudad  = String(body.ciudad ?? '').trim()
-    const metodoPagoSolicitado = String(body.metodo_pago ?? 'tarjeta').trim()
     const disclaimerAcceptanceId = body.disclaimer_acceptance_id ? String(body.disclaimer_acceptance_id) : null
     const disclaimerVersion = body.disclaimer_version ? String(body.disclaimer_version) : null
 
@@ -108,10 +101,10 @@ export async function POST(
     if (dir.length < 8) return NextResponse.json({ error: 'Dirección demasiado corta' }, { status: 400 })
     if (ciudad.length < 3) return NextResponse.json({ error: 'Ciudad requerida' }, { status: 400 })
 
-    // Blindaje servidor: contra_entrega solo válido si la ciudad real está
-    // dentro del Gran Santo Domingo — igual que el checkout web.
-    const metodoPago: 'tarjeta' | 'contra_entrega' =
-      metodoPagoSolicitado === 'contra_entrega' && ZONAS_CONTRA_ENTREGA.includes(ciudad) ? 'contra_entrega' : 'tarjeta'
+    // "Contra entrega" se retiró de este flujo — urgente, a pedido directo
+    // del negocio. Se ignora cualquier metodo_pago que llegue en el body
+    // (aunque alguien llame la API directo) y siempre queda en 'tarjeta'.
+    const metodoPago: 'tarjeta' = 'tarjeta'
 
     // ── Registrar al cliente como cuenta real (o reutilizar si ya existe) ──
     // Antes, los pedidos de venta por WhatsApp quedaban con user_id: null —
@@ -251,12 +244,9 @@ export async function POST(
       const resumen = (link.items ?? [])
         .map((i: any) => `• ${i.cantidad}x ${i.nombre}`)
         .join('\n')
-      const notaMetodo = metodoPago === 'contra_entrega'
-        ? '💵 *PAGO CONTRA ENTREGA* — el cliente pagará en efectivo al recibir. NO se envía link de pago, coordina la entrega.'
-        : '🔗 El cliente eligió *link de pago*. Ya puedes enviarle el link de pago AZUL.'
       await sendText(
         ADMIN_PHONE,
-        `🛒 *Venta WhatsApp completada*\n\nPedido: *${orderNum}*\nCliente: ${nombre}\nTel: ${tel}\n\n${resumen}\n\nTotal: *RD$${Number(link.total).toLocaleString('es-DO')}*\n\n${notaMetodo}`
+        `🛒 *Venta WhatsApp completada*\n\nPedido: *${orderNum}*\nCliente: ${nombre}\nTel: ${tel}\n\n${resumen}\n\nTotal: *RD$${Number(link.total).toLocaleString('es-DO')}*\n\n🔗 Ya puedes enviarle el link de pago AZUL.`
       )
     } catch (waErr: any) {
       console.error('[venta-wa] WA admin notify error:', waErr?.message)
