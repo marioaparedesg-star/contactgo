@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
-import { ShoppingBag, CheckCircle, Clock, User, CreditCard, Phone, Mail, MapPin, Calendar, Truck, Link2 } from 'lucide-react'
+import { ShoppingBag, CheckCircle, Clock, User, CreditCard, Phone, Mail, MapPin, Calendar, Truck, Link2, ShieldCheck } from 'lucide-react'
 import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
 
 const CIUDADES = [
@@ -280,49 +280,59 @@ export default function VentaWhatsAppPage() {
           </div>
           <div className="space-y-3.5">
             <div>
-              <label className="text-xs font-semibold text-gray-600 mb-1 block">Nombre y apellido</label>
+              <label htmlFor="nombre" className="text-xs font-semibold text-gray-600 mb-1 block">Nombre y apellido *</label>
               <div className="flex gap-2">
-                <input className={inputCls + ' w-1/2'} placeholder="Nombre" value={form.nombre}
+                <input id="nombre" className={inputCls + ' w-1/2'} placeholder="Nombre" value={form.nombre}
+                  autoComplete="given-name" aria-label="Nombre"
                   onChange={e => set('nombre', e.target.value)} />
-                <input className={inputCls + ' w-1/2'} placeholder="Apellido" value={form.apellido}
+                <input id="apellido" className={inputCls + ' w-1/2'} placeholder="Apellido" value={form.apellido}
+                  autoComplete="family-name" aria-label="Apellido"
                   onChange={e => set('apellido', e.target.value)} />
               </div>
             </div>
             <div>
-              <label className="text-xs font-semibold text-gray-600 mb-1 block">Fecha de nacimiento</label>
-              <input type="date" className={inputCls} value={form.fecha_nacimiento}
-                max={new Date().toISOString().slice(0, 10)}
+              <label htmlFor="fecha_nacimiento" className="text-xs font-semibold text-gray-600 mb-1 block">Fecha de nacimiento *</label>
+              <input id="fecha_nacimiento" type="date" className={inputCls} value={form.fecha_nacimiento}
+                max={new Date().toISOString().slice(0, 10)} autoComplete="bday"
                 onChange={e => set('fecha_nacimiento', e.target.value)} />
             </div>
             <div>
-              <label className="text-xs font-semibold text-gray-600 mb-1 block">WhatsApp</label>
-              <input className={inputCls} placeholder="809-000-0000" inputMode="tel" value={form.telefono}
+              <label htmlFor="telefono" className="text-xs font-semibold text-gray-600 mb-1 block">WhatsApp *</label>
+              <input id="telefono" className={inputCls} placeholder="809-000-0000" inputMode="tel" value={form.telefono}
+                autoComplete="tel" type="tel"
                 onChange={e => set('telefono', e.target.value)} />
             </div>
             <div>
-              <label className="text-xs font-semibold text-gray-600 mb-1 block">Correo electrónico</label>
-              <input type="email" className={inputCls} placeholder="tu@correo.com" value={form.email}
+              <label htmlFor="email" className="text-xs font-semibold text-gray-600 mb-1 block">Correo electrónico *</label>
+              <input id="email" type="email" className={inputCls} placeholder="tu@correo.com" value={form.email}
+                autoComplete="email"
                 onChange={e => set('email', e.target.value)} />
             </div>
             <div>
-              <label className="text-xs font-semibold text-gray-600 mb-1 block">Dirección de entrega</label>
-              <input className={inputCls} placeholder="Calle, número, sector, referencia" value={form.direccion}
+              <label htmlFor="direccion" className="text-xs font-semibold text-gray-600 mb-1 block">Dirección de entrega *</label>
+              <input id="direccion" className={inputCls} placeholder="Calle, número, sector, referencia" value={form.direccion}
+                autoComplete="street-address"
                 onChange={e => set('direccion', e.target.value)} />
             </div>
             <div>
-              <label className="text-xs font-semibold text-gray-600 mb-1 block">Ciudad</label>
-              <select className={inputCls} value={form.ciudad} onChange={e => set('ciudad', e.target.value)}>
+              <label htmlFor="ciudad" className="text-xs font-semibold text-gray-600 mb-1 block">Ciudad *</label>
+              <select id="ciudad" className={inputCls} value={form.ciudad} autoComplete="address-level2" onChange={e => set('ciudad', e.target.value)}>
                 <option value="">Selecciona tu ciudad</option>
                 {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             {form.ciudad === 'Otra ciudad' && (
               <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1 block">¿Cuál ciudad?</label>
-                <input className={inputCls} placeholder="Escribe tu ciudad" value={form.ciudadPersonalizada}
+                <label htmlFor="ciudadPersonalizada" className="text-xs font-semibold text-gray-600 mb-1 block">¿Cuál ciudad? *</label>
+                <input id="ciudadPersonalizada" className={inputCls} placeholder="Escribe tu ciudad" value={form.ciudadPersonalizada}
                   onChange={e => set('ciudadPersonalizada', e.target.value)} />
               </div>
             )}
+          </div>
+
+          <div className="flex items-center gap-2 mt-3.5 text-[11px] text-gray-400">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#01B2B7] shrink-0" />
+            Tus datos están protegidos y solo se usan para procesar tu pedido
           </div>
 
           {/* ── MÉTODO DE PAGO ── */}
