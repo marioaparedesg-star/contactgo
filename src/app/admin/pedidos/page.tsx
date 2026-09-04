@@ -89,6 +89,10 @@ export default function PedidosPage() {
   },[])
 
   const abrirPedido = async (p:any) => {
+    // Toggle: si ya estaba abierto ese mismo pedido, lo cierra (acordeón).
+    // Necesario para el detalle inline en celular — sin esto, tocar la
+    // fila otra vez no lo cerraría nunca.
+    if (selected?.id === p.id) { setSelected(null); return }
     setSelected(p)
     if (!items[p.id]) {
       const {data} = await sb.from('order_items').select('*').eq('order_id',p.id)
@@ -198,6 +202,207 @@ export default function PedidosPage() {
 
   const METODO_LABEL: Record<string,string> = {tarjeta:'💳 AZUL', contra_entrega:'💵 Contra entrega'}
 
+  // Detalle de pedido — extraído a función para poder mostrarlo en dos
+  // lugares: como panel lateral en desktop, y desplegado inline justo
+  // debajo de la fila tocada en celular (acordeón), sin duplicar el JSX.
+  const renderDetalle = () => {
+    if (!selected) return null
+    return (
+      <>
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <h2 className="font-black text-gray-900">#{(selected.numero_orden??selected.id.slice(-8)).toUpperCase()}</h2>
+            <p className="text-xs text-gray-400">{new Date(selected.created_at).toLocaleString('es-DO')}</p>
+          </div>
+          <button onClick={()=>setSelected(null)} className="text-gray-400 hover:text-gray-600"><X className="w-4 h-4"/></button>
+        </div>
+
+        {/* Info cliente */}
+        <div className="bg-gray-50 rounded-xl p-3 mb-4 text-sm space-y-1">
+          <div className="flex items-center gap-2">
+            <p className="font-semibold text-gray-800">{selected.cliente_nombre}</p>
+            {selected.canal === 'whatsapp' && (
+              <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Venta WhatsApp</span>
+            )}
+          </div>
+          <p className="text-gray-500">{selected.cliente_email}</p>
+          <p className="text-gray-500">{selected.cliente_telefono}</p>
+          {selected.cliente_cedula && (
+            <p className="text-gray-500 text-xs">Cédula: {selected.cliente_cedula?.length === 11
+              ? `${selected.cliente_cedula.slice(0,3)}-${selected.cliente_cedula.slice(3,10)}-${selected.cliente_cedula.slice(10)}`
+              : selected.cliente_cedula}</p>
+          )}
+          {selected.cliente_fecha_nacimiento && (
+            <p className="text-gray-500 text-xs">Nacimiento: {new Date(selected.cliente_fecha_nacimiento + 'T00:00:00').toLocaleDateString('es-DO', { day:'2-digit', month:'2-digit', year:'numeric' })}</p>
+          )}
+          <p className="text-gray-500 text-xs">{selected.direccion_texto}</p>
+          {selected.lat && selected.lng && (
+            <p className="text-[10px] text-blue-500 font-mono mt-0.5">{selected.lat?.toFixed(5)}, {selected.lng?.toFixed(5)}</p>
+          )}
+        </div>
+
+        {/* NCF */}
+        {selected.ncf && (
+          <div className="flex items-center gap-2 mb-3 bg-blue-50 rounded-xl px-3 py-2">
+            <Hash className="w-3.5 h-3.5 text-blue-600"/>
+            <span className="text-xs font-mono font-bold text-blue-700">{selected.ncf}</span>
+            <span className="text-xs text-blue-500">NCF</span>
+          </div>
+        )}
+
+        {/* Pago */}
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-xs text-gray-500">{METODO_LABEL[selected.metodo_pago]??selected.metodo_pago}</span>
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${selected.pago_estado==='pagado'?'bg-green-100 text-green-700':'bg-amber-100 text-amber-700'}`}>
+            {selected.pago_estado}
+          </span>
+          {selected.azul_auth_code && <span className="text-[10px] text-gray-400">Auth: {selected.azul_auth_code}</span>}
+        </div>
+
+        {/* Productos */}
+        {(items[selected.id]??[]).length>0 && (
+          <div className="mb-4">
+            <p className="text-xs font-bold text-gray-500 uppercase mb-2">Productos</p>
+            <div className="space-y-2">
+              {(items[selected.id]??[]).map((i:any,idx:number)=>{
+                const rx = formatReceta(i)
+                return (
+                <div key={idx} className="flex gap-2 text-sm">
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-800 text-xs">{i.nombre}</p>
+                    {rx && (
+                      <p className="text-[10px] text-blue-600 font-mono">{rx}</p>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs font-bold text-gray-800">RD${i.precio?.toLocaleString()}</p>
+                    <p className="text-[10px] text-gray-400">×{i.cantidad}</p>
+                  </div>
+                </div>
+              )})}
+            </div>
+            <div className="border-t border-gray-100 mt-3 pt-2 flex justify-between">
+              <span className="text-xs font-bold text-gray-700">Total</span>
+              <span className="text-sm font-black text-gray-900">RD${selected.total?.toLocaleString()}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Cambiar estado */}
+        <div className="mb-4">
+          <p className="text-xs font-bold text-gray-500 uppercase mb-2">Estado del pedido</p>
+          {/* Link al tracking del cliente */}
+          <a href={`/pedido/${selected.numero_orden}`} target="_blank" rel="noopener"
+            className="flex items-center gap-1.5 text-[10px] font-semibold text-blue-600 hover:text-blue-800 mb-2">
+            📦 Ver como el cliente → /pedido/{selected.numero_orden}
+          </a>
+          <div className="grid grid-cols-3 gap-1.5 mb-2">
+            {[
+              {k:'recibido',i:'✅'},
+              {k:'pago_aprobado',i:'💳'},
+              {k:'preparando',i:'📦'},
+              {k:'fabricante',i:'🏭'},
+              {k:'transito',i:'🚛'},
+              {k:'entregado',i:'🎉'},
+            ].map(({k:e,i})=>(
+              <button key={e} onClick={()=>cambiarEstado(selected.id,e)}
+                className={`text-[10px] font-bold py-2 rounded-lg border transition-all ${
+                  selected.estado===e ? 'bg-teal-500 text-white border-primary-600' : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-primary-300 hover:text-primary-600'
+                }`}>
+                <span className="block text-base">{i}</span>
+                <span className="block truncate">{e}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* ── Acciones rápidas para pendientes sin pago ── */}
+          {(selected.pago_estado === 'pendiente' || selected.estado === 'pendiente') && (
+            <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
+              <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wide">⚠️ Pago pendiente — acciones</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    // Abrir modal con defaults sensatos
+                    setPayType('completo')
+                    setPayMonto(String(selected.total ?? ''))
+                    setPayMetodo('efectivo')
+                    setPayNota('')
+                    setPayNotificar(true)
+                    // Cargar historial de pagos previos
+                    fetch('/api/admin/pedidos', {
+                      method: 'POST', headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ accion: 'listar_pagos', order_id: selected.id }),
+                    }).then(r => r.json()).then(j => setPagosHist(j.pagos ?? [])).catch(() => setPagosHist([]))
+                    setPayModalOpen(true)
+                  }}
+                  className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
+                  💳 Registrar pago
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!confirm(`¿CANCELAR el pedido #${selected.numero_orden}?\n\nSe le enviará una notificación al cliente por WhatsApp y email.`)) return
+                    const r = await fetch('/api/admin/pedidos', {
+                      method:'POST', headers:{'Content-Type':'application/json'},
+                      body: JSON.stringify({ accion:'cancelar', order_id:selected.id })
+                    })
+                    const j = await r.json().catch(() => ({}))
+                    if (!r.ok) { toast.error(j.error ?? 'No se pudo cancelar'); return }
+                    setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, estado:'cancelado', pago_estado:'declinado'} : p))
+                    setSelected((s:any) => ({...s, estado:'cancelado', pago_estado:'declinado'}))
+                    toast.success('🗑️ Pedido cancelado — cliente notificado')
+                  }}
+                  className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-red-100 text-red-700 border border-red-200 hover:bg-red-200 transition-colors">
+                  🗑️ Cancelar pedido
+                </button>
+              </div>
+              <button
+                onClick={async () => {
+                  if (!confirm(`¿ELIMINAR PERMANENTEMENTE el pedido #${selected.numero_orden}? Solo para pedidos de prueba. No se puede deshacer.`)) return
+                  const r = await fetch('/api/admin/pedidos', {
+                    method:'POST', headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({ accion:'eliminar', order_id:selected.id })
+                  })
+                  if (!r.ok) { toast.error('No se pudo eliminar'); return }
+                  setPedidos(ps => ps.filter(p => p.id !== selected.id))
+                  setSelected(null)
+                  toast.success('🗑️ Pedido eliminado permanentemente')
+                }}
+                className="w-full text-[10px] font-bold py-1.5 px-3 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
+                ⛔ Eliminar permanentemente (solo pruebas)
+              </button>
+            </div>
+          )}
+          <div className="text-[9px] text-gray-400 mt-1 flex items-center gap-1">
+            <span>ℹ️</span>
+            <span>Al cambiar el estado, el cliente lo ve en su página de tracking y recibe email automático</span>
+          </div>
+        </div>
+
+        {/* Acciones */}
+        <div className="flex gap-2 flex-wrap">
+          <div className="flex-1 flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 rounded-xl px-3 py-2">
+            <Bell className="w-3.5 h-3.5"/>Cliente notificado al cambiar estado
+          </div>
+          <button onClick={()=>window.open(`https://wa.me/${selected.cliente_telefono?.replace(/\D/g,'')}?text=Hola+${encodeURIComponent(selected.cliente_nombre?.split(' ')[0]??'')}+tu+pedido+%23${selected.numero_orden??selected.id.slice(-8)}+está+${selected.estado}`,'_blank')}
+            className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700">
+            <WhatsAppIcon className="w-3.5 h-3.5"/>WA
+          </button>
+          {selected.lat && selected.lng && (
+            <button onClick={()=>window.open(`https://www.google.com/maps?q=${selected.lat},${selected.lng}`,'_blank')}
+              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
+              title="Ver ubicación del cliente en Google Maps">
+              <Navigation className="w-3.5 h-3.5"/>Mapa
+            </button>
+          )}
+          <button onClick={printOrder}
+            className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50">
+            <Printer className="w-3.5 h-3.5"/>Imprimir
+          </button>
+        </div>
+      </>
+    )
+  }
+
   return (
     <div className="max-w-7xl mx-auto w-full">
 <div className="max-w-7xl mx-auto p-4 md:p-6">
@@ -253,7 +458,8 @@ export default function PedidosPage() {
                 const Icon = ESTADO_ICON[p.estado]??Clock
                 const isSelected = selected?.id===p.id
                 return (
-                  <button key={p.id} onClick={()=>abrirPedido(p)}
+                  <div key={p.id}>
+                  <button onClick={()=>abrirPedido(p)}
                     className={`w-full text-left p-4 rounded-2xl border transition-all ${isSelected?'border-primary-400 bg-teal-50/50 shadow-md':'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}>
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
@@ -280,208 +486,28 @@ export default function PedidosPage() {
                       <span className="font-black text-sm text-gray-900 shrink-0">RD${p.total?.toLocaleString()}</span>
                     </div>
                   </button>
+
+                  {/* Detalle inline — solo celular (md:hidden). Se despliega
+                      justo debajo de la fila tocada, acordeón, sin saltar
+                      de pantalla. En desktop se usa el panel lateral de abajo. */}
+                  {isSelected && (
+                    <div className="md:hidden bg-white rounded-2xl border border-primary-300 shadow-md p-5 mt-2">
+                      {renderDetalle()}
+                    </div>
+                  )}
+                  </div>
                 )
               })}
             </div>
 
-            {/* Detalle */}
+            {/* Detalle — panel lateral, solo desktop */}
             {selected && (
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-4 max-h-[85vh] overflow-y-auto">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h2 className="font-black text-gray-900">#{(selected.numero_orden??selected.id.slice(-8)).toUpperCase()}</h2>
-                    <p className="text-xs text-gray-400">{new Date(selected.created_at).toLocaleString('es-DO')}</p>
-                  </div>
-                  <button onClick={()=>setSelected(null)} className="text-gray-400 hover:text-gray-600"><X className="w-4 h-4"/></button>
-                </div>
-
-                {/* Info cliente */}
-                <div className="bg-gray-50 rounded-xl p-3 mb-4 text-sm space-y-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-gray-800">{selected.cliente_nombre}</p>
-                    {selected.canal === 'whatsapp' && (
-                      <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Venta WhatsApp</span>
-                    )}
-                  </div>
-                  <p className="text-gray-500">{selected.cliente_email}</p>
-                  <p className="text-gray-500">{selected.cliente_telefono}</p>
-                  {selected.cliente_cedula && (
-                    <p className="text-gray-500 text-xs">Cédula: {selected.cliente_cedula?.length === 11
-                      ? `${selected.cliente_cedula.slice(0,3)}-${selected.cliente_cedula.slice(3,10)}-${selected.cliente_cedula.slice(10)}`
-                      : selected.cliente_cedula}</p>
-                  )}
-                  {selected.cliente_fecha_nacimiento && (
-                    <p className="text-gray-500 text-xs">Nacimiento: {new Date(selected.cliente_fecha_nacimiento + 'T00:00:00').toLocaleDateString('es-DO', { day:'2-digit', month:'2-digit', year:'numeric' })}</p>
-                  )}
-                  <p className="text-gray-500 text-xs">{selected.direccion_texto}</p>
-                  {selected.lat && selected.lng && (
-                    <p className="text-[10px] text-blue-500 font-mono mt-0.5">{selected.lat?.toFixed(5)}, {selected.lng?.toFixed(5)}</p>
-                  )}
-                </div>
-
-                {/* NCF */}
-                {selected.ncf && (
-                  <div className="flex items-center gap-2 mb-3 bg-blue-50 rounded-xl px-3 py-2">
-                    <Hash className="w-3.5 h-3.5 text-blue-600"/>
-                    <span className="text-xs font-mono font-bold text-blue-700">{selected.ncf}</span>
-                    <span className="text-xs text-blue-500">NCF</span>
-                  </div>
-                )}
-
-                {/* Pago */}
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-xs text-gray-500">{METODO_LABEL[selected.metodo_pago]??selected.metodo_pago}</span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${selected.pago_estado==='pagado'?'bg-green-100 text-green-700':'bg-amber-100 text-amber-700'}`}>
-                    {selected.pago_estado}
-                  </span>
-                  {selected.azul_auth_code && <span className="text-[10px] text-gray-400">Auth: {selected.azul_auth_code}</span>}
-                </div>
-
-                {/* Productos */}
-                {(items[selected.id]??[]).length>0 && (
-                  <div className="mb-4">
-                    <p className="text-xs font-bold text-gray-500 uppercase mb-2">Productos</p>
-                    <div className="space-y-2">
-                      {(items[selected.id]??[]).map((i:any,idx:number)=>{
-                        const rx = formatReceta(i)
-                        return (
-                        <div key={idx} className="flex gap-2 text-sm">
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-800 text-xs">{i.nombre}</p>
-                            {rx && (
-                              <p className="text-[10px] text-blue-600 font-mono">{rx}</p>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xs font-bold text-gray-800">RD${i.precio?.toLocaleString()}</p>
-                            <p className="text-[10px] text-gray-400">×{i.cantidad}</p>
-                          </div>
-                        </div>
-                      )})}
-                    </div>
-                    <div className="border-t border-gray-100 mt-3 pt-2 flex justify-between">
-                      <span className="text-xs font-bold text-gray-700">Total</span>
-                      <span className="text-sm font-black text-gray-900">RD${selected.total?.toLocaleString()}</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Cambiar estado */}
-                <div className="mb-4">
-                  <p className="text-xs font-bold text-gray-500 uppercase mb-2">Estado del pedido</p>
-                  {/* Link al tracking del cliente */}
-                  <a href={`/pedido/${selected.numero_orden}`} target="_blank" rel="noopener"
-                    className="flex items-center gap-1.5 text-[10px] font-semibold text-blue-600 hover:text-blue-800 mb-2">
-                    📦 Ver como el cliente → /pedido/{selected.numero_orden}
-                  </a>
-                  <div className="grid grid-cols-3 gap-1.5 mb-2">
-                    {[
-                      {k:'recibido',i:'✅'},
-                      {k:'pago_aprobado',i:'💳'},
-                      {k:'preparando',i:'📦'},
-                      {k:'fabricante',i:'🏭'},
-                      {k:'transito',i:'🚛'},
-                      {k:'entregado',i:'🎉'},
-                    ].map(({k:e,i})=>(
-                      <button key={e} onClick={()=>cambiarEstado(selected.id,e)}
-                        className={`text-[10px] font-bold py-2 rounded-lg border transition-all ${
-                          selected.estado===e ? 'bg-teal-500 text-white border-primary-600' : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-primary-300 hover:text-primary-600'
-                        }`}>
-                        <span className="block text-base">{i}</span>
-                        <span className="block truncate">{e}</span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* ── Acciones rápidas para pendientes sin pago ── */}
-                  {(selected.pago_estado === 'pendiente' || selected.estado === 'pendiente') && (
-                    <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
-                      <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wide">⚠️ Pago pendiente — acciones</p>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => {
-                            // Abrir modal con defaults sensatos
-                            setPayType('completo')
-                            setPayMonto(String(selected.total ?? ''))
-                            setPayMetodo('efectivo')
-                            setPayNota('')
-                            setPayNotificar(true)
-                            // Cargar historial de pagos previos
-                            fetch('/api/admin/pedidos', {
-                              method: 'POST', headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({ accion: 'listar_pagos', order_id: selected.id }),
-                            }).then(r => r.json()).then(j => setPagosHist(j.pagos ?? [])).catch(() => setPagosHist([]))
-                            setPayModalOpen(true)
-                          }}
-                          className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
-                          💳 Registrar pago
-                        </button>
-                        <button
-                          onClick={async () => {
-                            if (!confirm(`¿CANCELAR el pedido #${selected.numero_orden}?\n\nSe le enviará una notificación al cliente por WhatsApp y email.`)) return
-                            const r = await fetch('/api/admin/pedidos', {
-                              method:'POST', headers:{'Content-Type':'application/json'},
-                              body: JSON.stringify({ accion:'cancelar', order_id:selected.id })
-                            })
-                            const j = await r.json().catch(() => ({}))
-                            if (!r.ok) { toast.error(j.error ?? 'No se pudo cancelar'); return }
-                            setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, estado:'cancelado', pago_estado:'declinado'} : p))
-                            setSelected((s:any) => ({...s, estado:'cancelado', pago_estado:'declinado'}))
-                            toast.success('🗑️ Pedido cancelado — cliente notificado')
-                          }}
-                          className="flex-1 text-[11px] font-bold py-2 px-3 rounded-lg bg-red-100 text-red-700 border border-red-200 hover:bg-red-200 transition-colors">
-                          🗑️ Cancelar pedido
-                        </button>
-                      </div>
-                      <button
-                        onClick={async () => {
-                          if (!confirm(`¿ELIMINAR PERMANENTEMENTE el pedido #${selected.numero_orden}? Solo para pedidos de prueba. No se puede deshacer.`)) return
-                          const r = await fetch('/api/admin/pedidos', {
-                            method:'POST', headers:{'Content-Type':'application/json'},
-                            body: JSON.stringify({ accion:'eliminar', order_id:selected.id })
-                          })
-                          if (!r.ok) { toast.error('No se pudo eliminar'); return }
-                          setPedidos(ps => ps.filter(p => p.id !== selected.id))
-                          setSelected(null)
-                          toast.success('🗑️ Pedido eliminado permanentemente')
-                        }}
-                        className="w-full text-[10px] font-bold py-1.5 px-3 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
-                        ⛔ Eliminar permanentemente (solo pruebas)
-                      </button>
-                    </div>
-                  )}
-                  <div className="text-[9px] text-gray-400 mt-1 flex items-center gap-1">
-                    <span>ℹ️</span>
-                    <span>Al cambiar el estado, el cliente lo ve en su página de tracking y recibe email automático</span>
-                  </div>
-                </div>
-
-                {/* Acciones */}
-                <div className="flex gap-2 flex-wrap">
-                  <div className="flex-1 flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 rounded-xl px-3 py-2">
-                    <Bell className="w-3.5 h-3.5"/>Cliente notificado al cambiar estado
-                  </div>
-                  <button onClick={()=>window.open(`https://wa.me/${selected.cliente_telefono?.replace(/\D/g,'')}?text=Hola+${encodeURIComponent(selected.cliente_nombre?.split(' ')[0]??'')}+tu+pedido+%23${selected.numero_orden??selected.id.slice(-8)}+está+${selected.estado}`,'_blank')}
-                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700">
-                    <WhatsAppIcon className="w-3.5 h-3.5"/>WA
-                  </button>
-                  {selected.lat && selected.lng && (
-                    <button onClick={()=>window.open(`https://www.google.com/maps?q=${selected.lat},${selected.lng}`,'_blank')}
-                      className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
-                      title="Ver ubicación del cliente en Google Maps">
-                      <Navigation className="w-3.5 h-3.5"/>Mapa
-                    </button>
-                  )}
-                  <button onClick={printOrder}
-                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50">
-                    <Printer className="w-3.5 h-3.5"/>Imprimir
-                  </button>
-                </div>
+              <div className="hidden md:block bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-4 max-h-[85vh] overflow-y-auto">
+                {renderDetalle()}
               </div>
             )}
           </div>
         </div>
-
       {/* ═══════════════════════════════════════════════════════════════
           MODAL: Registrar pago (soporta completo, parcial, con o sin notificación)
           ═══════════════════════════════════════════════════════════════ */}

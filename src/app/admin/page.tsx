@@ -80,6 +80,11 @@ export default function AdminDashboard() {
   const [chartRaw, setChartRaw] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [updated, setUpdated] = useState(new Date())
+  // Detalle clickeable: qué tarjeta está expandida (o null si ninguna) y
+  // la lista de pedidos que componen esa cifra, con su cobrado real y su
+  // saldo pendiente, para que Mario pueda ver a quién le cobró qué.
+  const [detalleAbierto, setDetalleAbierto] = useState<null | 'hoy' | 'periodo' | 'porCobrarActivo' | 'porCobrarViejo'>(null)
+  const [detalleOrdenes, setDetalleOrdenes] = useState<any[]>([])
 
   // ── Estado del selector de fechas ──
   const [preset, setPreset] = useState<PresetKey>('mes_actual')
@@ -101,10 +106,10 @@ export default function AdminDashboard() {
     const hoy0ISO = new Date(new Date().setHours(0,0,0,0)).toISOString()
 
     const [periodo, hoyData, ordRecent, stockLow, abonosData] = await Promise.all([
-      sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
+      sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
-      sb.from('orders').select('id,total,pago_estado')
+      sb.from('orders').select('id,total,pago_estado,fecha,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', hoy0ISO),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
@@ -208,10 +213,27 @@ export default function AdminDashboard() {
     const invCriticos   = invAll.filter((p:any) => p.alerta_stock === 'critico').length
     const invBajoMin    = invAll.filter((p:any) => p.alerta_stock === 'bajo_minimo').length
 
+    // Detalle por pedido — para las tarjetas clickeables. Se guarda ya
+    // resuelto (cobrado, saldo) en vez de recalcular al abrir el detalle.
+    const detalleFn = (lista:any[]) => lista
+      .map((o:any) => ({ ...o, cobrado: cobradoDe(o), saldo: Number(o.total??0) - cobradoDe(o) }))
+      .filter((o:any) => o.cobrado > 0)
+      .sort((a:any,b:any) => new Date(b.created_at ?? b.fecha).getTime() - new Date(a.created_at ?? a.fecha).getTime())
+
+    const detalleHoyArr     = detalleFn(hoyData.data ?? [])
+    const detallePeriodoArr = detalleFn(ords)
+    const detallePorCobrarActivoArr = ords
+      .filter((o:any) => (Number(o.total??0)-cobradoDe(o)) > 0 && new Date(o.created_at) >= hace30d)
+      .map((o:any) => ({ ...o, cobrado: cobradoDe(o), saldo: Number(o.total??0)-cobradoDe(o) }))
+    const detallePorCobrarViejoArr = ords
+      .filter((o:any) => (Number(o.total??0)-cobradoDe(o)) > 0 && new Date(o.created_at) < hace30d)
+      .map((o:any) => ({ ...o, cobrado: cobradoDe(o), saldo: Number(o.total??0)-cobradoDe(o) }))
+
     setData({ ventasPeriodo, ventasHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
       costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy,
-      porCobrarActivo, porCobrarViejo, pedidosPorCobrar })
+      porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
+      detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr })
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
@@ -326,43 +348,102 @@ export default function AdminDashboard() {
         )}
       </div>
 
-      {/* KPIs del período seleccionado */}
+      {/* KPIs del período seleccionado — las 2 de cobrado son clickeables,
+          despliegan abajo el detalle real (a quién, qué pedido, cuánto) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon:TrendingUp,  label:'Cobrado hoy',             val:fmt(data?.ventasHoy??0),      sub:'pagos + abonos de hoy',           color:'text-green-600',  bg:'bg-green-50' },
-          { icon:ShoppingBag, label:`Cobrado · ${rango.label}`, val:fmt(data?.ventasPeriodo??0),  sub:`${data?.pedidosPeriodo??0} pedidos`, color:'text-blue-600',   bg:'bg-blue-50'  },
-          { icon:Package,     label:'Ticket promedio',         val:fmt(data?.ticketProm??0),     sub:'de pedidos cobrados',              color:'text-purple-600', bg:'bg-purple-50' },
-          { icon:AlertTriangle,label:'Bajo mínimo',            val:String((data?.invCriticos??0)+(data?.invBajoMin??0)), sub:'requieren atención', color:'text-amber-600',  bg:'bg-amber-50'  },
-        ].map(({icon:Icon,label,val,sub,color,bg})=>(
-          <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center mb-4`}>
-              <Icon className={`w-5 h-5 ${color}`}/>
-            </div>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{label}</p>
-            <p className="text-2xl font-black text-gray-900 mt-1">{val}</p>
-            <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
-          </div>
-        ))}
+          { key:'hoy',     icon:TrendingUp,  label:'Cobrado hoy',             val:fmt(data?.ventasHoy??0),      sub:'pagos + abonos de hoy — toca para ver detalle',           color:'text-green-600',  bg:'bg-green-50', clickable:true },
+          { key:'periodo', icon:ShoppingBag, label:`Cobrado · ${rango.label}`, val:fmt(data?.ventasPeriodo??0),  sub:`${data?.pedidosPeriodo??0} pedidos — toca para ver detalle`, color:'text-blue-600',   bg:'bg-blue-50',  clickable:true },
+          { key:null,      icon:Package,     label:'Ticket promedio',         val:fmt(data?.ticketProm??0),     sub:'de pedidos cobrados',              color:'text-purple-600', bg:'bg-purple-50', clickable:false },
+          { key:null,      icon:AlertTriangle,label:'Bajo mínimo',            val:String((data?.invCriticos??0)+(data?.invBajoMin??0)), sub:'requieren atención', color:'text-amber-600',  bg:'bg-amber-50', clickable:false },
+        ].map(({key,icon:Icon,label,val,sub,color,bg,clickable})=>{
+          const abierta = clickable && detalleAbierto===key
+          const Tag = clickable ? 'button' : 'div'
+          return (
+            <Tag key={label} onClick={clickable ? ()=>setDetalleAbierto(abierta ? null : key as any) : undefined}
+              className={`text-left bg-white rounded-2xl border shadow-sm p-5 transition-all ${abierta?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'} ${clickable?'hover:border-gray-200 active:scale-[0.98]':''}`}>
+              <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center mb-4`}>
+                <Icon className={`w-5 h-5 ${color}`}/>
+              </div>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{label}</p>
+              <p className="text-2xl font-black text-gray-900 mt-1">{val}</p>
+              <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
+            </Tag>
+          )
+        })}
       </div>
 
+      {/* Detalle desplegado de "Cobrado hoy" / "Cobrado · período" */}
+      {(detalleAbierto==='hoy' || detalleAbierto==='periodo') && (
+        <div className="bg-white rounded-2xl border border-primary-200 shadow-md p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-bold text-sm text-gray-700">
+              {detalleAbierto==='hoy' ? 'Cobrado hoy — detalle' : `Cobrado · ${rango.label} — detalle`}
+            </h2>
+            <button onClick={()=>setDetalleAbierto(null)} className="text-gray-400 hover:text-gray-600 text-xs font-semibold">Cerrar ✕</button>
+          </div>
+          {(() => {
+            const lista = detalleAbierto==='hoy' ? (data?.detalleHoyArr??[]) : (data?.detallePeriodoArr??[])
+            if (lista.length===0) return <p className="text-xs text-gray-400 text-center py-6">Sin cobros en este rango.</p>
+            return (
+              <div className="space-y-2">
+                {lista.map((o:any) => (
+                  <a key={o.id} href="/admin/pedidos" className="flex items-center justify-between gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-gray-800 truncate">{o.cliente_nombre}</p>
+                      <p className="text-[11px] text-gray-400">#{o.numero_orden} · {new Date(o.created_at ?? o.fecha).toLocaleString('es-DO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-black text-green-600">{fmt(o.cobrado)}</p>
+                      {o.saldo > 0 && <p className="text-[10px] text-amber-600">falta {fmt(o.saldo)}</p>}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )
+          })()}
+        </div>
+      )}
+
       {/* Por cobrar — saldo real pendiente (incluye pedidos con abono parcial,
-          no solo los que nunca recibieron ningún pago) */}
+          no solo los que nunca recibieron ningún pago). Clickeable también. */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
         <div className="flex items-center justify-between mb-1">
           <h2 className="font-bold text-sm text-gray-700">Por cobrar</h2>
           <span className="text-xs text-gray-400">{data?.pedidosPorCobrar??0} pedidos con saldo pendiente</span>
         </div>
-        <p className="text-xs text-gray-400 mb-4">Dentro del período seleccionado ({rango.label}). Incluye abonos parciales.</p>
+        <p className="text-xs text-gray-400 mb-4">Dentro del período seleccionado ({rango.label}). Incluye abonos parciales. Toca cualquiera para ver el detalle.</p>
         <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-xl bg-amber-50 p-4">
+          <button onClick={()=>setDetalleAbierto(detalleAbierto==='porCobrarActivo'?null:'porCobrarActivo')}
+            className={`text-left rounded-xl bg-amber-50 p-4 transition-all ${detalleAbierto==='porCobrarActivo'?'ring-2 ring-amber-300':''}`}>
             <p className="text-2xl font-black text-amber-600">{fmt(data?.porCobrarActivo??0)}</p>
             <p className="text-xs text-gray-500 mt-1">Últimos 30 días — todavía accionable</p>
-          </div>
-          <div className="rounded-xl bg-gray-50 p-4">
+          </button>
+          <button onClick={()=>setDetalleAbierto(detalleAbierto==='porCobrarViejo'?null:'porCobrarViejo')}
+            className={`text-left rounded-xl bg-gray-50 p-4 transition-all ${detalleAbierto==='porCobrarViejo'?'ring-2 ring-gray-300':''}`}>
             <p className="text-2xl font-black text-gray-400">{fmt(data?.porCobrarViejo??0)}</p>
             <p className="text-xs text-gray-500 mt-1">+30 días — probablemente perdido</p>
-          </div>
+          </button>
         </div>
+        {(detalleAbierto==='porCobrarActivo' || detalleAbierto==='porCobrarViejo') && (() => {
+          const lista = detalleAbierto==='porCobrarActivo' ? (data?.detallePorCobrarActivoArr??[]) : (data?.detallePorCobrarViejoArr??[])
+          return (
+            <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
+              {lista.length===0 ? <p className="text-xs text-gray-400 text-center py-4">Sin pedidos en este grupo.</p> : lista.map((o:any) => (
+                <a key={o.id} href="/admin/pedidos" className="flex items-center justify-between gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-gray-800 truncate">{o.cliente_nombre}</p>
+                    <p className="text-[11px] text-gray-400">#{o.numero_orden} · {o.cliente_telefono}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-sm font-black text-amber-600">falta {fmt(o.saldo)}</p>
+                    <p className="text-[10px] text-gray-400">de {fmt(o.total)}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )
+        })()}
       </div>
 
       {/* Costo y Ganancia — cruce real contra products.costo, cualquier canal de venta */}
