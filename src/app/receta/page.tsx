@@ -60,6 +60,7 @@ export default function RecetaPage() {
   const [showLead, setShowLead] = useState(false)
   const [leadEmail, setLeadEmail] = useState('')
   const [leadNombre, setLeadNombre] = useState('')
+  const [leadApellido, setLeadApellido] = useState('')
   const [leadTelefono, setLeadTelefono] = useState('')
   const [leadCaptured, setLeadCaptured] = useState(false)
   const [pendingRx, setPendingRx] = useState<GlassesRx | null>(null)
@@ -150,7 +151,9 @@ export default function RecetaPage() {
     if (!pendingRx) return
     const telClean = leadTelefono.replace(/\D/g,'')
     if (!leadNombre.trim()) { toast.error('Ingresa tu nombre'); return }
-    if (!tieneNombreYApellido(leadNombre)) { toast.error(ERROR_NOMBRE_INCOMPLETO); return }
+    if (!leadApellido.trim()) { toast.error('Ingresa tu apellido'); return }
+    const nombreCompleto = `${leadNombre.trim()} ${leadApellido.trim()}`
+    if (!tieneNombreYApellido(nombreCompleto)) { toast.error(ERROR_NOMBRE_INCOMPLETO); return }
     if (telClean.length < 10) { toast.error('Ingresa tu número de WhatsApp (10 dígitos)'); return }
     const conv = convertGlassesToContacts(pendingRx)
     let saveOk = false
@@ -158,7 +161,7 @@ export default function RecetaPage() {
       const res = await fetch('/api/calculator-leads/save', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nombre: leadNombre.trim(),
+          nombre: nombreCompleto,
           email: leadEmail.trim() ? leadEmail.trim().toLowerCase() : null,
           telefono: telClean,
           od_sph: pendingRx.od.sph, od_cyl: pendingRx.od.cyl, od_axis: pendingRx.od.axis,
@@ -185,7 +188,7 @@ export default function RecetaPage() {
       fetch('/api/calculator-leads/notify', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nombre: leadNombre.trim(),
+          nombre: nombreCompleto,
           telefono: telClean,
           od_sph: convFinal.od.sph, od_cyl: convFinal.od.cyl, od_axis: convFinal.od.axis,
           oi_sph: convFinal.oi.sph, oi_cyl: convFinal.oi.cyl, oi_axis: convFinal.oi.axis,
@@ -300,8 +303,12 @@ export default function RecetaPage() {
                 <p className="text-xs text-gray-500 mt-1">Déjanos tus datos para mostrarte qué lentes te sirven y avisarte cuando toque reponer</p>
               </div>
               <div className="space-y-3 mb-4">
-                <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre completo *"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
+                <div className="flex gap-2">
+                  <input value={leadNombre} onChange={e => setLeadNombre(e.target.value)} placeholder="Nombre *"
+                    className="w-1/2 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
+                  <input value={leadApellido} onChange={e => setLeadApellido(e.target.value)} placeholder="Apellido *"
+                    className="w-1/2 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
+                </div>
                 <input value={leadTelefono} onChange={e => setLeadTelefono(e.target.value)} type="tel" placeholder="WhatsApp * (ej: 809-555-1234)"
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
                 <input value={leadEmail} onChange={e => setLeadEmail(e.target.value)} type="email" placeholder="Correo electrónico (opcional)"

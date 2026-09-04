@@ -15,10 +15,10 @@ import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/componen
 import toast from 'react-hot-toast'
 import Image from 'next/image'
 import { Shield, ShieldCheck, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, MapPin, User, Phone, Mail } from 'lucide-react'
-import { tieneNombreYApellido, ERROR_NOMBRE_INCOMPLETO } from '@/lib/validation'
 
 const schema = z.object({
-  nombre:               z.string().min(3, 'Nombre requerido').refine(tieneNombreYApellido, ERROR_NOMBRE_INCOMPLETO),
+  nombre:               z.string().min(2, 'Nombre requerido'),
+  apellido:             z.string().min(2, 'Apellido requerido'),
   email:                z.string().email('Email inválido'),
   telefono:             z.string().min(10, 'Teléfono requerido').refine(
                             (v) => (v.match(/\d/g) ?? []).length >= 10,
@@ -77,6 +77,7 @@ export default function CheckoutPage() {
   const [authPass, setAuthPass] = useState('')
   const [authFecha, setAuthFecha] = useState('')
   const [authNombre, setAuthNombre] = useState('')
+  const [authApellido, setAuthApellido] = useState('')
   const [authTel, setAuthTel] = useState('')
   const [authLoading, setAuthLoading] = useState(false)
   const [authMsg, setAuthMsg] = useState('')
@@ -169,6 +170,7 @@ export default function CheckoutPage() {
   }
 
   const createOrder = async (data: FormData) => {
+    const nombreCompleto = `${data.nombre.trim()} ${data.apellido.trim()}`
     // Blindaje: si el cliente eligió "contra entrega" y luego regresó a
     // cambiar su ciudad a una distinta a Santo Domingo, no permitir que
     // ese pedido se cree como contra entrega — se revierte a tarjeta
@@ -197,7 +199,7 @@ export default function CheckoutPage() {
       const orderNum = `CG-${Date.now().toString().slice(-8)}`
       const { data: order, error } = await sb.from('orders').insert({
         user_id: user?.id ?? null,
-        cliente_nombre: data.nombre, cliente_email: data.email, cliente_telefono: data.telefono,
+        cliente_nombre: nombreCompleto, cliente_email: data.email, cliente_telefono: data.telefono,
         direccion_texto: `${data.direccion}, ${data.ciudad === 'Otra ciudad' && data.ciudadPersonalizada ? data.ciudadPersonalizada : data.ciudad}`,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
         descuento, metodo_pago: metodoPagoReal, pago_estado: 'pendiente',
@@ -306,7 +308,7 @@ export default function CheckoutPage() {
           const proximo = proxEnvio(frecuencia)
           await sb.from('subscriptions').insert({
             user_id:           user.id,
-            cliente_nombre:    data.nombre,
+            cliente_nombre:    nombreCompleto,
             cliente_email:     data.email,
             cliente_telefono:  data.telefono,
             direccion_texto:   `${data.direccion}, ${data.ciudad}`,
@@ -382,24 +384,25 @@ export default function CheckoutPage() {
   }
 
   const handleAuth = async () => {
-    if (authMode === 'register' && !tieneNombreYApellido(authNombre)) {
-      setAuthMsg(ERROR_NOMBRE_INCOMPLETO)
+    if (authMode === 'register' && (authNombre.trim().length < 2 || authApellido.trim().length < 2)) {
+      setAuthMsg('Escribe tu nombre y apellido')
       return
     }
     setAuthLoading(true); setAuthMsg('')
     const sb = createClient()
     if (authMode === 'register') {
-      const { data: signUp, error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: authNombre, phone: authTel, fecha_nacimiento: authFecha } } })
+      const nombreCompletoAuth = `${authNombre.trim()} ${authApellido.trim()}`
+      const { data: signUp, error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: nombreCompletoAuth, phone: authTel, fecha_nacimiento: authFecha } } })
       if (error) { setAuthMsg(error.message); setAuthLoading(false); return }
       fetch('/api/auth/welcome', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: authEmail, nombre: authNombre, telefono: authTel, user_id: signUp?.user?.id }),
+        body: JSON.stringify({ email: authEmail, nombre: nombreCompletoAuth, telefono: authTel, user_id: signUp?.user?.id }),
       }).catch(() => {})
       const { data: { user } } = await sb.auth.getUser()
       if (user) {
-        await sb.from('profiles').upsert({ id: user.id, nombre: authNombre, email: authEmail, telefono: authTel, role: 'customer' })
-        setValue('nombre', authNombre); setValue('email', authEmail); if (authTel) setValue('telefono', authTel)
+        await sb.from('profiles').upsert({ id: user.id, nombre: nombreCompletoAuth, email: authEmail, telefono: authTel, role: 'customer' })
+        setValue('nombre', authNombre.trim()); setValue('apellido', authApellido.trim()); setValue('email', authEmail); if (authTel) setValue('telefono', authTel)
       }
     } else {
       const { error } = await sb.auth.signInWithPassword({ email: authEmail, password: authPass })
@@ -424,15 +427,16 @@ export default function CheckoutPage() {
 
   const nextStep = async () => {
     if (step === 1) {
-      const ok = await trigger(['nombre','email','telefono'])
+      const ok = await trigger(['nombre','apellido','email','telefono'])
       if (!ok) return
       try {
         const sb2 = createClient()
         const vals = getValues()
+        const nombreCompletoVals = vals.nombre && vals.apellido ? `${vals.nombre.trim()} ${vals.apellido.trim()}` : (vals.nombre ?? null)
         if (vals.email && items.length > 0) {
           await sb2.from('abandoned_carts').upsert({
             cliente_email:    vals.email,
-            cliente_nombre:   vals.nombre ?? null,
+            cliente_nombre:   nombreCompletoVals,
             cliente_telefono: vals.telefono ?? null,
             items:            JSON.stringify(items.map(i => ({
               id: i.product.id, nombre: i.product.nombre,
@@ -451,7 +455,7 @@ export default function CheckoutPage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               telefono: vals.telefono,
-              nombre: vals.nombre ?? null,
+              nombre: nombreCompletoVals,
               email: vals.email ?? null,
               items: items.map(i => ({
                 id: i.product.id, nombre: i.product.nombre,
@@ -463,8 +467,8 @@ export default function CheckoutPage() {
         }
         // Guardar perfil para pre-llenar próxima compra
         const { data: { user: u } } = await sb2.auth.getUser()
-        if (u && vals.nombre && vals.email) {
-          sb2.from('profiles').upsert({ id: u.id, nombre: vals.nombre, email: vals.email, telefono: vals.telefono ?? null }, { onConflict: 'id' }).then(() => {})
+        if (u && nombreCompletoVals && vals.email) {
+          sb2.from('profiles').upsert({ id: u.id, nombre: nombreCompletoVals, email: vals.email, telefono: vals.telefono ?? null }, { onConflict: 'id' }).then(() => {})
         }
       } catch { /* no bloquear flujo si falla */ }
       if (!isLoggedIn) { setShowAuthModal(true); return }
@@ -479,10 +483,11 @@ export default function CheckoutPage() {
         const { data: { user: u } } = await sb2.auth.getUser()
         const vals = getValues()
         if (u && vals.direccion) {
+          const nombreCompletoVals = vals.nombre && vals.apellido ? `${vals.nombre.trim()} ${vals.apellido.trim()}` : (vals.nombre ?? null)
           const ciudadFinal = vals.ciudad === 'Otra ciudad' && (vals as any).ciudadPersonalizada ? (vals as any).ciudadPersonalizada : vals.ciudad
           const { data: existing } = await sb2.from('addresses').select('id').eq('user_id', u.id).eq('principal', true).maybeSingle()
           if (!existing) {
-            sb2.from('addresses').insert({ user_id: u.id, nombre: vals.nombre, direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null, principal: true }).then(() => {})
+            sb2.from('addresses').insert({ user_id: u.id, nombre: nombreCompletoVals, direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null, principal: true }).then(() => {})
           } else {
             sb2.from('addresses').update({ direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null }).eq('id', existing.id).then(() => {})
           }
@@ -526,7 +531,10 @@ export default function CheckoutPage() {
             </div>
             <div className="space-y-3">
               {authMode === 'register' && <>
-                <input placeholder="Nombre completo" value={authNombre} onChange={e => setAuthNombre(e.target.value)} className="input w-full" required />
+                <div className="flex gap-2">
+                  <input placeholder="Nombre" value={authNombre} onChange={e => setAuthNombre(e.target.value)} className="input w-1/2" required />
+                  <input placeholder="Apellido" value={authApellido} onChange={e => setAuthApellido(e.target.value)} className="input w-1/2" required />
+                </div>
                 <input placeholder="Teléfono (ej: 829-000-0000)" value={authTel} onChange={e => setAuthTel(e.target.value)} className="input w-full" type="tel" required />
                 <div>
                   <label className="text-xs font-bold text-gray-600 block mb-1">Fecha de nacimiento</label>
@@ -620,7 +628,7 @@ export default function CheckoutPage() {
                     </div>
                     <div>
                       <p className="font-bold text-gray-900 text-sm">Información de contacto</p>
-                      {step > 1 && <p className="text-xs text-gray-400 mt-0.5">{getValues('nombre')} · {getValues('email')}</p>}
+                      {step > 1 && <p className="text-xs text-gray-400 mt-0.5">{getValues('nombre')} {getValues('apellido')} · {getValues('email')}</p>}
                     </div>
                   </div>
                   {step > 1 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
@@ -628,14 +636,24 @@ export default function CheckoutPage() {
 
                 {step === 1 && (
                   <div className="px-5 pb-5 space-y-3 border-t border-gray-50 pt-4">
-                    <div className="relative">
-                      <User className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                      <label htmlFor="nombre" className="sr-only">Nombre completo</label>
-                      <input id="nombre" {...register('nombre')} placeholder="Nombre completo" autoComplete="name"
-                        aria-label="Nombre completo"
-                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
-                      {errors.nombre && <p className="text-red-500 text-xs mt-1 flex items-center gap-1">⚠️ {errors.nombre.message}</p>}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="relative">
+                        <User className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                        <label htmlFor="nombre" className="sr-only">Nombre</label>
+                        <input id="nombre" {...register('nombre')} placeholder="Nombre" autoComplete="given-name"
+                          aria-label="Nombre"
+                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
+                      </div>
+                      <div className="relative">
+                        <label htmlFor="apellido" className="sr-only">Apellido</label>
+                        <input id="apellido" {...register('apellido')} placeholder="Apellido" autoComplete="family-name"
+                          aria-label="Apellido"
+                          className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
+                      </div>
                     </div>
+                    {(errors.nombre || errors.apellido) && (
+                      <p className="text-red-500 text-xs -mt-1 flex items-center gap-1">⚠️ {errors.nombre?.message ?? errors.apellido?.message}</p>
+                    )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="relative">
                         <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
@@ -795,7 +813,7 @@ export default function CheckoutPage() {
                           <User className="w-4 h-4 text-primary-600" />
                         </div>
                         <div>
-                          <p className="font-bold text-gray-900 text-sm">{getValues('nombre')}</p>
+                          <p className="font-bold text-gray-900 text-sm">{getValues('nombre')} {getValues('apellido')}</p>
                           <p className="text-xs text-gray-400">{getValues('telefono')}</p>
                         </div>
                       </div>

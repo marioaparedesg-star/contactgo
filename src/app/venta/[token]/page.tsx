@@ -10,7 +10,6 @@ import { useParams } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { ShoppingBag, CheckCircle, Clock, User, CreditCard, Phone, Mail, MapPin, Calendar, Truck, Link2 } from 'lucide-react'
 import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
-import { tieneNombreYApellido, ERROR_NOMBRE_INCOMPLETO } from '@/lib/validation'
 
 const CIUDADES = [
   'Santo Domingo', 'Santo Domingo Este', 'Santo Domingo Norte', 'Santo Domingo Oeste',
@@ -88,7 +87,7 @@ export default function VentaWhatsAppPage() {
   const [metodoPago, setMetodoPago] = useState<'tarjeta' | 'contra_entrega'>('tarjeta')
 
   const [form, setForm] = useState({
-    nombre: '', fecha_nacimiento: '', telefono: '',
+    nombre: '', apellido: '', fecha_nacimiento: '', telefono: '',
     email: '', direccion: '', ciudad: '', ciudadPersonalizada: '',
   })
 
@@ -119,8 +118,8 @@ export default function VentaWhatsAppPage() {
 
   const submit = async () => {
     const telDigits = form.telefono.replace(/\D/g, '')
-    if (form.nombre.trim().length < 3) return toast.error('Escribe tu nombre completo')
-    if (!tieneNombreYApellido(form.nombre)) return toast.error(ERROR_NOMBRE_INCOMPLETO)
+    if (form.nombre.trim().length < 2) return toast.error('Escribe tu nombre')
+    if (form.apellido.trim().length < 2) return toast.error('Escribe tu apellido')
     if (!form.fecha_nacimiento) return toast.error('Selecciona tu fecha de nacimiento')
     if (telDigits.length < 10) return toast.error('Escribe tu número de WhatsApp (10 dígitos)')
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) return toast.error('Escribe un correo válido')
@@ -158,7 +157,7 @@ export default function VentaWhatsAppPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nombre: form.nombre.trim(),
+          nombre: `${form.nombre.trim()} ${form.apellido.trim()}`,
           fecha_nacimiento: form.fecha_nacimiento,
           telefono: telDigits,
           email: form.email.trim(),
@@ -280,9 +279,13 @@ export default function VentaWhatsAppPage() {
           </div>
           <div className="space-y-3.5">
             <div>
-              <label className="text-xs font-semibold text-gray-600 mb-1 block">Nombre completo</label>
-              <input className={inputCls} placeholder="Ej: María Rodríguez" value={form.nombre}
-                onChange={e => set('nombre', e.target.value)} />
+              <label className="text-xs font-semibold text-gray-600 mb-1 block">Nombre y apellido</label>
+              <div className="flex gap-2">
+                <input className={inputCls + ' w-1/2'} placeholder="Nombre" value={form.nombre}
+                  onChange={e => set('nombre', e.target.value)} />
+                <input className={inputCls + ' w-1/2'} placeholder="Apellido" value={form.apellido}
+                  onChange={e => set('apellido', e.target.value)} />
+              </div>
             </div>
             <div>
               <label className="text-xs font-semibold text-gray-600 mb-1 block">Fecha de nacimiento</label>
