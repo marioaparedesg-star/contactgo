@@ -15,9 +15,10 @@ import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/componen
 import toast from 'react-hot-toast'
 import Image from 'next/image'
 import { Shield, ShieldCheck, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, MapPin, User, Phone, Mail } from 'lucide-react'
+import { tieneNombreYApellido, ERROR_NOMBRE_INCOMPLETO } from '@/lib/validation'
 
 const schema = z.object({
-  nombre:               z.string().min(3, 'Nombre requerido'),
+  nombre:               z.string().min(3, 'Nombre requerido').refine(tieneNombreYApellido, ERROR_NOMBRE_INCOMPLETO),
   email:                z.string().email('Email inválido'),
   telefono:             z.string().min(10, 'Teléfono requerido').refine(
                             (v) => (v.match(/\d/g) ?? []).length >= 10,
@@ -381,6 +382,10 @@ export default function CheckoutPage() {
   }
 
   const handleAuth = async () => {
+    if (authMode === 'register' && !tieneNombreYApellido(authNombre)) {
+      setAuthMsg(ERROR_NOMBRE_INCOMPLETO)
+      return
+    }
     setAuthLoading(true); setAuthMsg('')
     const sb = createClient()
     if (authMode === 'register') {

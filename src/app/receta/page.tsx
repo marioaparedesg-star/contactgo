@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
+import { tieneNombreYApellido, ERROR_NOMBRE_INCOMPLETO } from '@/lib/validation'
 import { createClient } from '@/lib/supabase'
 import { useCartStore } from '@/lib/cart-store'
 import {
@@ -149,6 +150,7 @@ export default function RecetaPage() {
     if (!pendingRx) return
     const telClean = leadTelefono.replace(/\D/g,'')
     if (!leadNombre.trim()) { toast.error('Ingresa tu nombre'); return }
+    if (!tieneNombreYApellido(leadNombre)) { toast.error(ERROR_NOMBRE_INCOMPLETO); return }
     if (telClean.length < 10) { toast.error('Ingresa tu número de WhatsApp (10 dígitos)'); return }
     const conv = convertGlassesToContacts(pendingRx)
     let saveOk = false

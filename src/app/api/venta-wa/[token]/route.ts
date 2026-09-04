@@ -6,6 +6,7 @@
 import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { tieneNombreYApellido } from '@/lib/validation'
 
 function getSb() {
   return createClient(
@@ -98,6 +99,7 @@ export async function POST(
 
     // Validaciones
     if (nombre.length < 3) return NextResponse.json({ error: 'Nombre inválido' }, { status: 400 })
+    if (!tieneNombreYApellido(nombre)) return NextResponse.json({ error: 'Escribe nombre y apellido completos' }, { status: 400 })
     if (!fnac || isNaN(Date.parse(fnac))) return NextResponse.json({ error: 'Fecha de nacimiento inválida' }, { status: 400 })
     const edad = (Date.now() - Date.parse(fnac)) / (365.25 * 24 * 3600 * 1000)
     if (edad < 16 || edad > 110) return NextResponse.json({ error: 'Fecha de nacimiento fuera de rango' }, { status: 400 })

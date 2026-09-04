@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { guardRequest } from '@/lib/api-guard'
+import { tieneNombreYApellido } from '@/lib/validation'
 
 // Endpoint server-side para guardar leads de la calculadora de recetas.
 // Usa SERVICE_ROLE_KEY (bypassa RLS de forma segura) — el cliente en el
@@ -30,6 +31,13 @@ export async function POST(req: NextRequest) {
 
     if (nombre && String(nombre).length > 100) {
       return NextResponse.json({ error: 'Nombre demasiado largo' }, { status: 400 })
+    }
+    // El frontend ya exige nombre+apellido (ver comentario más abajo: "todo
+    // lead tiene nombre + WhatsApp"), pero nunca se exigía aquí — cualquiera
+    // podía llamar este endpoint directo y guardar un lead sin nombre o con
+    // un solo nombre. Ahora se exige igual en el servidor.
+    if (!tieneNombreYApellido(nombre)) {
+      return NextResponse.json({ error: 'Escribe nombre y apellido completos' }, { status: 400 })
     }
     if (email && !isValidEmail(String(email))) {
       return NextResponse.json({ error: 'Email inválido' }, { status: 400 })

@@ -10,6 +10,7 @@ import { useParams } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { ShoppingBag, CheckCircle, Clock, User, CreditCard, Phone, Mail, MapPin, Calendar, Truck, Link2 } from 'lucide-react'
 import DisclaimerMedico, { DisclaimerData, DISCLAIMER_VERSION } from '@/components/legal/DisclaimerMedico'
+import { tieneNombreYApellido, ERROR_NOMBRE_INCOMPLETO } from '@/lib/validation'
 
 const CIUDADES = [
   'Santo Domingo', 'Santo Domingo Este', 'Santo Domingo Norte', 'Santo Domingo Oeste',
@@ -119,6 +120,7 @@ export default function VentaWhatsAppPage() {
   const submit = async () => {
     const telDigits = form.telefono.replace(/\D/g, '')
     if (form.nombre.trim().length < 3) return toast.error('Escribe tu nombre completo')
+    if (!tieneNombreYApellido(form.nombre)) return toast.error(ERROR_NOMBRE_INCOMPLETO)
     if (!form.fecha_nacimiento) return toast.error('Selecciona tu fecha de nacimiento')
     if (telDigits.length < 10) return toast.error('Escribe tu número de WhatsApp (10 dígitos)')
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) return toast.error('Escribe un correo válido')
