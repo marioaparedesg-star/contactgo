@@ -189,7 +189,8 @@ export default function VentaWhatsAppPage() {
       <div className="bg-white rounded-2xl shadow-sm border p-8 max-w-md text-center">
         <Clock className="w-10 h-10 text-amber-500 mx-auto mb-3" />
         <p className="text-gray-800 font-medium">{errorMsg}</p>
-        <a href="https://wa.me/18096942268" className="inline-block mt-5 bg-[#25D366] text-white font-semibold px-6 py-2.5 rounded-full">
+        <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer"
+          className="inline-block mt-5 bg-[#25D366] text-white font-semibold px-6 py-2.5 rounded-full">
           Escribir por WhatsApp
         </a>
       </div>
