@@ -65,9 +65,9 @@ export default function ReportesPage() {
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          {icon:DollarSign,  label:'Ventas 30 días',    val: fmt(kpis?.revenue_30d??0),    sub:`${kpis?.orders_30d??0} pedidos`, color:'text-green-600',bg:'bg-green-50'},
-          {icon:DollarSign,  label:'Ventas 7 días',     val: fmt(kpis?.revenue_7d??0),     sub:`${kpis?.orders_7d??0} pedidos`,  color:'text-blue-600', bg:'bg-blue-50'},
-          {icon:ShoppingBag, label:'Ticket promedio',   val: fmt(kpis?.avg_order_value??0),sub:'por pedido',                     color:'text-purple-600',bg:'bg-purple-50'},
+          {icon:DollarSign,  label:'Cobrado hoy',       val: fmt(kpis?.revenue_hoy??0),    sub:'pagos + abonos de hoy',           color:'text-green-600',bg:'bg-green-50'},
+          {icon:DollarSign,  label:'Cobrado 30 días',   val: fmt(kpis?.revenue_30d??0),    sub:`${kpis?.orders_30d??0} pedidos`, color:'text-blue-600', bg:'bg-blue-50'},
+          {icon:ShoppingBag, label:'Ticket promedio',   val: fmt(kpis?.avg_order_value??0),sub:'por pedido cobrado',              color:'text-purple-600',bg:'bg-purple-50'},
           {icon:Users,       label:'Clientes',          val: String(kpis?.total_customers??0), sub:'registrados',               color:'text-indigo-600',bg:'bg-indigo-50'},
         ].map(({icon:Icon,label,val,sub,color,bg})=>(
           <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
@@ -79,6 +79,22 @@ export default function ReportesPage() {
             <p className="text-xs text-gray-400">{sub}</p>
           </div>
         ))}
+      </div>
+
+      {/* Por cobrar — dinero real pendiente, separado por qué tan recuperable es */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <h2 className="font-bold text-sm text-gray-700 mb-1">Por cobrar</h2>
+        <p className="text-xs text-gray-400 mb-4">Incluye pedidos con abono parcial — saldo real que falta, no solo pedidos sin ningún pago.</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="rounded-xl bg-amber-50 p-4">
+            <p className="text-2xl font-black text-amber-600">{fmt(kpis?.por_cobrar_activo??0)}</p>
+            <p className="text-xs text-gray-500 mt-1">{kpis?.pedidos_por_cobrar_activo??0} pedidos · últimos 30 días, todavía accionable</p>
+          </div>
+          <div className="rounded-xl bg-gray-50 p-4">
+            <p className="text-2xl font-black text-gray-400">{fmt(kpis?.por_cobrar_viejo??0)}</p>
+            <p className="text-xs text-gray-500 mt-1">{kpis?.pedidos_por_cobrar_viejo??0} pedidos · +30 días, probablemente perdido</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-5">

@@ -100,12 +100,12 @@ export default function AdminDashboard() {
     // es información operativa del día, no del análisis histórico.
     const hoy0ISO = new Date(new Date().setHours(0,0,0,0)).toISOString()
 
-    const [periodo, hoyData, ordRecent, items, stockLow] = await Promise.all([
+    const [periodo, hoyData, ordRecent, items, stockLow, abonosData] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at')
-        .eq('pago_estado','pagado').eq('es_prueba', false)
+        .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
-      sb.from('orders').select('id,total')
-        .eq('pago_estado','pagado').eq('es_prueba', false)
+      sb.from('orders').select('id,total,pago_estado')
+        .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', hoy0ISO),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
@@ -115,19 +115,46 @@ export default function AdminDashboard() {
       // FIX (2026-08-25): se agrega product_id para poder cruzar contra
       // products.costo y calcular costo/ganancia real de cada venta.
       sb.from('order_items')
-        .select('nombre,cantidad,precio,product_id,order_id,orders!inner(pago_estado,es_prueba,fecha)')
+        .select('nombre,cantidad,precio,product_id,order_id,orders!inner(pago_estado,es_prueba,fecha,estado)')
         .eq('orders.pago_estado','pagado').eq('orders.es_prueba', false)
         .gte('orders.fecha', desdeISO).lte('orders.fecha', hastaISO)
         .limit(1000),
       sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
+      // FIX (2026-09-04): "Ventas" solo contaba pedidos con pago_estado='pagado'
+      // completo — los abonos parciales que Mario registra en order_payments
+      // (pagos contra entrega, pagos por partes) nunca se sumaban a ningún
+      // lado, así que dinero real cobrado no aparecía en el dashboard.
+      // Ahora se cruza cada pedido contra sus abonos reales para calcular
+      // "cobrado" = pago completo, o suma de abonos si es pago parcial.
+      sb.from('order_payments').select('order_id,monto'),
     ])
 
     const ords = periodo.data ?? []
-    const ventasPeriodo  = ords.reduce((s,o)=>s+Number(o.total??0),0)
-    const ventasHoy      = (hoyData.data ?? []).reduce((s,o)=>s+Number(o.total??0),0)
-    const ticketProm     = ords.length > 0 ? ventasPeriodo/ords.length : 0
+    const abonosPorOrden: Record<string, number> = {}
+    ;(abonosData.data ?? []).forEach((a: any) => {
+      abonosPorOrden[a.order_id] = (abonosPorOrden[a.order_id] ?? 0) + Number(a.monto ?? 0)
+    })
+    const cobradoDe = (o: any) => o.pago_estado === 'pagado' ? Number(o.total ?? 0) : (abonosPorOrden[o.id] ?? 0)
+
+    const ventasPeriodo  = ords.reduce((s,o)=>s+cobradoDe(o),0)
+    const ventasHoy      = (hoyData.data ?? []).reduce((s,o)=>s+cobradoDe(o),0)
+    const pedidosPagadosPeriodo = ords.filter(o => cobradoDe(o) > 0).length
+    const ticketProm     = pedidosPagadosPeriodo > 0 ? ventasPeriodo/pedidosPagadosPeriodo : 0
     const entregados     = ords.filter(o=>o.estado==='entregado').length
     const conversion     = ords.length > 0 ? Math.round((entregados/ords.length)*100) : 0
+
+    // Por cobrar dentro del período seleccionado: saldo real pendiente
+    // (total - cobrado) de pedidos activos, separado por antigüedad —
+    // los de +30 días casi nunca se terminan de cobrar.
+    const hace30d = new Date(Date.now() - 30*86400000)
+    let porCobrarActivo = 0, porCobrarViejo = 0, pedidosPorCobrar = 0
+    ords.forEach((o:any) => {
+      const saldo = Number(o.total ?? 0) - cobradoDe(o)
+      if (saldo <= 0) return
+      pedidosPorCobrar++
+      if (new Date(o.created_at) >= hace30d) porCobrarActivo += saldo
+      else porCobrarViejo += saldo
+    })
 
     // ── Costo y ganancia real del período (y de hoy) ──────────────────────
     // Se cruza cada item vendido contra el costo REAL actual del producto
@@ -177,7 +204,8 @@ export default function AdminDashboard() {
 
     setData({ ventasPeriodo, ventasHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
-      costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy })
+      costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy,
+      porCobrarActivo, porCobrarViejo, pedidosPorCobrar })
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
@@ -295,9 +323,9 @@ export default function AdminDashboard() {
       {/* KPIs del período seleccionado */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon:TrendingUp,  label:'Ventas hoy',              val:fmt(data?.ventasHoy??0),      sub:'siempre del día de hoy',           color:'text-green-600',  bg:'bg-green-50' },
-          { icon:ShoppingBag, label:`Ventas · ${rango.label}`, val:fmt(data?.ventasPeriodo??0),  sub:`${data?.pedidosPeriodo??0} pedidos`, color:'text-blue-600',   bg:'bg-blue-50'  },
-          { icon:Package,     label:'Ticket promedio',         val:fmt(data?.ticketProm??0),     sub:rango.label,                        color:'text-purple-600', bg:'bg-purple-50' },
+          { icon:TrendingUp,  label:'Cobrado hoy',             val:fmt(data?.ventasHoy??0),      sub:'pagos + abonos de hoy',           color:'text-green-600',  bg:'bg-green-50' },
+          { icon:ShoppingBag, label:`Cobrado · ${rango.label}`, val:fmt(data?.ventasPeriodo??0),  sub:`${data?.pedidosPeriodo??0} pedidos`, color:'text-blue-600',   bg:'bg-blue-50'  },
+          { icon:Package,     label:'Ticket promedio',         val:fmt(data?.ticketProm??0),     sub:'de pedidos cobrados',              color:'text-purple-600', bg:'bg-purple-50' },
           { icon:AlertTriangle,label:'Bajo mínimo',            val:String((data?.invCriticos??0)+(data?.invBajoMin??0)), sub:'requieren atención', color:'text-amber-600',  bg:'bg-amber-50'  },
         ].map(({icon:Icon,label,val,sub,color,bg})=>(
           <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
@@ -309,6 +337,26 @@ export default function AdminDashboard() {
             <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
           </div>
         ))}
+      </div>
+
+      {/* Por cobrar — saldo real pendiente (incluye pedidos con abono parcial,
+          no solo los que nunca recibieron ningún pago) */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="font-bold text-sm text-gray-700">Por cobrar</h2>
+          <span className="text-xs text-gray-400">{data?.pedidosPorCobrar??0} pedidos con saldo pendiente</span>
+        </div>
+        <p className="text-xs text-gray-400 mb-4">Dentro del período seleccionado ({rango.label}). Incluye abonos parciales.</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="rounded-xl bg-amber-50 p-4">
+            <p className="text-2xl font-black text-amber-600">{fmt(data?.porCobrarActivo??0)}</p>
+            <p className="text-xs text-gray-500 mt-1">Últimos 30 días — todavía accionable</p>
+          </div>
+          <div className="rounded-xl bg-gray-50 p-4">
+            <p className="text-2xl font-black text-gray-400">{fmt(data?.porCobrarViejo??0)}</p>
+            <p className="text-xs text-gray-500 mt-1">+30 días — probablemente perdido</p>
+          </div>
+        </div>
       </div>
 
       {/* Costo y Ganancia — cruce real contra products.costo, cualquier canal de venta */}
