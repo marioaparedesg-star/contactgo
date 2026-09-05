@@ -28,7 +28,7 @@ export const DESCRIPCION_AD_SAFE: Record<string, string> = {
   'Proclear® Sphere':
     'Lente de contacto mensual con PC Technology® — tecnología de hidratación avanzada que mantiene el confort durante todo el día. Caja de 6 lentes.',
   'Biofinity® XR':
-    'Lente esférico de rango extendido con tecnología Aquaform®, cubriendo graduaciones positivas de +8.50 a +15.00 y negativas de -12.50 a -20.00. Alta transmisión de oxígeno.',
+    'Lente esférico de rango extendido con tecnología Aquaform®, para graduaciones fuera del rango estándar. Alta transmisión de oxígeno. Disponible bajo pedido especial.',
 
   // ── Multifocales ─────────────────────────────────────────────────────────
   'ACUVUE® OASYS® Multifocal':
@@ -37,8 +37,10 @@ export const DESCRIPCION_AD_SAFE: Record<string, string> = {
     'Lente multifocal mensual con óptica PRECISION PROFILE® para visión nítida a todas las distancias. HydraGlyde® Moisture Matrix para superficie húmeda todo el mes. SmartShield® Technology. ADD: LOW, MID, HIGH.',
   'Bausch+Lomb ULTRA® for Presbyopia':
     'Lente multifocal mensual con tecnología MoistureSeal® y diseño 3-Zone Progressive para visión en múltiples distancias. Caja de 6 lentes.',
+  'AIR OPTIX® plus HydraGlyde® for Astigmatism':
+    'Versión tórica de AIR OPTIX plus HydraGlyde, con corrección de cilindro y eje. Tecnología SmartShield® y HydraGlyde® Moisture Matrix de Alcon para hidratación todo el mes.',
   'Biofinity® Multifocal':
-    'Lente multifocal mensual con Balanced Progressive™ Technology para transición suave entre distancias. Aquaform® Technology. ADD disponible: +1.00, +1.50, +2.00, +2.50. Diseño D (dominante) y N (no dominante).',
+    'Lente multifocal mensual con Balanced Progressive™ Technology para transición suave entre distancias. Aquaform® Technology. Niveles de ADD: LOW, MID, HIGH. Diseño D (dominante) y N (no dominante).',
   'clariti® 1 day multifocal':
     'Lente multifocal diario de silicona hidrogel con visión en múltiples distancias. WetLoc® technology para superficie húmeda permanente. Lente fresco cada día. ADD: LOW, MED, HIGH.',
   'Proclear® Multifocal':
@@ -60,7 +62,7 @@ export const DESCRIPCION_AD_SAFE: Record<string, string> = {
   'Biofinity® Toric':
     'Lente tórico mensual con Aquaform® Technology y Optimized Toric Lens Geometry™. Naturalmente húmedo. Cilindros disponibles: -0.75, -1.25, -1.75, -2.25. Ejes en incrementos de 10°.',
   'Biofinity® XR Toric':
-    'Lente tórico de rango extendido, cubre graduaciones esféricas de +20.00 a -20.00 con cilindros de -2.75 a -5.75 en incrementos de 0.50.',
+    'Lente tórico de rango extendido, con tecnología Aquaform®, para graduaciones y cilindros fuera del rango estándar. Disponible bajo pedido especial.',
   'clariti® 1 day toric':
     'Lente tórico diario de silicona hidrogel a precio accesible. WetLoc® technology mantiene la humedad permanente. Diseño de estabilización para visión nítida. Cilindros: -0.75, -1.25, -1.75, -2.25.',
 }
