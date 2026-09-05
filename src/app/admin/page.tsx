@@ -112,12 +112,19 @@ export default function AdminDashboard() {
     // los números nunca cuadraban entre pantallas. Ahora "Cobrado" se lee
     // directo de cash_movements (categoría 'venta'), agrupado por la fecha
     // real en que entró el dinero — la misma fuente que ya usa Caja y el
-    // ERP Dashboard. 'en-CA' da 'YYYY-MM-DD' en hora LOCAL del navegador
-    // (evita el corrimiento de día que causa .toISOString(), que convierte
-    // a UTC primero).
-    const desdeStr = rango.desde.toLocaleDateString('en-CA')
-    const hastaStr = rango.hasta.toLocaleDateString('en-CA')
-    const hoyStr   = new Date().toLocaleDateString('en-CA')
+    // ERP Dashboard.
+    //
+    // FIX (2026-09-05): "hoyStr" antes usaba toLocaleDateString('en-CA'),
+    // que toma la fecha del RELOJ/ZONA HORARIA DEL DISPOSITIVO que carga
+    // el dashboard — si el celular estuviera mal configurado (viajando,
+    // fecha/hora automática desactivada), "Cobrado hoy" mostraría el día
+    // equivocado sin avisar. Ahora se calcula con un offset fijo de RD
+    // (UTC-4, sin horario de verano) a partir del timestamp real, igual
+    // que ya hace el reporte diario por email — no depende del dispositivo.
+    const fechaRD = (d: Date) => new Date(d.getTime() - 4 * 3600000).toISOString().slice(0, 10)
+    const desdeStr = fechaRD(rango.desde)
+    const hastaStr = fechaRD(rango.hasta)
+    const hoyStr   = fechaRD(new Date())
 
     const [periodo, ordRecent, stockLow, cobrosPeriodo] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
