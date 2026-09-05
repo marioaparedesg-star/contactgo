@@ -229,6 +229,41 @@ export default function AdminDashboard() {
     const invCriticos   = invAll.filter((p:any) => p.alerta_stock === 'critico').length
     const invBajoMin    = invAll.filter((p:any) => p.alerta_stock === 'bajo_minimo').length
 
+    // ── OPERACIÓN: pedidos activos por etapa (todo lo que no es entregado
+    // ni cancelado — el flujo real de "qué hay que atender hoy") ──────────
+    const { data: pedidosActivosData } = await sb
+      .from('orders').select('estado')
+      .not('estado','in','(entregado,cancelado)').eq('es_prueba', false)
+    const porEtapa: Record<string, number> = {}
+    ;(pedidosActivosData ?? []).forEach((o:any) => { porEtapa[o.estado] = (porEtapa[o.estado] ?? 0) + 1 })
+
+    // ── MARKETING: leads de la calculadora + conversión real ──────────────
+    const inicioMesStr = fechaRD(new Date(new Date().getFullYear(), new Date().getMonth(), 1))
+    const [{ data: leadsHoyData }, { data: leadsMesData }] = await Promise.all([
+      sb.from('calculator_leads').select('id').gte('created_at', hoyStr),
+      sb.from('calculator_leads').select('id, telefono').gte('created_at', inicioMesStr),
+    ])
+    const leadsHoy = leadsHoyData?.length ?? 0
+    const leadsMes = leadsMesData?.length ?? 0
+    // Conversión real: cruce de teléfono normalizado contra pedidos del mes
+    // (el flag 'convertido' en la tabla nunca se actualiza — ver pendiente
+    // ya anotado). Se normaliza a los últimos 10 dígitos para no perder
+    // coincidencias por el formato +1/1 delante que a veces trae 'orders'.
+    let leadsConvertidos = 0
+    if ((leadsMesData ?? []).length > 0) {
+      const telsLeads = new Set((leadsMesData ?? []).map((l:any) => String(l.telefono ?? '').replace(/\D/g,'').slice(-10)).filter(Boolean))
+      const { data: ordsDelMes } = await sb.from('orders').select('cliente_telefono').gte('created_at', inicioMesStr).eq('es_prueba', false)
+      const telsConCompra = new Set((ordsDelMes ?? []).map((o:any) => String(o.cliente_telefono ?? '').replace(/\D/g,'').slice(-10)))
+      telsLeads.forEach(t => { if (telsConCompra.has(t)) leadsConvertidos++ })
+    }
+    const conversionLeadsPct = leadsMes > 0 ? Math.round((leadsConvertidos / leadsMes) * 100) : 0
+
+    // Gasto en marketing del mes — se registra manualmente en el ERP
+    // Dashboard (tabla expenses). No se puede leer en vivo desde Meta Ads
+    // porque el token de la app no tiene permiso ads_read, solo CAPI.
+    const { data: gastosMktData } = await sb.from('expenses').select('monto').eq('categoria','marketing').gte('fecha', inicioMesStr)
+    const gastoMktMes = (gastosMktData ?? []).reduce((s:number, g:any) => s + Number(g.monto ?? 0), 0)
+
     // Detalle por cobro real — para las tarjetas clickeables. Una fila por
     // cada pago/abono realmente recibido (no una fila por pedido), así se
     // ve exactamente "cobré X a Y a tal hora", que es lo que se pidió.
@@ -252,7 +287,8 @@ export default function AdminDashboard() {
       invCriticos, invBajoMin, invTotal: invAll.length,
       costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
-      detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr })
+      detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr,
+      porEtapa, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct, gastoMktMes })
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
@@ -562,6 +598,56 @@ export default function AdminDashboard() {
             {top.length===0&&<p className="text-xs text-gray-400 text-center py-4">Sin ventas en este período</p>}
           </div>
         </div>
+      </div>
+
+      {/* ═══ OPERACIÓN — pedidos activos por etapa ═══ */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <h2 className="font-bold text-gray-900 text-sm mb-1">Operación — pedidos por etapa</h2>
+        <p className="text-xs text-gray-400 mb-4">Todo lo que sigue activo ahora mismo (no entregado ni cancelado).</p>
+        <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+          {[
+            {k:'recibido',      label:'Recibido',      icon:Clock,       color:'text-amber-600',  bg:'bg-amber-50'},
+            {k:'pago_aprobado', label:'Pago aprobado',  icon:CreditCard,  color:'text-blue-600',   bg:'bg-blue-50'},
+            {k:'preparando',    label:'Preparando',     icon:Package,     color:'text-purple-600', bg:'bg-purple-50'},
+            {k:'fabricante',    label:'Fabricante',     icon:Package,     color:'text-indigo-600', bg:'bg-indigo-50'},
+            {k:'transito',      label:'En tránsito',    icon:Truck,       color:'text-teal-600',   bg:'bg-teal-50'},
+          ].map(({k,label,icon:Icon,color,bg})=>(
+            <div key={k} className="text-center p-3 rounded-xl bg-gray-50">
+              <div className={`w-8 h-8 ${bg} rounded-lg flex items-center justify-center mx-auto mb-2`}>
+                <Icon className={`w-4 h-4 ${color}`}/>
+              </div>
+              <p className="text-xl font-black text-gray-900">{data?.porEtapa?.[k] ?? 0}</p>
+              <p className="text-[10px] text-gray-500 font-medium">{label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ═══ MARKETING — leads, conversión, gasto ═══ */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <h2 className="font-bold text-gray-900 text-sm mb-1">Marketing</h2>
+        <p className="text-xs text-gray-400 mb-4">Leads de la calculadora y conversión real (cruce por teléfono contra pedidos del mes).</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="p-3 rounded-xl bg-blue-50">
+            <p className="text-xl font-black text-blue-700">{data?.leadsHoy ?? 0}</p>
+            <p className="text-[10px] text-gray-500 font-medium">Leads hoy</p>
+          </div>
+          <div className="p-3 rounded-xl bg-blue-50">
+            <p className="text-xl font-black text-blue-700">{data?.leadsMes ?? 0}</p>
+            <p className="text-[10px] text-gray-500 font-medium">Leads este mes</p>
+          </div>
+          <div className="p-3 rounded-xl bg-green-50">
+            <p className="text-xl font-black text-green-700">{data?.conversionLeadsPct ?? 0}%</p>
+            <p className="text-[10px] text-gray-500 font-medium">{data?.leadsConvertidos ?? 0} de {data?.leadsMes ?? 0} sí compraron</p>
+          </div>
+          <div className="p-3 rounded-xl bg-gray-50">
+            <p className="text-xl font-black text-gray-400">{fmt(data?.gastoMktMes ?? 0)}</p>
+            <p className="text-[10px] text-gray-500 font-medium">Gasto ads (manual, ver nota)</p>
+          </div>
+        </div>
+        <p className="text-[10px] text-gray-400 mt-3">
+          El gasto en Meta Ads no se puede leer en vivo desde aquí (el token de la app no tiene permiso para eso) — regístralo en <button onClick={()=>router.push('/admin/erp-dashboard')} className="text-primary-600 font-semibold hover:underline">ERP Dashboard → Gastos</button> para que aparezca aquí. Revisa el gasto real en Meta Ads Manager directamente mientras tanto.
+        </p>
       </div>
 
       {/* Pedidos recientes + Alertas stock (siempre en tiempo real, no dependen del selector) */}
