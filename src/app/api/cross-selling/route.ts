@@ -15,14 +15,20 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(Number(searchParams.get('limit') ?? 4) || 4, 10)
 
   const sb = createServerSupabaseClient()
-  const { data } = await sb.from('products')
+  let query = sb.from('products')
     .select('id, nombre, slug, precio, imagen_url, tipo')
     .in('tipo', tipos)
     .eq('activo', true)
     .gt('stock', 0)
-    .neq('id', exclude)
     .order('nombre')
     .limit(10)
+  // FIX (2026-09-05): cuando 'exclude' llega vacío (ej. desde /cart, que no
+  // siempre tiene un producto que excluir), .neq('id','') fallaba porque
+  // 'id' es UUID y '' no es un UUID válido — Postgres rechazaba la consulta
+  // y Supabase devolvía data=null en silencio, sin ningún error visible.
+  // Ahora solo se aplica el filtro si exclude trae un valor real.
+  if (exclude) query = query.neq('id', exclude)
+  const { data } = await query
 
   // Cuando se piden soluciones, Mario pidió explícitamente que la sugerida
   // por defecto sea Opti-Free Puremoist (no Dream Eye, que antes salía
