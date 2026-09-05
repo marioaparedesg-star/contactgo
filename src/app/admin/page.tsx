@@ -397,29 +397,41 @@ export default function AdminDashboard() {
         )}
       </div>
 
-      {/* KPIs del período seleccionado — las 2 de cobrado son clickeables,
-          despliegan abajo el detalle real (a quién, qué pedido, cuánto) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { key:'hoy',     icon:TrendingUp,  label:'Cobrado hoy',             val:fmt(data?.ventasHoy??0),      sub:'pagos + abonos de hoy — toca para ver detalle',           color:'text-green-600',  bg:'bg-green-50', clickable:true },
-          { key:'periodo', icon:ShoppingBag, label:`Cobrado · ${rango.label}`, val:fmt(data?.ventasPeriodo??0),  sub:`${data?.pedidosPeriodo??0} pedidos — toca para ver detalle`, color:'text-blue-600',   bg:'bg-blue-50',  clickable:true },
-          { key:null,      icon:Package,     label:'Ticket promedio',         val:fmt(data?.ticketProm??0),     sub:'de pedidos cobrados',              color:'text-purple-600', bg:'bg-purple-50', clickable:false },
-          { key:null,      icon:AlertTriangle,label:'Bajo mínimo',            val:String((data?.invCriticos??0)+(data?.invBajoMin??0)), sub:'requieren atención', color:'text-amber-600',  bg:'bg-amber-50', clickable:false },
-        ].map(({key,icon:Icon,label,val,sub,color,bg,clickable})=>{
-          const abierta = clickable && detalleAbierto===key
-          const Tag = clickable ? 'button' : 'div'
-          return (
-            <Tag key={label} onClick={clickable ? ()=>setDetalleAbierto(abierta ? null : key as any) : undefined}
-              className={`text-left bg-white rounded-2xl border shadow-sm p-5 transition-all ${abierta?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'} ${clickable?'hover:border-gray-200 active:scale-[0.98]':''}`}>
-              <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center mb-4`}>
-                <Icon className={`w-5 h-5 ${color}`}/>
-              </div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{label}</p>
-              <p className="text-2xl font-black text-gray-900 mt-1">{val}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
-            </Tag>
-          )
-        })}
+      {/* ═══════════════════════════════════════════════════════════════
+          RESUMEN FINANCIERO — un solo bloque, mismo orden que el reporte
+          por email/WhatsApp (Hoy, luego el período), para que sea el
+          mismo número que ya conoces, no uno nuevo que aprender.
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <h2 className="font-bold text-gray-900 text-base mb-1">📊 Resumen financiero</h2>
+        <p className="text-xs text-gray-400 mb-4">Los mismos números que recibes cada noche por email y WhatsApp.</p>
+
+        <div className="grid grid-cols-2 gap-3">
+          {/* HOY */}
+          <button onClick={()=>setDetalleAbierto(detalleAbierto==='hoy'?null:'hoy')}
+            className={`text-left rounded-2xl border-2 p-4 transition-all ${detalleAbierto==='hoy'?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'}`}>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wide">Hoy</p>
+            <p className="text-xl sm:text-2xl font-black text-gray-900 mt-1">{fmt(data?.ventasHoy??0)}</p>
+            <p className="text-[10px] text-gray-400 mb-2">cobrado (pagos + abonos)</p>
+            <div className="border-t border-gray-100 pt-2 flex items-center justify-between">
+              <span className="text-[11px] text-gray-400">Costo {fmt(data?.costoHoy??0)}</span>
+              <span className="text-[11px] font-bold text-emerald-600">+{fmt(data?.gananciaHoy??0)}</span>
+            </div>
+          </button>
+
+          {/* PERÍODO SELECCIONADO */}
+          <button onClick={()=>setDetalleAbierto(detalleAbierto==='periodo'?null:'periodo')}
+            className={`text-left rounded-2xl border-2 p-4 transition-all ${detalleAbierto==='periodo'?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'}`}>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wide">{rango.label}</p>
+            <p className="text-xl sm:text-2xl font-black text-gray-900 mt-1">{fmt(data?.ventasPeriodo??0)}</p>
+            <p className="text-[10px] text-gray-400 mb-2">cobrado · {data?.pedidosPeriodo??0} pedidos</p>
+            <div className="border-t border-gray-100 pt-2 flex items-center justify-between">
+              <span className="text-[11px] text-gray-400">Costo {fmt(data?.costoTotalPeriodo??0)}</span>
+              <span className="text-[11px] font-bold text-emerald-600">+{fmt(data?.gananciaPeriodo??0)}</span>
+            </div>
+          </button>
+        </div>
+        <p className="text-[10px] text-gray-400 mt-2 text-center">Toca cualquiera de los dos para ver a quién le cobraste qué</p>
       </div>
 
       {/* Detalle desplegado de "Cobrado hoy" / "Cobrado · período" */}
@@ -495,57 +507,36 @@ export default function AdminDashboard() {
         })()}
       </div>
 
-      {/* Costo y Ganancia — cruce real contra products.costo, cualquier canal de venta */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center mb-4">
-            <CreditCard className="w-5 h-5 text-red-500"/>
-          </div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Costo · {rango.label}</p>
-          <p className="text-2xl font-black text-gray-900 mt-1">{fmt(data?.costoTotalPeriodo??0)}</p>
-          <p className="text-xs text-gray-400 mt-0.5">Hoy: {fmt(data?.costoHoy??0)}</p>
+      {/* Métricas secundarias — apoyo al resumen financiero, no son el número principal */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <p className="text-lg font-black text-gray-900">{fmt(data?.ticketProm??0)}</p>
+          <p className="text-[10px] text-gray-400">Ticket promedio</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center mb-4">
-            <TrendingUp className="w-5 h-5 text-emerald-600"/>
-          </div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Ganancia · {rango.label}</p>
-          <p className="text-2xl font-black text-emerald-700 mt-1">{fmt(data?.gananciaPeriodo??0)}</p>
-          <p className="text-xs text-gray-400 mt-0.5">Hoy: {fmt(data?.gananciaHoy??0)}</p>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <p className="text-lg font-black text-gray-900">{data?.pedidosPeriodo??0}</p>
+          <p className="text-[10px] text-gray-400">Pedidos · {rango.label}</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <p className="text-lg font-black text-gray-900">{data?.entregados??0} <span className="text-xs font-medium text-gray-400">({data?.conversion??0}%)</span></p>
+          <p className="text-[10px] text-gray-400">Entregados · {rango.label}</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <p className="text-lg font-black text-amber-600">{(data?.invCriticos??0)+(data?.invBajoMin??0)}</p>
+          <p className="text-[10px] text-gray-400">Productos bajo mínimo</p>
         </div>
       </div>
 
-      {/* Fila de métricas secundarias */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-          <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center shrink-0">
-            <Clock className="w-5 h-5 text-amber-600"/>
-          </div>
-          <div>
-            <p className="text-xl font-black text-gray-900">{data?.pedidosPeriodo??0}</p>
-            <p className="text-xs text-gray-400">Pedidos · {rango.label}</p>
-          </div>
+      <button onClick={()=>router.push('/admin/calculadora')}
+        className="w-full bg-blue-50 border border-blue-100 rounded-2xl shadow-sm p-4 flex items-center gap-4 hover:bg-blue-100 transition-colors text-left">
+        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+          <span className="text-lg">📊</span>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-          <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center shrink-0">
-            <CheckCircle className="w-5 h-5 text-green-600"/>
-          </div>
-          <div>
-            <p className="text-xl font-black text-gray-900">{data?.entregados??0}</p>
-            <p className="text-xs text-gray-400">Entregados · {rango.label} ({data?.conversion??0}%)</p>
-          </div>
+        <div>
+          <p className="text-base font-black text-blue-700">Calculadora</p>
+          <p className="text-xs text-blue-500">Ver métricas y leads →</p>
         </div>
-        <button onClick={()=>router.push('/admin/calculadora')}
-          className="bg-blue-50 border border-blue-100 rounded-2xl shadow-sm p-4 flex items-center gap-4 hover:bg-blue-100 transition-colors text-left">
-          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-            <span className="text-lg">📊</span>
-          </div>
-          <div>
-            <p className="text-xl font-black text-blue-700">Calculadora</p>
-            <p className="text-xs text-blue-500">Ver métricas y leads →</p>
-          </div>
-        </button>
-      </div>
+      </button>
 
       {/* Gráfica + Top productos */}
       <div className="grid lg:grid-cols-5 gap-4">
