@@ -2,6 +2,19 @@
 import { useState } from 'react'
 import { ChevronRight } from 'lucide-react'
 
+// FAQ específicas por producto — tienen prioridad sobre las de categoría.
+// Se usa el nombre EXACTO de products.nombre como llave. Solo los productos
+// listados aquí tienen preguntas verdaderamente propias; el resto sigue
+// usando el respaldo genérico de FAQS_BY_TYPE mientras se van agregando.
+const FAQS_BY_PRODUCT: Record<string, { q: string; a: string }[]> = {
+  'Biofinity®': [
+    { q: '¿Cada cuánto debo cambiar Biofinity?', a: 'Biofinity es de reemplazo mensual — se usa durante 30 días y luego se descarta, sin importar si lo usaste todos los días o no. Necesita solución multipropósito para su limpieza nocturna.' },
+    { q: '¿Qué es Aquaform Technology?', a: 'Es la tecnología de CooperVision que integra agua directamente en la estructura del material del lente (no solo en la superficie), lo que le da muy buena transmisión de oxígeno y comodidad durante todo el día de uso.' },
+    { q: '¿Qué rango de graduación cubre Biofinity?', a: 'Biofinity estándar cubre miopía e hipermetropía dentro del rango habitual. Si tu graduación es muy alta (fuera de rango estándar), existe Biofinity XR, pensado específicamente para esos casos.' },
+    { q: '¿Biofinity tiene versión para astigmatismo o presbicia?', a: 'Sí — Biofinity Toric corrige astigmatismo, y Biofinity Multifocal corrige presbicia (vista cansada +40 años). Son productos separados con la misma tecnología Aquaform.' },
+  ],
+}
+
 const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
   esferico: [
     { q: '¿Cuánto tiempo puedo usar estos lentes?', a: 'Depende del tipo: diarios se descartan cada día, quincenales cada 2 semanas, mensuales cada 30 días. Nunca uses más allá del tiempo recomendado.' },
@@ -49,7 +62,11 @@ const FAQS_GENERAL = [
 
 export default function ProductFAQ({ tipo, nombre }: { tipo: string; nombre: string }) {
   const [open, setOpen] = useState<number | null>(null)
-  const faqs = [...(FAQS_BY_TYPE[tipo] ?? []), ...FAQS_GENERAL]
+  // Prioridad: FAQ propia del producto (si existe) → FAQ de su categoría
+  // como respaldo. Así un producto sin FAQ propia todavía no se queda sin
+  // nada, mientras se van agregando las específicas una por una.
+  const propias = FAQS_BY_PRODUCT[nombre] ?? []
+  const faqs = [...propias, ...(FAQS_BY_TYPE[tipo] ?? []), ...FAQS_GENERAL]
   if (!faqs.length) return null
 
   return (
