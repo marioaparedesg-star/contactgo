@@ -83,7 +83,7 @@ export default function AdminDashboard() {
   // Detalle clickeable: qué tarjeta está expandida (o null si ninguna) y
   // la lista de pedidos que componen esa cifra, con su cobrado real y su
   // saldo pendiente, para que Mario pueda ver a quién le cobró qué.
-  const [detalleAbierto, setDetalleAbierto] = useState<null | 'hoy' | 'periodo' | 'mesFijo' | 'porCobrarActivo' | 'porCobrarViejo'>(null)
+  const [detalleAbierto, setDetalleAbierto] = useState<null | 'hoy' | 'periodo' | 'porCobrarActivo' | 'porCobrarViejo'>(null)
   const [detalleOrdenes, setDetalleOrdenes] = useState<any[]>([])
 
   // ── Estado del selector de fechas ──
@@ -125,14 +125,8 @@ export default function AdminDashboard() {
     const desdeStr = fechaRD(rango.desde)
     const hastaStr = fechaRD(rango.hasta)
     const hoyStr   = fechaRD(new Date())
-    // "Este mes" fijo — SIEMPRE el mes calendario actual, sin importar qué
-    // filtro tenga seleccionado el resto de la página. Mario pidió ver
-    // Hoy + Mes siempre presentes, no depender de un selector para verlos.
-    const nowLocal = new Date()
-    const inicioMesFijoStr = fechaRD(new Date(nowLocal.getFullYear(), nowLocal.getMonth(), 1))
-    const nombreMesActual = nowLocal.toLocaleDateString('es-DO', { month: 'long', year: 'numeric' })
 
-    const [periodo, ordRecent, stockLow, cobrosPeriodo, cobrosMesFijoData] = await Promise.all([
+    const [periodo, ordRecent, stockLow, cobrosPeriodo] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
@@ -144,17 +138,11 @@ export default function AdminDashboard() {
         .select('id,monto,fecha,created_at,order_id,referencia,descripcion,orders(numero_orden,cliente_nombre,cliente_telefono)')
         .eq('categoria','venta').eq('tipo','ingreso')
         .gte('fecha', desdeStr).lte('fecha', hastaStr),
-      // Independiente del selector — siempre el mes calendario actual completo.
-      sb.from('cash_movements')
-        .select('id,monto,fecha,created_at,order_id,referencia,descripcion,orders(numero_orden,cliente_nombre,cliente_telefono)')
-        .eq('categoria','venta').eq('tipo','ingreso')
-        .gte('fecha', inicioMesFijoStr).lte('fecha', hoyStr),
     ])
 
     const ords = periodo.data ?? []
     const cobros = cobrosPeriodo.data ?? []
     const cobrosHoy = cobros.filter((c:any) => c.fecha === hoyStr)
-    const cobrosMesFijo = cobrosMesFijoData.data ?? []
 
     const ventasPeriodo  = cobros.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
     const ventasHoy      = cobrosHoy.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
@@ -226,29 +214,6 @@ export default function AdminDashboard() {
     })
     const gananciaHoy = ventasHoy - costoHoy
 
-    // ── "Este mes" FIJO — mismo cruce de costo real, pero totalmente
-    // independiente del selector de arriba. Así "Hoy" y "Este mes" nunca
-    // desaparecen ni cambian aunque alguien esté mirando "Año anterior"
-    // en el selector para comparar otra cosa más abajo en la página.
-    const ventasMesFijo = cobrosMesFijo.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
-    const idsMesFijo = Array.from(new Set(cobrosMesFijo.map((c:any) => c.order_id).filter(Boolean)))
-    const { data: itemsMesFijoData } = idsMesFijo.length > 0
-      ? await sb.from('order_items').select('cantidad,product_id,order_id').in('order_id', idsMesFijo).limit(1000)
-      : { data: [] as any[] }
-    const productIdsMesFijo = Array.from(new Set((itemsMesFijoData ?? []).map((i:any) => i.product_id).filter(Boolean)))
-    const idsCostoFaltantes = productIdsMesFijo.filter(id => !(id in costoPorId))
-    if (idsCostoFaltantes.length > 0) {
-      const { data: costosExtra } = await sb.from('products').select('id,costo').in('id', idsCostoFaltantes)
-      ;(costosExtra ?? []).forEach((p:any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
-    }
-    let costoMesFijo = 0
-    ;(itemsMesFijoData ?? []).forEach((i:any) => {
-      const costoUnit = i.product_id ? (costoPorId[i.product_id] ?? 0) : 0
-      costoMesFijo += costoUnit * Number(i.cantidad ?? 1)
-    })
-    const gananciaMesFijo = ventasMesFijo - costoMesFijo
-    const pedidosMesFijo = idsMesFijo.length
-
     const agg: Record<string,{nombre:string,u:number,rev:number}> = {}
     ;(items.data??[]).forEach((i:any)=>{
       if(!agg[i.nombre]) agg[i.nombre]={nombre:i.nombre,u:0,rev:0}
@@ -305,7 +270,6 @@ export default function AdminDashboard() {
     })
     const detalleHoyArr     = cobrosHoy.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
     const detallePeriodoArr = cobros.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
-    const detalleMesFijoArr = cobrosMesFijo.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
     const detallePorCobrarActivoArr = ords
       .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) >= hace30d)
       .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
@@ -316,7 +280,6 @@ export default function AdminDashboard() {
     setData({ ventasPeriodo, ventasHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
       costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy,
-      ventasMesFijo, costoMesFijo, gananciaMesFijo, pedidosMesFijo, nombreMesActual, detalleMesFijoArr,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
       detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr,
       porEtapa, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct })
@@ -399,72 +362,89 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════════════════════
-          HOY + ESTE MES — SIEMPRE fijos, no dependen de ningún selector.
-          Es lo primero que se ve al abrir el dashboard, en grande, con
-          Cobrado → Costo → Ganancia uno debajo del otro para que se lea
-          de un vistazo. El costo sale de cruzar cada producto vendido
-          contra su costo real (products.costo), no un estimado.
-          ═══════════════════════════════════════════════════════════════ */}
-      <div className="space-y-3">
-        {/* HOY */}
-        <button onClick={()=>setDetalleAbierto(detalleAbierto==='hoy'?null:'hoy')}
-          className={`w-full text-left bg-white rounded-2xl border-2 shadow-sm p-5 transition-all ${detalleAbierto==='hoy'?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'}`}>
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-black text-gray-900 uppercase tracking-wide">📅 Hoy</p>
-            <p className="text-[10px] text-gray-400">toca para ver el detalle</p>
+      {/* ═══ SELECTOR DE RANGO DE FECHAS ═══ */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Calendar className="w-4 h-4 text-gray-400 shrink-0"/>
+            {PRESETS.map(p => (
+              <button key={p.key}
+                onClick={() => { setPreset(p.key); setSelectorAbierto(p.key === 'personalizado') }}
+                className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                  preset === p.key ? 'bg-teal-500 text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                }`}>
+                {p.label}
+              </button>
+            ))}
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <p className="text-xs text-gray-400 shrink-0">
+            {rango.desde.toLocaleDateString('es-DO')} — {rango.hasta.toLocaleDateString('es-DO')}
+          </p>
+        </div>
+        {selectorAbierto && (
+          <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100">
             <div>
-              <p className="text-lg sm:text-2xl font-black text-gray-900">{fmt(data?.ventasHoy??0)}</p>
-              <p className="text-[10px] sm:text-xs text-gray-400">Cobrado</p>
+              <label className="text-[10px] font-semibold text-gray-400 uppercase block mb-1">Desde</label>
+              <input type="date" value={customDesde} onChange={e=>setCustomDesde(e.target.value)}
+                className="text-xs border border-gray-200 rounded-lg px-2 py-1.5"/>
             </div>
             <div>
-              <p className="text-lg sm:text-2xl font-black text-red-500">{fmt(data?.costoHoy??0)}</p>
-              <p className="text-[10px] sm:text-xs text-gray-400">Costo</p>
-            </div>
-            <div>
-              <p className="text-lg sm:text-2xl font-black text-emerald-600">{fmt(data?.gananciaHoy??0)}</p>
-              <p className="text-[10px] sm:text-xs text-gray-400">Ganancia</p>
-            </div>
-          </div>
-        </button>
-
-        {/* ESTE MES — fijo, siempre el mes calendario actual */}
-        <button onClick={()=>setDetalleAbierto(detalleAbierto==='mesFijo'?null:'mesFijo')}
-          className={`w-full text-left bg-white rounded-2xl border-2 shadow-sm p-5 transition-all ${detalleAbierto==='mesFijo'?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'}`}>
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-black text-gray-900 uppercase tracking-wide capitalize">📆 {data?.nombreMesActual ?? 'Este mes'}</p>
-            <p className="text-[10px] text-gray-400">{data?.pedidosMesFijo??0} pedidos cobrados — toca para ver el detalle</p>
-          </div>
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
-            <div>
-              <p className="text-lg sm:text-2xl font-black text-gray-900">{fmt(data?.ventasMesFijo??0)}</p>
-              <p className="text-[10px] sm:text-xs text-gray-400">Cobrado</p>
-            </div>
-            <div>
-              <p className="text-lg sm:text-2xl font-black text-red-500">{fmt(data?.costoMesFijo??0)}</p>
-              <p className="text-[10px] sm:text-xs text-gray-400">Costo</p>
-            </div>
-            <div>
-              <p className="text-lg sm:text-2xl font-black text-emerald-600">{fmt(data?.gananciaMesFijo??0)}</p>
-              <p className="text-[10px] sm:text-xs text-gray-400">Ganancia</p>
+              <label className="text-[10px] font-semibold text-gray-400 uppercase block mb-1">Hasta</label>
+              <input type="date" value={customHasta} onChange={e=>setCustomHasta(e.target.value)}
+                className="text-xs border border-gray-200 rounded-lg px-2 py-1.5"/>
             </div>
           </div>
-        </button>
+        )}
       </div>
 
-      {/* Detalle desplegado de "Hoy" / "Este mes" */}
-      {(detalleAbierto==='hoy' || detalleAbierto==='mesFijo') && (
+      {/* ═══════════════════════════════════════════════════════════════
+          RESUMEN FINANCIERO — un solo bloque, mismo orden que el reporte
+          por email/WhatsApp (Hoy, luego el período), para que sea el
+          mismo número que ya conoces, no uno nuevo que aprender.
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <h2 className="font-bold text-gray-900 text-base mb-1">📊 Resumen financiero</h2>
+        <p className="text-xs text-gray-400 mb-4">Los mismos números que recibes cada noche por email y WhatsApp.</p>
+
+        <div className="grid grid-cols-2 gap-3">
+          {/* HOY */}
+          <button onClick={()=>setDetalleAbierto(detalleAbierto==='hoy'?null:'hoy')}
+            className={`text-left rounded-2xl border-2 p-4 transition-all ${detalleAbierto==='hoy'?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'}`}>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wide">Hoy</p>
+            <p className="text-xl sm:text-2xl font-black text-gray-900 mt-1">{fmt(data?.ventasHoy??0)}</p>
+            <p className="text-[10px] text-gray-400 mb-2">cobrado (pagos + abonos)</p>
+            <div className="border-t border-gray-100 pt-2 flex items-center justify-between">
+              <span className="text-[11px] text-gray-400">Costo {fmt(data?.costoHoy??0)}</span>
+              <span className="text-[11px] font-bold text-emerald-600">+{fmt(data?.gananciaHoy??0)}</span>
+            </div>
+          </button>
+
+          {/* PERÍODO SELECCIONADO */}
+          <button onClick={()=>setDetalleAbierto(detalleAbierto==='periodo'?null:'periodo')}
+            className={`text-left rounded-2xl border-2 p-4 transition-all ${detalleAbierto==='periodo'?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'}`}>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wide">{rango.label}</p>
+            <p className="text-xl sm:text-2xl font-black text-gray-900 mt-1">{fmt(data?.ventasPeriodo??0)}</p>
+            <p className="text-[10px] text-gray-400 mb-2">cobrado · {data?.pedidosPeriodo??0} pedidos</p>
+            <div className="border-t border-gray-100 pt-2 flex items-center justify-between">
+              <span className="text-[11px] text-gray-400">Costo {fmt(data?.costoTotalPeriodo??0)}</span>
+              <span className="text-[11px] font-bold text-emerald-600">+{fmt(data?.gananciaPeriodo??0)}</span>
+            </div>
+          </button>
+        </div>
+        <p className="text-[10px] text-gray-400 mt-2 text-center">Toca cualquiera de los dos para ver a quién le cobraste qué</p>
+      </div>
+
+      {/* Detalle desplegado de "Cobrado hoy" / "Cobrado · período" */}
+      {(detalleAbierto==='hoy' || detalleAbierto==='periodo') && (
         <div className="bg-white rounded-2xl border border-primary-200 shadow-md p-5">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-bold text-sm text-gray-700">
-              {detalleAbierto==='hoy' ? 'Hoy — detalle de cobros' : `${data?.nombreMesActual ?? 'Este mes'} — detalle de cobros`}
+              {detalleAbierto==='hoy' ? 'Cobrado hoy — detalle' : `Cobrado · ${rango.label} — detalle`}
             </h2>
             <button onClick={()=>setDetalleAbierto(null)} className="text-gray-400 hover:text-gray-600 text-xs font-semibold">Cerrar ✕</button>
           </div>
           {(() => {
-            const lista = detalleAbierto==='hoy' ? (data?.detalleHoyArr??[]) : (data?.detalleMesFijoArr??[])
+            const lista = detalleAbierto==='hoy' ? (data?.detalleHoyArr??[]) : (data?.detallePeriodoArr??[])
             if (lista.length===0) return <p className="text-xs text-gray-400 text-center py-6">Sin cobros en este rango.</p>
             return (
               <div className="space-y-2">
@@ -493,7 +473,7 @@ export default function AdminDashboard() {
           <h2 className="font-bold text-sm text-gray-700">Por cobrar</h2>
           <span className="text-xs text-gray-400">{data?.pedidosPorCobrar??0} pedidos con saldo pendiente</span>
         </div>
-        <p className="text-xs text-gray-400 mb-4">Dentro del rango de comparación de abajo ({rango.label}). Incluye abonos parciales. Toca cualquiera para ver el detalle.</p>
+        <p className="text-xs text-gray-400 mb-4">Dentro del período seleccionado ({rango.label}). Incluye abonos parciales. Toca cualquiera para ver el detalle.</p>
         <div className="grid grid-cols-2 gap-4">
           <button onClick={()=>setDetalleAbierto(detalleAbierto==='porCobrarActivo'?null:'porCobrarActivo')}
             className={`text-left rounded-xl bg-amber-50 p-4 transition-all ${detalleAbierto==='porCobrarActivo'?'ring-2 ring-amber-300':''}`}>
@@ -527,7 +507,7 @@ export default function AdminDashboard() {
         })()}
       </div>
 
-      {/* Métricas secundarias — apoyo, no son el número principal */}
+      {/* Métricas secundarias — apoyo al resumen financiero, no son el número principal */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
           <p className="text-lg font-black text-gray-900">{fmt(data?.ticketProm??0)}</p>
@@ -557,44 +537,6 @@ export default function AdminDashboard() {
           <p className="text-xs text-blue-500">Ver métricas y leads →</p>
         </div>
       </button>
-
-      {/* ═══ COMPARAR OTRO PERIODO — para el histórico de abajo (gráfica y
-          top productos) únicamente. No afecta a Hoy ni Este Mes de arriba,
-          esos siempre se quedan fijos. ═══ */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-        <p className="text-xs font-bold text-gray-500 mb-2">📊 Comparar otro periodo (para la gráfica y top productos de abajo)</p>
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <Calendar className="w-4 h-4 text-gray-400 shrink-0"/>
-            {PRESETS.map(p => (
-              <button key={p.key}
-                onClick={() => { setPreset(p.key); setSelectorAbierto(p.key === 'personalizado') }}
-                className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
-                  preset === p.key ? 'bg-teal-500 text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-                }`}>
-                {p.label}
-              </button>
-            ))}
-          </div>
-          <p className="text-xs text-gray-400 shrink-0">
-            {rango.desde.toLocaleDateString('es-DO')} — {rango.hasta.toLocaleDateString('es-DO')}
-          </p>
-        </div>
-        {selectorAbierto && (
-          <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100">
-            <div>
-              <label className="text-[10px] font-semibold text-gray-400 uppercase block mb-1">Desde</label>
-              <input type="date" value={customDesde} onChange={e=>setCustomDesde(e.target.value)}
-                className="text-xs border border-gray-200 rounded-lg px-2 py-1.5"/>
-            </div>
-            <div>
-              <label className="text-[10px] font-semibold text-gray-400 uppercase block mb-1">Hasta</label>
-              <input type="date" value={customHasta} onChange={e=>setCustomHasta(e.target.value)}
-                className="text-xs border border-gray-200 rounded-lg px-2 py-1.5"/>
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* Gráfica + Top productos */}
       <div className="grid lg:grid-cols-5 gap-4">
