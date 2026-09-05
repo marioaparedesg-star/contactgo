@@ -1,7 +1,8 @@
 // ============================================================
 // ContactGo — POST /api/admin/pedidos
 // Acciones de admin sobre pedidos con service role (evita bloqueos de RLS desde el navegador).
-// acciones: cambiar_estado | marcar_pagado | cancelar | eliminar
+// acciones: cambiar_estado | marcar_pagado | registrar_pago | listar_pagos | cancelar | eliminar
+//           | agregar_item | eliminar_item | editar_item_precio
 // ============================================================
 import { guardRequest } from '@/lib/api-guard'
 import { requireAdmin } from '@/lib/admin-guard'
@@ -214,6 +215,61 @@ export async function POST(req: NextRequest) {
       const { error } = await sb.from('orders').delete().eq('id', order_id)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({ ok: true })
+    }
+
+    // ── Editar productos de un pedido YA CREADO (agregar/quitar/cambiar
+    // precio) — a propósito NO cambia orders.estado ni orders.pago_estado,
+    // y NUNCA llama a /api/notify. Es un ajuste interno silencioso: el
+    // pedido sigue tal como el cliente lo ve (pagado sigue pagado, el
+    // estado de preparación no se toca), solo cambia qué se va a preparar.
+    // Las tres acciones recalculan orders.subtotal/total desde cero sumando
+    // order_items real, para que nunca queden desincronizados.
+    async function recalcularTotales(orderId: string) {
+      const { data: items } = await sb.from('order_items').select('subtotal').eq('order_id', orderId)
+      const nuevoSubtotal = (items ?? []).reduce((s, i: any) => s + Number(i.subtotal ?? 0), 0)
+      const { data: ord } = await sb.from('orders').select('envio, descuento').eq('id', orderId).single()
+      const envio = Number(ord?.envio ?? 0)
+      const descuento = Number(ord?.descuento ?? 0)
+      const nuevoTotal = nuevoSubtotal + envio - descuento
+      await sb.from('orders').update({ subtotal: nuevoSubtotal, total: nuevoTotal }).eq('id', orderId)
+      return nuevoTotal
+    }
+
+    if (accion === 'agregar_item') {
+      const { nombre, precio, cantidad, product_id, sph, cyl, axis, add_power, ojo_mode } = body
+      if (!nombre || precio == null) return NextResponse.json({ error: 'nombre y precio requeridos' }, { status: 400 })
+      const { error } = await sb.from('order_items').insert({
+        order_id, nombre, precio: Number(precio), cantidad: Number(cantidad) || 1,
+        product_id: product_id || null, precio_original: Number(precio),
+        sph: sph || null, cyl: cyl || null, axis: axis || null, add_power: add_power || null,
+        ojo_mode: ojo_mode || 'AMBOS',
+      })
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      const nuevoTotal = await recalcularTotales(order_id)
+      return NextResponse.json({ ok: true, nuevoTotal })
+    }
+
+    if (accion === 'eliminar_item') {
+      const { item_id } = body
+      if (!item_id) return NextResponse.json({ error: 'item_id requerido' }, { status: 400 })
+      const { error } = await sb.from('order_items').delete().eq('id', item_id).eq('order_id', order_id)
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      const nuevoTotal = await recalcularTotales(order_id)
+      return NextResponse.json({ ok: true, nuevoTotal })
+    }
+
+    if (accion === 'editar_item') {
+      const { item_id, nombre, precio, cantidad, product_id } = body
+      if (!item_id) return NextResponse.json({ error: 'item_id requerido' }, { status: 400 })
+      const updateData: Record<string, any> = {}
+      if (nombre != null) updateData.nombre = nombre
+      if (precio != null) updateData.precio = Number(precio)
+      if (cantidad != null) updateData.cantidad = Number(cantidad)
+      if (product_id !== undefined) updateData.product_id = product_id || null
+      const { error } = await sb.from('order_items').update(updateData).eq('id', item_id).eq('order_id', order_id)
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      const nuevoTotal = await recalcularTotales(order_id)
+      return NextResponse.json({ ok: true, nuevoTotal })
     }
 
     return NextResponse.json({ error: 'Acción inválida' }, { status: 400 })

@@ -64,6 +64,14 @@ export default function PedidosPage() {
   const [pedidos, setPedidos] = useState<any[]>([])
   const [items, setItems] = useState<Record<string,any[]>>({})
   const [selected, setSelected] = useState<any>(null)
+  // Editar productos de un pedido ya creado — agregar/quitar sin tocar
+  // estado ni notificar al cliente (a pedido explícito de Mario).
+  const [editandoItems, setEditandoItems] = useState(false)
+  const [catalogo, setCatalogo] = useState<any[]>([])
+  const [nuevoItemProductoId, setNuevoItemProductoId] = useState('')
+  const [nuevoItemPrecio, setNuevoItemPrecio] = useState('')
+  const [nuevoItemCantidad, setNuevoItemCantidad] = useState('1')
+  const [guardandoItem, setGuardandoItem] = useState(false)
   const [search, setSearch] = useState('')
   const [filtroEstado, setFiltroEstado] = useState('activos')
   const [filtroPago, setFiltroPago] = useState('todos')
@@ -94,10 +102,57 @@ export default function PedidosPage() {
     // fila otra vez no lo cerraría nunca.
     if (selected?.id === p.id) { setSelected(null); return }
     setSelected(p)
+    setEditandoItems(false)
     if (!items[p.id]) {
       const {data} = await sb.from('order_items').select('*').eq('order_id',p.id)
       setItems(i=>({...i,[p.id]:data??[]}))
     }
+  }
+
+  const cargarCatalogoSiHaceFalta = async () => {
+    if (catalogo.length > 0) return
+    const { data } = await sb.from('products').select('id,nombre,precio,tipo').eq('activo', true).order('nombre')
+    setCatalogo(data ?? [])
+  }
+
+  const eliminarItem = async (itemId: string) => {
+    if (!selected) return
+    if (!confirm('¿Quitar este producto del pedido? El pedido queda pagado igual, sin notificar al cliente.')) return
+    const r = await fetch('/api/admin/pedidos', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accion: 'eliminar_item', order_id: selected.id, item_id: itemId }),
+    })
+    const j = await r.json().catch(() => ({}))
+    if (!r.ok) { toast.error(j.error ?? 'No se pudo quitar el producto'); return }
+    setItems(prev => ({ ...prev, [selected.id]: (prev[selected.id] ?? []).filter((i: any) => i.id !== itemId) }))
+    setSelected((s: any) => ({ ...s, total: j.nuevoTotal }))
+    setPedidos(ps => ps.map(p => p.id === selected.id ? { ...p, total: j.nuevoTotal } : p))
+    toast.success('Producto quitado del pedido')
+  }
+
+  const agregarItem = async () => {
+    if (!selected) return
+    const prod = catalogo.find((p: any) => p.id === nuevoItemProductoId)
+    if (!prod) { toast.error('Selecciona un producto'); return }
+    const precio = Number(nuevoItemPrecio || prod.precio)
+    const cantidad = Number(nuevoItemCantidad) || 1
+    setGuardandoItem(true)
+    const r = await fetch('/api/admin/pedidos', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        accion: 'agregar_item', order_id: selected.id,
+        nombre: prod.nombre, precio, cantidad, product_id: prod.id,
+      }),
+    })
+    const j = await r.json().catch(() => ({}))
+    setGuardandoItem(false)
+    if (!r.ok) { toast.error(j.error ?? 'No se pudo agregar el producto'); return }
+    const { data: itemsFrescos } = await sb.from('order_items').select('*').eq('order_id', selected.id)
+    setItems(prev => ({ ...prev, [selected.id]: itemsFrescos ?? [] }))
+    setSelected((s: any) => ({ ...s, total: j.nuevoTotal }))
+    setPedidos(ps => ps.map(p => p.id === selected.id ? { ...p, total: j.nuevoTotal } : p))
+    setNuevoItemProductoId(''); setNuevoItemPrecio(''); setNuevoItemCantidad('1')
+    toast.success('Producto agregado al pedido')
   }
 
   const cambiarEstado = async (orderId:string, estado:string, nota?:string) => {
@@ -262,12 +317,19 @@ export default function PedidosPage() {
         {/* Productos */}
         {(items[selected.id]??[]).length>0 && (
           <div className="mb-4">
-            <p className="text-xs font-bold text-gray-500 uppercase mb-2">Productos</p>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-bold text-gray-500 uppercase">Productos</p>
+              <button
+                onClick={() => { setEditandoItems(v => !v); if (!editandoItems) cargarCatalogoSiHaceFalta() }}
+                className="text-[10px] font-bold text-primary-600 hover:underline">
+                {editandoItems ? 'Listo ✓' : '✏️ Editar productos'}
+              </button>
+            </div>
             <div className="space-y-2">
               {(items[selected.id]??[]).map((i:any,idx:number)=>{
                 const rx = formatReceta(i)
                 return (
-                <div key={idx} className="flex gap-2 text-sm">
+                <div key={idx} className="flex gap-2 text-sm items-start">
                   <div className="flex-1">
                     <p className="font-medium text-gray-800 text-xs">{i.nombre}</p>
                     {rx && (
@@ -278,9 +340,40 @@ export default function PedidosPage() {
                     <p className="text-xs font-bold text-gray-800">RD${i.precio?.toLocaleString()}</p>
                     <p className="text-[10px] text-gray-400">×{i.cantidad}</p>
                   </div>
+                  {editandoItems && (
+                    <button onClick={() => eliminarItem(i.id)}
+                      className="shrink-0 w-6 h-6 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center"
+                      title="Quitar del pedido">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               )})}
             </div>
+
+            {editandoItems && (
+              <div className="mt-3 p-3 bg-gray-50 rounded-xl space-y-2">
+                <p className="text-[10px] font-bold text-gray-500 uppercase">Agregar producto</p>
+                <select value={nuevoItemProductoId}
+                  onChange={e => { setNuevoItemProductoId(e.target.value); const p = catalogo.find((c:any)=>c.id===e.target.value); setNuevoItemPrecio(p ? String(p.precio) : '') }}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5">
+                  <option value="">Selecciona un producto…</option>
+                  {catalogo.map((p:any) => <option key={p.id} value={p.id}>{p.nombre} — RD${Number(p.precio).toLocaleString()}</option>)}
+                </select>
+                <div className="flex gap-2">
+                  <input type="number" value={nuevoItemPrecio} onChange={e=>setNuevoItemPrecio(e.target.value)}
+                    placeholder="Precio a cobrar" className="flex-1 text-xs border border-gray-200 rounded-lg px-2 py-1.5" />
+                  <input type="number" min="1" value={nuevoItemCantidad} onChange={e=>setNuevoItemCantidad(e.target.value)}
+                    placeholder="Cant." className="w-16 text-xs border border-gray-200 rounded-lg px-2 py-1.5" />
+                </div>
+                <button onClick={agregarItem} disabled={guardandoItem || !nuevoItemProductoId}
+                  className="w-full text-xs font-bold py-2 rounded-lg bg-teal-500 text-white hover:bg-teal-600 disabled:opacity-50">
+                  {guardandoItem ? 'Agregando…' : '+ Agregar al pedido'}
+                </button>
+                <p className="text-[9px] text-gray-400">El pedido no cambia de estado ni se notifica al cliente — es un ajuste interno.</p>
+              </div>
+            )}
+
             <div className="border-t border-gray-100 mt-3 pt-2 flex justify-between">
               <span className="text-xs font-bold text-gray-700">Total</span>
               <span className="text-sm font-black text-gray-900">RD${selected.total?.toLocaleString()}</span>
