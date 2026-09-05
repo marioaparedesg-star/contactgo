@@ -258,12 +258,6 @@ export default function AdminDashboard() {
     }
     const conversionLeadsPct = leadsMes > 0 ? Math.round((leadsConvertidos / leadsMes) * 100) : 0
 
-    // Gasto en marketing del mes — se registra manualmente en el ERP
-    // Dashboard (tabla expenses). No se puede leer en vivo desde Meta Ads
-    // porque el token de la app no tiene permiso ads_read, solo CAPI.
-    const { data: gastosMktData } = await sb.from('expenses').select('monto').eq('categoria','marketing').gte('fecha', inicioMesStr)
-    const gastoMktMes = (gastosMktData ?? []).reduce((s:number, g:any) => s + Number(g.monto ?? 0), 0)
-
     // Detalle por cobro real — para las tarjetas clickeables. Una fila por
     // cada pago/abono realmente recibido (no una fila por pedido), así se
     // ve exactamente "cobré X a Y a tal hora", que es lo que se pidió.
@@ -288,7 +282,7 @@ export default function AdminDashboard() {
       costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
       detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr,
-      porEtapa, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct, gastoMktMes })
+      porEtapa, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct })
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
@@ -623,11 +617,11 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* ═══ MARKETING — leads, conversión, gasto ═══ */}
+      {/* ═══ MARKETING — leads, conversión ═══ */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
         <h2 className="font-bold text-gray-900 text-sm mb-1">Marketing</h2>
         <p className="text-xs text-gray-400 mb-4">Leads de la calculadora y conversión real (cruce por teléfono contra pedidos del mes).</p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           <div className="p-3 rounded-xl bg-blue-50">
             <p className="text-xl font-black text-blue-700">{data?.leadsHoy ?? 0}</p>
             <p className="text-[10px] text-gray-500 font-medium">Leads hoy</p>
@@ -640,14 +634,7 @@ export default function AdminDashboard() {
             <p className="text-xl font-black text-green-700">{data?.conversionLeadsPct ?? 0}%</p>
             <p className="text-[10px] text-gray-500 font-medium">{data?.leadsConvertidos ?? 0} de {data?.leadsMes ?? 0} sí compraron</p>
           </div>
-          <div className="p-3 rounded-xl bg-gray-50">
-            <p className="text-xl font-black text-gray-400">{fmt(data?.gastoMktMes ?? 0)}</p>
-            <p className="text-[10px] text-gray-500 font-medium">Gasto ads (manual, ver nota)</p>
-          </div>
         </div>
-        <p className="text-[10px] text-gray-400 mt-3">
-          El gasto en Meta Ads no se puede leer en vivo desde aquí (el token de la app no tiene permiso para eso) — regístralo en <button onClick={()=>router.push('/admin/erp-dashboard')} className="text-primary-600 font-semibold hover:underline">ERP Dashboard → Gastos</button> para que aparezca aquí. Revisa el gasto real en Meta Ads Manager directamente mientras tanto.
-        </p>
       </div>
 
       {/* Pedidos recientes + Alertas stock (siempre en tiempo real, no dependen del selector) */}
