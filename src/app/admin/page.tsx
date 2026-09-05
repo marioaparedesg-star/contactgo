@@ -105,47 +105,58 @@ export default function AdminDashboard() {
     // es información operativa del día, no del análisis histórico.
     const hoy0ISO = new Date(new Date().setHours(0,0,0,0)).toISOString()
 
-    const [periodo, hoyData, ordRecent, stockLow, abonosData] = await Promise.all([
+    // FIX DE FONDO (2026-09-04): antes "Cobrado" agrupaba el dinero por la
+    // fecha de CREACIÓN del pedido — un pedido creado en agosto que recibe
+    // un abono HOY contaba como "venta de agosto", mientras que Caja
+    // (cash_movements) correctamente lo cuenta como cobro de hoy. Por eso
+    // los números nunca cuadraban entre pantallas. Ahora "Cobrado" se lee
+    // directo de cash_movements (categoría 'venta'), agrupado por la fecha
+    // real en que entró el dinero — la misma fuente que ya usa Caja y el
+    // ERP Dashboard. 'en-CA' da 'YYYY-MM-DD' en hora LOCAL del navegador
+    // (evita el corrimiento de día que causa .toISOString(), que convierte
+    // a UTC primero).
+    const desdeStr = rango.desde.toLocaleDateString('en-CA')
+    const hastaStr = rango.hasta.toLocaleDateString('en-CA')
+    const hoyStr   = new Date().toLocaleDateString('en-CA')
+
+    const [periodo, ordRecent, stockLow, cobrosPeriodo] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
-      sb.from('orders').select('id,total,pago_estado,fecha,created_at,numero_orden,cliente_nombre,cliente_telefono')
-        .not('estado','eq','cancelado').eq('es_prueba', false)
-        .gte('fecha', hoy0ISO),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
       sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
-      // FIX (2026-09-04): "Ventas" solo contaba pedidos con pago_estado='pagado'
-      // completo — los abonos parciales que Mario registra en order_payments
-      // (pagos contra entrega, pagos por partes) nunca se sumaban a ningún
-      // lado, así que dinero real cobrado no aparecía en el dashboard.
-      // Ahora se cruza cada pedido contra sus abonos reales para calcular
-      // "cobrado" = pago completo, o suma de abonos si es pago parcial.
-      sb.from('order_payments').select('order_id,monto'),
+      sb.from('cash_movements')
+        .select('id,monto,fecha,created_at,order_id,referencia,descripcion,orders(numero_orden,cliente_nombre,cliente_telefono)')
+        .eq('categoria','venta').eq('tipo','ingreso')
+        .gte('fecha', desdeStr).lte('fecha', hastaStr),
     ])
 
     const ords = periodo.data ?? []
-    const abonosPorOrden: Record<string, number> = {}
-    ;(abonosData.data ?? []).forEach((a: any) => {
-      abonosPorOrden[a.order_id] = (abonosPorOrden[a.order_id] ?? 0) + Number(a.monto ?? 0)
-    })
-    const cobradoDe = (o: any) => o.pago_estado === 'pagado' ? Number(o.total ?? 0) : (abonosPorOrden[o.id] ?? 0)
+    const cobros = cobrosPeriodo.data ?? []
+    const cobrosHoy = cobros.filter((c:any) => c.fecha === hoyStr)
 
-    const ventasPeriodo  = ords.reduce((s,o)=>s+cobradoDe(o),0)
-    const ventasHoy      = (hoyData.data ?? []).reduce((s,o)=>s+cobradoDe(o),0)
-    const pedidosPagadosPeriodo = ords.filter(o => cobradoDe(o) > 0).length
-    const ticketProm     = pedidosPagadosPeriodo > 0 ? ventasPeriodo/pedidosPagadosPeriodo : 0
-    const entregados     = ords.filter(o=>o.estado==='entregado').length
+    const ventasPeriodo  = cobros.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
+    const ventasHoy      = cobrosHoy.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
+    const ticketProm     = cobros.length > 0 ? ventasPeriodo/cobros.length : 0
+    const entregados     = ords.filter((o:any)=>o.estado==='entregado').length
     const conversion     = ords.length > 0 ? Math.round((entregados/ords.length)*100) : 0
 
-    // Por cobrar dentro del período seleccionado: saldo real pendiente
-    // (total - cobrado) de pedidos activos, separado por antigüedad —
-    // los de +30 días casi nunca se terminan de cobrar.
+    // Por cobrar: esto SÍ sigue basado en pedidos (no en cash_movements) —
+    // es sobre saldo pendiente de ÓRDENES activas, no sobre cuándo entró
+    // el dinero. Necesita su propio cálculo de abonos por pedido.
+    const { data: abonosData } = await sb.from('order_payments').select('order_id,monto')
+    const abonosPorOrden: Record<string, number> = {}
+    ;(abonosData ?? []).forEach((a: any) => {
+      abonosPorOrden[a.order_id] = (abonosPorOrden[a.order_id] ?? 0) + Number(a.monto ?? 0)
+    })
+    const cobradoDeOrden = (o: any) => o.pago_estado === 'pagado' ? Number(o.total ?? 0) : (abonosPorOrden[o.id] ?? 0)
+
     const hace30d = new Date(Date.now() - 30*86400000)
     let porCobrarActivo = 0, porCobrarViejo = 0, pedidosPorCobrar = 0
     ords.forEach((o:any) => {
-      const saldo = Number(o.total ?? 0) - cobradoDe(o)
+      const saldo = Number(o.total ?? 0) - cobradoDeOrden(o)
       if (saldo <= 0) return
       pedidosPorCobrar++
       if (new Date(o.created_at) >= hace30d) porCobrarActivo += saldo
@@ -153,13 +164,10 @@ export default function AdminDashboard() {
     })
 
     // ── Costo y ganancia real del período (y de hoy) ──────────────────────
-    // FIX (2026-09-04): antes "items" solo traía pedidos 100% pagados —
-    // así que un pedido con abono parcial sumaba a "Cobrado" (arriba) pero
-    // su costo se quedaba en RD$0, inflando la "Ganancia" mostrada (Mario lo
-    // notó: "Ganancia hoy" RD$10,550 con "Costo hoy" RD$0 no cuadraba).
-    // Ahora se usa el MISMO conjunto de pedidos que ya cuenta como cobrado
-    // (pagado completo O con algún abono), no solo los 100% pagados.
-    const idsConCobro = ords.filter(o => cobradoDe(o) > 0).map((o:any) => o.id)
+    // Mismo conjunto de transacciones que ya cuenta como "Cobrado" arriba
+    // (cash_movements), no el de pedidos creados en el rango — para que
+    // Costo y Ganancia cuadren exactamente contra Cobrado.
+    const idsConCobro = Array.from(new Set(cobros.map((c:any) => c.order_id).filter(Boolean)))
     const { data: itemsData } = idsConCobro.length > 0
       ? await sb.from('order_items')
           .select('nombre,cantidad,precio,product_id,order_id')
@@ -188,8 +196,9 @@ export default function AdminDashboard() {
     })
     const gananciaPeriodo = ventasPeriodo - costoTotalPeriodo
 
-    // Costo/ganancia de HOY: mismo cruce pero solo con los items de pedidos de hoy
-    const idsHoy = new Set((hoyData.data ?? []).filter((o:any) => cobradoDe(o) > 0).map((o:any) => o.id))
+    // Costo/ganancia de HOY: mismo cruce pero solo con los items de los
+    // pedidos que tuvieron algún cobro HOY (no de pedidos creados hoy).
+    const idsHoy = new Set(cobrosHoy.map((c:any) => c.order_id).filter(Boolean))
     let costoHoy = 0
     ;(items.data ?? []).forEach((i:any) => {
       if (!idsHoy.has(i.order_id)) return
@@ -213,21 +222,24 @@ export default function AdminDashboard() {
     const invCriticos   = invAll.filter((p:any) => p.alerta_stock === 'critico').length
     const invBajoMin    = invAll.filter((p:any) => p.alerta_stock === 'bajo_minimo').length
 
-    // Detalle por pedido — para las tarjetas clickeables. Se guarda ya
-    // resuelto (cobrado, saldo) en vez de recalcular al abrir el detalle.
-    const detalleFn = (lista:any[]) => lista
-      .map((o:any) => ({ ...o, cobrado: cobradoDe(o), saldo: Number(o.total??0) - cobradoDe(o) }))
-      .filter((o:any) => o.cobrado > 0)
-      .sort((a:any,b:any) => new Date(b.created_at ?? b.fecha).getTime() - new Date(a.created_at ?? a.fecha).getTime())
-
-    const detalleHoyArr     = detalleFn(hoyData.data ?? [])
-    const detallePeriodoArr = detalleFn(ords)
+    // Detalle por cobro real — para las tarjetas clickeables. Una fila por
+    // cada pago/abono realmente recibido (no una fila por pedido), así se
+    // ve exactamente "cobré X a Y a tal hora", que es lo que se pidió.
+    const detalleDeCobro = (c:any) => ({
+      id: c.id, cobrado: Number(c.monto??0), created_at: c.created_at, fecha: c.fecha,
+      numero_orden: c.orders?.numero_orden ?? c.referencia,
+      cliente_nombre: c.orders?.cliente_nombre ?? c.descripcion,
+      cliente_telefono: c.orders?.cliente_telefono,
+      saldo: 0, // el saldo pendiente se ve en la sección "Por cobrar", no aquí
+    })
+    const detalleHoyArr     = cobrosHoy.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
+    const detallePeriodoArr = cobros.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
     const detallePorCobrarActivoArr = ords
-      .filter((o:any) => (Number(o.total??0)-cobradoDe(o)) > 0 && new Date(o.created_at) >= hace30d)
-      .map((o:any) => ({ ...o, cobrado: cobradoDe(o), saldo: Number(o.total??0)-cobradoDe(o) }))
+      .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) >= hace30d)
+      .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
     const detallePorCobrarViejoArr = ords
-      .filter((o:any) => (Number(o.total??0)-cobradoDe(o)) > 0 && new Date(o.created_at) < hace30d)
-      .map((o:any) => ({ ...o, cobrado: cobradoDe(o), saldo: Number(o.total??0)-cobradoDe(o) }))
+      .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) < hace30d)
+      .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
 
     setData({ ventasPeriodo, ventasHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
       invCriticos, invBajoMin, invTotal: invAll.length,

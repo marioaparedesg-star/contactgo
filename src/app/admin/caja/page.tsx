@@ -33,7 +33,12 @@ export default function CajaPage() {
 
   useEffect(()=>{ cargar() },[mes])
 
-  // Sincronizar ventas pagadas al cargar
+  // Sincronizar ventas pagadas al cargar — SOLO cubre pagos confirmados
+  // automáticamente por AZUL (el webhook marca pago_estado='pagado' directo,
+  // sin pasar por 'Registrar pago'). Los abonos manuales YA se registran en
+  // cash_movements al instante desde /api/admin/pedidos (acción registrar_pago,
+  // ver ese archivo) — este sync NO debe tocar order_payments ni re-sincronizar
+  // abonos, o duplicaría esas entradas que ya se insertan ahí directamente.
   useEffect(() => {
     const syncVentas = async () => {
       // BUG CORREGIDO (2026-08-05): sin filtro de es_prueba, esta sincronización

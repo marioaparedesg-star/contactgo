@@ -40,7 +40,14 @@ export default function ERPDashboard() {
       {data:g}, {data:v}, {data:c}, {data:cost}
     ] = await Promise.all([
       sb.from('expenses').select('*').gte('fecha',desde).lte('fecha',hasta).order('fecha',{ascending:false}),
-      sb.from('orders').select('total,created_at,pago_estado').eq('pago_estado','pagado').gte('created_at',`${desde}T00:00:00`).lte('created_at',`${hasta}T23:59:59`),
+      // FIX (2026-09-04): antes sumaba orders.total de pedidos 100% pagados
+      // — un pedido con abono parcial (pago_estado='pendiente' todavía)
+      // nunca contaba, aunque ya se hubiera cobrado parte real del dinero.
+      // Ahora se lee directo de cash_movements (categoría 'venta'), que ya
+      // es la fuente confiable: registra cada abono individual al momento
+      // de cobrarse (ver /api/admin/pedidos, acción registrar_pago) más los
+      // pagos automáticos de AZUL. Evita repetir la misma lógica una tercera vez.
+      sb.from('cash_movements').select('monto,fecha').eq('categoria','venta').eq('tipo','ingreso').gte('fecha',desde).lte('fecha',hasta),
       sb.from('purchase_orders').select('total').eq('estado','recibida').gte('created_at',`${desde}T00:00:00`).lte('created_at',`${hasta}T23:59:59`),
       sb.from('product_costs').select('*,products(nombre,precio,sku,stock)'),
     ])
@@ -52,7 +59,7 @@ export default function ERPDashboard() {
   useEffect(()=>{ cargar() },[mes])
 
   // Métricas calculadas
-  const totalVentas   = ventas.reduce((s,v)=>s+Number(v.total),0)
+  const totalVentas   = ventas.reduce((s,v)=>s+Number(v.monto),0)
   const totalCompras  = compras.reduce((s,c)=>s+Number(c.total),0)
   const totalGastos   = gastos.reduce((s,g)=>s+Number(g.monto),0)
   const gastosMkt     = gastos.filter(g=>g.categoria==='marketing').reduce((s,g)=>s+Number(g.monto),0)
@@ -129,7 +136,7 @@ export default function ERPDashboard() {
           {/* KPIs principales */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { label:'Ventas netas', value:`RD$${totalVentas.toLocaleString()}`, sub:`${ventas.length} órdenes`, color:'text-green-700', bg:'bg-green-50 border-green-100' },
+              { label:'Ventas netas', value:`RD$${totalVentas.toLocaleString()}`, sub:`${ventas.length} cobros`, color:'text-green-700', bg:'bg-green-50 border-green-100' },
               { label:'Costo mercancía', value:`RD$${totalCompras.toLocaleString()}`, sub:'Compras recibidas', color:'text-red-600', bg:'bg-red-50 border-red-100' },
               { label:'Utilidad bruta', value:`RD$${utilidadBruta.toLocaleString()}`, sub:`${margenBruto.toFixed(1)}% margen`, color:utilidadBruta>=0?'text-primary-700':'text-red-700', bg:'bg-teal-50 border-primary-100' },
               { label:'Utilidad neta', value:`RD$${utilidadNeta.toLocaleString()}`, sub:`${margenNeto.toFixed(1)}% margen neto`, color:utilidadNeta>=0?'text-gray-900':'text-red-700', bg:'bg-white border-gray-100' },

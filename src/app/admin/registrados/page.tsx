@@ -20,9 +20,21 @@ export default function RegistradosPage() {
       .then(async ({ data: profiles }) => {
         const ps = profiles ?? []
         const ids = ps.map((p: any) => p.id)
-        const { data: ords } = ids.length > 0
-          ? await sb.from('orders').select('user_id,total,pago_estado,numero_orden,created_at').in('user_id', ids)
-          : { data: [] }
+        const [{ data: ords }, { data: abonos }] = ids.length > 0
+          ? await Promise.all([
+              sb.from('orders').select('id,user_id,total,pago_estado,numero_orden,created_at').in('user_id', ids),
+              // FIX (2026-09-04): el LTV solo contaba pedidos 100% pagados —
+              // un cliente con un pedido a medio pagar (abono) se veía con
+              // menos historial de compra del que realmente tiene.
+              sb.from('order_payments').select('order_id,monto'),
+            ])
+          : [{ data: [] }, { data: [] }]
+
+        const abonadoPorOrden: Record<string, number> = {}
+        ;(abonos ?? []).forEach((a: any) => {
+          abonadoPorOrden[a.order_id] = (abonadoPorOrden[a.order_id] ?? 0) + Number(a.monto ?? 0)
+        })
+        const cobradoDe = (o: any) => o.pago_estado === 'pagado' ? Number(o.total ?? 0) : (abonadoPorOrden[o.id] ?? 0)
 
         const ordMap: Record<string, any[]> = {}
         ;(ords ?? []).forEach((o: any) => {
@@ -32,8 +44,8 @@ export default function RegistradosPage() {
 
         setUsers(ps.map((p: any) => {
           const userOrds = ordMap[p.id] ?? []
-          const pagadas  = userOrds.filter((o: any) => o.pago_estado === 'pagado')
-          return { ...p, ordenes: userOrds.length, pagadas: pagadas.length, ltv: pagadas.reduce((s: number, o: any) => s + Number(o.total ?? 0), 0) }
+          const conCobro = userOrds.filter((o: any) => cobradoDe(o) > 0)
+          return { ...p, ordenes: userOrds.length, pagadas: conCobro.length, ltv: conCobro.reduce((s: number, o: any) => s + cobradoDe(o), 0) }
         }))
         setLoading(false)
       })
