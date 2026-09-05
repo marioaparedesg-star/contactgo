@@ -59,69 +59,68 @@ export async function GET(req: Request) {
   })
 
   try {
-    // ═══ 1. VENTAS DEL DÍA — única fuente de verdad: pedidos PAGADOS hoy ═══
-    const { data: pagadosHoy } = await sb
-      .from('orders').select('numero_orden, cliente_nombre, total, canal, pagado_en, created_at')
-      .eq('pago_estado', 'pagado').eq('es_prueba', false)
-      .gte('pagado_en', inicioHoyUTC).lt('pagado_en', finHoyUTC)
-      .order('pagado_en', { ascending: true })
+    // ═══ 1. VENTAS DEL DÍA — única fuente de verdad: cash_movements ═══════
+    // FIX (2026-09-05): antes se basaba en pedidos con pago_estado='pagado'
+    // y pagado_en dentro del rango — eso deja fuera cualquier abono parcial
+    // (un pedido con abono sigue en pago_estado='pendiente' aunque ya se
+    // haya cobrado parte real). Ahora se lee de cash_movements (categoría
+    // 'venta'), la misma fuente que ya usa Caja, el dashboard y el ERP
+    // Dashboard — para que este reporte por fin cuadre con esas pantallas.
+    const hoyStr   = hoyDR
+    const ayerStr  = new Date(new Date(inicioHoyUTC).getTime() - 24*3600000).toISOString().slice(0,10)
+    const hace7Str = new Date(new Date(inicioHoyUTC).getTime() - 7*24*3600000).toISOString().slice(0,10)
+    const mesStr   = `${hoyDR.slice(0,7)}-01`
 
-    const ventasHoy = (pagadosHoy ?? []).reduce((s, o) => s + Number(o.total), 0)
-    const pedidosHoyCount = pagadosHoy?.length ?? 0
+    const { data: cobrosHoy } = await sb
+      .from('cash_movements').select('monto, order_id')
+      .eq('categoria','venta').eq('tipo','ingreso').eq('fecha', hoyStr)
+    const ventasHoy = (cobrosHoy ?? []).reduce((s, c) => s + Number(c.monto), 0)
+    const pedidosHoyIds = Array.from(new Set((cobrosHoy ?? []).map((c:any) => c.order_id).filter(Boolean)))
+    const pedidosHoyCount = pedidosHoyIds.length
     const ticketPromedioHoy = pedidosHoyCount > 0 ? ventasHoy / pedidosHoyCount : 0
 
     // ── Comparativo: ayer y promedio de los últimos 7 días ──
-    const { data: pagadosAyer } = await sb
-      .from('orders').select('total')
-      .eq('pago_estado', 'pagado').eq('es_prueba', false)
-      .gte('pagado_en', inicioAyerUTC).lt('pagado_en', inicioHoyUTC)
-    const ventasAyer = (pagadosAyer ?? []).reduce((s, o) => s + Number(o.total), 0)
+    const { data: cobrosAyer } = await sb
+      .from('cash_movements').select('monto')
+      .eq('categoria','venta').eq('tipo','ingreso').eq('fecha', ayerStr)
+    const ventasAyer = (cobrosAyer ?? []).reduce((s, c) => s + Number(c.monto), 0)
 
-    const { data: pagados7dias } = await sb
-      .from('orders').select('total')
-      .eq('pago_estado', 'pagado').eq('es_prueba', false)
-      .gte('pagado_en', inicio7diasUTC).lt('pagado_en', inicioHoyUTC)
-    const promedio7dias = (pagados7dias ?? []).reduce((s, o) => s + Number(o.total), 0) / 7
+    const { data: cobros7dias } = await sb
+      .from('cash_movements').select('monto')
+      .eq('categoria','venta').eq('tipo','ingreso').gte('fecha', hace7Str).lt('fecha', hoyStr)
+    const promedio7dias = (cobros7dias ?? []).reduce((s, c) => s + Number(c.monto), 0) / 7
 
     const cambioVsAyer = ventasAyer > 0 ? Math.round(((ventasHoy - ventasAyer) / ventasAyer) * 100) : null
     const cambioVsPromedio = promedio7dias > 0 ? Math.round(((ventasHoy - promedio7dias) / promedio7dias) * 100) : null
 
     // ═══ 2. AVANCE DEL MES ══════════════════════════════════════════════════
-    const { data: pagadosMes } = await sb
-      .from('orders').select('total')
-      .eq('pago_estado', 'pagado').eq('es_prueba', false)
-      .gte('pagado_en', inicioMesUTC).lt('pagado_en', finHoyUTC)
-    const ventasMes = (pagadosMes ?? []).reduce((s, o) => s + Number(o.total), 0)
-    const pedidosMesCount = pagadosMes?.length ?? 0
+    const { data: cobrosMes } = await sb
+      .from('cash_movements').select('monto, order_id')
+      .eq('categoria','venta').eq('tipo','ingreso').gte('fecha', mesStr).lte('fecha', hoyStr)
+    const ventasMes = (cobrosMes ?? []).reduce((s, c) => s + Number(c.monto), 0)
+    const pedidosMesCount = new Set((cobrosMes ?? []).map((c:any) => c.order_id).filter(Boolean)).size
     const promedioDiarioMes = diaDelMes > 0 ? ventasMes / diaDelMes : 0
 
     // ═══ 3. PRODUCTOS VENDIDOS HOY (+ costo y ganancia real del día) ═══════
     let productosVendidos: { nombre: string; cantidad: number; ingreso: number }[] = []
     let costoHoyReporte = 0
-    if (pedidosHoyCount > 0) {
-      const { data: ordersHoyIds } = await sb
-        .from('orders').select('id')
-        .eq('pago_estado', 'pagado').eq('es_prueba', false)
-        .gte('pagado_en', inicioHoyUTC).lt('pagado_en', finHoyUTC)
-      const orderIds = (ordersHoyIds ?? []).map((o: any) => o.id)
-      if (orderIds.length > 0) {
-        const { data: items } = await sb.from('order_items').select('nombre, cantidad, precio, product_id').in('order_id', orderIds)
-        const mapa: Record<string, { cantidad: number; ingreso: number }> = {}
-        const idsProductos = Array.from(new Set((items ?? []).map((i: any) => i.product_id).filter(Boolean)))
-        const { data: costosProd } = idsProductos.length > 0
-          ? await sb.from('products').select('id,costo').in('id', idsProductos)
-          : { data: [] as any[] }
-        const costoPorId: Record<string, number> = {}
-        ;(costosProd ?? []).forEach((p: any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
-        for (const it of items ?? []) {
-          if (!mapa[it.nombre]) mapa[it.nombre] = { cantidad: 0, ingreso: 0 }
-          mapa[it.nombre].cantidad += Number(it.cantidad ?? 1)
-          mapa[it.nombre].ingreso += Number(it.precio ?? 0) * Number(it.cantidad ?? 1)
-          const costoUnit = it.product_id ? (costoPorId[it.product_id] ?? 0) : 0
-          costoHoyReporte += costoUnit * Number(it.cantidad ?? 1)
-        }
-        productosVendidos = Object.entries(mapa).map(([nombre, v]) => ({ nombre, ...v })).sort((a, b) => b.ingreso - a.ingreso)
+    if (pedidosHoyIds.length > 0) {
+      const { data: items } = await sb.from('order_items').select('nombre, cantidad, precio, product_id').in('order_id', pedidosHoyIds)
+      const mapa: Record<string, { cantidad: number; ingreso: number }> = {}
+      const idsProductos = Array.from(new Set((items ?? []).map((i: any) => i.product_id).filter(Boolean)))
+      const { data: costosProd } = idsProductos.length > 0
+        ? await sb.from('products').select('id,costo').in('id', idsProductos)
+        : { data: [] as any[] }
+      const costoPorId: Record<string, number> = {}
+      ;(costosProd ?? []).forEach((p: any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
+      for (const it of items ?? []) {
+        if (!mapa[it.nombre]) mapa[it.nombre] = { cantidad: 0, ingreso: 0 }
+        mapa[it.nombre].cantidad += Number(it.cantidad ?? 1)
+        mapa[it.nombre].ingreso += Number(it.precio ?? 0) * Number(it.cantidad ?? 1)
+        const costoUnit = it.product_id ? (costoPorId[it.product_id] ?? 0) : 0
+        costoHoyReporte += costoUnit * Number(it.cantidad ?? 1)
       }
+      productosVendidos = Object.entries(mapa).map(([nombre, v]) => ({ nombre, ...v })).sort((a, b) => b.ingreso - a.ingreso)
     }
     const gananciaHoyReporte = ventasHoy - costoHoyReporte
 
@@ -284,9 +283,15 @@ export async function GET(req: Request) {
     // el webhook) — esto es distinto: es SOLO un mensaje saliente de
     // administración hacia Mario, mismo patrón ya usado para
     // aviso_nuevo_mensaje_admin. No toca nada del trato con clientes.
+    //
+    // FIX (2026-09-05): antes esto fallaba en silencio — fetch() no lanza
+    // excepción por un error HTTP de Meta (ej. plantilla rechazada, límite
+    // de mensajería, token vencido), solo por fallo de red. Un 4xx/5xx de
+    // Meta pasaba desapercibido, sin ningún registro. Ahora se revisa la
+    // respuesta real y se loguea el detalle si Meta la rechaza.
     try {
       const WA_API = 'https://graph.facebook.com/v20.0'
-      await fetch(`${WA_API}/${process.env.WHATSAPP_PHONE_ID}/messages`, {
+      const waRes = await fetch(`${WA_API}/${process.env.WHATSAPP_PHONE_ID}/messages`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -308,8 +313,12 @@ export async function GET(req: Request) {
           },
         }),
       })
+      const waBody = await waRes.json().catch(() => ({}))
+      if (!waRes.ok) {
+        console.error('[reporte-diario] Meta RECHAZÓ el WhatsApp (el email ya se mandó):', waRes.status, JSON.stringify(waBody))
+      }
     } catch (e) {
-      console.error('[reporte-diario] WhatsApp falló (el email ya se mandó):', e)
+      console.error('[reporte-diario] WhatsApp falló por error de red (el email ya se mandó):', e)
     }
 
     return NextResponse.json({
