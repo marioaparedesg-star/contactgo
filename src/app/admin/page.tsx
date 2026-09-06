@@ -131,7 +131,7 @@ export default function AdminDashboard() {
     const hastaStr = fechaRD(rango.hasta)
     const hoyStr   = fechaRD(new Date())
 
-    const [periodo, ordRecent, stockLow, cobrosPeriodo] = await Promise.all([
+    const [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
@@ -143,6 +143,15 @@ export default function AdminDashboard() {
         .select('id,monto,fecha,created_at,order_id,referencia,descripcion,orders(numero_orden,cliente_nombre,cliente_telefono)')
         .eq('categoria','venta').eq('tipo','ingreso')
         .gte('fecha', desdeStr).lte('fecha', hastaStr),
+      // FIX (2026-09-06): "Por cobrar" NO debe limitarse al período
+      // seleccionado arriba — un pedido de agosto con saldo pendiente sigue
+      // pendiente aunque estés viendo "Mes actual" en septiembre. Antes
+      // usaba 'ords' (filtrado por fecha del período), así que esos pedidos
+      // viejos desaparecían de la vista al cambiar de mes. Ahora es su
+      // propia consulta, sin restricción de fecha — todo lo activo con
+      // saldo pendiente, sin importar cuándo se creó.
+      sb.from('orders').select('id,total,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
+        .not('estado','eq','cancelado').eq('es_prueba', false),
     ])
 
     const ords = periodo.data ?? []
@@ -167,7 +176,8 @@ export default function AdminDashboard() {
 
     const hace30d = new Date(Date.now() - 30*86400000)
     let porCobrarActivo = 0, porCobrarViejo = 0, pedidosPorCobrar = 0
-    ords.forEach((o:any) => {
+    const ordsParaCobrar = ordsPorCobrar.data ?? []
+    ordsParaCobrar.forEach((o:any) => {
       const saldo = Number(o.total ?? 0) - cobradoDeOrden(o)
       if (saldo <= 0) return
       pedidosPorCobrar++
@@ -275,10 +285,10 @@ export default function AdminDashboard() {
     })
     const detalleHoyArr     = cobrosHoy.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
     const detallePeriodoArr = cobros.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
-    const detallePorCobrarActivoArr = ords
+    const detallePorCobrarActivoArr = ordsParaCobrar
       .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) >= hace30d)
       .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
-    const detallePorCobrarViejoArr = ords
+    const detallePorCobrarViejoArr = ordsParaCobrar
       .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) < hace30d)
       .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
 
