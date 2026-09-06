@@ -1042,7 +1042,7 @@ export default function ProductoClient({ product, variants }: Props) {
               <Reviews productId={product.id} initialReviews={(product as any).reviews ?? []} />
 
               {/* FAQ */}
-              {isLente && <ProductFAQ tipo={tipo} nombre={product.nombre} />}
+              {(isLente || tipo === 'solucion' || tipo === 'gota') && <ProductFAQ tipo={tipo} nombre={product.nombre} />}
             </div>
           </div>
 
@@ -1331,7 +1331,7 @@ export default function ProductoClient({ product, variants }: Props) {
             </div>
             <Reviews productId={product.id} initialReviews={(product as any).reviews ?? []} />
             <FrequentlyBoughtTogether productId={product.id} tipo={tipo} precio={price} />
-            {isLente && <ProductFAQ tipo={tipo} nombre={product.nombre} />}
+            {(isLente || tipo === 'solucion' || tipo === 'gota') && <ProductFAQ tipo={tipo} nombre={product.nombre} />}
           </div>
 
         </div>
