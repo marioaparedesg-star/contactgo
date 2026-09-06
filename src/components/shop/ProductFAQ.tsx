@@ -329,17 +329,23 @@ const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
 
 const FAQS_GENERAL = [
   { q: '¿Hacen envíos a toda República Dominicana?', a: 'Sí. Santo Domingo y Santiago en 24-48h. Resto del país en 2-3 días hábiles. Los lentes tóricos tardan 20-30 días por fabricación a medida.' },
-  { q: '¿Los productos son directo del fabricante?', a: 'Sí. Todos los productos de ContactGo son directo del fabricante, directo del fabricante y con código de autenticidad. Nunca vendemos imitaciones.' },
+  { q: '¿Los productos son directo del fabricante?', a: 'Sí. Todos los productos de ContactGo son directo del fabricante o su distribuidor autorizado en el país, con código de autenticidad. Nunca vendemos imitaciones.' },
   { q: '¿Puedo devolver mi pedido?', a: 'Sí, en 30 días si el producto viene defectuoso o no es lo que pediste. Los lentes sin abrir y en su empaque original también son elegibles para devolución.' },
 ]
 
 export default function ProductFAQ({ tipo, nombre }: { tipo: string; nombre: string }) {
   const [open, setOpen] = useState<number | null>(null)
-  // Prioridad: FAQ propia del producto (si existe) → FAQ de su categoría
-  // como respaldo. Así un producto sin FAQ propia todavía no se queda sin
-  // nada, mientras se van agregando las específicas una por una.
+  // FIX (2026-09-05): antes se mostraban las 7 preguntas propias del
+  // producto Y ADEMÁS las 4 de su categoría — 11 preguntas por producto,
+  // varias repitiendo el mismo tema (ej. "¿necesito solución?") con
+  // redacción distinta, lo que se veía desorganizado e inconsistente.
+  // Ahora la categoría es un respaldo REAL: solo se usa si el producto
+  // todavía no tiene sus propias 7 preguntas (hoy los 31 activos ya las
+  // tienen, así que esto nunca debería dispararse en la práctica).
   const propias = FAQS_BY_PRODUCT[nombre] ?? []
-  const faqs = [...propias, ...(FAQS_BY_TYPE[tipo] ?? []), ...FAQS_GENERAL]
+  const faqs = propias.length > 0
+    ? [...propias, ...FAQS_GENERAL]
+    : [...(FAQS_BY_TYPE[tipo] ?? []), ...FAQS_GENERAL]
   if (!faqs.length) return null
 
   return (
