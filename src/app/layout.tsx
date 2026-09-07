@@ -60,6 +60,14 @@ export const viewport = {
   maximumScale: 5,
   // Necesario para que env(safe-area-inset-bottom) funcione en iPhone notch
   viewportFit: 'cover' as const,
+  // FIX (2026-09-06): el sitio es solo modo claro (nunca implementamos modo
+  // oscuro real) — sin esto, si el celular del cliente está en modo oscuro,
+  // los controles NATIVOS del navegador (selector de fecha de nacimiento en
+  // checkout/venta-wa, checkboxes, el desplegable de <select>) pueden salir
+  // con fondo negro nativo, chocando visualmente contra las tarjetas
+  // blancas del sitio. Esto le dice al navegador "esta página es solo
+  // clara" para que esos controles nativos también se queden en claro.
+  colorScheme: 'light' as const,
 }
 
 
