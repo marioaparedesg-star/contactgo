@@ -158,9 +158,21 @@ export default function AdminDashboard() {
     const cobros = cobrosPeriodo.data ?? []
     const cobrosHoy = cobros.filter((c:any) => c.fecha === hoyStr)
 
+    // FIX (2026-09-07): Mario pidió separar claramente 4 conceptos que se
+    // estaban mezclando en un solo número:
+    //  1. VENDIDO — el valor de TODO lo que se vendió, se haya cobrado o no.
+    //  2. COBRADO — el dinero que ya entró de verdad (cash_movements).
+    //  3. POR COBRAR — la diferencia entre los dos anteriores.
+    //  4. COSTO/GANANCIA — deben ir sobre lo VENDIDO, no solo sobre lo
+    //     cobrado (antes un pedido pagado a medias no sumaba nada de costo,
+    //     inflando la ganancia mostrada).
+    const ventasTotalPeriodo = ords.reduce((s:number,o:any)=>s+Number(o.total??0),0)
+    const ventasTotalHoy = ords.filter((o:any)=>o.fecha===hoyStr || (o.created_at??'').slice(0,10)===hoyStr)
+      .reduce((s:number,o:any)=>s+Number(o.total??0),0)
+
     const ventasPeriodo  = cobros.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
     const ventasHoy      = cobrosHoy.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
-    const ticketProm     = cobros.length > 0 ? ventasPeriodo/cobros.length : 0
+    const ticketProm     = ords.length > 0 ? ventasTotalPeriodo/ords.length : 0
     const entregados     = ords.filter((o:any)=>o.estado==='entregado').length
     const conversion     = ords.length > 0 ? Math.round((entregados/ords.length)*100) : 0
 
@@ -185,15 +197,17 @@ export default function AdminDashboard() {
       else porCobrarViejo += saldo
     })
 
-    // ── Costo y ganancia real del período (y de hoy) ──────────────────────
-    // Mismo conjunto de transacciones que ya cuenta como "Cobrado" arriba
-    // (cash_movements), no el de pedidos creados en el rango — para que
-    // Costo y Ganancia cuadren exactamente contra Cobrado.
-    const idsConCobro = Array.from(new Set(cobros.map((c:any) => c.order_id).filter(Boolean)))
-    const { data: itemsData } = idsConCobro.length > 0
+    // ── Costo y ganancia de LO VENDIDO (no solo lo cobrado) ───────────────
+    // Antes solo se cruzaban los items de pedidos con cash_movements — un
+    // pedido vendido pero todavía sin cobrar completo no sumaba NADA de
+    // costo, inflando artificialmente la ganancia mostrada. Ahora se usa
+    // TODO pedido real del período, se haya cobrado o no — "costo de lo
+    // vendido" y "ganancia de lo vendido", que es lo que se pidió.
+    const idsVendidos = Array.from(new Set(ords.map((o:any) => o.id).filter(Boolean)))
+    const { data: itemsData } = idsVendidos.length > 0
       ? await sb.from('order_items')
           .select('nombre,cantidad,precio,product_id,order_id')
-          .in('order_id', idsConCobro)
+          .in('order_id', idsVendidos)
           .limit(1000)
       : { data: [] as any[] }
     const items = { data: itemsData }
@@ -216,18 +230,18 @@ export default function AdminDashboard() {
       const costoUnit = i.product_id ? (costoPorId[i.product_id] ?? 0) : 0
       costoTotalPeriodo += costoUnit * Number(i.cantidad ?? 1)
     })
-    const gananciaPeriodo = ventasPeriodo - costoTotalPeriodo
+    const gananciaPeriodo = ventasTotalPeriodo - costoTotalPeriodo
 
-    // Costo/ganancia de HOY: mismo cruce pero solo con los items de los
-    // pedidos que tuvieron algún cobro HOY (no de pedidos creados hoy).
-    const idsHoy = new Set(cobrosHoy.map((c:any) => c.order_id).filter(Boolean))
+    // Costo/ganancia de HOY: mismo cruce, pedidos VENDIDOS hoy (no solo
+    // cobrados hoy).
+    const idsHoy = new Set(ords.filter((o:any)=>o.fecha===hoyStr || (o.created_at??'').slice(0,10)===hoyStr).map((o:any)=>o.id))
     let costoHoy = 0
     ;(items.data ?? []).forEach((i:any) => {
       if (!idsHoy.has(i.order_id)) return
       const costoUnit = i.product_id ? (costoPorId[i.product_id] ?? 0) : 0
       costoHoy += costoUnit * Number(i.cantidad ?? 1)
     })
-    const gananciaHoy = ventasHoy - costoHoy
+    const gananciaHoy = ventasTotalHoy - costoHoy
 
     const agg: Record<string,{nombre:string,u:number,rev:number}> = {}
     ;(items.data??[]).forEach((i:any)=>{
@@ -273,18 +287,32 @@ export default function AdminDashboard() {
     }
     const conversionLeadsPct = leadsMes > 0 ? Math.round((leadsConvertidos / leadsMes) * 100) : 0
 
-    // Detalle por cobro real — para las tarjetas clickeables. Una fila por
-    // cada pago/abono realmente recibido (no una fila por pedido), así se
-    // ve exactamente "cobré X a Y a tal hora", que es lo que se pidió.
-    const detalleDeCobro = (c:any) => ({
-      id: c.id, cobrado: Number(c.monto??0), created_at: c.created_at, fecha: c.fecha,
-      numero_orden: c.orders?.numero_orden ?? c.referencia,
-      cliente_nombre: c.orders?.cliente_nombre ?? c.descripcion,
-      cliente_telefono: c.orders?.cliente_telefono,
-      saldo: 0, // el saldo pendiente se ve en la sección "Por cobrar", no aquí
-    })
-    const detalleHoyArr     = cobrosHoy.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
-    const detallePeriodoArr = cobros.map(detalleDeCobro).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
+    // FIX (2026-09-07): antes se hacía una fila por cada COBRO individual
+    // (cash_movements) — un cliente con 2 abonos en el mismo pedido salía
+    // 2 veces en la lista ("Selena apareció dos veces como vendida" aunque
+    // era UN solo pedido con 2 pagos). Ahora se agrupa por pedido: se suman
+    // los cobros de un mismo order_id en una sola fila.
+    const agruparPorPedido = (lista:any[]) => {
+      const porOrden: Record<string, any> = {}
+      lista.forEach((c:any) => {
+        const oid = c.order_id ?? c.id
+        if (!porOrden[oid]) {
+          porOrden[oid] = {
+            id: oid, cobrado: 0, created_at: c.created_at, fecha: c.fecha,
+            numero_orden: c.orders?.numero_orden ?? c.referencia,
+            cliente_nombre: c.orders?.cliente_nombre ?? c.descripcion,
+            cliente_telefono: c.orders?.cliente_telefono,
+            saldo: 0,
+          }
+        }
+        porOrden[oid].cobrado += Number(c.monto ?? 0)
+        // Se queda con la fecha del cobro MÁS RECIENTE de ese pedido
+        if (new Date(c.created_at) > new Date(porOrden[oid].created_at)) porOrden[oid].created_at = c.created_at
+      })
+      return Object.values(porOrden).sort((a:any,b:any)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
+    }
+    const detalleHoyArr     = agruparPorPedido(cobrosHoy)
+    const detallePeriodoArr = agruparPorPedido(cobros)
     const detallePorCobrarActivoArr = ordsParaCobrar
       .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) >= hace30d)
       .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
@@ -292,7 +320,7 @@ export default function AdminDashboard() {
       .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) < hace30d)
       .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
 
-    setData({ ventasPeriodo, ventasHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
+    setData({ ventasPeriodo, ventasHoy, ventasTotalPeriodo, ventasTotalHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
       costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
@@ -379,7 +407,7 @@ export default function AdminDashboard() {
   const pedidosActivosTotal = ['recibido','pago_aprobado','preparando','fabricante','transito']
     .reduce((s,k)=>s+(data?.porEtapa?.[k]??0),0)
   const porCobrarTotal = (data?.porCobrarActivo??0)+(data?.porCobrarViejo??0)
-  const margenPct = (data?.ventasPeriodo??0) > 0 ? Math.round(((data?.gananciaPeriodo??0)/(data?.ventasPeriodo??0))*100) : 0
+  const margenPct = (data?.ventasTotalPeriodo??0) > 0 ? Math.round(((data?.gananciaPeriodo??0)/(data?.ventasTotalPeriodo??0))*100) : 0
   const primerNombre = 'Mario'
   const horaActual = new Date().getHours()
   const saludo = horaActual < 12 ? 'Buenos días' : horaActual < 19 ? 'Buenas tardes' : 'Buenas noches'
@@ -487,14 +515,18 @@ export default function AdminDashboard() {
         </p>
       </div>
 
-      {/* ═══ RESUMEN EJECUTIVO — 6 KPI, cada uno clickeable ═══ */}
+      {/* ═══ RESUMEN EJECUTIVO — Vendido, Cobrado y Por cobrar bien
+          separados (antes se mezclaban en un solo "Ventas" confuso).
+          Costo/Ganancia van sobre lo VENDIDO, no solo lo cobrado. ═══ */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {[
-          { key:'periodo', label:'Ventas', val:fmt(data?.ventasPeriodo??0), sub:`${data?.pedidosPeriodo??0} pedidos`, color:'text-gray-900', accion:()=>setDetalleAbierto(detalleAbierto==='periodo'?null:'periodo') },
-          { key:'ganancia', label:'Ganancia', val:fmt(data?.gananciaPeriodo??0), sub:`${margenPct}% margen`, color:'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
-          { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/admin/pedidos') },
-          { key:null, label:'Ticket promedio', val:fmt(data?.ticketProm??0), sub:'por cobro', color:'text-gray-900', accion:undefined },
+          { key:null, label:'Vendido', val:fmt(data?.ventasTotalPeriodo??0), sub:`${data?.pedidosPeriodo??0} pedidos — se haya cobrado o no`, color:'text-gray-900', accion:()=>router.push('/admin/pedidos') },
+          { key:'periodo', label:'Cobrado', val:fmt(data?.ventasPeriodo??0), sub:'dinero que ya entró', color:'text-blue-600', accion:()=>setDetalleAbierto(detalleAbierto==='periodo'?null:'periodo') },
           { key:'porCobrar', label:'Por cobrar', val:fmt(porCobrarTotal), sub:`${data?.pedidosPorCobrar??0} pedidos`, color:'text-amber-600', accion:()=>setDetalleAbierto(detalleAbierto==='porCobrar'?null:'porCobrar') },
+          { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según products.costo', color:'text-red-500', accion:undefined },
+          { key:'ganancia', label:'Ganancia de lo vendido', val:fmt(data?.gananciaPeriodo??0), sub:`${margenPct}% margen`, color:'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
+          { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/admin/pedidos') },
+          { key:null, label:'Ticket promedio', val:fmt(data?.ticketProm??0), sub:'por pedido vendido', color:'text-gray-900', accion:undefined },
           { key:'etapa', label:'Pedidos activos', val:String(pedidosActivosTotal), sub:'en proceso', color:'text-indigo-600', accion:()=>document.getElementById('pedidos-por-etapa')?.scrollIntoView({behavior:'smooth'}) },
         ].map(({key,label,val,sub,color,accion})=>{
           const abierta = key && detalleAbierto===key
@@ -509,14 +541,18 @@ export default function AdminDashboard() {
           )
         })}
       </div>
+      <p className="text-[11px] text-gray-400 -mt-2 px-1">
+        <b>Vendido</b> = valor de todos los pedidos, se hayan cobrado o no · <b>Cobrado</b> = dinero que ya entró de verdad · Vendido − Cobrado = Por cobrar
+      </p>
 
       {/* Detalle desplegado — Ventas / Ganancia / Por cobrar */}
       {detalleAbierto==='periodo' && (
         <div className="bg-white rounded-2xl border border-primary-200 shadow-md p-5">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-bold text-sm text-gray-700">Ventas · {rango.label} — detalle</h2>
+            <h2 className="font-bold text-sm text-gray-700">Cobrado · {rango.label} — detalle</h2>
             <button onClick={()=>setDetalleAbierto(null)} className="text-gray-400 hover:text-gray-600 text-xs font-semibold">Cerrar ✕</button>
           </div>
+          <p className="text-[11px] text-gray-400 -mt-2 mb-3">Un pedido con varios abonos aparece una sola vez, con la suma de todos sus pagos.</p>
           {(data?.detallePeriodoArr??[]).length===0 ? <p className="text-xs text-gray-400 text-center py-6">Sin cobros en este rango.</p> : (
             <div className="space-y-2">
               {data.detallePeriodoArr.map((o:any) => (
@@ -536,13 +572,13 @@ export default function AdminDashboard() {
       {detalleAbierto==='ganancia' && (
         <div className="bg-white rounded-2xl border border-primary-200 shadow-md p-5">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-bold text-sm text-gray-700">Ganancia · {rango.label} — desglose</h2>
+            <h2 className="font-bold text-sm text-gray-700">Ganancia de lo vendido · {rango.label} — desglose</h2>
             <button onClick={()=>setDetalleAbierto(null)} className="text-gray-400 hover:text-gray-600 text-xs font-semibold">Cerrar ✕</button>
           </div>
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="p-3 rounded-xl bg-gray-50">
-              <p className="text-lg font-black text-gray-900">{fmt(data?.ventasPeriodo??0)}</p>
-              <p className="text-[10px] text-gray-400">Cobrado</p>
+              <p className="text-lg font-black text-gray-900">{fmt(data?.ventasTotalPeriodo??0)}</p>
+              <p className="text-[10px] text-gray-400">Vendido</p>
             </div>
             <div className="p-3 rounded-xl bg-gray-50">
               <p className="text-lg font-black text-red-500">{fmt(data?.costoTotalPeriodo??0)}</p>
@@ -553,7 +589,7 @@ export default function AdminDashboard() {
               <p className="text-[10px] text-gray-400">Ganancia ({margenPct}%)</p>
             </div>
           </div>
-          <p className="text-[10px] text-gray-400 mt-3">Costo calculado cruzando cada producto vendido contra su costo real actual (products.costo).</p>
+          <p className="text-[10px] text-gray-400 mt-3">Vendido − Costo = Ganancia. El costo cruza cada producto vendido (se haya cobrado o no) contra su costo real actual (products.costo).</p>
         </div>
       )}
 
@@ -637,7 +673,7 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
         <h2 className="font-bold text-gray-900 text-sm mb-1">Rendimiento financiero</h2>
         <div className="flex items-baseline gap-4 mb-4 flex-wrap">
-          <div><span className="text-lg font-black text-gray-900">{fmt(data?.ventasPeriodo??0)}</span><span className="text-[10px] text-gray-400 ml-1">ventas</span></div>
+          <div><span className="text-lg font-black text-gray-900">{fmt(data?.ventasPeriodo??0)}</span><span className="text-[10px] text-gray-400 ml-1">cobrado</span></div>
           <div><span className="text-lg font-black text-emerald-600">{fmt(data?.gananciaPeriodo??0)}</span><span className="text-[10px] text-gray-400 ml-1">ganancia</span></div>
           <div><span className="text-lg font-black text-gray-500">{margenPct}%</span><span className="text-[10px] text-gray-400 ml-1">margen</span></div>
         </div>
