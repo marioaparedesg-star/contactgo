@@ -22,7 +22,8 @@ export default function RegistradosPage() {
         const ids = ps.map((p: any) => p.id)
         const [{ data: ords }, { data: abonos }] = ids.length > 0
           ? await Promise.all([
-              sb.from('orders').select('id,user_id,total,pago_estado,numero_orden,created_at').in('user_id', ids),
+              sb.from('orders').select('id,user_id,total,pago_estado,numero_orden,created_at')
+                .in('user_id', ids).not('estado','eq','cancelado').eq('es_prueba', false),
               // FIX (2026-09-04): el LTV solo contaba pedidos 100% pagados —
               // un cliente con un pedido a medio pagar (abono) se veía con
               // menos historial de compra del que realmente tiene.

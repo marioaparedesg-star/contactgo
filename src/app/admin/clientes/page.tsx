@@ -26,6 +26,8 @@ export default function ClientesPage() {
             .select('user_id,total,estado')
             .in('user_id',ids)
             .not('pago_estado','eq','declinado')
+            .not('estado','eq','cancelado')
+            .eq('es_prueba', false)
           const map: Record<string,{total:number,ltv:number}> = {}
           ;(ords??[]).forEach((o:any)=>{
             if(!map[o.user_id]) map[o.user_id]={total:0,ltv:0}
@@ -42,7 +44,7 @@ export default function ClientesPage() {
     setSelected(c)
     if (!pedidos[c.id]) {
       const {data} = await sb.from('orders').select('id,total,estado,metodo_pago,numero_orden,created_at')
-        .eq('user_id',c.id).not('pago_estado','eq','declinado').order('created_at',{ascending:false})
+        .eq('user_id',c.id).not('pago_estado','eq','declinado').eq('es_prueba', false).order('created_at',{ascending:false})
       setPedidos(p=>({...p,[c.id]:data??[]}))
     }
   }
