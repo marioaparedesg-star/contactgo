@@ -89,7 +89,7 @@ export default function PedidosPage() {
 
 
   useEffect(()=>{
-    sb.from('orders').select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,cliente_cedula,cliente_fecha_nacimiento,direccion_texto,ciudad,canal,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin').order('created_at', { ascending: false }).limit(200)
+    sb.from('orders').select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,cliente_cedula,cliente_fecha_nacimiento,direccion_texto,ciudad,canal,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin,es_prueba').order('created_at', { ascending: false }).limit(200)
       // Traemos todos los estados para verlos en el admin
       .not('numero_orden','like','CG-TEST%')
       .order('created_at',{ascending:false})
@@ -502,7 +502,18 @@ export default function PedidosPage() {
 
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">Pedidos</h1>
-            <p className="text-sm text-gray-400 mt-0.5">{pedidos.length} total · {pedidos.filter(p=>p.estado==='confirmado'&&p.pago_estado!=='pagado').length} por preparar · {pedidos.filter(p=>p.pago_estado==='pagado'&&p.estado!=='entregado').length} pagados</p>
+            {/* FIX (2026-09-06): antes "X total" contaba TODO sin filtrar —
+                incluía pedidos de prueba de Mario y cancelados, inflando el
+                número (ej. mostraba "72" cuando los reales activos eran 43).
+                Ahora solo cuenta lo real: sin pruebas, sin cancelados. */}
+            {(() => {
+              const reales = pedidos.filter(p => !(p as any).es_prueba && p.estado !== 'cancelado')
+              return (
+                <p className="text-sm text-gray-400 mt-0.5">
+                  {reales.length} reales · {reales.filter(p=>p.estado==='confirmado'&&p.pago_estado!=='pagado').length} por preparar · {reales.filter(p=>p.pago_estado==='pagado'&&p.estado!=='entregado').length} pagados
+                </p>
+              )
+            })()}
             <button
               onClick={async()=>{
                 if(!confirm('¿Cancelar todos los pedidos pendientes con más de 3 horas sin pago?')) return
