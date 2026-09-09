@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 
       // Traer orden actual + suma de pagos previos
       const { data: order, error: orderErr } = await sb.from('orders')
-        .select('id, numero_orden, total, pago_estado')
+        .select('id, numero_orden, total, pago_estado, estado')
         .eq('id', order_id).single()
       if (orderErr || !order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
 
@@ -115,12 +115,24 @@ export async function POST(req: NextRequest) {
       // Solo cambiamos el estado del pedido si:
       //   - Se completó el 100% → pagado + confirmado
       //   - Sigue en pendiente → no hacemos nada
+      // FIX (2026-09-09): antes esto ponía SIEMPRE estado:'confirmado' al
+      // completar el 100% del pago — sin importar si el pedido ya había
+      // avanzado más en el flujo (ej. ya marcado 'entregado' manualmente).
+      // Registrar el pago después de la entrega revertía el pedido a una
+      // etapa anterior. Además 'confirmado' ni siquiera es uno de los 6
+      // estados reales que usa el resto del admin (recibido/pago_aprobado/
+      // preparando/fabricante/transito/entregado) — era un valor huérfano.
+      // Ahora solo avanza la etapa si el pedido sigue en 'recibido' (el
+      // punto de partida); si ya está más adelante en el flujo (o ya
+      // entregado), el pago se registra pero la etapa NUNCA retrocede.
+      const ETAPAS_ORDEN = ['recibido', 'pago_aprobado', 'preparando', 'fabricante', 'transito', 'entregado']
+      const etapaActualIdx = ETAPAS_ORDEN.indexOf(order.estado)
+      const debeAvanzarAPagoAprobado = order.estado === 'recibido' || etapaActualIdx === -1
+
       if (cubrio100) {
-        await sb.from('orders').update({
-          pago_estado: 'pagado',
-          estado: 'confirmado',
-          pagado_en: new Date().toISOString(),
-        }).eq('id', order_id)
+        const updateData: Record<string, any> = { pago_estado: 'pagado', pagado_en: new Date().toISOString() }
+        if (debeAvanzarAPagoAprobado) updateData.estado = 'pago_aprobado'
+        await sb.from('orders').update(updateData).eq('id', order_id)
       }
 
       // Notificar al cliente solo si el usuario lo pidió Y el pedido llegó a 100%
