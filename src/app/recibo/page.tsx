@@ -99,12 +99,15 @@ function ReciboContent() {
 
       // Abonos/pagos aplicados a este pedido — para poder mostrar el
       // desglose real (cuánto se pagó, cuánto falta, y en qué fechas se
-      // fueron aplicando los pagos) en vez de solo un PAGADO/PENDIENTE binario.
-      const { data: pagosData } = await sb
-        .from('order_payments')
-        .select('monto, created_at, metodo')
-        .eq('order_id', orderData.id)
-        .order('created_at', { ascending: true })
+      // fueron aplicando los pagos) en vez de solo un PAGADO/PENDIENTE
+      // binario. IMPORTANTE: order_payments solo tiene RLS para admins —
+      // una consulta directa desde el navegador de un cliente sin sesión
+      // de admin queda bloqueada en silencio. Se usan funciones
+      // SECURITY DEFINER (mismo patrón que get_order_by_public_token) que
+      // solo devuelven los pagos del pedido correcto, verificando dueño.
+      const { data: pagosData } = token
+        ? await sb.rpc('get_order_payments_by_public_token', { p_token: token })
+        : await sb.rpc('get_order_payments_by_order_id', { p_order_id: orderData.id })
 
       setOrder(orderData)
       setItems(its ?? [])
