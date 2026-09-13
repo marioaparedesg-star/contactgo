@@ -18,6 +18,7 @@ function ReciboContent() {
 
   const [order,   setOrder]   = useState<any>(null)
   const [items,   setItems]   = useState<any[]>([])
+  const [pagos,   setPagos]   = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error,   setError]   = useState<'not_found'|'invalid'|null>(null)
   const [retry,   setRetry]   = useState(0)
@@ -96,8 +97,18 @@ function ReciboContent() {
         .select('*')
         .eq('order_id', orderData.id)
 
+      // Abonos/pagos aplicados a este pedido — para poder mostrar el
+      // desglose real (cuánto se pagó, cuánto falta, y en qué fechas se
+      // fueron aplicando los pagos) en vez de solo un PAGADO/PENDIENTE binario.
+      const { data: pagosData } = await sb
+        .from('order_payments')
+        .select('monto, created_at, metodo')
+        .eq('order_id', orderData.id)
+        .order('created_at', { ascending: true })
+
       setOrder(orderData)
       setItems(its ?? [])
+      setPagos(pagosData ?? [])
       setLoading(false)
       // Analytics: receipt_viewed
       if (typeof window !== 'undefined') {
@@ -192,11 +203,25 @@ function ReciboContent() {
 
   const fecha = new Date(order.fecha || order.updated_at || Date.now())
   const totalReal         = order.total ?? 0
-  const envio             = order.envio ?? 200
-  const descuento         = order.descuento ?? 0
+  const envio              = order.envio ?? 200
+  const descuento           = order.descuento ?? 0
   const subtotalConITBIS  = totalReal - envio - descuento
   const itbis             = Math.round(subtotalConITBIS * 0.18 / 1.18)
   const subtotalSinITBIS  = subtotalConITBIS - itbis
+
+  // Desglose real de pago — a pedido explícito de Mario (2026-09-10):
+  // antes el recibo solo decía "PAGADO" o "PENDIENTE" sin mostrar cuánto
+  // se abonó ni las fechas. Ahora, si el pedido ya está 100% pagado, se
+  // suman los montos y fechas de cada abono real; si no hay abonos
+  // individuales registrados (ej. se pagó completo de una sola vez por
+  // AZUL), se usa la fecha del pedido como única fecha de pago.
+  const montoPagado = order.pago_estado === 'pagado'
+    ? totalReal
+    : pagos.reduce((s:number, p:any) => s + Number(p.monto ?? 0), 0)
+  const saldoPendiente = Math.max(0, totalReal - montoPagado)
+  const fechasDePago = pagos.length > 0
+    ? pagos.map((p:any) => new Date(p.created_at))
+    : (order.pago_estado === 'pagado' ? [fecha] : [])
 
   return (
     <>
@@ -334,10 +359,43 @@ function ReciboContent() {
           }}>
             <div style={{fontSize:'9px',fontWeight:'700',color:'#6b7280',textTransform:'uppercase',marginBottom:'6px'}}>Estado del pago</div>
             <div style={{fontWeight:'900',fontSize:'18px',color: order.pago_estado === 'pagado' ? '#16a34a' : '#d97706'}}>
-              {order.pago_estado === 'pagado' ? '✅ PAGADO' :
+              {order.pago_estado === 'pagado' ? '✅ PAGO APLICADO' :
+               saldoPendiente > 0 && montoPagado > 0 ? '⏳ PAGO PARCIAL' :
                order.pago_estado === 'pendiente' ? '⏳ PENDIENTE' :
                '📋 ' + (order.pago_estado ?? 'Pendiente').toUpperCase()}
             </div>
+
+            {order.pago_estado === 'pagado' ? (
+              <>
+                <div style={{fontSize:'13px',fontWeight:'700',color:'#16a34a',marginTop:'6px'}}>
+                  RD${totalReal.toLocaleString()} — total pagado
+                </div>
+                {fechasDePago.length > 0 && (
+                  <div style={{fontSize:'10px',color:'#666',marginTop:'4px'}}>
+                    {fechasDePago.length === 1
+                      ? <>Pagado el {fechasDePago[0].toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'})}</>
+                      : <>Pagado en {fechasDePago.length} abonos: {fechasDePago.map((f,i) => (
+                          <span key={i}>{i>0 && ', '}{f.toLocaleDateString('es-DO',{day:'2-digit',month:'short'})}</span>
+                        ))}</>
+                    }
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <div style={{fontSize:'11px',color:'#555',marginTop:'6px',display:'flex',justifyContent:'space-between'}}>
+                  <span>Pagado:</span><strong>RD${montoPagado.toLocaleString()}</strong>
+                </div>
+                <div style={{fontSize:'11px',color:'#d97706',display:'flex',justifyContent:'space-between',fontWeight:'700'}}>
+                  <span>Pendiente:</span><strong>RD${saldoPendiente.toLocaleString()}</strong>
+                </div>
+                {fechasDePago.length > 0 && (
+                  <div style={{fontSize:'10px',color:'#666',marginTop:'4px'}}>
+                    Último abono: {fechasDePago[fechasDePago.length-1].toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'})}
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
 
