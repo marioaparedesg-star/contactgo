@@ -7,6 +7,15 @@ import { ChevronRight } from 'lucide-react'
 // listados aquí tienen preguntas verdaderamente propias; el resto sigue
 // usando el respaldo genérico de FAQS_BY_TYPE mientras se van agregando.
 const FAQS_BY_PRODUCT: Record<string, { q: string; a: string }[]> = {
+  'DAILIES® AquaComfort Plus®': [
+    { q: '¿Qué es la tecnología Blink-Activated Moisture?', a: 'Libera ráfagas de humectante cada vez que parpadeas, en vez de soltarlo todo de una vez — así el lente se siente fresco durante todo el día de uso, no solo al insertarlo.' },
+    { q: '¿Necesito solución de limpieza?', a: 'No — es un lente diario, se usa una vez y se desecha. No necesita estuche ni solución.' },
+    { q: '¿Qué material tiene?', a: 'Nelfilcon A, un hidrogel (no silicona hidrogel) con 69% de contenido de agua — uno de los más altos de nuestro catálogo, pensado para comodidad e hidratación superficial.' },
+    { q: '¿Cuántos lentes trae la caja?', a: '30 lentes — un mes de uso diario.' },
+    { q: '¿Tiene protección UV?', a: 'Sí, incluye bloqueo UV — un beneficio adicional, no un sustituto de gafas de sol o protección ocular específica.' },
+    { q: '¿Es de Alcon?', a: 'Sí, es fabricado por Alcon, la misma marca detrás de Air Optix y PRECISION1.' },
+    { q: '¿Es buena opción si nunca he usado lentes de contacto?', a: 'Sí — al ser diario y de hidrogel suave, suele ser una de las opciones más cómodas para adaptarse por primera vez, sin rutina de limpieza que aprender.' },
+  ],
   '1-DAY ACUVUE® MOIST®': [
     { q: '¿Qué es LACREON Technology?', a: 'Es la tecnología de ACUVUE que incorpora un agente humectante directamente en el material del lente, para que se sienta cómodo desde la mañana hasta la noche sin necesidad de gotas adicionales.' },
     { q: '¿Necesito solución de limpieza?', a: 'No — es un lente diario, se usa una vez y se desecha. No necesita estuche ni solución.' },
