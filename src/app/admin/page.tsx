@@ -336,6 +336,24 @@ export default function AdminDashboard() {
 
   useEffect(()=>{ cargar() },[rango.desde.getTime(), rango.hasta.getTime()]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // FIX (2026-09-16): el dashboard solo cargaba datos al abrir la página o
+  // cambiar el filtro — si Mario lo dejaba abierto en una pestaña y volvía
+  // más tarde (o cambiaba de app y regresaba), seguía viendo los números
+  // de cuando lo abrió, sin ningún aviso de que estaban desactualizados.
+  // Ahora se refresca solo: cada vez que la pestaña/app vuelve a estar
+  // visible, y además cada 2 minutos mientras esté activa en pantalla.
+  useEffect(() => {
+    const alVolverVisible = () => { if (document.visibilityState === 'visible') cargar() }
+    document.addEventListener('visibilitychange', alVolverVisible)
+    window.addEventListener('focus', alVolverVisible)
+    const intervalo = setInterval(() => { if (document.visibilityState === 'visible') cargar() }, 120000)
+    return () => {
+      document.removeEventListener('visibilitychange', alVolverVisible)
+      window.removeEventListener('focus', alVolverVisible)
+      clearInterval(intervalo)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Drill-down de "Pedidos por etapa" — carga bajo demanda, no toca cargar()
   // ni ningún cálculo existente. Es una consulta adicional, solo cuando el
   // usuario toca una etapa específica.
