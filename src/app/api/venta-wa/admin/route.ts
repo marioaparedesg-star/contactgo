@@ -90,22 +90,41 @@ export async function POST(req: NextRequest) {
     if (accion === 'marcar_pagado' && order_id) {
       const { data: order, error: getErr } = await sb
         .from('orders')
-        .select('id, pago_estado, numero_orden')
+        .select('id, pago_estado, numero_orden, total, estado')
         .eq('id', order_id)
         .single()
       if (getErr || !order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 })
       if (order.pago_estado === 'pagado') return NextResponse.json({ error: 'Ya estaba marcada como pagada' }, { status: 409 })
 
+      // FIX (2026-09-16): esta acción nunca creaba el movimiento de caja
+      // correspondiente, y ponía estado='confirmado' (valor huérfano, no es
+      // una de las 6 etapas reales del admin) sin importar la etapa actual.
+      // Resultado real encontrado: pedidos de esta misma ruta (venta por
+      // WhatsApp) estaban entre los 11 que sumaban RD$62,288 nunca
+      // reflejados en Caja. Mismo fix que ya se aplicó en /api/admin/pedidos.
+      const ETAPAS_ORDEN = ['recibido', 'pago_aprobado', 'preparando', 'fabricante', 'transito', 'entregado']
+      const debeAvanzarAPagoAprobado = order.estado === 'recibido' || !ETAPAS_ORDEN.includes(order.estado)
+      const updateData: Record<string, any> = {
+        pago_estado: 'pagado',
+        pagado_en: new Date().toISOString(),
+        pago_referencia: 'AZUL manual — venta WhatsApp',
+      }
+      if (debeAvanzarAPagoAprobado) updateData.estado = 'pago_aprobado'
+
       const { error: updErr } = await sb
         .from('orders')
-        .update({
-          pago_estado: 'pagado',
-          estado: 'confirmado',
-          pagado_en: new Date().toISOString(),
-          pago_referencia: 'AZUL manual — venta WhatsApp',
-        })
+        .update(updateData)
         .eq('id', order_id)
       if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 })
+
+      await sb.from('cash_movements').insert({
+        tipo: 'ingreso', categoria: 'venta',
+        descripcion: `Venta ${order.numero_orden} (marcado pagado — venta WhatsApp)`,
+        monto: order.total, metodo: 'tarjeta', referencia: order.numero_orden,
+        order_id, fecha: new Date().toISOString().split('T')[0],
+      }).then(({ error }) => {
+        if (error) console.error('[venta-wa marcar_pagado] cash_movements insert falló (no bloquea):', error.message)
+      })
 
       // Al confirmar el pago SÍ se notifica al cliente (WhatsApp + email) como cualquier
       // pedido pagado — ya es una venta confirmada real.

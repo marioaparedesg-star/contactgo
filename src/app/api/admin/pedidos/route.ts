@@ -42,10 +42,33 @@ export async function POST(req: NextRequest) {
     }
 
     if (accion === 'marcar_pagado') {
-      const { error } = await sb.from('orders')
-        .update({ pago_estado: 'pagado', estado: 'confirmado', pagado_en: new Date().toISOString() })
-        .eq('id', order_id)
+      // FIX (2026-09-16): esta acción nunca creaba el movimiento de caja
+      // correspondiente — a diferencia de registrar_pago, que sí lo hace.
+      // Resultado real encontrado: 11 pedidos marcados "pagado" por aquí
+      // sumando RD$62,288 que nunca aparecieron en Caja ni en "Por cobrar"
+      // (porque el sistema asumía que ya estaban 100% cobrados). Ahora
+      // también inserta en cash_movements, y usa la misma lógica de no
+      // retroceder la etapa del pedido que ya se corrigió en registrar_pago.
+      const { data: orderActual } = await sb.from('orders').select('numero_orden, total, estado').eq('id', order_id).single()
+      if (!orderActual) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
+
+      const ETAPAS_ORDEN = ['recibido', 'pago_aprobado', 'preparando', 'fabricante', 'transito', 'entregado']
+      const debeAvanzarAPagoAprobado = orderActual.estado === 'recibido' || !ETAPAS_ORDEN.includes(orderActual.estado)
+      const updateData: Record<string, any> = { pago_estado: 'pagado', pagado_en: new Date().toISOString() }
+      if (debeAvanzarAPagoAprobado) updateData.estado = 'pago_aprobado'
+
+      const { error } = await sb.from('orders').update(updateData).eq('id', order_id)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+      await sb.from('cash_movements').insert({
+        tipo: 'ingreso', categoria: 'venta',
+        descripcion: `Venta ${orderActual.numero_orden} (marcado pagado)`,
+        monto: orderActual.total, metodo: 'tarjeta', referencia: orderActual.numero_orden,
+        order_id, fecha: new Date().toISOString().split('T')[0],
+      }).then(({ error }) => {
+        if (error) console.error('[marcar_pagado] cash_movements insert falló (no bloquea):', error.message)
+      })
+
       return NextResponse.json({ ok: true })
     }
 
