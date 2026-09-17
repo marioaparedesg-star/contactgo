@@ -427,8 +427,18 @@ export default function ProductoClient({ product, variants }: Props) {
       .map(v => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
     const cylOpts = (product.cyl_disponibles?.length ? [...product.cyl_disponibles] : ALL_CYL)
       .sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
-    const axisOpts = (product.axis_disponibles?.length ? [...product.axis_disponibles] : ALL_AXIS)
-      .sort((a:any,b:any)=>Number(a)-Number(b)).map(String)
+    // FIX (2026-09-18): axisOpts estaba limitado a product.axis_disponibles
+    // (los valores que el fabricante tiene en STOCK estándar, normalmente
+    // pasos de 10°). El problema real: la receta de un cliente puede traer
+    // CUALQUIER eje de 1 a 180 — no solo múltiplos de 10. Verificado contra
+    // recetas reales de clientes en la calculadora: 12 de 27 (44%) tenían un
+    // eje que NO calzaba con ningún paso de 10 disponible (ej. 179, 165, 101,
+    // 4) — esas personas literalmente no podían seleccionar su eje real.
+    // Como todo pedido tórico YA se trata como fabricación especial (25-40
+    // días, sin importar el eje exacto — ver delivery-times.ts), dejar
+    // elegir el eje real completo no rompe ninguna promesa de entrega; solo
+    // deja que el cliente ingrese lo que su receta realmente dice.
+    const axisOpts = ALL_AXIS.map(String)
     const addOpts = product.add_disponibles?.length ? product.add_disponibles : ALL_ADD
     const colorOpts = (product as any).colores_disponibles ?? []
     return { sphOpts, cylOpts, axisOpts, addOpts, colorOpts }
