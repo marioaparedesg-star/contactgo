@@ -278,9 +278,21 @@ export async function POST(req: NextRequest) {
             )
             await logAutoReply(`${texto}\n\n[Menú: 🛒 Ver catálogo | 👁️ Ayuda con receta | 📦 Rastrear pedido]`)
             }
+          } else {
+            // FIX (2026-09-17): a pedido de Mario, tras el caso real de
+            // Carla — un mensaje libre (no botón, no saludo, no primera
+            // vez) que no encaja en ningún flujo automático se quedaba sin
+            // NADA de respuesta para el cliente; solo Mario recibía el
+            // aviso. El cliente veía la conversación "muerta" sin saber si
+            // alguien la había leído. Ahora se le confirma que ya llegó y
+            // que un representante lo atiende en breve — deja claro que es
+            // automático, sin fingir que es una persona respondiendo ya.
+            const texto = '💬 ¡Gracias por escribirnos! Este es un mensaje automático solo para avisarte ' +
+              'que ya recibimos el tuyo — en unos minutos uno de nuestros representantes te responde personalmente. 👁️✨\n\n' +
+              'Gracias por tu paciencia, ¡ya casi te atendemos! 😊'
+            await waSendText(from, texto)
+            await logAutoReply(texto)
           }
-          // Si no es ninguno de los anteriores (mensaje libre), no auto-responde —
-          // solo llega la notificación al admin para que Mario conteste personalmente.
         } catch (autoErr: any) {
           console.error('[WA/webhook] Auto-reply error:', autoErr.message)
           // Si falla la auto-respuesta, no importa — el admin recibe la notificación igual
