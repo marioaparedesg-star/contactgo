@@ -23,7 +23,7 @@ export const revalidate = 60
 const faqs = [
   { q: '¿Qué son los lentes tóricos?', a: 'Los lentes tóricos están diseñados específicamente para corregir el astigmatismo. A diferencia de los lentes esféricos, tienen una curvatura diferente en cada eje para compensar la forma irregular de la córnea.' },
   { q: '¿Cómo sé si necesito lentes tóricos?', a: 'Si tu receta tiene valores de CYL (cilindro) y AXIS (eje), tienes astigmatismo y necesitas lentes tóricos. El valor de AXIS indica la orientación del astigmatismo (0°–180°).' },
-  { q: '¿Por qué tardan más en llegar los lentes tóricos?', a: 'Los lentes tóricos se fabrican a medida según tu graduación exacta (Esfera, Cilindro y Eje). Por eso el tiempo de entrega es de 20-30 días, en lugar de las 24-48 horas de los esféricos.' },
+  { q: '¿Por qué tardan más en llegar los lentes tóricos?', a: 'Los lentes tóricos se fabrican a medida según tu graduación exacta (Esfera, Cilindro y Eje). Por eso el tiempo de entrega es de 25-40 días, en lugar de las 24-48 horas de los esféricos.' },
   { q: '¿Son más caros los lentes tóricos?', a: 'Sí, generalmente cuestan un poco más que los esféricos del mismo material porque requieren fabricación especializada. Sin embargo, son indispensables para corregir el astigmatismo correctamente.' },
 ]
 
