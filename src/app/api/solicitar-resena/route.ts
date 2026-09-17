@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
   // rezagado de días previos si el cron falló.
   const { data: ordenes } = await sb
     .from('orders')
-    .select('id, cliente_email, cliente_nombre, numero_orden, cliente_telefono')
+    .select('id, cliente_email, cliente_nombre, numero_orden, cliente_telefono, notas_admin')
     .eq('estado', 'entregado')
     .eq('resena_solicitada', false)
     .not('entregado_at', 'is', null)
@@ -64,12 +64,22 @@ export async function GET(req: NextRequest) {
 
     // WhatsApp (plantilla 'solicitar_resena_v2', APROBADA en Meta — verificado
     // 2026-09-03 directo contra la API, ya trae el link de reseña de Google).
+    // FIX (2026-09-16): el error se atrapaba en silencio — no había forma de
+    // saber si WhatsApp realmente falló para un pedido específico o si
+    // simplemente no tenía teléfono. Ahora se guarda el motivo exacto en
+    // notas_admin para poder auditar sin tener que adivinar.
     if (o.cliente_telefono) {
       try {
         await sendReviewRequest({ telefono: o.cliente_telefono, nombre: o.cliente_nombre })
         whatsappOk = true
         sentWhatsapp++
-      } catch { /* WhatsApp falló, el email de abajo puede cubrir el envío */ }
+      } catch (err: any) {
+        console.error(`[solicitar-resena] WhatsApp falló para ${o.numero_orden}:`, err.message)
+        const notaError = `[Reseña WA falló ${new Date().toISOString().slice(0,10)}: ${String(err.message).slice(0, 150)}]`
+        await sb.from('orders').update({
+          notas_admin: o.notas_admin ? `${o.notas_admin}\n${notaError}` : notaError,
+        }).eq('id', o.id)
+      }
     }
 
     if (o.cliente_email) {

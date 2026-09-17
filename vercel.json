@@ -10,7 +10,7 @@
     },
     {
       "path": "/api/cancelar-pendientes",
-      "schedule": "0 7 * * *"
+      "schedule": "30 13 * * *"
     },
     {
       "path": "/api/solicitar-resena",
