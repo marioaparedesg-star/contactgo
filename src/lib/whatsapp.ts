@@ -19,8 +19,44 @@ export function normalizePhone(phone: string): string {
   return digits
 }
 
+// ─── Interruptor de pausa (2026-10-07, a pedido explícito de Mario) ───
+// Bloquea TODO mensaje saliente hacia clientes hasta que él mismo lo
+// reactive — el número de Mario (809-694-2268) queda exento a propósito,
+// para que él nunca se quede sin sus propias notificaciones de admin.
+// Se revisa una sola vez por request y se cachea 30s para no golpear la
+// base de datos en cada envío dentro del mismo lote de un cron.
+const NUMERO_ADMIN_MARIO = '18096942268'
+let _pausaCache: { valor: boolean; expira: number } | null = null
+
+async function clientesPausados(): Promise<boolean> {
+  if (_pausaCache && _pausaCache.expira > Date.now()) return _pausaCache.valor
+  try {
+    const { createClient } = await import('@supabase/supabase-js')
+    const sb = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+    const { data } = await sb.from('configuracion_sistema').select('valor')
+      .eq('clave', 'whatsapp_clientes_pausado').single()
+    const valor = data?.valor === 'true'
+    _pausaCache = { valor, expira: Date.now() + 30000 }
+    return valor
+  } catch {
+    return false // si falla la consulta, no bloquear por un error de infraestructura
+  }
+}
+
+// Lanza si el envío a `to` debe bloquearse ahora mismo (cliente + pausa activa)
+async function bloquearSiPausado(to: string) {
+  if (normalizePhone(to) === NUMERO_ADMIN_MARIO) return // admin nunca se bloquea
+  if (await clientesPausados()) {
+    throw new Error('WHATSAPP_CLIENTES_PAUSADO: envío a clientes pausado por Mario — no se intentó.')
+  }
+}
+
 // ─── Enviar mensaje de texto libre (solo ventana 24h) ───
 export async function sendText(to: string, text: string) {
+  await bloquearSiPausado(to)
   const phone = normalizePhone(to)
   const res = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
     method: 'POST',
@@ -47,6 +83,7 @@ export async function sendTemplate(
   params: string[],
   lang = 'es'
 ) {
+  await bloquearSiPausado(to)
   const phone = normalizePhone(to)
   const components: any[] = []
   if (params.length > 0) {
@@ -215,6 +252,7 @@ export async function sendButtons(
   headerText?: string,
   footerText?: string,
 ) {
+  await bloquearSiPausado(to)
   const phone = normalizePhone(to)
   const res = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
     method: 'POST',

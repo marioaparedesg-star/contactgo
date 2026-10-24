@@ -523,7 +523,7 @@ export default async function HomePage() {
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-3">
             {[
-              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en todo el país. Los lentes tóricos tardan 20-30 días por ser fabricados a medida.' },
+              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en todo el país. Los lentes tóricos tardan 25-40 días por ser fabricados a medida.' },
               { q: '¿Son directo del fabricante?', a: 'Sí. Trabajamos directo con los distribuidores oficiales de cada marca. Recibes tu producto sellado, con su empaque original de fábrica. Nunca vendemos imitaciones.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados recomendamos tener una receta actualizada. Nuestra calculadora gratuita te ayuda a identificar el tipo correcto de lente. Para lentes de color sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },

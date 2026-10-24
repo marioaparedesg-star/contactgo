@@ -42,9 +42,9 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-purple-700 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para astigmatismo</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes Tóricos para Astigmatismo en RD</h1>
-          <p className="text-purple-100 text-lg max-w-xl mx-auto">Fabricados a medida según tu SPH, CYL y AXIS. Entrega en 20-30 días en República Dominicana.</p>
+          <p className="text-purple-100 text-lg max-w-xl mx-auto">Fabricados a medida según tu SPH, CYL y AXIS. Entrega en 25-40 días en República Dominicana.</p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-400/20 border border-amber-300/30 text-amber-100 text-xs px-4 py-2 rounded-full">
-            ⏱ Tiempo de entrega: 20-30 días (fabricación a medida)
+            ⏱ Tiempo de entrega: 25-40 días (fabricación a medida)
           </div>
         </section>
 

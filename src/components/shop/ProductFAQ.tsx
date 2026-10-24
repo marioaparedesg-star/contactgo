@@ -305,7 +305,7 @@ const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
     { q: '¿Los lentes son para miopía e hipermetropía?', a: 'Sí, los lentes esféricos corrigen tanto miopía (valores negativos) como hipermetropía (valores positivos). Los valores van del -12.00 al +8.00 según el producto.' },
   ],
   torico: [
-    { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos se fabrican a medida según tu graduación específica (Esfera, Cilindro y Eje). Este proceso toma 20-30 días, a diferencia de los esféricos que enviamos desde inventario.' },
+    { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos se fabrican a medida según tu graduación específica (Esfera, Cilindro y Eje). Este proceso toma 25-40 días, a diferencia de los esféricos que enviamos desde inventario.' },
     { q: '¿Qué diferencia hay entre lentes tóricos y esféricos?', a: 'Los lentes tóricos tienen una curvatura especial que corrige el astigmatismo. Tienen un diseño estabilizado para que no roten con el parpadeo, manteniendo la visión nítida.' },
     { q: '¿Qué información de mi receta necesito?', a: 'Para lentes tóricos necesitas la Esfera, el Cilindro y el Eje de tu receta. Estos tres valores son obligatorios y aparecen en cualquier receta óptica.' },
     { q: '¿Puedo usar lentes tóricos si tengo astigmatismo leve?', a: 'Sí, los lentes tóricos están disponibles desde -0.75 de cilindro. Para astigmatismo leve suelen ser muy efectivos.' },
@@ -337,7 +337,7 @@ const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
 }
 
 const FAQS_GENERAL = [
-  { q: '¿Hacen envíos a toda República Dominicana?', a: 'Sí. Santo Domingo y Santiago en 24-48h. Resto del país en 2-3 días hábiles. Los lentes tóricos tardan 20-30 días por fabricación a medida.' },
+  { q: '¿Hacen envíos a toda República Dominicana?', a: 'Sí. Santo Domingo y Santiago en 24-48h. Resto del país en 2-3 días hábiles. Los lentes tóricos tardan 25-40 días por fabricación a medida.' },
   { q: '¿Los productos son directo del fabricante?', a: 'Sí. Todos los productos de ContactGo son directo del fabricante o su distribuidor autorizado en el país, con código de autenticidad. Nunca vendemos imitaciones.' },
   { q: '¿Puedo devolver mi pedido?', a: 'Sí, en 30 días si el producto viene defectuoso o no es lo que pediste. Los lentes sin abrir y en su empaque original también son elegibles para devolución.' },
 ]
