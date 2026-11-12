@@ -16,8 +16,8 @@ const meta: BlogMeta = {
       a: 'Sí, entregamos en toda la zona metropolitana de Santo Domingo, incluyendo Los Alcarrizos, Villa Mella, Herrera, Pantoja y sectores aledaños — el tiempo de entrega suele ser de 24-48 horas.' },
     { q: '¿El precio de envío es distinto en estas zonas?',
       a: 'El costo de envío se calcula según tu dirección exacta en el checkout — no asumimos un precio fijo, se te muestra el costo real antes de confirmar tu pedido.' },
-    { q: '¿Puedo pagar contra entrega en estas zonas?',
-      a: 'Para compras por WhatsApp, en algunos casos se puede coordinar pago contra entrega o abono parcial — se evalúa caso por caso con nuestro equipo, no es automático.' },
+    { q: '¿Qué métodos de pago aceptan?',
+      a: 'Los pedidos realizados en ContactGo se pagan con tarjeta de crédito o débito Visa o Mastercard durante el proceso de compra.' },
   ],
   relatedSlugs: [
     'lentes-contacto-santo-domingo-provincia',
@@ -63,7 +63,7 @@ export default function Page() {
       <ol>
         <li>Ve nuestro <Link href="/catalogo">catálogo completo</Link> o escríbenos tu graduación por WhatsApp</li>
         <li>Confirma tu dirección con puntos de referencia claros (esto ayuda mucho en zonas con nomenclatura menos exacta)</li>
-        <li>Paga con tarjeta de forma segura, o coordina otra opción con nuestro equipo</li>
+        <li>Paga con tarjeta de forma segura durante el proceso de compra</li>
         <li>Recibe en 24-48h con seguimiento por WhatsApp</li>
       </ol>
 

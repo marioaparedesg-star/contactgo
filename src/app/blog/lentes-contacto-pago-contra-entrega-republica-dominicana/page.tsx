@@ -5,19 +5,25 @@ import BlogArticle, { type BlogMeta } from '@/components/blog/BlogArticle'
 
 const meta: BlogMeta = {
   slug: 'lentes-contacto-pago-contra-entrega-republica-dominicana',
-  title: 'Lentes de Contacto: Pago Contra Entrega en RD — Cómo Funciona',
-  h1: '¿Se puede pagar contra entrega al comprar lentes de contacto en RD?',
-  description: 'Todo sobre las opciones de pago para comprar lentes de contacto en República Dominicana: tarjeta, contra entrega, y qué esperar en cada caso.',
+  title: 'Cómo pagar tus lentes de contacto en línea de forma segura en RD',
+  h1: 'Cómo pagar tus lentes de contacto en línea de forma segura',
+  description: 'Conoce cómo completar tu compra de lentes de contacto en ContactGo con tarjeta de crédito o débito mediante el checkout seguro.',
   publishedAt: '2026-08-27',
-  readMinutes: 5,
+  readMinutes: 4,
   category: 'Guías',
   faq: [
-    { q: '¿ContactGo ofrece pago contra entrega?',
-      a: 'Para compras directas en la web, el pago es con tarjeta a través de AZUL. Para ventas asistidas por WhatsApp, en algunos casos se puede coordinar pago contra entrega o un abono parcial — se evalúa caso por caso con nuestro equipo, no es una opción automática en el checkout.' },
-    { q: '¿Por qué no todas las tiendas de lentes de contacto ofrecen contra entrega?',
-      a: 'Los lentes de contacto se piden con la graduación exacta del cliente — un producto muy específico que no se puede revender fácilmente si el cliente rechaza el pedido al llegar. Por eso muchas tiendas especializadas prefieren pago adelantado o abonos parciales para pedidos personalizados.' },
-    { q: '¿Es seguro pagar con tarjeta en una tienda de lentes de contacto en RD?',
-      a: 'Si la tienda usa una pasarela certificada (como AZUL de Banco Popular, con tecnología 3D Secure) y no almacena los datos de tu tarjeta, es tan seguro como pagar en cualquier comercio físico con datáfono.' },
+    {
+      q: '¿Qué métodos de pago están disponibles en ContactGo?',
+      a: 'Las compras realizadas desde nuestra tienda en línea se pagan con tarjeta de crédito o débito Visa o Mastercard mediante el checkout seguro.',
+    },
+    {
+      q: '¿Puedo pagar en efectivo al recibir mi pedido?',
+      a: 'No. ContactGo no ofrece pago contra entrega ni cobro en efectivo al momento de recibir pedidos realizados en la tienda en línea.',
+    },
+    {
+      q: '¿ContactGo guarda los datos de mi tarjeta?',
+      a: 'No. Los datos de la tarjeta se procesan en el portal seguro de pago y ContactGo no almacena los números de tu tarjeta.',
+    },
   ],
   relatedSlugs: [
     'comprar-lentes-contacto-online-republica-dominicana',
@@ -36,35 +42,30 @@ export const metadata: Metadata = {
     url: `https://www.contactgo.net/blog/${meta.slug}`,
     type: 'article', locale: 'es_DO', siteName: 'ContactGo',
   },
-  keywords: 'lentes de contacto pago contra entrega, comprar lentes de contacto rd pago, lentes de contacto tarjeta republica dominicana',
+  keywords: 'pago seguro lentes de contacto, comprar lentes de contacto online, pago con tarjeta republica dominicana',
 }
 
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Si estás por comprar lentes de contacto en línea por primera vez en RD, es normal preguntarte cómo funciona el pago — sobre todo si estás acostumbrado a pagar contra entrega en otros tipos de compras online. Aquí te explicamos las opciones reales.</p>
+      <p>En ContactGo puedes completar tu pedido directamente desde nuestra tienda en línea. El proceso de pago se realiza con tarjeta de crédito o débito Visa o Mastercard desde el checkout.</p>
 
-      <h2>Las 2 formas más comunes de pagar lentes de contacto en línea en RD</h2>
+      <h2>Cómo completar tu pago</h2>
+      <ol>
+        <li>Selecciona los productos y configura la graduación de cada ojo según tu receta vigente.</li>
+        <li>Completa tus datos de contacto y la dirección de entrega.</li>
+        <li>Revisa el resumen del pedido y acepta los términos y condiciones.</li>
+        <li>Continúa al portal seguro de pago para completar la transacción con tu tarjeta.</li>
+      </ol>
 
-      <h3>1. Pago con tarjeta al momento de la compra</h3>
-      <p>Es el método más común en tiendas especializadas de lentes de contacto. Pagas con Visa o Mastercard, crédito o débito, directo en el checkout — el pedido se procesa de inmediato una vez confirmado el pago. Si la tienda usa una pasarela certificada como AZUL (Banco Popular) con tecnología 3D Secure, es un proceso seguro y encriptado.</p>
+      <h2>Seguridad de la transacción</h2>
+      <p>El pago se procesa en el portal seguro de AZUL, de Banco Popular. ContactGo no almacena los datos de tu tarjeta. Verifica siempre que estás completando la operación en el portal de pago correspondiente antes de introducir tus datos.</p>
 
-      <h3>2. Pago contra entrega o abono parcial (venta asistida)</h3>
-      <p>Algunas tiendas, incluyendo ContactGo, ofrecen esta opción para ventas coordinadas directamente por WhatsApp — no es automática en el checkout de la web, pero sí se puede conversar con el equipo de ventas caso por caso, especialmente para clientes recurrentes o pedidos de mayor volumen.</p>
+      <h2>¿Puedo pagar al recibir el pedido?</h2>
+      <p>No. Los pedidos realizados en la tienda en línea deben pagarse con tarjeta durante el proceso de compra. No ofrecemos pago contra entrega ni cobro en efectivo al momento de la entrega.</p>
 
-      <h2>¿Por qué no todas las tiendas de lentes ofrecen contra entrega como estándar?</h2>
-
-      <p>A diferencia de un producto genérico (como una camisa en talla M), un lente de contacto se pide con la <strong>graduación exacta de cada cliente</strong> — SPH, CYL, eje, todo específico a esa persona. Si el cliente rechaza el pedido al momento de la entrega, ese producto no se puede revender fácilmente a otro cliente. Por esa razón, muchas tiendas especializadas prefieren pago adelantado, o piden un abono parcial como compromiso antes de procesar un pedido personalizado.</p>
-
-      <h2>¿Qué pasa si mi pedido no es lo que esperaba?</h2>
-
-      <p>Esto es distinto a "arrepentirme al ver el mensajero" — si el error fue del vendedor (se envió el producto equivocado, graduación incorrecta por error de la tienda), la solución debe ser sin costo para ti, sin importar el método de pago que hayas usado. Revisa siempre la política de devoluciones de la tienda antes de comprar.</p>
-
-      <h2>Nuestra recomendación honesta</h2>
-
-      <p>Si es tu primera compra y quieres máxima seguridad, el pago con tarjeta directo en una web con checkout certificado (verifica que tenga candado SSL y mencione su pasarela de pago) es la opción más rápida y confiable. Si prefieres coordinar algo distinto, escríbele directo al equipo de ventas por WhatsApp antes de comprar — la mayoría de tiendas serias están dispuestas a conversar sobre opciones para clientes nuevos.</p>
-
-      <p>En ContactGo puedes pagar con tarjeta de forma segura en <Link href="/catalogo">nuestro catálogo</Link>, o escribirnos por WhatsApp al <strong>(809) 694-2268</strong> para conversar sobre tu caso específico.</p>
+      <h2>¿Necesitas ayuda con tu compra?</h2>
+      <p>Si tienes alguna duda antes de pagar, puedes escribirnos por WhatsApp al <strong>(809) 694-2268</strong>. También puedes consultar nuestro <Link href="/catalogo">catálogo completo</Link> antes de iniciar tu pedido.</p>
     </BlogArticle>
   )
 }
