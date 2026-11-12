@@ -203,7 +203,7 @@ export function getRangoEntregaDesdeFecha(
   const max = sumarDiasLaborables(base, info.dias_max)
   const mismoMes = min.getUTCMonth() === max.getUTCMonth() && min.getUTCFullYear() === max.getUTCFullYear()
   const texto = mismoMes
-    ? `Entre el ${min.getUTCDate()} y el ${formatoFecha(max, false)} de ${MESES_ES[max.getUTCMonth()]}`
+    ? `Entre el ${min.getUTCDate()} y el ${max.getUTCDate()} de ${MESES_ES[max.getUTCMonth()]}`
     : `Entre el ${formatoFecha(min, false)} y el ${formatoFecha(max, false)}`
   return { texto, fechaMin: isoFecha(min), fechaMax: isoFecha(max) }
 }
