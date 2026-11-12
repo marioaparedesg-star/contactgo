@@ -11,7 +11,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/envios-y-entregas' },
   title: 'Envíos y Entregas | ContactGo — Lentes de Contacto RD',
-  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos en 24-48 horas, multifocales en 2-6 días, tóricos en 25-40 días — a todo el país.',
+  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos en 24-48 horas, multifocales en 2-6 días, tóricos en 25-45 días laborables — a todo el país.',
 }
 
 export default function EnviosPage() {
@@ -55,12 +55,8 @@ export default function EnviosPage() {
             <p className="text-gray-500 text-sm mb-4">El tiempo de entrega no varía por zona (ver tiempos por tipo de lente arriba) — esto es solo el costo del envío.</p>
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               {[
-                { zona: 'Santo Domingo y Gran Santo Domingo', costo: 'RD$200' },
-                { zona: 'Santiago de los Caballeros', costo: 'RD$350' },
-                { zona: 'La Romana / San Pedro de Macorís', costo: 'RD$350' },
-                { zona: 'Punta Cana / Bávaro', costo: 'RD$350' },
-                { zona: 'Puerto Plata', costo: 'RD$350' },
-                { zona: 'Otras provincias', costo: 'RD$350' },
+                { zona: 'Gran Santo Domingo (provincia Santo Domingo y Distrito Nacional)', costo: 'RD$250' },
+                { zona: 'Interior del país (30 provincias restantes)', costo: 'RD$350' },
               ].map((z, i) => (
                 <div key={i} className={`flex items-center justify-between px-5 py-4 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                   <p className="font-semibold text-gray-900 text-sm">{z.zona}</p>

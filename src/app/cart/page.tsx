@@ -16,7 +16,7 @@ import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase'
 
 export default function CartPage() {
-  const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+  const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento, cuponEnvioGratis } = useCartStore()
 
   // Requiere una cuenta para revisar y continuar el carrito; el estado local se conserva durante el acceso.
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function CartPage() {
         cliente_nombre: perfil?.nombre ?? user.user_metadata?.nombre ?? null,
         cliente_telefono: perfil?.telefono ?? null,
         items: JSON.stringify(snapshot),
-        total: snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0) + 200,
+        total: snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0),
         recuperado: false,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'cliente_email', ignoreDuplicates: false })
@@ -127,8 +127,8 @@ export default function CartPage() {
   const [cuponErr, setCuponErr] = useState('')
 
   const sub  = subtotal()
-  const envio = sub >= 8000 ? 0 : 200
-  const tot  = sub + envio - descuento
+  const envio = sub >= 8000 || cuponEnvioGratis ? 0 : null
+  const tot  = sub + (envio ?? 0) - descuento
 
   const aplicarCupon = async () => {
     const code = cuponInput.trim().toUpperCase()
@@ -148,7 +148,7 @@ export default function CartPage() {
         return
       }
       setDescuento(result.descuento)
-      setCupon(code, result.descuento)  // persistir en store → checkout lo leerá
+      setCupon(code, result.descuento, !!result.envio_gratis)  // conservar descuento y envío gratis al pasar al checkout
       setCuponOk(true)
       setCuponErr('')
       toast.success(result.mensaje ?? 'Cupón aplicado ✓')
@@ -398,7 +398,7 @@ export default function CartPage() {
                 <div className="flex justify-between text-gray-500">
                   <span>Envío</span>
                   <span className={envio === 0 ? 'text-green-600 font-semibold' : ''}>
-                    {envio === 0 ? '🎁 ¡Gratis!' : `RD$${envio}`}
+                    {envio === 0 ? 'Gratis' : 'Se calcula en checkout'}
                   </span>
                 </div>
                 {descuento > 0 && (
@@ -414,10 +414,10 @@ export default function CartPage() {
               </div>
 
               {/* Envío gratis hint */}
-              {envio > 0 && (
+              {envio === null && (
                 <div className="bg-amber-50 rounded-xl p-3 text-center">
                   <p className="text-xs text-amber-700">
-                    ¡Agrega <strong>RD${(8000 - sub).toLocaleString()}</strong> más y el envío es <strong>gratis</strong>! 🚀
+                    El costo del envío se calcula al elegir tu provincia. ¡Agrega <strong>RD${(8000 - sub).toLocaleString()}</strong> más y obtén envío gratis.
                   </p>
                   <div className="mt-2 bg-amber-200/50 rounded-full h-1.5 overflow-hidden">
                     <div className="bg-amber-500 h-full rounded-full transition-all"

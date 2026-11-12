@@ -495,6 +495,31 @@ export default function ProductoClient({ product, variants }: Props) {
       : null
   const [modalidad, setModalidad] = useState<'plano' | 'graduado' | null>(null)
 
+  // Recuperar la configuración temporal si el cliente tuvo que autenticarse.
+  // sessionStorage limita estos datos a la pestaña y evita guardar recetas indefinidamente.
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('contactgo-product-config-draft')
+      if (!raw) return
+      const draft = JSON.parse(raw)
+      if (draft?.productId !== product.id || draft?.pathname !== window.location.pathname) return
+      if (draft.eyeFlow) setEyeFlow(draft.eyeFlow)
+      if (typeof draft.size === 'string') setSize(draft.size)
+      if (Number.isFinite(draft.qty) && draft.qty > 0) setQty(draft.qty)
+      if (typeof draft.suscripcion === 'string' || draft.suscripcion === null) setSuscripcion(draft.suscripcion)
+      if (draft.modalidad === 'plano' || draft.modalidad === 'graduado') setModalidad(draft.modalidad)
+      if (draft.eyeFlow?.color && imagenesPorColor[draft.eyeFlow.color]) {
+        setImagenActual(imagenesPorColor[draft.eyeFlow.color])
+      }
+      sessionStorage.removeItem('contactgo-product-config-draft')
+      toast.success('Recuperamos la configuración de tu producto')
+    } catch {
+      try { sessionStorage.removeItem('contactgo-product-config-draft') } catch {}
+    }
+  // La restauración corresponde únicamente al producto que originó el acceso.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.id])
+
   const tipo       = product.tipo ?? ''
   const getEntregaInfo = getEntrega(tipo, product.nombre, eyeFlow.sph)
   const sku        = product.sku ?? ''
@@ -664,18 +689,35 @@ export default function ProductoClient({ product, variants }: Props) {
     setPrice(Math.round(base * (1 - descSub)))
   }, [size, product.precio, sku, suscripcion, qty, isLente, isColor, modalidad, precioPlano])
 
+  const guardarConfiguracionYContinuar = () => {
+    const currentPath = window.location.pathname + window.location.search
+    try {
+      sessionStorage.setItem('contactgo-product-config-draft', JSON.stringify({
+        productId: product.id,
+        pathname: window.location.pathname,
+        eyeFlow,
+        size,
+        qty,
+        suscripcion,
+        modalidad,
+      }))
+    } catch {
+      toast.error('No pudimos guardar temporalmente tu configuración. Inténtalo de nuevo.')
+      return
+    }
+    router.push(`/cuenta?next=${encodeURIComponent(currentPath)}`)
+  }
+
   const handleAdd = async (): Promise<boolean> => {
     // Exigir autenticación antes de añadir cualquier producto al carrito.
     try {
       const { data: { user } } = await createClient().auth.getUser()
       if (!user) {
-        const currentPath = window.location.pathname + window.location.search
-        router.push(`/cuenta?next=${encodeURIComponent(currentPath)}`)
+        guardarConfiguracionYContinuar()
         return false
       }
     } catch {
-      const currentPath = window.location.pathname + window.location.search
-      router.push(`/cuenta?next=${encodeURIComponent(currentPath)}`)
+      guardarConfiguracionYContinuar()
       return false
     }
 
@@ -1324,7 +1366,7 @@ export default function ProductoClient({ product, variants }: Props) {
           <div className="hidden lg:block px-6 xl:px-8 pb-8 mt-6 space-y-6">
             <div className="grid grid-cols-4 gap-3 bg-gray-50 rounded-2xl p-4 border border-gray-100">
               {([
-                {icon:'🚚',t:'Envío gratis',d:'Desde RD$2,500', azul:false},
+                {icon:'🚚',t:'Envío gratis',d:'Desde RD$8,000', azul:false},
                 {icon:null,t:'Pago AZUL',d:'100% protegido', azul:true},
                 {icon:'↩️',t:'7 días dev.',d:'Sin preguntas', azul:false},
                 {icon:'✅',t:'Originales',d:'Dist. oficial', azul:false},

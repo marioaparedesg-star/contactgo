@@ -32,7 +32,8 @@ interface CartStore {
   items:            CartItem[]
   cuponCodigo:      string | null
   cuponDescuento:   number
-  setCupon:         (codigo: string | null, descuento: number) => void
+  cuponEnvioGratis: boolean
+  setCupon:         (codigo: string | null, descuento: number, envioGratis?: boolean) => void
   clearCupon:       () => void
   addItem:          (product: Product, opts?: AddItemOpts) => void
   removeByIndex:    (index: number) => void
@@ -64,9 +65,10 @@ export const useCartStore = create<CartStore>()(
       items:          [],
       cuponCodigo:    null,
       cuponDescuento: 0,
+      cuponEnvioGratis: false,
 
-      setCupon:  (codigo, descuento) => set({ cuponCodigo: codigo, cuponDescuento: descuento }),
-      clearCupon: () => set({ cuponCodigo: null, cuponDescuento: 0 }),
+      setCupon:  (codigo, descuento, envioGratis = false) => set({ cuponCodigo: codigo, cuponDescuento: descuento, cuponEnvioGratis: envioGratis }),
+      clearCupon: () => set({ cuponCodigo: null, cuponDescuento: 0, cuponEnvioGratis: false }),
 
       addItem: (product, opts = {}) => {
         if (product.tipo === 'color' && !opts.color) {
@@ -119,7 +121,7 @@ export const useCartStore = create<CartStore>()(
         })
       },
 
-      clearCart: () => set({ items: [], cuponCodigo: null, cuponDescuento: 0 }),
+      clearCart: () => set({ items: [], cuponCodigo: null, cuponDescuento: 0, cuponEnvioGratis: false }),
 
       // ── Legacy — mantener compatibilidad ────────────────────────────
       removeItem: (productId, _sph, _ojo) => {
