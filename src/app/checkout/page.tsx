@@ -84,6 +84,9 @@ export default function CheckoutPage() {
   const [step, setStep] = useState<1|2|3>(1)
   const [savedAddresses, setSavedAddresses] = useState<any[]>([])
   const [selectedAddrId, setSelectedAddrId] = useState<string|null>(null)
+  const [showAddressEditor, setShowAddressEditor] = useState(false)
+  const [savingAddress, setSavingAddress] = useState(false)
+  const [addressDraft, setAddressDraft] = useState({ etiqueta: 'Casa', direccion: '', ciudad: 'Santo Domingo', referencias: '' })
   // El checkout público acepta únicamente pago con tarjeta vía AZUL.
   // Los cobros en efectivo siguen disponibles en el panel administrativo.
 
@@ -124,6 +127,57 @@ export default function CheckoutPage() {
       }
     })
   }, [items, router])
+
+  const abrirEditorDireccion = (addr?: any) => {
+    setAddressDraft({
+      etiqueta: addr?.etiqueta ?? 'Casa',
+      direccion: addr?.direccion ?? getValues('direccion') ?? '',
+      ciudad: addr?.ciudad ?? getValues('ciudad') ?? 'Santo Domingo',
+      referencias: addr?.referencias ?? '',
+    })
+    setShowAddressEditor(true)
+  }
+
+  const guardarDireccionCheckout = async () => {
+    if (addressDraft.direccion.trim().length < 5 || !addressDraft.ciudad.trim()) {
+      toast.error('Completa la dirección y la ciudad')
+      return
+    }
+    setSavingAddress(true)
+    try {
+      const sb = createClient()
+      const { data: { user } } = await sb.auth.getUser()
+      if (!user) { toast.error('Inicia sesión para guardar tu dirección'); return }
+      const payload = {
+        user_id: user.id,
+        etiqueta: addressDraft.etiqueta,
+        direccion: addressDraft.direccion.trim(),
+        ciudad: addressDraft.ciudad.trim(),
+        referencias: addressDraft.referencias.trim() || null,
+        telefono: getValues('telefono') || null,
+      }
+      let result: any
+      if (selectedAddrId) {
+        result = await sb.from('addresses').update(payload).eq('id', selectedAddrId).eq('user_id', user.id).select().single()
+      } else {
+        result = await sb.from('addresses').insert({ ...payload, principal: savedAddresses.length === 0 }).select().single()
+      }
+      if (result.error || !result.data) throw result.error ?? new Error('No se pudo guardar la dirección')
+      const saved = result.data
+      setSavedAddresses(prev => selectedAddrId
+        ? prev.map(a => a.id === saved.id ? saved : a)
+        : [...prev, saved])
+      setSelectedAddrId(saved.id)
+      setValue('direccion', saved.direccion, { shouldValidate: true })
+      setValue('ciudad', saved.ciudad, { shouldValidate: true })
+      setShowAddressEditor(false)
+      toast.success('Dirección guardada')
+    } catch (err: any) {
+      toast.error(err?.message ?? 'No se pudo guardar la dirección')
+    } finally {
+      setSavingAddress(false)
+    }
+  }
 
   const aplicarCupon = async () => {
     const code = cupon.trim().toUpperCase()
@@ -720,9 +774,44 @@ export default function CheckoutPage() {
                             </button>
                           )
                         })}
-                        <a href="/cuenta" className="text-xs text-primary-600 font-semibold flex items-center gap-1 pt-1">
-                          <MapPin className="w-3 h-3"/> Agregar o editar direcciones
-                        </a>
+                        <div className="flex flex-wrap gap-3 pt-2">
+                          <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
+                            className="text-xs text-primary-600 font-semibold flex items-center gap-1">
+                            <MapPin className="w-3 h-3"/> Agregar otra dirección
+                          </button>
+                          {selectedAddrId && (
+                            <button type="button" onClick={() => abrirEditorDireccion(savedAddresses.find(a => a.id === selectedAddrId))}
+                              className="text-xs text-primary-600 font-semibold">Editar dirección seleccionada</button>
+                          )}
+                        </div>
+                        {showAddressEditor && (
+                          <div className="rounded-xl border border-teal-200 bg-teal-50/40 p-3 space-y-3">
+                            <p className="text-sm font-bold text-gray-900">{selectedAddrId ? 'Editar dirección' : 'Nueva dirección de envío'}</p>
+                            <div className="flex gap-2">
+                              {['Casa','Trabajo','Otro'].map(label => (
+                                <button key={label} type="button" onClick={() => setAddressDraft(d => ({ ...d, etiqueta: label }))}
+                                  className={`flex-1 rounded-lg border px-2 py-2 text-xs font-semibold ${addressDraft.etiqueta === label ? 'border-teal-500 bg-teal-500 text-white' : 'border-gray-200 bg-white text-gray-600'}`}>
+                                  {label}
+                                </button>
+                              ))}
+                            </div>
+                            <input value={addressDraft.direccion} onChange={e => setAddressDraft(d => ({ ...d, direccion: e.target.value }))}
+                              placeholder="Calle, número, sector *" className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm" />
+                            <select value={addressDraft.ciudad} onChange={e => setAddressDraft(d => ({ ...d, ciudad: e.target.value }))}
+                              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm">
+                              {CIUDADES.map(city => <option key={city} value={city}>{city}</option>)}
+                            </select>
+                            <input value={addressDraft.referencias} onChange={e => setAddressDraft(d => ({ ...d, referencias: e.target.value }))}
+                              placeholder="Referencias (opcional)" className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm" />
+                            <div className="flex gap-2">
+                              <button type="button" onClick={() => setShowAddressEditor(false)} className="flex-1 rounded-lg bg-white border border-gray-200 py-2 text-sm">Cancelar</button>
+                              <button type="button" disabled={savingAddress} onClick={guardarDireccionCheckout}
+                                className="flex-1 rounded-lg bg-teal-500 text-white py-2 text-sm font-bold disabled:opacity-50">
+                                {savingAddress ? 'Guardando…' : 'Guardar dirección'}
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       /* Sin direcciones guardadas — input manual */
@@ -749,9 +838,10 @@ export default function CheckoutPage() {
                         )}
                         {errors.ciudad && <p className="text-red-500 text-xs">⚠️ {errors.ciudad.message}</p>}
                         {isLoggedIn && (
-                          <a href="/cuenta" className="text-xs text-primary-600 font-semibold flex items-center gap-1">
-                            <MapPin className="w-3 h-3"/> Guardar esta dirección en tu perfil
-                          </a>
+                          <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
+                            className="text-xs text-primary-600 font-semibold flex items-center gap-1">
+                            <MapPin className="w-3 h-3"/> Guardar esta dirección en mi perfil
+                          </button>
                         )}
                       </div>
                     )}
