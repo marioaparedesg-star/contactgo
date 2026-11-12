@@ -664,6 +664,12 @@ export default function ProductoClient({ product, variants }: Props) {
     setPrice(Math.round(base * (1 - descSub)))
   }, [size, product.precio, sku, suscripcion, qty, isLente, isColor, modalidad, precioPlano])
 
+  const promptAccountAfterAdd = () => {
+    createClient().auth.getUser().then(({ data: { user } }) => {
+      if (!user) router.push('/cuenta?next=/cart')
+    }).catch(() => router.push('/cuenta?next=/cart'))
+  }
+
   const handleAdd = (): boolean => {
     const { ojoMode, mismaReceta,
             sph, cyl, axis, add,
@@ -684,6 +690,7 @@ export default function ProductoClient({ product, variants }: Props) {
         suscripcion: suscripcion ?? undefined,
       })
       toast.success('¡Perfecto! Lente agregado al carrito 🎉')
+      promptAccountAfterAdd()
       return true
     }
 
@@ -700,6 +707,7 @@ export default function ProductoClient({ product, variants }: Props) {
         precio_original: precioBase,
       })
       toast.success('¡Listo! Agregado al carrito 🎉')
+      promptAccountAfterAdd()
       return true
     }
 
@@ -769,6 +777,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
     const ojoMsg = ojoMode === 'AMBOS' ? 'para ambos ojos' : ojoMode === 'OD' ? '— ojo derecho' : '— ojo izquierdo'
     toast.success(`¡Listo! ${ojoMsg} agregado al carrito 🛍️`)
+    promptAccountAfterAdd()
     const addToCartEventId = generateEventId()
     trackEcommerce('add_to_cart', {
       items: [{ item_id: product.id, item_name: product.nombre,
