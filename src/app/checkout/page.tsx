@@ -101,10 +101,15 @@ export default function CheckoutPage() {
     const sb = createClient()
     sb.auth.getUser().then(({ data: { user } }) => {
       setIsLoggedIn(!!user)
+      if (!user) { router.replace('/cuenta?next=/cart'); return }
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
-          if (p?.nombre) setValue('nombre', p.nombre)
-          if (p?.email) setValue('email', p.email)
+          if (p?.nombre) {
+            const partes = String(p.nombre).trim().split(/\\s+/)
+            setValue('nombre', partes.shift() ?? '')
+            setValue('apellido', partes.join(' ') || '')
+          }
+          if (p?.email || user.email) setValue('email', p?.email || user.email || '')
           if (p?.telefono) setValue('telefono', p.telefono)
         })
         sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: a }) => {
@@ -453,7 +458,6 @@ export default function CheckoutPage() {
           sb2.from('profiles').upsert({ id: u.id, nombre: nombreCompletoVals, email: vals.email, telefono: vals.telefono ?? null }, { onConflict: 'id' }).then(() => {})
         }
       } catch { /* no bloquear flujo si falla */ }
-      if (!isLoggedIn) { setShowAuthModal(true); return }
       setStep(2)
     } else if (step === 2) {
       const ok = await trigger(['direccion','ciudad'])
