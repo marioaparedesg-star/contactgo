@@ -11,7 +11,6 @@ import {
   Eye, EyeOff, KeyRound, Repeat, Calendar, RefreshCw
 } from 'lucide-react'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
-import LocationPicker, { type LocationData } from '@/components/ui/LocationPicker'
 
 // ─── WebAuthn helpers ────────────────────────────────────────────────────────
 function bufferToBase64url(buf: ArrayBuffer): string {
@@ -116,18 +115,8 @@ export default function CuentaPage() {
   const [direcciones, setDirecciones] = useState<any[]>([])
   const [nuevaDireccion, setNuevaDireccion] = useState('')
   const [nuevaCiudad, setNuevaCiudad]   = useState('Santo Domingo')
-  const [showMap,       setShowMap]       = useState(false)
-  const [profileLat,    setProfileLat]    = useState<number|null>(null)
-  const [profileLng,    setProfileLng]    = useState<number|null>(null)
-  const [profileAddr,   setProfileAddr]   = useState<string|null>(null)
-  // Dirección seleccionada para nueva dirección con mapa
-  const [mapEditId,     setMapEditId]     = useState<string|null>(null)  // id de direccion editando mapa
   const [showAddDir,    setShowAddDir]    = useState(false)              // formulario nueva dirección
   const [newDirData,    setNewDirData]    = useState({ etiqueta:'Casa', direccion:'', ciudad:'Santo Domingo', referencias:'' })
-  const [newDirStep,    setNewDirStep]    = useState<'form'|'map'>('form')  // paso: form o mapa
-  const [newDirLat,     setNewDirLat]     = useState<number|null>(null)
-  const [newDirLng,     setNewDirLng]     = useState<number|null>(null)
-  const [newDirMapAddr, setNewDirMapAddr] = useState<string|null>(null)
   const [agregandoDir, setAgregandoDir] = useState(false)
   const [modo, setModo]       = useState('login')
   const [email, setEmail]     = useState('')
@@ -201,9 +190,6 @@ export default function CuentaPage() {
             const d = rPerfil.value.data
             setPerfil(d)
             setForm({ nombre: d.nombre || '', telefono: d.telefono || '' })
-            setProfileLat(d.lat ?? null)
-            setProfileLng(d.lng ?? null)
-            setProfileAddr(d.direccion_completa ?? null)
           }
           if (rOrdenes.status === 'fulfilled')  setPedidos(rOrdenes.value.data || [])
           if (rDirs.status === 'fulfilled')     setDirecciones(rDirs.value.data || [])
@@ -392,8 +378,6 @@ export default function CuentaPage() {
       direccion:   newDirData.direccion,
       ciudad:      newDirData.ciudad,
       referencias: newDirData.referencias || null,
-      lat:         newDirLat,
-      lng:         newDirLng,
       principal:   direcciones.length === 0,
     }).select().single()
     if (error) { alert(error.message); return }
@@ -401,8 +385,6 @@ export default function CuentaPage() {
       setDirecciones(d => [...d, data])
       setShowAddDir(false)
       setNewDirData({ etiqueta:'Casa', direccion:'', ciudad:'Santo Domingo', referencias:'' })
-      setNewDirLat(null); setNewDirLng(null); setNewDirMapAddr(null)
-      setNewDirStep('form')
     }
   }
 
@@ -411,13 +393,6 @@ export default function CuentaPage() {
     await sb.from('addresses').update({ principal: false }).eq('user_id', user.id)
     await sb.from('addresses').update({ principal: true }).eq('id', id)
     setDirecciones(ds => ds.map(d => ({ ...d, principal: d.id === id })))
-  }
-
-  const guardarMapaDireccion = async (id: string, lat: number, lng: number) => {
-    const sb = createClient()
-    await sb.from('addresses').update({ lat, lng }).eq('id', id)
-    setDirecciones(ds => ds.map(d => d.id === id ? { ...d, lat, lng } : d))
-    setMapEditId(null)
   }
 
   const eliminarDireccion = async (id: string) => {
@@ -1479,11 +1454,9 @@ export default function CuentaPage() {
 
             {/* Lista de direcciones guardadas */}
             {direcciones.map(d => {
-              const isEditingMap = mapEditId === d.id
               const ETIQUETA_ICON: Record<string,string> = { Casa:'🏠', Trabajo:'💼', Otro:'📍' }
               return (
                 <div key={d.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${d.principal ? 'border-primary-300' : 'border-gray-100'}`}>
-                  {/* Header dirección */}
                   <div className="flex items-start gap-3 p-4">
                     <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg ${d.principal ? 'bg-teal-50' : 'bg-gray-100'}`}>
                       {ETIQUETA_ICON[d.etiqueta ?? 'Casa'] ?? '📍'}
@@ -1492,7 +1465,6 @@ export default function CuentaPage() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="font-bold text-gray-900 text-sm">{d.etiqueta ?? 'Dirección'}</p>
                         {d.principal && <span className="text-[10px] font-bold text-primary-600 bg-teal-50 border border-primary-200 px-2 py-0.5 rounded-full">Principal</span>}
-                        {d.lat && d.lng && <span className="text-[10px] font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">📍 Mapa</span>}
                       </div>
                       <p className="text-sm text-gray-700 mt-0.5">{d.direccion}</p>
                       <p className="text-xs text-gray-400">{d.ciudad}</p>
@@ -1502,55 +1474,12 @@ export default function CuentaPage() {
                       <Trash2 className="w-4 h-4"/>
                     </button>
                   </div>
-
-                  {/* Acciones */}
-                  <div className="flex gap-2 px-4 pb-3">
-                    {!d.principal && (
+                  {!d.principal && (
+                    <div className="px-4 pb-3">
                       <button onClick={() => marcarPrincipal(d.id)}
-                        className="flex-1 text-xs font-semibold py-1.5 rounded-lg border border-primary-200 text-primary-600 hover:bg-teal-50 transition-colors">
+                        className="w-full text-xs font-semibold py-1.5 rounded-lg border border-primary-200 text-primary-600 hover:bg-teal-50 transition-colors">
                         ★ Marcar principal
                       </button>
-                    )}
-                    <button onClick={() => setMapEditId(isEditingMap ? null : d.id)}
-                      className={`flex-1 text-xs font-semibold py-1.5 rounded-lg border transition-colors ${
-                        isEditingMap
-                          ? 'border-gray-300 bg-gray-100 text-gray-600'
-                          : d.lat ? 'border-green-200 text-green-700 hover:bg-green-50' : 'border-blue-200 text-blue-600 hover:bg-blue-50'
-                      }`}>
-                      {isEditingMap ? 'Cerrar mapa' : d.lat ? '✏️ Editar pin' : '📍 Agregar pin'}
-                    </button>
-                    {d.lat && d.lng && (
-                      <a href={`https://www.google.com/maps?q=${d.lat},${d.lng}`} target="_blank" rel="noopener"
-                        className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors">
-                        Ver
-                      </a>
-                    )}
-                  </div>
-
-                  {/* Mapa edición inline */}
-                  {isEditingMap && (
-                    <div className="border-t border-gray-100 p-4 bg-gray-50/50">
-                      <LocationPicker
-                        initialLat={d.lat}
-                        initialLng={d.lng}
-                        initialAddress={d.direccion + ', ' + d.ciudad}
-                        onSave={async (data: LocationData) => {
-                          await guardarMapaDireccion(d.id, data.lat, data.lng)
-                        }}
-                        onCancel={() => setMapEditId(null)}
-                      />
-                    </div>
-                  )}
-
-                  {/* Mini preview si tiene pin y no está editando */}
-                  {d.lat && d.lng && !isEditingMap && process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY && (
-                    <div className="border-t border-gray-50">
-                      <img
-                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${d.lat},${d.lng}&zoom=16&size=600x120&scale=2&markers=color:green%7C${d.lat},${d.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`}
-                        alt="Mapa de ubicación de entrega"
-                        className="w-full object-cover"
-                        style={{height:100}}
-                      />
                     </div>
                   )}
                 </div>
@@ -1562,12 +1491,12 @@ export default function CuentaPage() {
               <div className="bg-white rounded-2xl border border-primary-200 shadow-sm overflow-hidden">
                 <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                   <p className="font-bold text-gray-900 text-sm">Nueva dirección</p>
-                  <button onClick={() => { setShowAddDir(false); setNewDirStep('form') }} className="text-gray-400 hover:text-gray-600">
+                  <button onClick={() => setShowAddDir(false)} className="text-gray-400 hover:text-gray-600">
                     <X className="w-4 h-4"/>
                   </button>
                 </div>
 
-                {newDirStep === 'form' ? (
+
                   <div className="p-4 space-y-3">
                     {/* Etiqueta */}
                     <div className="flex gap-2">
@@ -1591,23 +1520,7 @@ export default function CuentaPage() {
                       className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"
                       placeholder="Referencias: portón azul, cerca del parque... (opcional)"/>
 
-                    {/* Preview pin si ya marcó */}
-                    {newDirLat && newDirLng && (
-                      <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-                        <MapPin className="w-4 h-4 text-green-600 shrink-0"/>
-                        <p className="text-xs text-green-700 flex-1 truncate">{newDirMapAddr ?? 'Pin marcado'}</p>
-                        <button onClick={() => { setNewDirLat(null); setNewDirLng(null); setNewDirMapAddr(null) }}
-                          className="text-green-500 hover:text-green-700">
-                          <X className="w-3.5 h-3.5"/>
-                        </button>
-                      </div>
-                    )}
-
                     <div className="flex gap-2 pt-1">
-                      <button onClick={() => setNewDirStep('map')}
-                        className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors">
-                        {newDirLat ? '✏️ Editar pin' : '📍 Marcar en mapa'}
-                      </button>
                       <button onClick={agregarDireccion}
                         disabled={!newDirData.direccion.trim()}
                         className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-teal-500 text-white hover:bg-teal-600 disabled:opacity-40 transition-colors">
@@ -1615,23 +1528,6 @@ export default function CuentaPage() {
                       </button>
                     </div>
                   </div>
-                ) : (
-                  <div className="p-4">
-                    <p className="text-xs text-gray-500 mb-3">Marca el pin exacto de tu dirección</p>
-                    <LocationPicker
-                      initialLat={newDirLat}
-                      initialLng={newDirLng}
-                      initialAddress={newDirData.direccion ? `${newDirData.direccion}, ${newDirData.ciudad}` : null}
-                      onSave={(data: LocationData) => {
-                        setNewDirLat(data.lat)
-                        setNewDirLng(data.lng)
-                        setNewDirMapAddr(data.direccion_completa)
-                        setNewDirStep('form')
-                      }}
-                      onCancel={() => setNewDirStep('form')}
-                    />
-                  </div>
-                )}
               </div>
             ) : (
               <button onClick={() => setShowAddDir(true)}
