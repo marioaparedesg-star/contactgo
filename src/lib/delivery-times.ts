@@ -95,60 +95,69 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
   }
 }
 
+/** Fecha/hora de referencia siempre en la zona horaria comercial de ContactGo. */
+const ZONA_HORARIA = 'America/Santo_Domingo'
+const DIAS_ES = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado']
+const MESES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+
+function partesFechaDR(fecha: Date) {
+  const partes = new Intl.DateTimeFormat('en-CA', {
+    timeZone: ZONA_HORARIA, year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', hourCycle: 'h23',
+  }).formatToParts(fecha)
+  const valor = (tipo: string) => Number(partes.find(p => p.type === tipo)?.value ?? 0)
+  return { year: valor('year'), month: valor('month'), day: valor('day'), hour: valor('hour') }
+}
+
+// Fechas de calendario en UTC para evitar desplazamientos por la zona horaria del servidor.
+function fechaCalendario(year: number, month: number, day: number): Date {
+  return new Date(Date.UTC(year, month - 1, day))
+}
+function sumarDiasLaborables(base: Date, dias: number): Date {
+  const fecha = new Date(base)
+  let contados = 0
+  while (contados < dias) {
+    fecha.setUTCDate(fecha.getUTCDate() + 1)
+    const dia = fecha.getUTCDay()
+    if (dia !== 0 && dia !== 6) contados++
+  }
+  return fecha
+}
+function formatoFecha(fecha: Date, conDia = true): string {
+  const dia = fecha.getUTCDay()
+  const num = fecha.getUTCDate()
+  const mes = MESES_ES[fecha.getUTCMonth()]
+  return conDia ? `${DIAS_ES[dia]} ${num} de ${mes}` : `${num} de ${mes}`
+}
+function isoFecha(fecha: Date): string {
+  return `${fecha.getUTCFullYear()}-${String(fecha.getUTCMonth()+1).padStart(2,'0')}-${String(fecha.getUTCDate()).padStart(2,'0')}`
+}
+
 /**
- * Calcula la fecha exacta de entrega en texto legible.
- * Cuenta únicamente días laborables de lunes a viernes.
+ * Estimación dinámica para catálogo/carrito/checkout. El corte comercial es
+ * a las 15:00, hora de República Dominicana; solo se cuentan lunes-viernes.
  */
 export function getFechaEntrega(
-  tipo: string,
-  nombre = '',
-  sph?: string | number | null
+  tipo: string, nombre = '', sph?: string | number | null
 ): { texto: string; corto: string } {
   const info = getEntrega(tipo, nombre, sph)
-
-  const DIAS_ES  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado']
-  const MESES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
-
-  function addDiasLaborables(base: Date, dias: number): Date {
-    const d = new Date(base)
-    let added = 0
-    if (base.getHours() >= 15) d.setDate(d.getDate() + 1)
-    while (added < dias) {
-      d.setDate(d.getDate() + 1)
-      const dow = d.getDay()
-      if (dow !== 0 && dow !== 6) added++
-    }
-    return d
-  }
-
-  function fmtFecha(d: Date, conDia = true): string {
-    const dia = DIAS_ES[d.getDay()]
-    const num = d.getDate()
-    const mes = MESES_ES[d.getMonth()]
-    return conDia ? `${dia} ${num} de ${mes}` : `${num} de ${mes}`
-  }
-
   const ahora = new Date()
+  const local = partesFechaDR(ahora)
+  let base = fechaCalendario(local.year, local.month, local.day)
+  if (local.hour >= 15) base.setUTCDate(base.getUTCDate() + 1)
 
+  const min = sumarDiasLaborables(base, info.dias_min)
+  const max = sumarDiasLaborables(base, info.dias_max)
   if (info.dias_min === info.dias_max) {
-    const fecha = addDiasLaborables(ahora, info.dias_min)
     return {
-      texto: `Llega el ${fmtFecha(fecha)}`,
-      corto: `${DIAS_ES[fecha.getDay()].charAt(0).toUpperCase()}${DIAS_ES[fecha.getDay()].slice(1)} ${fecha.getDate()}/${fecha.getMonth()+1}`,
+      texto: `Llega el ${formatoFecha(min)}`,
+      corto: `${DIAS_ES[min.getUTCDay()].charAt(0).toUpperCase()}${DIAS_ES[min.getUTCDay()].slice(1)} ${min.getUTCDate()}/${min.getUTCMonth()+1}`,
     }
   }
-
-  const fechaMin = addDiasLaborables(ahora, info.dias_min)
-  const fechaMax = addDiasLaborables(ahora, info.dias_max)
-  const mismoMes = fechaMin.getMonth() === fechaMax.getMonth()
-  const rango    = mismoMes
-    ? `${fechaMin.getDate()} y ${fmtFecha(fechaMax, false)}`
-    : `${fmtFecha(fechaMin, false)} y ${fmtFecha(fechaMax, false)}`
-
-  return {
-    texto: `Llega entre el ${rango}`,
-    corto: `${fechaMin.getDate()}–${fechaMax.getDate()} ${MESES_ES[fechaMax.getMonth()]}`,
-  }
+  const rango = min.getUTCMonth() === max.getUTCMonth() && min.getUTCFullYear() === max.getUTCFullYear()
+    ? `${min.getUTCDate()} y ${formatoFecha(max, false)}`
+    : `${formatoFecha(min, false)} y ${formatoFecha(max, false)}`
+  return { texto: `Llega entre el ${rango}`, corto: `${min.getUTCDate()}–${max.getUTCDate()} ${MESES_ES[max.getUTCMonth()]}` }
 }
 
 /** Texto para emails */
@@ -165,18 +174,11 @@ export function getEntregaTextoEmail(tipo: string, nombre = '', sph?: string | n
  */
 export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | number | null): string {
   const info = getEntrega(tipo, nombre, sph)
-  const ahora = new Date()
-  const d = new Date(ahora)
-  let added = 0
-  if (ahora.getHours() >= 15) d.setDate(d.getDate() + 1)
-  while (added < info.dias_max) {
-    d.setDate(d.getDate() + 1)
-    const dow = d.getDay()
-    if (dow !== 0 && dow !== 6) added++
-  }
-  return d.toISOString().split('T')[0]
+  const local = partesFechaDR(new Date())
+  const base = fechaCalendario(local.year, local.month, local.day)
+  if (local.hour >= 15) base.setUTCDate(base.getUTCDate() + 1)
+  return isoFecha(sumarDiasLaborables(base, info.dias_max))
 }
-
 
 /**
  * Calcula un rango fijo a partir de la fecha original de creación del pedido.
@@ -185,30 +187,23 @@ export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | num
  */
 export function getRangoEntregaDesdeFecha(
   fechaCreacion: string | Date,
-  tipo: string
+  tipo: string,
+  sph?: string | number | null
 ): { texto: string; fechaMin: string; fechaMax: string } {
-  const info = getEntrega(tipo)
-  const base = new Date(fechaCreacion)
-  const inicio = new Date(base.getFullYear(), base.getMonth(), base.getDate())
-  const sumarLaborables = (dias: number) => {
-    const fecha = new Date(inicio)
-    let contados = 0
-    while (contados < dias) {
-      fecha.setDate(fecha.getDate() + 1)
-      const dia = fecha.getDay()
-      if (dia !== 0 && dia !== 6) contados++
-    }
-    return fecha
+  const info = getEntrega(tipo, '', sph)
+  const fecha = fechaCreacion instanceof Date ? fechaCreacion : new Date(fechaCreacion)
+  if (Number.isNaN(fecha.getTime())) {
+    return { texto: 'Fecha de entrega por confirmar', fechaMin: '', fechaMax: '' }
   }
-  const min = sumarLaborables(info.dias_min)
-  const max = sumarLaborables(info.dias_max)
-  const fmt = (f: Date) => f.toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })
-  const isoLocal = (f: Date) => `${f.getFullYear()}-${String(f.getMonth()+1).padStart(2,'0')}-${String(f.getDate()).padStart(2,'0')}`
-  return {
-    texto: min.getMonth() === max.getMonth() && min.getFullYear() === max.getFullYear()
-      ? `Entre el ${min.getDate()} y el ${fmt(max)}`
-      : `Entre el ${fmt(min)} y el ${fmt(max)}`,
-    fechaMin: isoLocal(min),
-    fechaMax: isoLocal(max),
-  }
+  const local = partesFechaDR(fecha)
+  let base = fechaCalendario(local.year, local.month, local.day)
+  // Si la orden se creó desde las 15:00 (hora RD), el conteo inicia al próximo día.
+  if (local.hour >= 15) base.setUTCDate(base.getUTCDate() + 1)
+  const min = sumarDiasLaborables(base, info.dias_min)
+  const max = sumarDiasLaborables(base, info.dias_max)
+  const mismoMes = min.getUTCMonth() === max.getUTCMonth() && min.getUTCFullYear() === max.getUTCFullYear()
+  const texto = mismoMes
+    ? `Entre el ${min.getUTCDate()} y el ${formatoFecha(max, false)} de ${MESES_ES[max.getUTCMonth()]}`
+    : `Entre el ${formatoFecha(min, false)} y el ${formatoFecha(max, false)}`
+  return { texto, fechaMin: isoFecha(min), fechaMax: isoFecha(max) }
 }
