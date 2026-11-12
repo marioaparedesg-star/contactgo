@@ -169,6 +169,17 @@ export default function CheckoutPage() {
   }
 
   const createOrder = async (data: FormData) => {
+    const itemSinColor = items.findIndex((item: any) =>
+      item.product?.tipo === 'color' && !String(item.color ?? '').trim()
+    )
+    if (itemSinColor >= 0) {
+      const item = items[itemSinColor]
+      removeByIndex(itemSinColor)
+      toast.error('Debes seleccionar el color del lente antes de continuar. Vuelve a elegirlo.')
+      router.push(`/producto/${item.product.slug || item.product.id}`)
+      return
+    }
+
     const nombreCompleto = `${data.nombre.trim()} ${data.apellido.trim()}`
     // Los pedidos del checkout web se procesan exclusivamente con tarjeta.
     const metodoPagoReal = 'tarjeta' as const
