@@ -21,11 +21,32 @@ export default function CartPage() {
   // Requiere una cuenta para revisar y continuar el carrito; el estado local se conserva durante el acceso.
   useEffect(() => {
     let active = true
-    createClient().auth.getUser().then(({ data: { user } }) => {
-      if (active && !user) window.location.replace('/cuenta?next=/cart')
+    const sb = createClient()
+    sb.auth.getUser().then(async ({ data: { user } }) => {
+      if (!active) return
+      if (!user) { window.location.replace('/cuenta?next=/cart'); return }
+      if (items.length === 0 || !user.email) return
+      const { data: perfil } = await sb.from('profiles').select('nombre,telefono').eq('id', user.id).maybeSingle()
+      if (!active) return
+      const snapshot = items.map((i: any) => ({
+        id: i.product.id, nombre: i.product.nombre,
+        precio: Number(i.precio_final ?? i.product.precio), cantidad: i.cantidad,
+        color: i.color ?? null, sph: i.sph ?? null, cyl: i.cyl ?? null,
+        axis: i.axis ?? null, add_power: i.add_power ?? null,
+        size: i.size ?? null, suscripcion: i.suscripcion ?? null,
+      }))
+      await sb.from('abandoned_carts').upsert({
+        cliente_email: user.email,
+        cliente_nombre: perfil?.nombre ?? user.user_metadata?.nombre ?? null,
+        cliente_telefono: perfil?.telefono ?? null,
+        items: JSON.stringify(snapshot),
+        total: snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0) + 200,
+        recuperado: false,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'cliente_email', ignoreDuplicates: false })
     }).catch(() => { if (active) window.location.replace('/cuenta?next=/cart') })
     return () => { active = false }
-  }, [])
+  }, [items])
 
   // ── Leer items de "Repetir pedido" al cargar ─────────────────────────────
   useEffect(() => {
