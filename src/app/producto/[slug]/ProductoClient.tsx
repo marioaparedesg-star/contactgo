@@ -664,13 +664,21 @@ export default function ProductoClient({ product, variants }: Props) {
     setPrice(Math.round(base * (1 - descSub)))
   }, [size, product.precio, sku, suscripcion, qty, isLente, isColor, modalidad, precioPlano])
 
-  const promptAccountAfterAdd = () => {
-    createClient().auth.getUser().then(({ data: { user } }) => {
-      if (!user) router.push('/cuenta?next=/cart')
-    }).catch(() => router.push('/cuenta?next=/cart'))
-  }
+  const handleAdd = async (): Promise<boolean> => {
+    // Exigir autenticación antes de añadir cualquier producto al carrito.
+    try {
+      const { data: { user } } = await createClient().auth.getUser()
+      if (!user) {
+        const currentPath = window.location.pathname + window.location.search
+        router.push(`/cuenta?next=${encodeURIComponent(currentPath)}`)
+        return false
+      }
+    } catch {
+      const currentPath = window.location.pathname + window.location.search
+      router.push(`/cuenta?next=${encodeURIComponent(currentPath)}`)
+      return false
+    }
 
-  const handleAdd = (): boolean => {
     const { ojoMode, mismaReceta,
             sph, cyl, axis, add,
             sph_od, sph_oi, cyl_od, cyl_oi, axis_od, axis_oi,
@@ -690,7 +698,6 @@ export default function ProductoClient({ product, variants }: Props) {
         suscripcion: suscripcion ?? undefined,
       })
       toast.success('¡Perfecto! Lente agregado al carrito 🎉')
-      promptAccountAfterAdd()
       return true
     }
 
@@ -707,8 +714,7 @@ export default function ProductoClient({ product, variants }: Props) {
         precio_original: precioBase,
       })
       toast.success('¡Listo! Agregado al carrito 🎉')
-      promptAccountAfterAdd()
-      return true
+        return true
     }
 
     // ── Lentes: requieren selección de ojo ────────────────────────────
