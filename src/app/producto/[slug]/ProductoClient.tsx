@@ -845,17 +845,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 )}
               </div>
 
-              {/* Thumbnails de color */}
-              {isColor && Object.keys(imagenesPorColor).length > 0 && (
-                <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
-                  {Object.entries(imagenesPorColor).map(([c, url]) => (
-                    <button key={c} onClick={() => { setImagenActual(url); setEyeFlow(prev => ({...prev, color: c})) }}
-                      className={`shrink-0 w-10 h-10 rounded-lg border-2 overflow-hidden transition-all ${eyeFlow.color === c ? 'border-primary-500' : 'border-gray-200'}`}>
-                      <img src={url} alt={c} className="w-full h-full object-contain p-0.5" />
-                    </button>
-                  ))}
-                </div>
-              )}
+
             </div>
 
             {/* BLOQUE 2: NOMBRE + PRECIO */}
@@ -951,7 +941,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     state={eyeFlow} onChange={handleColorChange}
                     soloColor={isColor && modalidad === 'plano'}
                     needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor}
-                    sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts}
+                    sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts} colorImages={imagenesPorColor}
                     sphMin={Number(product.sph_min ?? -20)} sphMax={Number(product.sph_max ?? 8)}
                     sphStep={Number(product.sph_step ?? 0.25)} sphPlano={Boolean(product.sph_plano)}
                   />
@@ -1092,16 +1082,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               )}
 
-              {isColor && Object.keys(imagenesPorColor).length > 0 && (
-                <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
-                  {Object.entries(imagenesPorColor).map(([c, url]) => (
-                    <button key={c} onClick={() => { setImagenActual(url); setEyeFlow(prev => ({...prev, color: c})) }}
-                      className={`shrink-0 w-12 h-12 rounded-xl border-2 overflow-hidden transition-all ${eyeFlow.color===c ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'}`}>
-                      <img src={url} alt={c} className="w-full h-full object-contain p-1" />
-                    </button>
-                  ))}
-                </div>
-              )}
+
               <div className="grid grid-cols-2 gap-1.5 mt-3">
                 <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
                   <span className="text-sm shrink-0">✅</span>
@@ -1174,7 +1155,7 @@ export default function ProductoClient({ product, variants }: Props) {
               {isColor && precioPlano != null && (
                 <ModalidadSelector modalidad={modalidad} onChange={setModalidad} precioPlano={precioPlano} precioGraduado={product.precio ?? 0} />
               )}
-              {isLente && !(isColor && precioPlano != null && !modalidad) && (<EyeFlowSelector state={eyeFlow} onChange={handleColorChange} soloColor={isColor && modalidad === 'plano'} needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor} sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts}
+              {isLente && !(isColor && precioPlano != null && !modalidad) && (<EyeFlowSelector state={eyeFlow} onChange={handleColorChange} soloColor={isColor && modalidad === 'plano'} needsCyl={needsToric} needsAdd={isMulti} needsColor={isColor} sphOpts={selectorOpts.sphOpts} cylOpts={selectorOpts.cylOpts} axisOpts={selectorOpts.axisOpts} addOpts={selectorOpts.addOpts} colorOpts={selectorOpts.colorOpts} colorImages={imagenesPorColor}
                     sphMin={Number(product.sph_min ?? -20)} sphMax={Number(product.sph_max ?? 8)}
                     sphStep={Number(product.sph_step ?? 0.25)} sphPlano={Boolean(product.sph_plano)} />)}
               {isSolucion && sizes.length>0 && (
