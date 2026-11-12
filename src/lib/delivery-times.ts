@@ -21,9 +21,9 @@ export interface EntregaInfo {
 }
 
 const T_24H: EntregaInfo = {
-  etiqueta: 'Entrega 24-48 h',
-  detalle:  'Entrega estimada: entre 24 y 48 horas laborables, según disponibilidad del color.',
-  dias_min: 1, dias_max: 2,
+  etiqueta: 'Entrega en 24 h',
+  detalle:  'Entrega estimada: dentro de las próximas 24 horas laborables.',
+  dias_min: 1, dias_max: 1,
   especial: false,
   icono:    '🚀',
 }
@@ -203,11 +203,12 @@ export function getRangoEntregaDesdeFecha(
   const min = sumarLaborables(info.dias_min)
   const max = sumarLaborables(info.dias_max)
   const fmt = (f: Date) => f.toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })
+  const isoLocal = (f: Date) => `${f.getFullYear()}-${String(f.getMonth()+1).padStart(2,'0')}-${String(f.getDate()).padStart(2,'0')}`
   return {
     texto: min.getMonth() === max.getMonth() && min.getFullYear() === max.getFullYear()
       ? `Entre el ${min.getDate()} y el ${fmt(max)}`
       : `Entre el ${fmt(min)} y el ${fmt(max)}`,
-    fechaMin: min.toISOString().slice(0, 10),
-    fechaMax: max.toISOString().slice(0, 10),
+    fechaMin: isoLocal(min),
+    fechaMax: isoLocal(max),
   }
 }
