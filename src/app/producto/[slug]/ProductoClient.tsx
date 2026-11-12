@@ -543,8 +543,9 @@ export default function ProductoClient({ product, variants }: Props) {
   // Excepción: tórico y multifocal son fabricación especial (siempre habilitados)
   // Lentes de color con opción plano: no se puede comprar sin elegir modalidad
   const faltaModalidad = isColor && precioPlano != null && !modalidad
-  const sinVariante = faltaModalidad || isLente && !isToric && !isMulti && sph !== '' && (
-    isColor ? (!!color && !varianteSeleccionadaTieneStock()) : !varianteSeleccionadaTieneStock()
+  const faltaColor = isColor && !color
+  const sinVariante = faltaModalidad || faltaColor || isLente && !isToric && !isMulti && sph !== '' && (
+    isColor ? !varianteSeleccionadaTieneStock() : !varianteSeleccionadaTieneStock()
   )
 
   // ── Scroll al top al montar el PDP — evita que Next.js conserve posición de scroll anterior ──
@@ -977,10 +978,10 @@ export default function ProductoClient({ product, variants }: Props) {
             {/* BLOQUE 5: CTA MOBILE (inline, arriba de la sticky bar) */}
             <div className="px-4 pb-4 space-y-2">
               <EntregaHoy especial={getEntregaInfo.especial} />
-              <button onClick={handleAdd} disabled={product.stock===0||faltaModalidad}
+              <button onClick={handleAdd} disabled={product.stock===0||sinVariante}
                 className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-teal-100/50 transition-all">
                 <ShoppingCart className="w-5 h-5" />
-                {sinVariante ? 'Elegir graduación primero' : 'Agregar al carrito'}
+                {faltaColor ? 'Selecciona un color primero' : sinVariante ? 'Completa la selección primero' : 'Agregar al carrito'}
               </button>
               <button onClick={handleBuyNow} disabled={product.stock===0||sinVariante}
                 className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-30 text-white font-bold py-3.5 rounded-2xl text-base transition-all">
@@ -1249,11 +1250,11 @@ export default function ProductoClient({ product, variants }: Props) {
                     <button onClick={handleAdd} disabled={product.stock===0||sinVariante}
                       className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-teal-100/50">
                       <ShoppingCart className="w-4 h-4" />
-                      {product.stock===0?'Sin stock':sinVariante?'Consultar':'Agregar al carrito'}
+                      {product.stock===0?'Sin stock':faltaColor?'Selecciona un color primero':sinVariante?'Consultar':'Agregar al carrito'}
                     </button>
                     <button onClick={handleBuyNow} disabled={product.stock===0||sinVariante}
                       className="w-full mt-1.5 bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-40 text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all text-sm">
-                      {product.stock===0||sinVariante?'No disponible':'Comprar ahora ⚡'}
+                      {product.stock===0?'Sin stock':faltaColor?'Selecciona un color primero':sinVariante?'Completa la selección primero':'Comprar ahora ⚡'}
                     </button>
                     <a href={`https://wa.me/18096942268?text=${encodeURIComponent(`Hola, quiero comprar ${product.nombre}. ¿Está disponible?`)}`}
                       target="_blank" rel="noopener"
