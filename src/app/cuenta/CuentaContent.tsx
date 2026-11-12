@@ -11,6 +11,7 @@ import {
   Eye, EyeOff, KeyRound, Repeat, Calendar, RefreshCw
 } from 'lucide-react'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
+import { getRangoEntregaDesdeFecha } from '@/lib/delivery-times'
 
 // ─── WebAuthn helpers ────────────────────────────────────────────────────────
 function bufferToBase64url(buf: ArrayBuffer): string {
@@ -1731,6 +1732,24 @@ export default function CuentaPage() {
                 <p className="font-black text-primary-600 text-lg">RD${(selectedPedido.total||0).toLocaleString()}</p>
               </div>
             </div>
+            {(() => {
+              const fechaPedido = selectedPedido.created_at || selectedPedido.fecha
+              const items = itemsPedido || []
+              const tipos = items.map((item: any) => {
+                const nombre = String(item.nombre || '').toLowerCase()
+                if (Number(item.cyl || 0) !== 0 || /t[oó]ric|astigmat/.test(nombre)) return 'torico'
+                if (item.add_power || /multifocal|progressive/.test(nombre)) return 'multifocal'
+                return null
+              }).filter(Boolean) as string[]
+              const tipoLargo = tipos.includes('torico') ? 'torico' : tipos.includes('multifocal') ? 'multifocal' : null
+              if (!fechaPedido || !tipoLargo) return null
+              const rango = getRangoEntregaDesdeFecha(fechaPedido, tipoLargo)
+              return <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-blue-700 mb-1">Fecha estimada de entrega</p>
+                <p className="text-lg font-bold text-slate-900">{rango.texto}</p>
+                <p className="text-xs text-slate-600 mt-1">Calculada desde la fecha de tu pedido · días laborables (lunes a viernes)</p>
+              </div>
+            })()}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
               <div className="flex items-center gap-2 mb-3">
                 <MapPin className="w-4 h-4 text-primary-600" />
