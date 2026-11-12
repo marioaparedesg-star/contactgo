@@ -13,9 +13,19 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye, Tag, Shield, Truck, RotateCcw, ChevronRight } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { createClient } from '@/lib/supabase'
 
 export default function CartPage() {
   const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+
+  // Requiere una cuenta para revisar y continuar el carrito; el estado local se conserva durante el acceso.
+  useEffect(() => {
+    let active = true
+    createClient().auth.getUser().then(({ data: { user } }) => {
+      if (active && !user) window.location.replace('/cuenta?next=/cart')
+    }).catch(() => { if (active) window.location.replace('/cuenta?next=/cart') })
+    return () => { active = false }
+  }, [])
 
   // ── Leer items de "Repetir pedido" al cargar ─────────────────────────────
   useEffect(() => {
@@ -207,6 +217,7 @@ export default function CartPage() {
                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{(item.product as any).marca}</p>
                         )}
                         <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
+                        {(item as any).color && <span className="inline-flex mt-1 items-center rounded-full bg-teal-50 border border-teal-100 px-2.5 py-1 text-[10px] font-bold text-teal-800">Color: {(item as any).color}</span>}
                         <div className="mt-1">
                           <EntregaBadge tipo={(item.product as any).tipo ?? 'esferico'} nombre={item.product.nombre} sph={item.sph} variant="cart" />
                         </div>
