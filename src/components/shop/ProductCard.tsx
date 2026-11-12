@@ -46,6 +46,9 @@ export default function ProductCard({ product, isBestseller }: Props) {
     e.preventDefault()
     if (needsRx) { window.location.href = `/producto/${(product as any).slug || product.id}`; return }
     addItem(product)
+    createClient().auth.getUser().then(({ data: { user } }) => {
+      if (!user) window.location.assign('/cuenta?next=/cart')
+    }).catch(() => window.location.assign('/cuenta?next=/cart'))
     toast.custom((t) => (
       <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-sm w-full bg-white shadow-xl rounded-2xl border border-green-100 flex items-center gap-3 p-4`}>
         <span className="text-xl flex-shrink-0">✅</span>
