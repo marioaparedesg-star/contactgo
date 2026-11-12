@@ -65,7 +65,7 @@ export default function CheckoutPage() {
   const { items, subtotal, total, clearCart, updateItem, removeByIndex, cuponCodigo, cuponDescuento, cuponEnvioGratis: cuponEnvioGratisStore, setCupon, clearCupon } = useCartStore()
   const [loading, setLoading] = useState(false)
   // Cupón: pre-poblar desde el cart-store (el usuario lo aplicó en el carrito)
-  const [cupon, setCupon] = useState(() => cuponCodigo ?? '')
+  const [cupon, setCuponInput] = useState(() => cuponCodigo ?? '')
   const [cuponAplicado, setCuponAplicado] = useState(() => !!cuponCodigo)
   const [descuento, setDescuento] = useState(() => cuponDescuento)
   const [cuponEnvioGratis, setCuponEnvioGratis] = useState(() => cuponEnvioGratisStore)
@@ -1137,7 +1137,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-black text-green-700">−RD${descuento.toLocaleString()}</span>
-                        <button onClick={() => { setCupon(''); setCuponAplicado(false); setDescuento(0); setCuponEnvioGratis(false); clearCupon() }}
+                        <button onClick={() => { setCuponInput(''); setCuponAplicado(false); setDescuento(0); setCuponEnvioGratis(false); clearCupon() }}
                           className="text-gray-400 hover:text-red-500 text-xs">✕</button>
                       </div>
                     </div>
@@ -1147,7 +1147,7 @@ export default function CheckoutPage() {
                       <div className="flex gap-2">
                         <div className="relative flex-1">
                           <Tag className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
-                          <input value={cupon} onChange={e => setCupon(e.target.value)}
+                          <input value={cupon} onChange={e => setCuponInput(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && aplicarCupon()}
                             placeholder="Código de cupón"
                             className="w-full pl-8 pr-3 py-2.5 border-2 border-gray-200 rounded-xl text-xs focus:outline-none focus:border-primary-500 transition-colors" />
