@@ -433,7 +433,7 @@ export default function CheckoutPage() {
     const sb = createClient()
     if (authMode === 'register') {
       const nombreCompletoAuth = `${authNombre.trim()} ${authApellido.trim()}`
-      const { data: signUp, error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: nombreCompletoAuth, phone: authTel, fecha_nacimiento: authFecha } } })
+      const { data: signUp, error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { emailRedirectTo: window.location.origin + '/auth/callback?next=' + encodeURIComponent('/checkout'), data: { nombre: nombreCompletoAuth, phone: authTel, fecha_nacimiento: authFecha } } })
       if (error) { setAuthMsg(error.message); setAuthLoading(false); return }
       fetch('/api/auth/welcome', {
         method: 'POST',
@@ -441,10 +441,13 @@ export default function CheckoutPage() {
         body: JSON.stringify({ email: authEmail, nombre: nombreCompletoAuth, telefono: authTel, user_id: signUp?.user?.id }),
       }).catch(() => {})
       const { data: { user } } = await sb.auth.getUser()
-      if (user) {
-        await sb.from('profiles').upsert({ id: user.id, nombre: nombreCompletoAuth, email: authEmail, telefono: authTel, role: 'customer' })
-        setValue('nombre', authNombre.trim()); setValue('apellido', authApellido.trim()); setValue('email', authEmail); if (authTel) setValue('telefono', authTel)
+      if (!user) {
+        setAuthMsg('Te enviamos un correo para confirmar tu cuenta. Confirma tu email y luego podrás continuar con tu checkout.')
+        setAuthLoading(false)
+        return
       }
+      await sb.from('profiles').upsert({ id: user.id, nombre: nombreCompletoAuth, email: authEmail, telefono: authTel, role: 'customer' })
+      setValue('nombre', authNombre.trim()); setValue('apellido', authApellido.trim()); setValue('email', authEmail); if (authTel) setValue('telefono', authTel)
     } else {
       const { error } = await sb.auth.signInWithPassword({ email: authEmail, password: authPass })
       if (error) { setAuthMsg('Email o contraseña incorrectos'); setAuthLoading(false); return }
