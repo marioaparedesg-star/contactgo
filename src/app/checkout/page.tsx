@@ -225,7 +225,11 @@ export default function CheckoutPage() {
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
     const id = await saveDisclaimer(dData, user?.id)
-    if (id) setDisclaimerId(id)
+    if (!id) {
+      toast.error('No pudimos registrar tu aceptación. Inténtalo nuevamente antes de continuar.')
+      return
+    }
+    setDisclaimerId(id)
     setDisclaimerAceptado(true)
     setShowDisclaimer(false)
     setStep(3)
