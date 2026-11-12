@@ -2,6 +2,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { CartItem, Product } from '@/types'
+import toast from 'react-hot-toast'
 
 interface AddItemOpts {
   cantidad?:       number
@@ -68,6 +69,10 @@ export const useCartStore = create<CartStore>()(
       clearCupon: () => set({ cuponCodigo: null, cuponDescuento: 0 }),
 
       addItem: (product, opts = {}) => {
+        if (product.tipo === 'color' && !opts.color) {
+          toast.error('Para agregar este lente, entra al producto y selecciona el color.')
+          return
+        }
         const {
           cantidad = 1, ojo_mode = null, misma_receta = true,
           sph, cyl, axis, add_power,
