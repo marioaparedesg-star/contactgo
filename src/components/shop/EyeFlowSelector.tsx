@@ -224,11 +224,11 @@ export default function EyeFlowSelector({
         <OptionCard
           selected={s.ojoMode === 'AMBOS'}
           onClick={() => { set({ ojoMode: 'AMBOS' }); trackEyeFlow('ambos_selected') }}
-          icon="👀" label="Ambos ojos" sublabel="Lo más común" highlight />
+          icon="2" label="Ambos ojos" sublabel="Lo más común" highlight />
         <OptionCard
           selected={s.ojoMode === 'OD' || s.ojoMode === 'OI'}
           onClick={() => { set({ ojoMode: 'OD' }); trackEyeFlow('un_ojo_selected') }}
-          icon="👁" label="Un solo ojo" sublabel="Solo uno" />
+          icon="1" label="Un solo ojo" sublabel="Solo uno" />
       </div>
     </div>
   )
@@ -266,12 +266,12 @@ export default function EyeFlowSelector({
         <OptionCard
           selected={!!s.noEstaSeguro}
           onClick={() => { set({ noEstaSeguro: true }); trackEyeFlow('no_seguro') }}
-          icon="🤔" label="No estoy seguro" />
+          icon="?" label="No estoy seguro" />
       </div>
       {/* Mensaje de ayuda cuando tienen graduaciones diferentes — común en lentes de color */}
       {s.mismaReceta === false && !s.noEstaSeguro && (
         <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700 flex items-start gap-2">
-          <span className="text-base">💡</span>
+          <span className="text-base font-bold text-blue-600">i</span>
           <span>Perfecto — ingresa la graduación de cada ojo por separado. Si no tienes tu receta a mano, <a href="https://wa.me/18096942268?text=Hola%2C+necesito+ayuda+con+mi+receta+para+lentes+de+color" target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsappHelp('pdp')} className="font-bold underline">escríbenos por WhatsApp</a> y te ayudamos.</span>
         </div>
       )}
@@ -319,7 +319,7 @@ export default function EyeFlowSelector({
       <StepLabel n={rxStepNum} label="Graduación por ojo" />
       {/* Ojo Derecho */}
       <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 space-y-3">
-        <p className="text-xs font-black text-blue-700 uppercase tracking-wide">👁 Ojo Derecho (OD)</p>
+        <p className="text-xs font-black text-blue-700 uppercase tracking-wide">Ojo Derecho (OD)</p>
         <SPHPicker label="Esfera (SPH) — Ojo Derecho" value={s.sph_od}
           onChange={v => set({ sph_od: v })}
           placeholder="Graduación ojo derecho"
@@ -337,7 +337,7 @@ export default function EyeFlowSelector({
       </div>
       {/* Ojo Izquierdo */}
       <div className="bg-green-50 border border-green-100 rounded-2xl p-4 space-y-3">
-        <p className="text-xs font-black text-green-700 uppercase tracking-wide">👁 Ojo Izquierdo (OI)</p>
+        <p className="text-xs font-black text-green-700 uppercase tracking-wide">Ojo Izquierdo (OI)</p>
         <SPHPicker label="Esfera (SPH) — Ojo Izquierdo" value={s.sph_oi}
           onChange={v => set({ sph_oi: v })}
           placeholder="Graduación ojo izquierdo"
@@ -378,7 +378,7 @@ export default function EyeFlowSelector({
           <img src={colorImages[s.color]} alt={s.color} className="w-14 h-14 rounded-lg object-cover border border-white shadow-sm" />
         ) : (
           <span className="w-14 h-14 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
-            <span className="text-2xl">👁️</span>
+            <span className="text-sm font-semibold">Color</span>
           </span>
         )}
         <span className="min-w-0 flex-1">
@@ -554,7 +554,7 @@ export default function EyeFlowSelector({
       {/* Para color: mostrar badge que confirma "Para ambos ojos" */}
       {needsColor && (
         <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-          <span className="text-sm">👀</span>
+          <span className="text-sm">2</span>
           <p className="text-xs font-bold text-green-700">Una caja para ambos ojos</p>
         </div>
       )}
