@@ -4,10 +4,10 @@
  * REGLAS DE NEGOCIO (definidas por Mario, 2026-08-03 — aplican a TODO el país,
  * ya no varían por zona ni por signo de graduación):
  *  - Esférico   → 24-48 horas
- *  - Multifocal → 2-6 días
- *  - Tórico     → 25-40 días
+ *  - Multifocal → 1-5 días laborables
+ *  - Tórico     → 25-45 días laborables
  *  - Color CON graduación (SPH ≠ 0)  → 24-72 h  (pedido especial al distribuidor)
- *  - Color SIN graduación / plano     → 24 h     (stock disponible)
+ *  - Color SIN graduación / plano     → 24-48 h
  *  - Solución / Gota                  → 24 h
  */
 
@@ -21,9 +21,9 @@ export interface EntregaInfo {
 }
 
 const T_24H: EntregaInfo = {
-  etiqueta: 'Entrega en 24 h',
-  detalle:  'Entrega estimada: dentro de las próximas 24 horas laborables.',
-  dias_min: 1, dias_max: 1,
+  etiqueta: 'Entrega 24-48 h',
+  detalle:  'Entrega estimada: entre 24 y 48 horas laborables, según disponibilidad del color.',
+  dias_min: 1, dias_max: 2,
   especial: false,
   icono:    '🚀',
 }
@@ -45,17 +45,17 @@ const T_ESFERICO: EntregaInfo = {
 }
 
 const T_MULTIFOCAL: EntregaInfo = {
-  etiqueta: 'Entrega 2-6 días',
-  detalle:  'Entrega estimada: entre 2 y 6 días laborables, en toda la República Dominicana.',
-  dias_min: 2, dias_max: 6,
+  etiqueta: 'Entrega 1-5 días',
+  detalle:  'Entrega estimada: entre 1 y 5 días laborables, en toda la República Dominicana.',
+  dias_min: 1, dias_max: 5,
   especial: true,
   icono:    '📦',
 }
 
 const T_TORICO: EntregaInfo = {
-  etiqueta: 'Fabricación especial · 25-40 días',
-  detalle:  'Lente tórico fabricado a medida. Entrega estimada de 25 a 40 días laborables, en toda la República Dominicana.',
-  dias_min: 25, dias_max: 40,
+  etiqueta: 'Fabricación especial · 25-45 días',
+  detalle:  'Lente tórico fabricado a medida. Entrega estimada de 25 a 45 días laborables (lunes a viernes), en toda la República Dominicana.',
+  dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',
 }
@@ -80,7 +80,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
     // Color CON graduación (positivo o negativo) → 24-72h
     // Color PLANO (0.00) o sin seleccionar → 24h
     if (sphNum != null && sphNum !== 0) return T_24_72H
-    return T_24H
+    return T_ESFERICO
   }
 
   if (tipo === 'solucion')   return T_24H
@@ -97,7 +97,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
 
 /**
  * Calcula la fecha exacta de entrega en texto legible.
- * Excluye únicamente los domingos; los sábados cuentan como día de entrega.
+ * Cuenta únicamente días laborables de lunes a viernes.
  */
 export function getFechaEntrega(
   tipo: string,
@@ -116,7 +116,7 @@ export function getFechaEntrega(
     while (added < dias) {
       d.setDate(d.getDate() + 1)
       const dow = d.getDay()
-      if (dow !== 0) added++
+      if (dow !== 0 && dow !== 6) added++
     }
     return d
   }
@@ -172,7 +172,42 @@ export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | num
   while (added < info.dias_max) {
     d.setDate(d.getDate() + 1)
     const dow = d.getDay()
-    if (dow !== 0) added++
+    if (dow !== 0 && dow !== 6) added++
   }
   return d.toISOString().split('T')[0]
+}
+
+
+/**
+ * Calcula un rango fijo a partir de la fecha original de creación del pedido.
+ * No utiliza la fecha actual: consultar el pedido días después no desplaza la promesa.
+ * Los días contabilizados son de lunes a viernes.
+ */
+export function getRangoEntregaDesdeFecha(
+  fechaCreacion: string | Date,
+  tipo: string
+): { texto: string; fechaMin: string; fechaMax: string } {
+  const info = getEntrega(tipo)
+  const base = new Date(fechaCreacion)
+  const inicio = new Date(base.getFullYear(), base.getMonth(), base.getDate())
+  const sumarLaborables = (dias: number) => {
+    const fecha = new Date(inicio)
+    let contados = 0
+    while (contados < dias) {
+      fecha.setDate(fecha.getDate() + 1)
+      const dia = fecha.getDay()
+      if (dia !== 0 && dia !== 6) contados++
+    }
+    return fecha
+  }
+  const min = sumarLaborables(info.dias_min)
+  const max = sumarLaborables(info.dias_max)
+  const fmt = (f: Date) => f.toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })
+  return {
+    texto: min.getMonth() === max.getMonth() && min.getFullYear() === max.getFullYear()
+      ? `Entre el ${min.getDate()} y el ${fmt(max)}`
+      : `Entre el ${fmt(min)} y el ${fmt(max)}`,
+    fechaMin: min.toISOString().slice(0, 10),
+    fechaMax: max.toISOString().slice(0, 10),
+  }
 }
