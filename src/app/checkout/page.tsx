@@ -263,7 +263,7 @@ export default function CheckoutPage() {
       const { data: order, error } = await sb.from('orders').insert({
         user_id: user?.id ?? null,
         cliente_nombre: nombreCompleto, cliente_email: data.email, cliente_telefono: data.telefono,
-        direccion_texto: `${data.direccion}, ${data.ciudad === 'Otra ciudad' && data.ciudadPersonalizada ? data.ciudadPersonalizada : data.ciudad}`,
+        direccion_texto: `${data.direccion}, ${data.ciudad === 'Otra ciudad' && data.ciudadPersonalizada ? data.ciudadPersonalizada : data.ciudad}${savedAddresses.find(a => a.id === selectedAddrId)?.referencias ? ` · Referencia: ${savedAddresses.find(a => a.id === selectedAddrId)?.referencias}` : ''}`,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
         descuento, metodo_pago: metodoPagoReal, pago_estado: 'pendiente',
         numero_orden: orderNum,
@@ -525,11 +525,20 @@ export default function CheckoutPage() {
         if (u && vals.direccion) {
           const nombreCompletoVals = vals.nombre && vals.apellido ? `${vals.nombre.trim()} ${vals.apellido.trim()}` : (vals.nombre ?? null)
           const ciudadFinal = vals.ciudad === 'Otra ciudad' && (vals as any).ciudadPersonalizada ? (vals as any).ciudadPersonalizada : vals.ciudad
-          const { data: existing } = await sb2.from('addresses').select('id').eq('user_id', u.id).eq('principal', true).maybeSingle()
-          if (!existing) {
-            sb2.from('addresses').insert({ user_id: u.id, nombre: nombreCompletoVals, direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null, principal: true }).then(() => {})
+          if (selectedAddrId) {
+            // Actualiza solo la dirección elegida; nunca sobrescribe por accidente
+            // la dirección principal cuando el cliente selecciona otra guardada.
+            await sb2.from('addresses').update({
+              direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null,
+            }).eq('id', selectedAddrId).eq('user_id', u.id)
           } else {
-            sb2.from('addresses').update({ direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null }).eq('id', existing.id).then(() => {})
+            const { data: existing } = await sb2.from('addresses').select('id').eq('user_id', u.id).eq('principal', true).maybeSingle()
+            if (!existing) {
+              await sb2.from('addresses').insert({
+                user_id: u.id, nombre: nombreCompletoVals, direccion: vals.direccion,
+                ciudad: ciudadFinal, telefono: vals.telefono ?? null, principal: true,
+              })
+            }
           }
         }
       } catch { /* silencioso */ }
