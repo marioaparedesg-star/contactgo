@@ -56,11 +56,7 @@ export default function EnviosPage() {
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               {[
                 { zona: 'Gran Santo Domingo (provincia Santo Domingo y Distrito Nacional)', costo: 'RD$250' },
-                { zona: 'Interior del país (31 provincias restantes)', costo: 'RD$350' },
-                { zona: 'La Romana / San Pedro de Macorís', costo: 'RD$350' },
-                { zona: 'Punta Cana / Bávaro (La Altagracia)', costo: 'RD$350' },
-                { zona: 'Puerto Plata', costo: 'RD$350' },
-                { zona: 'Otras provincias', costo: 'RD$350' },
+                { zona: 'Interior del país (30 provincias restantes)', costo: 'RD$350' },
               ].map((z, i) => (
                 <div key={i} className={`flex items-center justify-between px-5 py-4 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                   <p className="font-semibold text-gray-900 text-sm">{z.zona}</p>
