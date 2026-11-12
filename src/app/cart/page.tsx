@@ -148,7 +148,7 @@ export default function CartPage() {
         return
       }
       setDescuento(result.descuento)
-      setCupon(code, result.descuento)  // persistir en store → checkout lo leerá
+      setCupon(code, result.descuento, !!result.envio_gratis)  // conservar descuento y envío gratis al pasar al checkout
       setCuponOk(true)
       setCuponErr('')
       toast.success(result.mensaje ?? 'Cupón aplicado ✓')
