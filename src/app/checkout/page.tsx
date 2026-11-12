@@ -25,13 +25,16 @@ const schema = z.object({
                             'Ese no parece un número de teléfono válido — debe tener al menos 10 dígitos'
                           ),
   direccion:            z.string().min(5, 'Dirección requerida'),
-  ciudad:               z.string().min(2, 'Ciudad requerida'),
+  ciudad:               z.string().min(2, 'Provincia requerida'),
   ciudadPersonalizada:  z.string().optional(),
+
 })
 type FormData = z.infer<typeof schema>
 
-const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata',
-  'Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad']
+const CIUDADES = ["Azua","Baoruco","Barahona","Dajabón","Distrito Nacional","Duarte","El Seibo","Elías Piña","Espaillat","Hato Mayor","Hermanas Mirabal","Independencia","La Altagracia","La Romana","La Vega","María Trinidad Sánchez","Monseñor Nouel","Monte Cristi","Monte Plata","Pedernales","Peravia","Puerto Plata","Samaná","San Cristóbal","San José de Ocoa","San Juan","San Pedro de Macorís","Sánchez Ramírez","Santiago","Santiago Rodríguez","Santo Domingo","Valverde"] as const
+
+const calcularEnvio = (provincia?: string) =>
+  provincia === 'Santo Domingo' || provincia === 'Distrito Nacional' ? 250 : 350
 
 // AZUL disponible solo cuando hay AUTH_KEY configurada
 const AZUL_READY = Boolean(process.env.NEXT_PUBLIC_AZUL_READY)
@@ -42,10 +45,10 @@ export default function CheckoutPage() {
     try {
       const cartItems = useCartStore.getState().items
       if (cartItems && cartItems.length > 0) {
-        const value = cartItems.reduce((s: number, i: any) => s + i.precio * (i.quantity ?? 1), 0)
+        const value = cartItems.reduce((s: number, i: any) => s + Number(i.precio_final ?? i.product?.precio ?? 0) * (i.cantidad ?? 1), 0)
         const checkoutEventId = generateEventId()
         trackEcommerce('begin_checkout', {
-          items: cartItems.map((i: any) => ({ item_id: i.id, item_name: i.nombre, item_brand: i.marca ?? '', price: i.precio, quantity: i.quantity ?? 1 })),
+          items: cartItems.map((i: any) => ({ item_id: i.product?.id, item_name: i.product?.nombre, item_brand: i.product?.marca ?? '', price: Number(i.precio_final ?? i.product?.precio ?? 0), quantity: i.cantidad ?? 1 })),
           value
         }, checkoutEventId)
         // CAPI server-side — mismo eventId que el Pixel para deduplicación
@@ -59,13 +62,13 @@ export default function CheckoutPage() {
     } catch {}
   }, [])
   const router = useRouter()
-  const { items, subtotal, total, clearCart, updateItem, removeByIndex, cuponCodigo, cuponDescuento, clearCupon } = useCartStore()
+  const { items, subtotal, total, clearCart, updateItem, removeByIndex, cuponCodigo, cuponDescuento, cuponEnvioGratis: cuponEnvioGratisStore, setCupon, clearCupon } = useCartStore()
   const [loading, setLoading] = useState(false)
   // Cupón: pre-poblar desde el cart-store (el usuario lo aplicó en el carrito)
   const [cupon, setCupon] = useState(() => cuponCodigo ?? '')
   const [cuponAplicado, setCuponAplicado] = useState(() => !!cuponCodigo)
   const [descuento, setDescuento] = useState(() => cuponDescuento)
-  const [cuponEnvioGratis, setCuponEnvioGratis] = useState(false)
+  const [cuponEnvioGratis, setCuponEnvioGratis] = useState(() => cuponEnvioGratisStore)
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
   const [showDisclaimer, setShowDisclaimer] = useState(false)
@@ -91,13 +94,13 @@ export default function CheckoutPage() {
   // Los cobros en efectivo siguen disponibles en el panel administrativo.
 
   const sub = subtotal()
-  const envioGratis = sub >= 8000 || cuponEnvioGratis
-  const envio = envioGratis ? 0 : 200
-  const totalFinal = sub + envio - descuento
-
   const { register, handleSubmit, getValues, setValue, trigger, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema)
   })
+  const provinciaSeleccionada = watch('ciudad')
+  const envioGratis = sub >= 8000 || cuponEnvioGratis
+  const envio = envioGratis ? 0 : calcularEnvio(provinciaSeleccionada)
+  const totalFinal = sub + envio - descuento
 
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
@@ -195,11 +198,13 @@ export default function CheckoutPage() {
         setCuponAplicado(false)
         setDescuento(0)
         setCuponEnvioGratis(false)
+        clearCupon()
         return
       }
       setDescuento(result.descuento)
       setCuponAplicado(true)
       setCuponEnvioGratis(!!result.envio_gratis)
+      setCupon(code, Number(result.descuento ?? 0), !!result.envio_gratis)
       toast.success(result.mensaje ?? 'Cupón aplicado ✓')
     } catch {
       toast.error('Error al validar cupón')
@@ -263,7 +268,7 @@ export default function CheckoutPage() {
       const { data: order, error } = await sb.from('orders').insert({
         user_id: user?.id ?? null,
         cliente_nombre: nombreCompleto, cliente_email: data.email, cliente_telefono: data.telefono,
-        direccion_texto: `${data.direccion}, ${data.ciudad === 'Otra ciudad' && data.ciudadPersonalizada ? data.ciudadPersonalizada : data.ciudad}${savedAddresses.find(a => a.id === selectedAddrId)?.referencias ? ` · Referencia: ${savedAddresses.find(a => a.id === selectedAddrId)?.referencias}` : ''}`,
+        direccion_texto: `${data.direccion}, ${data.ciudad}${savedAddresses.find(a => a.id === selectedAddrId)?.referencias ? ` · Referencia: ${savedAddresses.find(a => a.id === selectedAddrId)?.referencias}` : ''}`,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
         descuento, metodo_pago: metodoPagoReal, pago_estado: 'pendiente',
         numero_orden: orderNum,
@@ -841,13 +846,8 @@ export default function CheckoutPage() {
                           <option value="">Selecciona tu ciudad</option>
                           {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
-                        {watch('ciudad') === 'Otra ciudad' && (
-                          <input
-                            {...register('ciudadPersonalizada')}
-                            placeholder="Escribe tu ciudad *"
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors mt-2"
-                          />
-                        )}
+                        {errors.ciudad && <p className="text-red-500 text-xs mt-1">{errors.ciudad.message}</p>}
+                        <p className="text-xs text-gray-500 mt-1">Punta Cana se selecciona dentro de La Altagracia. El envío se calcula según la provincia.</p>
                         {errors.ciudad && <p className="text-red-500 text-xs">⚠️ {errors.ciudad.message}</p>}
                         {isLoggedIn && (
                           <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
@@ -861,7 +861,7 @@ export default function CheckoutPage() {
                     {items.some(i => i.product.tipo === 'torico') && (
                       <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-2 items-start">
                         <span className="text-amber-500 shrink-0">⏱️</span>
-                        <p className="text-xs text-amber-700 leading-relaxed"><strong>Tu pedido incluye lentes tóricos.</strong> Tiempo de fabricación: 25-40 días.</p>
+                        <p className="text-xs text-amber-700 leading-relaxed"><strong>Tu pedido incluye lentes tóricos.</strong> Tiempo de fabricación: 25-45 días laborables (lunes a viernes).</p>
                       </div>
                     )}
 
