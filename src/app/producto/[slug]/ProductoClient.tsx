@@ -808,9 +808,9 @@ export default function ProductoClient({ product, variants }: Props) {
     return true
   }
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     trackBuyNow(product.id, product.nombre, price)
-    if (handleAdd()) router.push('/checkout')
+    if (await handleAdd()) router.push('/checkout')
   }
 
   return (
