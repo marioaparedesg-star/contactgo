@@ -31,6 +31,24 @@ export async function GET(req: NextRequest) {
     }
   )
 
+  
+  // Crear el perfil solo si aún no existe (no altera perfiles de clientes actuales).
+  const syncNewCustomerProfile = async () => {
+    const { data: { user } } = await sb.auth.getUser()
+    if (!user) return
+    const { data: existing } = await sb.from('profiles').select('id').eq('id', user.id).maybeSingle()
+    if (existing) return
+    const meta = user.user_metadata ?? {}
+    await sb.from('profiles').insert({
+      id: user.id,
+      email: user.email,
+      nombre: typeof meta.nombre === 'string' ? meta.nombre : null,
+      telefono: typeof meta.telefono === 'string' ? meta.telefono : (typeof meta.phone === 'string' ? meta.phone : null),
+      fecha_nacimiento: typeof meta.fecha_nacimiento === 'string' ? meta.fecha_nacimiento : null,
+      role: 'customer',
+    })
+  }
+
   // CASO 1: token_hash (nuestros emails bonitos via admin.generateLink)
   if (token_hash && type) {
     const { error } = await sb.auth.verifyOtp({
@@ -38,6 +56,7 @@ export async function GET(req: NextRequest) {
       type: type as any,
     })
     if (!error) {
+      await syncNewCustomerProfile()
       return NextResponse.redirect(`${origin}${next}`)
     }
     console.error('verifyOtp error:', error.message)
@@ -50,6 +69,7 @@ export async function GET(req: NextRequest) {
   if (code) {
     const { error } = await sb.auth.exchangeCodeForSession(code)
     if (!error) {
+      await syncNewCustomerProfile()
       return NextResponse.redirect(`${origin}${next}`)
     }
     console.error('exchangeCodeForSession error:', error.message)

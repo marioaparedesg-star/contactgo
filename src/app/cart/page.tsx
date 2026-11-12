@@ -13,9 +13,40 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Eye, Tag, Shield, Truck, RotateCcw, ChevronRight } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { createClient } from '@/lib/supabase'
 
 export default function CartPage() {
   const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+
+  // Requiere una cuenta para revisar y continuar el carrito; el estado local se conserva durante el acceso.
+  useEffect(() => {
+    let active = true
+    const sb = createClient()
+    sb.auth.getUser().then(async ({ data: { user } }) => {
+      if (!active) return
+      if (!user) { window.location.replace('/cuenta?next=/cart'); return }
+      if (items.length === 0 || !user.email) return
+      const { data: perfil } = await sb.from('profiles').select('nombre,telefono').eq('id', user.id).maybeSingle()
+      if (!active) return
+      const snapshot = items.map((i: any) => ({
+        id: i.product.id, nombre: i.product.nombre,
+        precio: Number(i.precio_final ?? i.product.precio), cantidad: i.cantidad,
+        color: i.color ?? null, sph: i.sph ?? null, cyl: i.cyl ?? null,
+        axis: i.axis ?? null, add_power: i.add_power ?? null,
+        size: i.size ?? null, suscripcion: i.suscripcion ?? null,
+      }))
+      await sb.from('abandoned_carts').upsert({
+        cliente_email: user.email,
+        cliente_nombre: perfil?.nombre ?? user.user_metadata?.nombre ?? null,
+        cliente_telefono: perfil?.telefono ?? null,
+        items: JSON.stringify(snapshot),
+        total: snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0) + 200,
+        recuperado: false,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'cliente_email', ignoreDuplicates: false })
+    }).catch(() => { if (active) window.location.replace('/cuenta?next=/cart') })
+    return () => { active = false }
+  }, [items])
 
   // ── Leer items de "Repetir pedido" al cargar ─────────────────────────────
   useEffect(() => {
@@ -207,6 +238,7 @@ export default function CartPage() {
                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{(item.product as any).marca}</p>
                         )}
                         <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
+                        {(item as any).color && <span className="inline-flex mt-1 items-center rounded-full bg-teal-50 border border-teal-100 px-2.5 py-1 text-[10px] font-bold text-teal-800">Color: {(item as any).color}</span>}
                         <div className="mt-1">
                           <EntregaBadge tipo={(item.product as any).tipo ?? 'esferico'} nombre={item.product.nombre} sph={item.sph} variant="cart" />
                         </div>

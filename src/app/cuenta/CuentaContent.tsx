@@ -122,6 +122,8 @@ export default function CuentaPage() {
   const [email, setEmail]     = useState('')
   const [pass, setPass]       = useState('')
   const [nombre, setNombre]   = useState('')
+  const [apellido, setApellido] = useState('')
+  const [fechaNacimiento, setFechaNacimiento] = useState('')
   const [telefono, setTelefono] = useState('')
   const [loading, setLoading] = useState(false)
   const [recetas, setRecetas] = useState<any[]>([])
@@ -477,7 +479,8 @@ export default function CuentaPage() {
     const sb = createClient()
     const { error } = await sb.auth.signInWithPassword({ email, password: pass })
     if (error) { setMsg('Email o contraseña incorrectos'); setLoading(false); return }
-    window.location.reload()
+    const next = new URLSearchParams(window.location.search).get('next')
+    window.location.href = next?.startsWith('/') && !next.startsWith('//') ? next : '/cuenta'
   }
 
   const loginConPasskey = async () => {
@@ -508,18 +511,28 @@ export default function CuentaPage() {
       setLoading(false)
       return
     }
+    if (nombre.trim().length < 2 || apellido.trim().length < 2) { setMsg('Completa tu nombre y apellido.'); setLoading(false); return }
+    if (!fechaNacimiento) { setMsg('Ingresa tu fecha de nacimiento.'); setLoading(false); return }
+    const edad = (Date.now() - new Date(fechaNacimiento + 'T00:00:00').getTime()) / (365.25 * 24 * 60 * 60 * 1000)
+    if (!Number.isFinite(edad) || edad < 18) { setMsg('Debes tener 18 años o más para crear una cuenta.'); setLoading(false); return }
+    const nombreCompleto = nombre.trim() + ' ' + apellido.trim()
+    const nextPath = new URLSearchParams(window.location.search).get('next') || '/cuenta'
     const sb = createClient()
-    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { nombre, telefono } } })
+    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: window.location.origin + '/auth/callback?next=' + encodeURIComponent(nextPath), data: { nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento } } })
     if (error) { setMsg(error.message); setLoading(false); return }
     if (data.user) {
-      await sb.from('profiles').upsert({ id: data.user.id, email, nombre, telefono, role: 'customer' })
+      await sb.from('profiles').upsert({ id: data.user.id, email, nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, role: 'customer' })
       // Evento estándar para GTM (X Ads "GTM Sign up", GA4, y cualquier otra
       // plataforma que escuche este nombre de evento en el dataLayer)
       if (typeof window !== 'undefined') {
         window.dataLayer = window.dataLayer || []
         window.dataLayer.push({ event: 'sign_up', method: 'email' })
       }
-      window.location.reload()
+      if (data.session) {
+        window.location.href = nextPath.startsWith('/') && !nextPath.startsWith('//') ? nextPath : '/cuenta'
+      } else {
+        setMsg('Te enviamos un correo para confirmar tu cuenta. Confirma tu email y luego podrás continuar con tu carrito.')
+      }
     }
     setLoading(false)
   }
@@ -557,20 +570,9 @@ export default function CuentaPage() {
           <h1 className="text-2xl font-bold text-gray-900">Mi cuenta</h1>
         </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          {/* Social login */}
-          <div className="space-y-2 mb-5">
-            <button onClick={async () => {
-              const sb = createClient()
-              await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/cuenta' } })
-            }} className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3.5 rounded-xl transition-colors text-sm shadow-sm">
-              <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-              Continuar con Google
-            </button>
-
-          </div>
           <div className="flex items-center gap-3 mb-5">
             <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400 font-medium">o con email</span>
+            <span className="text-xs text-gray-400 font-medium">Accede con tu correo</span>
             <div className="flex-1 h-px bg-gray-200" />
           </div>
           <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
@@ -588,11 +590,20 @@ export default function CuentaPage() {
 
           <form onSubmit={modo==='login' ? login : registro} className="space-y-4">
             {modo==='registro' && (<>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Nombre</label>
+                  <input type="text" autoComplete="given-name" value={nombre} onChange={e => setNombre(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Tu nombre" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Apellido</label>
+                  <input type="text" autoComplete="family-name" value={apellido} onChange={e => setApellido(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Tu apellido" />
+                </div>
+              </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Nombre</label>
-                <input type="text" autoComplete="name" value={nombre} onChange={e => setNombre(e.target.value)} required
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
-                  placeholder="Tu nombre" />
+                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Fecha de nacimiento</label>
+                <input type="date" value={fechaNacimiento} onChange={e => setFechaNacimiento(e.target.value)} max={new Date(Date.now()-18*365.25*24*60*60*1000).toISOString().split('T')[0]} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400" />
+                <p className="text-[11px] text-gray-400 mt-1">Registro disponible para mayores de 18 años.</p>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Teléfono <span className="text-red-500">*</span></label>

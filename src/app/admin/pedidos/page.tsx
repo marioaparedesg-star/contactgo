@@ -163,16 +163,11 @@ export default function PedidosPage() {
     })
     if (!upd.ok) { toast.error('No se pudo actualizar el estado'); return }
 
-    // 2. Registrar en order_status_history (dispara trigger → order_events → cliente)
-    const { data: { user } } = await sb.auth.getUser()
-    await sb.from('order_status_history').insert({
-      order_id: orderId,
-      estado,
-      nota: nota ?? null,
-      changed_by: user?.id ?? null,
-    })
+    // El trigger de base de datos trg_sync_order_event registra automáticamente
+    // order_status_history y order_events al cambiar orders.estado. No insertar
+    // aquí una segunda fila: duplicaría eventos e historial del mismo cambio.
 
-    // 3. Actualizar UI local
+    // 2. Actualizar UI local
     setPedidos(ps=>ps.map(p=>p.id===orderId?{...p,estado}:p))
     if (selected?.id===orderId) setSelected((s:any)=>({...s,estado}))
     toast.success(`✅ Estado actualizado → ${estado}`)

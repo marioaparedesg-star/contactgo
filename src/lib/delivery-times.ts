@@ -97,7 +97,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
 
 /**
  * Calcula la fecha exacta de entrega en texto legible.
- * Saltea sábados y domingos.
+ * Excluye únicamente los domingos; los sábados cuentan como día de entrega.
  */
 export function getFechaEntrega(
   tipo: string,
@@ -116,7 +116,7 @@ export function getFechaEntrega(
     while (added < dias) {
       d.setDate(d.getDate() + 1)
       const dow = d.getDay()
-      if (dow !== 0 && dow !== 6) added++
+      if (dow !== 0) added++
     }
     return d
   }
@@ -172,7 +172,7 @@ export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | num
   while (added < info.dias_max) {
     d.setDate(d.getDate() + 1)
     const dow = d.getDay()
-    if (dow !== 0 && dow !== 6) added++
+    if (dow !== 0) added++
   }
   return d.toISOString().split('T')[0]
 }
