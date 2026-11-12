@@ -985,7 +985,7 @@ export default function ProductoClient({ product, variants }: Props) {
               </button>
               <button onClick={handleBuyNow} disabled={product.stock===0||sinVariante}
                 className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-30 text-white font-bold py-3.5 rounded-2xl text-base transition-all">
-                Comprar ahora ⚡
+                {product.stock===0?'Sin stock':faltaColor?'Selecciona un color primero':sinVariante?'Completa la selección primero':'Comprar ahora ⚡'}
               </button>
               <a href={`https://wa.me/18096942268?text=${encodeURIComponent(`Hola, quiero info sobre ${product.nombre}`)}`}
                 target="_blank" rel="noopener"
