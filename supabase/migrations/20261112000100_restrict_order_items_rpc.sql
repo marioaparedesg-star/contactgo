@@ -94,6 +94,8 @@ BEGIN
     ELSE 350
   END;
 
+  IF v_subtotal_real >= 8000 THEN v_envio_real := 0; END IF;
+
   IF v_order.cupon_aplicado IS NOT NULL THEN
     SELECT valido, descuento, envio_gratis
     INTO v_cupon_valido, v_cupon_descuento, v_cupon_envio_gratis
