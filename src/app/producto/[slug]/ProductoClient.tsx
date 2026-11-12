@@ -1366,7 +1366,7 @@ export default function ProductoClient({ product, variants }: Props) {
           <div className="hidden lg:block px-6 xl:px-8 pb-8 mt-6 space-y-6">
             <div className="grid grid-cols-4 gap-3 bg-gray-50 rounded-2xl p-4 border border-gray-100">
               {([
-                {icon:'🚚',t:'Envío gratis',d:'Desde RD$2,500', azul:false},
+                {icon:'🚚',t:'Envío gratis',d:'Desde RD$8,000', azul:false},
                 {icon:null,t:'Pago AZUL',d:'100% protegido', azul:true},
                 {icon:'↩️',t:'7 días dev.',d:'Sin preguntas', azul:false},
                 {icon:'✅',t:'Originales',d:'Dist. oficial', azul:false},
