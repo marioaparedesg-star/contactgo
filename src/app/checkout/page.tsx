@@ -268,6 +268,7 @@ export default function CheckoutPage() {
       const { data: order, error } = await sb.from('orders').insert({
         user_id: user?.id ?? null,
         cliente_nombre: nombreCompleto, cliente_email: data.email, cliente_telefono: data.telefono,
+        ciudad: data.ciudad,
         direccion_texto: `${data.direccion}, ${data.ciudad}${savedAddresses.find(a => a.id === selectedAddrId)?.referencias ? ` · Referencia: ${savedAddresses.find(a => a.id === selectedAddrId)?.referencias}` : ''}`,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
         descuento, metodo_pago: metodoPagoReal, pago_estado: 'pendiente',
