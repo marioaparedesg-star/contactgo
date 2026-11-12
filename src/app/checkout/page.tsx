@@ -169,6 +169,17 @@ export default function CheckoutPage() {
   }
 
   const createOrder = async (data: FormData) => {
+    const itemSinColor = items.findIndex((item: any) =>
+      item.product?.tipo === 'color' && !String(item.color ?? '').trim()
+    )
+    if (itemSinColor >= 0) {
+      const item = items[itemSinColor]
+      removeByIndex(itemSinColor)
+      toast.error('Debes seleccionar el color del lente antes de continuar. Vuelve a elegirlo.')
+      router.push(`/producto/${item.product.slug || item.product.id}`)
+      return
+    }
+
     const nombreCompleto = `${data.nombre.trim()} ${data.apellido.trim()}`
     // Los pedidos del checkout web se procesan exclusivamente con tarjeta.
     const metodoPagoReal = 'tarjeta' as const
@@ -203,11 +214,6 @@ export default function CheckoutPage() {
         // Cookies de atribución Meta — para deduplicación CAPI server-side
         ...(fbp ? { fbp } : {}),
         ...(fbc ? { fbc } : {}),
-        // Coordenadas de la dirección seleccionada
-        ...(() => {
-          const sel = savedAddresses.find((a:any) => a.id === selectedAddrId)
-          return sel?.lat ? { lat: sel.lat, lng: sel.lng } : {}
-        })(),
       }).select().single()
 
       if (error || !order) {
@@ -699,7 +705,6 @@ export default function CheckoutPage() {
                                   <p className="text-sm font-bold text-gray-900 flex items-center gap-2">
                                     {addr.etiqueta ?? 'Dirección'}
                                     {addr.principal && <span className="text-[10px] font-semibold text-primary-600 bg-teal-50 px-1.5 py-0.5 rounded-full">Principal</span>}
-                                    {addr.lat && <span className="text-[10px] text-green-600">📍 Pin</span>}
                                   </p>
                                   <p className="text-xs text-gray-600 truncate">{addr.direccion}</p>
                                   <p className="text-xs text-gray-400">{addr.ciudad}</p>
@@ -707,17 +712,7 @@ export default function CheckoutPage() {
                                 </div>
                                 {isSelected && <div className="w-5 h-5 bg-teal-500 rounded-full flex items-center justify-center shrink-0"><svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/></svg></div>}
                               </div>
-                              {/* Mini mapa preview si tiene pin */}
-                              {isSelected && addr.lat && addr.lng && process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY && (
-                                <div className="mt-2 rounded-lg overflow-hidden">
-                                  <img
-                                    src={`https://maps.googleapis.com/maps/api/staticmap?center=${addr.lat},${addr.lng}&zoom=16&size=600x100&scale=2&markers=color:green%7C${addr.lat},${addr.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`}
-                                    alt="Mapa de ubicación de entrega" className="w-full object-cover" style={{height:80}}
-                                    loading="lazy"
-                                    decoding="async"
-                                  />
-                                </div>
-                              )}
+
                             </button>
                           )
                         })}

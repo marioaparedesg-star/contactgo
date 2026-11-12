@@ -26,7 +26,7 @@ const TIPO_BADGE: Record<string, { label: string; color: string }> = {
 
 export default function ProductCard({ product, isBestseller }: Props) {
   const addItem = useCartStore(s => s.addItem)
-  const needsRx = ['esferico','torico','multifocal'].includes(product.tipo ?? '')
+  const needsRx = ['esferico','torico','multifocal','color'].includes(product.tipo ?? '')
   const [isFav, setIsFav] = React.useState(false)
 
   const toggleFav = async (e: React.MouseEvent) => {
