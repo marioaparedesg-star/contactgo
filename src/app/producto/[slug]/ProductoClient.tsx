@@ -783,7 +783,6 @@ export default function ProductoClient({ product, variants }: Props) {
 
     const ojoMsg = ojoMode === 'AMBOS' ? 'para ambos ojos' : ojoMode === 'OD' ? '— ojo derecho' : '— ojo izquierdo'
     toast.success(`¡Listo! ${ojoMsg} agregado al carrito 🛍️`)
-    promptAccountAfterAdd()
     const addToCartEventId = generateEventId()
     trackEcommerce('add_to_cart', {
       items: [{ item_id: product.id, item_name: product.nombre,
