@@ -56,6 +56,7 @@ interface Props {
   axisOpts:    (number|string)[]
   addOpts:     string[]
   colorOpts:   string[]
+  colorImages?: Record<string, string>
   // Rx prellenada desde calculadora/cuenta
   prefilledRx?: {
     sph_od?: number|null; sph_oi?: number|null
@@ -139,11 +140,12 @@ function SelectField({
 // ── Componente principal ──────────────────────────────────────────────────
 export default function EyeFlowSelector({
   state, onChange, needsCyl, needsAdd, needsColor, soloColor = false,
-  sphOpts, cylOpts, axisOpts, addOpts, colorOpts, prefilledRx,
+  sphOpts, cylOpts, axisOpts, addOpts, colorOpts, colorImages = {}, prefilledRx,
   sphMin = -20, sphMax = 8, sphStep = 0.25, sphPlano = false
 }: Props) {
   const s = state
   const set = (patch: Partial<EyeFlowState>) => onChange({ ...s, ...patch })
+  const [colorPickerOpen, setColorPickerOpen] = useState(false)
 
   // Pre-llenar desde calculadora/cuenta si disponible
   useEffect(() => {
@@ -361,20 +363,77 @@ export default function EyeFlowSelector({
 
   // ── SELECTOR DE COLOR ─────────────────────────────────────────────────
   const colorStep = needsColor ? (
-    <div className="space-y-2.5">
+    <div className="space-y-2">
       <StepLabel n={rxStepNum + 1} label="Color del lente" />
-      <div className="grid grid-cols-3 gap-2">
-        {colorOpts.map(col => (
-          <button key={col} type="button" onClick={() => set({ color: col })}
-            className={`py-2.5 px-2 rounded-xl border-2 text-xs font-bold transition-all ${
-              s.color === col
-                ? 'border-primary-600 bg-teal-50 text-primary-700'
-                : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
-            }`}>
-            {col}
-          </button>
-        ))}
-      </div>
+      <button
+        type="button"
+        onClick={() => setColorPickerOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={colorPickerOpen}
+        className={`w-full flex items-center gap-3 rounded-xl border-2 p-3 text-left transition-all ${
+          s.color ? 'border-primary-500 bg-teal-50' : 'border-gray-200 bg-white hover:border-primary-300'
+        }`}
+      >
+        {s.color && colorImages[s.color] ? (
+          <img src={colorImages[s.color]} alt={s.color} className="w-14 h-14 rounded-lg object-cover border border-white shadow-sm" />
+        ) : (
+          <span className="w-14 h-14 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+            <span className="text-2xl">👁️</span>
+          </span>
+        )}
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-bold text-gray-900">{s.color || 'Selecciona el color'}</span>
+          <span className="block text-xs text-gray-500 mt-0.5">{s.color ? 'Color seleccionado · Toca para cambiar' : `Ver los ${colorOpts.length} colores disponibles`}</span>
+        </span>
+        <span className="text-primary-700 text-lg" aria-hidden="true">⌄</span>
+      </button>
+
+      {colorPickerOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/50"
+          role="presentation"
+          onClick={() => setColorPickerOpen(false)}
+        >
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-label="Selecciona tu color"
+            className="w-full sm:max-w-lg max-h-[82dvh] overflow-y-auto rounded-t-3xl sm:rounded-2xl bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl"
+            onClick={event => event.stopPropagation()}
+          >
+            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-200 sm:hidden" />
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div>
+                <h3 className="text-base font-black text-gray-900">Selecciona tu color</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Toca el tono que deseas</p>
+              </div>
+              <button type="button" onClick={() => setColorPickerOpen(false)} aria-label="Cerrar selector"
+                className="w-9 h-9 rounded-full bg-gray-100 text-gray-600 text-xl">×</button>
+            </div>
+            <div className="grid grid-cols-3 gap-2.5">
+              {colorOpts.map(col => (
+                <button key={col} type="button"
+                  onClick={() => { set({ color: col }); setColorPickerOpen(false) }}
+                  aria-pressed={s.color === col}
+                  className={`min-w-0 overflow-hidden rounded-xl border-2 text-left transition-all ${
+                    s.color === col ? 'border-primary-600 bg-teal-50 ring-2 ring-teal-100' : 'border-gray-200 bg-white hover:border-gray-300'
+                  }`}
+                >
+                  {colorImages[col] ? (
+                    <img src={colorImages[col]} alt={col} loading="lazy" className="w-full aspect-[4/3] object-cover" />
+                  ) : (
+                    <span className="w-full aspect-[4/3] bg-gray-100 flex items-center justify-center text-2xl">👁️</span>
+                  )}
+                  <span className="flex min-h-10 items-center justify-center gap-1 px-1.5 py-2 text-center text-[11px] font-bold leading-tight text-gray-800">
+                    {s.color === col && <span className="text-teal-600">✓</span>}
+                    {col}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   ) : null
 
