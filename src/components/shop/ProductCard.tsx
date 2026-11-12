@@ -42,13 +42,22 @@ export default function ProductCard({ product, isBestseller }: Props) {
     setIsFav(!isFav)
   }
 
-  const handleAdd = (e: React.MouseEvent) => {
+  const handleAdd = async (e: React.MouseEvent) => {
     e.preventDefault()
-    if (needsRx) { window.location.href = `/producto/${(product as any).slug || product.id}`; return }
+    const productPath = `/producto/${(product as any).slug || product.id}`
+    if (needsRx) { window.location.href = productPath; return }
+    // Registro obligatorio ANTES de modificar el carrito.
+    try {
+      const { data: { user } } = await createClient().auth.getUser()
+      if (!user) {
+        window.location.assign(`/cuenta?next=${encodeURIComponent(productPath)}`)
+        return
+      }
+    } catch {
+      window.location.assign(`/cuenta?next=${encodeURIComponent(productPath)}`)
+      return
+    }
     addItem(product)
-    createClient().auth.getUser().then(({ data: { user } }) => {
-      if (!user) window.location.assign('/cuenta?next=/cart')
-    }).catch(() => window.location.assign('/cuenta?next=/cart'))
     toast.custom((t) => (
       <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-sm w-full bg-white shadow-xl rounded-2xl border border-green-100 flex items-center gap-3 p-4`}>
         <span className="text-xl flex-shrink-0">✅</span>
