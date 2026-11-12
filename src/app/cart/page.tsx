@@ -16,7 +16,7 @@ import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase'
 
 export default function CartPage() {
-  const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+  const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento, cuponEnvioGratis } = useCartStore()
 
   // Requiere una cuenta para revisar y continuar el carrito; el estado local se conserva durante el acceso.
   useEffect(() => {
@@ -127,7 +127,7 @@ export default function CartPage() {
   const [cuponErr, setCuponErr] = useState('')
 
   const sub  = subtotal()
-  const envio = sub >= 8000 ? 0 : null
+  const envio = sub >= 8000 || cuponEnvioGratis ? 0 : null
   const tot  = sub + (envio ?? 0) - descuento
 
   const aplicarCupon = async () => {
