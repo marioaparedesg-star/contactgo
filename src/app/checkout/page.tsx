@@ -104,7 +104,7 @@ export default function CheckoutPage() {
     const sb = createClient()
     sb.auth.getUser().then(({ data: { user } }) => {
       setIsLoggedIn(!!user)
-      if (!user) { router.replace('/cuenta?next=/cart'); return }
+      if (!user) { router.replace('/cuenta?next=/checkout'); return }
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
           if (p?.nombre) {
