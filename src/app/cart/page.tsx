@@ -127,9 +127,13 @@ export default function CartPage() {
   const [cuponErr, setCuponErr] = useState('')
 
   const sub  = subtotal()
-  // El destino se confirma en checkout; aquí mostramos la tarifa base de Santo Domingo.
-  const envio = sub >= 8000 ? 0 : 250
-  const tot  = sub + envio - descuento
+  // El destino se confirma en checkout: mostramos el rango real para evitar prometer una tarifa incorrecta.
+  const envioGratis = sub >= 8000
+  const envioMin = envioGratis ? 0 : 250
+  const envioMax = envioGratis ? 0 : 350
+  const totMin = Math.max(0, sub + envioMin - descuento)
+  const totMax = Math.max(0, sub + envioMax - descuento)
+  const formatoPrecio = (valor: number) => `RD${valor.toLocaleString('es-DO')}`
 
   const aplicarCupon = async () => {
     const code = cuponInput.trim().toUpperCase()
@@ -398,8 +402,8 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-gray-500">
                   <span>Envío estimado</span>
-                  <span className={envio === 0 ? 'text-green-600 font-semibold' : ''}>
-                    {envio === 0 ? '🎁 ¡Gratis!' : `Desde RD${envio} · según destino`}
+                  <span className={envioGratis ? 'text-green-600 font-semibold' : 'text-right'}>
+                    {envioGratis ? '🎁 ¡Gratis!' : 'SD: RD$250 · Interior: RD$350'}
                   </span>
                 </div>
                 {descuento > 0 && (
@@ -410,19 +414,26 @@ export default function CartPage() {
                 )}
                 <div className="border-t-2 border-gray-100 pt-3 flex justify-between items-baseline">
                   <span className="font-black text-gray-900">{envio > 0 ? 'Total estimado' : 'Total'}</span>
-                  <span className="font-black text-2xl text-primary-600">RD${tot.toLocaleString()}</span>
+                  <span className="font-black text-2xl text-primary-600">{totMin === totMax ? formatoPrecio(totMin) : `${formatoPrecio(totMin)}–${formatoPrecio(totMax)}`}</span>
                 </div>
               </div>
 
               {/* Envío gratis hint */}
-              {envio > 0 && (
-                <div className="bg-amber-50 rounded-xl p-3 text-center">
-                  <p className="text-xs text-amber-700">
-                    ¡Agrega <strong>RD${(8000 - sub).toLocaleString()}</strong> más y el envío es <strong>gratis</strong>! 🚀
-                  </p>
-                  <div className="mt-2 bg-amber-200/50 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-amber-500 h-full rounded-full transition-all"
-                      style={{ width: `${Math.min(100, (sub/8000)*100)}%` }} />
+              {!envioGratis && (
+                <div className="bg-amber-50 rounded-xl p-3">
+                  <p className="text-center text-xs text-amber-800">Te faltan <strong>{formatoPrecio(8000 - sub)}</strong> para obtener envío gratis.</p>
+                  <div className="mt-2 bg-amber-200/60 rounded-full h-1.5 overflow-hidden"><div className="bg-amber-500 h-full rounded-full transition-all" style={{ width: `${Math.min(100, (sub / 8000) * 100)}%` }} /></div>
+                  <p className="mt-2 text-center text-[10px] text-amber-700">Completa tu pedido con una solución para el cuidado de tus lentes.</p>
+                </div>
+              )}
+
+              {solucionSugerida && (
+                <div className="rounded-xl border border-gray-100 bg-gray-50 p-3">
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-gray-500 mb-2">Completa tu cuidado visual</p>
+                  <div className="flex items-center gap-2.5">
+                    {solucionSugerida.imagen_url ? <img src={solucionSugerida.imagen_url} alt={solucionSugerida.nombre} className="w-12 h-12 object-contain rounded-lg bg-white border border-gray-100 shrink-0" /> : null}
+                    <div className="min-w-0 flex-1"><p className="text-xs font-semibold text-gray-900 line-clamp-2">{solucionSugerida.nombre}</p><p className="text-sm font-bold text-primary-700">{formatoPrecio(Number(solucionSugerida.precio))}</p></div>
+                    <button type="button" onClick={() => { addItem({ id: solucionSugerida.id, nombre: solucionSugerida.nombre, slug: solucionSugerida.slug, precio: Number(solucionSugerida.precio), imagen_url: solucionSugerida.imagen_url, tipo: solucionSugerida.tipo } as any); setSolucionSugerida(null); toast.success('Producto añadido al carrito') }} className="shrink-0 rounded-lg bg-white border border-teal-200 px-3 py-2 text-xs font-bold text-teal-700 hover:bg-teal-50">+ Agregar</button>
                   </div>
                 </div>
               )}
@@ -483,8 +494,8 @@ export default function CartPage() {
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 px-3 py-2 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <p className="text-xs text-gray-500">{items.length} productos</p>
-            <p className="font-black text-primary-600 text-lg">RD${tot.toLocaleString()}</p>
+            <p className="text-xs text-gray-500">{items.length} productos · envío según destino</p>
+            <p className="font-black text-primary-600 text-base">{totMin === totMax ? formatoPrecio(totMin) : `${formatoPrecio(totMin)}–${formatoPrecio(totMax)}`}</p>
           </div>
           <Link href="/checkout"
             className="btn-primary flex items-center gap-2 px-5 py-2.5 font-bold text-sm rounded-xl">
