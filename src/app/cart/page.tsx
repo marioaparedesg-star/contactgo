@@ -40,7 +40,7 @@ export default function CartPage() {
         cliente_nombre: perfil?.nombre ?? user.user_metadata?.nombre ?? null,
         cliente_telefono: perfil?.telefono ?? null,
         items: JSON.stringify(snapshot),
-        total: snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0) + 200,
+        total: snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0) + (snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0) >= 8000 ? 0 : 250),
         recuperado: false,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'cliente_email', ignoreDuplicates: false })
