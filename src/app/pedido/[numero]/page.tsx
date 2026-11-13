@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import { getFechaEntrega, getEntrega } from '@/lib/delivery-times'
+import { getRangoEntregaDesdeFecha, getEntrega } from '@/lib/delivery-times'
 
 const ESTADOS = [
   { key: 'recibido',      label: 'Pedido recibido',          icono: '✅', desc: 'Tu pedido fue recibido exitosamente' },
@@ -51,7 +51,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ numero:
             <p className="text-xs text-gray-400">Pedido</p>
             <h1 className="text-2xl font-black text-gray-900">{order.numero_orden}</h1>
             <p className="text-sm text-gray-500 mt-1">
-              {new Date(order.created_at).toLocaleDateString('es-DO', { weekday:'long', year:'numeric', month:'long', day:'numeric' })}
+              {new Date(order.created_at).toLocaleDateString('es-DO', { timeZone: 'America/Santo_Domingo', weekday:'long', year:'numeric', month:'long', day:'numeric' })}
             </p>
             <div className="mt-3 flex items-center gap-2 flex-wrap">
               <span className={`text-xs font-black px-2.5 py-1 rounded-full ${
@@ -89,7 +89,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ numero:
                       <p className="text-xs text-gray-400 mt-0.5">{evento?.descripcion ?? estado.desc}</p>
                       {evento?.created_at && (
                         <p className="text-[10px] text-gray-300 mt-0.5">
-                          {new Date(evento.created_at).toLocaleString('es-DO',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}
+                          {new Date(evento.created_at).toLocaleString('es-DO',{timeZone:'America/Santo_Domingo',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}
                         </p>
                       )}
                     </div>
@@ -106,7 +106,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ numero:
               {(order.order_items ?? []).map((item: any, idx: number) => {
                 const tipo  = item.product?.tipo ?? 'esferico'
                 const nomb  = item.nombre ?? item.product?.nombre ?? ''
-                const fecha = getFechaEntrega(tipo, nomb, item.sph)
+                const fecha = getRangoEntregaDesdeFecha(order.created_at, tipo, item.sph)
                 const info  = getEntrega(tipo, nomb, item.sph)
                 return (
                   <div key={idx} className="flex gap-3 items-start pt-3 first:pt-0">
