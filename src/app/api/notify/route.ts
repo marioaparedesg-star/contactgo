@@ -217,14 +217,6 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
   <!-- TOTALES -->
   <tr><td style="padding:12px 32px 0;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-      <tr>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;border-bottom:1px solid #f3f4f6;">Subtotal (sin ITBIS)</td>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;text-align:right;border-bottom:1px solid #f3f4f6;">RD$${subtotalSinITBIS.toLocaleString()}</td>
-      </tr>
-      <tr>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;border-bottom:1px solid #f3f4f6;">ITBIS (18%)</td>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;text-align:right;border-bottom:1px solid #f3f4f6;">RD$${itbis.toLocaleString()}</td>
-      </tr>
       ${descNum > 0 ? `<tr>
         <td style="padding:8px 16px;font-size:12px;color:#16a34a;border-bottom:1px solid #f3f4f6;">Descuento</td>
         <td style="padding:8px 16px;font-size:12px;color:#16a34a;text-align:right;border-bottom:1px solid #f3f4f6;">-RD$${descNum.toLocaleString()}</td>
