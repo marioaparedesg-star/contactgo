@@ -82,7 +82,7 @@ export default function CheckoutPage() {
   const [authTel, setAuthTel] = useState('')
   const [authLoading, setAuthLoading] = useState(false)
   const [authMsg, setAuthMsg] = useState('')
-  const [step, setStep] = useState<1|2|3>(1)
+  const [step, setStep] = useState<1|2|3>(3)
   const [savedAddresses, setSavedAddresses] = useState<any[]>([])
   const [selectedAddrId, setSelectedAddrId] = useState<string|null>(null)
   const [showAddressEditor, setShowAddressEditor] = useState(false)
@@ -111,7 +111,7 @@ export default function CheckoutPage() {
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
           if (p?.nombre) {
-            const partes = String(p.nombre).trim().split(/\\s+/)
+            const partes = String(p.nombre).trim().split(/\s+/)
             setValue('nombre', partes.shift() ?? '')
             setValue('apellido', partes.join(' ') || '')
           }
@@ -639,7 +639,7 @@ export default function CheckoutPage() {
               <span className="hidden sm:inline text-xs">Pago seguro</span>
             </div>
             {/* Pasos */}
-            <div className="flex min-w-0 items-center gap-1 sm:gap-2">
+            <div className="hidden min-w-0 items-center gap-1 sm:gap-2">
               {steps.map((s, i) => (
                 <div key={s.n} className="flex items-center gap-1.5">
                   <button onClick={() => step > s.n && setStep(s.n)}
@@ -668,7 +668,7 @@ export default function CheckoutPage() {
             <div className="space-y-2 order-first">
 
               {/* Paso 1 */}
-              <div className={`bg-white rounded-2xl border transition-all duration-200 ${
+              <div className={`hidden bg-white rounded-2xl border transition-all duration-200 ${
                 step === 1 ? 'border-primary-200 shadow-sm' :
                 step > 1 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100'
@@ -734,7 +734,7 @@ export default function CheckoutPage() {
 
               {/* Paso 2 */}
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
-                step === 2 ? 'border-primary-200 shadow-sm' :
+                (step === 2 || step === 3) ? 'border-primary-200 shadow-sm' :
                 step > 2 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100 opacity-50'
               }`}>
@@ -751,7 +751,7 @@ export default function CheckoutPage() {
                   {step > 2 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
 
-                {step === 2 && (
+                {(step === 2 || step === 3) && (
                   <div className="px-3 pb-3 space-y-2.5 border-t border-gray-50 pt-3">
 
                     {/* Selector de direcciones guardadas */}
@@ -865,10 +865,10 @@ export default function CheckoutPage() {
                       </div>
                     )}
 
-                    <button type="button" onClick={nextStep}
+                    {step === 2 && <button type="button" onClick={nextStep}
                       className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all">
                       Continuar <ChevronRight className="w-4 h-4" />
-                    </button>
+                    </button>}
                   </div>
                 )}
               </div>
@@ -935,6 +935,7 @@ export default function CheckoutPage() {
                         </div>
                         <div>
                           <p className="font-bold text-gray-900 text-sm">{getValues('nombre')} {getValues('apellido')}</p>
+                          <p className="text-xs text-gray-500">{getValues('email')}</p>
                           <p className="text-xs text-gray-400">{getValues('telefono')}</p>
                         </div>
                       </div>
