@@ -1185,11 +1185,6 @@ export default function CheckoutPage() {
                       <span>Cupón</span><span>−RD${descuento.toLocaleString()}</span>
                     </div>
                   )}
-                  <div className="flex justify-between text-[11px] text-gray-400 pt-1 border-t border-dashed border-gray-100">
-                    <span>ITBIS incluido (18%)</span>
-                    <span>RD${Math.round((sub - descuento) * 18 / 118).toLocaleString()}</span>
-                  </div>
-
                   {/* Total destacado */}
                   <div className="bg-gray-50 rounded-xl px-3 py-3 flex justify-between items-center mt-1">
                     <span className="font-black text-gray-900">Total</span>
