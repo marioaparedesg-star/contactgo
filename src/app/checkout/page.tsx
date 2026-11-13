@@ -1009,7 +1009,7 @@ export default function CheckoutPage() {
                         </>
                       ) : (
                         <>
-                          <span>💳 Pagar · RD${totalFinal.toLocaleString()}</span>
+                          <span>💳 Pagar ahora</span>
                           <ChevronRight className="w-5 h-5" />
                         </>
                       )}
