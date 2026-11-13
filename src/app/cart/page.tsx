@@ -215,7 +215,7 @@ export default function CartPage() {
         <div className="grid md:grid-cols-5 gap-3">
 
           {/* Items */}
-          <div className="md:col-span-3 space-y-2 order-last md:order-first">
+          <div className="md:col-span-3 space-y-2">
             {items.map((item, idx) => {
               const receta = fmtReceta(item)
               const precioItem = Number((item as any).precio_final ?? item.product.precio)
@@ -367,7 +367,7 @@ export default function CartPage() {
           </div>
 
           {/* Resumen */}
-          <div className="md:col-span-2 md:sticky md:top-3 md:self-start order-first md:order-last">
+          <div className="md:col-span-2 md:sticky md:top-3 md:self-start">
             <div className="bg-white rounded-xl border border-gray-100 p-3 space-y-2.5">
               <h3 className="text-sm font-bold text-gray-900">Resumen</h3>
 
