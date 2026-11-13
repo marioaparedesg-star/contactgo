@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes de contacto en Higüey — Entrega a domicilio 2026 — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Higüey, La Altagracia. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-48h. Sin salir de casa. Pago con AZUL.',
+  description: 'Compra lentes de contacto con entrega en Higüey, La Altagracia. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h. Sin salir de casa. Pago con AZUL.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-higuey' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto en Higüey — Entrega a tu puerta 2026',
-    description: 'Compra lentes de contacto con entrega en Higüey, La Altagracia. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-48h. Sin salir de casa. Pago con AZUL.',
+    description: 'Compra lentes de contacto con entrega en Higüey, La Altagracia. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h. Sin salir de casa. Pago con AZUL.',
     url: 'https://www.contactgo.net/blog/lentes-contacto-higuey',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-contacto-entrega-rd.webp', width: 1200, height: 630, alt: 'Lentes de contacto en Higüey — Entrega a tu puerta 2026' }],
@@ -34,7 +34,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Lentes de contacto en Higüey — Entrega a tu puerta 2026",
-            "description": "Compra lentes de contacto con entrega en Higüey, La Altagracia. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-48h. Sin salir de casa. Pago con AZUL.",
+            "description": "Compra lentes de contacto con entrega en Higüey, La Altagracia. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h. Sin salir de casa. Pago con AZUL.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
@@ -42,9 +42,9 @@ export default function Page() {
             "about": { "@type": "Place", "name": "Higüey", "addressCountry": "DO" } },
           { "@context": "https://schema.org", "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en Higüey y toda la provincia de La Altagracia en 24-48 horas. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
+              { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en Higüey y toda la provincia de La Altagracia en 24-72 horas. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío a Higüey se calcula al momento del checkout. Los pedidos superiores a RD$8,000 tienen envío gratuito. Consulta el costo exacto al agregar tu dirección de entrega." } },
-              { "@type": "Question", "name": "¿Cuánto tarda la entrega en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en Higüey es en 24-48 horas hábiles para la mayoría de los pedidos. Pedidos realizados antes de las 3pm salen el mismo día." } },
+              { "@type": "Question", "name": "¿Cuánto tarda la entrega en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en Higüey es en 24-72 horas hábiles para la mayoría de los pedidos. El plazo de transporte estimado para el interior es de 24 a 72 horas." } },
               { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en Higüey?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 30 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y directo del fabricante." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -67,13 +67,13 @@ export default function Page() {
         <div className="flex items-center gap-3 mb-5 p-4 bg-green-50 border border-green-100 rounded-2xl">
           <span className="text-2xl">🚀</span>
           <div>
-            <p className="text-sm font-bold text-green-800">Entrega 24-48h en Higüey y Higüey y toda la provincia de La Altagracia</p>
+            <p className="text-sm font-bold text-green-800">Entrega 24-72h en Higüey y Higüey y toda la provincia de La Altagracia</p>
             <p className="text-xs text-green-600">directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           </div>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Comprar lentes de contacto en Higüey nunca fue tan fácil. ContactGo entrega directamente en Higüey y toda la provincia de La Altagracia en 24-48 horas — sin necesidad de visitar ninguna tienda. Más de 30 productos de las marcas más reconocidas del mundo, directo del fabricante.</p>
+          <p>Comprar lentes de contacto en Higüey nunca fue tan fácil. ContactGo entrega directamente en Higüey y toda la provincia de La Altagracia en 24-72 horas — sin necesidad de visitar ninguna tienda. Más de 30 productos de las marcas más reconocidas del mundo, directo del fabricante.</p>
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Productos más vendidos disponibles en Higüey</h2>
@@ -95,7 +95,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Elige tu lente en línea', desc: 'Busca por marca, tipo o graduación. Más de 30 productos disponibles.' },
                 { paso: '2', titulo: 'Ingresa tu dirección en Higüey', desc: 'Al hacer checkout, ingresa tu dirección exacta en Higüey y toda la provincia de La Altagracia.' },
                 { paso: '3', titulo: 'Paga con AZUL de forma segura', desc: 'Tarjeta VISA o Mastercard. Procesado por AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Recibe en 24-48h', desc: 'El mensajero te contacta para coordinar. Sin necesidad de estar en un lugar fijo.' },
+                { paso: '4', titulo: 'Recibe en 24-72h', desc: 'El mensajero te contacta para coordinar. Sin necesidad de estar en un lugar fijo.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -109,7 +109,7 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Preguntas frecuentes — Entrega en Higüey</h2>
             <div className="space-y-3">
               {[
-                { q: '¿Hacen entrega en Higüey?', a: 'Sí. ContactGo entrega lentes de contacto en Higüey y toda la provincia de La Altagracia en 24-48 horas hábiles.' },
+                { q: '¿Hacen entrega en Higüey?', a: 'Sí. ContactGo entrega lentes de contacto en Higüey y toda la provincia de La Altagracia en 24-72 horas hábiles.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
                 { q: '¿Cuánto tarda la entrega en Higüey?', a: 'Entre 24 y 48 horas hábiles para la mayoría de los pedidos. Pedidos antes de las 3pm suelen salir el mismo día.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
@@ -131,7 +131,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en Higüey en 24-48h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en Higüey en 24-72h</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
