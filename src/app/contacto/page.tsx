@@ -163,7 +163,7 @@ export default function ContactoPage() {
       {/* CTA catálogo */}
       <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
         <p className="font-bold text-gray-900 mb-1">¿Buscas lentes de contacto?</p>
-        <p className="text-sm text-gray-500 mb-4">Entrega 24-48h en toda República Dominicana · Pago seguro con AZUL</p>
+        <p className="text-sm text-gray-500 mb-4">Envíos: Santo Domingo 24-48h · Interior 24-72h · Pago seguro con AZUL</p>
         <a href="/catalogo" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
       </div>
 
