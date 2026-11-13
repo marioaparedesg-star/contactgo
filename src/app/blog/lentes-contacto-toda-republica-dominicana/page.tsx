@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes de contacto con entrega a toda República Dominicana — ContactGo',
-  description: 'Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h donde estés en República Dominicana.',
+  description: 'Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix certificados. Transporte: Santo Domingo 24-48h e interior 24-72h.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-toda-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto con entrega en toda República Dominicana — 2026',
@@ -67,7 +67,7 @@ export default function Page() {
         <div className="flex items-center gap-3 mb-5 p-4 bg-green-50 border border-green-100 rounded-2xl">
           <span className="text-2xl">🚀</span>
           <div>
-            <p className="text-sm font-bold text-green-800">Entrega 24h en Santo Domingo y Santiago · 24-48h en Santo Domingo · 24-72h en el interior</p>
+            <p className="text-sm font-bold text-green-800">Transporte: Santo Domingo 24-48h · Interior 24-72h</p>
             <p className="text-xs text-green-600">directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           </div>
         </div>
@@ -131,7 +131,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en República Dominicana en 24-48h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
