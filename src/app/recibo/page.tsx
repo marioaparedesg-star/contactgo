@@ -92,10 +92,11 @@ function ReciboContent() {
         return
       }
 
-      const { data: its } = await sb
-        .from('order_items')
-        .select('*')
-        .eq('order_id', orderData.id)
+      // Los pedidos invitados consultan sus artículos mediante token público
+      // de un solo pedido; las cuentas autenticadas usan RLS por propietario.
+      const { data: its } = token
+        ? await sb.rpc('get_order_items_by_public_token', { p_token: token })
+        : await sb.from('order_items').select('*').eq('order_id', orderData.id)
 
       // Abonos/pagos aplicados a este pedido — para poder mostrar el
       // desglose real (cuánto se pagó, cuánto falta, y en qué fechas se
