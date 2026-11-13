@@ -20,12 +20,20 @@ export interface EntregaInfo {
   icono:    string
 }
 
-const T_24H: EntregaInfo = {
+const T_COLOR_PLANO: EntregaInfo = {
   etiqueta: 'Entrega al día siguiente',
   detalle:  'Los lentes de color planos disponibles se entregan al día siguiente de realizar la compra.',
   dias_min: 1, dias_max: 1,
   especial: false,
   icono:    '🚀',
+}
+
+const T_24H: EntregaInfo = {
+  etiqueta: 'Entrega en 24 horas',
+  detalle: 'Entrega estimada en 24 horas.',
+  dias_min: 1, dias_max: 1,
+  especial: false,
+  icono: '🚀',
 }
 
 const T_24_72H: EntregaInfo = {
@@ -80,7 +88,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
     // Color CON graduación (positivo o negativo) → 24-72h
     // Color PLANO (0.00) o sin seleccionar → 24h
     if (sphNum != null && sphNum !== 0) return T_24_72H
-    return T_24H
+    return T_COLOR_PLANO
   }
 
   if (tipo === 'solucion')   return T_24H
