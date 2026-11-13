@@ -37,6 +37,7 @@ interface CartStore {
   addItem:          (product: Product, opts?: AddItemOpts) => void
   removeByIndex:    (index: number) => void
   updateItem:       (index: number, cantidad: number) => void
+  removeEye:        (index: number, eye: 'OD' | 'OI') => void
   clearCart:        () => void
   subtotal:         () => number
   total:            () => number
@@ -118,6 +119,30 @@ export const useCartStore = create<CartStore>()(
           return { items }
         })
       },
+
+      // Quitar un solo ojo convierte el artículo en una caja individual y conserva su receta.
+      removeEye: (index, eye) => set(state => {
+        const items = [...state.items]
+        const item = items[index] as any
+        if (!item || item.ojo_mode !== 'AMBOS') return { items }
+        const same = item.misma_receta !== false
+        const sph = same ? item.sph : item[eye === 'OD' ? 'sph_od' : 'sph_oi']
+        const cyl = same ? item.cyl : item[eye === 'OD' ? 'cyl_od' : 'cyl_oi']
+        const axis = same ? item.axis : item[eye === 'OD' ? 'axis_od' : 'axis_oi']
+        items[index] = {
+          ...item,
+          cantidad: 1,
+          ojo_mode: eye,
+          misma_receta: true,
+          sph: sph ?? null,
+          cyl: cyl ?? null,
+          axis: axis ?? null,
+          sph_od: null, sph_oi: null,
+          cyl_od: null, cyl_oi: null,
+          axis_od: null, axis_oi: null,
+        }
+        return { items }
+      }),
 
       clearCart: () => set({ items: [], cuponCodigo: null, cuponDescuento: 0 }),
 
