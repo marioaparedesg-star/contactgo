@@ -648,10 +648,10 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      <main id="main-content" className="min-h-screen bg-gray-50 pb-20">
+      <main id="main-content" className="min-h-screen bg-[#f5f8fb] pb-24">
         {/* Barra de progreso */}
         <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
-          <div className="max-w-3xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
             <div className="flex items-center gap-1.5 text-sm text-green-700 font-semibold">
               <Lock className="w-4 h-4" />
               <img src="/azul-badge.png" alt="Pago seguro AZUL" width="28" height="28" className="h-7 w-7 object-contain rounded" />
@@ -680,19 +680,19 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <div className="max-w-3xl mx-auto px-3 pt-3">
-          <div className="grid grid-cols-1 gap-3 items-start">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-5 lg:gap-7 items-start">
 
             {/* LEFT */}
-            <div className="space-y-2 order-first">
+            <div className="space-y-5 order-first">
 
               {/* Paso 1 */}
-              <div className={`hidden bg-white rounded-2xl border transition-all duration-200 ${
+              <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm transition-all duration-200 ${
                 step === 1 ? 'border-primary-200 shadow-sm' :
                 step > 1 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100'
               }`}>
-                <div className="px-3 py-2.5 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
+                <div className="px-4 sm:px-6 py-4 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 1 ? 'bg-green-500 text-white' : step === 1 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 1 ? <Check className="w-4 h-4" /> : '1'}
@@ -705,9 +705,9 @@ export default function CheckoutPage() {
                   {step > 1 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
 
-                {step === 1 && (
-                  <div className="px-3 pb-3 space-y-2.5 border-t border-gray-50 pt-3">
-                    <div className="grid grid-cols-2 gap-3">
+                {(step === 1 || step === 3) && (
+                  <div className="px-4 sm:px-6 pb-5 sm:pb-6 space-y-4 border-t border-slate-100 pt-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="relative">
                         <User className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
                         <label htmlFor="nombre" className="block text-[11px] font-semibold text-gray-500 mb-1">Nombre</label>
@@ -743,16 +743,16 @@ export default function CheckoutPage() {
                         {errors.telefono && <p className="text-red-500 text-xs mt-1">⚠️ {errors.telefono.message}</p>}
                       </div>
                     </div>
-                    <button type="button" onClick={nextStep}
+                    {step === 1 && <button type="button" onClick={nextStep}
                       className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all">
                       Continuar a dirección de entrega <ChevronRight className="w-4 h-4" />
-                    </button>
+                    </button>}
                   </div>
                 )}
               </div>
 
                 {step === 3 && (
-                  <div className="rounded-xl border border-gray-100 bg-white px-3 py-3">
+                  <div className="hidden rounded-xl border border-gray-100 bg-white px-3 py-3">
                     <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 mb-1">Datos del cliente</p>
                     <p className="text-base font-bold text-gray-900">{[watch('nombre'), watch('apellido')].filter(Boolean).join(' ') || 'Cargando datos…'}</p>
                     <p className="text-xs text-gray-500 mt-0.5">{watch('email')} · {watch('telefono')}</p>
@@ -760,7 +760,7 @@ export default function CheckoutPage() {
                 )}
 
               {/* Paso 2 */}
-              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
+              <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm transition-all duration-200 ${
                 (step === 2 || step === 3) ? 'border-primary-200 shadow-sm' :
                 step > 2 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100 opacity-50'
@@ -779,7 +779,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {(step === 2 || step === 3) && (
-                  <div className="px-3 pb-3 space-y-2.5 border-t border-gray-50 pt-3">
+                  <div className="px-4 sm:px-6 pb-5 sm:pb-6 space-y-4 border-t border-slate-100 pt-5">
 
                     {/* Selector de direcciones guardadas */}
                     {savedAddresses.length > 0 ? (
@@ -901,17 +901,17 @@ export default function CheckoutPage() {
               </div>
 
               {/* Paso 3 */}
-              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${step === 3 ? 'border-primary-200 shadow-sm' : 'border-gray-100 opacity-50'}`}>
-                <div className="px-3 py-2.5 flex items-center gap-2.5">
+              <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm transition-all duration-200 ${step === 3 ? 'border-teal-200' : 'border-slate-200'}`}>
+                <div className="px-4 sm:px-6 py-4 flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
                   <p className="font-bold text-gray-900 text-sm">Resumen del pedido</p>
                 </div>
 
                 {step === 3 && (
-                  <div className="px-3 pb-3 border-t border-gray-100 pt-3 space-y-3">
+                  <div className="px-4 sm:px-6 pb-6 border-t border-slate-100 pt-5 space-y-5">
 
                     {/* Resumen compacto del pedido */}
-                    <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2.5">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
@@ -944,7 +944,7 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* Cupón accesible también en compra directa */}
-                    <div className="rounded-xl border border-gray-100 px-3 py-2">
+                    <div className="rounded-2xl border border-slate-200 px-4 py-3">
                       {cuponAplicado ? (
                         <div className="flex items-center justify-between gap-2 text-xs text-green-700">
                           <span className="font-semibold">✓ Cupón {cupon.toUpperCase()} aplicado · −RD${descuento.toLocaleString()}</span>
@@ -963,7 +963,7 @@ export default function CheckoutPage() {
                       <p className="text-sm font-semibold text-gray-700">Método de pago</p>
 
                       {/* Tarjeta — AZUL */}
-                      <div className="bg-white border border-blue-200 rounded-xl p-3">
+                      <div className="bg-white border border-blue-200 rounded-2xl p-4">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center shrink-0">
                             <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"/>
@@ -1010,7 +1010,7 @@ export default function CheckoutPage() {
                         createOrder(data)
                       })}
                       disabled={loading || !aceptaTerminos}
-                      className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm">
+                      className="w-full bg-[#002455] hover:bg-[#001f4a] active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-blue-950/10">
                       {loading ? (
                         <>
                           <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
