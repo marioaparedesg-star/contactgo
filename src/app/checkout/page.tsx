@@ -889,6 +889,24 @@ export default function CheckoutPage() {
                         <div className="min-w-0">
                           <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
                           <p className="truncate text-sm font-bold text-gray-900">{items.map(item => item.product.nombre).join(', ')}</p>
+                          <div className="mt-1 space-y-1">
+                            {items.map((item: any, idx: number) => {
+                              const fmt = (v: number | null | undefined) => v == null ? '—' : (Number(v) > 0 ? '+' : '') + Number(v).toFixed(2)
+                              const eyeRows = item.ojo_mode === 'AMBOS'
+                                ? item.misma_receta === false
+                                  ? [{ label: 'OD', sph: item.sph_od, cyl: item.cyl_od, axis: item.axis_od }, { label: 'OI', sph: item.sph_oi, cyl: item.cyl_oi, axis: item.axis_oi }]
+                                  : [{ label: 'OD + OI', sph: item.sph, cyl: item.cyl, axis: item.axis }]
+                                : item.ojo_mode === 'OD' || item.ojo_mode === 'OI'
+                                  ? [{ label: item.ojo_mode, sph: item.sph, cyl: item.cyl, axis: item.axis }]
+                                  : []
+                              return eyeRows.length ? (
+                                <div key={idx} className="text-[10px] font-mono text-gray-600">
+                                  <span className="font-bold">{item.product.nombre} · </span>
+                                  {eyeRows.map((eye: any) => eye.label + ': SPH ' + fmt(eye.sph) + (eye.cyl != null ? ' / CYL ' + fmt(eye.cyl) : '') + (eye.axis != null ? ' / AXIS ' + eye.axis + '°' : '')).join(' · ')}
+                                </div>
+                              ) : null
+                            })}
+                          </div>
                           <p className="text-[11px] text-gray-500">Subtotal RD${sub.toLocaleString()} · Envío {envioGratis ? 'gratis' : `RD${envio.toLocaleString()}`}</p>
                         </div>
                         <p className="shrink-0 text-lg font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
