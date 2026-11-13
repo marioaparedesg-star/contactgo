@@ -4,7 +4,7 @@ export const ENVIO_SANTO_DOMINGO = 250
 export const ENVIO_INTERIOR = 350
 
 export function esGranSantoDomingo(ciudad?: string | null): boolean {
-  const value = String(ciudad ?? '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').trim().toLowerCase()
+  const value = String(ciudad ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase()
   return /^(santo domingo|santo domingo este|santo domingo oeste|santo domingo norte|distrito nacional|ensanche|los alcarrizos|boca chica|pantoja|pedro brand|la guayiga)/.test(value)
 }
 
