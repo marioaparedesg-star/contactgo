@@ -895,6 +895,21 @@ export default function CheckoutPage() {
                       </div>
                     </div>
 
+                    {/* Cupón accesible también en compra directa */}
+                    <div className="rounded-xl border border-gray-100 px-3 py-2">
+                      {cuponAplicado ? (
+                        <div className="flex items-center justify-between gap-2 text-xs text-green-700">
+                          <span className="font-semibold">✓ Cupón {cupon.toUpperCase()} aplicado · −RD${descuento.toLocaleString()}</span>
+                          <button type="button" onClick={() => { setCupon(''); setCuponAplicado(false); setDescuento(0); setCuponEnvioGratis(false); clearCupon() }} className="text-gray-400">Quitar</button>
+                        </div>
+                      ) : (
+                        <div className="flex gap-2">
+                          <input value={cupon} onChange={e => setCupon(e.target.value)} onKeyDown={e => e.key === 'Enter' && aplicarCupon()} placeholder="¿Tienes un código de descuento?" className="min-w-0 flex-1 rounded-lg border border-gray-200 px-3 py-2 text-xs focus:outline-none focus:border-primary-500" />
+                          <button type="button" onClick={aplicarCupon} className="rounded-lg bg-gray-900 px-3 py-2 text-xs font-bold text-white">Usar</button>
+                        </div>
+                      )}
+                    </div>
+
                     {/* Resumen cliente */}
                     <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
                       <div className="flex items-center gap-2.5">
