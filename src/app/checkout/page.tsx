@@ -888,8 +888,24 @@ export default function CheckoutPage() {
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
-                          <p className="truncate text-sm font-bold text-gray-900">{items.map(item => item.product.nombre).join(', ')}</p>
-                          <p className="text-[11px] text-gray-500">Subtotal RD${sub.toLocaleString()} · Envío {envioGratis ? 'gratis' : `RD${envio.toLocaleString()}`}</p>
+                          <div className="mt-1 space-y-1">
+                            {items.map((item: any, index: number) => {
+                              const bilateralDifferent = item.ojo_mode === 'AMBOS' && item.misma_receta === false
+                              const rx = bilateralDifferent
+                                ? `OD ${item.sph_od != null ? Number(item.sph_od).toFixed(2) : '—'} / OI ${item.sph_oi != null ? Number(item.sph_oi).toFixed(2) : '—'}`
+                                : item.sph != null ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
+                              const eyes = item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
+                              return (
+                                <p key={item.product.id + '-' + index} className="text-[11px] leading-snug text-gray-700">
+                                  <span className="font-semibold">{item.product.nombre}</span> · x{item.cantidad}
+                                  {eyes ? ` · ${eyes}` : ''}{rx ? ` · ${rx}` : ''}
+                                  {item.color ? ` · ${item.color}` : ''}
+                                  {item.add_power ? ` · ADD ${item.add_power}` : ''}
+                                </p>
+                              )
+                            })}
+                          </div>
+                          <p className="text-[11px] text-gray-500 mt-1">Subtotal RD${sub.toLocaleString()} · Envío {envioGratis ? 'gratis' : `RD${envio.toLocaleString()}`}</p>
                         </div>
                         <p className="shrink-0 text-lg font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
                       </div>
