@@ -3,12 +3,12 @@
  *
  * REGLAS DE NEGOCIO (definidas por Mario, 2026-08-03 — aplican a TODO el país,
  * ya no varían por zona ni por signo de graduación):
- *  - Esférico   → 24-48 horas
- *  - Multifocal → 1-5 días laborables
- *  - Tórico     → 25-45 días laborables
- *  - Color CON graduación (SPH ≠ 0)  → 24-72 h  (pedido especial al distribuidor)
- *  - Color SIN graduación / plano     → 24-48 h
- *  - Solución / Gota                  → 24 h
+ *  - Color plano → al día siguiente
+ *  - Esférico    → 24-48 horas
+ *  - Multifocal  → 1-5 días
+ *  - Tórico      → 25-45 días
+ *  - Color graduado → 24-72 horas (pedido especial; no confundir con color plano)
+ *  - Solución / Gota → 24 horas
  */
 
 export interface EntregaInfo {
@@ -21,8 +21,8 @@ export interface EntregaInfo {
 }
 
 const T_24H: EntregaInfo = {
-  etiqueta: 'Entrega en 24 h',
-  detalle:  'Entrega estimada: dentro de las próximas 24 horas laborables.',
+  etiqueta: 'Entrega al día siguiente',
+  detalle:  'Los lentes de color planos disponibles se entregan al día siguiente de realizar la compra.',
   dias_min: 1, dias_max: 1,
   especial: false,
   icono:    '🚀',
@@ -37,24 +37,24 @@ const T_24_72H: EntregaInfo = {
 }
 
 const T_ESFERICO: EntregaInfo = {
-  etiqueta: 'Entrega 24-48 h',
-  detalle:  'Entrega estimada: entre 24 y 48 horas laborables, en toda la República Dominicana.',
+  etiqueta: 'Entrega en 24-48 horas',
+  detalle:  'Entrega estimada en 24 a 48 horas.',
   dias_min: 1, dias_max: 2,
   especial: false,
   icono:    '🚀',
 }
 
 const T_MULTIFOCAL: EntregaInfo = {
-  etiqueta: 'Entrega 1-5 días',
-  detalle:  'Entrega estimada: entre 1 y 5 días laborables, en toda la República Dominicana.',
+  etiqueta: 'Entrega en 1-5 días',
+  detalle:  'Entrega estimada en 1 a 5 días.',
   dias_min: 1, dias_max: 5,
   especial: true,
   icono:    '📦',
 }
 
 const T_TORICO: EntregaInfo = {
-  etiqueta: 'Fabricación especial · 25-45 días',
-  detalle:  'Lente tórico fabricado a medida. Entrega estimada de 25 a 45 días laborables (lunes a viernes), en toda la República Dominicana.',
+  etiqueta: 'Entrega en 25-45 días',
+  detalle:  'Lente tórico fabricado a medida. Entrega estimada de 25 a 45 días.',
   dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',
@@ -80,7 +80,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
     // Color CON graduación (positivo o negativo) → 24-72h
     // Color PLANO (0.00) o sin seleccionar → 24h
     if (sphNum != null && sphNum !== 0) return T_24_72H
-    return T_ESFERICO
+    return T_24H
   }
 
   if (tipo === 'solucion')   return T_24H
@@ -141,23 +141,9 @@ export function getFechaEntrega(
   tipo: string, nombre = '', sph?: string | number | null
 ): { texto: string; corto: string } {
   const info = getEntrega(tipo, nombre, sph)
-  const ahora = new Date()
-  const local = partesFechaDR(ahora)
-  let base = fechaCalendario(local.year, local.month, local.day)
-  if (local.hour >= 15) base.setUTCDate(base.getUTCDate() + 1)
-
-  const min = sumarDiasLaborables(base, info.dias_min)
-  const max = sumarDiasLaborables(base, info.dias_max)
-  if (info.dias_min === info.dias_max) {
-    return {
-      texto: `Llega el ${formatoFecha(min)}`,
-      corto: `${DIAS_ES[min.getUTCDay()].charAt(0).toUpperCase()}${DIAS_ES[min.getUTCDay()].slice(1)} ${min.getUTCDate()}/${min.getUTCMonth()+1}`,
-    }
-  }
-  const rango = min.getUTCMonth() === max.getUTCMonth() && min.getUTCFullYear() === max.getUTCFullYear()
-    ? `${min.getUTCDate()} y ${formatoFecha(max, false)}`
-    : `${formatoFecha(min, false)} y ${formatoFecha(max, false)}`
-  return { texto: `Llega entre el ${rango}`, corto: `${min.getUTCDate()}–${max.getUTCDate()} ${MESES_ES[max.getUTCMonth()]}` }
+  // Promesas comerciales por categoría: no mostrar fechas de calendario
+  // que cambian según la hora de compra o el día en que se consulta.
+  return { texto: info.etiqueta, corto: info.etiqueta }
 }
 
 /** Texto para emails */
