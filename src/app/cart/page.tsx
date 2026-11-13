@@ -127,7 +127,7 @@ export default function CartPage() {
   const [cuponErr, setCuponErr] = useState('')
 
   const sub  = subtotal()
-  const envio = sub >= 8000 ? 0 : 200
+  // El destino se confirma en checkout; aquí mostramos la tarifa base de Santo Domingo.\n  const envio = sub >= 8000 ? 0 : 250
   const tot  = sub + envio - descuento
 
   const aplicarCupon = async () => {
