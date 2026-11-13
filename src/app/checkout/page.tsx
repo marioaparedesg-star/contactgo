@@ -1,5 +1,6 @@
 'use client'
 import { descuentoPct, labelFrecuencia, labelDescuento, proxEnvio } from '@/lib/subscription-utils'
+import { calcularEnvio } from '@/lib/shipping'
 import { trackEcommerce, trackCheckoutReviewed, trackAzulRedirect, sendCAPI, generateEventId } from '@/lib/analytics'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -90,14 +91,16 @@ export default function CheckoutPage() {
   // El checkout público acepta únicamente pago con tarjeta vía AZUL.
   // Los cobros en efectivo siguen disponibles en el panel administrativo.
 
-  const sub = subtotal()
-  const envioGratis = sub >= 8000 || cuponEnvioGratis
-  const envio = envioGratis ? 0 : 200
-  const totalFinal = sub + envio - descuento
-
   const { register, handleSubmit, getValues, setValue, trigger, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema)
   })
+
+  const sub = subtotal()
+  const ciudadActual = watch('ciudad')
+  const ciudadEnvio = ciudadActual === 'Otra ciudad' ? watch('ciudadPersonalizada') : ciudadActual
+  const envio = calcularEnvio(sub, ciudadEnvio, cuponEnvioGratis)
+  const envioGratis = envio === 0
+  const totalFinal = sub + envio - descuento
 
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
