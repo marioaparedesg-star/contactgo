@@ -1296,7 +1296,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     <p className="text-[10px] text-gray-400 font-medium inline-flex items-center gap-1">
                       <AzulLogo size="xs" /> Pago seguro con AZUL
                     </p>
-                    <p className="text-[10px] text-gray-400 font-medium">🚚 Entrega 24-48h en toda RD</p>
+                    <p className="text-[10px] text-gray-400 font-medium">🚚 Transporte: Santo Domingo 24-48h · Interior 24-72h</p>
                   </div>
                 </div>
               </div>
