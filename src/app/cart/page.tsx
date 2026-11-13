@@ -403,7 +403,7 @@ export default function CartPage() {
                 <div className="flex justify-between text-gray-500">
                   <span>Envío estimado</span>
                   <span className={envioGratis ? 'text-green-600 font-semibold' : 'text-right'}>
-                    {envioGratis ? '🎁 ¡Gratis!' : 'SD: RD$250 · Interior: RD$350'}
+                    {envioGratis ? '🎁 ¡Gratis!' : 'Santo Domingo: RD$250 · Interior: RD$350'}
                   </span>
                 </div>
                 {descuento > 0 && (
@@ -413,7 +413,7 @@ export default function CartPage() {
                   </div>
                 )}
                 <div className="border-t-2 border-gray-100 pt-3 flex justify-between items-baseline">
-                  <span className="font-black text-gray-900">{envio > 0 ? 'Total estimado' : 'Total'}</span>
+                  <span className="font-black text-gray-900">{!envioGratis ? 'Total estimado' : 'Total'}</span>
                   <span className="font-black text-2xl text-primary-600">{totMin === totMax ? formatoPrecio(totMin) : `${formatoPrecio(totMin)}–${formatoPrecio(totMax)}`}</span>
                 </div>
               </div>
