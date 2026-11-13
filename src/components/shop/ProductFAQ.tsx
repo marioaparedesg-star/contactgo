@@ -337,7 +337,7 @@ const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
 }
 
 const FAQS_GENERAL = [
-  { q: '¿Hacen envíos a toda República Dominicana?', a: 'Los lentes de color planos se entregan al día siguiente; los esféricos en 24 a 48 horas; los multifocales en 1 a 5 días; y los tóricos en 25 a 45 días por fabricación a medida.' },
+  { q: '¿Hacen envíos a toda República Dominicana?', a: 'El transporte tarda 24-48 horas en Santo Domingo y 24-72 horas en el interior. El tiempo de preparación depende del lente: color plano disponible, al día siguiente; esféricos, 24-48 horas; multifocales, 1-5 días; tóricos, 25-45 días de fabricación a medida.' },
   { q: '¿Los productos son directo del fabricante?', a: 'Sí. Todos los productos de ContactGo son directo del fabricante o su distribuidor autorizado en el país, con código de autenticidad. Nunca vendemos imitaciones.' },
   { q: '¿Puedo devolver mi pedido?', a: 'Sí, en 30 días si el producto viene defectuoso o no es lo que pediste. Los lentes sin abrir y en su empaque original también son elegibles para devolución.' },
 ]
