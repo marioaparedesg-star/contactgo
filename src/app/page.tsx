@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'ContactGo — Lentes de contacto certificados en RD | Entrega 24h',
-  description: 'ContactGo — La única tienda dominicana especializada 100% en lentes de contacto. ACUVUE, Air Optix, Biofinity certificados. Recibe en 24-48h. Compra en minutos.',
+  description: 'ContactGo — La única tienda dominicana especializada 100% en lentes de contacto. ACUVUE, Air Optix, Biofinity certificados. Envíos: Santo Domingo 24-48h e interior 24-72h. Compra en minutos.',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   alternates: { canonical: 'https://www.contactgo.net' },
 }
@@ -82,7 +82,7 @@ const SCHEMA_ORG = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en toda República Dominicana." } },
+    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y 24-72 horas en el interior del país." } },
     { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todos los productos de ContactGo son directo del fabricante, directo del fabricante y con garantía de autenticidad. Nunca vendemos imitaciones." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
     { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
@@ -257,7 +257,7 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
-                { icon: Truck,    title: 'Entrega en 24-48h',  desc: 'A cualquier punto de RD',    color: 'text-blue-600',   bg: 'bg-blue-50' },
+                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Interior 24-72h',    color: 'text-blue-600',   bg: 'bg-blue-50' },
                 { icon: Package,  title: '+4,700 cajas vendidas',   desc: 'Marcas 100% originales',        color: 'text-green-600',  bg: 'bg-green-50' },
                 { icon: Star,     title: `${reseñasAvg.toFixed(1)}★ · ${reseñasCount}+ reseñas`,  desc: 'Clientes satisfechos',   color: 'text-amber-500',  bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-purple-600', bg: 'bg-purple-50' },
@@ -283,7 +283,7 @@ export default async function HomePage() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-3">
                   <Award className="w-5 h-5 text-blue-600" />
-                  <span className="text-blue-600 font-bold text-sm uppercase tracking-wide">Entrega en 24-48h en toda RD</span>
+                  <span className="text-blue-600 font-bold text-sm uppercase tracking-wide">Envíos: Santo Domingo 24-48h · Interior 24-72h</span>
                 </div>
                 <h2 className="font-display text-2xl md:text-3xl font-black text-gray-900 mb-3 leading-tight">
                   La única tienda dominicana<br className="hidden md:block" /> especializada 100% en lentes de contacto
@@ -496,7 +496,7 @@ export default async function HomePage() {
             {[
               { n: '1', icon: '🔍', t: 'Encuentra tu lente', d: 'Usa nuestra calculadora gratuita o dinos qué marca usas. Si tienes dudas, te asesoramos por WhatsApp al instante.' },
               { n: '2', azul: true, t: 'Paga seguro', d: 'Tarjeta de crédito o débito con AZUL de Banco Popular. Pago 100% protegido con 3D Secure. Nunca guardamos los datos de tu tarjeta.' },
-              { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Entrega en 24-48h a todo el país. Sin filas, sin citas, sin salir de casa.' },
+              { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Santo Domingo 24-48h e interior 24-72h. Sin filas, sin citas, sin salir de casa.' },
             ].map((p:any) => (
               <div key={p.n} className="relative bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
                 <div className="absolute -top-3 -left-1 w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-sm shadow-md">{p.n}</div>
@@ -523,7 +523,7 @@ export default async function HomePage() {
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-3">
             {[
-              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en todo el país. Los lentes tóricos tardan 25-40 días por ser fabricados a medida.' },
+              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y 24-72 horas en el interior. Los tiempos de preparación dependen del tipo de lente.' },
               { q: '¿Son directo del fabricante?', a: 'Sí. Trabajamos directo con los distribuidores oficiales de cada marca. Recibes tu producto sellado, con su empaque original de fábrica. Nunca vendemos imitaciones.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados recomendamos tener una receta actualizada. Nuestra calculadora gratuita te ayuda a identificar el tipo correcto de lente. Para lentes de color sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
