@@ -668,8 +668,8 @@ export default function CheckoutPage() {
             <div className="space-y-2 order-first">
 
               {/* Paso 1 */}
-              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
-                step === 1 ? 'border-primary-500 shadow-lg' :
+              <div className={`bg-white rounded-2xl border transition-all duration-200 ${
+                step === 1 ? 'border-primary-200 shadow-sm' :
                 step > 1 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100'
               }`}>
@@ -734,7 +734,7 @@ export default function CheckoutPage() {
 
               {/* Paso 2 */}
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
-                step === 2 ? 'border-primary-500 shadow-lg' :
+                step === 2 ? 'border-primary-200 shadow-sm' :
                 step > 2 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100 opacity-50'
               }`}>
@@ -874,7 +874,7 @@ export default function CheckoutPage() {
               </div>
 
               {/* Paso 3 */}
-              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${step === 3 ? 'border-primary-500 shadow-lg' : 'border-gray-100 opacity-50'}`}>
+              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${step === 3 ? 'border-primary-200 shadow-sm' : 'border-gray-100 opacity-50'}`}>
                 <div className="px-3 py-2.5 flex items-center gap-2.5">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
                   <p className="font-bold text-gray-900 text-sm">Confirmar y pagar</p>
