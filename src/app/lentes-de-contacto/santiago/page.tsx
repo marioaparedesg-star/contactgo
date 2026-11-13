@@ -21,7 +21,7 @@ export const revalidate = 60
 
 const faqs = [
               { q: '¿Cuánto tarda el envío a Santiago?', a: 'Entregamos en 24-48 horas hábiles en Santiago de los Caballeros. Pedidos realizados antes de las 3pm salen el mismo día.' },
-              { q: '¿Cuánto cuesta el envío a Santiago?', a: 'El envío a Santiago tiene un costo de RD$350. Es gratuito en pedidos superiores a RD$6,000.' },
+              { q: '¿Cuánto cuesta el envío a Santiago?', a: 'El envío a Santiago tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en toda la región del Cibao?', a: 'Sí, cubrimos Santiago, Villa González, Licey al Medio, Tamboril, Moca, La Vega y otros municipios del Cibao.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
 ]
