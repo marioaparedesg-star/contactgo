@@ -883,6 +883,18 @@ export default function CheckoutPage() {
                 {step === 3 && (
                   <div className="px-3 pb-3 border-t border-gray-100 pt-3 space-y-3">
 
+                    {/* Resumen compacto del pedido */}
+                    <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2.5">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
+                          <p className="truncate text-sm font-bold text-gray-900">{items.map(item => item.product.nombre).join(', ')}</p>
+                          <p className="text-[11px] text-gray-500">Subtotal RD${sub.toLocaleString()} · Envío {envioGratis ? 'gratis' : `RD${envio.toLocaleString()}`}</p>
+                        </div>
+                        <p className="shrink-0 text-lg font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
+                      </div>
+                    </div>
+
                     {/* Resumen cliente */}
                     <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
                       <div className="flex items-center gap-2.5">
