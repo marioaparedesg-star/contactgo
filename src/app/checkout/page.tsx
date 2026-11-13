@@ -890,16 +890,17 @@ export default function CheckoutPage() {
                           <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
                           <div className="mt-1 space-y-1">
                             {items.map((item: any, index: number) => {
-                              const bilateralDifferent = item.ojo_mode === 'AMBOS' && item.misma_receta === false
-                              const rx = bilateralDifferent
+                              const isColor = item.product?.tipo === 'color'
+                              const bilateralDifferent = !isColor && item.ojo_mode === 'AMBOS' && item.misma_receta === false
+                              const rx = isColor ? '' : bilateralDifferent
                                 ? `OD ${item.sph_od != null ? Number(item.sph_od).toFixed(2) : '—'} / OI ${item.sph_oi != null ? Number(item.sph_oi).toFixed(2) : '—'}`
-                                : item.sph != null ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
-                              const eyes = item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
+                                : item.sph != null && Number(item.sph) !== 0 ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
+                              const eyes = isColor ? 'Par para ambos ojos' : item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
                               return (
-                                <p key={item.product.id + '-' + index} className="text-[11px] leading-snug text-gray-700">
+                                <p key={item.product.id + '-' + index} className="text-xs leading-relaxed text-gray-700 break-words">
                                   <span className="font-semibold">{item.product.nombre}</span> · x{item.cantidad}
                                   {eyes ? ` · ${eyes}` : ''}{rx ? ` · ${rx}` : ''}
-                                  {item.color ? ` · ${item.color}` : ''}
+                                  {item.color ? ` · Color: ${item.color}` : ''}
                                   {item.add_power ? ` · ADD ${item.add_power}` : ''}
                                 </p>
                               )
