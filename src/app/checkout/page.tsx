@@ -226,7 +226,11 @@ export default function CheckoutPage() {
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
     const id = await saveDisclaimer(dData, user?.id)
-    if (id) setDisclaimerId(id)
+    if (!id) {
+      toast.error('No pudimos registrar tu aceptación. Inténtalo nuevamente antes de pagar.')
+      return
+    }
+    setDisclaimerId(id)
     setDisclaimerAceptado(true)
     setShowDisclaimer(false)
     setStep(3)
@@ -929,9 +933,13 @@ export default function CheckoutPage() {
                               )
                             })}
                           </div>
-                          <p className="text-[11px] text-gray-500 mt-1">Subtotal RD${sub.toLocaleString()} · Envío {envioGratis ? 'gratis' : `RD${envio.toLocaleString()}`}</p>
+                          <div className="mt-2 space-y-1 border-t border-gray-200 pt-2 text-xs">
+                            <div className="flex justify-between gap-3 text-gray-600"><span>Subtotal</span><span>RD${sub.toLocaleString()}</span></div>
+                            {descuento > 0 && <div className="flex justify-between gap-3 text-green-700"><span>Descuento</span><span>−RD${descuento.toLocaleString()}</span></div>}
+                            <div className="flex justify-between gap-3 text-gray-600"><span>Envío</span><span>{envioGratis ? 'Gratis' : `RD${envio.toLocaleString()}`}</span></div>
+                            <div className="flex justify-between gap-3 border-t border-gray-200 pt-2 text-sm font-black text-gray-900"><span>Total a pagar</span><span className="text-primary-700">RD${totalFinal.toLocaleString()}</span></div>
+                          </div>
                         </div>
-                        <p className="shrink-0 text-lg font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
                       </div>
                     </div>
 
