@@ -98,7 +98,10 @@ export default function CheckoutPage() {
   const sub = subtotal()
   const ciudadActual = watch('ciudad')
   const ciudadEnvio = ciudadActual === 'Otra ciudad' ? watch('ciudadPersonalizada') : ciudadActual
-  const envio = items.length > 0 ? calcularEnvio(sub, ciudadEnvio, cuponEnvioGratis) : 0
+  // Excepción temporal y estrictamente limitada al producto de prueba solicitado.
+  // Solo elimina el envío cuando el carrito contiene exclusivamente ese producto.
+  const esPedidoDePrueba = items.length > 0 && items.every((item: any) => item.product?.id === 'a1b1025e-cb68-4f33-8501-f44f4c2375f4')
+  const envio = items.length > 0 ? (esPedidoDePrueba ? 0 : calcularEnvio(sub, ciudadEnvio, cuponEnvioGratis)) : 0
   const envioGratis = envio === 0
   const totalFinal = items.length > 0 ? Math.max(0, sub + envio - descuento) : 0
 
