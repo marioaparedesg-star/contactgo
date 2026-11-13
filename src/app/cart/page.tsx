@@ -338,19 +338,23 @@ export default function CartPage() {
                     )}
                     {/* Precio + cantidad */}
                     <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
-                        <button type="button" onClick={() => updateItem(idx, item.cantidad - 1)}
-                          aria-label="Reducir cantidad"
-                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="w-8 text-center text-sm font-bold text-gray-900">{item.cantidad}</span>
-                        <button type="button" onClick={() => updateItem(idx, item.cantidad + 1)}
-                          aria-label="Aumentar cantidad"
-                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
-                          <Plus className="w-3 h-3" />
-                        </button>
-                      </div>
+                      {(item as any).ojo_mode === 'AMBOS' ? (
+                        <span className="text-[11px] font-semibold text-gray-500">OD + OI · {item.cantidad} {item.cantidad === 1 ? 'unidad' : 'unidades'}</span>
+                      ) : (
+                        <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                          <button type="button" onClick={() => updateItem(idx, item.cantidad - 1)}
+                            aria-label="Reducir cantidad"
+                            className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="w-8 text-center text-sm font-bold text-gray-900">{item.cantidad}</span>
+                          <button type="button" onClick={() => updateItem(idx, item.cantidad + 1)}
+                            aria-label="Aumentar cantidad"
+                            className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
                       <p className="font-black text-gray-900 text-base">
                         RD${(precioItem * item.cantidad).toLocaleString()}
                       </p>
