@@ -133,7 +133,7 @@ export default function CartPage() {
   const envioMax = envioGratis ? 0 : 350
   const totMin = Math.max(0, sub + envioMin - descuento)
   const totMax = Math.max(0, sub + envioMax - descuento)
-  const formatoPrecio = (valor: number) => `RD${valor.toLocaleString('es-DO')}`
+  const formatoPrecio = (valor: number) => `RD$\${valor.toLocaleString('es-DO')}`
 
   const aplicarCupon = async () => {
     const code = cuponInput.trim().toUpperCase()
