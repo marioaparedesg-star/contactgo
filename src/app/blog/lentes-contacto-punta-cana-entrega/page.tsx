@@ -111,7 +111,7 @@ export default function Page() {
               {[
                 { q: '¿Hacen entrega en Punta Cana?', a: 'Sí. ContactGo entrega lentes de contacto en Bávaro, Cap Cana y toda La Altagracia en 24-72 horas hábiles.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
-                { q: '¿Cuánto tarda la entrega en Punta Cana?', a: 'Entre 24 y 48 horas hábiles para la mayoría de los pedidos. Pedidos antes de las 3pm suelen salir el mismo día.' },
+                { q: '¿Cuánto tarda la entrega en Punta Cana?', a: 'El transporte al interior tarda de 24 a 72 horas. El tiempo de preparación o fabricación del lente se suma según el producto.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
               ].map((item, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
