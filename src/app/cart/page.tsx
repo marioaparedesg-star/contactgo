@@ -270,10 +270,39 @@ export default function CartPage() {
                             {mode === 'AMBOS' ? '👀 Ambos ojos' : mode === 'OD' ? '👁 Ojo derecho' : '👁 Ojo izquierdo'}
                           </span>
                           {/* Receta */}
-                          {mode === 'AMBOS' && !misma ? (
-                            <div className="bg-gray-50 border border-gray-100 rounded-lg px-2.5 py-1.5 text-[10px] font-mono font-bold text-gray-700 space-y-0.5">
-                              {(item as any).sph_od && <p>OD: SPH {(item as any).sph_od}{(item as any).cyl_od ? ` / CYL ${(item as any).cyl_od}` : ''}{(item as any).axis_od ? ` / AXIS ${(item as any).axis_od}°` : ''}</p>}
-                              {(item as any).sph_oi && <p>OI: SPH {(item as any).sph_oi}{(item as any).cyl_oi ? ` / CYL ${(item as any).cyl_oi}` : ''}{(item as any).axis_oi ? ` / AXIS ${(item as any).axis_oi}°` : ''}</p>}
+                          {mode === 'AMBOS' ? (
+                            <div className="space-y-1.5">
+                              {(['OD', 'OI'] as const).map(eye => {
+                                const sph = misma ? item.sph : (item as any)[eye === 'OD' ? 'sph_od' : 'sph_oi']
+                                const cyl = misma ? item.cyl : (item as any)[eye === 'OD' ? 'cyl_od' : 'cyl_oi']
+                                const axis = misma ? (item as any).axis : (item as any)[eye === 'OD' ? 'axis_od' : 'axis_oi']
+                                return (
+                                  <div key={eye} className="flex items-center justify-between gap-2 rounded-lg border border-gray-100 bg-gray-50 px-2.5 py-1.5">
+                                    <p className="min-w-0 text-[10px] font-mono font-bold text-gray-700">
+                                      {eye}: SPH {sph != null ? `${Number(sph) > 0 ? '+' : ''}${Number(sph).toFixed(2)}` : '—'}
+                                      {cyl != null ? ` / CYL ${Number(cyl).toFixed(2)}` : ''}
+                                      {axis != null ? ` / AXIS ${axis}°` : ''}
+                                    </p>
+                                    <button type="button" onClick={() => {
+                                      const otherEye = eye === 'OD' ? 'OI' : 'OD'
+                                      if (window.confirm(`¿Eliminar la caja del ${eye === 'OD' ? 'ojo derecho (OD)' : 'ojo izquierdo (OI)'}? El pedido conservará únicamente el ${otherEye}.`)) {
+                                        useCartStore.getState().removeEye(idx, otherEye)
+                                        toast.success(`Se conservó únicamente ${otherEye}`)
+                                      }
+                                    }} className="shrink-0 text-[10px] font-bold text-red-500 hover:text-red-700">
+                                      Quitar {eye}
+                                    </button>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          ) : mode === 'OD' || mode === 'OI' ? (
+                            <div className="bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1.5">
+                              <p className="text-[10px] font-mono font-bold text-blue-800">
+                                {mode}: SPH {item.sph != null ? `${Number(item.sph) > 0 ? '+' : ''}${Number(item.sph).toFixed(2)}` : '—'}
+                                {item.cyl != null ? ` / CYL ${Number(item.cyl).toFixed(2)}` : ''}
+                                {(item as any).axis != null ? ` / AXIS ${(item as any).axis}°` : ''}
+                              </p>
                             </div>
                           ) : item.sph != null ? (
                             <div className="bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1.5">
