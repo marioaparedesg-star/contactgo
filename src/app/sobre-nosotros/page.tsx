@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const VALORES = [
   { icon: '🏥', title: 'Especialización total', desc: 'Solo lentes de contacto. No somos una óptica genérica — somos expertos en una sola cosa y la hacemos muy bien.' },
   { icon: '✅', title: 'Certificados. Siempre.', desc: 'Cada caja llega sellada de fábrica. Nunca usados, nunca reempacados, nunca vencidos. Lo que ves es exactamente lo que recibes.' },
-  { icon: '🚀', title: 'Tu puerta, en 24-48h', desc: 'Pedido antes de las 3pm — sale hoy. Cubrimos Santo Domingo, Santiago, Punta Cana y todo el país. Sin excusas, sin demoras.' },
+  { icon: '🚀', title: 'Entrega según tu tipo de lente', desc: 'Lentes de color planos al día siguiente, esféricos en 24-48 horas, multifocales en 1-5 días y tóricos en 25-45 días por fabricación a medida.' },
   { icon: '💬', title: 'Alguien que realmente sabe', desc: 'Cuando escribes a ContactGo, alguien que entiende de lentes te responde. No un bot, no un guión. Ayuda real para tu receta.' },
 ]
 
@@ -105,7 +105,7 @@ export default function SobreNosotrosPage() {
               Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de las mejores marcas del mundo — directo del fabricante, adquiridos a través de canales oficiales de cada marca.
             </p>
             <p>
-              Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin lentes, y entrega en 24-48 horas a todo el país.
+              Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin lentes, y entrega según el tipo de lente en todo el país.
             </p>
           </div>
         </section>

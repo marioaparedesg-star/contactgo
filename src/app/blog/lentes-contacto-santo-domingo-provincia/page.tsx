@@ -111,7 +111,7 @@ export default function Page() {
               {[
                 { q: '¿Hacen entrega en Santo Domingo (provincia)?', a: 'Sí. ContactGo entrega lentes de contacto en toda la provincia de Santo Domingo (Santo Domingo Este, Norte, Oeste, Los Alcarrizos, Boca Chica, Pedro Brand y San Antonio de Guerra) en 24-48 horas hábiles.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
-                { q: '¿Cuánto tarda la entrega?', a: 'Entre 24 y 48 horas hábiles para la mayoría de los pedidos. Pedidos antes de las 3pm suelen salir el mismo día.' },
+                { q: '¿Cuánto tarda la entrega?', a: 'Entre 24 y 48 horas hábiles para la mayoría de los pedidos. El transporte estimado en Santo Domingo es de 24 a 48 horas.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
               ].map((item, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">

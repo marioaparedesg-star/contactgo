@@ -44,7 +44,7 @@ export default async function Page() {
         </nav>
 
         <section className="bg-gradient-to-br from-teal-600 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
-          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$200 · 24-48h</span>
+          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$250 · 24-48h</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Santo Domingo</h1>
           <p className="text-primary-100 text-lg max-w-xl mx-auto">Entrega a domicilio en toda el área metropolitana. ACUVUE, Biofinity, Air Optix y más — directo del fabricante.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
@@ -96,7 +96,7 @@ export default async function Page() {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[['🚚','Envío RD$200'],['📦','Entrega 24-48h'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
+            {[['🚚','Envío RD$250'],['📦','Entrega 24-48h'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
                 <span className="text-xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>

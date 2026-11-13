@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Color RD | FreshLook, Air Optix Colors — ContactGo',
-  description: 'Lentes de contacto de color en República Dominicana. FreshLook Colorblends, Air Optix Colors. Con y sin graduación. Entrega a domicilio en 24-48h.',
+  description: 'Lentes de contacto de color en República Dominicana. FreshLook Colorblends, Air Optix Colors. Con y sin graduación. Lentes de color planos con entrega al día siguiente.',
   alternates: { canonical: 'https://www.contactgo.net/color' },
   openGraph: {
     title: 'Lentes de Color RD | FreshLook, Air Optix Colors',
@@ -35,7 +35,7 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-pink-600 via-purple-600 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Con y sin graduación</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto de Color en RD</h1>
-          <p className="text-pink-100 text-lg max-w-xl mx-auto">FreshLook Colorblends, Air Optix Colors y más. Cambia tu mirada con colores naturales y vibrantes. Entrega en 24-48h.</p>
+          <p className="text-pink-100 text-lg max-w-xl mx-auto">FreshLook Colorblends, Air Optix Colors y más. Cambia tu mirada con colores naturales y vibrantes. Los lentes de color planos se entregan al día siguiente.</p>
         </section>
         <section className="max-w-7xl mx-auto px-4 py-10">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">

@@ -17,7 +17,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en República Dominicana — Marcas Originales · ContactGo',
-  description: 'Compra lentes de contacto originales en toda República Dominicana: Acuvue, Biofinity, Air Optix, Ultra, Precision1, Dailies. Entrega 24-48h. Pago seguro con AZUL. Especialistas exclusivos en lentes de contacto.',
+  description: 'Compra lentes de contacto originales en toda República Dominicana: Acuvue, Biofinity, Air Optix, Ultra, Precision1, Dailies. Entrega según el tipo de lente. Pago seguro con AZUL. Especialistas exclusivos en lentes de contacto.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto-republica-dominicana' },
   openGraph: {
     title: 'Lentes de Contacto en República Dominicana — ContactGo®',
@@ -149,7 +149,7 @@ return [
         name: '¿Cuánto tarda la entrega de lentes de contacto en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'La entrega estándar en Santo Domingo y Santiago es de 24 a 48 horas. Para el resto del país (Punta Cana, Higüey, La Romana, San Pedro, Puerto Plata, entre otros) la entrega toma de 2 a 4 días hábiles. Todos los pedidos incluyen tracking.',
+          text: 'Los lentes de color planos se entregan al día siguiente; los esféricos en 24 a 48 horas; los multifocales en 1 a 5 días; y los tóricos en 25 a 45 días por fabricación a medida. El tiempo depende del tipo de lente y no de la provincia.',
         },
       },
       {
@@ -189,7 +189,7 @@ return [
         name: '¿ContactGo entrega lentes de contacto en Santo Domingo?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sí. Entregamos en toda el área metropolitana de Santo Domingo (Distrito Nacional, Santo Domingo Este, Norte y Oeste), igual que en Santiago, Punta Cana, La Romana, Higüey, San Pedro, Puerto Plata, Barahona y el resto del país. El tiempo depende del tipo de lente, no de la ciudad: esféricos en 24-48 horas, multifocales en 2-6 días y tóricos en 25-40 días, en toda la República Dominicana.',
+          text: 'Sí. Entregamos en toda el área metropolitana de Santo Domingo (Distrito Nacional, Santo Domingo Este, Norte y Oeste), igual que en Santiago, Punta Cana, La Romana, Higüey, San Pedro, Puerto Plata, Barahona y el resto del país. El transporte tarda 24-48 horas en Santo Domingo y 24-72 horas en el interior. A ese plazo se suma, cuando aplique, el tiempo de preparación o fabricación: color plano disponible, al día siguiente; esféricos, 24-48 horas; multifocales, 1-5 días; tóricos, 25-45 días.',
         },
       },
     ],
@@ -206,23 +206,23 @@ const marcasData = [
   { nombre: 'Precision1', fabricante: 'Alcon', linea: 'Diarios esféricos', desde: 4400 },
 ]
 
-// Tiempos de entrega ahora son por CATEGORÍA de lente, no por zona — aplican
-// igual en todo el país (esférico 24-48h, multifocal 2-6 días, tórico 25-40
+// Transporte por zona: Santo Domingo 24-48h; interior 24-72h. Los plazos
+// de preparación/fabricación del lente se informan aparte (multifocal 1-5 días, tórico 25-45
 // días). La tabla de ciudades ya no varía el tiempo; queda para mostrar
 // cobertura geográfica.
 const ciudadesData = [
   { ciudad: 'Santo Domingo', tiempo: '24-48 horas*', slug: 'santo-domingo' },
-  { ciudad: 'Santiago', tiempo: '24-48 horas*', slug: 'santiago' },
-  { ciudad: 'Punta Cana', tiempo: '24-48 horas*', slug: 'punta-cana' },
-  { ciudad: 'La Romana', tiempo: '24-48 horas*', slug: 'la-romana' },
-  { ciudad: 'Higüey', tiempo: '24-48 horas*', slug: 'higuey' },
-  { ciudad: 'San Pedro de Macorís', tiempo: '24-48 horas*', slug: 'san-pedro-de-macoris' },
-  { ciudad: 'Puerto Plata', tiempo: '24-48 horas*', slug: 'puerto-plata' },
-  { ciudad: 'La Vega', tiempo: '24-48 horas*', slug: 'la-vega' },
-  { ciudad: 'San Cristóbal', tiempo: '24-48 horas*', slug: 'san-cristobal' },
-  { ciudad: 'Barahona', tiempo: '24-48 horas*', slug: 'barahona' },
-  { ciudad: 'Baní', tiempo: '24-48 horas*', slug: 'bani' },
-  { ciudad: 'Moca', tiempo: '24-48 horas*', slug: 'moca' },
+  { ciudad: 'Santiago', tiempo: '24-72 horas*', slug: 'santiago' },
+  { ciudad: 'Punta Cana', tiempo: '24-72 horas*', slug: 'punta-cana' },
+  { ciudad: 'La Romana', tiempo: '24-72 horas*', slug: 'la-romana' },
+  { ciudad: 'Higüey', tiempo: '24-72 horas*', slug: 'higuey' },
+  { ciudad: 'San Pedro de Macorís', tiempo: '24-72 horas*', slug: 'san-pedro-de-macoris' },
+  { ciudad: 'Puerto Plata', tiempo: '24-72 horas*', slug: 'puerto-plata' },
+  { ciudad: 'La Vega', tiempo: '24-72 horas*', slug: 'la-vega' },
+  { ciudad: 'San Cristóbal', tiempo: '24-72 horas*', slug: 'san-cristobal' },
+  { ciudad: 'Barahona', tiempo: '24-72 horas*', slug: 'barahona' },
+  { ciudad: 'Baní', tiempo: '24-72 horas*', slug: 'bani' },
+  { ciudad: 'Moca', tiempo: '24-72 horas*', slug: 'moca' },
 ]
 
 export default async function LentesRDPage() {
@@ -274,7 +274,7 @@ export default async function LentesRDPage() {
             </div>
             <div className="flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-full px-3 py-1.5">
               <Truck className="w-4 h-4 text-green-600" />
-              <span className="text-xs font-semibold text-green-700">Entrega 24-48h</span>
+              <span className="text-xs font-semibold text-green-700">Envíos: Santo Domingo 24-48h · Interior 24-72h</span>
             </div>
           </div>
 
@@ -310,7 +310,7 @@ export default async function LentesRDPage() {
               <div className="p-5 rounded-2xl border border-gray-100">
                 <Truck className="w-6 h-6 text-primary-600 mb-3" />
                 <h3 className="font-bold text-gray-900 text-base mb-1">Entrega en toda República Dominicana</h3>
-                <p className="text-sm text-gray-500">Esféricos 24-48h, multifocales 2-6 días, tóricos 25-40 días — mismo tiempo en todo el país.</p>
+                <p className="text-sm text-gray-500">Transporte: Santo Domingo 24-48h e interior 24-72h. Preparación: color plano al día siguiente, esféricos 24-48h, multifocales 1-5 días y tóricos 25-45 días.</p>
               </div>
               <div className="p-5 rounded-2xl border border-gray-100">
                 <div className="mb-3"><AzulLogo size="lg" /></div>
@@ -391,7 +391,7 @@ export default async function LentesRDPage() {
             <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Cobertura de entrega en República Dominicana
             </h2>
-            <p className="text-gray-500 text-sm mb-8">Enviamos a todo el país. * Tiempo para lentes esféricos — multifocales 2-6 días y tóricos 25-40 días, igual en cualquier ciudad.</p>
+            <p className="text-gray-500 text-sm mb-8">Enviamos a todo el país. Transporte: Santo Domingo 24-48h e interior 24-72h. Los tiempos de preparación varían por producto.</p>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {ciudadesData.map((c) => (
@@ -419,7 +419,7 @@ export default async function LentesRDPage() {
                 { n: '1', t: 'Elige tu producto', d: 'Busca por marca o usa nuestra calculadora gratuita si tienes receta de gafas y no sabes qué lente comprar.' },
                 { n: '2', t: 'Configura tu receta', d: 'Ingresa la graduación exacta de tu receta óptica vigente para cada ojo (OD y OI).' },
                 { n: '3', t: 'Paga seguro', d: 'Con tarjeta Visa/Mastercard vía AZUL Banco Popular. El pago de los pedidos en línea se realiza con tarjeta Visa o Mastercard mediante AZUL Banco Popular.' },
-                { n: '4', t: 'Recibe en casa', d: 'Esféricos en 24-48h, multifocales en 2-6 días, tóricos en 25-40 días — en toda República Dominicana. Incluye tracking.' },
+                { n: '4', t: 'Recibe en casa', d: 'Transporte: Santo Domingo 24-48h e interior 24-72h. Preparación: color plano al día siguiente, esféricos 24-48h, multifocales 1-5 días y tóricos 25-45 días. Incluye tracking.' },
               ].map((p) => (
                 <div key={p.n} className="p-5 rounded-2xl border border-gray-100">
                   <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-sm mb-3">{p.n}</div>
@@ -450,7 +450,7 @@ export default async function LentesRDPage() {
                 },
                 {
                   q: '¿Cuánto tarda la entrega en toda República Dominicana?',
-                  a: 'El tiempo depende del tipo de lente, no de la ciudad: esféricos en 24-48 horas, multifocales en 2-6 días y tóricos en 25-40 días (se fabrican a medida), en toda la República Dominicana. Todos los pedidos incluyen tracking.',
+                  a: 'El tiempo depende del tipo de lente, no de la ciudad: transporte 24-48 horas en Santo Domingo y 24-72 horas en el interior; preparación de esféricos 24-48 horas, multifocales 1-5 días y tóricos 25-45 días (se fabrican a medida), en toda la República Dominicana. Todos los pedidos incluyen tracking.',
                 },
                 {
                   q: '¿Necesito receta médica para comprar lentes de contacto en RD?',

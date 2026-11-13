@@ -22,7 +22,7 @@ const FAQS = [
   {
     categoria: '🚚 Envíos',
     preguntas: [
-      { q: '¿Cuánto tarda el envío?', a: 'En Santo Domingo y Santiago, los productos disponibles se entregan normalmente en 24 a 48 horas hábiles. En otras provincias, el envío puede tomar de 24 a 72 horas hábiles. Los productos de fabricación especial tienen un plazo distinto, indicado antes de confirmar el pedido.' },
+      { q: '¿Cuánto tarda el envío?', a: 'El transporte tarda 24-48 horas en Santo Domingo y 24-72 horas en el interior. El tiempo de preparación depende del lente: color plano disponible, al día siguiente; esféricos, 24-48 horas; multifocales, 1-5 días; tóricos, 25-45 días de fabricación a medida. El plazo total puede sumar preparación y transporte.' },
       { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Gran Santo Domingo: RD$250. Interior del país: RD$350. Envío gratis en compras desde RD$8,000.' },
       { q: '¿Envían a todo el país?', a: 'Sí, hacemos envíos a todas las provincias de República Dominicana.' },
       { q: '¿Puedo rastrear mi pedido?', a: 'Sí. Una vez confirmado tu pedido, te notificamos por WhatsApp cuando esté en camino con los datos del mensajero.' },

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const FAQS = [
-    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo ofrece lentes directo del fabricante, directo del fabricante, con pago seguro mediante AZUL/Banco Popular y entrega verificada en 24-48 horas en toda la RD.' },
+    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo ofrece lentes directo del fabricante, directo del fabricante, con pago seguro mediante AZUL/Banco Popular y transporte de 24-48 horas en Santo Domingo y 24-72 horas en el interior.' },
     { q: '¿Necesito receta para comprar lentes de contacto online?', a: 'Para lentes graduados sí. Necesitas los valores de tu receta (SPH, CYL, AXIS, ADD según el tipo). Para lentes de color sin graduación, no es necesaria. Puedes usar nuestra calculadora de receta gratuita si no tienes la tuya a mano.' },
     { q: '¿Cómo sé que los lentes son certificados?', a: 'Los lentes certificados vienen en empaque directo del fabricante con código de autenticidad verificable con el fabricante. En ContactGo todos los productos son directo del fabricante con garantía de autenticidad. Nunca vendemos imitaciones.' },
     { q: '¿Cuánto tarda la entrega de lentes de contacto en RD?', a: 'En ContactGo la entrega es en 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el resto del país.' },
@@ -96,7 +96,7 @@ export default function Page() {
                 { icono: '💰', titulo: 'Precios más competitivos', desc: 'Sin costos de local ni personal en sala, los precios online suelen ser más accesibles con el mismo producto original.' },
                 { icono: '📦', titulo: 'Mayor disponibilidad de stock', desc: 'En tiendas físicas el stock es limitado. Online tienes acceso a toda la línea de marcas: ACUVUE, Biofinity, Air Optix, BL Ultra y más.' },
                 { icono: '🔁', titulo: 'Recompra fácil', desc: 'Tu receta y dirección quedan guardadas. La próxima vez, repites pedido en un clic sin volver a ingresar datos.' },
-                { icono: '🚀', titulo: 'Entrega en 24-48 horas', desc: 'En todo el país. Para Santo Domingo y Santiago, muchos pedidos llegan al día siguiente.' },
+                { icono: '🚀', titulo: 'Transporte según destino', desc: 'Santo Domingo: 24-48 horas. Interior: 24-72 horas. El plazo de preparación del lente se suma aparte.' },
                 { icono: '💳', titulo: 'Pago seguro', desc: 'Pago con tarjeta mediante AZUL/Banco Popular, el procesador más utilizado y confiable en República Dominicana.' },
               ].map(({ icono, titulo, desc }, i) => (
                 <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
@@ -117,7 +117,7 @@ export default function Page() {
                 { paso: '4', titulo: 'Selecciona tu graduación', desc: 'Ingresa el SPH (y CYL/AXIS si aplica) de cada ojo. Si los dos ojos tienen diferente graduación, puedes seleccionarlas por separado.' },
                 { paso: '5', titulo: 'Completa el checkout en menos de 2 minutos', desc: 'Ingresa tu nombre, teléfono y dirección de entrega. El sistema guarda estos datos para futuros pedidos.' },
                 { paso: '6', titulo: 'Paga con tu tarjeta de forma segura', desc: 'Acepta VISA y Mastercard a través de AZUL/Banco Popular. La transacción es 100% segura con cifrado SSL.' },
-                { paso: '7', titulo: 'Recibe tu pedido en 24-48 horas', desc: 'El mensajero te contacta para coordinar la entrega. Sin necesidad de estar en un lugar fijo.' },
+                { paso: '7', titulo: 'Recibe tu pedido según el destino', desc: 'El mensajero te contacta para coordinar la entrega. Sin necesidad de estar en un lugar fijo.' },
               ].map(({ paso, titulo, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{paso}</div>
@@ -192,8 +192,8 @@ export default function Page() {
                   {[
                     ['Santo Domingo y Gran Santo Domingo', '24 horas'],
                     ['Santiago de los Caballeros', '24-48 horas'],
-                    ['La Romana, San Pedro, San Cristóbal', '24-48 horas'],
-                    ['Punta Cana / Bávaro / Cap Cana', '24-48 horas'],
+                    ['La Romana, San Pedro, San Cristóbal', '24-72 horas'],
+                    ['Punta Cana / Bávaro / Cap Cana', '24-72 horas'],
                     ['Higüey, La Altagracia', '24-72 horas'],
                     ['Norte: Puerto Plata, Moca, SFM', '24-72 horas'],
                     ['Sur: Barahona, Azua, Baní', '24-72 horas'],
