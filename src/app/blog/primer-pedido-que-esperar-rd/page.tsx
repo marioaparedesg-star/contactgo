@@ -12,7 +12,7 @@ const meta: BlogMeta = {
   readMinutes: 5,
   category: 'Guías',
   faq: [
-    { q: '¿Cuánto tarda en llegar mi primer pedido?', a: '24 horas en Santo Domingo, 24-48 horas en Santiago, 2-3 días en Punta Cana/Bávaro/La Romana, y 2-4 días en el resto del país.' },
+    { q: '¿Cuánto tarda en llegar mi primer pedido?', a: 'El transporte tarda 24-48 horas en Santo Domingo y 24-72 horas en el interior. El plazo de preparación del lente, si aplica, se suma por separado.' },
     { q: '¿Recibo alguna confirmación después de pagar?', a: 'Sí — notificación automática por WhatsApp y correo apenas se procesa el pago, y luego actualizaciones en cada cambio de estado hasta la entrega.' },
     { q: '¿Necesito estar en casa para recibirlo?', a: 'Depende de la empresa de envío asignada — normalmente coordinan contigo directamente por teléfono antes de la entrega.' },
   ],
@@ -54,8 +54,7 @@ export default function Page() {
         <tbody>
           <tr><td>Santo Domingo (todas las zonas)</td><td>24 horas</td></tr>
           <tr><td>Santiago</td><td>24-48 horas</td></tr>
-          <tr><td>Punta Cana / Bávaro / La Romana</td><td>2-3 días</td></tr>
-          <tr><td>Resto del país</td><td>2-4 días</td></tr>
+          <tr><td>Interior del país</td><td>24-72 horas</td></tr>
         </tbody>
       </table>
       <p>La empresa de envío suele coordinar contigo directamente por teléfono antes de la entrega, así que ten tu número accesible los días siguientes a tu pedido.</p>
