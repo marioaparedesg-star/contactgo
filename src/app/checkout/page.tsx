@@ -690,14 +690,14 @@ export default function CheckoutPage() {
                   <div className="px-3 pb-3 space-y-2.5 border-t border-gray-50 pt-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="relative">
-                        <User className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                        <label htmlFor="nombre" className="sr-only">Nombre</label>
+                        <User className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
+                        <label htmlFor="nombre" className="block text-[11px] font-semibold text-gray-500 mb-1">Nombre</label>
                         <input id="nombre" {...register('nombre')} placeholder="Nombre" autoComplete="given-name"
                           aria-label="Nombre"
                           className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                       </div>
                       <div className="relative">
-                        <label htmlFor="apellido" className="sr-only">Apellido</label>
+                        <label htmlFor="apellido" className="block text-[11px] font-semibold text-gray-500 mb-1">Apellido</label>
                         <input id="apellido" {...register('apellido')} placeholder="Apellido" autoComplete="family-name"
                           aria-label="Apellido"
                           className="w-full pl-3 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
@@ -708,16 +708,16 @@ export default function CheckoutPage() {
                     )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="relative">
-                        <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                        <label htmlFor="email" className="sr-only">Email</label>
+                        <Mail className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
+                        <label htmlFor="email" className="block text-[11px] font-semibold text-gray-500 mb-1">Correo electrónico</label>
                         <input id="email" {...register('email')} type="email" placeholder="Email" autoComplete="email"
                           aria-label="Correo electrónico"
                           className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                         {errors.email && <p className="text-red-500 text-xs mt-1">⚠️ {errors.email.message}</p>}
                       </div>
                       <div className="relative">
-                        <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                        <label htmlFor="telefono" className="sr-only">Teléfono</label>
+                        <Phone className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
+                        <label htmlFor="telefono" className="block text-[11px] font-semibold text-gray-500 mb-1">Teléfono / WhatsApp</label>
                         <input id="telefono" {...register('telefono')} type="tel" placeholder="WhatsApp / Teléfono" autoComplete="tel"
                           aria-label="Número de teléfono"
                           className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
@@ -726,7 +726,7 @@ export default function CheckoutPage() {
                     </div>
                     <button type="button" onClick={nextStep}
                       className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all">
-                      Continuar <ChevronRight className="w-4 h-4" />
+                      Continuar a dirección de entrega <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
                 )}
@@ -829,7 +829,7 @@ export default function CheckoutPage() {
                       /* Sin direcciones guardadas — input manual */
                       <div className="space-y-3">
                         <div className="relative">
-                          <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                          <MapPin className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
                           <label htmlFor="direccion" className="sr-only">Dirección</label>
                           <input id="direccion" {...register('direccion')} placeholder="Calle, número, sector, referencias" autoComplete="street-address"
                             aria-label="Dirección de entrega"
@@ -888,8 +888,24 @@ export default function CheckoutPage() {
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
-                          <p className="truncate text-sm font-bold text-gray-900">{items.map(item => item.product.nombre).join(', ')}</p>
-                          <p className="text-[11px] text-gray-500">Subtotal RD${sub.toLocaleString()} · Envío {envioGratis ? 'gratis' : `RD${envio.toLocaleString()}`}</p>
+                          <div className="mt-1 space-y-1">
+                            {items.map((item: any, index: number) => {
+                              const bilateralDifferent = item.ojo_mode === 'AMBOS' && item.misma_receta === false
+                              const rx = bilateralDifferent
+                                ? `OD ${item.sph_od != null ? Number(item.sph_od).toFixed(2) : '—'} / OI ${item.sph_oi != null ? Number(item.sph_oi).toFixed(2) : '—'}`
+                                : item.sph != null ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
+                              const eyes = item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
+                              return (
+                                <p key={item.product.id + '-' + index} className="text-[11px] leading-snug text-gray-700">
+                                  <span className="font-semibold">{item.product.nombre}</span> · x{item.cantidad}
+                                  {eyes ? ` · ${eyes}` : ''}{rx ? ` · ${rx}` : ''}
+                                  {item.color ? ` · ${item.color}` : ''}
+                                  {item.add_power ? ` · ADD ${item.add_power}` : ''}
+                                </p>
+                              )
+                            })}
+                          </div>
+                          <p className="text-[11px] text-gray-500 mt-1">Subtotal RD${sub.toLocaleString()} · Envío {envioGratis ? 'gratis' : `RD${envio.toLocaleString()}`}</p>
                         </div>
                         <p className="shrink-0 text-lg font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
                       </div>

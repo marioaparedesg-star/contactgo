@@ -119,6 +119,26 @@ export const useCartStore = create<CartStore>()(
         })
       },
 
+      // Quitar un ojo conserva la receta del ojo restante y ajusta el item a una caja.
+      removeEye: (index, eye) => set(state => {
+        const items = [...state.items]
+        const item = items[index] as any
+        if (!item || item.ojo_mode !== 'AMBOS') return { items }
+        const same = item.misma_receta !== false
+        const remaining = eye === 'OD' ? 'OI' : 'OD'
+        const sph = same ? item.sph : item[`sph_${remaining.toLowerCase()}`]
+        const cyl = same ? item.cyl : item[`cyl_${remaining.toLowerCase()}`]
+        const axis = same ? item.axis : item[`axis_${remaining.toLowerCase()}`]
+        if (sph == null) return { items }
+        items[index] = {
+          ...item, cantidad: 1, ojo_mode: remaining, misma_receta: true,
+          sph, cyl: cyl ?? null, axis: axis ?? null,
+          sph_od: null, sph_oi: null, cyl_od: null, cyl_oi: null,
+          axis_od: null, axis_oi: null,
+        }
+        return { items }
+      }),
+
       clearCart: () => set({ items: [], cuponCodigo: null, cuponDescuento: 0 }),
 
       // ── Legacy — mantener compatibilidad ────────────────────────────

@@ -151,21 +151,23 @@ export default function EyeFlowSelector({
   useEffect(() => {
     if (!prefilledRx) return
     const patch: Partial<EyeFlowState> = {}
-    if (prefilledRx.sph_od) patch.sph_od = String(prefilledRx.sph_od)
-    if (prefilledRx.sph_oi) patch.sph_oi = String(prefilledRx.sph_oi)
-    if (prefilledRx.cyl_od) patch.cyl_od = String(prefilledRx.cyl_od)
-    if (prefilledRx.cyl_oi) patch.cyl_oi = String(prefilledRx.cyl_oi)
-    if (prefilledRx.axis_od) patch.axis_od = String(prefilledRx.axis_od)
-    if (prefilledRx.axis_oi) patch.axis_oi = String(prefilledRx.axis_oi)
+    if (prefilledRx.sph_od != null) patch.sph_od = String(prefilledRx.sph_od)
+    if (prefilledRx.sph_oi != null) patch.sph_oi = String(prefilledRx.sph_oi)
+    if (prefilledRx.cyl_od != null) patch.cyl_od = String(prefilledRx.cyl_od)
+    if (prefilledRx.cyl_oi != null) patch.cyl_oi = String(prefilledRx.cyl_oi)
+    if (prefilledRx.axis_od != null) patch.axis_od = String(prefilledRx.axis_od)
+    if (prefilledRx.axis_oi != null) patch.axis_oi = String(prefilledRx.axis_oi)
     if (prefilledRx.add_power) patch.add = prefilledRx.add_power
     // Detectar si son iguales
-    if (prefilledRx.sph_od && prefilledRx.sph_oi &&
-        prefilledRx.sph_od === prefilledRx.sph_oi) {
+    if (prefilledRx.sph_od != null && prefilledRx.sph_oi != null &&
+        prefilledRx.sph_od === prefilledRx.sph_oi &&
+        prefilledRx.cyl_od === prefilledRx.cyl_oi &&
+        prefilledRx.axis_od === prefilledRx.axis_oi) {
       patch.mismaReceta = true
       patch.sph = String(prefilledRx.sph_od)
       if (prefilledRx.cyl_od) patch.cyl = String(prefilledRx.cyl_od)
       if (prefilledRx.axis_od) patch.axis = String(prefilledRx.axis_od)
-    } else if (prefilledRx.sph_od || prefilledRx.sph_oi) {
+    } else if (prefilledRx.sph_od != null || prefilledRx.sph_oi != null) {
       patch.mismaReceta = false
     }
     onChange({ ...s, ...patch })
@@ -207,11 +209,11 @@ export default function EyeFlowSelector({
     onChange({
       ...s,
       ojoMode: 'AMBOS',
-      mismaReceta: rx.od_sph === rx.oi_sph && rx.od_cyl === rx.oi_cyl,
-      sph: rx.od_sph ? String(rx.od_sph) : s.sph,
-      cyl: rx.od_cyl ? String(rx.od_cyl) : s.cyl,
-      axis: rx.od_axis ? String(rx.od_axis) : s.axis,
-      add: rx.add_power ? String(rx.add_power) : s.add,
+      mismaReceta: rx.od_sph === rx.oi_sph && rx.od_cyl === rx.oi_cyl && rx.od_axis === rx.oi_axis,
+      sph: rx.od_sph != null ? String(rx.od_sph) : s.sph,
+      cyl: rx.od_cyl != null ? String(rx.od_cyl) : s.cyl,
+      axis: rx.od_axis != null ? String(rx.od_axis) : s.axis,
+      add: rx.add_power != null ? String(rx.add_power) : s.add,
     })
     setShowSavedRx(false)
   }
