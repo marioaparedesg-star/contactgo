@@ -242,6 +242,19 @@ export default function CheckoutPage() {
       return
     }
 
+    const itemConRecetaIncompleta = items.findIndex((item: any) => {
+      if (!item.ojo_mode) return false
+      if (item.ojo_mode === 'AMBOS' && item.misma_receta === false) {
+        return item.sph_od == null || item.sph_oi == null
+      }
+      return item.sph == null
+    })
+    if (itemConRecetaIncompleta >= 0) {
+      toast.error('Falta la graduación de uno de los ojos. Regresa al carrito y completa la receta.')
+      router.push('/cart')
+      return
+    }
+
     const nombreCompleto = `${data.nombre.trim()} ${data.apellido.trim()}`
     // Los pedidos del checkout web se procesan exclusivamente con tarjeta.
     const metodoPagoReal = 'tarjeta' as const
@@ -336,7 +349,9 @@ export default function CheckoutPage() {
       if (!itemsRes.ok) {
         const itemsErr = await itemsRes.text().catch(() => 'unknown')
         console.error('[checkout] order_items FAILED:', itemsErr)
-        // No bloqueamos el pago, pero lo logueamos
+        toast.error('No pudimos guardar las graduaciones del pedido. No se realizará el cobro; inténtalo nuevamente.')
+        setLoading(false)
+        return
       }
 
       // 2b. Crear registro de suscripción si algún item tiene frecuencia
