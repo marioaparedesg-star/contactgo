@@ -37,12 +37,12 @@ export default function EnviosPage() {
                 <p className="text-gray-600 text-sm">Miopía o hipermetropía simple. Alta disponibilidad, procesamiento y despacho inmediato.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-                <p className="font-bold text-amber-800 text-lg mb-1">📦 2 a 6 días</p>
+                <p className="font-bold text-amber-800 text-lg mb-1">📦 1 a 5 días</p>
                 <p className="text-amber-700 text-sm font-semibold mb-2">Lentes multifocales</p>
                 <p className="text-gray-600 text-sm">Presbicia / vista cansada. Se piden al distribuidor según tu graduación exacta.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 40 días</p>
+                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 45 días</p>
                 <p className="text-amber-700 text-sm font-semibold mb-2">Lentes tóricos</p>
                 <p className="text-gray-600 text-sm">Astigmatismo. Fabricados a medida (cilindro + eje exactos) — por eso el plazo es mayor.</p>
               </div>
