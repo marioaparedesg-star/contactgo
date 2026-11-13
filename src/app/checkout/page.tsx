@@ -110,12 +110,16 @@ export default function CheckoutPage() {
       if (!user) { router.replace('/cuenta?next=/cart'); return }
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
-          if (p?.nombre) {
-            setValue('nombre', String(p.nombre).trim())
+          const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre ||
+            [user.user_metadata?.first_name, user.user_metadata?.last_name].filter(Boolean).join(' ')
+          if (nombreGuardado) {
+            setValue('nombre', String(nombreGuardado).trim())
             setValue('apellido', '')
           }
-          if (p?.email || user.email) setValue('email', p?.email || user.email || '')
-          if (p?.telefono) setValue('telefono', p.telefono)
+          const emailGuardado = p?.email || user.email || ''
+          const telefonoGuardado = p?.telefono || user.phone || user.user_metadata?.telefono || user.user_metadata?.phone || ''
+          if (emailGuardado) setValue('email', emailGuardado)
+          if (telefonoGuardado) setValue('telefono', telefonoGuardado)
         })
         sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: a }) => {
           if (a && a.length > 0) {
@@ -453,7 +457,11 @@ export default function CheckoutPage() {
       const { data: { user } } = await sb.auth.getUser()
       if (user) {
         const { data: p } = await sb.from('profiles').select('*').eq('id', user.id).single()
-        if (p?.nombre) { setValue('nombre', String(p.nombre).trim()); setValue('apellido', '') }; if (p?.email) setValue('email', p.email); if (p?.telefono) setValue('telefono', p.telefono)
+        const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre
+        if (nombreGuardado) { setValue('nombre', String(nombreGuardado).trim()); setValue('apellido', '') }
+        if (p?.email || user.email) setValue('email', p?.email || user.email || '')
+        const telefonoGuardado = p?.telefono || user.phone || user.user_metadata?.telefono || user.user_metadata?.phone
+        if (telefonoGuardado) setValue('telefono', telefonoGuardado)
         const { data: a } = await sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false })
         if (a && a.length > 0) {
           setSavedAddresses(a)
