@@ -125,7 +125,6 @@ export const useCartStore = create<CartStore>()(
         const item = items[index] as any
         if (!item || item.ojo_mode !== 'AMBOS') return { items }
         const same = item.misma_receta !== false
-        const prefix = eye === 'OD' ? 'sph_od' : 'sph_oi'
         const remaining = eye === 'OD' ? 'OI' : 'OD'
         const sph = same ? item.sph : item[`sph_${remaining.toLowerCase()}`]
         const cyl = same ? item.cyl : item[`cyl_${remaining.toLowerCase()}`]
