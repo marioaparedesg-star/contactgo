@@ -11,7 +11,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/envios-y-entregas' },
   title: 'Envíos y Entregas | ContactGo — Lentes de Contacto RD',
-  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos en 24-48 horas, multifocales en 2-6 días, tóricos en 25-45 días — a todo el país.',
+  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Transporte: 24-48 horas en Santo Domingo y 24-72 horas en el interior. Los tiempos de preparación varían según el tipo de lente.',
 }
 
 export default function EnviosPage() {
