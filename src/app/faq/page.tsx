@@ -23,7 +23,7 @@ const FAQS = [
     categoria: '🚚 Envíos',
     preguntas: [
       { q: '¿Cuánto tarda el envío?', a: 'Entregamos en 24 a 7 días hábiles en Santo Domingo y Santiago. Para otras provincias puede tomar de 2 a 4 días hábiles.' },
-      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo: RD$200. Interior del país: RD$350. Envío gratis en pedidos superiores a RD$6,000.' },
+      { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Gran Santo Domingo: RD$250. Interior del país: RD$350. Envío gratis en compras desde RD$8,000.' },
       { q: '¿Envían a todo el país?', a: 'Sí, hacemos envíos a todas las provincias de República Dominicana.' },
       { q: '¿Puedo rastrear mi pedido?', a: 'Sí. Una vez confirmado tu pedido, te notificamos por WhatsApp cuando esté en camino con los datos del mensajero.' },
     ]

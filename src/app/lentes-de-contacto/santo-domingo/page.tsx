@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santo Domingo RD | Envío 24-48h — ContactGo',
-  description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$200. Entrega en 24-48 horas.',
+  description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$250. Entrega en 24-48 horas.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo' },
   openGraph: {
     title: 'Lentes de Contacto en Santo Domingo | ContactGo',
@@ -21,7 +21,7 @@ export const revalidate = 60
 
 const faqs = [
   { q: '¿Cuánto tarda el envío en Santo Domingo?', a: 'Entregamos en 24-48 horas hábiles en toda el área metropolitana de Santo Domingo, incluyendo Santo Domingo Este, Norte y Oeste. Si ordenas antes de las 3pm de lunes a sábado, tu pedido sale el mismo día.' },
-  { q: '¿Cuánto cuesta el envío a Santo Domingo?', a: 'El envío a Santo Domingo tiene un costo fijo de RD$200. Es gratuito en pedidos superiores a RD$6,000.' },
+  { q: '¿Cuánto cuesta el envío a Santo Domingo?', a: 'El envío a Santo Domingo tiene un costo fijo de RD$250. Es gratuito en compras desde RD$8,000.' },
   { q: '¿Hacen entregas en todos los sectores de Santo Domingo?', a: 'Sí, cubrimos todos los sectores: Piantini, Naco, Evaristo Morales, Los Prados, Bella Vista, Gazcue, Los Cacicazgos, La Esperilla, El Millón, Los Alcarrizos, Herrera, Villa Mella y más.' },
   { q: '¿Qué métodos de pago aceptan en Santo Domingo?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
 ]

@@ -1,5 +1,6 @@
 'use client'
 import { descuentoPct, labelFrecuencia, labelDescuento, proxEnvio } from '@/lib/subscription-utils'
+import { calcularEnvio } from '@/lib/shipping'
 import { trackEcommerce, trackCheckoutReviewed, trackAzulRedirect, sendCAPI, generateEventId } from '@/lib/analytics'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -90,14 +91,16 @@ export default function CheckoutPage() {
   // El checkout público acepta únicamente pago con tarjeta vía AZUL.
   // Los cobros en efectivo siguen disponibles en el panel administrativo.
 
-  const sub = subtotal()
-  const envioGratis = sub >= 8000 || cuponEnvioGratis
-  const envio = envioGratis ? 0 : 200
-  const totalFinal = sub + envio - descuento
-
   const { register, handleSubmit, getValues, setValue, trigger, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema)
   })
+
+  const sub = subtotal()
+  const ciudadActual = watch('ciudad')
+  const ciudadEnvio = ciudadActual === 'Otra ciudad' ? watch('ciudadPersonalizada') : ciudadActual
+  const envio = calcularEnvio(sub, ciudadEnvio, cuponEnvioGratis)
+  const envioGratis = envio === 0
+  const totalFinal = sub + envio - descuento
 
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
@@ -662,7 +665,7 @@ export default function CheckoutPage() {
           <div className="grid md:grid-cols-5 gap-6 items-start">
 
             {/* LEFT */}
-            <div className="lg:col-span-3 space-y-3">
+            <div className="lg:col-span-3 space-y-3 order-last lg:order-first">
 
               {/* Paso 1 */}
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
@@ -899,54 +902,6 @@ export default function CheckoutPage() {
                       </div>
                     </div>
 
-                    {/* ── REVISA TU PEDIDO ─────────────────────────────────────── */}
-                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
-                      <p className="text-sm font-black text-gray-900 flex items-center gap-2">
-                        📦 Revisa tu pedido
-                      </p>
-                      {items.map((item, idx) => {
-                        const mode = (item as any).ojo_mode
-                        const misma = (item as any).misma_receta !== false
-                        const sph = item.sph != null ? (Number(item.sph) > 0 ? `+${Number(item.sph).toFixed(2)}` : Number(item.sph).toFixed(2)) : null
-                        const sphOD = (item as any).sph_od != null ? (Number((item as any).sph_od) > 0 ? `+${Number((item as any).sph_od).toFixed(2)}` : Number((item as any).sph_od).toFixed(2)) : null
-                        const sphOI = (item as any).sph_oi != null ? (Number((item as any).sph_oi) > 0 ? `+${Number((item as any).sph_oi).toFixed(2)}` : Number((item as any).sph_oi).toFixed(2)) : null
-                        const precio = Number((item as any).precio_final ?? item.product.precio)
-                        return (
-                          <div key={idx} className="bg-white rounded-xl border border-gray-100 p-3 space-y-1.5">
-                            <div className="flex items-start justify-between gap-2">
-                              <p className="text-sm font-bold text-gray-900 leading-tight">{item.product.nombre}</p>
-                              <p className="text-sm font-black text-gray-900 shrink-0">RD${(precio * item.cantidad).toLocaleString()}</p>
-                            </div>
-                            {/* ── Color del lente (si aplica) ── */}
-                            {(item as any).color && (
-                              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
-                                🎨 {(item as any).color}
-                              </span>
-                            )}
-                            {mode && (
-                              <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                                mode === 'AMBOS' ? 'bg-teal-50 text-primary-700' :
-                                mode === 'OD'    ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
-                              }`}>
-                                {mode === 'AMBOS' ? '👀 Ambos ojos' : mode === 'OD' ? '👁 Ojo derecho' : '👁 Ojo izquierdo'}
-                              </span>
-                            )}
-                            {mode === 'AMBOS' && !misma && (sphOD || sphOI) ? (
-                              <div className="text-[10px] font-mono text-gray-600 space-y-0.5">
-                                {sphOD && <p>OD: SPH {sphOD}{(item as any).cyl_od ? ` / CYL ${(item as any).cyl_od}` : ''}</p>}
-                                {sphOI && <p>OI: SPH {sphOI}{(item as any).cyl_oi ? ` / CYL ${(item as any).cyl_oi}` : ''}</p>}
-                              </div>
-                            ) : sph ? (
-                              <p className="text-[10px] font-mono text-gray-600">
-                                SPH {sph}{item.cyl ? ` / CYL ${item.cyl}` : ''}{(item as any).axis ? ` / AXIS ${(item as any).axis}°` : ''}{item.add_power ? ` / ADD ${item.add_power}` : ''}
-                              </p>
-                            ) : null}
-                            <p className="text-[10px] text-gray-500">{item.cantidad} {item.cantidad === 1 ? 'caja' : 'cajas'}</p>
-                          </div>
-                        )
-                      })}
-                    </div>
-
                     {/* Método de pago — solo AZUL */}
                     <div className="space-y-2">
                       <p className="text-sm font-semibold text-gray-700">Método de pago</p>
@@ -1031,7 +986,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* RIGHT — resumen sticky */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 order-first lg:order-last">
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm sticky top-20 overflow-hidden">
                 {/* Header */}
                 <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">

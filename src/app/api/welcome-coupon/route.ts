@@ -187,7 +187,7 @@ function emailBienvenidaHTML(codigo: string): string {
           </a>
           <p style="margin:24px 0 0 0;color:#999;font-size:12px;line-height:1.6">
             Aplica el c&oacute;digo al finalizar tu compra.<br>
-            Env&iacute;o a todo el pa&iacute;s desde RD$200.
+            Env&iacute;o a todo el pa&iacute;s desde RD$250.
           </p>
         </td></tr>
         <tr><td style="padding:20px 32px;background:#f7f9fc;text-align:center;border-top:1px solid #eee">

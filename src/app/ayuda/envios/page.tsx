@@ -28,7 +28,7 @@ export default function EnviosPage() {
         <div className="space-y-6">
           {[
             { title: '⏱️ Tiempo de entrega', body: 'Santo Domingo y Santiago: 24 a 48 horas hábiles. Otras provincias: 2 a 4 días hábiles. Los pedidos realizados antes de las 2pm se procesan el mismo día.' },
-            { title: '💵 Costo de envío', body: 'Envío fijo de RD$200 a cualquier parte de República Dominicana, sin importar la cantidad de productos.' },
+            { title: '💵 Costo de envío', body: 'Santo Domingo y Gran Santo Domingo: RD$250. Interior del país: RD$350. En compras desde RD$8,000, el envío es GRATIS.' },
             { title: '🗺️ Cobertura', body: 'Hacemos envíos a todas las provincias de República Dominicana, incluyendo zonas rurales y turísticas como Punta Cana, Samaná y Las Terrenas.' },
             { title: '📱 Seguimiento de pedido', body: 'Una vez confirmado tu pedido te notificamos por WhatsApp. Cuando esté en camino recibirás los datos del mensajero para coordinar la entrega.' },
             { title: '🏠 ¿Dónde entregan?', body: 'Entregamos directamente en tu domicilio, lugar de trabajo o cualquier dirección que indiques al momento de hacer el pedido.' },

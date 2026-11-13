@@ -120,7 +120,7 @@ export default function Page() {
 
         <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5">
           <h2 className="font-bold text-gray-900 mb-2">¿Listo para ahorrar?</h2>
-          <p className="text-sm text-gray-700 mb-4">Revisa nuestro catálogo completo con todos los precios. Envío gratis en pedidos superiores a RD$6,000.</p>
+          <p className="text-sm text-gray-700 mb-4">Revisa nuestro catálogo completo con todos los precios. Envío gratis en compras desde RD$8,000.</p>
           <div className="flex gap-3">
             <Link href="/catalogo" className="bg-teal-500 text-white px-4 py-2.5 rounded-xl font-bold text-sm">Ver catálogo y precios</Link>
             <Link href="/receta" className="border border-primary-300 text-primary-700 px-4 py-2.5 rounded-xl font-bold text-sm">Usar mi receta</Link>

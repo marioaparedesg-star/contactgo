@@ -55,7 +55,7 @@ export default function EnviosPage() {
             <p className="text-gray-500 text-sm mb-4">El tiempo de entrega no varía por zona (ver tiempos por tipo de lente arriba) — esto es solo el costo del envío.</p>
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               {[
-                { zona: 'Santo Domingo y Gran Santo Domingo', costo: 'RD$200' },
+                { zona: 'Santo Domingo y Gran Santo Domingo', costo: 'RD$250' },
                 { zona: 'Santiago de los Caballeros', costo: 'RD$350' },
                 { zona: 'La Romana / San Pedro de Macorís', costo: 'RD$350' },
                 { zona: 'Punta Cana / Bávaro', costo: 'RD$350' },
@@ -68,7 +68,7 @@ export default function EnviosPage() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-400 mt-2">* Los costos son estimados y pueden variar según disponibilidad del courier.</p>
+            <p className="text-xs text-gray-400 mt-2">En compras desde RD$8,000, el envío es GRATIS en todo el país.</p>
           </div>
 
           {/* Proceso */}
