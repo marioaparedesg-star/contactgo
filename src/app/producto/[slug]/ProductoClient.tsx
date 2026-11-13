@@ -509,9 +509,9 @@ export default function ProductoClient({ product, variants }: Props) {
   const inventario = (product as any).stock_map as any[] ?? []
   const varianteSeleccionadaTieneStock = (): boolean => {
     if (!isLente || !inventario.length) return true // solo excluye no-lentes
-    const sphNum  = sph  ? parseFloat(sph)  : null
-    const cylNum  = cyl  ? parseFloat(cyl)  : null
-    const axisNum = axis ? parseInt(axis)   : null
+    const sphNum  = sph !== '' ? parseFloat(sph) : null
+    const cylNum  = cyl !== '' ? parseFloat(cyl) : null
+    const axisNum = axis !== '' ? parseInt(axis, 10) : null
     const addVal  = add ? normalizeAdd(add) : null
     if (sphNum === null) return true // SPH no seleccionado aún → habilitado
     return inventario.some((v: any) => {
