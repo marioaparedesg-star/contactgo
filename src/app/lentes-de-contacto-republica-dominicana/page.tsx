@@ -189,7 +189,7 @@ return [
         name: '¿ContactGo entrega lentes de contacto en Santo Domingo?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sí. Entregamos en toda el área metropolitana de Santo Domingo (Distrito Nacional, Santo Domingo Este, Norte y Oeste), igual que en Santiago, Punta Cana, La Romana, Higüey, San Pedro, Puerto Plata, Barahona y el resto del país. El tiempo depende del tipo de lente, no de la ciudad: esféricos en 24-48 horas, multifocales en 2-6 días y tóricos en 25-40 días, en toda la República Dominicana.',
+          text: 'Sí. Entregamos en toda el área metropolitana de Santo Domingo (Distrito Nacional, Santo Domingo Este, Norte y Oeste), igual que en Santiago, Punta Cana, La Romana, Higüey, San Pedro, Puerto Plata, Barahona y el resto del país. El transporte tarda 24-48 horas en Santo Domingo y 24-72 horas en el interior. A ese plazo se suma, cuando aplique, el tiempo de preparación o fabricación: color plano disponible, al día siguiente; esféricos, 24-48 horas; multifocales, 1-5 días; tóricos, 25-45 días.',
         },
       },
     ],
@@ -206,23 +206,23 @@ const marcasData = [
   { nombre: 'Precision1', fabricante: 'Alcon', linea: 'Diarios esféricos', desde: 4400 },
 ]
 
-// Tiempos de entrega ahora son por CATEGORÍA de lente, no por zona — aplican
-// igual en todo el país (esférico 24-48h, multifocal 2-6 días, tórico 25-40
+// Transporte por zona: Santo Domingo 24-48h; interior 24-72h. Los plazos
+// de preparación/fabricación del lente se informan aparte (multifocal 1-5 días, tórico 25-45
 // días). La tabla de ciudades ya no varía el tiempo; queda para mostrar
 // cobertura geográfica.
 const ciudadesData = [
   { ciudad: 'Santo Domingo', tiempo: '24-48 horas*', slug: 'santo-domingo' },
   { ciudad: 'Santiago', tiempo: '24-48 horas*', slug: 'santiago' },
-  { ciudad: 'Punta Cana', tiempo: '24-48 horas*', slug: 'punta-cana' },
-  { ciudad: 'La Romana', tiempo: '24-48 horas*', slug: 'la-romana' },
-  { ciudad: 'Higüey', tiempo: '24-48 horas*', slug: 'higuey' },
-  { ciudad: 'San Pedro de Macorís', tiempo: '24-48 horas*', slug: 'san-pedro-de-macoris' },
-  { ciudad: 'Puerto Plata', tiempo: '24-48 horas*', slug: 'puerto-plata' },
-  { ciudad: 'La Vega', tiempo: '24-48 horas*', slug: 'la-vega' },
+  { ciudad: 'Punta Cana', tiempo: '24-72 horas*', slug: 'punta-cana' },
+  { ciudad: 'La Romana', tiempo: '24-72 horas*', slug: 'la-romana' },
+  { ciudad: 'Higüey', tiempo: '24-72 horas*', slug: 'higuey' },
+  { ciudad: 'San Pedro de Macorís', tiempo: '24-72 horas*', slug: 'san-pedro-de-macoris' },
+  { ciudad: 'Puerto Plata', tiempo: '24-72 horas*', slug: 'puerto-plata' },
+  { ciudad: 'La Vega', tiempo: '24-72 horas*', slug: 'la-vega' },
   { ciudad: 'San Cristóbal', tiempo: '24-48 horas*', slug: 'san-cristobal' },
-  { ciudad: 'Barahona', tiempo: '24-48 horas*', slug: 'barahona' },
-  { ciudad: 'Baní', tiempo: '24-48 horas*', slug: 'bani' },
-  { ciudad: 'Moca', tiempo: '24-48 horas*', slug: 'moca' },
+  { ciudad: 'Barahona', tiempo: '24-72 horas*', slug: 'barahona' },
+  { ciudad: 'Baní', tiempo: '24-72 horas*', slug: 'bani' },
+  { ciudad: 'Moca', tiempo: '24-72 horas*', slug: 'moca' },
 ]
 
 export default async function LentesRDPage() {
