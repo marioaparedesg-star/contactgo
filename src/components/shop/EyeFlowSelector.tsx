@@ -160,7 +160,9 @@ export default function EyeFlowSelector({
     if (prefilledRx.add_power) patch.add = prefilledRx.add_power
     // Detectar si son iguales
     if (prefilledRx.sph_od != null && prefilledRx.sph_oi != null &&
-        prefilledRx.sph_od === prefilledRx.sph_oi) {
+        prefilledRx.sph_od === prefilledRx.sph_oi &&
+        prefilledRx.cyl_od === prefilledRx.cyl_oi &&
+        prefilledRx.axis_od === prefilledRx.axis_oi) {
       patch.mismaReceta = true
       patch.sph = String(prefilledRx.sph_od)
       if (prefilledRx.cyl_od) patch.cyl = String(prefilledRx.cyl_od)
@@ -207,7 +209,7 @@ export default function EyeFlowSelector({
     onChange({
       ...s,
       ojoMode: 'AMBOS',
-      mismaReceta: rx.od_sph === rx.oi_sph && rx.od_cyl === rx.oi_cyl,
+      mismaReceta: rx.od_sph === rx.oi_sph && rx.od_cyl === rx.oi_cyl && rx.od_axis === rx.oi_axis,
       sph: rx.od_sph != null ? String(rx.od_sph) : s.sph,
       cyl: rx.od_cyl != null ? String(rx.od_cyl) : s.cyl,
       axis: rx.od_axis != null ? String(rx.od_axis) : s.axis,
