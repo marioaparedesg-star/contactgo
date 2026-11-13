@@ -276,8 +276,8 @@ export default function CartPage() {
                           {/* Receta */}
                           {mode === 'AMBOS' && !misma ? (
                             <div className="bg-gray-50 border border-gray-100 rounded-lg px-2.5 py-1.5 text-[10px] font-mono font-bold text-gray-700 space-y-0.5">
-                              {(item as any).sph_od && <p>OD: SPH {(item as any).sph_od}{(item as any).cyl_od ? ` / CYL ${(item as any).cyl_od}` : ''}{(item as any).axis_od ? ` / AXIS ${(item as any).axis_od}°` : ''}</p>}
-                              {(item as any).sph_oi && <p>OI: SPH {(item as any).sph_oi}{(item as any).cyl_oi ? ` / CYL ${(item as any).cyl_oi}` : ''}{(item as any).axis_oi ? ` / AXIS ${(item as any).axis_oi}°` : ''}</p>}
+                              {(item as any).sph_od != null && <p>OD: SPH {(item as any).sph_od}{(item as any).cyl_od != null ? ` / CYL ${(item as any).cyl_od}` : ''}{(item as any).axis_od != null ? ` / AXIS ${(item as any).axis_od}°` : ''}</p>}
+                              {(item as any).sph_oi != null && <p>OI: SPH {(item as any).sph_oi}{(item as any).cyl_oi != null ? ` / CYL ${(item as any).cyl_oi}` : ''}{(item as any).axis_oi != null ? ` / AXIS ${(item as any).axis_oi}°` : ''}</p>}
                             </div>
                           ) : item.sph != null ? (
                             <div className="bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1.5">
