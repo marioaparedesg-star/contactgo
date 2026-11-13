@@ -397,9 +397,9 @@ export default function CartPage() {
                   <span>RD${sub.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-gray-500">
-                  <span>Envío (desde)</span>
+                  <span>Envío estimado</span>
                   <span className={envio === 0 ? 'text-green-600 font-semibold' : ''}>
-                    {envio === 0 ? '🎁 ¡Gratis!' : `RD$${envio}`}
+                    {envio === 0 ? '🎁 ¡Gratis!' : `Desde RD${envio} · según destino`}
                   </span>
                 </div>
                 {descuento > 0 && (
@@ -409,7 +409,7 @@ export default function CartPage() {
                   </div>
                 )}
                 <div className="border-t-2 border-gray-100 pt-3 flex justify-between items-baseline">
-                  <span className="font-black text-gray-900">Total</span>
+                  <span className="font-black text-gray-900">{envio > 0 ? 'Total estimado' : 'Total'}</span>
                   <span className="font-black text-2xl text-primary-600">RD${tot.toLocaleString()}</span>
                 </div>
               </div>
@@ -463,7 +463,7 @@ export default function CartPage() {
               <Link href="/checkout"
                 onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
                 className="w-full btn-primary flex items-center justify-center gap-2 py-4 text-base font-black rounded-2xl">
-                Ir al pago · RD${tot.toLocaleString()} <ChevronRight className="w-5 h-5" />
+                Continuar al pago <ChevronRight className="w-5 h-5" />
               </Link>
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-gray-500">
