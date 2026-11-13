@@ -210,9 +210,6 @@ function ReciboContent() {
   const ciudadDestino = String(order.ciudad ?? order.provincia ?? '').toLowerCase()
   const envio              = order.envio ?? (ciudadDestino.includes('santo domingo') || ciudadDestino.includes('distrito nacional') ? 250 : 350)
   const descuento           = order.descuento ?? 0
-  const subtotalConITBIS  = totalReal - envio - descuento
-  const itbis             = Math.round(subtotalConITBIS * 0.18 / 1.18)
-  const subtotalSinITBIS  = subtotalConITBIS - itbis
 
   // Desglose real de pago — a pedido explícito de Mario (2026-09-10):
   // antes el recibo solo decía "PAGADO" o "PENDIENTE" sin mostrar cuánto
