@@ -639,17 +639,17 @@ export default function CheckoutPage() {
               <span className="hidden sm:inline text-xs">Pago seguro</span>
             </div>
             {/* Pasos */}
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 items-center gap-1 sm:gap-2">
               {steps.map((s, i) => (
                 <div key={s.n} className="flex items-center gap-1.5">
                   <button onClick={() => step > s.n && setStep(s.n)}
-                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-black transition-all ${
+                    className={`flex items-center gap-1.5 px-1.5 sm:px-2.5 py-1.5 rounded-full text-xs font-black transition-all ${
                       step === s.n ? 'bg-teal-500 text-white shadow-md scale-105' :
                       step > s.n ? 'bg-green-100 text-green-700 cursor-pointer' :
                       'bg-gray-100 text-gray-400'
                     }`}>
                     {step > s.n ? <Check className="w-3 h-3" /> : <span>{s.n}</span>}
-                    <span>{s.label}</span>
+                    <span className="hidden sm:inline">{s.label}</span>
                   </button>
                   {i < steps.length - 1 && (
                     <div className={`w-6 h-1 rounded-full transition-all ${step > s.n ? 'bg-green-400' : 'bg-gray-200'}`} />
@@ -890,16 +890,17 @@ export default function CheckoutPage() {
                           <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
                           <div className="mt-1 space-y-1">
                             {items.map((item: any, index: number) => {
-                              const bilateralDifferent = item.ojo_mode === 'AMBOS' && item.misma_receta === false
-                              const rx = bilateralDifferent
+                              const isColor = item.product?.tipo === 'color'
+                              const bilateralDifferent = !isColor && item.ojo_mode === 'AMBOS' && item.misma_receta === false
+                              const rx = isColor ? '' : bilateralDifferent
                                 ? `OD ${item.sph_od != null ? Number(item.sph_od).toFixed(2) : '—'} / OI ${item.sph_oi != null ? Number(item.sph_oi).toFixed(2) : '—'}`
-                                : item.sph != null ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
-                              const eyes = item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
+                                : item.sph != null && Number(item.sph) !== 0 ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
+                              const eyes = isColor ? 'Par para ambos ojos' : item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
                               return (
-                                <p key={item.product.id + '-' + index} className="text-[11px] leading-snug text-gray-700">
+                                <p key={item.product.id + '-' + index} className="text-xs leading-relaxed text-gray-700 break-words">
                                   <span className="font-semibold">{item.product.nombre}</span> · x{item.cantidad}
                                   {eyes ? ` · ${eyes}` : ''}{rx ? ` · ${rx}` : ''}
-                                  {item.color ? ` · ${item.color}` : ''}
+                                  {item.color ? ` · Color: ${item.color}` : ''}
                                   {item.add_power ? ` · ADD ${item.add_power}` : ''}
                                 </p>
                               )

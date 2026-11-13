@@ -260,8 +260,14 @@ export default function CartPage() {
                       </button>
                     </div>
 
-                    {/* Ojo + Receta — nuevo formato single-item */}
-                    {(item as any).ojo_mode && (() => {
+                    {/* Los lentes de color se venden como par: no se dividen por ojo ni muestran receta plana. */}
+                    {(item.product as any).tipo === 'color' ? (
+                      <div className="mt-1.5">
+                        <span className="inline-flex items-center rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-semibold text-teal-800">
+                          Para ambos ojos · mismo color
+                        </span>
+                      </div>
+                    ) : (item as any).ojo_mode && (() => {
                       const mode = (item as any).ojo_mode
                       const misma = (item as any).misma_receta !== false
                       return (
@@ -293,7 +299,7 @@ export default function CartPage() {
                       )
                     })()}
 
-                    {(item as any).ojo_mode === 'AMBOS' && (
+                    {(item.product as any).tipo !== 'color' && (item as any).ojo_mode === 'AMBOS' && (
                       <div className="mt-2 flex flex-wrap gap-2">
                         <button type="button" onClick={() => removeEye(idx, 'OD')}
                           className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-[10px] font-semibold text-gray-600 hover:border-red-200 hover:text-red-600">

@@ -210,11 +210,11 @@ export default function ProductCard({ product, isBestseller }: Props) {
           <button
             onClick={handleAdd}
             disabled={product.stock === 0}
-            aria-label={product.stock === 0 ? `${product.nombre} sin stock` : `Configurar ${product.nombre}`}
+            aria-label={product.stock === 0 ? `${product.nombre} sin stock` : `${product.tipo === "color" ? "Elegir color" : needsRx ? "Ver opciones" : "Ver producto"}: ${product.nombre}`}
             className="w-full btn-primary py-2 text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-4 h-4 shrink-0" aria-hidden="true" />
-            <span>Configurar</span>
+            <span>{product.stock === 0 ? "Agotado" : product.tipo === "color" ? "Elegir color" : needsRx ? "Ver opciones" : "Ver producto"}</span>
           </button>
         </div>
       </div>
