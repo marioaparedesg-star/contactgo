@@ -16,7 +16,7 @@ import toast from 'react-hot-toast'
 import { createClient } from '@/lib/supabase'
 
 export default function CartPage() {
-  const { items, removeItem, updateQty, removeByIndex, updateItem, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
+  const { items, removeItem, updateQty, removeByIndex, updateItem, removeEye, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
 
   // Requiere una cuenta para revisar y continuar el carrito; el estado local se conserva durante el acceso.
   useEffect(() => {
@@ -292,6 +292,19 @@ export default function CartPage() {
                         </div>
                       )
                     })()}
+
+                    {(item as any).ojo_mode === 'AMBOS' && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <button type="button" onClick={() => removeEye(idx, 'OD')}
+                          className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-[10px] font-semibold text-gray-600 hover:border-red-200 hover:text-red-600">
+                          Quitar ojo derecho
+                        </button>
+                        <button type="button" onClick={() => removeEye(idx, 'OI')}
+                          className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-[10px] font-semibold text-gray-600 hover:border-red-200 hover:text-red-600">
+                          Quitar ojo izquierdo
+                        </button>
+                      </div>
+                    )}
 
                     {/* Suscripción */}
                     {(item as any).suscripcion && (
