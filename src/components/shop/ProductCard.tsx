@@ -69,7 +69,6 @@ export default function ProductCard({ product, isBestseller }: Props) {
         <a href="/cart" className="text-xs font-black text-primary-600 bg-teal-50 hover:bg-teal-50 px-3 py-1.5 rounded-xl flex-shrink-0">Ver →</a>
       </div>
     ), { duration: 1800, position: 'top-center' })
-    window.location.assign('/cart')
   }
 
   const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
