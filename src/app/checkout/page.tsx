@@ -629,10 +629,10 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      <main id="main-content" className="min-h-screen bg-gray-50 pb-24">
+      <main id="main-content" className="min-h-screen bg-gray-50 pb-20">
         {/* Barra de progreso */}
         <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
-          <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+          <div className="max-w-3xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5 text-sm text-green-700 font-semibold">
               <Lock className="w-4 h-4" />
               <img src="/azul-badge.png" alt="Pago seguro AZUL" width="28" height="28" className="h-7 w-7 object-contain rounded" />
@@ -661,11 +661,11 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <div className="max-w-5xl mx-auto px-4 pt-6">
-          <div className="grid md:grid-cols-5 gap-6 items-start">
+        <div className="max-w-3xl mx-auto px-3 pt-3">
+          <div className="grid grid-cols-1 gap-3 items-start">
 
             {/* LEFT */}
-            <div className="lg:col-span-3 space-y-3 order-first lg:order-first">
+            <div className="space-y-2 order-first">
 
               {/* Paso 1 */}
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
@@ -673,7 +673,7 @@ export default function CheckoutPage() {
                 step > 1 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100'
               }`}>
-                <div className="p-5 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
+                <div className="px-3 py-2.5 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 1 ? 'bg-green-500 text-white' : step === 1 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 1 ? <Check className="w-4 h-4" /> : '1'}
@@ -687,20 +687,20 @@ export default function CheckoutPage() {
                 </div>
 
                 {step === 1 && (
-                  <div className="px-5 pb-5 space-y-3 border-t border-gray-50 pt-4">
+                  <div className="px-3 pb-3 space-y-2.5 border-t border-gray-50 pt-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="relative">
                         <User className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
                         <label htmlFor="nombre" className="sr-only">Nombre</label>
                         <input id="nombre" {...register('nombre')} placeholder="Nombre" autoComplete="given-name"
                           aria-label="Nombre"
-                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
+                          className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                       </div>
                       <div className="relative">
                         <label htmlFor="apellido" className="sr-only">Apellido</label>
                         <input id="apellido" {...register('apellido')} placeholder="Apellido" autoComplete="family-name"
                           aria-label="Apellido"
-                          className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
+                          className="w-full pl-3 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                       </div>
                     </div>
                     {(errors.nombre || errors.apellido) && (
@@ -712,7 +712,7 @@ export default function CheckoutPage() {
                         <label htmlFor="email" className="sr-only">Email</label>
                         <input id="email" {...register('email')} type="email" placeholder="Email" autoComplete="email"
                           aria-label="Correo electrónico"
-                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
+                          className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                         {errors.email && <p className="text-red-500 text-xs mt-1">⚠️ {errors.email.message}</p>}
                       </div>
                       <div className="relative">
@@ -720,12 +720,12 @@ export default function CheckoutPage() {
                         <label htmlFor="telefono" className="sr-only">Teléfono</label>
                         <input id="telefono" {...register('telefono')} type="tel" placeholder="WhatsApp / Teléfono" autoComplete="tel"
                           aria-label="Número de teléfono"
-                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
+                          className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                         {errors.telefono && <p className="text-red-500 text-xs mt-1">⚠️ {errors.telefono.message}</p>}
                       </div>
                     </div>
                     <button type="button" onClick={nextStep}
-                      className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-100">
+                      className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all">
                       Continuar <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -738,7 +738,7 @@ export default function CheckoutPage() {
                 step > 2 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100 opacity-50'
               }`}>
-                <div className="p-5 flex items-center justify-between cursor-pointer" onClick={() => step > 2 && setStep(2)} role="button" tabIndex={step > 2 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 2 && setStep(2)} aria-label="Volver al paso 2">
+                <div className="px-3 py-2.5 flex items-center justify-between cursor-pointer" onClick={() => step > 2 && setStep(2)} role="button" tabIndex={step > 2 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 2 && setStep(2)} aria-label="Volver al paso 2">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 2 ? 'bg-green-500 text-white' : step === 2 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 2 ? <Check className="w-4 h-4" /> : '2'}
@@ -752,7 +752,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {step === 2 && (
-                  <div className="px-5 pb-5 space-y-3 border-t border-gray-50 pt-4">
+                  <div className="px-3 pb-3 space-y-2.5 border-t border-gray-50 pt-3">
 
                     {/* Selector de direcciones guardadas */}
                     {savedAddresses.length > 0 ? (
@@ -833,7 +833,7 @@ export default function CheckoutPage() {
                           <label htmlFor="direccion" className="sr-only">Dirección</label>
                           <input id="direccion" {...register('direccion')} placeholder="Calle, número, sector, referencias" autoComplete="street-address"
                             aria-label="Dirección de entrega"
-                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors" />
+                            className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
                           {errors.direccion && <p className="text-red-500 text-xs mt-1">⚠️ {errors.direccion.message}</p>}
                         </div>
                         <select {...register('ciudad')}
@@ -866,7 +866,7 @@ export default function CheckoutPage() {
                     )}
 
                     <button type="button" onClick={nextStep}
-                      className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-100">
+                      className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all">
                       Continuar <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -875,13 +875,13 @@ export default function CheckoutPage() {
 
               {/* Paso 3 */}
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${step === 3 ? 'border-primary-500 shadow-lg' : 'border-gray-100 opacity-50'}`}>
-                <div className="p-5 flex items-center gap-3">
+                <div className="px-3 py-2.5 flex items-center gap-2.5">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
                   <p className="font-bold text-gray-900 text-sm">Confirmar y pagar</p>
                 </div>
 
                 {step === 3 && (
-                  <div className="px-5 pb-6 border-t border-gray-100 pt-5 space-y-4">
+                  <div className="px-3 pb-3 border-t border-gray-100 pt-3 space-y-3">
 
                     {/* Resumen cliente */}
                     <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
@@ -907,7 +907,7 @@ export default function CheckoutPage() {
                       <p className="text-sm font-semibold text-gray-700">Método de pago</p>
 
                       {/* Tarjeta — AZUL */}
-                      <div className="bg-white border-2 border-blue-200 rounded-2xl p-4">
+                      <div className="bg-white border border-blue-200 rounded-xl p-3">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center shrink-0">
                             <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"/>
@@ -953,7 +953,7 @@ export default function CheckoutPage() {
                         createOrder(data)
                       })}
                       disabled={loading || !aceptaTerminos}
-                      className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2.5 transition-all text-base shadow-lg shadow-blue-200">
+                      className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm">
                       {loading ? (
                         <>
                           <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -986,7 +986,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* RIGHT — resumen sticky */}
-            <div className="lg:col-span-2 order-last lg:order-last">
+            <div className="hidden">
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm lg:sticky lg:top-20 overflow-hidden">
                 {/* Header */}
                 <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
@@ -1179,11 +1179,11 @@ export default function CheckoutPage() {
         </div>
       </main>
       {step === 3 && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white/95 backdrop-blur px-4 py-3 shadow-[0_-8px_24px_rgba(15,23,42,0.08)]">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white/95 backdrop-blur px-3 py-2 shadow-[0_-4px_16px_rgba(15,23,42,0.08)]">
           <div className="mx-auto flex max-w-3xl items-center gap-3">
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-semibold text-gray-500">Total a pagar</p>
-              <p className="text-lg font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
+              <p className="text-base font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
             </div>
             <button
               onClick={handleSubmit(data => {
