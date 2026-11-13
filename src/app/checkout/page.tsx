@@ -19,7 +19,7 @@ import { Shield, ShieldCheck, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, 
 
 const schema = z.object({
   nombre:               z.string().min(2, 'Nombre requerido'),
-  apellido:             z.string().min(2, 'Apellido requerido'),
+  apellido:             z.string().optional().default(''),
   email:                z.string().email('Email inválido'),
   telefono:             z.string().min(10, 'Teléfono requerido').refine(
                             (v) => (v.match(/\d/g) ?? []).length >= 10,
@@ -111,9 +111,8 @@ export default function CheckoutPage() {
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
           if (p?.nombre) {
-            const partes = String(p.nombre).trim().split(/\s+/)
-            setValue('nombre', partes.shift() ?? '')
-            setValue('apellido', partes.join(' ') || '')
+            setValue('nombre', String(p.nombre).trim())
+            setValue('apellido', '')
           }
           if (p?.email || user.email) setValue('email', p?.email || user.email || '')
           if (p?.telefono) setValue('telefono', p.telefono)
@@ -242,7 +241,7 @@ export default function CheckoutPage() {
       return
     }
 
-    const nombreCompleto = `${data.nombre.trim()} ${data.apellido.trim()}`
+    const nombreCompleto = [data.nombre, data.apellido].filter(Boolean).join(' ').trim()
     // Los pedidos del checkout web se procesan exclusivamente con tarjeta.
     const metodoPagoReal = 'tarjeta' as const
 
@@ -454,7 +453,7 @@ export default function CheckoutPage() {
       const { data: { user } } = await sb.auth.getUser()
       if (user) {
         const { data: p } = await sb.from('profiles').select('*').eq('id', user.id).single()
-        if (p?.nombre) setValue('nombre', p.nombre); if (p?.email) setValue('email', p.email); if (p?.telefono) setValue('telefono', p.telefono)
+        if (p?.nombre) { setValue('nombre', String(p.nombre).trim()); setValue('apellido', '') }; if (p?.email) setValue('email', p.email); if (p?.telefono) setValue('telefono', p.telefono)
         const { data: a } = await sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false })
         if (a && a.length > 0) {
           setSavedAddresses(a)
@@ -732,6 +731,14 @@ export default function CheckoutPage() {
                 )}
               </div>
 
+                {step === 3 && (
+                  <div className="rounded-xl border border-gray-100 bg-white px-3 py-3">
+                    <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 mb-1">Datos del cliente</p>
+                    <p className="text-base font-bold text-gray-900">{[watch('nombre'), watch('apellido')].filter(Boolean).join(' ') || 'Cargando datos…'}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{watch('email')} · {watch('telefono')}</p>
+                  </div>
+                )}
+
               {/* Paso 2 */}
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
                 (step === 2 || step === 3) ? 'border-primary-200 shadow-sm' :
@@ -789,7 +796,7 @@ export default function CheckoutPage() {
                         <div className="flex flex-wrap gap-3 pt-2">
                           <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
                             className="text-xs text-primary-600 font-semibold flex items-center gap-1">
-                            <MapPin className="w-3 h-3"/> Agregar otra dirección
+                            <MapPin className="w-3 h-3"/> Agregar dirección de entrega
                           </button>
                           {selectedAddrId && (
                             <button type="button" onClick={() => abrirEditorDireccion(savedAddresses.find(a => a.id === selectedAddrId))}
@@ -852,7 +859,7 @@ export default function CheckoutPage() {
                         {isLoggedIn && (
                           <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
                             className="text-xs text-primary-600 font-semibold flex items-center gap-1">
-                            <MapPin className="w-3 h-3"/> Guardar esta dirección en mi perfil
+                            <MapPin className="w-3 h-3"/> Agregar y guardar dirección de entrega
                           </button>
                         )}
                       </div>
@@ -1228,6 +1235,7 @@ export default function CheckoutPage() {
             <button
               onClick={handleSubmit(data => {
                 if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones para continuar'); return }
+                if (!disclaimerAceptado) { setShowDisclaimer(true); return }
                 createOrder(data)
               })}
               disabled={loading || !aceptaTerminos}
