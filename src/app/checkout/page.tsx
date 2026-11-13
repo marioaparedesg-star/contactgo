@@ -998,6 +998,7 @@ export default function CheckoutPage() {
                     <button
                       onClick={handleSubmit(data => {
                         if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones para continuar'); return }
+                        if (!disclaimerAceptado) { setShowDisclaimer(true); return }
                         createOrder(data)
                       })}
                       disabled={loading || !aceptaTerminos}
