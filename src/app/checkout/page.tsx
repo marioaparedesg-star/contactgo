@@ -98,9 +98,9 @@ export default function CheckoutPage() {
   const sub = subtotal()
   const ciudadActual = watch('ciudad')
   const ciudadEnvio = ciudadActual === 'Otra ciudad' ? watch('ciudadPersonalizada') : ciudadActual
-  const envio = calcularEnvio(sub, ciudadEnvio, cuponEnvioGratis)
+  const envio = items.length > 0 ? calcularEnvio(sub, ciudadEnvio, cuponEnvioGratis) : 0
   const envioGratis = envio === 0
-  const totalFinal = sub + envio - descuento
+  const totalFinal = items.length > 0 ? Math.max(0, sub + envio - descuento) : 0
 
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
@@ -665,7 +665,7 @@ export default function CheckoutPage() {
           <div className="grid md:grid-cols-5 gap-6 items-start">
 
             {/* LEFT */}
-            <div className="lg:col-span-3 space-y-3 order-last lg:order-first">
+            <div className="lg:col-span-3 space-y-3 order-first lg:order-first">
 
               {/* Paso 1 */}
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
@@ -986,10 +986,10 @@ export default function CheckoutPage() {
             </div>
 
             {/* RIGHT — resumen sticky */}
-            <div className="lg:col-span-2 order-first lg:order-last">
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm sticky top-20 overflow-hidden">
+            <div className="lg:col-span-2 order-last lg:order-last">
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm lg:sticky lg:top-20 overflow-hidden">
                 {/* Header */}
-                <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                   <div>
                     <p className="font-black text-gray-900 text-sm">Resumen del pedido</p>
                     <p className="text-[11px] text-gray-400 mt-0.5">{items.length} {items.length===1?'producto':'productos'}</p>
@@ -1002,7 +1002,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Items */}
-                <div className="p-4 space-y-3 max-h-56 overflow-y-auto border-b border-gray-50">
+                <div className="p-3 space-y-2 max-h-40 overflow-y-auto border-b border-gray-50">
                   {items.map((item, idx) => (
                     <div key={idx} className="flex gap-3 items-start">
                       {item.product.imagen_url && (
@@ -1072,7 +1072,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Cupón — si viene del carrito, mostrar banner; si no, input */}
-                <div className="p-4 border-b border-gray-50">
+                <div className="p-3 border-b border-gray-50">
                   {cuponAplicado ? (
                     <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2.5">
                       <div className="flex items-center gap-2">
@@ -1108,7 +1108,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Totales */}
-                <div className="p-4 space-y-1.5">
+                <div className="p-3 space-y-1.5">
                   {/* Descuento por suscripción */}
                   {items.some(i => (i as any).suscripcion) && (() => {
                     const ahorro = items.reduce((acc, i) => {
@@ -1149,7 +1149,7 @@ export default function CheckoutPage() {
                   {/* Total destacado */}
                   <div className="bg-gray-50 rounded-xl px-3 py-3 flex justify-between items-center mt-1">
                     <span className="font-black text-gray-900">Total</span>
-                    <span className="font-black text-2xl text-primary-600">RD${totalFinal.toLocaleString()}</span>
+                    <span className="font-black text-xl text-primary-600">RD${totalFinal.toLocaleString()}</span>
                   </div>
 
                   {envio > 0 && sub > 0 && (
