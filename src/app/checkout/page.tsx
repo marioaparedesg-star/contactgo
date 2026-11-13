@@ -680,8 +680,8 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-5 lg:gap-7 items-start">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="grid grid-cols-1 gap-5 items-start">
 
             {/* LEFT */}
             <div className="space-y-5 order-first">
