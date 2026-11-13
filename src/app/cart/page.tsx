@@ -396,7 +396,7 @@ export default function CartPage() {
                   <span>RD${sub.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-gray-500">
-                  <span>Envío</span>
+                  <span>Envío (desde)</span>
                   <span className={envio === 0 ? 'text-green-600 font-semibold' : ''}>
                     {envio === 0 ? '🎁 ¡Gratis!' : `RD$${envio}`}
                   </span>
