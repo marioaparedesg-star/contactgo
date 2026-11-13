@@ -651,7 +651,7 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      <main id="main-content" className="min-h-screen bg-[#f5f8fb] pb-24">
+      <main id="main-content" className="min-h-screen bg-[#f7f9fc] pb-24">
         {/* Barra de progreso */}
         <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
@@ -683,25 +683,25 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <div className="grid grid-cols-1 gap-5 items-start">
+        <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-7">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)] gap-4 lg:gap-5 items-start">
 
             {/* LEFT */}
             <div className="space-y-5 order-first">
 
               {/* Paso 1 */}
-              <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm transition-all duration-200 ${
+              <div className={`bg-white rounded-2xl border border-slate-200 shadow-[0_2px_12px_rgba(15,35,65,0.045)] transition-all duration-200 ${
                 step === 1 ? 'border-primary-200 shadow-sm' :
                 step > 1 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100'
               }`}>
-                <div className="px-4 sm:px-6 py-4 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
+                <div className="px-4 sm:px-5 py-3.5 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 1 ? 'bg-green-500 text-white' : step === 1 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 1 ? <Check className="w-4 h-4" /> : '1'}
                     </div>
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">Información de contacto</p>
+                      <p className="font-bold text-gray-900 text-base">Datos del cliente</p>
                       {step > 1 && <p className="text-xs text-gray-400 mt-0.5">{getValues('nombre')} {getValues('apellido')} · {getValues('email')}</p>}
                     </div>
                   </div>
@@ -709,7 +709,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {(step === 1 || step === 3) && (
-                  <div className="px-4 sm:px-6 pb-5 sm:pb-6 space-y-4 border-t border-slate-100 pt-5">
+                  <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-3.5 border-t border-slate-100 pt-4">
                     <div className="relative">
                       <User className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
                       <label htmlFor="nombre" className="block text-xs font-semibold text-slate-600 mb-1.5">Nombre completo</label>
@@ -761,13 +761,13 @@ export default function CheckoutPage() {
                 step > 2 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100 opacity-50'
               }`}>
-                <div className="px-3 py-2.5 flex items-center justify-between cursor-pointer" onClick={() => step > 2 && setStep(2)} role="button" tabIndex={step > 2 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 2 && setStep(2)} aria-label="Volver al paso 2">
+                <div className="px-4 sm:px-5 py-3.5 flex items-center justify-between cursor-pointer" onClick={() => step > 2 && setStep(2)} role="button" tabIndex={step > 2 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 2 && setStep(2)} aria-label="Volver al paso 2">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 2 ? 'bg-green-500 text-white' : step === 2 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 2 ? <Check className="w-4 h-4" /> : '2'}
                     </div>
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">Dirección de entrega</p>
+                      <p className="font-bold text-gray-900 text-base">Dirección de entrega</p>
                       {step > 2 && <p className="text-xs text-gray-400 mt-0.5">{getValues('direccion')}, {getValues('ciudad')}</p>}
                     </div>
                   </div>
@@ -900,14 +900,14 @@ export default function CheckoutPage() {
               <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm transition-all duration-200 ${step === 3 ? 'border-teal-200' : 'border-slate-200'}`}>
                 <div className="px-4 sm:px-6 py-4 flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
-                  <p className="font-bold text-gray-900 text-sm">Resumen del pedido</p>
+                  <p className="font-bold text-gray-900 text-base">Resumen del pedido y pago</p>
                 </div>
 
                 {step === 3 && (
-                  <div className="px-4 sm:px-6 pb-6 border-t border-slate-100 pt-5 space-y-5">
+                  <div className="px-4 sm:px-5 pb-5 border-t border-slate-100 pt-4 space-y-4">
 
                     {/* Resumen compacto del pedido */}
-                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                    <div className="rounded-xl border border-slate-200 bg-white px-3.5 py-3.5">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
@@ -940,7 +940,7 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* Cupón accesible también en compra directa */}
-                    <div className="rounded-2xl border border-slate-200 px-4 py-3">
+                    <div className="rounded-xl border border-slate-200 px-3.5 py-3">
                       {cuponAplicado ? (
                         <div className="flex items-center justify-between gap-2 text-xs text-green-700">
                           <span className="font-semibold">✓ Cupón {cupon.toUpperCase()} aplicado · −RD${descuento.toLocaleString()}</span>
@@ -959,7 +959,7 @@ export default function CheckoutPage() {
                       <p className="text-sm font-semibold text-gray-700">Método de pago</p>
 
                       {/* Tarjeta — AZUL */}
-                      <div className="bg-white border border-blue-200 rounded-2xl p-4">
+                      <div className="bg-white border border-blue-200 rounded-xl p-3.5">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center shrink-0">
                             <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"/>
@@ -1006,7 +1006,7 @@ export default function CheckoutPage() {
                         createOrder(data)
                       })}
                       disabled={loading || !aceptaTerminos}
-                      className="w-full bg-[#002455] hover:bg-[#001f4a] active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-base shadow-lg shadow-blue-950/10">
+                      className="w-full bg-[#002455] hover:bg-[#001f4a] active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all text-base shadow-md shadow-blue-950/10">
                       {loading ? (
                         <>
                           <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
