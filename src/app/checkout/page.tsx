@@ -249,7 +249,7 @@ export default function CheckoutPage() {
       return
     }
 
-    const nombreCompleto = [data.nombre, data.apellido].filter(Boolean).join(' ').trim()
+    const nombreCompleto = data.nombre.trim()
     // Los pedidos del checkout web se procesan exclusivamente con tarjeta.
     const metodoPagoReal = 'tarjeta' as const
 
@@ -707,20 +707,13 @@ export default function CheckoutPage() {
 
                 {(step === 1 || step === 3) && (
                   <div className="px-4 sm:px-6 pb-5 sm:pb-6 space-y-4 border-t border-slate-100 pt-5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="relative">
-                        <User className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
-                        <label htmlFor="nombre" className="block text-[11px] font-semibold text-gray-500 mb-1">Nombre</label>
-                        <input id="nombre" {...register('nombre')} placeholder="Nombre" autoComplete="given-name"
-                          aria-label="Nombre"
-                          className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
-                      </div>
-                      <div className="relative">
-                        <label htmlFor="apellido" className="block text-[11px] font-semibold text-gray-500 mb-1">Apellido</label>
-                        <input id="apellido" {...register('apellido')} placeholder="Apellido" autoComplete="family-name"
-                          aria-label="Apellido"
-                          className="w-full pl-3 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
-                      </div>
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
+                      <label htmlFor="nombre" className="block text-xs font-semibold text-slate-600 mb-1.5">Nombre completo</label>
+                      <input id="nombre" {...register('nombre')} placeholder="Nombre y apellido" autoComplete="name"
+                        aria-label="Nombre completo"
+                        className="w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-teal-100 focus:border-teal-500 transition-colors bg-white" />
+                      {errors.nombre && <p className="text-red-500 text-xs mt-1">⚠️ {errors.nombre.message}</p>}
                     </div>
                     {(errors.nombre || errors.apellido) && (
                       <p className="text-red-500 text-xs -mt-1 flex items-center gap-1">⚠️ {errors.nombre?.message ?? errors.apellido?.message}</p>
