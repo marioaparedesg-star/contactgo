@@ -664,7 +664,7 @@ export default function CheckoutPage() {
                 </div>
               ))}
             </div>
-            <div className="text-[10px] text-gray-400 font-medium">{step}/3</div>
+            <div className="text-[10px] text-gray-400 font-medium">Compra segura</div>
           </div>
         </div>
 
@@ -892,7 +892,7 @@ export default function CheckoutPage() {
               <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${step === 3 ? 'border-primary-200 shadow-sm' : 'border-gray-100 opacity-50'}`}>
                 <div className="px-3 py-2.5 flex items-center gap-2.5">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
-                  <p className="font-bold text-gray-900 text-sm">Confirmar y pagar</p>
+                  <p className="font-bold text-gray-900 text-sm">Resumen del pedido</p>
                 </div>
 
                 {step === 3 && (
@@ -940,26 +940,6 @@ export default function CheckoutPage() {
                           <button type="button" onClick={aplicarCupon} className="rounded-lg bg-gray-900 px-3 py-2 text-xs font-bold text-white">Usar</button>
                         </div>
                       )}
-                    </div>
-
-                    {/* Resumen cliente */}
-                    <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center shrink-0">
-                          <User className="w-4 h-4 text-primary-600" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-gray-900 text-sm">{getValues('nombre')} {getValues('apellido')}</p>
-                          <p className="text-xs text-gray-500">{getValues('email')}</p>
-                          <p className="text-xs text-gray-400">{getValues('telefono')}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-2.5 pl-0.5">
-                        <div className="w-8 h-8 bg-green-50 rounded-xl flex items-center justify-center shrink-0">
-                          <MapPin className="w-4 h-4 text-green-500" />
-                        </div>
-                        <p className="text-sm text-gray-600 pt-1.5">{getValues('direccion')}, {getValues('ciudad')}</p>
-                      </div>
                     </div>
 
                     {/* Método de pago — solo AZUL */}
