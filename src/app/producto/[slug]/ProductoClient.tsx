@@ -664,7 +664,7 @@ export default function ProductoClient({ product, variants }: Props) {
     setPrice(Math.round(base * (1 - descSub)))
   }, [size, product.precio, sku, suscripcion, qty, isLente, isColor, modalidad, precioPlano])
 
-  const handleAdd = async (): Promise<boolean> => {
+  const handleAdd = async (redirectToCart = true): Promise<boolean> => {
     // Exigir autenticación antes de añadir cualquier producto al carrito.
     try {
       const { data: { user } } = await createClient().auth.getUser()
@@ -698,6 +698,7 @@ export default function ProductoClient({ product, variants }: Props) {
         suscripcion: suscripcion ?? undefined,
       })
       toast.success('¡Perfecto! Lente agregado al carrito 🎉')
+      if (redirectToCart) router.push('/cart')
       return true
     }
 
@@ -714,7 +715,8 @@ export default function ProductoClient({ product, variants }: Props) {
         precio_original: precioBase,
       })
       toast.success('¡Listo! Agregado al carrito 🎉')
-        return true
+      if (redirectToCart) router.push('/cart')
+      return true
     }
 
     // ── Lentes: requieren selección de ojo ────────────────────────────
@@ -804,12 +806,13 @@ export default function ProductoClient({ product, variants }: Props) {
         num_items: qty,
       }, email ? { email } : undefined, addToCartEventId)
     })()
+    if (redirectToCart) router.push('/cart')
     return true
   }
 
   const handleBuyNow = async () => {
     trackBuyNow(product.id, product.nombre, price)
-    if (await handleAdd()) router.push('/checkout')
+    if (await handleAdd(false)) router.push('/checkout')
   }
 
   return (
