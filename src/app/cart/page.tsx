@@ -199,12 +199,12 @@ export default function CartPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-5xl mx-auto px-4 py-5 pb-32 md:pb-8">
+      <main className="max-w-3xl mx-auto px-3 py-3 pb-24 md:pb-6">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-3">
           <div>
-            <h1 className="text-2xl font-black text-gray-900">Tu carrito</h1>
+            <h1 className="text-xl font-bold text-gray-900">Tu carrito</h1>
             <p className="text-sm text-gray-400 mt-0.5">{items.length} {items.length === 1 ? 'producto' : 'productos'}</p>
           </div>
           <button onClick={clearCart} className="text-xs text-red-400 hover:text-red-600 font-medium transition-colors">
@@ -212,21 +212,21 @@ export default function CartPage() {
           </button>
         </div>
 
-        <div className="grid md:grid-cols-5 gap-6">
+        <div className="grid md:grid-cols-5 gap-3">
 
           {/* Items */}
-          <div className="md:col-span-3 space-y-3">
+          <div className="md:col-span-3 space-y-2 order-last md:order-first">
             {items.map((item, idx) => {
               const receta = fmtReceta(item)
               const precioItem = Number((item as any).precio_final ?? item.product.precio)
               // ojoLabel legacy — reemplazado por nuevo bloque ojo_mode abajo
               return (
                 <div key={`${item.product.id}-${item.sph}-${(item as any).ojo}-${idx}`}
-                  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 flex gap-3 sm:gap-4">
+                  className="bg-white rounded-xl border border-gray-100 p-2.5 flex gap-2.5">
                   {/* Imagen */}
-                  <div className="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
+                  <div className="w-14 h-14 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
                     {item.product.imagen_url
-                      ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={80} height={80} className="object-contain p-1" unoptimized />
+                      ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={56} height={56} className="object-contain p-1" unoptimized />
                       : <Eye className="w-8 h-8 text-gray-200" />
                     }
                   </div>
@@ -308,17 +308,17 @@ export default function CartPage() {
                       </p>
                     )}
                     {/* Precio + cantidad */}
-                    <div className="flex items-center justify-between mt-3">
+                    <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
                         <button type="button" onClick={() => updateItem(idx, item.cantidad - 1)}
                           aria-label="Reducir cantidad"
-                          className="w-11 h-11 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
+                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
                           <Minus className="w-3 h-3" />
                         </button>
                         <span className="w-8 text-center text-sm font-bold text-gray-900">{item.cantidad}</span>
                         <button type="button" onClick={() => updateItem(idx, item.cantidad + 1)}
                           aria-label="Aumentar cantidad"
-                          className="w-11 h-11 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
+                          className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 text-gray-600 font-bold transition-colors">
                           <Plus className="w-3 h-3" />
                         </button>
                       </div>
@@ -343,7 +343,7 @@ export default function CartPage() {
                 respondiera. Ahora se calcula según el artículo más lento
                 del carrito, usando la misma fuente única de verdad.
             */}
-            <div className="grid grid-cols-3 gap-2 pt-2">
+            <div className="hidden">
               {(() => {
                 const entregaPeorCaso = items.reduce((peor: any, item: any) => {
                   const info = getEntrega((item.product as any)?.tipo ?? 'esferico', item.product?.nombre, item.sph)
@@ -367,9 +367,9 @@ export default function CartPage() {
           </div>
 
           {/* Resumen */}
-          <div className="md:col-span-2 md:sticky md:top-4 md:self-start">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5 sticky top-20 space-y-3">
-              <h3 className="font-black text-gray-900">Resumen</h3>
+          <div className="md:col-span-2 md:sticky md:top-3 md:self-start order-first md:order-last">
+            <div className="bg-white rounded-xl border border-gray-100 p-3 space-y-2.5">
+              <h3 className="text-sm font-bold text-gray-900">Resumen</h3>
 
               {/* Cupón */}
               <div>
@@ -430,12 +430,12 @@ export default function CartPage() {
               {/* Email capture movido aquí — captura discreta en el blur del CTA, no antes */}
               <Link href="/checkout"
                 onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
-                className="w-full btn-primary flex items-center justify-center gap-2 py-4 text-base font-black rounded-2xl">
+                className="w-full btn-primary flex items-center justify-center gap-2 py-3 text-sm font-bold rounded-xl">
                 Continuar al pago <ChevronRight className="w-5 h-5" />
               </Link>
 
               {/* Cross-sell: solución si no la tienen — Bundle destacado */}
-              {solucionSugerida && (
+              {false && solucionSugerida && (
                 <div className="bg-gradient-to-br from-blue-50 to-teal-50 border border-primary-100 rounded-2xl p-3">
                   <p className="text-[10px] font-black text-primary-700 uppercase tracking-wide mb-1.5">
                     💧 Agrega tu solución de limpieza
@@ -467,7 +467,7 @@ export default function CartPage() {
               )}
 
 
-              <div className="flex items-center justify-center gap-2 text-[11px] text-gray-500">
+              <div className="flex items-center justify-center gap-1.5 text-[10px] text-gray-400">
                 <span>Pago seguro con</span>
                 <AzulLogo size="sm" />
                 <span>· Banco Popular</span>
@@ -480,14 +480,14 @@ export default function CartPage() {
       <div className="pb-24 md:pb-0" />
 
       {/* Sticky móvil */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 px-4 py-2.5 shadow-lg">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 px-3 py-2 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <p className="text-xs text-gray-500">{items.length} productos</p>
             <p className="font-black text-primary-600 text-lg">RD${tot.toLocaleString()}</p>
           </div>
           <Link href="/checkout"
-            className="btn-primary flex items-center gap-2 px-6 py-3 font-bold text-sm">
+            className="btn-primary flex items-center gap-2 px-5 py-2.5 font-bold text-sm rounded-xl">
             Pagar <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
