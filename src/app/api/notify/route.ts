@@ -440,7 +440,11 @@ export async function POST(req: NextRequest) {
             headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
             body: JSON.stringify({ tipo: tipoWA, order_id }),
           })
-          const d = await r.json()
+          const responseText = await r.text()
+          let d: any
+          try { d = JSON.parse(responseText) } catch {
+            d = { ok: false, error: `Respuesta no JSON (HTTP ${r.status}): ${responseText.slice(0, 180)}` }
+          }
           console.log('[notify] WA estado:', nuevo_estado, d?.ok ? 'OK' : d)
         } catch (e) {
           console.error('[notify] WA error:', e)
@@ -462,7 +466,11 @@ export async function POST(req: NextRequest) {
           headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
           body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
         })
-        const d = await r.json()
+        const responseText = await r.text()
+          let d: any
+          try { d = JSON.parse(responseText) } catch {
+            d = { ok: false, error: `Respuesta no JSON (HTTP ${r.status}): ${responseText.slice(0, 180)}` }
+          }
         console.log('[notify] WA pedido_pagado:', d?.ok ? 'OK' : d)
       } catch (e) {
         console.error('[notify] WA error:', e)
