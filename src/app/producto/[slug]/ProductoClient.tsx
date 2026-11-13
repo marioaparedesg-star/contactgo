@@ -985,7 +985,7 @@ export default function ProductoClient({ product, variants }: Props) {
             {/* BLOQUE 5: CTA MOBILE (inline, arriba de la sticky bar) */}
             <div className="px-4 pb-4 space-y-2">
               <EntregaHoy especial={getEntregaInfo.especial} />
-              <button onClick={handleAdd} disabled={product.stock===0||sinVariante}
+              <button onClick={() => handleAdd()} disabled={product.stock===0||sinVariante}
                 className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-teal-100/50 transition-all">
                 <ShoppingCart className="w-5 h-5" />
                 {faltaColor ? 'Selecciona un color primero' : sinVariante ? 'Completa la selección primero' : 'Agregar al carrito'}
@@ -1245,7 +1245,7 @@ export default function ProductoClient({ product, variants }: Props) {
                       <p className="text-xs text-gray-400">Total</p>
                       <p className="text-xl font-black text-gray-900">RD${(price*(isGota?1:qty)).toLocaleString()}</p>
                     </div>
-                    <button onClick={handleAdd} disabled={product.stock===0||sinVariante}
+                    <button onClick={() => handleAdd()} disabled={product.stock===0||sinVariante}
                       className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-teal-100/50">
                       <ShoppingCart className="w-4 h-4" />
                       {product.stock===0?'Sin stock':faltaColor?'Selecciona un color primero':sinVariante?'Consultar':'Agregar al carrito'}
