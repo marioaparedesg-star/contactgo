@@ -252,6 +252,12 @@ export default function CheckoutPage() {
     setLoading(true)
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
+    if (!user) {
+      setLoading(false)
+      toast.error('Tu sesión expiró. Inicia sesión para continuar con el pago.')
+      router.replace('/cuenta?next=/cart')
+      return
+    }
 
     // ─── Crear orden y preparar el pago con AZUL. ──
     {
@@ -339,7 +345,9 @@ export default function CheckoutPage() {
       if (!itemsRes.ok) {
         const itemsErr = await itemsRes.text().catch(() => 'unknown')
         console.error('[checkout] order_items FAILED:', itemsErr)
-        // No bloqueamos el pago, pero lo logueamos
+        toast.error('No pudimos guardar los productos de tu pedido. No se realizará ningún cobro. Intenta nuevamente.')
+        setLoading(false)
+        return
       }
 
       // 2b. Crear registro de suscripción si algún item tiene frecuencia
