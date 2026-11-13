@@ -639,17 +639,17 @@ export default function CheckoutPage() {
               <span className="hidden sm:inline text-xs">Pago seguro</span>
             </div>
             {/* Pasos */}
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 items-center gap-1 sm:gap-2">
               {steps.map((s, i) => (
                 <div key={s.n} className="flex items-center gap-1.5">
                   <button onClick={() => step > s.n && setStep(s.n)}
-                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-black transition-all ${
+                    className={`flex items-center gap-1.5 px-1.5 sm:px-2.5 py-1.5 rounded-full text-xs font-black transition-all ${
                       step === s.n ? 'bg-teal-500 text-white shadow-md scale-105' :
                       step > s.n ? 'bg-green-100 text-green-700 cursor-pointer' :
                       'bg-gray-100 text-gray-400'
                     }`}>
                     {step > s.n ? <Check className="w-3 h-3" /> : <span>{s.n}</span>}
-                    <span>{s.label}</span>
+                    <span className="hidden sm:inline">{s.label}</span>
                   </button>
                   {i < steps.length - 1 && (
                     <div className={`w-6 h-1 rounded-full transition-all ${step > s.n ? 'bg-green-400' : 'bg-gray-200'}`} />
