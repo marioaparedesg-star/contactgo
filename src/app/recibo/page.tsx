@@ -206,7 +206,8 @@ function ReciboContent() {
 
   const fecha = new Date(order.fecha || order.updated_at || Date.now())
   const totalReal         = order.total ?? 0
-  const envio              = order.envio ?? 200
+  const ciudadDestino = String(order.ciudad ?? order.provincia ?? '').toLowerCase()
+  const envio              = order.envio ?? (ciudadDestino.includes('santo domingo') || ciudadDestino.includes('distrito nacional') ? 250 : 350)
   const descuento           = order.descuento ?? 0
   const subtotalConITBIS  = totalReal - envio - descuento
   const itbis             = Math.round(subtotalConITBIS * 0.18 / 1.18)
@@ -328,8 +329,6 @@ function ReciboContent() {
         <div style={{display:'flex',justifyContent:'flex-end',marginBottom:'16px'}}>
           <div style={{width:'260px'}}>
             {[
-              {label:'Subtotal (sin ITBIS)', val:`RD$${subtotalSinITBIS.toLocaleString()}`},
-              {label:'ITBIS (18%)',           val:`RD$${itbis.toLocaleString()}`},
               ...(descuento > 0 ? [{label:'Descuento', val:`-RD$${descuento.toLocaleString()}`, color:'#16a34a'}] : []),
               {label:'Envío',                val: envio > 0 ? `RD$${envio.toLocaleString()}` : 'Gratis'},
             ].map((row:any, i:number) => (
