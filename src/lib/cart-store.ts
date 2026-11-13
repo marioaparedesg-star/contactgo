@@ -37,6 +37,7 @@ interface CartStore {
   addItem:          (product: Product, opts?: AddItemOpts) => void
   removeByIndex:    (index: number) => void
   updateItem:       (index: number, cantidad: number) => void
+  removeEye:        (index: number, eye: 'OD' | 'OI') => void
   clearCart:        () => void
   subtotal:         () => number
   total:            () => number
@@ -141,7 +142,7 @@ export const useCartStore = create<CartStore>()(
 
       clearCart: () => set({ items: [], cuponCodigo: null, cuponDescuento: 0 }),
 
-      // ── Legacy — mantener compatibilidad ────────────────────────────
+      // ── Legacy — mantener para compatibilidad ────────────────────────────
       removeItem: (productId, _sph, _ojo) => {
         // Usar removeByIndex cuando sea posible; esto es fallback
         set(state => ({
