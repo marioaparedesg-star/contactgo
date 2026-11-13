@@ -17,7 +17,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en República Dominicana — Marcas Originales · ContactGo',
-  description: 'Compra lentes de contacto originales en toda República Dominicana: Acuvue, Biofinity, Air Optix, Ultra, Precision1, Dailies. Entrega 24-48h. Pago seguro con AZUL. Especialistas exclusivos en lentes de contacto.',
+  description: 'Compra lentes de contacto originales en toda República Dominicana: Acuvue, Biofinity, Air Optix, Ultra, Precision1, Dailies. Entrega según el tipo de lente. Pago seguro con AZUL. Especialistas exclusivos en lentes de contacto.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto-republica-dominicana' },
   openGraph: {
     title: 'Lentes de Contacto en República Dominicana — ContactGo®',
@@ -149,7 +149,7 @@ return [
         name: '¿Cuánto tarda la entrega de lentes de contacto en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'La entrega estándar en Santo Domingo y Santiago es de 24 a 48 horas. Para el resto del país (Punta Cana, Higüey, La Romana, San Pedro, Puerto Plata, entre otros) la entrega toma de 2 a 4 días hábiles. Todos los pedidos incluyen tracking.',
+          text: 'Los lentes de color planos se entregan al día siguiente; los esféricos en 24 a 48 horas; los multifocales en 1 a 5 días; y los tóricos en 25 a 45 días por fabricación a medida. El tiempo depende del tipo de lente y no de la provincia.',
         },
       },
       {
