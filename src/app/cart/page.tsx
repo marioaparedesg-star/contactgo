@@ -199,7 +199,7 @@ export default function CartPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-5xl mx-auto px-4 py-8 pb-32 md:pb-8">
+      <main className="max-w-5xl mx-auto px-4 py-5 pb-32 md:pb-8">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -222,7 +222,7 @@ export default function CartPage() {
               // ojoLabel legacy — reemplazado por nuevo bloque ojo_mode abajo
               return (
                 <div key={`${item.product.id}-${item.sph}-${(item as any).ojo}-${idx}`}
-                  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4">
+                  className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 flex gap-3 sm:gap-4">
                   {/* Imagen */}
                   <div className="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
                     {item.product.imagen_url
@@ -368,7 +368,7 @@ export default function CartPage() {
 
           {/* Resumen */}
           <div className="md:col-span-2 md:sticky md:top-4 md:self-start">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-20 space-y-4">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5 sticky top-20 space-y-3">
               <h3 className="font-black text-gray-900">Resumen</h3>
 
               {/* Cupón */}
@@ -427,6 +427,13 @@ export default function CartPage() {
                 </div>
               )}
 
+              {/* Email capture movido aquí — captura discreta en el blur del CTA, no antes */}
+              <Link href="/checkout"
+                onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
+                className="w-full btn-primary flex items-center justify-center gap-2 py-4 text-base font-black rounded-2xl">
+                Continuar al pago <ChevronRight className="w-5 h-5" />
+              </Link>
+
               {/* Cross-sell: solución si no la tienen — Bundle destacado */}
               {solucionSugerida && (
                 <div className="bg-gradient-to-br from-blue-50 to-teal-50 border border-primary-100 rounded-2xl p-3">
@@ -459,12 +466,6 @@ export default function CartPage() {
                 </div>
               )}
 
-              {/* Email capture movido aquí — captura discreta en el blur del CTA, no antes */}
-              <Link href="/checkout"
-                onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
-                className="w-full btn-primary flex items-center justify-center gap-2 py-4 text-base font-black rounded-2xl">
-                Continuar al pago <ChevronRight className="w-5 h-5" />
-              </Link>
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-gray-500">
                 <span>Pago seguro con</span>
@@ -479,7 +480,7 @@ export default function CartPage() {
       <div className="pb-24 md:pb-0" />
 
       {/* Sticky móvil */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 shadow-lg">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 px-4 py-2.5 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <p className="text-xs text-gray-500">{items.length} productos</p>

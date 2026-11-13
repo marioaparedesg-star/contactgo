@@ -42,33 +42,12 @@ export default function ProductCard({ product, isBestseller }: Props) {
     setIsFav(!isFav)
   }
 
-  const handleAdd = async (e: React.MouseEvent) => {
+  const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault()
+    // La tarjeta del catálogo solo lleva a configurar el producto.
+    // El alta al carrito ocurre exclusivamente desde la ficha configurada.
     const productPath = `/producto/${(product as any).slug || product.id}`
-    if (needsRx) { window.location.href = productPath; return }
-    // Registro obligatorio ANTES de modificar el carrito.
-    try {
-      const { data: { user } } = await createClient().auth.getUser()
-      if (!user) {
-        window.location.assign(`/cuenta?next=${encodeURIComponent(productPath)}`)
-        return
-      }
-    } catch {
-      window.location.assign(`/cuenta?next=${encodeURIComponent(productPath)}`)
-      return
-    }
-    addItem(product)
-    toast.custom((t) => (
-      <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-sm w-full bg-white shadow-xl rounded-2xl border border-green-100 flex items-center gap-3 p-4`}>
-        <span className="text-xl flex-shrink-0">✅</span>
-        <p className="text-sm font-bold text-gray-900 flex-1 truncate">{product.nombre} agregado</p>
-        <a href="/cart" className="text-xs font-black text-primary-600 bg-teal-50 hover:bg-teal-50 px-3 py-1.5 rounded-xl flex-shrink-0">Ver →</a>
-      </div>
-    ), { duration: 3500, position: 'top-center' })
-    trackEcommerce('add_to_cart', {
-      items: [{ item_id: product.id, item_name: product.nombre, item_brand: product.marca ?? '', item_category: product.tipo ?? '', price: product.precio, quantity: 1 }],
-      value: product.precio
-    })
+    window.location.assign(productPath)
   }
 
   const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
@@ -231,11 +210,11 @@ export default function ProductCard({ product, isBestseller }: Props) {
           <button
             onClick={handleAdd}
             disabled={product.stock === 0}
-            aria-label={product.stock === 0 ? `${product.nombre} sin stock` : needsRx ? `Ver opciones de ${product.nombre}` : `Agregar ${product.nombre} al carrito`}
+            aria-label={product.stock === 0 ? `${product.nombre} sin stock` : `Configurar ${product.nombre}`}
             className="w-full btn-primary py-2 text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-4 h-4 shrink-0" aria-hidden="true" />
-            <span>{needsRx ? 'Ver opciones' : 'Agregar'}</span>
+            <span>Configurar</span>
           </button>
         </div>
       </div>
