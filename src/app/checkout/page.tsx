@@ -157,11 +157,15 @@ export default function CheckoutPage() {
             // Clientes con dirección guardada pasan directamente al resumen/pago.
             setStep(3)
           } else {
-            // Cliente registrado sin dirección: el primer paso ya viene del perfil.
+            // Cliente registrado sin dirección: abre directamente el formulario del paso 2.
+            setSelectedAddrId(null)
+            setShowAddressEditor(true)
             setStep(2)
           }
           setAddressesLoaded(true)
         }).then(undefined, () => {
+          setSelectedAddrId(null)
+          setShowAddressEditor(true)
           setStep(2)
           setAddressesLoaded(true)
         })
