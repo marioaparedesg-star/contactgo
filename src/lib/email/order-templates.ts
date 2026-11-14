@@ -20,11 +20,15 @@ function orderNumber(order: Order): string {
   return String(order.numero_orden ?? order.id?.slice(-8)?.toUpperCase() ?? '')
 }
 function deliveryText(items: OrderItem[]): string {
-  const rank: Record<string, number> = { solucion: 1, gota: 1, color: 2, esferico: 3, multifocal: 4, torico: 5 }
-  const tipos = items.map(i => i.products?.tipo ?? i.tipo).filter(Boolean) as string[]
-  const tipo = tipos.sort((a, b) => (rank[b] ?? 0) - (rank[a] ?? 0))[0]
-  if (!tipo) return 'El tiempo de entrega se confirmará según la disponibilidad de los productos.'
-  return getEntregaTextoEmail(tipo)
+  const estimates = items.map((item) => {
+    const tipo = item.products?.tipo ?? item.tipo
+    if (!tipo) return ''
+    return getEntregaTextoEmail(String(tipo), String(item.nombre ?? ''), item.sph ?? null)
+  }).filter(Boolean)
+  const unique = [...new Set(estimates)]
+  return unique.length
+    ? unique.join(' · ')
+    : 'El tiempo de entrega se confirmará según la disponibilidad de los productos.'
 }
 
 const STATUS: Record<string, { subject: string; title: string; message: string; tag: string }> = {
@@ -136,7 +140,7 @@ export function buildAdminOrderEmail(order: Order, items: OrderItem[], event: st
           <tr><td style="padding:7px 0;color:#64748b">Pago</td><td align="right">${esc(order.pago_estado)}</td></tr>
           <tr><td style="padding:7px 0;color:#64748b">Estado</td><td align="right">${esc(state)}</td></tr>
         </table>
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e8edf3;font-size:13px">${itemRows(items)}</div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e8edf3;font-size:13px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tbody>${itemRows(items)}</tbody></table></div>
         <p style="margin:20px 0 0;text-align:center"><a href="${SITE}/admin/pedidos" style="display:inline-block;padding:12px 20px;border-radius:8px;background:${ACCENT};color:#002b35;text-decoration:none;font-size:13px;font-weight:800">Abrir pedidos en administración</a></p>
       </div>
     </div></body></html>`
