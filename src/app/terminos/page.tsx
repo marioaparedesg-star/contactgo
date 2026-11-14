@@ -20,23 +20,23 @@ const secciones = [
   },
   {
     title: '2. Descripción del servicio',
-    body: 'ContactGo es la única tienda dominicana especializada exclusivamente en lentes de contacto y productos de cuidado ocular. Todos nuestros productos son directo del fabricante y certificados por las marcas fabricantes: ACUVUE®, Air Optix®, Biofinity® y Bausch+Lomb®.'
+    body: 'ContactGo es una tienda en línea especializada en lentes de contacto y productos para el cuidado visual. Nuestro catálogo incluye marcas como ACUVUE®, Air Optix®, Biofinity® y Bausch+Lomb®.'
   },
   {
     title: '3. Productos y disponibilidad',
-    body: 'Todos los productos ofrecidos son directo del fabricante, directo del fabricante y adquiridos a través de canales oficiales de las marcas. ContactGo se reserva el derecho de modificar precios, descontinuar productos o limitar cantidades sin previo aviso. La disponibilidad de stock se actualiza en tiempo real.'
+    body: 'Los productos, precios y disponibilidad se muestran en sus respectivas fichas y pueden cambiar según el inventario y las condiciones de los fabricantes. ContactGo se reserva el derecho de actualizar el catálogo y limitar cantidades cuando corresponda.'
   },
   {
     title: '4. Precios y pagos',
-    body: 'Todos los precios están expresados en pesos dominicanos (RD$) e incluyen ITBIS del 18% conforme a la Ley 11-92. Aceptamos tarjeta de crédito/débito Visa y Mastercard procesada por AZUL (Banco Popular) con verificación 3D Secure. ContactGo no almacena datos de tarjetas de crédito.'
+    body: 'Todos los precios se muestran en pesos dominicanos (RD$). Aceptamos tarjeta de crédito y débito mediante la pasarela de pago indicada durante el checkout. ContactGo no almacena datos de tarjetas.'
   },
   {
     title: '5. Envíos y entregas',
-    body: 'Realizamos entregas en toda la República Dominicana. Costo de envío: RD$250 en Santo Domingo y Gran Santo Domingo, RD$350 en el interior del país. Envío gratuito en compras desde RD$8,000. Tiempo estimado de transporte: 24-48 horas en Santo Domingo y 2-4 días en el resto del país. Los tiempos estimados de entrega son: color plano disponible, al día siguiente; esféricos, 24-48 horas; multifocales, de 1 a 5 días; tóricos, de 25 a 40 días. Los tiempos son estimados y pueden variar por factores externos ajenos a ContactGo.'
+    body: 'Realizamos entregas en toda la República Dominicana. El envío cuesta RD$250 en Santo Domingo y Gran Santo Domingo y RD$350 en el interior. En compras desde RD$8,000, el envío es gratis. Los tiempos estimados son: esféricos, 24-48 horas en Santo Domingo y 24-72 horas en el interior; color disponible, al día siguiente; multifocales, de 1 a 5 días; tóricos, de 25 a 45 días; soluciones y gotas, 24 horas. Los tiempos pueden variar por disponibilidad y factores externos. Los lentes tóricos se solicitan bajo pedido y pueden cancelarse dentro de las primeras 48 horas desde la confirmación.'
   },
   {
     title: '6. Devoluciones y reembolsos',
-    body: 'Aceptamos devoluciones dentro de las 7 días desde la recepción del pedido, siempre que el producto esté en su empaque original sellado y sin abrir. No se aceptan devoluciones de lentes abiertos por razones de higiene y seguridad médica. Los reembolsos se procesan en 3-5 días hábiles por el mismo método de pago original. Para iniciar una devolución: info@contactgo.net o WhatsApp (809) 694-2268.'
+    body: 'Aceptamos devoluciones dentro de los 7 días posteriores a la entrega, siempre que el producto esté sellado, sin abrir y en su empaque original. No aceptamos devoluciones de productos abiertos por razones de higiene y seguridad. Los lentes tóricos pueden cancelarse dentro de las primeras 48 horas desde la confirmación; después de ese plazo no admiten cancelación ni devolución. Los reembolsos aprobados se procesan en 3-5 días hábiles por el mismo método de pago original. Para iniciar una solicitud: info@contactgo.net o WhatsApp (809) 694-2268.'
   },
   {
     title: '7. Responsabilidad médica',
