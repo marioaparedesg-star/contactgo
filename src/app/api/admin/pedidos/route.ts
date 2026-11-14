@@ -219,12 +219,14 @@ export async function POST(req: NextRequest) {
         await sb.from('orders').update(updateData).eq('id', order_id)
       }
 
-      // Notificar al cliente solo si el usuario lo pidió Y el pedido llegó a 100%
-      // (si es abono parcial, no tiene sentido notificar 'tu pedido está pagado')
+      // Notificar al cliente solo si el usuario lo pidió Y el pedido llegó a 100%.
+      // El resultado se devuelve al panel para distinguir envío aceptado de fallo.
+      let notification: any = { email_cliente: 'skipped' }
       if (notificar && cubrio100) {
-        const notification = debeAvanzarAPagoAprobado
+        notification = debeAvanzarAPagoAprobado
           ? await notificarEstadoPedido(order_id, 'pago_aprobado')
           : { email_cliente: 'skipped' }
+        const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 
         // Confirmación completa de pedido por WhatsApp (nombre + # orden + productos + total).
         // Antes solo se enviaba automáticamente para pagos AZUL vía /confirmacion — los pedidos
