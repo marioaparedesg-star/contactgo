@@ -89,14 +89,14 @@ export async function GET(req: NextRequest) {
           const nombre = info.nombre.split(' ')[0]
           await resend.emails.send({
             from: FROM, to: email,
-            subject: `${nombre}, te extrañamos 👋 — 10% en tu próxima compra`,
+            subject: `${nombre}, te extrañamos 👋`,
             html: wrap('Te extrañamos', `
               <h2 style="color:#111827;font-size:18px;margin:0 0 12px">¡Hola, ${nombre}! 👋</h2>
               <p style="color:#4b5563;font-size:14px;line-height:1.6">Hace un tiempo que no nos visitas. Si ya se te acabaron tus lentes de contacto, o simplemente se te pasó reponerlos, aquí seguimos — con tus marcas certificadas de siempre.</p>
               <p style="color:#4b5563;font-size:14px;line-height:1.6">Como agradecimiento por volver, usa este código en tu próxima compra:</p>
               <div style="background:#f0fdfa;border:2px dashed #01B2B7;border-radius:12px;padding:16px;text-align:center;margin:16px 0">
                 <p style="color:#018E92;font-size:22px;font-weight:900;margin:0;letter-spacing:1px">VUELVE10</p>
-                <p style="color:#6b7280;font-size:12px;margin:4px 0 0">10% de descuento en tu próximo pedido</p>
+                
               </div>`,
               'Ver catálogo →', 'https://www.contactgo.net/catalogo'),
           })

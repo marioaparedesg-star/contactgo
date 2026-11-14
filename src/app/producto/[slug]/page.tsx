@@ -151,7 +151,7 @@ export default async function ProductoPage(
   if (!product) notFound()
 
   const reviews = (product.reviews ?? []).filter((r: any) =>
-    r.approved !== false   // incluye: approved=true y approved=null (legacy)
+    r.orden_id != null    // SOLO reseñas vinculadas a un pedido real (verificables)
     && (r.comment ?? '').trim() !== ''  // solo reviews con texto
   )
   const avgRating = reviews.length
