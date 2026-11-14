@@ -101,28 +101,35 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       : evento === 'nuevo_pedido'
         ? `Nuevo pedido #${order.numero_orden ?? order.id.slice(-8).toUpperCase()} — RD$${Number(order.total ?? 0).toLocaleString('es-DO')}`
         : `Pedido #${order.numero_orden ?? order.id.slice(-8).toUpperCase()} → ${stateLabel}`
-    const { data: adminPrior, error: adminPriorError } = await sb.from('email_log').select('id')
-      .eq('order_id', orderId).eq('template', adminTemplate).eq('status', 'sent').maybeSingle()
-    if (adminPriorError) console.error('[order-notifications] dedup admin lookup failed:', adminPriorError.message)
-    if (adminPrior) {
-      result.email_admin = 'sent'
+    const adminRecipientIsCustomer = String(ADMIN_EMAIL).trim().toLowerCase() === String(order.cliente_email ?? '').trim().toLowerCase()
+    if (adminRecipientIsCustomer) {
+      // Never send the internal admin template to the customer's address.
+      result.email_admin = 'skipped'
+      console.warn('[order-notifications] aviso administrativo omitido: ADMIN_EMAIL coincide con el correo del cliente')
     } else {
-      let adminError: string | undefined
-      let adminResendId: string | undefined
-      try {
-        const { data, error } = await resend.emails.send({
-          from: FROM_EMAIL, to: [ADMIN_EMAIL], subject: adminSubject,
-          html: buildAdminOrderEmail(order, items, evento, state),
+      const { data: adminPrior, error: adminPriorError } = await sb.from('email_log').select('id')
+        .eq('order_id', orderId).eq('template', adminTemplate).eq('status', 'sent').maybeSingle()
+      if (adminPriorError) console.error('[order-notifications] dedup admin lookup failed:', adminPriorError.message)
+      if (adminPrior) {
+        result.email_admin = 'sent'
+      } else {
+        let adminError: string | undefined
+        let adminResendId: string | undefined
+        try {
+          const { data, error } = await resend.emails.send({
+            from: FROM_EMAIL, to: [ADMIN_EMAIL], subject: adminSubject,
+            html: buildAdminOrderEmail(order, items, evento, state),
+          })
+          adminResendId = data?.id
+          if (error) adminError = error.message
+        } catch (error: any) { adminError = error?.message ?? 'Error desconocido' }
+        result.email_admin = adminError ? 'error' : 'sent'
+        const { error: logError } = await sb.from('email_log').insert({
+          order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
+          resend_id: adminResendId ?? null, status: adminError ? 'error' : 'sent',
         })
-        adminResendId = data?.id
-        if (error) adminError = error.message
-      } catch (error: any) { adminError = error?.message ?? 'Error desconocido' }
-      result.email_admin = adminError ? 'error' : 'sent'
-      const { error: logError } = await sb.from('email_log').insert({
-        order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
-        resend_id: adminResendId ?? null, status: adminError ? 'error' : 'sent',
-      })
-      if (logError) console.error('[order-notifications] no se pudo guardar email_log admin:', logError.message)
+        if (logError) console.error('[order-notifications] no se pudo guardar email_log admin:', logError.message)
+      }
     }
     return result
   } catch (error: any) {
