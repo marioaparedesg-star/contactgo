@@ -496,7 +496,7 @@ export default function CartPage() {
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <p className="text-xs text-gray-500">{items.length} productos · envío según destino</p>
-            <p className="font-black text-primary-600 text-base">{totMin === totMax ? formatoPrecio(totMin) : `${formatoPrecio(totMin)}–${formatoPrecio(totMax)}`}</p>
+            <p className="font-black text-primary-600 text-base">{formatoPrecio(totalCarrito)}</p>
           </div>
           <Link href="/checkout"
             className="btn-primary flex items-center gap-2 px-5 py-2.5 font-bold text-sm rounded-xl">
