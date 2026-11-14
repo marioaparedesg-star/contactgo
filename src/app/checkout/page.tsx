@@ -528,22 +528,10 @@ export default function CheckoutPage() {
         const sb2 = createClient()
         const vals = getValues()
         const nombreCompletoVals = vals.nombre && vals.apellido ? `${vals.nombre.trim()} ${vals.apellido.trim()}` : (vals.nombre ?? null)
-        if (vals.email && items.length > 0) {
-          await sb2.from('abandoned_carts').upsert({
-            cliente_email:    vals.email,
-            cliente_nombre:   nombreCompletoVals,
-            cliente_telefono: vals.telefono ?? null,
-            items:            JSON.stringify(items.map(i => ({
-              id: i.product.id, nombre: i.product.nombre,
-              precio: (i as any).precio_final ?? i.product.precio,
-              cantidad: i.cantidad, sph: i.sph ?? null,
-            }))),
-            total:            totalFinal,
-            recuperado:       false,
-            updated_at:       new Date().toISOString(),
-          }, { onConflict: 'cliente_email', ignoreDuplicates: false })
-        }
-        // Track para cron de WhatsApp (nueva tabla dedicada)
+        // El seguimiento de carrito se realiza por el endpoint server-side
+        // /api/carrito/track; no escribir abandoned_carts desde el navegador
+        // porque su RLS reserva esa tabla para operaciones administrativas.
+        // Track para cron de WhatsApp (tabla dedicada)
         if (vals.telefono && items.length > 0) {
           fetch('/api/carrito/track', {
             method: 'POST',
