@@ -95,7 +95,7 @@ export default function Page() {
 
           <section id="cuando-conviene-rd">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Cuándo conviene comprar en RD?</h2>
-            <p>Si no tienes seguro de visión en tu país (muchos planes de salud en EE.UU. no incluyen "vision insurance" por defecto, es un add-on aparte), comprar directo del fabricante en RD a través de una tienda especializada suele ser competitivo frente al precio de lista sin seguro en EE.UU. Además, evitas cargar cajas extra en la maleta y el riesgo de que se dañen o se queden en casa.</p>
+            <p>Si no tienes seguro de visión en tu país (muchos planes de salud en EE.UU. no incluyen &quot;vision insurance&quot; por defecto, es un add-on aparte), comprar directo del fabricante en RD a través de una tienda especializada suele ser competitivo frente al precio de lista sin seguro en EE.UU. Además, evitas cargar cajas extra en la maleta y el riesgo de que se dañen o se queden en casa.</p>
           </section>
 
           <section id="cuando-conviene-traerlos">

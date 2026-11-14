@@ -54,7 +54,7 @@ export default function Page() {
       <h2>Los mejores lentes de contacto por categoría (2026)</h2>
 
       <h3>🥇 Mejor lente diario: 1-DAY ACUVUE Moist</h3>
-      <p>Ganador indiscutible en la categoría "diarios" para uso general. El material HydraClear Plus lo hace muy cómodo durante todo el día y su filtro UV Clase 1 protege tus ojos. Cajas de 30 lentes desde <strong>RD$1,850</strong>. Ideal si tienes ojos ligeramente sensibles o si viajas mucho — no necesitas cargar solución.</p>
+      <p>Ganador indiscutible en la categoría &quot;diarios&quot; para uso general. El material HydraClear Plus lo hace muy cómodo durante todo el día y su filtro UV Clase 1 protege tus ojos. Cajas de 30 lentes desde <strong>RD$1,850</strong>. Ideal si tienes ojos ligeramente sensibles o si viajas mucho — no necesitas cargar solución.</p>
       <p><em>Alternativa premium:</em> Precision1 de Alcon, con tecnología SmartSurface que retiene humedad. Un poco más caro (RD$3,000) pero excelente para uso en aire acondicionado o pantallas.</p>
 
       <h3>🥇 Mejor lente mensual: Biofinity de CooperVision</h3>
@@ -62,7 +62,7 @@ export default function Page() {
       <p><em>Alternativa premium:</em> ACUVUE Oasys, con tecnología HydraLuxe y filtro UV. Un poco más caro (RD$3,350) pero superior en confort para usuarios de pantallas o entornos secos.</p>
 
       <h3>🥇 Mejor lente para astigmatismo: Biofinity Toric</h3>
-      <p>Estabilización óptica excelente gracias a su diseño "Optimized Toric Lens Design". Cubre graduaciones hasta CYL -2.25 y prácticamente todos los ejes. Mensual, cómodo, se mantiene estable incluso al parpadear o mirar hacia arriba. Caja de 6 desde <strong>RD$5,750</strong>.</p>
+      <p>Estabilización óptica excelente gracias a su diseño &quot;Optimized Toric Lens Design&quot;. Cubre graduaciones hasta CYL -2.25 y prácticamente todos los ejes. Mensual, cómodo, se mantiene estable incluso al parpadear o mirar hacia arriba. Caja de 6 desde <strong>RD$5,750</strong>.</p>
       <p><em>Alternativa premium:</em> ACUVUE Oasys for Astigmatism, con tecnología Blink Stabilized. Superior en actividades dinámicas (correr, deportes).</p>
 
       <h3>🥇 Mejor lente multifocal (presbicia): Biofinity Multifocal</h3>
@@ -92,8 +92,8 @@ export default function Page() {
       <h3>Si tienes graduación alta (más de -6.00)</h3>
       <p><strong>Biofinity XR</strong> — cubre rangos ampliados hasta ±15.00 esférico. Muchas marcas no llegan a esas graduaciones. Requiere ordenarse (2-3 semanas de espera).</p>
 
-      <h2>¿Marca original o "genérica"?</h2>
-      <p>En el mercado dominicano circulan lentes de contacto de origen incierto vendidos en tiendas online y redes sociales a precios sospechosamente bajos (RD$500-1,500 por "caja de 6"). <strong>No los uses.</strong></p>
+      <h2>¿Marca original o &quot;genérica&quot;?</h2>
+      <p>En el mercado dominicano circulan lentes de contacto de origen incierto vendidos en tiendas online y redes sociales a precios sospechosamente bajos (RD$500-1,500 por &quot;caja de 6&quot;). <strong>No los uses.</strong></p>
 
       <p>Los lentes de contacto son <strong>dispositivos médicos regulados</strong>. Un lente sin certificación puede tener:</p>
       <ul>

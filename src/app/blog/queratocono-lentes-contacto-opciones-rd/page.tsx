@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Si tu oftalmólogo te mencionó la palabra "queratocono" durante un examen, es normal sentir incertidumbre. Aquí te explicamos qué es realmente, cómo se detecta, y sobre todo, qué opciones reales tienes con lentes de contacto según la etapa en la que estés.</p>
+      <p>Si tu oftalmólogo te mencionó la palabra &quot;queratocono&quot; durante un examen, es normal sentir incertidumbre. Aquí te explicamos qué es realmente, cómo se detecta, y sobre todo, qué opciones reales tienes con lentes de contacto según la etapa en la que estés.</p>
 
       <h2>¿Qué es el queratocono?</h2>
 
@@ -55,7 +55,7 @@ export default function Page() {
         <li>Visión borrosa o distorsionada que no mejora del todo con gafas nuevas</li>
         <li>Necesidad de cambiar tu graduación con mucha frecuencia</li>
         <li>Sensibilidad a la luz y destellos, especialmente de noche</li>
-        <li>Ver "halos" alrededor de las luces</li>
+        <li>Ver &quot;halos&quot; alrededor de las luces</li>
         <li>Frotarte los ojos con frecuencia (el frotamiento crónico está asociado a su progresión)</li>
         <li>Antecedentes familiares de queratocono</li>
       </ul>
@@ -68,7 +68,7 @@ export default function Page() {
       <p>Algunos casos leves logran buena corrección visual con <Link href="/blog/lentes-de-contacto-para-astigmatismo-rd">lentes de contacto tóricos blandos convencionales</Link> — los mismos que se usan para astigmatismo regular. Esto lo determina el especialista según qué tan irregular esté la córnea todavía.</p>
 
       <h3>Etapa moderada</h3>
-      <p>Cuando los lentes blandos ya no logran una visión suficientemente nítida, se suele pasar a <Link href="/blog/lentes-contacto-rgp-rigidos-permeables-gas-rd">lentes RGP (rígidos permeables al gas)</Link>. Al ser rígidos, "esconden" mejor la irregularidad de la córnea que un lente blando flexible, que tiende a adaptarse a la forma irregular en vez de corregirla.</p>
+      <p>Cuando los lentes blandos ya no logran una visión suficientemente nítida, se suele pasar a <Link href="/blog/lentes-contacto-rgp-rigidos-permeables-gas-rd">lentes RGP (rígidos permeables al gas)</Link>. Al ser rígidos, &quot;esconden&quot; mejor la irregularidad de la córnea que un lente blando flexible, que tiende a adaptarse a la forma irregular en vez de corregirla.</p>
 
       <h3>Etapa avanzada</h3>
       <p>En casos más avanzados, donde incluso los RGP resultan incómodos o inestables, los <Link href="/blog/lentes-esclerales-que-son-cuando-necesitas-rd">lentes esclerales</Link> suelen ser la mejor opción — al apoyarse en la esclerótica en vez de la córnea directamente, ofrecen visión estable sin importar cuánto haya progresado la irregularidad corneal.</p>

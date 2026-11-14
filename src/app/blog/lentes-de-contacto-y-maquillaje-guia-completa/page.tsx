@@ -80,7 +80,7 @@ export default function Page() {
       <p><strong>NO uses:</strong> delineador en la línea de agua (waterline) — esa zona interior del párpado tiene glándulas de Meibomio que son clave para la lubricación ocular. Bloquearlas empeora el ojo seco con lentes de contacto.</p>
 
       <h3>Rímel / máscara de pestañas</h3>
-      <p><strong>Recomendado:</strong> rímel resistente al agua (waterproof) o específicamente formulado para usuarias de lentes de contacto. Marcas como Clinique, Almay, Neutrogena tienen líneas "gentle" para ojos sensibles.</p>
+      <p><strong>Recomendado:</strong> rímel resistente al agua (waterproof) o específicamente formulado para usuarias de lentes de contacto. Marcas como Clinique, Almay, Neutrogena tienen líneas &quot;gentle&quot; para ojos sensibles.</p>
       <p><strong>Evita:</strong> rímeles de fibras — esas fibrecitas pueden desprenderse durante el día y meterse detrás del lente. Muy incómodo.</p>
       <p><strong>Reemplaza cada 3 meses:</strong> el rímel acumula bacterias rapidísimo. Un rímel de más de 3 meses es un caldo de cultivo.</p>
 
@@ -89,7 +89,7 @@ export default function Page() {
         <li><strong>Glitter suelto o pigmentos sueltos</strong> — 90% seguro que algo cae al ojo</li>
         <li><strong>Sombras baratas de calidad dudosa</strong> — se caen constantemente</li>
         <li><strong>Aerosoles fijadores muy cerca del ojo</strong> — irritan lentes y párpado</li>
-        <li><strong>Pestañas postizas con adhesivos "económicos"</strong> — el pegamento cerca del ojo es problemático</li>
+        <li><strong>Pestañas postizas con adhesivos &quot;económicos&quot;</strong> — el pegamento cerca del ojo es problemático</li>
         <li><strong>Cualquier producto vencido</strong> — bacterias, pérdida de textura</li>
       </ul>
 

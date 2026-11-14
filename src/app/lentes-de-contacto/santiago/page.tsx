@@ -82,7 +82,7 @@ export default async function Page() {
           
           <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santiago</h3>
           <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
-            <p className="text-gray-700 text-sm italic">"Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto a mi casa en Santiago."</p>
+            <p className="text-gray-700 text-sm italic">&quot;Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto a mi casa en Santiago.&quot;</p>
             <p className="text-xs text-gray-500 mt-2 font-semibold">— Carlos M., Santiago de los Caballeros ⭐⭐⭐⭐⭐</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">

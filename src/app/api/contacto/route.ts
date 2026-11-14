@@ -20,7 +20,9 @@ export async function POST(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 5, requireOrigin: false })
   if (guardErr) return guardErr
   try {
-    let { nombre, email, telefono, mensaje, tipo } = await req.json()
+    const { nombre: _n, email, telefono, mensaje: _m, tipo } = await req.json()
+    let nombre: string = _n
+    let mensaje: string = _m
 
     if (!nombre || !mensaje) {
       return NextResponse.json({ error: 'Nombre y mensaje son requeridos' }, { status: 400 })

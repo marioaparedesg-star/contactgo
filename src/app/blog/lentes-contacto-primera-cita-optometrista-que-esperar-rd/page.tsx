@@ -41,10 +41,10 @@ export default function Page() {
       <p>El optometrista te va a preguntar sobre tu salud ocular general, si usas gafas actualmente, cuánto tiempo pasas frente a pantallas, y si tienes alguna condición como ojo seco o alergias. Sé honesto aquí — esta información determina qué tipo de lente te van a recomendar.</p>
 
       <h2>Paso 2: Examen de refracción</h2>
-      <p>Es la parte que ya conoces si has usado gafas — te sientan frente a un equipo (foróptero) y te muestran distintas combinaciones de lentes mientras lees una tabla de letras, preguntando "¿mejor así, o así?". Esto determina tu graduación esférica (SPH) y, si aplica, tu astigmatismo (CYL y AXIS).</p>
+      <p>Es la parte que ya conoces si has usado gafas — te sientan frente a un equipo (foróptero) y te muestran distintas combinaciones de lentes mientras lees una tabla de letras, preguntando &quot;¿mejor así, o así?&quot;. Esto determina tu graduación esférica (SPH) y, si aplica, tu astigmatismo (CYL y AXIS).</p>
 
       <h2>Paso 3: Evaluación de la córnea</h2>
-      <p>Con un instrumento llamado queratómetro (o uno más avanzado, un topógrafo corneal), miden la curvatura exacta de tu córnea. Este dato — la curva base (BC) — es específico de lentes de contacto y no aparece en una receta de gafas, porque determina qué tan bien se va a "acomodar" el lente sobre tu ojo.</p>
+      <p>Con un instrumento llamado queratómetro (o uno más avanzado, un topógrafo corneal), miden la curvatura exacta de tu córnea. Este dato — la curva base (BC) — es específico de lentes de contacto y no aparece en una receta de gafas, porque determina qué tan bien se va a &quot;acomodar&quot; el lente sobre tu ojo.</p>
 
       <h2>Paso 4: Evaluación de lágrima (si aplica)</h2>
       <p>Si mencionaste síntomas de ojo seco, el optometrista puede hacer una prueba rápida para medir la calidad y cantidad de tu lágrima — esto ayuda a decidir si necesitas una marca específica pensada para comodidad en ojo seco (como Proclear) en vez de una línea estándar.</p>

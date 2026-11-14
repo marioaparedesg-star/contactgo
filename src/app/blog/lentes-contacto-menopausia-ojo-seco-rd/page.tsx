@@ -38,7 +38,7 @@ export default function Page() {
       <p>Si llevas años usando la misma marca de lentes de contacto sin problema y de repente empiezan a sentirse incómodos o secos, y coincide con la etapa de la menopausia, no es coincidencia — hay una razón fisiológica real detrás de esto.</p>
 
       <h2>Por qué pasa esto</h2>
-      <p>Durante la menopausia, los niveles de estrógeno disminuyen, y el estrógeno tiene un rol directo en la producción de lágrima y en la salud de las glándulas que la generan. Es un cambio ampliamente documentado en oftalmología — no significa que hiciste algo mal ni que tus lentes de siempre ahora sean "malos", simplemente tu ojo está produciendo menos lubricación natural que antes.</p>
+      <p>Durante la menopausia, los niveles de estrógeno disminuyen, y el estrógeno tiene un rol directo en la producción de lágrima y en la salud de las glándulas que la generan. Es un cambio ampliamente documentado en oftalmología — no significa que hiciste algo mal ni que tus lentes de siempre ahora sean &quot;malos&quot;, simplemente tu ojo está produciendo menos lubricación natural que antes.</p>
 
       <h2>Señales de que esto te está pasando</h2>
       <ul>

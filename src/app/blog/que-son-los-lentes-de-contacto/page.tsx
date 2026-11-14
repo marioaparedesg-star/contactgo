@@ -94,7 +94,7 @@ export default function Page() {
         <div className="flex items-center gap-3 text-xs text-gray-400 mb-6">
           <span>📅 1 de junio, 2026</span>
           <span>·</span>
-          <a href="/autor/equipo-contactgo" className="hover:text-primary-600">✍️ Equipo ContactGo</a>
+          <Link href="/autor/equipo-contactgo" className="hover:text-primary-600">✍️ Equipo ContactGo</Link>
           <span>·</span>
           <span>⏱ 12 min lectura</span>
         </div>

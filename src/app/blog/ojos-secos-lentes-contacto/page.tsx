@@ -25,8 +25,8 @@ export default function Page() {
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-12 pb-24">
         <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
-          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
-          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span>
+          <Link href="/blog" className="hover:text-primary-600">Blog</Link><span>/</span>
           <span className="text-gray-600">Ojos secos y lentes de contacto — Soluci</span>
         </div>
 
@@ -45,7 +45,7 @@ export default function Page() {
         <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
           <span>📅 10 de mayo, 2026</span>
           <span>·</span>
-          <a href="/autor/equipo-contactgo" className="hover:text-primary-600 transition-colors">✍️ Equipo ContactGo</a>
+          <Link href="/autor/equipo-contactgo" className="hover:text-primary-600 transition-colors">✍️ Equipo ContactGo</Link>
           <span>·</span>
           <span>⏱ 5 min lectura</span>
         </div>
@@ -170,9 +170,9 @@ export default function Page() {
       
         <div className="mt-10 bg-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <p className="text-sm text-gray-600 mb-3">Gotas y soluciones para ojos secos</p>
-          <a href="/catalogo?tipo=solucion" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
+          <Link href="/catalogo?tipo=solucion" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
             Ver soluciones hidratantes →
-          </a>
+          </Link>
         </div>
 
         <section id="faq">
@@ -188,7 +188,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué gotas puedo usar con lentes de contacto?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Gotas lubricantes compatibles con lentes de contacto como Refresh Tears y Prolub Hyfresh. Evita gotas vasoconstrictoras ("quita el rojo") que no son compatibles con lentes. Siempre verifica que la etiqueta indique "compatible con lentes de contacto".</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Gotas lubricantes compatibles con lentes de contacto como Refresh Tears y Prolub Hyfresh. Evita gotas vasoconstrictoras (&quot;quita el rojo&quot;) que no son compatibles con lentes. Siempre verifica que la etiqueta indique &quot;compatible con lentes de contacto&quot;.</p>
           </details>
           </div>
         </section>
@@ -197,8 +197,8 @@ export default function Page() {
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
+            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</Link>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

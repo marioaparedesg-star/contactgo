@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Ya sea una sesión profesional, fotos para redes sociales, o un video importante, usar lentes de contacto correctamente puede marcar la diferencia entre fotos que se ven naturales y fotos donde algo "se ve raro" sin saber exactamente qué.</p>
+      <p>Ya sea una sesión profesional, fotos para redes sociales, o un video importante, usar lentes de contacto correctamente puede marcar la diferencia entre fotos que se ven naturales y fotos donde algo &quot;se ve raro&quot; sin saber exactamente qué.</p>
 
       <h2>Antes de la sesión</h2>
       <ul>
@@ -45,7 +45,7 @@ export default function Page() {
       </ul>
 
       <h2>Sobre los reflejos del flash</h2>
-      <p>Un lente de contacto no produce ningún reflejo distinto al que produce el ojo naturalmente — el "brillo rojo" típico de fotos con flash viene de la retina, no del lente. No hay ningún efecto óptico adicional que debas prevenir por usar lentes de contacto en vez de gafas (las gafas sí pueden generar reflejos propios en el cristal, que es justo lo que muchos fotógrafos evitan pidiendo a sus clientes que se quiten las gafas).</p>
+      <p>Un lente de contacto no produce ningún reflejo distinto al que produce el ojo naturalmente — el &quot;brillo rojo&quot; típico de fotos con flash viene de la retina, no del lente. No hay ningún efecto óptico adicional que debas prevenir por usar lentes de contacto en vez de gafas (las gafas sí pueden generar reflejos propios en el cristal, que es justo lo que muchos fotógrafos evitan pidiendo a sus clientes que se quiten las gafas).</p>
 
       <h2>Lentes de color para la sesión</h2>
       <p>Si el efecto que buscas es un color de ojos distinto para la sesión (edición, tema conceptual, contenido para redes), <strong>AIR OPTIX Colors</strong> está disponible en versión sin graduación — solo el efecto de color — así que no necesitas tener ningún problema de visión para usarlos.</p>

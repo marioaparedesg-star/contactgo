@@ -2,6 +2,7 @@ export const revalidate = 86400
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Avaira Vitality precio en República Dominicana 2026 — ContactGo',
@@ -40,8 +41,8 @@ export default function Page() {
         ]) }} />
 
         <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
-          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
-          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span>
+          <Link href="/blog" className="hover:text-primary-600">Blog</Link><span>/</span>
           <span className="text-gray-600 truncate">Avaira Vitality® precio en República Dominica</span>
         </div>
 
@@ -73,8 +74,8 @@ export default function Page() {
             <table className="w-full text-sm border-collapse">
               <thead><tr className="bg-green-50"><th className="p-3 text-left border border-gray-100 font-bold">Producto</th><th className="p-3 text-center border border-gray-100 font-bold">Tipo</th><th className="p-3 text-right border border-gray-100 font-bold">Precio RD$</th></tr></thead>
               <tbody>
-                <tr className="bg-white"><td className="p-3 border border-gray-100"><a href="/producto/avaira-vitality-lentes-contacto-mensuales-coopervision-dominicana" className="text-primary-600 font-medium hover:underline">Avaira Vitality® 6u</a></td><td className="p-3 border border-gray-100 text-center text-gray-500">Esférico mensual</td><td className="p-3 border border-gray-100 text-right font-black">RD$3,000</td></tr>
-                <tr className="bg-gray-50"><td className="p-3 border border-gray-100"><a href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="text-primary-600 font-medium hover:underline">Avaira Vitality® Toric 6u</a></td><td className="p-3 border border-gray-100 text-center text-gray-500">Tórico mensual</td><td className="p-3 border border-gray-100 text-right font-black">RD$3,000</td></tr>
+                <tr className="bg-white"><td className="p-3 border border-gray-100"><Link href="/producto/avaira-vitality-lentes-contacto-mensuales-coopervision-dominicana" className="text-primary-600 font-medium hover:underline">Avaira Vitality® 6u</Link></td><td className="p-3 border border-gray-100 text-center text-gray-500">Esférico mensual</td><td className="p-3 border border-gray-100 text-right font-black">RD$3,000</td></tr>
+                <tr className="bg-gray-50"><td className="p-3 border border-gray-100"><Link href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="text-primary-600 font-medium hover:underline">Avaira Vitality® Toric 6u</Link></td><td className="p-3 border border-gray-100 text-center text-gray-500">Tórico mensual</td><td className="p-3 border border-gray-100 text-right font-black">RD$3,000</td></tr>
               </tbody>
             </table>
           </div>
@@ -129,11 +130,11 @@ export default function Page() {
           <section id="productos">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Entrega 24-48h</h2>
             <div className="space-y-2">
-            <a href="/producto/avaira-vitality-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Avaira Vitality® 6u</p><p className="text-xs text-gray-500">Esférico mensual CooperVision</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,000</span></a>
-            <a href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Avaira Vitality® Toric 6u</p><p className="text-xs text-gray-500">Tórico mensual para astigmatismo</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,000</span></a>
-            <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Biofinity® 6u</p><p className="text-xs text-gray-500">Mensual premium CooperVision</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,650</span></a>
+            <Link href="/producto/avaira-vitality-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Avaira Vitality® 6u</p><p className="text-xs text-gray-500">Esférico mensual CooperVision</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,000</span></Link>
+            <Link href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Avaira Vitality® Toric 6u</p><p className="text-xs text-gray-500">Tórico mensual para astigmatismo</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,000</span></Link>
+            <Link href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Biofinity® 6u</p><p className="text-xs text-gray-500">Mensual premium CooperVision</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,650</span></Link>
             </div>
-            <a href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</a>
+            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</Link>
           </section>
 
           <section id="faq">
@@ -160,10 +161,10 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity precio en RD</p><p className="text-xs text-gray-500 mt-0.5">La alternativa premium de CooperVision</p></a>
-            <a href="/blog/lentes-diarios-vs-mensuales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes diarios vs mensuales</p><p className="text-xs text-gray-500 mt-0.5">¿Qué tipo es mejor para ti?</p></a>
-            <a href="/blog/lentes-astigmatismo-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes tóricos precio en RD</p><p className="text-xs text-gray-500 mt-0.5">Todas las opciones para astigmatismo</p></a>
-            <a href="/marca/coopervision" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los productos CooperVision</p><p className="text-xs text-gray-500 mt-0.5">Biofinity, Avaira, Proclear y más</p></a>
+            <Link href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity precio en RD</p><p className="text-xs text-gray-500 mt-0.5">La alternativa premium de CooperVision</p></Link>
+            <Link href="/blog/lentes-diarios-vs-mensuales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes diarios vs mensuales</p><p className="text-xs text-gray-500 mt-0.5">¿Qué tipo es mejor para ti?</p></Link>
+            <Link href="/blog/lentes-astigmatismo-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes tóricos precio en RD</p><p className="text-xs text-gray-500 mt-0.5">Todas las opciones para astigmatismo</p></Link>
+            <Link href="/marca/coopervision" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los productos CooperVision</p><p className="text-xs text-gray-500 mt-0.5">Biofinity, Avaira, Proclear y más</p></Link>
           </div>
         </div>
 
@@ -180,8 +181,8 @@ export default function Page() {
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en toda República Dominicana en 24-48h</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</a>
+            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</Link>
+            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

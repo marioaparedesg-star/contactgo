@@ -40,7 +40,7 @@ export default function Page() {
       <ul>
         <li>No tienes tiempo de comparar precios entre tiendas</li>
         <li>Pagas envío exprés o te conformas con lo primero que encuentras</li>
-        <li>A veces terminas comprando una caja pequeña "para salir del paso" que sale más cara por unidad</li>
+        <li>A veces terminas comprando una caja pequeña &quot;para salir del paso&quot; que sale más cara por unidad</li>
       </ul>
       <p><strong>La alternativa:</strong> compra cuando aún te queda al menos una caja de respaldo. Así puedes comparar con calma y aprovechar presentaciones más grandes.</p>
 
@@ -59,7 +59,7 @@ export default function Page() {
       <p>Aunque la <Link href="/blog/suscripcion-mensual-lentes-contacto-como-funciona-rd">suscripción de reposición</Link> en sí no ofrece descuento adicional, su verdadero ahorro está en lo que evita: compras de pánico a precio completo cuando se te olvida reponer a tiempo, envíos exprés de emergencia, y el tiempo perdido en volver a explicar tu receta cada vez.</p>
 
       <h2>Estrategia 5: Compara entre alternativas de marca equivalente</h2>
-      <p>No siempre necesitas la marca "premium" para obtener buena calidad. Ejemplos de alternativas más económicas del mismo fabricante:</p>
+      <p>No siempre necesitas la marca &quot;premium&quot; para obtener buena calidad. Ejemplos de alternativas más económicas del mismo fabricante:</p>
       <ul>
         <li><strong>Avaira Vitality</strong> en vez de Biofinity (mismo fabricante CooperVision) — ahorro de hasta 15%</li>
         <li><strong>Clariti 1 Day</strong> en vez de Precision1 para uso diario — buena alternativa de precio</li>
@@ -72,7 +72,7 @@ export default function Page() {
 
       <h2>Lo que NO recomendamos para ahorrar</h2>
       <ul>
-        <li><strong>Extender la vida útil del lente más de lo indicado.</strong> Usar un mensual por 45 días "para ahorrar" pone en riesgo tu salud ocular — el ahorro no vale la pena.</li>
+        <li><strong>Extender la vida útil del lente más de lo indicado.</strong> Usar un mensual por 45 días &quot;para ahorrar&quot; pone en riesgo tu salud ocular — el ahorro no vale la pena.</li>
         <li><strong>Comprar productos de origen dudoso por precio bajo sospechoso.</strong> Revisa nuestra guía sobre <Link href="/blog/como-saber-si-lentes-contacto-son-originales-o-falsos-rd">cómo identificar lentes falsificados</Link> antes de dejarte llevar solo por el precio más bajo.</li>
         <li><strong>Compartir lentes con otra persona.</strong> Nunca, sin importar cuánto se parezca su graduación a la tuya.</li>
       </ul>

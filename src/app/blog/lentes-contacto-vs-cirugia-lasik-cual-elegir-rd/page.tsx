@@ -48,7 +48,7 @@ export default function Page() {
 
       <h3>Reversibilidad</h3>
       <ul>
-        <li><strong>LASIK:</strong> permanente. No puedes "deshacer" la cirugía si cambias de opinión o si tu visión cambia significativamente después (aunque en algunos casos se puede hacer un retoque).</li>
+        <li><strong>LASIK:</strong> permanente. No puedes &quot;deshacer&quot; la cirugía si cambias de opinión o si tu visión cambia significativamente después (aunque en algunos casos se puede hacer un retoque).</li>
         <li><strong>Lentes de contacto:</strong> completamente reversible. Puedes dejar de usarlos cuando quieras, cambiar de marca, ajustar tu graduación libremente.</li>
       </ul>
 
@@ -73,7 +73,7 @@ export default function Page() {
       <h2>¿Cuándo tiene más sentido LASIK?</h2>
       <ul>
         <li>Tu graduación lleva más de 1-2 años estable (sin cambios)</li>
-        <li>Ya pasaste por la fase de "probar" con lentes de contacto y confirmas que quieres independencia total de corrección visual</li>
+        <li>Ya pasaste por la fase de &quot;probar&quot; con lentes de contacto y confirmas que quieres independencia total de corrección visual</li>
         <li>Tienes el presupuesto disponible para la inversión inicial</li>
         <li>Un examen preoperatorio confirma que eres buen candidato (córnea con grosor adecuado, sin condiciones que contraindiquen)</li>
         <li>Entiendes y aceptas los riesgos quirúrgicos, aunque sean bajos</li>
@@ -89,7 +89,7 @@ export default function Page() {
       </ul>
 
       <h2>Una estrategia común: probar primero, decidir después</h2>
-      <p>Muchas personas usan lentes de contacto durante meses o años antes de decidirse por LASIK — les da la experiencia de "vida sin gafas" para confirmar que realmente prefieren la independencia visual antes de comprometerse con algo permanente.</p>
+      <p>Muchas personas usan lentes de contacto durante meses o años antes de decidirse por LASIK — les da la experiencia de &quot;vida sin gafas&quot; para confirmar que realmente prefieren la independencia visual antes de comprometerse con algo permanente.</p>
 
       <p>Importante: si estás considerando LASIK próximamente, consulta con tu cirujano sobre cuánto tiempo antes debes dejar de usar lentes de contacto (generalmente 1-4 semanas dependiendo del tipo de lente) para que la córnea recupere su forma natural antes de la evaluación preoperatoria.</p>
 

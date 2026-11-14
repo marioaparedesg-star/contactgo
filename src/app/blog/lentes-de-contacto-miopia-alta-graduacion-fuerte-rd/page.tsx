@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Si tu graduación pasa de <strong>-6.00 dioptrías</strong>, probablemente ya conoces las incomodidades de las gafas de alta graduación: cristales gruesos, aro pesado, efecto de "ojos pequeños" desde afuera, y la distorsión periférica que limita tu visión lateral.</p>
+      <p>Si tu graduación pasa de <strong>-6.00 dioptrías</strong>, probablemente ya conoces las incomodidades de las gafas de alta graduación: cristales gruesos, aro pesado, efecto de &quot;ojos pequeños&quot; desde afuera, y la distorsión periférica que limita tu visión lateral.</p>
 
       <p>La buena noticia: los lentes de contacto son <strong>especialmente ideales</strong> para personas con miopía alta. Al estar directamente sobre la córnea, eliminan la distorsión, el peso, y el efecto óptico que reduce el tamaño de tus ojos. Pero también hay consideraciones específicas que debes conocer.</p>
 
@@ -55,7 +55,7 @@ export default function Page() {
         <li><strong>Miopía alta:</strong> de -6.00 a -10.00</li>
         <li><strong>Miopía magna (patológica):</strong> más de -10.00</li>
       </ul>
-      <p>Aproximadamente el 15-20% de la población mundial tiene miopía alta o magna. En República Dominicana, es común encontrar pacientes con -8.00 a -12.00 que han venido usando gafas durante décadas sin explorar lentes de contacto — muchas veces porque su óptico no les explicó la opción o creían (incorrectamente) que "no había lentes para esa graduación".</p>
+      <p>Aproximadamente el 15-20% de la población mundial tiene miopía alta o magna. En República Dominicana, es común encontrar pacientes con -8.00 a -12.00 que han venido usando gafas durante décadas sin explorar lentes de contacto — muchas veces porque su óptico no les explicó la opción o creían (incorrectamente) que &quot;no había lentes para esa graduación&quot;.</p>
 
       <h2>El efecto vértice: por qué tu receta cambia</h2>
       <p>Este es el punto clave que confunde a la mayoría de usuarios de miopía alta al pasar a lentes de contacto:</p>

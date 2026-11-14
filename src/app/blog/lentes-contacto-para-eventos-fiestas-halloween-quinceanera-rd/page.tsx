@@ -35,11 +35,11 @@ export default function Page() {
     <BlogArticle meta={meta}>
       <p>Boda, quinceañera, sesión de fotos, graduación o simplemente ganas de cambiar de look por una noche — los lentes de contacto de color son de los productos más buscados para ocasiones especiales en República Dominicana. Aquí la guía completa para acertar sin sorpresas de último momento.</p>
 
-      <h2>¿Necesito graduación o puedo comprarlos "planos"?</h2>
+      <h2>¿Necesito graduación o puedo comprarlos &quot;planos&quot;?</h2>
       <p>Depende de tu visión actual:</p>
       <ul>
         <li><strong>Si ya usas lentes de contacto o gafas graduadas</strong> — puedes conseguir lentes de color con tu graduación exacta. Cambias de color sin perder tu corrección visual.</li>
-        <li><strong>Si tu visión es normal (no necesitas corrección)</strong> — existen versiones "plano" (sin graduación), pero <strong>igual son dispositivos médicos</strong> que requieren la curvatura correcta para tu ojo. Necesitas receta, aunque sea solo para verificar que el lente calce bien.</li>
+        <li><strong>Si tu visión es normal (no necesitas corrección)</strong> — existen versiones &quot;plano&quot; (sin graduación), pero <strong>igual son dispositivos médicos</strong> que requieren la curvatura correcta para tu ojo. Necesitas receta, aunque sea solo para verificar que el lente calce bien.</li>
       </ul>
 
       <h2>Opciones de color disponibles en RD</h2>
@@ -47,7 +47,7 @@ export default function Page() {
       <ul>
         <li><strong>Tonos naturales/sutiles:</strong> True Sapphire, Sterling Gray, Pure Hazel, Honey — ideales para un cambio discreto que se ve realista en fotos.</li>
         <li><strong>Tonos llamativos:</strong> Amethyst, Turquoise, Brilliant Blue, Gemstone Green — para un efecto más dramático, ideal para fiestas temáticas o fotografía artística.</li>
-        <li><strong>Para ojos oscuros:</strong> las fórmulas "para ojos oscuros" tienen mayor pigmentación y cubren mejor sobre iris café oscuro (muy común en RD).</li>
+        <li><strong>Para ojos oscuros:</strong> las fórmulas &quot;para ojos oscuros&quot; tienen mayor pigmentación y cubren mejor sobre iris café oscuro (muy común en RD).</li>
       </ul>
       <p>Disponibles con graduación (<strong>RD$2,500</strong>) o sin graduación/plano (<strong>RD$2,100</strong>). Duración mensual — puedes usarlos varias veces mientras cuides la higiene correctamente.</p>
 
@@ -60,7 +60,7 @@ export default function Page() {
       <p>Los tonos con más pigmento (Amethyst, Gemstone Green) fotografían mejor bajo luces de estudio. Pruébalos antes del día de la sesión — la iluminación puede hacer que un color se vea diferente a lo esperado.</p>
 
       <h3>Fiestas temáticas / Halloween</h3>
-      <p>Aquí es donde más cuidado hay que tener. <strong>Evita comprar lentes "de efecto" (ojos de gato, esclerales totalmente blancos, etc.) de vendedores sin distribución autorizada</strong> — es la categoría con más riesgo de falsificaciones peligrosas en todo el mercado de lentes de contacto. Si buscas un efecto dramático, consulta primero con nosotros qué opciones seguras existen.</p>
+      <p>Aquí es donde más cuidado hay que tener. <strong>Evita comprar lentes &quot;de efecto&quot; (ojos de gato, esclerales totalmente blancos, etc.) de vendedores sin distribución autorizada</strong> — es la categoría con más riesgo de falsificaciones peligrosas en todo el mercado de lentes de contacto. Si buscas un efecto dramático, consulta primero con nosotros qué opciones seguras existen.</p>
 
       <h2>Cronograma recomendado</h2>
       <ol>
@@ -72,7 +72,7 @@ export default function Page() {
 
       <h2>Cuidados especiales para uso ocasional</h2>
       <ul>
-        <li>Aunque los uses "solo para una fiesta", límpialos con solución multipropósito antes y después de cada uso.</li>
+        <li>Aunque los uses &quot;solo para una fiesta&quot;, límpialos con solución multipropósito antes y después de cada uso.</li>
         <li>Guárdalos en su estuche con solución nueva entre usos — no los dejes secos en la caja original.</li>
         <li>Si vas a beber alcohol en el evento, ten más cuidado con la higiene de manos antes de tocarte los ojos.</li>
         <li>Lleva gotas humectantes si el evento es largo o hay mucho baile/sudor cerca de los ojos.</li>

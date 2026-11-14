@@ -68,22 +68,22 @@ export default function Page() {
 
         <div className="space-y-3 mb-6">
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Precios actuales en ContactGo</p>
-            <a href="/producto/bausch-lomb-ultra-lentes-contacto-mensuales-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
+            <Link href="/producto/bausch-lomb-ultra-lentes-contacto-mensuales-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® 6u</p><p className="text-xs text-gray-500">Esférico mensual</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,750</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
+            </Link>
+            <Link href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</p><p className="text-xs text-gray-500">Para astigmatismo</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
+            </Link>
+            <Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</p><p className="text-xs text-gray-500">Para presbicia</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,750</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/biotrue-oneday-lentes-contacto-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
+            </Link>
+            <Link href="/producto/biotrue-oneday-lentes-contacto-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-orange-100 rounded-2xl hover:border-orange-300 hover:shadow-sm transition-all group bg-orange-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Biotrue® ONEday 30u</p><p className="text-xs text-gray-500">Diario B+L</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
+            </Link>
 
           <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
         </div>
@@ -98,19 +98,19 @@ export default function Page() {
                 <thead><tr className="bg-gray-50"><th className="p-3 text-left border border-gray-100 font-bold">Producto</th><th className="p-3 text-right border border-gray-100 font-bold">Precio RD$</th></tr></thead>
                 <tbody>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/bausch-lomb-ultra-lentes-contacto-mensuales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® 6u</a><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Esférico mensual</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-lentes-contacto-mensuales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® 6u</Link><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Esférico mensual</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$3,750</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</a><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Para astigmatismo</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</Link><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Para astigmatismo</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,500</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</a><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Para presbicia</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</Link><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Para presbicia</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,750</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/biotrue-oneday-lentes-contacto-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biotrue® ONEday 30u</a><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Diario B+L</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/biotrue-oneday-lentes-contacto-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biotrue® ONEday 30u</Link><span className="ml-2 text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded-full font-bold">Diario B+L</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$3,500</td>
               </tr>
 
@@ -162,10 +162,10 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/marca/bausch-lomb" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los productos Bausch+Lomb en ContactGo</p><p className="text-xs text-gray-500 mt-0.5">ULTRA, Biotrue y más</p></a>
-            <a href="/blog/air-optix-hydraglyde-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Air Optix HydraGlyde precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual Alcon</p></a>
-            <a href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual CooperVision</p></a>
-            <a href="/blog/lentes-diarios-vs-mensuales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Diarios vs mensuales</p><p className="text-xs text-gray-500 mt-0.5">¿Cuál tipo es para ti?</p></a>
+            <Link href="/marca/bausch-lomb" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los productos Bausch+Lomb en ContactGo</p><p className="text-xs text-gray-500 mt-0.5">ULTRA, Biotrue y más</p></Link>
+            <Link href="/blog/air-optix-hydraglyde-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Air Optix HydraGlyde precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual Alcon</p></Link>
+            <Link href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual CooperVision</p></Link>
+            <Link href="/blog/lentes-diarios-vs-mensuales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Diarios vs mensuales</p><p className="text-xs text-gray-500 mt-0.5">¿Cuál tipo es para ti?</p></Link>
 
           </div>
         </div>

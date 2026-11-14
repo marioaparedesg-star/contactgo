@@ -160,9 +160,9 @@ function ResetContent() {
             <Link href="/cuenta" className="text-primary-600 hover:underline font-medium">
               ← Mi cuenta
             </Link>
-            <a href="/" className="text-gray-400 hover:text-primary-600 transition-colors font-medium">
+            <Link href="/" className="text-gray-400 hover:text-primary-600 transition-colors font-medium">
               Tienda →
-            </a>
+            </Link>
           </div>
         </div>
       </div>

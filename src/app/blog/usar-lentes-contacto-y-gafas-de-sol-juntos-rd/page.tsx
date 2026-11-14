@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Es una de las preguntas más comunes de quien está por cambiarse a lentes de contacto: <strong>"¿voy a tener que comprar gafas de sol graduadas también?"</strong> La respuesta corta: no. Y es justamente una de las razones por las que tanta gente en República Dominicana —con nuestro sol todo el año— prefiere lentes de contacto sobre gafas.</p>
+      <p>Es una de las preguntas más comunes de quien está por cambiarse a lentes de contacto: <strong>&quot;¿voy a tener que comprar gafas de sol graduadas también?&quot;</strong> La respuesta corta: no. Y es justamente una de las razones por las que tanta gente en República Dominicana —con nuestro sol todo el año— prefiere lentes de contacto sobre gafas.</p>
 
       <h2>Por qué funciona perfecto</h2>
       <p>Con gafas graduadas normales, tu corrección visual está en el cristal — por eso necesitas cristales especiales (y más caros) si además quieres protección solar. Con lentes de contacto, tu corrección ya está puesta directamente sobre tu ojo. Eso significa que <strong>cualquier gafa de sol, con el cristal que sea, funciona perfecto encima</strong>.</p>

@@ -50,13 +50,13 @@ export default function Page() {
       <p>Una tienda especializada suele cubrir todas las categorías reales — esféricos, tóricos, multifocales, soluciones de limpieza, gotas — no solo los productos más vendidos. Un vendedor general normalmente solo tiene lo más popular en stock.</p>
 
       <h3>2. Piden tu receta antes de vender</h3>
-      <p>Los lentes de contacto son dispositivos médicos regulados. Una tienda seria y especializada siempre va a pedirte tu graduación exacta antes de procesar tu pedido — si alguien te vende sin preguntar nada sobre tu receta, es una señal de alerta real, no un "plus" de conveniencia.</p>
+      <p>Los lentes de contacto son dispositivos médicos regulados. Una tienda seria y especializada siempre va a pedirte tu graduación exacta antes de procesar tu pedido — si alguien te vende sin preguntar nada sobre tu receta, es una señal de alerta real, no un &quot;plus&quot; de conveniencia.</p>
 
       <h3>3. Relación directa con distribuidores autorizados</h3>
       <p>Las tiendas especializadas suelen trabajar directo con los distribuidores oficiales de cada marca en el país — lo que reduce el riesgo de producto de origen incierto, algo que sí es un riesgo real en reventa informal por redes sociales.</p>
 
       <h3>4. Conocimiento real del producto en la atención</h3>
-      <p>Cuando escribes con una duda ("¿cuál es la diferencia entre este mensual y este quincenal?"), una tienda especializada suele responder con conocimiento técnico real, no solo copiar y pegar la descripción del producto.</p>
+      <p>Cuando escribes con una duda (&quot;¿cuál es la diferencia entre este mensual y este quincenal?&quot;), una tienda especializada suele responder con conocimiento técnico real, no solo copiar y pegar la descripción del producto.</p>
 
       <h2>¿Es más caro comprar especializado?</h2>
 
@@ -74,7 +74,7 @@ export default function Page() {
 
       <h2>Nuestra perspectiva, con honestidad</h2>
 
-      <p>En ContactGo somos <strong>especialistas exclusivamente en lentes de contacto</strong> — no vendemos monturas, gafas de sol, ni nada más. Esa especialización nos permite enfocar todo el catálogo, el conocimiento del equipo, y la atención en resolver bien un solo tipo de necesidad, en vez de ser "un poco de todo". No es la única forma válida de comprar lentes de contacto en RD, pero sí es la razón por la que existimos como negocio.</p>
+      <p>En ContactGo somos <strong>especialistas exclusivamente en lentes de contacto</strong> — no vendemos monturas, gafas de sol, ni nada más. Esa especialización nos permite enfocar todo el catálogo, el conocimiento del equipo, y la atención en resolver bien un solo tipo de necesidad, en vez de ser &quot;un poco de todo&quot;. No es la única forma válida de comprar lentes de contacto en RD, pero sí es la razón por la que existimos como negocio.</p>
 
       <p>Si quieres ver nuestro catálogo completo, <Link href="/catalogo">míralo aquí</Link>, o escríbenos por WhatsApp al <strong>(809) 694-2268</strong> con cualquier duda antes de decidir dónde comprar.</p>
     </BlogArticle>
