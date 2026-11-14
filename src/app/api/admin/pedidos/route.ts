@@ -16,6 +16,26 @@ function getSb() {
   )
 }
 
+async function notificarEstadoPedido(order_id: string, nuevo_estado: string) {
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+  try {
+    const response = await fetch(`${base}/api/notify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado }),
+    })
+    const result = await response.json().catch(() => ({ error: 'Respuesta inválida del servicio de correo' }))
+    if (!response.ok) {
+      console.error('[admin/pedidos] notificación no completada:', response.status, result)
+      return { email_cliente: 'error', ...result }
+    }
+    return result
+  } catch (error) {
+    console.error('[admin/pedidos] error invocando notificación:', error)
+    return { email_cliente: 'error', error: 'No se pudo contactar el servicio de notificaciones' }
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
@@ -106,7 +126,11 @@ export async function POST(req: NextRequest) {
         if (error) console.error('[marcar_pagado] cash_movements insert falló (no bloquea):', error.message)
       })
 
-      return NextResponse.json({ ok: true })
+      const notification = debeAvanzarAPagoAprobado
+        ? await notificarEstadoPedido(order_id, 'pago_aprobado')
+        : { email_cliente: 'skipped' }
+
+      return NextResponse.json({ ok: true, notification })
     }
 
     // ── Registrar pago o abono parcial ──────────────────────────────────
@@ -198,18 +222,16 @@ export async function POST(req: NextRequest) {
       // Notificar al cliente solo si el usuario lo pidió Y el pedido llegó a 100%
       // (si es abono parcial, no tiene sentido notificar 'tu pedido está pagado')
       if (notificar && cubrio100) {
-        const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-        fetch(`${base}/api/notify`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado: 'confirmado' }),
-        }).catch(err => console.error('[admin/pedidos registrar_pago] notify falló:', err))
+        const notification = debeAvanzarAPagoAprobado
+          ? await notificarEstadoPedido(order_id, 'pago_aprobado')
+          : { email_cliente: 'skipped' }
 
         // Confirmación completa de pedido por WhatsApp (nombre + # orden + productos + total).
         // Antes solo se enviaba automáticamente para pagos AZUL vía /confirmacion — los pedidos
         // pagados manualmente aquí (venta WhatsApp, transferencia, efectivo) nunca la recibían.
         // Tiene dedup incorporado por evento_id, así que es seguro llamarla siempre sin
         // riesgo de duplicar el mensaje si ya se envió por otra vía.
-        fetch(`${base}/api/wa/dispatch`, {
+        await fetch(`${base}/api/wa/dispatch`, {
           method: 'POST', headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
           body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
         }).catch(err => console.error('[admin/pedidos registrar_pago] wa/dispatch falló:', err))
@@ -244,6 +266,7 @@ export async function POST(req: NextRequest) {
         total_pedido: totalPedido,
         cubrio_total: cubrio100,
         pendiente: Math.max(0, totalPedido - totalPagadoNuevo),
+        notification,
       })
     }
 
@@ -271,13 +294,9 @@ export async function POST(req: NextRequest) {
 
       // Notificar al cliente (WhatsApp + email) — server-side para no depender del frontend.
       // Falla silenciosa: si notify no responde no bloqueamos la cancelación.
-      const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-      fetch(`${base}/api/notify`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado: 'cancelado' }),
-      }).catch(err => console.error('[admin/pedidos cancelar] notify falló:', err))
+      const notification = await notificarEstadoPedido(order_id, 'cancelado')
 
-      return NextResponse.json({ ok: true, order })
+      return NextResponse.json({ ok: true, order, notification })
     }
 
     if (accion === 'eliminar') {
