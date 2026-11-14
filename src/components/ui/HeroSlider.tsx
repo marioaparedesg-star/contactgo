@@ -40,21 +40,6 @@ const SLIDES: Slide[] = [
     textColor:  'dark',
   },
   {
-    badge:      '🇩🇴 La tienda de lentes más completa de RD',
-    tag:        null,
-    title:      'Todas las marcas,\nun solo lugar',
-    subtitle:   'ACUVUE, Air Optix, Biofinity, Bausch+Lomb y más. Con o sin graduación, en un mismo pedido.',
-    cta:        { label: 'Ver catálogo completo', href: '/catalogo' },
-    cta2:       { label: 'Buscar con mi receta', href: '/receta' },
-    glow:       'rgba(79,70,229,0.25)',
-    accent:     '#01B2B7',
-    image:      '/hero-general-v4.jpg',
-    imageMobile: '/hero-general-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
-    imageAlt:   'Todas las marcas de lentes de contacto en ContactGo',
-    precio:     null,
-    textColor:  'dark',
-  },
-  {
     badge:      '🎨 +12 tonos disponibles',
     tag:        '✨ Sin graduación disponible',
     title:      'Otro color,\notra tú',
@@ -66,21 +51,6 @@ const SLIDES: Slide[] = [
     image:      '/hero-air-optix-colors-v4.jpg',
     imageMobile: '/hero-air-optix-colors-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
     imageAlt:   'AIR OPTIX COLORS — cambia el color de tus ojos',
-    precio:     null,
-    textColor:  'dark',
-  },
-  {
-    badge:      '🛵 Directo a tu puerta',
-    tag:        null,
-    title:      'Tocan la puerta,\ny son tus lentes',
-    subtitle:   'Pides hoy, llegan mañana. Entregamos en 24-48h a todo el país, sin filas ni complicaciones.',
-    cta:        { label: 'Ver catálogo', href: '/catalogo' },
-    cta2:       { label: '¿Cómo funciona?', href: '/envios-y-entregas' },
-    glow:       'rgba(217,119,6,0.22)',
-    accent:     '#01B2B7',
-    image:      '/hero-entrega-v4.jpg',
-    imageMobile: '/hero-entrega-v4.jpg', // misma imagen completa — object-contain se adapta sin recortar
-    imageAlt:   'Entrega de lentes de contacto en toda República Dominicana',
     precio:     null,
     textColor:  'dark',
   },
