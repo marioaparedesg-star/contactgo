@@ -298,8 +298,8 @@ export default function RecetaPage() {
             <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative">
               <div className="flex flex-col items-center text-center mb-5">
                 <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-3"><Mail className="w-6 h-6 text-green-600" /></div>
-                <h3 className="font-black text-gray-900 text-lg">Tu resultado está listo 🎉</h3>
-                <p className="text-xs text-gray-500 mt-1">Déjanos tus datos para mostrarte qué lentes te sirven y avisarte cuando toque reponer</p>
+                <h3 className="font-black text-gray-900 text-lg">Guarda tu receta para la próxima vez</h3>
+                <p className="text-xs text-gray-500 mt-1">Completa tus datos si quieres que guardemos esta receta y podamos ayudarte con futuras reposiciones.</p>
               </div>
               <div className="space-y-3 mb-4">
                 <div className="flex gap-2">
@@ -314,7 +314,7 @@ export default function RecetaPage() {
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
               </div>
               <button onClick={handleLeadSubmit} className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
-                Ver mi resultado →
+                Guardar mi receta →
               </button>
               <p className="text-[10px] text-gray-400 text-center">🔒 Tus datos están seguros. Nunca spam.</p>
             </div>
