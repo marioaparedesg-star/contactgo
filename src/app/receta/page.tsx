@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/ui/Navbar'
@@ -47,6 +47,17 @@ export default function RecetaPage() {
   const addItem = useCartStore(s => s.addItem)
   const [od, setOd] = useState<EyeInput>(EMPTY)
   const [oi, setOi] = useState<EyeInput>(EMPTY)
+  // Prellenado desde "Mi cuenta" (/receta?od_sph=…&od_cyl=…&od_axis=…&od_add=…&oi_…).
+  // Solo se aplica si la URL trae parámetros de receta; no altera el flujo normal.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const q = new URLSearchParams(window.location.search)
+    const val = (k: string) => { const v = q.get(k); return v && v.trim() !== '' ? v.trim() : '' }
+    const params = ['od_sph','od_cyl','od_axis','oi_sph','oi_cyl','oi_axis','od_add','oi_add'].map(val)
+    if (params.every(v => v === '')) return
+    setOd({ sph: val('od_sph'), cyl: val('od_cyl'), axis: val('od_axis'), add: val('od_add') })
+    setOi({ sph: val('oi_sph'), cyl: val('oi_cyl'), axis: val('oi_axis'), add: val('oi_add') })
+  }, [])
   const [misma, setMisma] = useState(false)
   const [rxSource, setRxSource] = useState<'contacto' | 'gafas' | null>(null)
   const [result, setResult] = useState<ConvertedRx | null>(null)
@@ -90,9 +101,12 @@ export default function RecetaPage() {
                 tipo,
                 od_sph: rx.sph ?? 0, oi_sph: rx.sph ?? 0,
                 od_cyl: rx.cyl ?? 0, oi_cyl: rx.cyl ?? 0,
+                od_axis: rx.axis ?? null, oi_axis: rx.axis ?? null,
+                od_add: rx.add ?? null, oi_add: rx.add ?? null,
               })
             })
             const json = await res.json()
+            if (json.error) toast(json.error, { duration: 5000, icon: '⚠️' })
             return json.productos ?? []
           } catch { return [] }
         }
@@ -110,9 +124,16 @@ export default function RecetaPage() {
       // ── CASO ESTANDAR: 1 tipo de producto para ambos ojos ─────────────
       const res = await fetch('/api/receta/recomendar', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0, oi_cyl: conv.oi.cyl ?? 0 })
+        body: JSON.stringify({
+          tipo: conv.tipo,
+          od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0,
+          od_cyl: conv.od.cyl ?? 0, oi_cyl: conv.oi.cyl ?? 0,
+          od_axis: conv.od.axis ?? null, oi_axis: conv.oi.axis ?? null,
+          od_add: conv.od.add ?? null, oi_add: conv.oi.add ?? null,
+        })
       })
       const json = await res.json()
+      if (json.error) toast(json.error, { duration: 5000, icon: '⚠️' })
       const lista = json.productos ?? []
       setProducts(lista)
       setTotalDisp(json.total ?? 0)

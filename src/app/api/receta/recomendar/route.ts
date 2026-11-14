@@ -1,135 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { evaluarReceta, TIPOS, type TipoLente, type ProductoFabricacion } from '@/lib/prescription-recommend'
 
-/**
- * Motor de recomendación por compatibilidad de graduación; no devuelve alternativas fuera de rango
- * Soporta: esferico | torico | multifocal | multifocal_torico
- */
+// Solo filtra por parámetros de fabricación publicados. No sustituye la adaptación clínica.
 export async function POST(req: NextRequest) {
-  const sb = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  try {
+    const body = await req.json().catch(() => null)
+    if (!body || typeof body !== 'object') return NextResponse.json({ error: 'Solicitud inválida' }, { status: 400 })
+    const tipo = body.tipo as TipoLente
+    if (!TIPOS.includes(tipo)) return NextResponse.json({ error: 'Tipo de lente inválido' }, { status: 400 })
 
-  const { tipo, od_sph, oi_sph, od_cyl, oi_cyl } = await req.json()
-  if (!tipo) return NextResponse.json({ error: 'tipo requerido' }, { status: 400 })
-
-  const odS = Number(od_sph ?? 0)
-  const oiS = Number(oi_sph ?? 0)
-  const odCyl = Number(od_cyl ?? 0)
-  const oiCyl = Number(oi_cyl ?? od_cyl ?? 0)
-  const TOLERANCE = 0.50
-  const CYL_TOLERANCE = 0.25
-  const inCylRange = (cyls: number[], val: number) =>
-    Math.abs(val) < 0.01 ? true : !!cyls?.some(v => Math.abs(Number(v) - val) <= CYL_TOLERANCE)
-
-  const inRange = (sphs: number[], val: number) =>
-    !sphs?.length || (val >= Math.min(...sphs) - TOLERANCE && val <= Math.max(...sphs) + TOLERANCE)
-
-  const FIELDS = 'id,nombre,marca,tipo,precio,precio_anterior,imagen_url,slug,sph_disponibles,cyl_disponibles,add_disponibles,reemplazo,dias_uso,descripcion'
-
-  // ── MULTIFOCAL TÓRICO ────────────────────────────────────────────────────
-  if (tipo === 'multifocal_torico') {
-    const { data: mfAll } = await sb.from('products').select(FIELDS)
-      .eq('activo', true).eq('tipo', 'multifocal').eq('archivado', false)
-      .order('precio', { ascending: true })
-    
-    const conCyl = (mfAll ?? []).filter((p: any) =>
-      inRange((p.sph_disponibles ?? []).map(Number), odS) &&
-      inRange((p.sph_disponibles ?? []).map(Number), oiS) &&
-      inCylRange((p.cyl_disponibles ?? []).map(Number), odCyl) &&
-      inCylRange((p.cyl_disponibles ?? []).map(Number), oiCyl)
-    )
-    if (conCyl.length >= 1) {
-      // Dar 3 opciones aunque sean el mismo producto
-      const resultado = conCyl.length >= 3 ? conCyl.slice(0, 3) :
-                        conCyl.length === 2 ? [conCyl[0], conCyl[1], conCyl[1]] :
-                        [conCyl[0], conCyl[0], conCyl[0]]
-      return NextResponse.json({ productos: resultado, total: conCyl.length, tipo_real: 'multifocal_torico' })
+    const num = (v: unknown): number | null => (v === null || v === undefined || v === '') ? null : Number(v)
+    const odSph = num(body.od_sph), oiSph = num(body.oi_sph)
+    if (odSph === null || oiSph === null || !Number.isFinite(odSph) || !Number.isFinite(oiSph)) {
+      return NextResponse.json({ error: 'La receta está incompleta: falta la esfera (SPH) de un ojo' }, { status: 400 })
     }
-    return NextResponse.json({
-      productos: [],
-      total: 0,
-      tipo_real: 'multifocal_torico',
-      nota: 'No encontramos lentes multifocales tóricos que coincidan con ambos ojos. Te recomendamos asesoría personalizada antes de comprar.'
-    })
+    const receta = {
+      tipo,
+      od: { sph: odSph, cyl: num(body.od_cyl) ?? 0, axis: num(body.od_axis), add: num(body.od_add) },
+      oi: { sph: oiSph, cyl: num(body.oi_cyl) ?? 0, axis: num(body.oi_axis), add: num(body.oi_add) },
+    }
+
+    const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+    const tipoDb = tipo === 'esferico' ? 'esferico' : tipo === 'torico' ? 'torico' : 'multifocal'
+    const { data, error } = await sb.from('products')
+      .select('id,nombre,marca,tipo,precio,precio_anterior,imagen_url,slug,sph_disponibles,cyl_disponibles,axis_disponibles,add_disponibles,reemplazo,dias_uso,descripcion')
+      .eq('activo', true).eq('archivado', false).eq('tipo', tipoDb)
+    if (error) {
+      console.error('[receta/recomendar] products query failed:', error.message)
+      return NextResponse.json({ error: 'No pudimos validar el catálogo en este momento' }, { status: 503 })
+    }
+
+    const res = evaluarReceta(receta, (data ?? []) as ProductoFabricacion[])
+    if (res.ok === false) return NextResponse.json({ error: res.error }, { status: res.status })
+    return NextResponse.json({ productos: res.productos, total: res.total, sin_parametros: res.sin_parametros, nota: res.nota })
+  } catch (error) {
+    console.error('[receta/recomendar] unexpected error:', error)
+    return NextResponse.json({ error: 'No fue posible procesar la receta' }, { status: 500 })
   }
-
-  // ── TIPOS ESTÁNDAR ───────────────────────────────────────────────────────
-  const tipoDb = tipo
-  const maxSph = Math.max(Math.abs(odS), Math.abs(oiS))
-  const esAltaGraduacion = maxSph > 8
-
-  let { data: todos } = await sb.from('products').select(FIELDS)
-    .eq('activo', true).eq('tipo', tipoDb).eq('archivado', false)
-    .order('precio', { ascending: true })
-
-  todos = todos ?? []
-
-  // ── Filtrar por rango SPH ────────────────────────────────────────────────
-  let pool = todos.filter((p: any) => {
-    const sp = (p.sph_disponibles ?? []).map(Number)
-    // Excluir XR de recomendaciones estándar (solo recomendar XR si la graduación lo requiere)
-    const esXR = /XR/i.test(p.nombre ?? '')
-    if (esXR && !esAltaGraduacion && tipo === 'esferico') return false
-    const cyls = (p.cyl_disponibles ?? []).map(Number)
-    const needsCyl = tipo === 'torico' || tipo === 'multifocal_torico'
-    return inRange(sp, odS) && inRange(sp, oiS) &&
-      (!needsCyl || (inCylRange(cyls, odCyl) && inCylRange(cyls, oiCyl)))
-  })
-
-  // Para tóricos: excluir productos tóricos XR de rango normal
-  if (tipo === 'torico') {
-    const poolNormal = pool.filter((p: any) => !/XR/i.test(p.nombre ?? ''))
-    if (poolNormal.length > 0) pool = poolNormal
-  }
-
-  // Para multifocales: excluir tóricos de la lista
-  if (tipo === 'multifocal') {
-    const poolNoToric = pool.filter((p: any) => !p.cyl_disponibles?.length || !/t[oó]ric/i.test(p.nombre ?? ''))
-    if (poolNoToric.length > 0) pool = poolNoToric
-  }
-
-  // No recomendar productos fuera del rango de graduación solicitado.
-  if (!pool.length) {
-    return NextResponse.json({
-      productos: [],
-      total: 0,
-      nota: 'No encontramos lentes que coincidan con todos los valores de tu receta. Un especialista puede ayudarte a validar una opción.'
-    })
-  }
-
-  const sorted = [...pool].sort((a: any, b: any) => Number(a.precio) - Number(b.precio))
-
-  // ── Seleccionar 3 tiers con lógica mejorada ───────────────────────────────
-  let resultado: any[]
-  if (sorted.length === 0) {
-    resultado = []
-  } else if (sorted.length === 1) {
-    resultado = [sorted[0], sorted[0], sorted[0]]
-  } else if (sorted.length === 2) {
-    resultado = [sorted[0], sorted[1], sorted[1]]
-  } else {
-    const eco  = sorted[0]
-    const prem = sorted[sorted.length - 1]
-    
-    // Recomendado: preferir marca conocida de precio medio
-    const PREF = /acuvue|air optix|biofinity|bausch|clariti/i
-    // Buscar un producto en el rango medio (40%-70% del pool)
-    const midStart = Math.floor(sorted.length * 0.35)
-    const midEnd = Math.floor(sorted.length * 0.70)
-    const midPool = sorted.slice(midStart, midEnd + 1)
-    
-    let rec = midPool.find((p: any) => PREF.test(p.nombre ?? '') && p.id !== eco.id)
-             ?? midPool[Math.floor(midPool.length / 2)]
-             ?? sorted[Math.floor(sorted.length / 2)]
-
-    // Asegurar que eco !== rec !== prem
-    if (rec?.id === eco.id && sorted.length > 2) rec = sorted[1]
-    if (rec?.id === prem.id && sorted.length > 2) rec = sorted[sorted.length - 2]
-
-    resultado = [eco, rec, prem]
-  }
-
-  return NextResponse.json({ productos: resultado, total: pool.length })
 }
