@@ -691,31 +691,14 @@ export default function CuentaPage() {
             <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#002455] to-[#01B2B7] px-4 py-4 text-white shadow-lg shadow-blue-950/10">
               <div className="relative z-10 max-w-xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Tu espacio ContactGo</p>
-                <h1 className="mt-1 text-xl font-black tracking-tight">Hola, {(perfil?.nombre || user.email?.split('@')[0] || 'bienvenido').split(' ')[0]} <span aria-hidden="true">👋</span></h1>
-                <p className="mt-1 max-w-md text-xs leading-relaxed text-white/85">Gestiona tus pedidos, recetas y datos personales desde un solo lugar.</p>
-                <button onClick={() => setTab('pedidos')} className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#002455] shadow-sm transition hover:bg-slate-100">
-                  Consultar mis pedidos <ChevronRight className="h-4 w-4" />
+                <h1 className="mt-1 text-xl font-black tracking-tight">Hola, {(perfil?.nombre || user.email?.split('@')[0] || 'bienvenido').split(' ')[0]}</h1>
+                <p className="mt-1 max-w-md text-xs leading-relaxed text-white/85">Revisa tus compras y administra tus datos y direcciones de entrega.</p>
+                <button onClick={() => setTab('pedidos')} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#002455] shadow-sm transition hover:bg-slate-100">
+                  Ver mis pedidos <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
               <div aria-hidden="true" className="pointer-events-none absolute -right-8 -bottom-16 h-32 w-32 rounded-full border-[14px] border-white/10 sm:right-8 sm:bottom-[-90px] sm:h-72 sm:w-72" />
               <div aria-hidden="true" className="pointer-events-none absolute right-8 top-5 h-24 w-24 rounded-full bg-white/10 blur-2xl sm:right-24 sm:top-8 sm:h-36 sm:w-36" />
-            </section>
-
-            <section aria-label="Resumen de tu cuenta" className="grid grid-cols-4 gap-2">
-              {[
-                { label: 'Pedidos', value: pedidos.length, icon: Package, tone: 'text-[#002455]', bg: 'bg-blue-50' },
-                { label: 'En camino', value: pedidos.filter(p => ['enviado','preparando'].includes(String(p.estado || '').toLowerCase())).length, icon: RefreshCw, tone: 'text-[#01A5AA]', bg: 'bg-teal-50' },
-                { label: 'Mis recetas', value: recetas.length, icon: FileText, tone: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { label: 'Direcciones', value: direcciones.length, icon: MapPin, tone: 'text-violet-600', bg: 'bg-violet-50' },
-              ].map(item => (
-                <div key={item.label} className="flex items-center gap-2 rounded-xl border border-slate-100 bg-white px-2.5 py-2.5 shadow-sm">
-                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${item.bg} ${item.tone}`}>
-                    <item.icon className="h-4 w-4" />
-                  </div>
-                  <p className="text-lg font-black tracking-tight text-slate-900 tabular-nums">{item.value}</p>
-                  <p className="mt-0.5 truncate text-[10px] font-medium text-slate-500">{item.label}</p>
-                </div>
-              ))}
             </section>
 
             <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
