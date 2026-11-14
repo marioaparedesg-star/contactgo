@@ -1678,11 +1678,7 @@ export default function CuentaPage() {
                 <CreditCard className="w-4 h-4 text-primary-600" />
                 <p className="font-bold text-gray-900 text-sm">Información de pago</p>
               </div>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div>
-                  <p className="text-xs text-gray-400">Método</p>
-                  <p className="font-semibold text-gray-900 capitalize mt-0.5">{(selectedPedido.metodo_pago||'—').replace('_',' ')}</p>
-                </div>
+              <div className="grid grid-cols-1 gap-3 text-sm">
                 <div>
                   <p className="text-xs text-gray-400">Estado</p>
                   <p className={"font-semibold mt-0.5 capitalize "+(selectedPedido.pago_estado==='pagado'?'text-green-600':'text-amber-600')}>
