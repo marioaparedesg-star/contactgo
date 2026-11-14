@@ -180,3 +180,4 @@ contactgo/
 4. **Analytics** — Agregar Google Analytics o Vercel Analytics
 5. **App móvil** — Migrar a React Native / Expo (mismo backend Supabase)
 6. Updated: June 2026
+<!-- Vercel Git deployment trigger -->
