@@ -14,7 +14,7 @@ const meta: BlogMeta = {
   faq: [
     { q: 'Can I buy contact lenses in the Dominican Republic without a local doctor visit?', a: 'Yes — if you already know your prescription (from home), you can order online through ContactGo and have lenses delivered to your hotel or resort, no local eye exam required.' },
     { q: 'Do I need my prescription with me?', a: 'Yes, you need your exact prescription (SPH, and CYL/AXIS if you have astigmatism) to order the correct lenses. If you don\'t have it, contact your eye doctor back home for a copy — most will email it.' },
-    { q: 'How fast can I get contacts delivered while on vacation?', a: 'Same-brand spherical lenses typically arrive within 24-48 hours in Santo Domingo and Santiago, and 2-3 days in Punta Cana, Bávaro, and La Romana.' },
+    { q: 'How fast can I get contacts delivered while on vacation?', a: 'Available spherical lenses are estimated at 24-48 hours in Santo Domingo and 24-72 hours in the interior, including tourist destinations.' },
   ],
   relatedSlugs: [
     'lentes-contacto-extranjeros-residentes-rd',
@@ -55,9 +55,9 @@ export default function Page() {
         <thead><tr><th>Area</th><th>Typical delivery time</th></tr></thead>
         <tbody>
           <tr><td>Santo Domingo (all zones)</td><td>24 hours</td></tr>
-          <tr><td>Santiago</td><td>24-48 hours</td></tr>
+          <tr><td>Santiago</td><td>24-72 hours</td></tr>
           <tr><td>Punta Cana / Bávaro / La Romana</td><td>2-3 days</td></tr>
-          <tr><td>Rest of the country</td><td>2-4 days</td></tr>
+          <tr><td>Rest of the country</td><td>24-72 hours</td></tr>
         </tbody>
       </table>
       <p>Toric (astigmatism) lenses with very specific parameters sometimes require special-order fabrication, which can take longer — worth ordering as early in your trip as possible if you need them.</p>
