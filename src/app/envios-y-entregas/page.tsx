@@ -42,9 +42,9 @@ export default function EnviosPage() {
                 <p className="text-gray-600 text-sm">Presbicia / vista cansada. Se piden al distribuidor según tu graduación exacta.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 45 días</p>
+                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 40 días</p>
                 <p className="text-amber-700 text-sm font-semibold mb-2">Lentes tóricos</p>
-                <p className="text-gray-600 text-sm">Astigmatismo. La entrega estimada es de 25 a 45 días debido a la configuración específica de cilindro y eje.</p>
+                <p className="text-gray-600 text-sm">Astigmatismo. La entrega estimada es de 25 a 40 días debido a la configuración específica de cilindro y eje.</p>
               </div>
             </div>
           </div>
