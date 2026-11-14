@@ -93,7 +93,8 @@ function vertexCorrect(D: number): number {
 
 function roundStep(val: number): number {
   if (val === 0) return 0
-  const step = Math.abs(val) > 4 ? 0.5 : 0.25
+  // Lentes de contacto: pasos de 0.25 D hasta ±6.00 D, luego 0.50 D
+  const step = Math.abs(val) > 6 ? 0.5 : 0.25
   return Math.round(val / step) * step
 }
 
@@ -121,56 +122,51 @@ function convertEyeFromGlasses(eye: EyeRx): ContactRx {
  * @param source - 'contacto' = tomar como está, 'gafas' = convertir con vertex
  */
 export function convertGlassesToContacts(rx: GlassesRx, source: 'contacto' | 'gafas' = 'contacto'): ConvertedRx {
-  let od: ContactRx
-  let oi: ContactRx
-  let needsVertex = false
+  const esGafas = source === 'gafas'
 
-  if (source === 'gafas') {
-    od = convertEyeFromGlasses(rx.od)
-    oi = convertEyeFromGlasses(rx.oi)
-    needsVertex = Math.abs(rx.od.sph ?? 0) >= 4 || Math.abs(rx.oi.sph ?? 0) >= 4
-  } else {
-    // Contacto: valores TAL CUAL
-    od = {
-      sph: rx.od.sph ?? 0,
-      cyl: (rx.od.cyl && rx.od.cyl !== 0) ? rx.od.cyl : null,
-      axis: rx.od.axis,
-      add: rx.od.add,
-    }
-    oi = {
-      sph: rx.oi.sph ?? 0,
-      cyl: (rx.oi.cyl && rx.oi.cyl !== 0) ? rx.oi.cyl : null,
-      axis: rx.oi.axis,
-      add: rx.oi.add,
-    }
+  // 1) Receta que se va a usar para lentes de contacto (ya convertida si son gafas)
+  const od: ContactRx = esGafas ? convertEyeFromGlasses(rx.od) : {
+    sph: rx.od.sph ?? 0,
+    cyl: (rx.od.cyl && rx.od.cyl !== 0) ? rx.od.cyl : null,
+    axis: rx.od.axis, add: rx.od.add,
+  }
+  const oi: ContactRx = esGafas ? convertEyeFromGlasses(rx.oi) : {
+    sph: rx.oi.sph ?? 0,
+    cyl: (rx.oi.cyl && rx.oi.cyl !== 0) ? rx.oi.cyl : null,
+    axis: rx.oi.axis, add: rx.oi.add,
   }
 
-  // Determinar tipo y condiciones basado en la receta
-  const allSph = [rx.od.sph, rx.oi.sph].filter(v => v != null) as number[]
-  const allCyl = [rx.od.cyl, rx.oi.cyl].filter(v => v != null && v !== 0) as number[]
-  const allAdd = [rx.od.add, rx.oi.add].filter(v => v != null && v !== 0) as number[]
+  // 2) Compensación por vértice aplicada (|esfera| o meridiano ≥ 4.00 D)
+  const vertexAplicado = esGafas && [rx.od, rx.oi].some(e => {
+    const sph = e.sph ?? 0, cyl = e.cyl ?? 0
+    return Math.abs(sph) >= 4 || Math.abs(sph + cyl) >= 4
+  })
+
+  // 3) Tipo y condiciones decididos con la receta CONVERTIDA (la misma que va al motor).
+  //    Astigmatismo = cilindro distinto de cero tras la conversión (umbral 0.01 D, igual que el motor).
+  const cyls = [od.cyl, oi.cyl].filter((v): v is number => v != null && Math.abs(v) > 0.01)
+  const adds = [od.add, oi.add].filter((v): v is number => v != null && v > 0)
+  const sphs = [od.sph, oi.sph]
+  const avgSph = sphs.reduce((a, b) => a + b, 0) / sphs.length
+  const maxSph = sphs.reduce((m, v) => Math.max(m, Math.abs(v)), 0)
 
   const condiciones: string[] = []
-  const maxSph = allSph.reduce((m, v) => Math.max(m, Math.abs(v)), 0)
-  const avgSph = allSph.length ? allSph.reduce((a, b) => a + b, 0) / allSph.length : 0
-
   if (avgSph < -0.25) condiciones.push('Miopía')
-  if (avgSph > 0.25)  condiciones.push('Hipermetropía')
-  if (allCyl.length)  condiciones.push('Astigmatismo')
-  if (allAdd.length)  condiciones.push('Presbicia')
-  if (maxSph >= 8)    condiciones.push('Alta graduación')
+  if (avgSph > 0.25) condiciones.push('Hipermetropía')
+  if (cyls.length) condiciones.push('Astigmatismo')
+  if (adds.length) condiciones.push('Presbicia')
+  if (maxSph >= 8) condiciones.push('Alta graduación')
   if (!condiciones.length) condiciones.push('Sin graduación')
 
   let tipo: ConvertedRx['tipo'] = 'esferico'
   let descripcion = ''
-
-  if (allAdd.length > 0 && allCyl.length > 0) {
+  if (adds.length && cyls.length) {
     tipo = 'multifocal_torico'
     descripcion = 'Tu receta tiene presbicia y astigmatismo. Necesitas lentes multifocales tóricos.'
-  } else if (allAdd.length > 0) {
+  } else if (adds.length) {
     tipo = 'multifocal'
     descripcion = 'Tu receta incluye adición (ADD) — necesitas lentes multifocales.'
-  } else if (allCyl.length > 0) {
+  } else if (cyls.length) {
     tipo = 'torico'
     descripcion = 'Tu receta tiene cilindro (CYL) — necesitas lentes tóricos para astigmatismo.'
   } else {
@@ -180,7 +176,7 @@ export function convertGlassesToContacts(rx: GlassesRx, source: 'contacto' | 'ga
       : 'Lentes esféricos estándar.'
   }
 
-  return { od, oi, needsVertex: false, tipo, condiciones, descripcion }
+  return { od, oi, needsVertex: vertexAplicado, tipo, condiciones, descripcion }
 }
 
 // ─── Buscar productos compatibles con la receta ──────────────────────────────
@@ -312,7 +308,7 @@ export interface CasoMixto {
   oi: { tipo: TipoLenteOjo; rx: ContactRx }
 }
 
-const CYL_UMBRAL = 0.75 // CYL >= 0.75 requiere tórico (mismo umbral que convertGlassesToContacts)
+const CYL_UMBRAL = 0.01 // mismo criterio de astigmatismo que la conversión y el motor de recomendación
 
 function tipoDeOjo(o: ContactRx): TipoLenteOjo {
   const tieneCyl = o.cyl != null && Math.abs(o.cyl) >= CYL_UMBRAL
