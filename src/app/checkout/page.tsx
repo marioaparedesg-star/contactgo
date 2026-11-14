@@ -920,7 +920,7 @@ export default function CheckoutPage() {
                                 : item.sph != null && Number(item.sph) !== 0 ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
                               const eyes = isColor ? 'Par para ambos ojos' : item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
                               return (
-                                <p key={item.product.id + '-' + index} className="text-xs leading-relaxed text-gray-700 break-words">
+                                <div key={item.product.id + '-' + index} className="flex items-center gap-3 rounded-xl bg-white p-2.5 border border-slate-100">
                                   {item.product.imagen_url ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={56} height={56} className="h-14 w-14 shrink-0 rounded-lg bg-slate-50 object-contain p-1" unoptimized /> : <div className="h-14 w-14 shrink-0 rounded-lg bg-slate-100" />}
                                   <div className="min-w-0 flex-1">
                                     <p className="text-xs font-bold leading-snug text-[#002455]">{item.product.nombre} <span className="font-medium text-slate-500">×{item.cantidad}</span></p>
