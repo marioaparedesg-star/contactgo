@@ -6,217 +6,112 @@ import { ShoppingCart, Eye, Heart } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 import { useCartStore } from '@/lib/cart-store'
-import { trackEcommerce } from '@/lib/analytics'
 import { getEntrega } from '@/lib/delivery-times'
-import toast from 'react-hot-toast'
 
 interface Props { product: Product; isBestseller?: boolean }
 
 const TIPO_BADGE: Record<string, { label: string; color: string }> = {
-  esferico:   { label: 'Esférico',   color: 'bg-blue-100 text-blue-700' },
-  torico:     { label: 'Tórico',     color: 'bg-purple-100 text-purple-700' },
-  multifocal: { label: 'Multifocal', color: 'bg-amber-100 text-amber-700' },
-  color:      { label: 'Color',      color: 'bg-pink-100 text-pink-700' },
-  solucion:   { label: 'Solución',   color: 'bg-teal-100 text-teal-700' },
-  gota:       { label: 'Gotas',      color: 'bg-cyan-100 text-cyan-700' },
+  esferico: { label: 'Esférico', color: 'bg-blue-50 text-blue-700' },
+  torico: { label: 'Tórico', color: 'bg-violet-50 text-violet-700' },
+  multifocal: { label: 'Multifocal', color: 'bg-amber-50 text-amber-700' },
+  color: { label: 'Color', color: 'bg-pink-50 text-pink-700' },
+  solucion: { label: 'Solución', color: 'bg-teal-50 text-teal-700' },
+  gota: { label: 'Gotas', color: 'bg-cyan-50 text-cyan-700' },
 }
-
-// Calcula días totales de uso por caja
-
 
 export default function ProductCard({ product, isBestseller }: Props) {
   const addItem = useCartStore(s => s.addItem)
-  const needsRx = ['esferico','torico','multifocal','color'].includes(product.tipo ?? '')
   const [isFav, setIsFav] = React.useState(false)
+  const needsRx = ['esferico', 'torico', 'multifocal', 'color'].includes(product.tipo ?? '')
+  const href = `/producto/${(product as any).slug || product.id}`
+  const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
+  const stockCritical = product.stock > 0 && product.stock <= 4
+  const diasUso = (product as any).dias_uso
+  const contenidoLabel = product.tipo === 'gota' || product.tipo === 'solucion' ? '1 frasco'
+    : diasUso === 1 ? 'Caja de 30 unidades'
+    : diasUso === 14 || diasUso === 30 ? 'Caja de 6 unidades'
+    : product.tipo === 'color' ? '2 lentes'
+    : (product as any).contenido ?? 'Por caja'
 
   const toggleFav = async (e: React.MouseEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
     if (!user) { window.location.href = '/cuenta'; return }
-    if (isFav) {
-      await sb.from('favorites').delete().eq('user_id', user.id).eq('product_id', product.id)
-    } else {
-      await sb.from('favorites').insert({ user_id: user.id, product_id: product.id })
-    }
+    if (isFav) await sb.from('favorites').delete().eq('user_id', user.id).eq('product_id', product.id)
+    else await sb.from('favorites').insert({ user_id: user.id, product_id: product.id })
     setIsFav(!isFav)
   }
 
-  const handleAdd = (e: React.MouseEvent) => {
-    e.preventDefault()
-    // La tarjeta del catálogo solo lleva a configurar el producto.
-    // El alta al carrito ocurre exclusivamente desde la ficha configurada.
-    const productPath = `/producto/${(product as any).slug || product.id}`
-    window.location.assign(productPath)
-  }
-
-  const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
-  const stockCritical = product.stock > 0 && product.stock <= 4
-
-  // Etiqueta de contenido
-  const contenidoLabel = product.tipo === 'gota' || product.tipo === 'solucion'
-    ? '1 frasco'
-    : (product as any).dias_uso === 1 ? 'caja de 30u'
-    : (product as any).dias_uso === 14 ? 'caja de 6u'
-    : (product as any).dias_uso === 30 ? 'caja de 6u'
-    : product.tipo === 'color' ? '2 lentes'
-    : (product as any).contenido ?? 'por caja'
-
   return (
-    <Link
-      href={`/producto/${(product as any).slug || product.id}`}
-      scroll={true}
-      className="card group flex flex-col overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:-translate-y-0.5"
-    >
-      {/* ── Imagen ── */}
-      <div className="relative w-full aspect-square overflow-hidden" style={{ background: "linear-gradient(145deg, #f8fafc, #f0f4f8)" }}>
-        {/* Favorito */}
-        <button onClick={toggleFav}
-          aria-label={isFav ? `Quitar ${product.nombre} de favoritos` : `Agregar ${product.nombre} a favoritos`}
-          className={"absolute top-2 right-2 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-sm " + (isFav ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-400 hover:text-red-400')}>
-          <Heart className={"w-3.5 h-3.5 " + (isFav ? 'fill-current' : '')} aria-hidden="true" />
+    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-slate-50 to-white">
+        <Link href={href} aria-label={`Ver ${product.nombre}`} className="absolute inset-0">
+          {product.imagen_url ? (
+            <Image src={product.imagen_url} unoptimized alt={`${product.nombre}${product.marca ? ' — ' + product.marca : ''}`} fill
+              className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 400px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw" />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-1 bg-slate-50 text-slate-300">
+              <Eye className="h-10 w-10" aria-hidden="true" /><span className="text-[10px]">Imagen no disponible</span>
+            </div>
+          )}
+        </Link>
+        <button type="button" onClick={toggleFav} aria-label={isFav ? `Quitar ${product.nombre} de favoritos` : `Agregar ${product.nombre} a favoritos`}
+          className={`absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-colors ${isFav ? 'bg-rose-500 text-white' : 'bg-white/95 text-slate-500 hover:text-rose-500'}`}>
+          <Heart className={`h-4 w-4 ${isFav ? 'fill-current' : ''}`} aria-hidden="true" />
         </button>
-
-        {/* Días badge */}
-        {(product as any).dias_uso && (
-          <span className="absolute bottom-2 left-2 z-10 text-[10px] font-bold bg-black/60 text-white px-1.5 py-0.5 rounded-md">
-            {(product as any).dias_uso === 1 ? 'Diario' : (product as any).dias_uso === 14 ? 'Quincenal' : 'Mensual'}
-          </span>
-        )}
-        {/* Aviso entrega especial para tóricos y multifocales — usa la fuente
-            única de verdad (delivery-times.ts) en vez de un texto fijo, para
-            que los plazos se tomen siempre de delivery-times.ts. */}
-        {(product.tipo === 'torico' || product.tipo === 'multifocal') && (
-          <span className="absolute bottom-2 right-2 z-10 text-[9px] font-bold bg-amber-500 text-white px-1.5 py-0.5 rounded-md leading-tight">
-            ⏱ {getEntrega(product.tipo).etiqueta.replace(/^.*·\s*/, '')}
-          </span>
-        )}
-
-        {product.imagen_url ? (
-          <Image
-            src={product.imagen_url} unoptimized
-            alt={`${product.nombre}${product.marca ? ' — ' + product.marca : ''} — lente de contacto en República Dominicana`}
-            fill
-            className="object-contain p-4 group-hover:scale-110 transition-transform duration-500 drop-shadow-sm"
-            sizes="(max-width: 400px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw"
-            onError={(e) => {
-              const el = e.target as HTMLImageElement
-              // Fallback: intentar cargar sin el optimizer de Next.js
-              if (!el.dataset.fallback) {
-                el.dataset.fallback = '1'
-                el.src = product.imagen_url!
-              }
-            }}
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-gray-100">
-            <Eye className="w-10 h-10 text-gray-300" aria-hidden="true" />
-            <span className="text-[10px] text-gray-400">Sin imagen</span>
-          </div>
-        )}
-
-        {/* Badge tipo + bestseller */}
-        <div className="absolute top-2 left-2 pointer-events-none flex flex-col gap-1">
-          {isBestseller && (
-            <span className="badge text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-amber-500 text-white">
-              🔥 Más vendido
-            </span>
-          )}
-          {badge && (
-            <span className={`badge text-[10px] px-1.5 py-0.5 rounded-full font-medium ${badge.color}`}>
-              {badge.label}
-            </span>
-          )}
+        <div className="pointer-events-none absolute left-3 top-3 z-[1] flex max-w-[75%] flex-wrap gap-1">
+          {isBestseller && <span className="rounded-full bg-[#002455] px-2.5 py-1 text-[10px] font-bold text-white">Más vendido</span>}
+          {badge && <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${badge.color}`}>{badge.label}</span>}
         </div>
-
-        {/* Stock crítico */}
-        {stockCritical && (
-          <div className="absolute top-2 right-8 pointer-events-none">
-            <span className="badge bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full animate-pulse">
-              ¡Solo {product.stock}!
-            </span>
-          </div>
+        {diasUso && <span className="absolute bottom-3 left-3 rounded-md bg-[#002455]/90 px-2 py-1 text-[10px] font-semibold text-white">
+          {diasUso === 1 ? 'Diario' : diasUso === 14 ? 'Quincenal' : 'Mensual'}
+        </span>}
+        {(product.tipo === 'torico' || product.tipo === 'multifocal') && (
+          <span className="absolute bottom-3 right-3 rounded-md bg-amber-50 px-2 py-1 text-[9px] font-semibold text-amber-800">
+            {getEntrega(product.tipo).etiqueta.replace(/^.*·\\s*/, '')}
+          </span>
         )}
-
-        {/* Sin stock */}
-        {product.stock === 0 && (
-          <div className="absolute inset-0 bg-white/75 flex items-center justify-center">
-            <span className="badge bg-gray-100 text-gray-500 text-xs">Sin stock</span>
-          </div>
-        )}
+        {stockCritical && <span className="absolute right-3 top-14 rounded-full bg-rose-50 px-2 py-1 text-[10px] font-semibold text-rose-700">Últimas {product.stock}</span>}
+        {product.stock === 0 && <div className="absolute inset-0 flex items-center justify-center bg-white/70"><span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">Agotado</span></div>}
       </div>
 
-      {/* ── Info ── */}
-      <div className="p-3 flex flex-col flex-1 gap-1">
-        {/* Marca + Comparar */}
-        <div className="flex items-center justify-between gap-1">
-          <p className="text-[10px] font-bold text-primary-700 uppercase tracking-widest truncate">
-            {product.marca}
-          </p>
-          <Link
-            href={`/comparar?p=${product.slug}`}
-            onClick={e => e.stopPropagation()}
-            className="text-[9px] font-bold text-gray-400 hover:text-primary-600 uppercase tracking-wide shrink-0 transition-colors"
-          >
-            Comparar
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
+        <div className="mb-1 flex min-h-4 items-center justify-between gap-2">
+          <p className="truncate text-[10px] font-bold uppercase tracking-[0.12em] text-[#01a3a8]">{product.marca || 'ContactGo'}</p>
+          <Link href={`/comparar?p=${(product as any).slug || product.id}`} className="shrink-0 text-[10px] font-semibold text-slate-400 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
+        </div>
+        <Link href={href} className="block min-h-[2.6rem] text-sm font-bold leading-snug text-[#002455] transition-colors hover:text-[#01a3a8]">
+          <h3 className="line-clamp-2">{product.nombre}</h3>
+        </Link>
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <span className={`text-[10px] font-semibold ${product.stock === 0 ? 'text-rose-600' : stockCritical ? 'text-amber-700' : 'text-emerald-700'}`}>
+            {product.stock === 0 ? 'Sin stock' : stockCritical ? `Solo ${product.stock} disponibles` : 'Disponible'}
+          </span>
+          <span className="truncate text-[10px] text-slate-400">{contenidoLabel}</span>
+        </div>
+        <div className="mt-auto pt-3">
+          {product.precio_anterior && product.precio_anterior > product.precio && (
+            <div className="mb-0.5 text-[10px] text-slate-400 line-through">RD${Number(product.precio_anterior).toLocaleString()}</div>
+          )}
+          <div className="flex items-center gap-2">
+            <p className="text-lg font-extrabold tracking-tight text-[#002455]">RD${Number(product.precio).toLocaleString()}</p>
+            {product.precio_anterior && product.precio_anterior > product.precio && (
+              <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                -{Math.round((1 - product.precio / product.precio_anterior) * 100)}%
+              </span>
+            )}
+          </div>
+          <Link href={href} aria-disabled={product.stock === 0}
+            onClick={e => { if (product.stock === 0) e.preventDefault() }}
+            className={`mt-3 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-colors ${product.stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]'}`}>
+            <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+            {product.stock === 0 ? 'Agotado' : product.tipo === 'color' ? 'Elegir color' : needsRx ? 'Ver opciones' : 'Ver producto'}
           </Link>
         </div>
-
-        {/* Nombre */}
-        <h3 className="font-semibold text-gray-900 text-sm leading-snug min-h-[2.5rem]">
-          {product.nombre}
-        </h3>
-
-        {/* Stock real + duración en meses MEJORA-4 */}
-        <div className="flex items-center justify-between gap-1">
-          <p className="text-[10px] font-semibold">
-            {product.stock === 0
-              ? <span className="text-red-500">Sin stock</span>
-              : product.stock <= 4
-                ? <span className="text-orange-700">¡Solo {product.stock}!</span>
-                : <span className="text-green-700">✅ En stock</span>
-            }
-          </p>
-          {/* Duración en meses por caja */}
-          {product.tipo && ['esferico','torico','multifocal','color'].includes(product.tipo) && (product as any).dias_uso && (
-            <span className="text-[9px] text-gray-400 font-medium whitespace-nowrap">
-              {(product as any).dias_uso === 1  ? '30u = 1 mes'  :
-               (product as any).dias_uso === 14 ? '6u = 3 meses' :
-               (product as any).dias_uso === 30 ? '6u = 6 meses' : null}
-            </span>
-          )}
-        </div>
-
-        {/* Precio + ahorro vs óptica */}
-        <div className="mt-auto pt-1.5 flex flex-col gap-2">
-          <div>
-            {/* Precio anterior (óptica) tachado */}
-            {product.precio_anterior && product.precio_anterior > product.precio && (
-              <p className="text-[11px] text-gray-400 line-through leading-none mb-0.5">
-                RD${Number(product.precio_anterior).toLocaleString()} precio anterior
-              </p>
-            )}
-            <div className="flex items-center gap-2">
-              <p className="text-lg font-black text-gray-900 tracking-tight">RD${product.precio.toLocaleString()}</p>
-              {product.precio_anterior && product.precio_anterior > product.precio && (
-                <span className="text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded-full">
-                  -{Math.round((1 - product.precio / product.precio_anterior) * 100)}%
-                </span>
-              )}
-            </div>
-            <p className="text-[10px] text-gray-400">{contenidoLabel}</p>
-          </div>
-          <button
-            onClick={handleAdd}
-            disabled={product.stock === 0}
-            aria-label={product.stock === 0 ? `${product.nombre} sin stock` : `${product.tipo === "color" ? "Elegir color" : needsRx ? "Ver opciones" : "Ver producto"}: ${product.nombre}`}
-            className="w-full btn-primary py-2 text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            <ShoppingCart className="w-4 h-4 shrink-0" aria-hidden="true" />
-            <span>{product.stock === 0 ? "Agotado" : product.tipo === "color" ? "Elegir color" : needsRx ? "Ver opciones" : "Ver producto"}</span>
-          </button>
-        </div>
       </div>
-    </Link>
+    </article>
   )
 }
