@@ -1140,39 +1140,13 @@ export default function CuentaPage() {
           <div className="space-y-3">
 
             {/* Recetas guardadas */}
-            {recetas.map(r => {
-              const fechaEmision = r.fecha_emision ? new Date(r.fecha_emision) : null
-              const ahora = new Date()
-              const mesesDesde = fechaEmision ? (ahora.getFullYear() - fechaEmision.getFullYear()) * 12 + (ahora.getMonth() - fechaEmision.getMonth()) : null
-              const vencida = mesesDesde !== null && mesesDesde >= 12
-              const proxVencer = mesesDesde !== null && mesesDesde >= 10 && mesesDesde < 12
-              return (
-                <div key={r.id} className={`bg-white rounded-2xl border shadow-sm p-4 ${vencida ? 'border-red-200' : proxVencer ? 'border-amber-200' : 'border-gray-100'}`}>
-                  {/* Alerta vencimiento */}
-                  {vencida && (
-                    <div className="bg-red-50 border border-red-100 rounded-xl px-3 py-2.5 mb-3 flex items-start gap-2">
-                      <span className="text-red-500 text-base shrink-0 mt-0.5">⚠️</span>
-                      <div>
-                        <p className="text-red-700 font-bold text-xs">Receta vencida ({mesesDesde} meses)</p>
-                        <p className="text-red-600 text-xs mt-0.5">Tu receta tiene más de un año. Te recomendamos visitar un optometrista antes de comprar.</p>
-                        <a href="https://wa.me/18096942268?text=Hola%2C%20necesito%20información%20sobre%20revisión%20visual"
-                          target="_blank" rel="noopener noreferrer"
-                          className="text-xs font-bold text-red-600 underline mt-1 inline-block">Solicitar consulta →</a>
-                      </div>
-                    </div>
-                  )}
-                  {proxVencer && !vencida && (
-                    <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 mb-3 flex items-start gap-2">
-                      <span className="text-amber-500 text-base shrink-0 mt-0.5">🕐</span>
-                      <p className="text-amber-700 text-xs font-medium">Tu receta está próxima a vencer ({mesesDesde} meses). Considera hacer una revisión pronto.</p>
-                    </div>
-                  )}
-
+            {recetas.map(r => (
+                <div key={r.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-bold text-gray-900 text-sm">{r.nombre}</p>
                     <div className="flex items-center gap-1.5">
-                      {r.diagnostico && <span className="text-xs font-semibold px-2 py-0.5 bg-teal-50 text-primary-700 rounded-full capitalize">{r.diagnostico}</span>}
-                      {fechaEmision && <span className="text-xs text-gray-400">{fechaEmision.getFullYear()}</span>}
+                      {r.notas && <span className="text-xs font-semibold px-2 py-0.5 bg-teal-50 text-primary-700 rounded-full capitalize">{r.notas}</span>}
+                      {r.created_at && <span className="text-xs text-gray-400">{new Date(r.created_at).toLocaleDateString('es-DO')}</span>}
                     </div>
                   </div>
 
@@ -1202,8 +1176,7 @@ export default function CuentaPage() {
                     </button>
                   </div>
                 </div>
-              )
-            })}
+            ))}
 
             {!agregandoReceta && (
               <button onClick={() => setAgregandoReceta(true)}
@@ -1222,13 +1195,6 @@ export default function CuentaPage() {
                 <input value={recetaForm.nombre} onChange={e => setRecetaForm(f => ({...f,nombre:e.target.value}))}
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-400"
                   placeholder="Nombre (ej: Receta 2025)" />
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 mb-1 block">Fecha de emisión de la receta</label>
-                  <input type="date" value={fechaEmisionForm} onChange={e => setFechaEmisionForm(e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
-                    max={new Date().toISOString().slice(0,10)} />
-                  <p className="text-xs text-gray-400 mt-1">Si tiene más de 1 año, te avisaremos que necesitas una revisión</p>
-                </div>
                 {(recetaForm.od_sph||recetaForm.oi_sph) && (
                   <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-2.5 text-sm text-blue-800 font-semibold">
                     Diagnóstico: {detectarDiagnostico(recetaForm)||'—'}
