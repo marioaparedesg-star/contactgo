@@ -71,32 +71,11 @@ export async function POST(req: NextRequest) {
       const { error } = await sb.from('orders').update(updateData).eq('id', order_id)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-      // La notificación se dispara desde el servidor para que no dependa de
-      // que el navegador permanezca abierto después de actualizar el pedido.
-      // El endpoint valida el estado real guardado y aplica idempotencia en email_log.
-      let notification: any = { email_cliente: 'skipped' }
-      if (estadoActual.estado !== nuevo_estado) {
-        try {
-          const baseUrl = new URL(req.url).origin
-          const origin = req.headers.get('origin') || baseUrl
-          const response = await fetch(new URL('/api/notify', req.url), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', origin },
-            body: JSON.stringify({
-              order_id,
-              evento: 'estado_cambio',
-              nuevo_estado,
-            }),
-          })
-          notification = await response.json().catch(() => ({ error: 'Respuesta de notificación inválida' }))
-          if (!response.ok) {
-            console.error('[admin/pedidos cambiar_estado] notificación falló:', response.status, notification)
-          }
-        } catch (notifyError) {
-          console.error('[admin/pedidos cambiar_estado] no se pudo invocar notificación:', notifyError)
-          notification = { email_cliente: 'error', error: 'No se pudo contactar el servicio de notificaciones' }
-        }
-      }
+      // Usar el invocador interno autenticado. No hacer fetch directo con Origin:
+      // en producción esa llamada estaba entrando por el guard público y devolvía 403.
+      const notification = estadoActual.estado !== nuevo_estado
+        ? await notificarEstadoPedido(order_id, nuevo_estado)
+        : { email_cliente: 'skipped' }
 
       return NextResponse.json({ ok: true, notification })
     }
