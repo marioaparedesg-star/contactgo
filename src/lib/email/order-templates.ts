@@ -49,12 +49,13 @@ function itemRows(items: OrderItem[]): string {
   return items.map((item) => {
     const name = esc(item.nombre)
     const quantity = Math.max(1, Number(item.cantidad ?? 1))
+    const fmt = (value: unknown) => value == null || value === '' ? '' : `${Number(value) > 0 ? '+' : ''}${Number(value).toFixed(2)}`
     const details = [
       item.color ? `Color: ${esc(item.color)}` : '',
-      item.sph != null ? `SPH ${Number(item.sph) > 0 ? '+' : ''}${esc(Number(item.sph).toFixed(2))}` : '',
-      item.cyl != null && Number(item.cyl) !== 0 ? `CYL ${esc(Number(item.cyl).toFixed(2))}` : '',
-      item.axis != null ? `EJE ${esc(item.axis)}°` : '',
-      item.add_power ? `ADD ${esc(item.add_power)}` : '',
+      item.sph_od != null || item.sph_oi != null ? `OD ${fmt(item.sph_od)} · OI ${fmt(item.sph_oi)}` : item.sph != null ? `SPH ${fmt(item.sph)}` : '',
+      item.cyl_od != null || item.cyl_oi != null ? `CYL OD ${fmt(item.cyl_od)} · OI ${fmt(item.cyl_oi)}` : item.cyl != null && Number(item.cyl) !== 0 ? `CYL ${fmt(item.cyl)}` : '',
+      item.axis_od != null || item.axis_oi != null ? `EJE OD ${esc(item.axis_od)}° · OI ${esc(item.axis_oi)}°` : item.axis != null ? `EJE ${esc(item.axis)}°` : '',
+      item.add_od || item.add_oi ? `ADD OD ${esc(item.add_od ?? '—')} · OI ${esc(item.add_oi ?? '—')}` : item.add_power ? `ADD ${esc(item.add_power)}` : '',
       item.ojo_mode || item.ojo ? `Ojo: ${esc(item.ojo_mode ?? item.ojo)}` : '',
     ].filter(Boolean).join(' · ')
     return `<tr>
@@ -84,7 +85,7 @@ export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event:
   const eventMessage = event === 'nuevo_pedido' && isPaid
     ? 'Recibimos tu pedido y confirmamos el pago. Te mantendremos informado sobre cada etapa.'
     : event === 'nuevo_pedido' ? STATUS.recibido.message : meta.message
-  const subject = event === 'pago_aprobado' ? 'Pago aprobado' : event === 'nuevo_pedido' ? 'Pedido recibido' : meta.subject
+  const subject = event === 'pago_aprobado' || (event === 'nuevo_pedido' && isPaid) ? 'Pago aprobado y pedido recibido' : event === 'nuevo_pedido' ? 'Pedido recibido' : meta.subject
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(subject)} · ContactGo</title></head>
   <body style="margin:0;padding:0;background:#f3f6fa;font-family:Arial,Helvetica,sans-serif;color:#172b4d">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f6fa;padding:28px 12px"><tr><td align="center">
@@ -94,7 +95,7 @@ export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event:
           <div style="margin-top:7px;font-size:11px;letter-spacing:1.5px;color:#d6e4f3">LENTES DE CONTACTO · REPÚBLICA DOMINICANA</div>
         </td></tr>
         <tr><td style="padding:30px 32px 10px">
-          <div style="display:inline-block;padding:6px 10px;border-radius:20px;background:#e8f8f8;color:#007f84;font-size:10px;font-weight:800;letter-spacing:.8px">${esc(event === 'pago_aprobado' ? 'PAGO APROBADO' : event === 'nuevo_pedido' ? 'PEDIDO RECIBIDO' : meta.tag)}</div>
+          <div style="display:inline-block;padding:6px 10px;border-radius:20px;background:#e8f8f8;color:#007f84;font-size:10px;font-weight:800;letter-spacing:.8px">${esc(event === 'pago_aprobado' || (event === 'nuevo_pedido' && isPaid) ? 'PAGO APROBADO' : event === 'nuevo_pedido' ? 'PEDIDO RECIBIDO' : meta.tag)}</div>
           <h1 style="margin:16px 0 8px;font-size:25px;line-height:1.25;letter-spacing:-.5px;color:${BRAND}">${eventTitle}</h1>
           <p style="margin:0;font-size:14px;line-height:1.7;color:#52647a">Hola ${name}, ${eventMessage}</p>
           <p style="margin:15px 0 0;font-size:12px;color:#64748b">Pedido <strong style="color:${BRAND}">#${id}</strong></p>
