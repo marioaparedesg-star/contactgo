@@ -318,6 +318,44 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
 </html>`
 }
 
+function escapeEmailHtml(value: unknown): string {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[char] ?? char))
+}
+
+// Plantilla transaccional rediseñada: compacta, limpia y consistente con la
+// identidad visual azul/turquesa de ContactGo. Se usa para cada cambio de estado.
+function emailEstado(order: any, estado: string): string {
+  const pedidoId = escapeEmailHtml(order.numero_orden ?? order.id.slice(-8).toUpperCase())
+  const nombre = escapeEmailHtml(order.cliente_nombre?.split(' ')[0] ?? 'Cliente')
+  const label = escapeEmailHtml(ESTADO_LABEL[estado] ?? estado)
+  const mensaje = escapeEmailHtml(ESTADO_MSG[estado] ?? 'El estado de tu pedido fue actualizado.')
+  const base = BASE_URL
+  const fecha = new Date().toLocaleDateString('es-DO', { day: '2-digit', month: 'long', year: 'numeric' })
+  const total = Number(order.total ?? 0).toLocaleString('es-DO')
+  const color = estado === 'entregado' ? '#0f766e' : '#0b2b50'
+  return `<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Actualización de pedido #${pedidoId} | ContactGo</title></head>
+<body style="margin:0;padding:0;background:#f4f7fb;font-family:Arial,Helvetica,sans-serif;color:#172b4d">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7fb;padding:32px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fff;border:1px solid #e5eaf1;border-radius:16px;overflow:hidden">
+<tr><td style="padding:24px 30px;background:#002455">
+<p style="margin:0;color:#fff;font-size:23px;font-weight:800;letter-spacing:-.5px">Contact<span style="color:#01b2b7">Go</span></p>
+<p style="margin:5px 0 0;color:#c7d6e8;font-size:11px;letter-spacing:1.2px;text-transform:uppercase">Actualización de tu pedido</p></td></tr>
+<tr><td style="padding:30px 30px 12px">
+<p style="margin:0 0 8px;color:#64748b;font-size:12px">Hola ${nombre},</p>
+<h1 style="margin:0;color:#102a43;font-size:24px;line-height:1.25">Tu pedido está: ${label}</h1>
+<p style="margin:12px 0 0;color:#526579;font-size:14px;line-height:1.7">${mensaje}</p>
+</td></tr>
+<tr><td style="padding:12px 30px 24px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7fafc;border:1px solid #e5edf5;border-radius:12px">
+<tr><td style="padding:16px 18px"><p style="margin:0;color:#8191a5;font-size:10px;font-weight:700;letter-spacing:1px">NÚMERO DE PEDIDO</p><p style="margin:5px 0 0;color:#102a43;font-size:18px;font-weight:800">#${pedidoId}</p></td>
+<td align="right" style="padding:16px 18px"><p style="margin:0;color:#8191a5;font-size:10px;font-weight:700;letter-spacing:1px">TOTAL</p><p style="margin:5px 0 0;color:#102a43;font-size:16px;font-weight:800">RD${total}</p></td></tr></table></td></tr>
+<tr><td align="center" style="padding:0 30px 28px"><a href="${base}/cuenta" style="display:inline-block;background:#002455;color:#fff;text-decoration:none;font-size:14px;font-weight:700;padding:13px 25px;border-radius:8px">Consultar mi pedido</a></td></tr>
+<tr><td style="padding:18px 30px;background:#f8fafc;border-top:1px solid #edf1f5;text-align:center"><p style="margin:0;color:#64748b;font-size:11px;line-height:1.7">¿Necesitas ayuda? Escríbenos por WhatsApp al (809) 694-2268.<br>ContactGo · República Dominicana · ${fecha}</p><p style="margin:8px 0 0;color:#9aa8b8;font-size:10px">Este correo es una notificación automática sobre tu pedido.</p></td></tr>
+</table></td></tr></table></body></html>`
+}
+
 function emailAdmin(order: any, items: any[], evento: string, nuevoEstado?: string): string {
   const pedidoId = order.id.slice(-8).toUpperCase()
   const isNuevo  = evento === 'nuevo_pedido'
@@ -419,7 +457,7 @@ export async function POST(req: NextRequest) {
           from: FROM_EMAIL,
           to: order.cliente_email,
           subject,
-          html: emailCliente(order, itemsList, evento, nuevoEstadoSeguro),
+          html: evento === 'estado_cambio' ? emailEstado(order, nuevoEstadoSeguro) : emailCliente(order, itemsList, evento, nuevoEstadoSeguro),
         })
         emailClienteStatus = emailError ? 'error' : 'sent'
         emailClienteError = emailError
