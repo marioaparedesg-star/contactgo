@@ -90,6 +90,8 @@ export default function RecetaPage() {
                 tipo,
                 od_sph: rx.sph ?? 0, oi_sph: rx.sph ?? 0,
                 od_cyl: rx.cyl ?? 0, oi_cyl: rx.cyl ?? 0,
+                od_axis: rx.axis ?? null, oi_axis: rx.axis ?? null,
+                od_add: rx.add ?? null, oi_add: rx.add ?? null,
               })
             })
             const json = await res.json()
@@ -110,7 +112,13 @@ export default function RecetaPage() {
       // ── CASO ESTANDAR: 1 tipo de producto para ambos ojos ─────────────
       const res = await fetch('/api/receta/recomendar', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0, oi_cyl: conv.oi.cyl ?? 0 })
+        body: JSON.stringify({
+          tipo: conv.tipo,
+          od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0,
+          od_cyl: conv.od.cyl ?? 0, oi_cyl: conv.oi.cyl ?? 0,
+          od_axis: conv.od.axis ?? null, oi_axis: conv.oi.axis ?? null,
+          od_add: conv.od.add ?? null, oi_add: conv.oi.add ?? null,
+        })
       })
       const json = await res.json()
       const lista = json.productos ?? []
