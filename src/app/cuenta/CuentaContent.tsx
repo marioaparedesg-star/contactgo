@@ -184,7 +184,7 @@ export default function CuentaPage() {
         setUser(user)
         Promise.allSettled([
           sb.from('profiles').select('*').eq('id', user.id).single(),
-          sb.from('orders').select('*, order_items(*)').eq('user_id', user.id).order('created_at', { ascending: false }),
+          sb.from('orders').select('*, order_items(*, product:products(nombre,tipo,imagen_url))').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('addresses').select('*').eq('user_id', user.id).order('created_at'),
           sb.from('saved_prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('payment_methods').select('*').eq('user_id', user.id).order('created_at'),
@@ -447,7 +447,7 @@ export default function CuentaPage() {
     // Refresca el estado actual del pedido desde DB (no usar snapshot en memoria)
     const [{ data: pedidoFresh }, { data: items }, { data: historial }] = await Promise.all([
       sb.from('orders').select('*').eq('id', p.id).single(),
-      sb.from('order_items').select('*').eq('order_id', p.id),
+      sb.from('order_items').select('*, product:products(nombre,tipo,imagen_url)').eq('order_id', p.id),
       sb.from('order_status_history').select('*').eq('order_id', p.id).order('created_at', { ascending: true }),
     ])
     if (pedidoFresh) {
@@ -540,8 +540,8 @@ export default function CuentaPage() {
   }
 
   const ESTADO: Record<string, string> = {
-    pendiente:'bg-yellow-50 text-yellow-700', confirmado:'bg-blue-50 text-blue-700',
-    preparando:'bg-purple-50 text-purple-700', enviado:'bg-indigo-50 text-indigo-700',
+    recibido:'bg-blue-50 text-blue-700', pago_aprobado:'bg-emerald-50 text-emerald-700', pendiente:'bg-yellow-50 text-yellow-700', confirmado:'bg-blue-50 text-blue-700',
+    preparando:'bg-purple-50 text-purple-700', fabricante:'bg-amber-50 text-amber-700', enviado:'bg-indigo-50 text-indigo-700', transito:'bg-cyan-50 text-cyan-700',
     entregado:'bg-green-50 text-green-700', cancelado:'bg-red-50 text-red-700'
   }
 
@@ -736,38 +736,38 @@ export default function CuentaPage() {
         {/* Dashboard ContactGo — responsive desktop/mobile */}
         {tab === '' ? (
           <div className="space-y-5 pb-4">
-            <section className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-[#002455] via-[#00366B] to-[#01B2B7] px-5 py-6 sm:px-7 sm:py-8 text-white shadow-lg shadow-blue-950/10">
+            <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#002455] to-[#01B2B7] px-4 py-4 text-white shadow-lg shadow-blue-950/10">
               <div className="relative z-10 max-w-xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Tu espacio ContactGo</p>
-                <h1 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight">Hola, {(perfil?.nombre || user.email?.split('@')[0] || 'bienvenido').split(' ')[0]} <span aria-hidden="true">👋</span></h1>
-                <p className="mt-2 max-w-md text-sm sm:text-base leading-relaxed text-white/85">Gestiona tus pedidos, recetas y datos personales desde un solo lugar.</p>
-                <button onClick={() => setTab('pedidos')} className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#002455] shadow-sm transition hover:bg-slate-100">
+                <h1 className="mt-1 text-xl font-black tracking-tight">Hola, {(perfil?.nombre || user.email?.split('@')[0] || 'bienvenido').split(' ')[0]} <span aria-hidden="true">👋</span></h1>
+                <p className="mt-1 max-w-md text-xs leading-relaxed text-white/85">Gestiona tus pedidos, recetas y datos personales desde un solo lugar.</p>
+                <button onClick={() => setTab('pedidos')} className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#002455] shadow-sm transition hover:bg-slate-100">
                   Consultar mis pedidos <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
-              <div aria-hidden="true" className="pointer-events-none absolute -right-8 -bottom-16 h-56 w-56 rounded-full border-[24px] border-white/10 sm:right-8 sm:bottom-[-90px] sm:h-72 sm:w-72" />
+              <div aria-hidden="true" className="pointer-events-none absolute -right-8 -bottom-16 h-32 w-32 rounded-full border-[14px] border-white/10 sm:right-8 sm:bottom-[-90px] sm:h-72 sm:w-72" />
               <div aria-hidden="true" className="pointer-events-none absolute right-8 top-5 h-24 w-24 rounded-full bg-white/10 blur-2xl sm:right-24 sm:top-8 sm:h-36 sm:w-36" />
             </section>
 
-            <section aria-label="Resumen de tu cuenta" className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <section aria-label="Resumen de tu cuenta" className="grid grid-cols-4 gap-2">
               {[
                 { label: 'Pedidos', value: pedidos.length, icon: Package, tone: 'text-[#002455]', bg: 'bg-blue-50' },
                 { label: 'En camino', value: pedidos.filter(p => ['enviado','preparando'].includes(String(p.estado || '').toLowerCase())).length, icon: RefreshCw, tone: 'text-[#01A5AA]', bg: 'bg-teal-50' },
                 { label: 'Mis recetas', value: recetas.length, icon: FileText, tone: 'text-emerald-600', bg: 'bg-emerald-50' },
                 { label: 'Direcciones', value: direcciones.length, icon: MapPin, tone: 'text-violet-600', bg: 'bg-violet-50' },
               ].map(item => (
-                <div key={item.label} className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
-                  <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${item.bg} ${item.tone}`}>
-                    <item.icon className="h-5 w-5" />
+                <div key={item.label} className="flex items-center gap-2 rounded-xl border border-slate-100 bg-white px-2.5 py-2.5 shadow-sm">
+                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${item.bg} ${item.tone}`}>
+                    <item.icon className="h-4 w-4" />
                   </div>
-                  <p className="text-2xl font-black tracking-tight text-slate-900 tabular-nums">{item.value}</p>
-                  <p className="mt-0.5 text-xs font-medium text-slate-500">{item.label}</p>
+                  <p className="text-lg font-black tracking-tight text-slate-900 tabular-nums">{item.value}</p>
+                  <p className="mt-0.5 truncate text-[10px] font-medium text-slate-500">{item.label}</p>
                 </div>
               ))}
             </section>
 
             <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
-              <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-4 sm:px-5">
+              <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-3.5 py-3">
                 <div>
                   <h2 className="font-bold text-slate-900">Pedidos recientes</h2>
                   <p className="mt-0.5 text-xs text-slate-500">Consulta el estado de tus compras</p>
@@ -784,15 +784,15 @@ export default function CuentaPage() {
               ) : (
                 <div className="divide-y divide-slate-100">
                   {pedidos.slice(0, 3).map(p => (
-                    <button key={p.id} onClick={() => verPedido(p)} className="flex w-full items-center gap-3 px-4 py-4 text-left transition hover:bg-slate-50 sm:px-5">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#002455]"><Package className="h-5 w-5" /></div>
+                    <button key={p.id} onClick={() => verPedido(p)} className="flex w-full items-center gap-3 px-3.5 py-3 text-left transition hover:bg-slate-50">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50">{p.order_items?.[0]?.product?.imagen_url ? <img src={p.order_items[0].product.imagen_url} alt={p.order_items[0].nombre || 'Producto'} className="h-full w-full object-contain p-1"/> : <Package className="h-5 w-5 text-slate-300"/>}</div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-bold text-slate-900">Pedido #{String(p.numero_orden || p.id).slice(-6).toUpperCase()}</p>
                         <p className="mt-0.5 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})}</p>
                       </div>
                       <div className="shrink-0 text-right">
                         <p className="text-sm font-bold text-slate-900">RD${Number(p.total || 0).toLocaleString('es-DO')}</p>
-                        <span className={`mt-1 inline-flex rounded-full px-2 py-1 text-[10px] font-bold capitalize ${ESTADO[p.estado] || 'bg-slate-100 text-slate-600'}`}>{p.estado || 'Pendiente'}</span>
+                        <span className={`mt-1 inline-flex rounded-full px-2 py-1 text-[10px] font-bold capitalize ${ESTADO[p.estado] || 'bg-slate-100 text-slate-600'}`}>{({recibido:'Recibido',pago_aprobado:'Pago aprobado',pendiente:'Pendiente',confirmado:'Confirmado',preparando:'Preparando',fabricante:'En proceso especial',enviado:'Enviado',transito:'En tránsito',entregado:'Entregado',cancelado:'Cancelado'} as Record<string,string>)[String(p.estado||'').toLowerCase()] || p.estado || 'Pendiente'}</span>
                       </div>
                       <ChevronRight className="h-4 w-4 shrink-0 text-slate-300" />
                     </button>
@@ -813,7 +813,7 @@ export default function CuentaPage() {
                   {id:'direcciones', label:'Mis direcciones', desc:'Lugares de entrega guardados', icon:MapPin, tint:'bg-violet-50 text-violet-600'},
                   {id:'perfil', label:'Mis datos', desc:'Nombre, correo y teléfono', icon:User, tint:'bg-amber-50 text-amber-600'},
                   {id:'suscripciones', label:'Suscripciones', desc:'Gestiona tus entregas automáticas', icon:Repeat, tint:'bg-emerald-50 text-emerald-600'},
-                  {id:'pagos', label:'Métodos de pago', desc:'Consulta tus métodos guardados', icon:CreditCard, tint:'bg-indigo-50 text-indigo-600'},
+
                   {id:'seguridad', label:'Seguridad', desc:'Contraseña y acceso biométrico', icon:ShieldCheck, tint:'bg-slate-100 text-slate-700'},
                 ].map(item => (
                   <button key={item.id} onClick={() => setTab(item.id)} className="flex min-h-[72px] w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-slate-50 sm:px-5">
@@ -1329,94 +1329,6 @@ export default function CuentaPage() {
           </div>
         )}
 
-        {/* TAB: PAGOS */}
-        {tab==='pagos' && (
-          <div className="space-y-3 pt-1">
-            <div className="mb-2">
-              <h2 className="font-black text-gray-900 text-lg">Métodos de pago</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Referencia de tus tarjetas — nunca guardamos el número completo</p>
-            </div>
-
-            {/* Security badge */}
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-4 flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-5 h-5 text-green-400" />
-              </div>
-              <div>
-                <p className="text-white font-bold text-sm">Pago 100% seguro</p>
-                <p className="text-gray-400 text-[10px] mt-0.5">Procesado por AZUL · Banco Popular · Cifrado SHA-512</p>
-              </div>
-              <div className="ml-auto flex gap-1">
-                <span className="text-[9px] bg-white/10 text-gray-300 px-1.5 py-0.5 rounded font-bold">VISA</span>
-                <span className="text-[9px] bg-white/10 text-gray-300 px-1.5 py-0.5 rounded font-bold">MC</span>
-              </div>
-            </div>
-
-            {pagos.length===0 && !agregandoPago && (
-              <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-8 text-center">
-                <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                  <CreditCard className="w-6 h-6 text-gray-300" />
-                </div>
-                <p className="font-bold text-gray-700 text-sm">Sin tarjetas guardadas</p>
-                <p className="text-xs text-gray-400 mt-1">Agrega una referencia para identificar tu tarjeta</p>
-              </div>
-            )}
-
-            {pagos.map(p => (
-              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                {/* Card visual */}
-                <div className="bg-gradient-to-r from-gray-900 to-gray-700 px-4 py-3 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex gap-0.5">
-                      {[0,1,2,3].map(i => <div key={i} className="w-5 h-1.5 bg-white/30 rounded-full" />)}
-                      <span className="text-white font-bold text-sm ml-2">{p.ultimos4}</span>
-                    </div>
-                  </div>
-                  <button onClick={() => eliminarPago(p.id)} className="text-white/40 hover:text-red-400 transition-colors">
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-                <div className="px-4 py-2.5 flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">{p.titular}</p>
-                    <p className="text-[10px] text-gray-400">Vence {p.vencimiento}</p>
-                  </div>
-                  <span className="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-lg font-bold">Activa</span>
-                </div>
-              </div>
-            ))}
-
-            {agregandoPago ? (
-              <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-5 space-y-3">
-                <p className="font-bold text-gray-900 text-sm mb-1">Agregar referencia de tarjeta</p>
-                <input value={pagoForm.titular} onChange={e => setPagoForm(f => ({...f,titular:e.target.value}))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all"
-                  placeholder="Nombre del titular" />
-                <input value={pagoForm.ultimos4} onChange={e => setPagoForm(f => ({...f,ultimos4:e.target.value.slice(0,4)}))}
-                  maxLength={4} inputMode="numeric"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all font-mono tracking-widest"
-                  placeholder="Últimos 4 dígitos" />
-                <input value={pagoForm.vencimiento} onChange={e => setPagoForm(f => ({...f,vencimiento:e.target.value}))}
-                  maxLength={5}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all"
-                  placeholder="MM/AA" />
-                <div className="flex gap-2 pt-1">
-                  <button onClick={guardarPago} className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-xl text-sm font-bold transition-colors">Guardar</button>
-                  <button onClick={() => setAgregandoPago(false)} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 py-3 rounded-xl text-sm font-semibold transition-colors">Cancelar</button>
-                </div>
-              </div>
-            ) : (
-              <button onClick={() => setAgregandoPago(true)}
-                className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2.5 text-gray-400 hover:border-primary-300 hover:text-primary-600 transition-all group">
-                <div className="w-6 h-6 rounded-lg bg-gray-100 group-hover:bg-teal-50 flex items-center justify-center transition-colors">
-                  <Plus className="w-3.5 h-3.5" />
-                </div>
-                <span className="text-sm font-semibold">Agregar tarjeta</span>
-              </button>
-            )}
-          </div>
-        )}
-
         {/* TAB: PERFIL */}
         {tab==='perfil' && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -1710,9 +1622,11 @@ export default function CuentaPage() {
                   if (item.color)       specs.push({label:'Color', val:item.color})
                   if (item.size)        specs.push({label:'Tamaño',val:item.size})
                   return (
-                    <div key={item.id} className="bg-gray-50 rounded-xl p-3">
+                    <div key={item.id} className="flex items-start gap-3 rounded-xl border border-slate-100 bg-white p-3">
+                      <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-100 bg-slate-50">{item.product?.imagen_url ? <img src={item.product.imagen_url} alt={item.nombre || item.product?.nombre || 'Producto'} className="h-full w-full object-contain p-1"/> : <Package className="h-6 w-6 text-slate-300"/>}</div>
+                      <div className="min-w-0 flex-1">
                       <div className="flex justify-between items-start gap-2 mb-2">
-                        <p className="font-semibold text-gray-900 text-sm">{item.nombre}</p>
+                        <p className="font-semibold text-gray-900 text-sm">{item.nombre || item.product?.nombre || 'Producto'}</p>
                         <p className="font-bold text-gray-900 text-sm whitespace-nowrap">RD${(item.subtotal??item.precio*item.cantidad).toLocaleString()}</p>
                       </div>
                       {specs.length>0 && (
@@ -1726,6 +1640,7 @@ export default function CuentaPage() {
                         </div>
                       )}
                       <p className="text-xs text-gray-400">Cantidad: {item.cantidad}</p>
+                      </div>
                     </div>
                   )
                 })}
