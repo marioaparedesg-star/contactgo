@@ -47,10 +47,12 @@ export async function POST(req: NextRequest) {
                         [conCyl[0], conCyl[0], conCyl[0]]
       return NextResponse.json({ productos: resultado, total: conCyl.length, tipo_real: 'multifocal_torico' })
     }
-    // Fallback: multifocales estándar
-    const fallback = (mfAll ?? []).slice(0, 3)
-    return NextResponse.json({ productos: fallback, total: fallback.length, tipo_real: 'multifocal',
-      nota: 'Tu receta es compleja. Te recomendamos contactarnos por WhatsApp para asesoría personalizada.' })
+    return NextResponse.json({
+      productos: [],
+      total: 0,
+      tipo_real: 'multifocal_torico',
+      nota: 'No encontramos lentes multifocales tóricos que coincidan con ambos ojos. Te recomendamos asesoría personalizada antes de comprar.'
+    })
   }
 
   // ── TIPOS ESTÁNDAR ───────────────────────────────────────────────────────
