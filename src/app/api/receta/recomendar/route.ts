@@ -19,7 +19,7 @@ function addCompatible(values: unknown, add: number) {
     if (nums.length === 1) return Math.abs(nums[0] - add) <= 0.01
     if (label.includes('low')) return add >= 0.75 && add <= 1.50
     if (label.includes('mid') || label.includes('medium')) return add >= 1.50 && add <= 2.25
-    if (label.includes('high')) return add >= 2.00 && add <= 4.00
+    if (label.includes('high')) return add >= 2.00 && add <= 2.50
     return false
   })
 }
