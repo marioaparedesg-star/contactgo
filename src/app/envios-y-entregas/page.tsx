@@ -44,7 +44,7 @@ export default function EnviosPage() {
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
                 <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 45 días</p>
                 <p className="text-amber-700 text-sm font-semibold mb-2">Lentes tóricos</p>
-                <p className="text-gray-600 text-sm">Astigmatismo. Fabricados a medida (cilindro + eje exactos) — por eso el plazo es mayor.</p>
+                <p className="text-gray-600 text-sm">Astigmatismo. La entrega estimada es de 25 a 45 días debido a la configuración específica de cilindro y eje.</p>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function EnviosPage() {
               {[
                 { paso: '1', titulo: 'Haces tu pedido', desc: 'Seleccionas tus lentes, tu graduación y completas el checkout.' },
                 { paso: '2', titulo: 'Confirmamos', desc: 'Verificamos tu pedido y te enviamos confirmación por WhatsApp o email.' },
-                { paso: '3', titulo: 'Preparamos', desc: 'Empacamos tus lentes con cuidado para garantizar que lleguen en perfectas condiciones.' },
+                { paso: '3', titulo: 'Empacamos', desc: 'Empacamos tus lentes con cuidado para garantizar que lleguen en perfectas condiciones.' },
                 { paso: '4', titulo: 'Despachamos', desc: 'Entregamos al courier y te enviamos el tracking de tu pedido.' },
                 { paso: '5', titulo: 'Recibes', desc: 'Tu pedido llega a la dirección indicada en el tiempo estimado.' },
               ].map((s, i) => (
