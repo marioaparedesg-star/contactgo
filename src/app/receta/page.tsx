@@ -143,9 +143,8 @@ export default function RecetaPage() {
     return lista
   }
 
-  // El formulario de datos es obligatorio para ver resultados.
-  // Ya NO se guardan leads anónimos "Sin nombre" — todo lead tiene
-  // nombre + WhatsApp, lo que los hace contactables y accionables.
+  // La captura de datos es opcional: los resultados nunca dependen de guardar un lead.
+  // Si el usuario decide guardar sus datos, se procesa sin bloquear la calculadora.
   const handleLeadSubmit = async () => {
     if (!pendingRx) return
     const telClean = leadTelefono.replace(/\D/g,'')
@@ -294,11 +293,12 @@ export default function RecetaPage() {
 
         {/* Pop-up de captura — aparece INMEDIATAMENTE al dar clic en "Calcular", cerrable con X */}
         {showLead && !leadCaptured && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative">
+          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowLead(false)}>
+            <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative" role="dialog" aria-modal="true" aria-labelledby="lead-dialog-title" onClick={e => e.stopPropagation()}>
+              <button type="button" onClick={() => setShowLead(false)} aria-label="Cerrar formulario" className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-700">×</button>
               <div className="flex flex-col items-center text-center mb-5">
                 <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-3"><Mail className="w-6 h-6 text-green-600" /></div>
-                <h3 className="font-black text-gray-900 text-lg">Guarda tu receta para la próxima vez</h3>
+                <h3 id="lead-dialog-title" className="font-black text-gray-900 text-lg">Guarda tu receta para la próxima vez</h3>
                 <p className="text-xs text-gray-500 mt-1">Completa tus datos si quieres que guardemos esta receta y podamos ayudarte con futuras reposiciones.</p>
               </div>
               <div className="space-y-3 mb-4">
