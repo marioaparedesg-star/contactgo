@@ -6,11 +6,11 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Las mejores gotas para ojos secos en RD 2026 — Guía completa',
-  description: 'Comparativa de las mejores gotas para ojos secos disponibles en República Dominicana. Refresh Optive, Refresh Tears, Manzanilla Sophia, Prolub. Precios y entrega 24-48h.',
+  description: 'Comparativa de las mejores gotas para ojos secos disponibles en República Dominicana. Prolub Hyfresh y recomendaciones generales para el cuidado ocular.',
   alternates: { canonical: 'https://www.contactgo.net/blog/gotas-para-ojos-secos-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Las mejores gotas para ojos secos en República Dominicana 2026',
-    description: 'Comparativa de las mejores gotas para ojos secos disponibles en República Dominicana. Refresh Optive, Refresh Tears, Manzanilla Sophia, Prolub. Precios y entrega 24-48h.',
+    description: 'Comparativa de las mejores gotas para ojos secos disponibles en República Dominicana. Prolub Hyfresh y recomendaciones generales para el cuidado ocular.',
     url: 'https://www.contactgo.net/blog/gotas-para-ojos-secos-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/gotas-para-ojos-secos-republica-dominicana.webp', width: 1200, height: 630, alt: 'Las mejores gotas para ojos secos en República Dominicana 2026' }],
@@ -25,13 +25,13 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Las mejores gotas para ojos secos en República Dominicana 2026",
-            "description": "Comparativa de las mejores gotas para ojos secos disponibles en República Dominicana. Refresh Optive, Refresh Tears, Manzanilla Sophia, Prolub. Precios y entrega 24-48h.",
+            "description": "Comparativa de las mejores gotas para ojos secos disponibles en República Dominicana. Prolub Hyfresh y recomendaciones generales para el cuidado ocular.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-28", "dateModified": "2026-06-28",
             "url": "https://www.contactgo.net/blog/gotas-para-ojos-secos-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type":"Question","name":'¿Cuál es la mejor gota para ojos secos en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'Para ojo seco moderado a severo, el Refresh Optive Advanced (RD$1,000) es la mejor opción: actúa en las tres capas de la película lagrimal. Para usuarios de lentes de contacto con sequedad moderada, el Refresh Optive Lubricant (RD$900) es muy efectivo. Todas disponibles en ContactGo con entrega en 24-48h.'}},{"@type":"Question","name":'¿Puedo usar gotas para ojos secos con lentes de contacto?',"acceptedAnswer":{"@type":"Answer","text":'Sí, pero debes verificar que la etiqueta indique "compatible con lentes de contacto". Refresh Optive, Refresh Tears y Prolub Hyfresh son compatibles. Manzanilla Sophia también puede usarse, aunque algunos especialistas prefieren gotas específicamente formuladas para lentes.'}},{"@type":"Question","name":'¿Con qué frecuencia puedo usar gotas lubricantes?',"acceptedAnswer":{"@type":"Answer","text":'Las gotas lubricantes sin conservantes pueden usarse tan frecuentemente como sea necesario, incluso varias veces por hora. Las que contienen conservantes se recomienda usarlas máximo 4-6 veces al día para evitar toxicidad corneal por el conservante.'}},{"@type":"Question","name":'¿Dónde comprar gotas para ojos secos con entrega en RD?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo tienes disponibles Refresh Optive Advanced, Refresh Optive Lubricant, Refresh Tears, Manzanilla Sophia y Prolub Hyfresh con entrega en 24-48 horas en toda República Dominicana. Pago seguro con AZUL/Banco Popular.'}}] },
+            "mainEntity": [{"@type":"Question","name":'¿Cuál es la mejor gota para ojos secos en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'Para elegir gotas lubricantes, revisa siempre su indicación de uso y consulta a un profesional si las molestias persisten. Consulta el catálogo para ver los productos actualmente disponibles.'}},{"@type":"Question","name":'¿Puedo usar gotas para ojos secos con lentes de contacto?',"acceptedAnswer":{"@type":"Answer","text":'Sí, pero debes verificar que la etiqueta indique "compatible con lentes de contacto". Utiliza únicamente gotas cuya etiqueta indique expresamente que son compatibles con lentes de contacto.'}},{"@type":"Question","name":'¿Con qué frecuencia puedo usar gotas lubricantes?',"acceptedAnswer":{"@type":"Answer","text":'Las gotas lubricantes sin conservantes pueden usarse tan frecuentemente como sea necesario, incluso varias veces por hora. Las que contienen conservantes se recomienda usarlas máximo 4-6 veces al día para evitar toxicidad corneal por el conservante.'}},{"@type":"Question","name":'¿Dónde comprar gotas para ojos secos con entrega en RD?',"acceptedAnswer":{"@type":"Answer","text":'Consulta el catálogo de ContactGo para verificar los productos disponibles y sus condiciones de entrega. Pago seguro con AZUL/Banco Popular.'}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -103,12 +103,12 @@ export default function Page() {
               <thead><tr className="bg-gray-50"><th className="p-3 text-left border border-gray-100 font-bold">Si tienes...</th><th className="p-3 text-left border border-gray-100 font-bold">Elige</th></tr></thead>
               <tbody>
                 {[
-                  ['Ojo seco severo + lentes de contacto', 'Refresh Optive Advanced (RD$1,000)'],
-                  ['Ojo seco moderado + lentes', 'Refresh Optive Lubricant (RD$900)'],
-                  ['Irritación ocasional sin lentes', 'Refresh Tears (RD$800)'],
-                  ['Ojos secos al despertar', 'Refresh Optive Advanced antes de dormir'],
-                  ['Preferencia natural/sin químicos', 'Manzanilla Sophia (RD$600)'],
-                  ['Ojos muy secos con lentes todo el día', 'Prolub Hyfresh (RD$900)'],
+                  ['Ojo seco severo + lentes de contacto', 'Consulta con un profesional de salud visual'],
+                  ['Ojo seco moderado + lentes', 'Busca gotas indicadas para lentes de contacto'],
+                  ['Irritación ocasional sin lentes', 'Consulta las opciones lubricantes disponibles'],
+                  ['Ojos secos al despertar', 'Consulta con un profesional si es recurrente'],
+                  ['Preferencia por una fórmula específica', 'Verifica ingredientes y recomendaciones profesionales'],
+                  ['Cuidado de lentes de contacto', 'Prolub Hyfresh (solución multipropósito)'],
                 ].map(([cond, rec], i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="p-3 border border-gray-100">{cond}</td>
@@ -123,10 +123,6 @@ export default function Page() {
           <section id="productos">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Entrega 24-48h</h2>
             <div className="space-y-2">
-            <Link href="/producto/refresh-optive-advanced-gotas-ojos-secos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Advanced</p><p className="text-xs text-gray-500">Triple acción · Ojo seco severo</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$1,000</span></Link>
-            <Link href="/producto/refresh-optive-lubricant-gotas-oculares-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Lubricant</p><p className="text-xs text-gray-500">Doble acción · Ojo seco moderado</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$900</span></Link>
-            <Link href="/producto/refresh-tears-gotas-lubricantes-ojos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Tears</p><p className="text-xs text-gray-500">Básica · Molestias ocasionales</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$800</span></Link>
-            <Link href="/producto/manzanilla-sophia-gotas-ojos-naturales-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Manzanilla Sophia</p><p className="text-xs text-gray-500">Natural · Sin conservantes</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$600</span></Link>
             </div>
             <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</Link>
           </section>
@@ -155,7 +151,6 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <Link href="/blog/refresh-optive-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Refresh Optive precio en RD</p><p className="text-xs text-gray-500 mt-0.5">Guía completa de la gama Refresh</p></Link>
             <Link href="/blog/ojos-secos-lentes-contacto" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ojos secos y lentes de contacto</p><p className="text-xs text-gray-500 mt-0.5">Los mejores lentes para sequedad ocular</p></Link>
             <Link href="/blog/lentes-contacto-computadora-pantallas" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes de contacto para pantallas</p><p className="text-xs text-gray-500 mt-0.5">Cómo reducir la fatiga ocular digital</p></Link>
             <Link href="/soluciones" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todas las soluciones en ContactGo</p><p className="text-xs text-gray-500 mt-0.5">Catálogo completo de soluciones</p></Link>
