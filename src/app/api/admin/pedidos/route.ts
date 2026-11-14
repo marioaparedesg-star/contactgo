@@ -17,11 +17,42 @@ function getSb() {
 }
 
 async function notificarEstadoPedido(order_id: string, nuevo_estado: string) {
-  // La llamada es interna: la extracción posterior del servicio compartido
-  // evita una petición HTTP pública y conserva los controles de requireAdmin.
   try {
     const { enviarNotificacionPedido } = await import('@/lib/email/order-notifications')
-    return await enviarNotificacionPedido(order_id, 'estado_cambio', nuevo_estado)
+    const notification = await enviarNotificacionPedido(
+      order_id,
+      nuevo_estado === 'pago_aprobado' ? 'pago_aprobado' : 'estado_cambio',
+      nuevo_estado
+    )
+
+    // Preserve the existing WhatsApp state notification without a public
+    // /api/notify hop. wa/dispatch still requires the shared internal secret.
+    const waTypes: Record<string, string> = {
+      recibido: 'estado_recibido',
+      pago_aprobado: 'estado_pago_aprobado',
+      confirmado: 'estado_confirmado',
+      preparando: 'estado_preparando',
+      fabricante: 'estado_fabricante',
+      enviado: 'estado_enviado',
+      transito: 'estado_transito',
+      entregado: 'estado_entregado',
+      cancelado: 'estado_cancelado',
+    }
+    const tipoWA = waTypes[nuevo_estado]
+    if (tipoWA && process.env.CRON_SECRET) {
+      const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+      try {
+        const response = await fetch(`${base}/api/wa/dispatch`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET },
+          body: JSON.stringify({ tipo: tipoWA, order_id }),
+        })
+        if (!response.ok) console.error('[admin/pedidos] WA estado falló:', response.status)
+      } catch (error) {
+        console.error('[admin/pedidos] WA estado error:', error)
+      }
+    }
+    return notification
   } catch (error) {
     console.error('[admin/pedidos] error enviando notificación:', error)
     return { email_cliente: 'error', error: 'No se pudo enviar la notificación' }
