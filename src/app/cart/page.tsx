@@ -18,32 +18,8 @@ import { createClient } from '@/lib/supabase'
 export default function CartPage() {
   const { items, removeItem, updateQty, removeByIndex, updateItem, removeEye, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
 
-  // Requiere una cuenta para revisar y continuar el carrito; el estado local se conserva durante el acceso.
-  useEffect(() => {
-    let active = true
-    const sb = createClient()
-    sb.auth.getUser().then(async ({ data: { user } }) => {
-      if (!active) return
-      if (!user) { window.location.replace('/cuenta?next=/cart'); return }
-      if (items.length === 0 || !user.email) return
-      const { data: perfil } = await sb.from('profiles').select('nombre,telefono').eq('id', user.id).maybeSingle()
-      if (!active) return
-      const snapshot = items.map((i: any) => ({
-        id: i.product.id, nombre: i.product.nombre,
-        precio: Number(i.precio_final ?? i.product.precio), cantidad: i.cantidad,
-        color: i.color ?? null, sph: i.sph ?? null, cyl: i.cyl ?? null,
-        axis: i.axis ?? null, add_power: i.add_power ?? null,
-        size: i.size ?? null, suscripcion: i.suscripcion ?? null,
-      }))
-      // No escribir carritos abandonados desde el cliente público:
-      // abandoned_carts está restringida por RLS y el seguimiento operativo
-      // se centraliza en /api/carrito/track con service role.
-      void snapshot
-    }).catch((error) => {
-      console.error('[cart] No se pudo cargar el perfil del carrito', error)
-    })
-    return () => { active = false }
-  }, [items])
+  // Seguimiento abandonado: el checkout envía el evento al endpoint server-side.
+  // Este componente no escribe en abandoned_carts desde el cliente público.
 
   // ── Leer items de "Repetir pedido" al cargar ─────────────────────────────
   useEffect(() => {
