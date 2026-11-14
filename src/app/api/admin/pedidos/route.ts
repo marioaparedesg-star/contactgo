@@ -32,13 +32,50 @@ export async function POST(req: NextRequest) {
 
     if (accion === 'cambiar_estado') {
       if (!nuevo_estado) return NextResponse.json({ error: 'nuevo_estado requerido' }, { status: 400 })
+      const estadosPermitidos = ['recibido', 'pago_aprobado', 'confirmado', 'preparando', 'fabricante', 'transito', 'enviado', 'entregado', 'cancelado']
+      if (!estadosPermitidos.includes(String(nuevo_estado))) {
+        return NextResponse.json({ error: 'Estado de pedido no válido' }, { status: 400 })
+      }
+
+      const { data: estadoActual, error: readError } = await sb
+        .from('orders').select('estado').eq('id', order_id).single()
+      if (readError || !estadoActual) {
+        return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
+      }
+
       const updateData: Record<string, any> = { estado: nuevo_estado }
-      // Capturamos el momento exacto de la entrega — es lo que usa el cron
-      // de solicitud de reseña (pedidos entregados el día anterior).
       if (nuevo_estado === 'entregado') updateData.entregado_at = new Date().toISOString()
       const { error } = await sb.from('orders').update(updateData).eq('id', order_id)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-      return NextResponse.json({ ok: true })
+
+      // La notificación se dispara desde el servidor para que no dependa de
+      // que el navegador permanezca abierto después de actualizar el pedido.
+      // El endpoint valida el estado real guardado y aplica idempotencia en email_log.
+      let notification: any = { email_cliente: 'skipped' }
+      if (estadoActual.estado !== nuevo_estado) {
+        try {
+          const baseUrl = new URL(req.url).origin
+          const origin = req.headers.get('origin') || baseUrl
+          const response = await fetch(new URL('/api/notify', req.url), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', origin },
+            body: JSON.stringify({
+              order_id,
+              evento: 'estado_cambio',
+              nuevo_estado,
+            }),
+          })
+          notification = await response.json().catch(() => ({ error: 'Respuesta de notificación inválida' }))
+          if (!response.ok) {
+            console.error('[admin/pedidos cambiar_estado] notificación falló:', response.status, notification)
+          }
+        } catch (notifyError) {
+          console.error('[admin/pedidos cambiar_estado] no se pudo invocar notificación:', notifyError)
+          notification = { email_cliente: 'error', error: 'No se pudo contactar el servicio de notificaciones' }
+        }
+      }
+
+      return NextResponse.json({ ok: true, notification })
     }
 
     if (accion === 'marcar_pagado') {
