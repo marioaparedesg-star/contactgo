@@ -651,7 +651,7 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      <main id="main-content" className="min-h-screen bg-[#f7f9fc] pb-24">
+      <main id="main-content" className="min-h-screen bg-[#f5f7fb] pb-24">
         {/* Barra de progreso */}
         <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
@@ -683,8 +683,8 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-7">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)] gap-4 lg:gap-5 items-start">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-5 sm:py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)] gap-4 lg:gap-6 items-start">
 
             {/* LEFT */}
             <div className="space-y-5 order-first">
@@ -907,10 +907,10 @@ export default function CheckoutPage() {
                   <div className="px-4 sm:px-5 pb-5 border-t border-slate-100 pt-4 space-y-4">
 
                     {/* Resumen compacto del pedido */}
-                    <div className="rounded-xl border border-slate-200 bg-white px-3.5 py-3.5">
+                    <div className="rounded-2xl border border-slate-200/80 bg-[#fbfcfe] px-3.5 sm:px-4 py-4">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
+                          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500 mb-3">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
                           <div className="mt-1 space-y-1">
                             {items.map((item: any, index: number) => {
                               const isColor = item.product?.tipo === 'color'
@@ -920,12 +920,13 @@ export default function CheckoutPage() {
                                 : item.sph != null && Number(item.sph) !== 0 ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
                               const eyes = isColor ? 'Par para ambos ojos' : item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
                               return (
-                                <p key={item.product.id + '-' + index} className="text-xs leading-relaxed text-gray-700 break-words">
-                                  <span className="font-semibold">{item.product.nombre}</span> · x{item.cantidad}
-                                  {eyes ? ` · ${eyes}` : ''}{rx ? ` · ${rx}` : ''}
-                                  {item.color ? ` · Color: ${item.color}` : ''}
-                                  {item.add_power ? ` · ADD ${item.add_power}` : ''}
-                                </p>
+                                <div key={item.product.id + '-' + index} className="flex items-center gap-3 rounded-xl bg-white p-2.5 border border-slate-100">
+                                  {item.product.imagen_url ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={56} height={56} className="h-14 w-14 shrink-0 rounded-lg bg-slate-50 object-contain p-1" unoptimized /> : <div className="h-14 w-14 shrink-0 rounded-lg bg-slate-100" />}
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-xs font-bold leading-snug text-[#002455]">{item.product.nombre} <span className="font-medium text-slate-500">×{item.cantidad}</span></p>
+                                    <p className="mt-1 text-[11px] leading-relaxed text-slate-500 break-words">{[eyes, rx, item.color ? `Color: ${item.color}` : '', item.add_power ? `ADD ${item.add_power}` : ''].filter(Boolean).join(' · ')}</p>
+                                  </div>
+                                </div>
                               )
                             })}
                           </div>
@@ -940,7 +941,7 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* Cupón accesible también en compra directa */}
-                    <div className="rounded-xl border border-slate-200 px-3.5 py-3">
+                    <div className="rounded-2xl border border-slate-200/80 px-3.5 py-3.5">
                       {cuponAplicado ? (
                         <div className="flex items-center justify-between gap-2 text-xs text-green-700">
                           <span className="font-semibold">✓ Cupón {cupon.toUpperCase()} aplicado · −RD${descuento.toLocaleString()}</span>

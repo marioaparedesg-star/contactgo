@@ -127,12 +127,8 @@ export default function CartPage() {
   const [cuponErr, setCuponErr] = useState('')
 
   const sub  = subtotal()
-  // El destino se confirma en checkout: mostramos el rango real para evitar prometer una tarifa incorrecta.
-  const envioGratis = sub >= 8000
-  const envioMin = envioGratis ? 0 : 250
-  const envioMax = envioGratis ? 0 : 350
-  const totMin = Math.max(0, sub + envioMin - descuento)
-  const totMax = Math.max(0, sub + envioMax - descuento)
+  // El envío se calcula exclusivamente en checkout, cuando el cliente confirma su provincia.
+  const totalCarrito = Math.max(0, sub - descuento)
   const formatoPrecio = (valor: number) => `RD${valor.toLocaleString('es-DO')}`
 
   const aplicarCupon = async () => {
@@ -216,21 +212,21 @@ export default function CartPage() {
           </button>
         </div>
 
-        <div className="grid md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(300px,0.85fr)] gap-5 lg:gap-7 items-start">
 
           {/* Items */}
-          <div className="md:col-span-3 space-y-2">
+          <div className="space-y-3">
             {items.map((item, idx) => {
               const receta = fmtReceta(item)
               const precioItem = Number((item as any).precio_final ?? item.product.precio)
               // ojoLabel legacy — reemplazado por nuevo bloque ojo_mode abajo
               return (
                 <div key={`${item.product.id}-${item.sph}-${(item as any).ojo}-${idx}`}
-                  className="bg-white rounded-xl border border-gray-100 p-2.5 flex gap-2.5">
+                  className="group bg-white rounded-2xl border border-slate-200/80 shadow-[0_2px_12px_rgba(15,35,65,0.04)] p-3 sm:p-4 flex gap-3 sm:gap-4 transition-shadow hover:shadow-md">
                   {/* Imagen */}
-                  <div className="w-14 h-14 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#f7f9fc] rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-slate-100">
                     {item.product.imagen_url
-                      ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={56} height={56} className="object-contain p-1" unoptimized />
+                      ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={96} height={96} className="object-contain p-1" unoptimized />
                       : <Eye className="w-8 h-8 text-gray-200" />
                     }
                   </div>
@@ -390,9 +386,9 @@ export default function CartPage() {
           </div>
 
           {/* Resumen */}
-          <div className="md:col-span-2 md:sticky md:top-3 md:self-start">
-            <div className="bg-white rounded-xl border border-gray-100 p-3 space-y-2.5">
-              <h3 className="text-sm font-bold text-gray-900">Resumen</h3>
+          <div className="lg:sticky lg:top-6 lg:self-start">
+            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-[0_8px_30px_rgba(15,35,65,0.06)] p-4 sm:p-5 space-y-4">
+              <h3 className="text-base font-extrabold text-[#002455]">Resumen del pedido</h3>
 
               {/* Cupón */}
               <div>
@@ -413,38 +409,24 @@ export default function CartPage() {
                 {cuponErr && <p className="text-red-500 text-xs mt-1.5">{cuponErr}</p>}
               </div>
 
-              {/* Totales */}
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-gray-500">
+              {/* Totales: el envío se calcula únicamente en checkout */}
+              <div className="space-y-2.5 text-sm">
+                <div className="flex justify-between text-slate-500">
                   <span>Subtotal</span>
-                  <span>RD${sub.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between text-gray-500">
-                  <span>Envío estimado</span>
-                  <span className={envioGratis ? 'text-green-600 font-semibold' : 'text-right'}>
-                    {envioGratis ? '🎁 ¡Gratis!' : 'Santo Domingo: RD$250 · Interior: RD$350'}
-                  </span>
+                  <span className="font-semibold text-slate-800">{formatoPrecio(sub)}</span>
                 </div>
                 {descuento > 0 && (
-                  <div className="flex justify-between text-green-600 font-bold">
+                  <div className="flex justify-between text-emerald-700 font-semibold">
                     <span>Descuento</span>
-                    <span>-RD${descuento.toLocaleString()}</span>
+                    <span>−{formatoPrecio(descuento)}</span>
                   </div>
                 )}
-                <div className="border-t-2 border-gray-100 pt-3 flex justify-between items-baseline">
-                  <span className="font-black text-gray-900">{!envioGratis ? 'Total estimado' : 'Total'}</span>
-                  <span className="font-black text-2xl text-primary-600">{totMin === totMax ? formatoPrecio(totMin) : `${formatoPrecio(totMin)}–${formatoPrecio(totMax)}`}</span>
+                <div className="border-t border-slate-200 pt-3 flex justify-between items-baseline">
+                  <span className="font-bold text-[#002455]">Total de productos</span>
+                  <span className="font-extrabold text-2xl text-[#002455]">{formatoPrecio(totalCarrito)}</span>
                 </div>
+                <p className="text-[11px] leading-relaxed text-slate-500">El costo de envío se calculará en el checkout según tu provincia.</p>
               </div>
-
-              {/* Envío gratis hint */}
-              {!envioGratis && (
-                <div className="bg-amber-50 rounded-xl p-3">
-                  <p className="text-center text-xs text-amber-800">Te faltan <strong>{formatoPrecio(8000 - sub)}</strong> para obtener envío gratis.</p>
-                  <div className="mt-2 bg-amber-200/60 rounded-full h-1.5 overflow-hidden"><div className="bg-amber-500 h-full rounded-full transition-all" style={{ width: `${Math.min(100, (sub / 8000) * 100)}%` }} /></div>
-                  <p className="mt-2 text-center text-[10px] text-amber-700">Completa tu pedido con una solución para el cuidado de tus lentes.</p>
-                </div>
-              )}
 
               {solucionSugerida && (
                 <div className="rounded-xl border border-gray-100 bg-gray-50 p-3">
