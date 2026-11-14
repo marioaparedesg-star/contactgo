@@ -186,18 +186,20 @@ export default function CheckoutPage() {
       }
       if (result.error || !result.data) throw result.error ?? new Error('No se pudo guardar la dirección')
       const saved = result.data
-      const { data: profile, error: profileError } = await sb.from('profiles').update({
-        direccion: saved.direccion,
-        ciudad: saved.ciudad,
-        direccion_completa: saved.direccion_formateada,
-      }).eq('id', user.id).select('id').maybeSingle()
-      if (profileError || !profile) throw profileError ?? new Error('La dirección se guardó, pero no pudimos sincronizarla con tu perfil. Intenta guardar nuevamente.')
+      // Actualizar el estado local inmediatamente: si falla la sincronización del perfil,
+      // el siguiente intento actualizará esta misma dirección en vez de crear un duplicado.
       setSavedAddresses(prev => selectedAddrId
         ? prev.map(a => a.id === saved.id ? saved : a)
         : [...prev, saved])
       setSelectedAddrId(saved.id)
       setValue('direccion', saved.direccion, { shouldValidate: true })
       setValue('ciudad', saved.ciudad, { shouldValidate: true })
+      const { data: profile, error: profileError } = await sb.from('profiles').update({
+        direccion: saved.direccion,
+        ciudad: saved.ciudad,
+        direccion_completa: saved.direccion_formateada,
+      }).eq('id', user.id).select('id').maybeSingle()
+      if (profileError || !profile) throw profileError ?? new Error('La dirección se guardó, pero no pudimos sincronizarla con tu perfil. Intenta guardar nuevamente.')
       setShowAddressEditor(false)
       toast.success('Dirección guardada en tu perfil y libreta de direcciones')
       if (!disclaimerAceptado) setShowDisclaimer(true)
@@ -788,7 +790,7 @@ export default function CheckoutPage() {
                     </div>
                     <div>
                       <p className="font-bold text-gray-900 text-base">Dirección de entrega</p>
-                      {step > 2 && <p className="text-xs text-gray-400 mt-0.5">{getValues('direccion')}, {getValues('ciudad')}</p>}
+                      {step > 2 && <p className="text-xs text-gray-400 mt-0.5">{savedAddresses.find(a => a.id === selectedAddrId)?.direccion_formateada || [getValues('direccion'), getValues('ciudad')].filter(Boolean).join(' · ')}</p>}
                     </div>
                   </div>
                   {step > 2 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
