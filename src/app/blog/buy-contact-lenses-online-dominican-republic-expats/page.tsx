@@ -47,7 +47,7 @@ export default function Page() {
       <p>One thing many expats appreciate once they discover it: automatic reorder subscriptions. Instead of remembering to reorder every 2 weeks or every month, you can set up a subscription that automatically sends a new box on a schedule matching your lens type — one less thing to think about while adjusting to life in a new country.</p>
 
       <h2>Delivery to your home</h2>
-      <p>Orders are delivered directly to your address — 24 hours in Santo Domingo, 24-48 hours in Santiago, and 2-4 days elsewhere in the country. No need to navigate an unfamiliar pharmacy system in a language you may still be learning.</p>
+      <p>Orders are delivered directly to your address — 24-48 hours in Santo Domingo and 24-72 hours in the rest of the country, depending on product availability. No need to navigate an unfamiliar pharmacy system in a language you may still be learning.</p>
 
       <h2>If you wear astigmatism or multifocal lenses</h2>
       <p>Toric (astigmatism) and multifocal lenses with specific parameters are also available, though some may require special-order fabrication that takes a bit longer than standard spherical lenses — worth ordering with a little more lead time than you might back home.</p>
