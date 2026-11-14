@@ -319,9 +319,10 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
 }
 
 function escapeEmailHtml(value: unknown): string {
-  return String(value ?? '').replace(/[&<>"']/g, char => ({
+  const entities: Record<string, string> = {
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-  }[char] ?? char))
+  }
+  return String(value ?? '').replace(/[&<>"']/g, char => entities[char] ?? char)
 }
 
 // Plantilla transaccional rediseñada: compacta, limpia y consistente con la
