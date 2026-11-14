@@ -38,7 +38,7 @@ function ReciboContent() {
         total: 7360,
         envio: 200,
         descuento: 0,
-        azul_auth_code: 'OK0190',
+        azul_auth_code: null, // nunca hardcodear códigos de autorización AZUL en el bundle público
         fecha: new Date().toISOString(),
       })
       setItems([
