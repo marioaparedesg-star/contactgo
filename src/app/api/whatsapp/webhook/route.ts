@@ -5,6 +5,7 @@
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { fetchWA } from '@/lib/whatsapp'
 
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN ?? 'contactgo_webhook_2026'
 
@@ -315,7 +316,7 @@ export async function POST(req: NextRequest) {
         const NOTIFY_PHONES = [ADMIN_PHONE, '18096942268'].filter(Boolean)
 
         for (const notifyTo of NOTIFY_PHONES) {
-          const res = await fetch(`${WA_API}/${PHONE_ID}/messages`, {
+          const res = await fetchWA(notifyTo, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({

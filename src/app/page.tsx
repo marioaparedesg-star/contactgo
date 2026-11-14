@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'ContactGo — Lentes de contacto certificados en RD | Entrega 24h',
-  description: 'ContactGo — La única tienda dominicana especializada 100% en lentes de contacto. ACUVUE, Air Optix, Biofinity certificados. Envíos: Santo Domingo 24-48h e interior 24-72h. Compra en minutos.',
+  description: 'ContactGo — La única tienda dominicana especializada 100% en lentes de contacto. ACUVUE, Air Optix, Biofinity certificados. Envíos: Santo Domingo 24-48h · Santiago 24-48h · resto del país 2-4 días. Compra en minutos.',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   alternates: { canonical: 'https://www.contactgo.net' },
 }
@@ -82,7 +82,7 @@ const SCHEMA_ORG = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y 24-72 horas en el interior del país." } },
+    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago, y 2-4 días en el resto del país del país." } },
     { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todos los productos de ContactGo son directo del fabricante, directo del fabricante y con garantía de autenticidad. Nunca vendemos imitaciones." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
     { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
@@ -90,7 +90,7 @@ const SCHEMA_ORG = {
 }
 
 export default async function HomePage() {
-  const { products: featured, reseñasCount, reseñasAvg, precioOasys, preciosHero } = await getFeaturedProducts()
+  const { products: featured, precioOasys, preciosHero } = await getFeaturedProducts()
 
   return (
     <>
@@ -257,9 +257,9 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
-                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Interior 24-72h',    color: 'text-blue-600',   bg: 'bg-blue-50' },
-                { icon: Package,  title: '+4,700 cajas vendidas',   desc: 'Marcas 100% originales',        color: 'text-green-600',  bg: 'bg-green-50' },
-                { icon: Star,     title: `${reseñasAvg.toFixed(1)}★ · ${reseñasCount}+ reseñas`,  desc: 'Clientes satisfechos',   color: 'text-amber-500',  bg: 'bg-amber-50' },
+                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 2-4 días',    color: 'text-blue-600',   bg: 'bg-blue-50' },
+                { icon: Package,  title: 'Marcas originales',   desc: 'Distribuidores autorizados de cada marca',        color: 'text-green-600',  bg: 'bg-green-50' },
+                { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-amber-500', bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
                 <div key={title} className="flex items-center gap-3">
@@ -283,7 +283,7 @@ export default async function HomePage() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-3">
                   <Award className="w-5 h-5 text-blue-600" />
-                  <span className="text-blue-600 font-bold text-sm uppercase tracking-wide">Envíos: Santo Domingo 24-48h · Interior 24-72h</span>
+                  <span className="text-blue-600 font-bold text-sm uppercase tracking-wide">Envíos: Santo Domingo 24-48h · Santiago 24-48h · Resto del país 2-4 días</span>
                 </div>
                 <h2 className="font-display text-2xl md:text-3xl font-black text-gray-900 mb-3 leading-tight">
                   La única tienda dominicana<br className="hidden md:block" /> especializada 100% en lentes de contacto
@@ -332,7 +332,6 @@ export default async function HomePage() {
         <section className="bg-white border-b border-gray-100 py-5 px-4">
           <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             {[
-              { num: `${reseñasAvg.toFixed(1)}★`, label: 'Calificación promedio', sub: `${reseñasCount} reseñas verificadas` },
               { num: '30+',  label: 'Productos disponibles', sub: 'Marcas líderes mundiales' },
               { num: '24h',  label: 'Entrega a domicilio',   sub: 'En toda República Dominicana' },
               { num: null,   label: 'Pago 100% seguro',      sub: 'AZUL · Banco Popular RD', azul: true },
@@ -429,7 +428,7 @@ export default async function HomePage() {
               </div>
               <h3 className="font-display text-2xl md:text-3xl font-black text-white mb-2">Recordatorio automático</h3>
               <p className="text-gray-400 max-w-md text-sm md:text-base">
-                Guardamos tu receta. Te avisamos cuando es hora de reponer. Tú solo confirmas y en 24h están en tu puerta. Con 10% de descuento garantizado en cada recompra.
+                Guardamos tu receta. Te avisamos cuando es hora de reponer. Tú solo confirmas y te lo llevamos a tu puerta.
               </p>
             </div>
             <a href="https://wa.me/18096942268?text=Hola%20ContactGo%2C%20quiero%20activar%20recordatorio%20de%20recompra"
@@ -445,40 +444,22 @@ export default async function HomePage() {
         <section className="bg-gray-50 border-y border-gray-100">
           <div className="max-w-5xl mx-auto px-4 py-10 md:py-14">
             <div className="text-center mb-8">
-              <div className="flex items-center justify-center gap-1 mb-2">
-                <Users className="w-5 h-5 text-primary-600" />
-                <span className="text-primary-700 font-bold text-sm uppercase tracking-wide">Clientes reales</span>
-              </div>
-              <div className="flex justify-center gap-0.5 mb-2">
-                {[...Array(5)].map((_,i) => <svg key={i} className="w-5 h-5 text-amber-400 fill-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>)}
-              </div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-1">Dominicanos que ya confían en ContactGo</h2>
-              <p className="text-gray-500 text-sm">Reseñas verificadas de clientes</p>
+              <span className="text-primary-700 font-bold text-sm uppercase tracking-wide">Por qué ContactGo</span>
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mt-1">Compra con tranquilidad</h2>
+              <p className="text-gray-500 text-sm mt-2 max-w-lg mx-auto">Lo que puedes esperar de nosotros, desde el primer pedido.</p>
             </div>
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { nombre: 'María R.', ciudad: 'Santo Domingo', fecha: 'Hace 2 días', texto: 'Excelente servicio. Llegaron en 24 horas, empaque perfecto y los Acuvue directo del fabricante. Lo recomiendo a todos.', producto: 'ACUVUE® MOIST®', avatar: 'MR', color: 'bg-pink-100 text-pink-700' },
-                { nombre: 'Carlos M.', ciudad: 'Santiago', fecha: 'Hace 5 días', texto: 'Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto.', producto: 'Air Optix HydraGlyde', avatar: 'CM', color: 'bg-blue-100 text-blue-700' },
-                { nombre: 'Feyilina P.', ciudad: 'Santo Domingo', fecha: 'Hace 1 semana', texto: 'Llevo 6 meses comprando en ContactGo. Siempre rápido, siempre certificados. Ya no compro en ningún otro lugar.', producto: 'Biofinity® Toric', avatar: 'FP', color: 'bg-green-100 text-green-700' },
-                { nombre: 'Ana G.', ciudad: 'La Romana', fecha: 'Hace 2 semanas', texto: 'Tengo astigmatismo alto y siempre era difícil encontrar mis lentes. Aquí los tienen todos disponibles.', producto: 'ACUVUE Oasys Astig.', avatar: 'AG', color: 'bg-orange-100 text-orange-700' },
-                { nombre: 'Roberto S.', ciudad: 'Bávaro', fecha: 'Hace 3 semanas', texto: 'Llegaron en 24h con empaque sellado. Originales garantizados. La experiencia de compra es increíble.', producto: 'Air Optix Colors', avatar: 'RS', color: 'bg-purple-100 text-purple-700' },
-                { nombre: 'Luisa V.', ciudad: 'Santo Domingo', fecha: 'Hace 1 mes', texto: 'La calidad es perfecta. El proceso de compra tardó menos de 3 minutos. Nunca más compro en otro lugar.', producto: '1-Day ACUVUE MOIST', avatar: 'LV', color: 'bg-teal-100 text-teal-700' },
-              ].map((t, i) => (
-                <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col gap-3">
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_,s) => <svg key={s} className="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>)}
+                { icon: Award, t: 'Distribuidores autorizados', d: 'Trabajamos con los distribuidores oficiales de cada marca en República Dominicana.' },
+                { icon: Shield, t: 'Pago seguro', d: 'Pago con tarjeta a través de AZUL (Banco Popular) con 3D Secure. No guardamos datos de tu tarjeta.' },
+                { icon: Clock, t: 'Atención personalizada', d: 'Te asesoramos por WhatsApp antes y después de tu compra, de lunes a sábado.' },
+              ].map(({ icon: Icon, t, d }) => (
+                <div key={t} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                  <div className="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center mb-4">
+                    <Icon className="w-5 h-5 text-primary-600" />
                   </div>
-                  <p className="text-gray-700 text-sm leading-relaxed">&quot;{t.texto}&quot;</p>
-                  <div className="mt-auto pt-3 border-t border-gray-50 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full ${t.color} flex items-center justify-center text-xs font-black`}>{t.avatar}</div>
-                      <div>
-                        <p className="font-semibold text-gray-900 text-sm">{t.nombre}</p>
-                        <p className="text-xs text-gray-400">{t.ciudad} · {t.fecha}</p>
-                      </div>
-                    </div>
-                    <span className="text-xs bg-teal-50 text-primary-700 font-medium px-2 py-1 rounded-lg">{t.producto}</span>
-                  </div>
+                  <h3 className="font-bold text-gray-900 mb-1">{t}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{d}</p>
                 </div>
               ))}
             </div>
@@ -496,7 +477,7 @@ export default async function HomePage() {
             {[
               { n: '1', icon: '🔍', t: 'Encuentra tu lente', d: 'Usa nuestra calculadora gratuita o dinos qué marca usas. Si tienes dudas, te asesoramos por WhatsApp al instante.' },
               { n: '2', azul: true, t: 'Paga seguro', d: 'Tarjeta de crédito o débito con AZUL de Banco Popular. Pago 100% protegido con 3D Secure. Nunca guardamos los datos de tu tarjeta.' },
-              { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Santo Domingo 24-48h e interior 24-72h. Sin filas, sin citas, sin salir de casa.' },
+              { n: '3', icon: '🚚', t: 'Recibe en casa', d: 'Santo Domingo 24-48h · Santiago 24-48h · resto del país 2-4 días. Sin filas, sin citas, sin salir de casa.' },
             ].map((p:any) => (
               <div key={p.n} className="relative bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
                 <div className="absolute -top-3 -left-1 w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-sm shadow-md">{p.n}</div>
@@ -523,12 +504,12 @@ export default async function HomePage() {
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-3">
             {[
-              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y 24-72 horas en el interior. Los tiempos de preparación dependen del tipo de lente.' },
+              { q: '¿Cuánto tarda el envío?', a: '24-48 horas en Santo Domingo y Santiago, y 2-4 días en el resto del país. Los tiempos de preparación dependen del tipo de lente.' },
               { q: '¿Son directo del fabricante?', a: 'Sí. Trabajamos directo con los distribuidores oficiales de cada marca. Recibes tu producto sellado, con su empaque original de fábrica. Nunca vendemos imitaciones.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados recomendamos tener una receta actualizada. Nuestra calculadora gratuita te ayuda a identificar el tipo correcto de lente. Para lentes de color sin graduación no es necesaria.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },
-              { q: '¿Puedo suscribirme para recompra automática?', a: 'Sí. Te enviamos recordatorio cuando tus lentes estén por terminarse y puedes recomprar con 1 click con 10% de descuento.' },
+              { q: '¿Puedo suscribirme para recompra automática?', a: 'Sí. Te enviamos recordatorio cuando tus lentes estén por terminarse para que puedas recomprar sin complicaciones.' },
             ].map((faq, i) => (
               <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
                 <summary className="flex items-center justify-between p-5 cursor-pointer font-semibold text-gray-900 text-sm md:text-base list-none">

@@ -1,3 +1,4 @@
+import { enVentanaWhatsApp, proximaVentanaWhatsApp } from './whatsapp-horario'
 // ============================================================
 // ContactGo — WhatsApp Business API Client
 // Phone Number ID: 1237770472751989
@@ -48,41 +49,69 @@ async function clientesPausados(): Promise<boolean> {
   }
 }
 
-// Usado por rutas que envían por fetch directo (no pasan por sendText/sendTemplate).
-// true = este destinatario es un CLIENTE y la pausa está activa → no enviar.
-export async function clienteBloqueadoPorPausa(to: string): Promise<boolean> {
-  if (normalizePhone(to) === NUMERO_ADMIN_MARIO) return false
-  return clientesPausados()
-}
+const NUMERO_ADMIN = '18096942268' // admin exento: nunca se bloquea ni se encola
 
-// Lanza si el envío a `to` debe bloquearse ahora mismo (cliente + pausa activa)
-async function bloquearSiPausado(to: string) {
-  if (normalizePhone(to) === NUMERO_ADMIN_MARIO) return // admin nunca se bloquea
-  if (await clientesPausados()) {
-    throw new Error('WHATSAPP_CLIENTES_PAUSADO: envío a clientes pausado por Mario — no se intentó.')
-  }
-}
+// ─── PUNTO ÚNICO DE SALIDA A WHATSAPP ───
+// Toda salida (funciones, rutas, crons) pasa por aquí. Reglas:
+//  1) Admin → se envía siempre.
+//  2) Cliente con pausa activa → no se envía (lanza error).
+//  3) Cliente fuera de horario (lun–sáb 9:00–18:00 RD) → se ENCOLA para la
+//     siguiente ventana (wa_retry_queue) y lo envía el cron whatsapp-diferidos.
+//  4) Cliente dentro de horario y sin pausa → se envía.
+export type ResultadoEnvio = { estado: 'enviado' | 'diferido'; data?: any }
 
-// ─── Enviar mensaje de texto libre (solo ventana 24h) ───
-export async function sendText(to: string, text: string) {
-  await bloquearSiPausado(to)
+export async function enviarWA(to: string, body: Record<string, any>): Promise<ResultadoEnvio> {
   const phone = normalizePhone(to)
+  const payload = { messaging_product: 'whatsapp', ...body, to: phone }
+  if (phone !== NUMERO_ADMIN) {
+    if (await clientesPausados()) {
+      throw new Error('WHATSAPP_CLIENTES_PAUSADO: envío a clientes pausado — no se intentó.')
+    }
+    if (!enVentanaWhatsApp()) {
+      await encolarDiferido(phone, payload)
+      return { estado: 'diferido' }
+    }
+  }
   const res = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      messaging_product: 'whatsapp',
-      to: phone,
-      type: 'text',
-      text: { body: text },
-    }),
+    headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
   })
   const data = await res.json()
   if (data.error) throw new Error(JSON.stringify(data.error))
-  return data
+  return { estado: 'enviado', data }
+}
+
+async function encolarDiferido(phone: string, payload: any) {
+  const { createClient } = await import('@supabase/supabase-js')
+  const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+  const { error } = await sb.from('wa_retry_queue').insert({
+    evento_id: `diferido:${Date.now()}:${phone}`,
+    telefono: phone,
+    mensaje: JSON.stringify(payload),
+    tipo: 'raw',
+    attempt: 0,
+    max_attempts: 5,
+    next_retry_at: proximaVentanaWhatsApp().toISOString(),
+    resolved: false,
+  })
+  if (error) throw new Error('No se pudo encolar el mensaje fuera de horario: ' + error.message)
+}
+
+// Reemplazo de fetch() para rutas que construyen su propio cuerpo JSON.
+// Pasa por enviarWA: pausa, horario y cola. Devuelve un Response compatible.
+export async function fetchWA(phone: string, init: { body: string; [k: string]: any }): Promise<Response> {
+  const body = JSON.parse(init.body)
+  const r = await enviarWA(phone, body)
+  if (r.estado === 'diferido') {
+    return new Response(JSON.stringify({ deferred: true }), { status: 202, headers: { 'Content-Type': 'application/json' } })
+  }
+  return new Response(JSON.stringify(r.data), { status: 200, headers: { 'Content-Type': 'application/json' } })
+}
+
+export async function sendText(to: string, text: string) {
+  const r = await enviarWA(to, { type: 'text', text: { body: text } })
+  return r.data ?? { deferred: true }
 }
 
 // ─── Enviar template (funciona SIEMPRE, sin ventana 24h) ───
@@ -92,8 +121,6 @@ export async function sendTemplate(
   params: string[],
   lang = 'es'
 ) {
-  await bloquearSiPausado(to)
-  const phone = normalizePhone(to)
   const components: any[] = []
   if (params.length > 0) {
     components.push({
@@ -101,26 +128,11 @@ export async function sendTemplate(
       parameters: params.map(p => ({ type: 'text', text: p })),
     })
   }
-  const res = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      messaging_product: 'whatsapp',
-      to: phone,
-      type: 'template',
-      template: {
-        name: templateName,
-        language: { code: lang },
-        components,
-      },
-    }),
+  const r = await enviarWA(to, {
+    type: 'template',
+    template: { name: templateName, language: { code: lang }, components },
   })
-  const data = await res.json()
-  if (data.error) throw new Error(JSON.stringify(data.error))
-  return data
+  return r.data ?? { deferred: true }
 }
 
 // ─── Enviar con fallback: intenta texto libre, si falla usa template ───
@@ -261,33 +273,17 @@ export async function sendButtons(
   headerText?: string,
   footerText?: string,
 ) {
-  await bloquearSiPausado(to)
-  const phone = normalizePhone(to)
-  const res = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      messaging_product: 'whatsapp',
-      to: phone,
-      type: 'interactive',
-      interactive: {
-        type: 'button',
-        ...(headerText ? { header: { type: 'text', text: headerText } } : {}),
-        body: { text: bodyText },
-        ...(footerText ? { footer: { text: footerText } } : {}),
-        action: {
-          buttons: buttons.map(b => ({
-            type: 'reply',
-            reply: { id: b.id, title: b.title },
-          })),
-        },
+  const r = await enviarWA(to, {
+    type: 'interactive',
+    interactive: {
+      type: 'button',
+      ...(headerText ? { header: { type: 'text', text: headerText } } : {}),
+      body: { text: bodyText },
+      ...(footerText ? { footer: { text: footerText } } : {}),
+      action: {
+        buttons: buttons.map(b => ({ type: 'reply', reply: { id: b.id, title: b.title } })),
       },
-    }),
+    },
   })
-  const data = await res.json()
-  if (data.error) throw new Error(JSON.stringify(data.error))
-  return data
+  return r.data ?? { deferred: true }
 }
