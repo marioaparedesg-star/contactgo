@@ -9,20 +9,19 @@ export async function GET(_req: NextRequest) {
   if (auth.ok === false) return auth.response
 
   const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
-  const { data, error } = await sb.from('email_log')
-    .select('id,to_email,subject,template,order_id,status,resend_id,created_at')
-    .order('created_at', { ascending: false }).limit(150)
-
-  if (error) return NextResponse.json({ error: 'No se pudo consultar el historial de correos' }, { status: 500 })
-  const rows = data ?? []
   const today = new Date()
   today.setHours(0,0,0,0)
-  const todayRows = rows.filter((r:any) => new Date(r.created_at) >= today)
-  const stats = {
-    total: rows.length,
-    enviados: rows.filter((r:any) => r.status === 'sent').length,
-    errores: rows.filter((r:any) => r.status === 'error' || r.status === 'failed').length,
-    hoy: todayRows.length,
+  const [history, total, sent, errors, todayCount] = await Promise.all([
+    sb.from('email_log').select('id,to_email,subject,template,order_id,status,resend_id,created_at').order('created_at', { ascending: false }).limit(150),
+    sb.from('email_log').select('id', { count: 'exact', head: true }),
+    sb.from('email_log').select('id', { count: 'exact', head: true }).eq('status', 'sent'),
+    sb.from('email_log').select('id', { count: 'exact', head: true }).in('status', ['error','failed']),
+    sb.from('email_log').select('id', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
+  ])
+  if (history.error || total.error || sent.error || errors.error || todayCount.error) {
+    return NextResponse.json({ error: 'No se pudo consultar el historial de correos' }, { status: 500 })
   }
+  const rows = history.data ?? []
+  const stats = { total: total.count ?? 0, enviados: sent.count ?? 0, errores: errors.count ?? 0, hoy: todayCount.count ?? 0 }
   return NextResponse.json({ ok: true, stats, logs: rows })
 }
