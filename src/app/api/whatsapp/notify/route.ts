@@ -1,5 +1,6 @@
 import { guardRequest, getIP } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
+import { clienteBloqueadoPorPausa } from '@/lib/whatsapp'
 
 const WA_TOKEN    = process.env.WHATSAPP_TOKEN
 const WA_PHONE_ID = process.env.WHATSAPP_PHONE_ID
@@ -27,6 +28,11 @@ export async function POST(req: NextRequest) {
     if (WA_TOKEN && WA_PHONE_ID) {
       const raw = (cliente_telefono ?? '').replace(/\D/g, '')
       const telefono = raw.length === 10 ? `1${raw}` : raw
+
+      // PAUSA: no mandar al cliente; el aviso al admin de abajo no se toca
+      if (await clienteBloqueadoPorPausa(telefono)) {
+        return NextResponse.json({ success: false, reason: 'whatsapp_clientes_pausado' })
+      }
 
       const mensaje = `✅ *¡Hola ${nombre}, tu pedido está confirmado!*\n\n📦 *#${pedidoNum}*\n💰 *Total:* ${totalFmt}\n${metodo}\n\n🚚 Entrega en 24-48 horas.\n\n_ContactGo — contactgo.net_`
 
