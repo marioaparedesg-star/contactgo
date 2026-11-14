@@ -72,7 +72,7 @@ const T_TORICO: EntregaInfo = {
  *
  * @param tipo    - Tipo de producto: esferico | torico | multifocal | color | solucion | gota
  * @param nombre  - Nombre del producto (sin uso actualmente; se conserva por compatibilidad de firma)
- * @param sph     - Graduación seleccionada por el usuario (ej: "-2.75", "+1.50", "0.00") — solo aplica a color
+ * @param sph     - Graduación seleccionada (se conserva por compatibilidad con los componentes existentes)
  */
 export function getEntrega(tipo: string, nombre = '', sph?: string | number | null): EntregaInfo {
 
