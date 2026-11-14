@@ -31,8 +31,23 @@ const schema = z.object({
 })
 type FormData = z.infer<typeof schema>
 
-const CIUDADES = ['Santo Domingo','Santiago','La Romana','San Pedro de Macorís','Puerto Plata',
-  'Punta Cana','San Cristóbal','La Vega','Bonao','Baní','Otra ciudad']
+const CIUDAD_PROVINCIA: Record<string, string> = {
+  'Santo Domingo': 'Santo Domingo',
+  'Santiago': 'Santiago',
+  'La Romana': 'La Romana',
+  'San Pedro de Macorís': 'San Pedro de Macorís',
+  'Puerto Plata': 'Puerto Plata',
+  'Punta Cana': 'La Altagracia',
+  'San Cristóbal': 'San Cristóbal',
+  'La Vega': 'La Vega',
+  'Bonao': 'Monseñor Nouel',
+  'Baní': 'Peravia',
+}
+const CIUDADES = Object.keys(CIUDAD_PROVINCIA).concat('Otra ciudad')
+const PROVINCIAS = ['Azua','Bahoruco','Barahona','Dajabón','Distrito Nacional','Duarte','El Seibo','Elías Piña','Espaillat','Hato Mayor','Hermanas Mirabal','Independencia','La Altagracia','La Romana','La Vega','María Trinidad Sánchez','Monseñor Nouel','Monte Cristi','Monte Plata','Pedernales','Peravia','Puerto Plata','Samaná','San Cristóbal','San José de Ocoa','San Juan','San Pedro de Macorís','Sánchez Ramírez','Santiago','Santiago Rodríguez','Santo Domingo','Valverde']
+function provinciaDeCiudad(ciudad: string, provinciaActual?: string) {
+  return CIUDAD_PROVINCIA[ciudad] ?? (provinciaActual || '')
+}
 
 // AZUL disponible solo cuando hay AUTH_KEY configurada
 const AZUL_READY = Boolean(process.env.NEXT_PUBLIC_AZUL_READY)
@@ -114,12 +129,12 @@ export default function CheckoutPage() {
       if (!user) { router.replace('/cuenta?next=/cart'); return }
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
-          const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre ||
-            [user.user_metadata?.first_name, user.user_metadata?.last_name].filter(Boolean).join(' ')
-          if (nombreGuardado) {
-            setValue('nombre', String(nombreGuardado).trim())
-            setValue('apellido', '')
-          }
+          const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre || ''
+          const partesNombre = String(nombreGuardado).trim().split(/\\s+/).filter(Boolean)
+          const nombreSeparado = user.user_metadata?.first_name || partesNombre.shift() || ''
+          const apellidoSeparado = user.user_metadata?.last_name || partesNombre.join(' ')
+          if (nombreSeparado) setValue('nombre', String(nombreSeparado).trim())
+          if (apellidoSeparado) setValue('apellido', String(apellidoSeparado).trim())
           const emailGuardado = p?.email || user.email || ''
           const telefonoGuardado = p?.telefono || user.phone || user.user_metadata?.telefono || user.user_metadata?.phone || ''
           if (emailGuardado) setValue('email', emailGuardado)
@@ -134,7 +149,8 @@ export default function CheckoutPage() {
             if (principal.ciudad) setValue('ciudad', principal.ciudad)
           }
           setAddressesLoaded(true)
-        }).then(undefined, () => setAddressesLoaded(true))
+          setStep(2)
+        }).then(undefined, () => { setAddressesLoaded(true); setStep(2) })
       }
     })
   }, [items, router])
@@ -147,7 +163,7 @@ export default function CheckoutPage() {
       complemento: '',
       ciudad: addr?.ciudad ?? getValues('ciudad') ?? 'Santo Domingo',
       ciudadPersonalizada: '',
-      provincia: addr?.provincia ?? 'Santo Domingo',
+      provincia: provinciaDeCiudad(addr?.ciudad ?? getValues('ciudad') ?? 'Santo Domingo', addr?.provincia ?? 'Santo Domingo'),
       referencias: addr?.referencias ?? '',
     })
     setShowAddressEditor(true)
@@ -165,7 +181,7 @@ export default function CheckoutPage() {
       const { data: { user } } = await sb.auth.getUser()
       if (!user) throw new Error('Tu sesión expiró. Inicia sesión para guardar la dirección.')
       const direccionBase = [addressDraft.direccion.trim(), addressDraft.sector.trim() ? `Sector: ${addressDraft.sector.trim()}` : '', addressDraft.complemento.trim() ? `Edificio / apartamento: ${addressDraft.complemento.trim()}` : ''].filter(Boolean).join(' · ')
-      const provinciaFinal = addressDraft.provincia.trim() || null
+      const provinciaFinal = provinciaDeCiudad(addressDraft.ciudad === 'Otra ciudad' ? ciudadFinal : addressDraft.ciudad, addressDraft.provincia).trim() || null
       const referenciasFinal = addressDraft.referencias.trim() || null
       const direccionFormateada = [direccionBase, ciudadFinal, provinciaFinal ? `Provincia: ${provinciaFinal}` : '', referenciasFinal ? `Referencia para llegar: ${referenciasFinal}` : ''].filter(Boolean).join(' · ')
       const payload = {
@@ -337,7 +353,7 @@ export default function CheckoutPage() {
       try {
         const email = data.email
         const tel = data.telefono
-        if (email) createClient().from('abandoned_carts').update({ recuperado: true }).eq('cliente_email', email).then(() => {})
+        // El seguimiento activo se gestiona únicamente en carritos_abandonados vía API.
         // También marcar en tabla nueva de WhatsApp
         if (tel) {
           fetch('/api/carrito/track', {
@@ -500,8 +516,12 @@ export default function CheckoutPage() {
       const { data: { user } } = await sb.auth.getUser()
       if (user) {
         const { data: p } = await sb.from('profiles').select('*').eq('id', user.id).single()
-        const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre
-        if (nombreGuardado) { setValue('nombre', String(nombreGuardado).trim()); setValue('apellido', '') }
+        const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre || ''
+        const partesNombre = String(nombreGuardado).trim().split(/\\s+/).filter(Boolean)
+        const nombreSeparado = user.user_metadata?.first_name || partesNombre.shift() || ''
+        const apellidoSeparado = user.user_metadata?.last_name || partesNombre.join(' ')
+        if (nombreSeparado) setValue('nombre', String(nombreSeparado).trim())
+        if (apellidoSeparado) setValue('apellido', String(apellidoSeparado).trim())
         if (p?.email || user.email) setValue('email', p?.email || user.email || '')
         const telefonoGuardado = p?.telefono || user.phone || user.user_metadata?.telefono || user.user_metadata?.phone
         if (telefonoGuardado) setValue('telefono', telefonoGuardado)
@@ -853,13 +873,20 @@ export default function CheckoutPage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
                             <label className="block text-xs font-semibold text-gray-600 mb-1">Ciudad o municipio *</label>
-                            <select value={addressDraft.ciudad} onChange={e => setAddressDraft(d => ({ ...d, ciudad: e.target.value }))} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm">
+                            <select value={addressDraft.ciudad} onChange={e => setAddressDraft(d => ({ ...d, ciudad: e.target.value, provincia: provinciaDeCiudad(e.target.value, d.provincia) }))} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm">
                               {CIUDADES.map(city => <option key={city} value={city}>{city}</option>)}
                             </select>
                           </div>
                           <div>
                             <label className="block text-xs font-semibold text-gray-600 mb-1">Provincia</label>
-                            <input value={addressDraft.provincia} onChange={e => setAddressDraft(d => ({ ...d, provincia: e.target.value }))} placeholder="Ej.: Santo Domingo" maxLength={100} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm" />
+                            {addressDraft.ciudad === 'Otra ciudad' ? (
+                              <select value={addressDraft.provincia} onChange={e => setAddressDraft(d => ({ ...d, provincia: e.target.value }))} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm">
+                                <option value="">Selecciona una provincia</option>
+                                {PROVINCIAS.map(provincia => <option key={provincia} value={provincia}>{provincia}</option>)}
+                              </select>
+                            ) : (
+                              <input value={provinciaDeCiudad(addressDraft.ciudad, addressDraft.provincia)} readOnly aria-readonly="true" className="w-full rounded-xl border border-gray-200 bg-slate-100 px-3 py-3 text-sm text-slate-600" />
+                            )}
                           </div>
                         </div>
                         {addressDraft.ciudad === 'Otra ciudad' && (
