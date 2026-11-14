@@ -130,7 +130,7 @@ export default function CheckoutPage() {
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
           const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre || ''
-          const partesNombre = String(nombreGuardado).trim().split(/\\s+/).filter(Boolean)
+          const partesNombre = String(nombreGuardado).trim().split(/\s+/).filter(Boolean)
           const nombreSeparado = user.user_metadata?.first_name || partesNombre.shift() || ''
           const apellidoSeparado = user.user_metadata?.last_name || partesNombre.join(' ')
           if (nombreSeparado) setValue('nombre', String(nombreSeparado).trim())
@@ -147,10 +147,12 @@ export default function CheckoutPage() {
             setSelectedAddrId(principal.id)
             setValue('direccion', principal.direccion)
             if (principal.ciudad) setValue('ciudad', principal.ciudad)
+          } else {
+            setShowAddressEditor(true)
           }
           setAddressesLoaded(true)
           setStep(2)
-        }).then(undefined, () => { setAddressesLoaded(true); setStep(2) })
+        }).then(undefined, () => { setAddressesLoaded(true); setShowAddressEditor(true); setStep(2) })
       }
     })
   }, [items, router])
@@ -517,7 +519,7 @@ export default function CheckoutPage() {
       if (user) {
         const { data: p } = await sb.from('profiles').select('*').eq('id', user.id).single()
         const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre || ''
-        const partesNombre = String(nombreGuardado).trim().split(/\\s+/).filter(Boolean)
+        const partesNombre = String(nombreGuardado).trim().split(/\s+/).filter(Boolean)
         const nombreSeparado = user.user_metadata?.first_name || partesNombre.shift() || ''
         const apellidoSeparado = user.user_metadata?.last_name || partesNombre.join(' ')
         if (nombreSeparado) setValue('nombre', String(nombreSeparado).trim())
@@ -532,6 +534,8 @@ export default function CheckoutPage() {
           setSelectedAddrId(principal.id)
           setValue('direccion', principal.direccion)
           if (principal.ciudad) setValue('ciudad', principal.ciudad)
+        } else {
+          setShowAddressEditor(true)
         }
       }
     }
