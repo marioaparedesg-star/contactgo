@@ -49,7 +49,11 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
     if (orderError || !order) return { email_cliente: 'error', error: 'Orden no encontrada' }
 
     // State is always taken from the persisted order, never from caller-controlled input.
-    const state = nuevoEstado && nuevoEstado === order.estado ? nuevoEstado : String(order.estado ?? 'recibido')
+    const validStates = ['pendiente', 'recibido', 'pago_aprobado', 'confirmado', 'preparando', 'fabricante', 'enviado', 'transito', 'entregado', 'cancelado']
+    const requestedState = String(nuevoEstado ?? '')
+    const state = evento === 'estado_cambio' && validStates.includes(requestedState) && requestedState === String(order.estado)
+      ? requestedState
+      : String(order.estado ?? 'recibido')
     if (evento === 'pago_aprobado' && order.pago_estado !== 'pagado') {
       return { email_cliente: 'error', error: 'No se puede notificar un pago que no está aprobado' }
     }
