@@ -1229,27 +1229,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </main>
-      {step === 3 && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white/95 backdrop-blur px-3 py-2 shadow-[0_-4px_16px_rgba(15,23,42,0.08)]">
-          <div className="mx-auto flex max-w-3xl items-center gap-3">
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-semibold text-gray-500">Total a pagar</p>
-              <p className="text-base font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
-            </div>
-            <button
-              onClick={handleSubmit(data => {
-                if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones para continuar'); return }
-                if (!disclaimerAceptado) { setShowDisclaimer(true); return }
-                createOrder(data)
-              })}
-              disabled={loading || !aceptaTerminos}
-              className="min-h-12 rounded-xl bg-blue-600 px-5 text-sm font-black text-white shadow-md disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {loading ? 'Conectando…' : 'Pagar ahora'}
-            </button>
-          </div>
-        </div>
-      )}
       <Footer />
     </>
   )
