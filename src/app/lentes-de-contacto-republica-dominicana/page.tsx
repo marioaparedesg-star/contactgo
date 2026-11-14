@@ -418,7 +418,7 @@ export default async function LentesRDPage() {
               {[
                 { n: '1', t: 'Elige tu producto', d: 'Busca por marca o usa nuestra calculadora gratuita si tienes receta de gafas y no sabes qué lente comprar.' },
                 { n: '2', t: 'Configura tu receta', d: 'Ingresa la graduación exacta de tu receta óptica vigente para cada ojo (OD y OI).' },
-                { n: '3', t: 'Paga seguro', d: 'Con tarjeta Visa/Mastercard vía AZUL Banco Popular. También ofrecemos pago contra entrega en algunos casos.' },
+                { n: '3', t: 'Paga seguro', d: 'Con tarjeta Visa/Mastercard vía AZUL Banco Popular.' },
                 { n: '4', t: 'Recibe en casa', d: 'Esféricos en 24-48h, multifocales en 2-6 días, tóricos en 25-40 días — en toda República Dominicana. Incluye tracking.' },
               ].map((p) => (
                 <div key={p.n} className="p-5 rounded-2xl border border-gray-100">

@@ -16,8 +16,8 @@ const meta: BlogMeta = {
       a: 'Sí, entregamos en toda la zona metropolitana de Santo Domingo, incluyendo Los Alcarrizos, Villa Mella, Herrera, Pantoja y sectores aledaños — el tiempo de entrega suele ser de 24-48 horas.' },
     { q: '¿El precio de envío es distinto en estas zonas?',
       a: 'El costo de envío se calcula según tu dirección exacta en el checkout — no asumimos un precio fijo, se te muestra el costo real antes de confirmar tu pedido.' },
-    { q: '¿Puedo pagar contra entrega en estas zonas?',
-      a: 'Para compras por WhatsApp, en algunos casos se puede coordinar pago contra entrega o abono parcial — se evalúa caso por caso con nuestro equipo, no es automático.' },
+    { q: '¿Cómo puedo pagar en estas zonas?',
+      a: 'Con tarjeta de crédito o débito Visa o Mastercard, procesada de forma segura por AZUL (Banco Popular) — igual que en el resto del país.' },
   ],
   relatedSlugs: [
     'lentes-contacto-santo-domingo-provincia',
