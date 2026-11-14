@@ -56,7 +56,6 @@ const nextConfig = {
   },
   compress: true,
   experimental: {
-    instrumentationHook: true,
     optimizePackageImports: ['lucide-react', '@supabase/supabase-js'],
   },
   compiler: {
