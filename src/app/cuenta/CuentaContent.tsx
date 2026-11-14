@@ -733,101 +733,103 @@ export default function CuentaPage() {
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-4">
-        {/* Dashboard premium — menú principal */}
+        {/* Dashboard ContactGo — responsive desktop/mobile */}
         {tab === '' ? (
-          <div className="space-y-3 mb-4 pt-2">
-            {/* Stats rápidas */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              <div className="bg-white rounded-2xl border border-gray-100 p-3 text-center">
-                <p className="text-xl font-black text-gray-900">{pedidos.filter(p => p.pago_estado==='pagado').length}</p>
-                <p className="text-[10px] text-gray-400 font-medium mt-0.5">Pedidos</p>
-              </div>
-              <div className="bg-white rounded-2xl border border-gray-100 p-3 text-center">
-                <p className="text-xl font-black text-primary-600">{suscripciones.filter(s => s.activa).length}</p>
-                <p className="text-[10px] text-gray-400 font-medium mt-0.5">Suscripciones</p>
-              </div>
-              <div className="bg-white rounded-2xl border border-gray-100 p-3 text-center">
-                <p className="text-xl font-black text-gray-900">{recetas.length}</p>
-                <p className="text-[10px] text-gray-400 font-medium mt-0.5">Recetas</p>
-              </div>
-            </div>
-
-            {/* Suscripción activa — highlight card si existe */}
-            {suscripciones.filter(s => s.activa).length > 0 && (() => {
-              const s = suscripciones.find(s => s.activa)!
-              const proxDias = s.proximo_envio ? Math.ceil((new Date(s.proximo_envio).getTime() - Date.now()) / 86400000) : null
-              return (
-                <button onClick={() => setTab('suscripciones')}
-                  className="w-full bg-gradient-to-r from-teal-500 to-emerald-600 rounded-2xl p-4 text-left text-white shadow-md shadow-teal-50 hover:shadow-lg transition-all">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary-200">Suscripción activa</span>
-                    <span className="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-full font-bold">-{s.descuento_pct}%</span>
-                  </div>
-                  <p className="font-bold text-base leading-tight">
-                    {({'15_dias':'Cada 15 días','mensual':'Mensual','trimestral':'Cada 3 meses'} as any)[s.frecuencia] ?? s.frecuencia}
-                  </p>
-                  {proxDias != null && (
-                    <p className="text-xs text-primary-100 mt-1.5 flex items-center gap-1">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                      Próxima entrega {proxDias === 0 ? 'hoy' : `en ${proxDias} día${proxDias !== 1 ? 's' : ''}`}
-                    </p>
-                  )}
+          <div className="space-y-5 pb-4">
+            <section className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-[#002455] via-[#00366B] to-[#01B2B7] px-5 py-6 sm:px-7 sm:py-8 text-white shadow-lg shadow-blue-950/10">
+              <div className="relative z-10 max-w-xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Tu espacio ContactGo</p>
+                <h1 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight">Hola, {(perfil?.nombre || user.email?.split('@')[0] || 'bienvenido').split(' ')[0]} <span aria-hidden="true">👋</span></h1>
+                <p className="mt-2 max-w-md text-sm sm:text-base leading-relaxed text-white/85">Gestiona tus pedidos, recetas y datos personales desde un solo lugar.</p>
+                <button onClick={() => setTab('pedidos')} className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#002455] shadow-sm transition hover:bg-slate-100">
+                  Consultar mis pedidos <ChevronRight className="h-4 w-4" />
                 </button>
-              )
-            })()}
+              </div>
+              <div aria-hidden="true" className="pointer-events-none absolute -right-8 -bottom-16 h-56 w-56 rounded-full border-[24px] border-white/10 sm:right-8 sm:bottom-[-90px] sm:h-72 sm:w-72" />
+              <div aria-hidden="true" className="pointer-events-none absolute right-8 top-5 h-24 w-24 rounded-full bg-white/10 blur-2xl sm:right-24 sm:top-8 sm:h-36 sm:w-36" />
+            </section>
 
-            {/* Grid de acciones principales */}
-            <div className="grid grid-cols-2 gap-2">
+            <section aria-label="Resumen de tu cuenta" className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[
-                {id:'pedidos',       label:'Pedidos',         desc:'Historial',              icon:Package,     grad:'from-blue-50 to-blue-50',     iconBg:'bg-blue-100 text-blue-600'},
-                {id:'suscripciones', label:'Suscripciones',   desc:'Entregas automáticas',   icon:Repeat,      grad:'from-violet-50 to-violet-50', iconBg:'bg-violet-100 text-violet-600'},
-                {id:'recetas',       label:'Mis Recetas',     desc:'Prescripciones',         icon:FileText,    grad:'from-teal-50 to-teal-50',     iconBg:'bg-teal-100 text-teal-600'},
-                {id:'pagos',         label:'Métodos de pago', desc:'Tarjetas',               icon:CreditCard,  grad:'from-emerald-50 to-emerald-50',iconBg:'bg-emerald-100 text-emerald-600'},
-              ].map(t => (
-                <button key={t.id} onClick={() => setTab(t.id)}
-                  className={`bg-gradient-to-br ${t.grad} border border-white rounded-2xl p-4 text-left hover:shadow-md transition-all active:scale-[0.98]`}>
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${t.iconBg}`}>
-                    <t.icon className="w-4.5 h-4.5" />
+                { label: 'Pedidos', value: pedidos.length, icon: Package, tone: 'text-[#002455]', bg: 'bg-blue-50' },
+                { label: 'En camino', value: pedidos.filter(p => ['enviado','preparando'].includes(String(p.estado || '').toLowerCase())).length, icon: RefreshCw, tone: 'text-[#01A5AA]', bg: 'bg-teal-50' },
+                { label: 'Mis recetas', value: recetas.length, icon: FileText, tone: 'text-emerald-600', bg: 'bg-emerald-50' },
+                { label: 'Direcciones', value: direcciones.length, icon: MapPin, tone: 'text-violet-600', bg: 'bg-violet-50' },
+              ].map(item => (
+                <div key={item.label} className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
+                  <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${item.bg} ${item.tone}`}>
+                    <item.icon className="h-5 w-5" />
                   </div>
-                  <p className="font-bold text-gray-900 text-sm leading-tight">{t.label}</p>
-                  <p className="text-[10px] text-gray-400 mt-0.5">{t.desc}</p>
-                </button>
+                  <p className="text-2xl font-black tracking-tight text-slate-900 tabular-nums">{item.value}</p>
+                  <p className="mt-0.5 text-xs font-medium text-slate-500">{item.label}</p>
+                </div>
               ))}
-            </div>
+            </section>
 
-            {/* Fila secundaria */}
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                {id:'perfil',      label:'Mi Perfil',   desc:'Datos personales',  icon:User,        iconBg:'bg-orange-100 text-orange-600'},
-                {id:'direcciones', label:'Direcciones', desc:'Puntos de entrega', icon:MapPin,      iconBg:'bg-pink-100 text-pink-600'},
-              ].map(t => (
-                <button key={t.id} onClick={() => setTab(t.id)}
-                  className="bg-white border border-gray-100 rounded-2xl p-4 text-left hover:border-gray-200 hover:shadow-sm transition-all active:scale-[0.98]">
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${t.iconBg}`}>
-                    <t.icon className="w-4.5 h-4.5" />
-                  </div>
-                  <p className="font-bold text-gray-900 text-sm leading-tight">{t.label}</p>
-                  <p className="text-[10px] text-gray-400 mt-0.5">{t.desc}</p>
-                </button>
-              ))}
-            </div>
-
-            {/* Seguridad */}
-            <button onClick={() => setTab('seguridad')}
-              className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-3 hover:border-gray-200 hover:shadow-sm transition-all">
-              <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-4.5 h-4.5" />
+            <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+              <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-4 sm:px-5">
+                <div>
+                  <h2 className="font-bold text-slate-900">Pedidos recientes</h2>
+                  <p className="mt-0.5 text-xs text-slate-500">Consulta el estado de tus compras</p>
+                </div>
+                <button onClick={() => setTab('pedidos')} className="shrink-0 text-sm font-bold text-[#008F98] hover:text-[#002455]">Ver todos <ChevronRight className="inline h-4 w-4" /></button>
               </div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-900 text-sm">Seguridad</p>
-                <p className="text-[10px] text-gray-400">Contraseña y autenticación</p>
-              </div>
-              <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
-            </button>
+              {pedidos.length === 0 ? (
+                <div className="px-5 py-8 text-center">
+                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-400"><Package className="h-6 w-6" /></div>
+                  <p className="text-sm font-semibold text-slate-700">Todavía no tienes pedidos</p>
+                  <p className="mt-1 text-xs text-slate-500">Cuando realices una compra, podrás seguirla desde aquí.</p>
+                  <Link href="/catalogo" className="mt-4 inline-flex min-h-10 items-center rounded-xl bg-[#002455] px-4 py-2 text-sm font-bold text-white hover:bg-[#00366B]">Explorar catálogo</Link>
+                </div>
+              ) : (
+                <div className="divide-y divide-slate-100">
+                  {pedidos.slice(0, 3).map(p => (
+                    <button key={p.id} onClick={() => verPedido(p)} className="flex w-full items-center gap-3 px-4 py-4 text-left transition hover:bg-slate-50 sm:px-5">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#002455]"><Package className="h-5 w-5" /></div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-bold text-slate-900">Pedido #{String(p.numero_orden || p.id).slice(-6).toUpperCase()}</p>
+                        <p className="mt-0.5 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})}</p>
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <p className="text-sm font-bold text-slate-900">RD${Number(p.total || 0).toLocaleString('es-DO')}</p>
+                        <span className={`mt-1 inline-flex rounded-full px-2 py-1 text-[10px] font-bold capitalize ${ESTADO[p.estado] || 'bg-slate-100 text-slate-600'}`}>{p.estado || 'Pendiente'}</span>
+                      </div>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-slate-300" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </section>
 
-            <button onClick={cerrarSesion}
-              className="w-full border border-red-100 rounded-2xl p-3.5 flex items-center justify-center gap-2 text-red-500 hover:bg-red-50 transition-all text-sm font-semibold">
-              <LogOut className="w-4 h-4" /> Cerrar sesión
+            <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+              <div className="border-b border-slate-100 px-4 py-4 sm:px-5">
+                <h2 className="font-bold text-slate-900">Tu cuenta</h2>
+                <p className="mt-0.5 text-xs text-slate-500">Accesos rápidos a tu información</p>
+              </div>
+              <div className="divide-y divide-slate-100">
+                {[
+                  {id:'pedidos', label:'Mis pedidos', desc:'Historial y seguimiento de compras', icon:Package, tint:'bg-blue-50 text-[#002455]'},
+                  {id:'recetas', label:'Mis recetas', desc:'Graduaciones y prescripciones guardadas', icon:FileText, tint:'bg-teal-50 text-[#009BA3]'},
+                  {id:'direcciones', label:'Mis direcciones', desc:'Lugares de entrega guardados', icon:MapPin, tint:'bg-violet-50 text-violet-600'},
+                  {id:'perfil', label:'Mis datos', desc:'Nombre, correo y teléfono', icon:User, tint:'bg-amber-50 text-amber-600'},
+                  {id:'suscripciones', label:'Suscripciones', desc:'Gestiona tus entregas automáticas', icon:Repeat, tint:'bg-emerald-50 text-emerald-600'},
+                  {id:'pagos', label:'Métodos de pago', desc:'Consulta tus métodos guardados', icon:CreditCard, tint:'bg-indigo-50 text-indigo-600'},
+                  {id:'seguridad', label:'Seguridad', desc:'Contraseña y acceso biométrico', icon:ShieldCheck, tint:'bg-slate-100 text-slate-700'},
+                ].map(item => (
+                  <button key={item.id} onClick={() => setTab(item.id)} className="flex min-h-[72px] w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-slate-50 sm:px-5">
+                    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.tint}`}><item.icon className="h-5 w-5" /></span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-bold text-slate-900">{item.label}</span>
+                      <span className="mt-0.5 block text-xs text-slate-500">{item.desc}</span>
+                    </span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-300" />
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <button onClick={cerrarSesion} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600">
+              <LogOut className="h-4 w-4" /> Cerrar sesión
             </button>
           </div>
         ) : null}
