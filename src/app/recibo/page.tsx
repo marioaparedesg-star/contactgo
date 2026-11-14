@@ -347,9 +347,6 @@ function ReciboContent() {
             <div style={{fontWeight:'700'}}>
               {'💳 Tarjeta AZUL (Banco Popular)'}
             </div>
-            {order.azul_auth_code && (
-              <div style={{fontSize:'11px',color:'#666',marginTop:'4px'}}>Auth: <strong>{order.azul_auth_code}</strong></div>
-            )}
             <div style={{fontSize:'10px',color:'#888',marginTop:'4px'}}>Moneda: Peso Dominicano (RD$)</div>
           </div>
           <div style={{
