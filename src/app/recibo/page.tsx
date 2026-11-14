@@ -92,10 +92,11 @@ function ReciboContent() {
         return
       }
 
-      const { data: its } = await sb
-        .from('order_items')
-        .select('*')
-        .eq('order_id', orderData.id)
+      // Los pedidos invitados consultan sus artículos mediante token público
+      // de un solo pedido; las cuentas autenticadas usan RLS por propietario.
+      const { data: its } = token
+        ? await sb.rpc('get_order_items_by_public_token', { p_token: token })
+        : await sb.from('order_items').select('*').eq('order_id', orderData.id)
 
       // Abonos/pagos aplicados a este pedido — para poder mostrar el
       // desglose real (cuánto se pagó, cuánto falta, y en qué fechas se
@@ -206,11 +207,9 @@ function ReciboContent() {
 
   const fecha = new Date(order.fecha || order.updated_at || Date.now())
   const totalReal         = order.total ?? 0
-  const envio              = order.envio ?? 200
+  const ciudadDestino = String(order.ciudad ?? order.provincia ?? '').toLowerCase()
+  const envio              = order.envio ?? (ciudadDestino.includes('santo domingo') || ciudadDestino.includes('distrito nacional') ? 250 : 350)
   const descuento           = order.descuento ?? 0
-  const subtotalConITBIS  = totalReal - envio - descuento
-  const itbis             = Math.round(subtotalConITBIS * 0.18 / 1.18)
-  const subtotalSinITBIS  = subtotalConITBIS - itbis
 
   // Desglose real de pago — a pedido explícito de Mario (2026-09-10):
   // antes el recibo solo decía "PAGADO" o "PENDIENTE" sin mostrar cuánto
@@ -328,8 +327,6 @@ function ReciboContent() {
         <div style={{display:'flex',justifyContent:'flex-end',marginBottom:'16px'}}>
           <div style={{width:'260px'}}>
             {[
-              {label:'Subtotal (sin ITBIS)', val:`RD$${subtotalSinITBIS.toLocaleString()}`},
-              {label:'ITBIS (18%)',           val:`RD$${itbis.toLocaleString()}`},
               ...(descuento > 0 ? [{label:'Descuento', val:`-RD$${descuento.toLocaleString()}`, color:'#16a34a'}] : []),
               {label:'Envío',                val: envio > 0 ? `RD$${envio.toLocaleString()}` : 'Gratis'},
             ].map((row:any, i:number) => (
@@ -350,9 +347,6 @@ function ReciboContent() {
             <div style={{fontWeight:'700'}}>
               {'💳 Tarjeta AZUL (Banco Popular)'}
             </div>
-            {order.azul_auth_code && (
-              <div style={{fontSize:'11px',color:'#666',marginTop:'4px'}}>Auth: <strong>{order.azul_auth_code}</strong></div>
-            )}
             <div style={{fontSize:'10px',color:'#888',marginTop:'4px'}}>Moneda: Peso Dominicano (RD$)</div>
           </div>
           <div style={{

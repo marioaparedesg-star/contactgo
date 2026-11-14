@@ -19,7 +19,7 @@ import { Shield, ShieldCheck, Truck, RotateCcw, Lock, ChevronRight, Tag, Check, 
 
 const schema = z.object({
   nombre:               z.string().min(2, 'Nombre requerido'),
-  apellido:             z.string().min(2, 'Apellido requerido'),
+  apellido:             z.string().optional().default(''),
   email:                z.string().email('Email inválido'),
   telefono:             z.string().min(10, 'Teléfono requerido').refine(
                             (v) => (v.match(/\d/g) ?? []).length >= 10,
@@ -82,7 +82,7 @@ export default function CheckoutPage() {
   const [authTel, setAuthTel] = useState('')
   const [authLoading, setAuthLoading] = useState(false)
   const [authMsg, setAuthMsg] = useState('')
-  const [step, setStep] = useState<1|2|3>(1)
+  const [step, setStep] = useState<1|2|3>(3)
   const [savedAddresses, setSavedAddresses] = useState<any[]>([])
   const [selectedAddrId, setSelectedAddrId] = useState<string|null>(null)
   const [showAddressEditor, setShowAddressEditor] = useState(false)
@@ -98,7 +98,10 @@ export default function CheckoutPage() {
   const sub = subtotal()
   const ciudadActual = watch('ciudad')
   const ciudadEnvio = ciudadActual === 'Otra ciudad' ? watch('ciudadPersonalizada') : ciudadActual
-  const envio = items.length > 0 ? calcularEnvio(sub, ciudadEnvio, cuponEnvioGratis) : 0
+  // Excepción temporal y estrictamente limitada al producto de prueba solicitado.
+  // Solo elimina el envío cuando el carrito contiene exclusivamente ese producto.
+  const esPedidoDePrueba = items.length > 0 && items.every((item: any) => item.product?.id === 'a1b1025e-cb68-4f33-8501-f44f4c2375f4')
+  const envio = items.length > 0 ? (esPedidoDePrueba ? 0 : calcularEnvio(sub, ciudadEnvio, cuponEnvioGratis)) : 0
   const envioGratis = envio === 0
   const totalFinal = items.length > 0 ? Math.max(0, sub + envio - descuento) : 0
 
@@ -110,13 +113,16 @@ export default function CheckoutPage() {
       if (!user) { router.replace('/cuenta?next=/cart'); return }
       if (user) {
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
-          if (p?.nombre) {
-            const partes = String(p.nombre).trim().split(/\\s+/)
-            setValue('nombre', partes.shift() ?? '')
-            setValue('apellido', partes.join(' ') || '')
+          const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre ||
+            [user.user_metadata?.first_name, user.user_metadata?.last_name].filter(Boolean).join(' ')
+          if (nombreGuardado) {
+            setValue('nombre', String(nombreGuardado).trim())
+            setValue('apellido', '')
           }
-          if (p?.email || user.email) setValue('email', p?.email || user.email || '')
-          if (p?.telefono) setValue('telefono', p.telefono)
+          const emailGuardado = p?.email || user.email || ''
+          const telefonoGuardado = p?.telefono || user.phone || user.user_metadata?.telefono || user.user_metadata?.phone || ''
+          if (emailGuardado) setValue('email', emailGuardado)
+          if (telefonoGuardado) setValue('telefono', telefonoGuardado)
         })
         sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: a }) => {
           if (a && a.length > 0) {
@@ -223,7 +229,11 @@ export default function CheckoutPage() {
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
     const id = await saveDisclaimer(dData, user?.id)
-    if (id) setDisclaimerId(id)
+    if (!id) {
+      toast.error('No pudimos registrar tu aceptación. Inténtalo nuevamente antes de pagar.')
+      return
+    }
+    setDisclaimerId(id)
     setDisclaimerAceptado(true)
     setShowDisclaimer(false)
     setStep(3)
@@ -242,13 +252,19 @@ export default function CheckoutPage() {
       return
     }
 
-    const nombreCompleto = `${data.nombre.trim()} ${data.apellido.trim()}`
+    const nombreCompleto = data.nombre.trim()
     // Los pedidos del checkout web se procesan exclusivamente con tarjeta.
     const metodoPagoReal = 'tarjeta' as const
 
     setLoading(true)
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
+    if (!user) {
+      setLoading(false)
+      toast.error('Tu sesión expiró. Inicia sesión para continuar con el pago.')
+      router.replace('/cuenta?next=/cart')
+      return
+    }
 
     // ─── Crear orden y preparar el pago con AZUL. ──
     {
@@ -336,7 +352,9 @@ export default function CheckoutPage() {
       if (!itemsRes.ok) {
         const itemsErr = await itemsRes.text().catch(() => 'unknown')
         console.error('[checkout] order_items FAILED:', itemsErr)
-        // No bloqueamos el pago, pero lo logueamos
+        toast.error('No pudimos guardar los productos de tu pedido. No se realizará ningún cobro. Intenta nuevamente.')
+        setLoading(false)
+        return
       }
 
       // 2b. Crear registro de suscripción si algún item tiene frecuencia
@@ -454,7 +472,11 @@ export default function CheckoutPage() {
       const { data: { user } } = await sb.auth.getUser()
       if (user) {
         const { data: p } = await sb.from('profiles').select('*').eq('id', user.id).single()
-        if (p?.nombre) setValue('nombre', p.nombre); if (p?.email) setValue('email', p.email); if (p?.telefono) setValue('telefono', p.telefono)
+        const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre
+        if (nombreGuardado) { setValue('nombre', String(nombreGuardado).trim()); setValue('apellido', '') }
+        if (p?.email || user.email) setValue('email', p?.email || user.email || '')
+        const telefonoGuardado = p?.telefono || user.phone || user.user_metadata?.telefono || user.user_metadata?.phone
+        if (telefonoGuardado) setValue('telefono', telefonoGuardado)
         const { data: a } = await sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false })
         if (a && a.length > 0) {
           setSavedAddresses(a)
@@ -629,17 +651,17 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      <main id="main-content" className="min-h-screen bg-gray-50 pb-20">
+      <main id="main-content" className="min-h-screen bg-[#f7f9fc] pb-24">
         {/* Barra de progreso */}
         <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
-          <div className="max-w-3xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
             <div className="flex items-center gap-1.5 text-sm text-green-700 font-semibold">
               <Lock className="w-4 h-4" />
               <img src="/azul-badge.png" alt="Pago seguro AZUL" width="28" height="28" className="h-7 w-7 object-contain rounded" />
               <span className="hidden sm:inline text-xs">Pago seguro</span>
             </div>
             {/* Pasos */}
-            <div className="flex min-w-0 items-center gap-1 sm:gap-2">
+            <div className="hidden min-w-0 items-center gap-1 sm:gap-2">
               {steps.map((s, i) => (
                 <div key={s.n} className="flex items-center gap-1.5">
                   <button onClick={() => step > s.n && setStep(s.n)}
@@ -657,51 +679,44 @@ export default function CheckoutPage() {
                 </div>
               ))}
             </div>
-            <div className="text-[10px] text-gray-400 font-medium">{step}/3</div>
+            <div className="text-[10px] text-gray-400 font-medium">Compra segura</div>
           </div>
         </div>
 
-        <div className="max-w-3xl mx-auto px-3 pt-3">
-          <div className="grid grid-cols-1 gap-3 items-start">
+        <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-7">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)] gap-4 lg:gap-5 items-start">
 
             {/* LEFT */}
-            <div className="space-y-2 order-first">
+            <div className="space-y-5 order-first">
 
               {/* Paso 1 */}
-              <div className={`bg-white rounded-2xl border transition-all duration-200 ${
+              <div className={`bg-white rounded-2xl border border-slate-200 shadow-[0_2px_12px_rgba(15,35,65,0.045)] transition-all duration-200 ${
                 step === 1 ? 'border-primary-200 shadow-sm' :
                 step > 1 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100'
               }`}>
-                <div className="px-3 py-2.5 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
+                <div className="px-4 sm:px-5 py-3.5 flex items-center justify-between cursor-pointer" onClick={() => step > 1 && setStep(1)} role="button" tabIndex={step > 1 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 1 && setStep(1)} aria-label="Volver al paso 1">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 1 ? 'bg-green-500 text-white' : step === 1 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 1 ? <Check className="w-4 h-4" /> : '1'}
                     </div>
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">Información de contacto</p>
+                      <p className="font-bold text-gray-900 text-base">Datos del cliente</p>
                       {step > 1 && <p className="text-xs text-gray-400 mt-0.5">{getValues('nombre')} {getValues('apellido')} · {getValues('email')}</p>}
                     </div>
                   </div>
                   {step > 1 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
 
-                {step === 1 && (
-                  <div className="px-3 pb-3 space-y-2.5 border-t border-gray-50 pt-3">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="relative">
-                        <User className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
-                        <label htmlFor="nombre" className="block text-[11px] font-semibold text-gray-500 mb-1">Nombre</label>
-                        <input id="nombre" {...register('nombre')} placeholder="Nombre" autoComplete="given-name"
-                          aria-label="Nombre"
-                          className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
-                      </div>
-                      <div className="relative">
-                        <label htmlFor="apellido" className="block text-[11px] font-semibold text-gray-500 mb-1">Apellido</label>
-                        <input id="apellido" {...register('apellido')} placeholder="Apellido" autoComplete="family-name"
-                          aria-label="Apellido"
-                          className="w-full pl-3 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
-                      </div>
+                {(step === 1 || step === 3) && (
+                  <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-3.5 border-t border-slate-100 pt-4">
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
+                      <label htmlFor="nombre" className="block text-xs font-semibold text-slate-600 mb-1.5">Nombre completo</label>
+                      <input id="nombre" {...register('nombre')} placeholder="Nombre y apellido" autoComplete="name"
+                        aria-label="Nombre completo"
+                        className="w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-teal-100 focus:border-teal-500 transition-colors bg-white" />
+                      {errors.nombre && <p className="text-red-500 text-xs mt-1">⚠️ {errors.nombre.message}</p>}
                     </div>
                     {(errors.nombre || errors.apellido) && (
                       <p className="text-red-500 text-xs -mt-1 flex items-center gap-1">⚠️ {errors.nombre?.message ?? errors.apellido?.message}</p>
@@ -724,35 +739,43 @@ export default function CheckoutPage() {
                         {errors.telefono && <p className="text-red-500 text-xs mt-1">⚠️ {errors.telefono.message}</p>}
                       </div>
                     </div>
-                    <button type="button" onClick={nextStep}
+                    {step === 1 && <button type="button" onClick={nextStep}
                       className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all">
                       Continuar a dirección de entrega <ChevronRight className="w-4 h-4" />
-                    </button>
+                    </button>}
                   </div>
                 )}
               </div>
 
+                {step === 3 && (
+                  <div className="hidden rounded-xl border border-gray-100 bg-white px-3 py-3">
+                    <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 mb-1">Datos del cliente</p>
+                    <p className="text-base font-bold text-gray-900">{[watch('nombre'), watch('apellido')].filter(Boolean).join(' ') || 'Cargando datos…'}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{watch('email')} · {watch('telefono')}</p>
+                  </div>
+                )}
+
               {/* Paso 2 */}
-              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${
-                step === 2 ? 'border-primary-200 shadow-sm' :
+              <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm transition-all duration-200 ${
+                (step === 2 || step === 3) ? 'border-primary-200 shadow-sm' :
                 step > 2 ? 'border-green-200 cursor-pointer hover:border-green-300' :
                 'border-gray-100 opacity-50'
               }`}>
-                <div className="px-3 py-2.5 flex items-center justify-between cursor-pointer" onClick={() => step > 2 && setStep(2)} role="button" tabIndex={step > 2 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 2 && setStep(2)} aria-label="Volver al paso 2">
+                <div className="px-4 sm:px-5 py-3.5 flex items-center justify-between cursor-pointer" onClick={() => step > 2 && setStep(2)} role="button" tabIndex={step > 2 ? 0 : -1} onKeyDown={e => e.key === 'Enter' && step > 2 && setStep(2)} aria-label="Volver al paso 2">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step > 2 ? 'bg-green-500 text-white' : step === 2 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
                       {step > 2 ? <Check className="w-4 h-4" /> : '2'}
                     </div>
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">Dirección de entrega</p>
+                      <p className="font-bold text-gray-900 text-base">Dirección de entrega</p>
                       {step > 2 && <p className="text-xs text-gray-400 mt-0.5">{getValues('direccion')}, {getValues('ciudad')}</p>}
                     </div>
                   </div>
                   {step > 2 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
 
-                {step === 2 && (
-                  <div className="px-3 pb-3 space-y-2.5 border-t border-gray-50 pt-3">
+                {(step === 2 || step === 3) && (
+                  <div className="px-4 sm:px-6 pb-5 sm:pb-6 space-y-4 border-t border-slate-100 pt-5">
 
                     {/* Selector de direcciones guardadas */}
                     {savedAddresses.length > 0 ? (
@@ -789,7 +812,7 @@ export default function CheckoutPage() {
                         <div className="flex flex-wrap gap-3 pt-2">
                           <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
                             className="text-xs text-primary-600 font-semibold flex items-center gap-1">
-                            <MapPin className="w-3 h-3"/> Agregar otra dirección
+                            <MapPin className="w-3 h-3"/> Agregar dirección de entrega
                           </button>
                           {selectedAddrId && (
                             <button type="button" onClick={() => abrirEditorDireccion(savedAddresses.find(a => a.id === selectedAddrId))}
@@ -852,7 +875,7 @@ export default function CheckoutPage() {
                         {isLoggedIn && (
                           <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
                             className="text-xs text-primary-600 font-semibold flex items-center gap-1">
-                            <MapPin className="w-3 h-3"/> Guardar esta dirección en mi perfil
+                            <MapPin className="w-3 h-3"/> Agregar y guardar dirección de entrega
                           </button>
                         )}
                       </div>
@@ -865,26 +888,26 @@ export default function CheckoutPage() {
                       </div>
                     )}
 
-                    <button type="button" onClick={nextStep}
+                    {step === 2 && <button type="button" onClick={nextStep}
                       className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.99] text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all">
                       Continuar <ChevronRight className="w-4 h-4" />
-                    </button>
+                    </button>}
                   </div>
                 )}
               </div>
 
               {/* Paso 3 */}
-              <div className={`bg-white rounded-2xl border-2 transition-all duration-200 ${step === 3 ? 'border-primary-200 shadow-sm' : 'border-gray-100 opacity-50'}`}>
-                <div className="px-3 py-2.5 flex items-center gap-2.5">
+              <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm transition-all duration-200 ${step === 3 ? 'border-teal-200' : 'border-slate-200'}`}>
+                <div className="px-4 sm:px-6 py-4 flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${step === 3 ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-400'}`}>3</div>
-                  <p className="font-bold text-gray-900 text-sm">Confirmar y pagar</p>
+                  <p className="font-bold text-gray-900 text-base">Resumen del pedido y pago</p>
                 </div>
 
                 {step === 3 && (
-                  <div className="px-3 pb-3 border-t border-gray-100 pt-3 space-y-3">
+                  <div className="px-4 sm:px-5 pb-5 border-t border-slate-100 pt-4 space-y-4">
 
                     {/* Resumen compacto del pedido */}
-                    <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2.5">
+                    <div className="rounded-xl border border-slate-200 bg-white px-3.5 py-3.5">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-[11px] font-semibold text-gray-500">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
@@ -906,14 +929,18 @@ export default function CheckoutPage() {
                               )
                             })}
                           </div>
-                          <p className="text-[11px] text-gray-500 mt-1">Subtotal RD${sub.toLocaleString()} · Envío {envioGratis ? 'gratis' : `RD${envio.toLocaleString()}`}</p>
+                          <div className="mt-2 space-y-1 border-t border-gray-200 pt-2 text-xs">
+                            <div className="flex justify-between gap-3 text-gray-600"><span>Subtotal</span><span>RD${sub.toLocaleString()}</span></div>
+                            {descuento > 0 && <div className="flex justify-between gap-3 text-green-700"><span>Descuento</span><span>−RD${descuento.toLocaleString()}</span></div>}
+                            <div className="flex justify-between gap-3 text-gray-600"><span>Envío</span><span>{envioGratis ? 'Gratis' : `RD${envio.toLocaleString()}`}</span></div>
+                            <div className="flex justify-between gap-3 border-t border-gray-200 pt-2 text-sm font-black text-gray-900"><span>Total a pagar</span><span className="text-primary-700">RD${totalFinal.toLocaleString()}</span></div>
+                          </div>
                         </div>
-                        <p className="shrink-0 text-lg font-black text-primary-700">RD${totalFinal.toLocaleString()}</p>
                       </div>
                     </div>
 
                     {/* Cupón accesible también en compra directa */}
-                    <div className="rounded-xl border border-gray-100 px-3 py-2">
+                    <div className="rounded-xl border border-slate-200 px-3.5 py-3">
                       {cuponAplicado ? (
                         <div className="flex items-center justify-between gap-2 text-xs text-green-700">
                           <span className="font-semibold">✓ Cupón {cupon.toUpperCase()} aplicado · −RD${descuento.toLocaleString()}</span>
@@ -927,31 +954,12 @@ export default function CheckoutPage() {
                       )}
                     </div>
 
-                    {/* Resumen cliente */}
-                    <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center shrink-0">
-                          <User className="w-4 h-4 text-primary-600" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-gray-900 text-sm">{getValues('nombre')} {getValues('apellido')}</p>
-                          <p className="text-xs text-gray-400">{getValues('telefono')}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-2.5 pl-0.5">
-                        <div className="w-8 h-8 bg-green-50 rounded-xl flex items-center justify-center shrink-0">
-                          <MapPin className="w-4 h-4 text-green-500" />
-                        </div>
-                        <p className="text-sm text-gray-600 pt-1.5">{getValues('direccion')}, {getValues('ciudad')}</p>
-                      </div>
-                    </div>
-
                     {/* Método de pago — solo AZUL */}
                     <div className="space-y-2">
                       <p className="text-sm font-semibold text-gray-700">Método de pago</p>
 
                       {/* Tarjeta — AZUL */}
-                      <div className="bg-white border border-blue-200 rounded-xl p-3">
+                      <div className="bg-white border border-blue-200 rounded-xl p-3.5">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center shrink-0">
                             <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"/>
@@ -994,10 +1002,11 @@ export default function CheckoutPage() {
                     <button
                       onClick={handleSubmit(data => {
                         if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones para continuar'); return }
+                        if (!disclaimerAceptado) { setShowDisclaimer(true); return }
                         createOrder(data)
                       })}
                       disabled={loading || !aceptaTerminos}
-                      className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm">
+                      className="w-full bg-[#002455] hover:bg-[#001f4a] active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all text-base shadow-md shadow-blue-950/10">
                       {loading ? (
                         <>
                           <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -1005,7 +1014,7 @@ export default function CheckoutPage() {
                         </>
                       ) : (
                         <>
-                          <span>💳 Pagar · RD${totalFinal.toLocaleString()}</span>
+                          <span>💳 Pagar ahora</span>
                           <ChevronRight className="w-5 h-5" />
                         </>
                       )}
@@ -1227,6 +1236,7 @@ export default function CheckoutPage() {
             <button
               onClick={handleSubmit(data => {
                 if (!aceptaTerminos) { toast.error('Acepta los Términos y Condiciones para continuar'); return }
+                if (!disclaimerAceptado) { setShowDisclaimer(true); return }
                 createOrder(data)
               })}
               disabled={loading || !aceptaTerminos}

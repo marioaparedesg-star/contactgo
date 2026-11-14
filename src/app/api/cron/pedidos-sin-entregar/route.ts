@@ -48,7 +48,7 @@ export async function GET(req: Request) {
 
     const lista = (pedidos ?? []).map(o => {
       const dias = Math.floor((Date.now() - new Date(o.created_at).getTime()) / 86400000)
-      // Tóricos tardan 25-40 días en fabricación (normal, no alarmante).
+      // Tóricos tardan 25-45 días en fabricación (normal, no alarmante).
       // Para todo lo demás, más de 5 días sin moverse sí merece atención.
       const alerta = dias > 20 ? '🔴' : dias > 5 ? '🟡' : '🟢'
       return { ...o, dias, alerta, label: ESTADO_LABEL[o.estado] ?? o.estado }

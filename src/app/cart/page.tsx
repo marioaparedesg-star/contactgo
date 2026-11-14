@@ -359,7 +359,7 @@ export default function CartPage() {
                 sin importar qué hubiera en el carrito — contradecía la
                 insignia correcta que ya se muestra por artículo arriba
                 (línea ~211, vía EntregaBadge) cuando el carrito tiene un
-                tórico o multifocal (25-40 días / 2-6 días). Encontrado por
+                tórico o multifocal (25-45 días / 1-5 días). Encontrado por
                 una clienta real (Carla) que vio "24-48h" aquí abajo y
                 "llega después del 23 de octubre" arriba, para el mismo
                 pedido, y escribió confundida por WhatsApp sin que nadie le

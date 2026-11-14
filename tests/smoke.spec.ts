@@ -88,7 +88,7 @@ test.describe('Seguridad', () => {
       data: { order_id: '00000000-0000-0000-0000-000000000000', items: [{ nombre: 'test', precio: 100, cantidad: 1 }] },
     })
     // Debe rechazar la orden fantasma
-    expect([400, 403, 429]).toContain(res.status())
+    expect([400, 401, 403, 429]).toContain(res.status())
   })
 
   test('Headers de seguridad presentes', async ({ page }) => {

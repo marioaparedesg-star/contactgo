@@ -85,8 +85,7 @@ export default function ProductCard({ product, isBestseller }: Props) {
         )}
         {/* Aviso entrega especial para tóricos y multifocales — usa la fuente
             única de verdad (delivery-times.ts) en vez de un texto fijo, para
-            que tórico (25-40 días) y multifocal (2-6 días) muestren su
-            tiempo real y no el mismo número los dos. */}
+            que los plazos se tomen siempre de delivery-times.ts. */}
         {(product.tipo === 'torico' || product.tipo === 'multifocal') && (
           <span className="absolute bottom-2 right-2 z-10 text-[9px] font-bold bg-amber-500 text-white px-1.5 py-0.5 rounded-md leading-tight">
             ⏱ {getEntrega(product.tipo).etiqueta.replace(/^.*·\s*/, '')}

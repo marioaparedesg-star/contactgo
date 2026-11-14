@@ -217,14 +217,6 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
   <!-- TOTALES -->
   <tr><td style="padding:12px 32px 0;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-      <tr>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;border-bottom:1px solid #f3f4f6;">Subtotal (sin ITBIS)</td>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;text-align:right;border-bottom:1px solid #f3f4f6;">RD$${subtotalSinITBIS.toLocaleString()}</td>
-      </tr>
-      <tr>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;border-bottom:1px solid #f3f4f6;">ITBIS (18%)</td>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;text-align:right;border-bottom:1px solid #f3f4f6;">RD$${itbis.toLocaleString()}</td>
-      </tr>
       ${descNum > 0 ? `<tr>
         <td style="padding:8px 16px;font-size:12px;color:#16a34a;border-bottom:1px solid #f3f4f6;">Descuento</td>
         <td style="padding:8px 16px;font-size:12px;color:#16a34a;text-align:right;border-bottom:1px solid #f3f4f6;">-RD$${descNum.toLocaleString()}</td>
@@ -396,7 +388,11 @@ export async function POST(req: NextRequest) {
       : `ContactGo · Tu pedido #${pedidoId} está ${estadoLabel} 👁️`
 
     // Email al cliente + log de entrega — con protección contra duplicados
-    const emailTemplate = evento === 'nuevo_pedido' ? 'confirmacion_orden' : 'actualizacion_estado'
+    const emailTemplate = evento === 'nuevo_pedido'
+      ? 'confirmacion_orden'
+      : `actualizacion_estado_${nuevoEstadoSeguro}`
+    let emailClienteStatus: 'sent' | 'error' | 'skipped' = 'skipped'
+    let emailClienteError: string | undefined
     if (order.cliente_email) {
       // Verificar si ya se envió este mismo email para esta orden (evita duplicados
       // por reintentos, doble-clic del cliente, o pruebas manuales del endpoint)
@@ -411,6 +407,8 @@ export async function POST(req: NextRequest) {
           subject,
           html: emailCliente(order, itemsList, evento, nuevo_estado),
         })
+        emailClienteStatus = emailError ? 'error' : 'sent'
+        emailClienteError = emailError
         // Registrar en email_log para auditoría — nombres de columna correctos
         // (bug anterior: usaba tipo/asunto/enviado/error_msg que no existen en la tabla real)
         await sbAdmin.from('email_log').insert({
@@ -422,8 +420,12 @@ export async function POST(req: NextRequest) {
           status:      emailError ? 'error' : 'sent',
         }).then(() => {})
       } else {
-        console.log('[notify] Email ya enviado antes, se omite duplicado:', emailTemplate, order_id)
+        emailClienteStatus = 'sent'
+        console.log('[notify] Email ya enviado para este estado, se omite duplicado:', emailTemplate, order_id)
       }
+    } else {
+      emailClienteStatus = 'skipped'
+      emailClienteError = 'La orden no tiene correo electrónico de cliente'
     }
 
     // WhatsApp al cliente — cuando pedido cambia de estado (TODOS los estados)
@@ -448,7 +450,11 @@ export async function POST(req: NextRequest) {
             headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
             body: JSON.stringify({ tipo: tipoWA, order_id }),
           })
-          const d = await r.json()
+          const responseText = await r.text()
+          let d: any
+          try { d = JSON.parse(responseText) } catch {
+            d = { ok: false, error: `Respuesta no JSON (HTTP ${r.status}): ${responseText.slice(0, 180)}` }
+          }
           console.log('[notify] WA estado:', nuevo_estado, d?.ok ? 'OK' : d)
         } catch (e) {
           console.error('[notify] WA error:', e)
@@ -470,7 +476,11 @@ export async function POST(req: NextRequest) {
           headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET ?? '' },
           body: JSON.stringify({ tipo: 'pedido_pagado', order_id }),
         })
-        const d = await r.json()
+        const responseText = await r.text()
+          let d: any
+          try { d = JSON.parse(responseText) } catch {
+            d = { ok: false, error: `Respuesta no JSON (HTTP ${r.status}): ${responseText.slice(0, 180)}` }
+          }
         console.log('[notify] WA pedido_pagado:', d?.ok ? 'OK' : d)
       } catch (e) {
         console.error('[notify] WA error:', e)
@@ -577,7 +587,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ ok: true })
+    return NextResponse.json({ ok: emailClienteStatus !== 'error', email_cliente: emailClienteStatus, ...(emailClienteError ? { email_error: emailClienteError } : {}) }, { status: emailClienteStatus === 'error' ? 502 : 200 })
   } catch (err: any) {
     console.error('[notify]', err)
     return NextResponse.json({ error: err.message }, { status: 500 })
