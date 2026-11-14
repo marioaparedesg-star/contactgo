@@ -11,7 +11,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/envios-y-entregas' },
   title: 'Envíos y Entregas | ContactGo — Lentes de Contacto RD',
-  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Transporte: 24-48 horas en Santo Domingo y 2-4 días en el resto del país. Los tiempos estimados de entrega varían según el tipo de lente.',
+  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos: 24-48 horas en Santo Domingo y 24-72 horas en el interior. Los tiempos estimados de entrega varían según el tipo de lente.',
 }
 
 export default function EnviosPage() {
@@ -29,12 +29,12 @@ export default function EnviosPage() {
           {/* Tiempos */}
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">⏱️ Tiempos de entrega por tipo de lente</h2>
-            <p className="text-gray-500 text-sm mb-4">Aplican a toda la República Dominicana — el tiempo depende del tipo de lente, no de tu zona.</p>
-            <div className="grid md:grid-cols-3 gap-4">
+            <p className="text-gray-500 text-sm mb-4">Los tiempos dependen del tipo de lente y, para productos esféricos, también del destino.</p>
+            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
               <div className="bg-green-50 border border-green-200 rounded-2xl p-5">
-                <p className="font-bold text-green-800 text-lg mb-1">🚀 24 a 48 horas</p>
+                <p className="font-bold text-green-800 text-lg mb-1">🚀 24 a 48 / 24 a 72 h</p>
                 <p className="text-green-700 text-sm font-semibold mb-2">Lentes esféricos</p>
-                <p className="text-gray-600 text-sm">Miopía o hipermetropía simple. Alta disponibilidad, procesamiento y despacho inmediato.</p>
+                <p className="text-gray-600 text-sm">Santo Domingo: 24-48 horas. Interior del país: 24-72 horas.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
                 <p className="font-bold text-amber-800 text-lg mb-1">📦 1 a 5 días</p>
@@ -42,9 +42,19 @@ export default function EnviosPage() {
                 <p className="text-gray-600 text-sm">Presbicia / vista cansada. Se piden al distribuidor según tu graduación exacta.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 40 días</p>
+                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 45 días</p>
                 <p className="text-amber-700 text-sm font-semibold mb-2">Lentes tóricos</p>
-                <p className="text-gray-600 text-sm">Astigmatismo. La entrega estimada es de 25 a 40 días debido a la configuración específica de cilindro y eje.</p>
+                <p className="text-gray-600 text-sm">Astigmatismo. Se solicitan según la combinación específica de cilindro y eje.</p>
+              </div>
+              <div className="bg-pink-50 border border-pink-200 rounded-2xl p-5">
+                <p className="font-bold text-pink-800 text-lg mb-1">🚀 Al día siguiente</p>
+                <p className="text-pink-700 text-sm font-semibold mb-2">Lentes de color</p>
+                <p className="text-gray-600 text-sm">Productos de color disponibles con entrega estimada al día siguiente.</p>
+              </div>
+              <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5">
+                <p className="font-bold text-teal-800 text-lg mb-1">🚀 24 horas</p>
+                <p className="text-teal-700 text-sm font-semibold mb-2">Soluciones y gotas</p>
+                <p className="text-gray-600 text-sm">Productos de cuidado visual con entrega estimada en 24 horas.</p>
               </div>
             </div>
           </div>
