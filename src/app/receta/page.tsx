@@ -89,7 +89,7 @@ export default function RecetaPage() {
               body: JSON.stringify({
                 tipo,
                 od_sph: rx.sph ?? 0, oi_sph: rx.sph ?? 0,
-                od_cyl: rx.cyl ?? 0,
+                od_cyl: rx.cyl ?? 0, oi_cyl: rx.cyl ?? 0,
               })
             })
             const json = await res.json()
@@ -110,7 +110,7 @@ export default function RecetaPage() {
       // ── CASO ESTANDAR: 1 tipo de producto para ambos ojos ─────────────
       const res = await fetch('/api/receta/recomendar', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0 })
+        body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0, oi_cyl: conv.oi.cyl ?? 0 })
       })
       const json = await res.json()
       const lista = json.productos ?? []
@@ -131,8 +131,7 @@ export default function RecetaPage() {
       oi: { sph: parseN(oi.sph) ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
     }
     setPendingRx(rx)
-    // Pop-up de captura aparece INMEDIATAMENTE al dar clic — cerrable con X
-    if (!leadCaptured) { setShowLead(true); return }
+    // El cálculo es libre y no exige registro ni datos personales.
     await ejecutarCalculo(rx)
   }
 
@@ -155,7 +154,7 @@ export default function RecetaPage() {
     const nombreCompleto = `${leadNombre.trim()} ${leadApellido.trim()}`
     if (!tieneNombreYApellido(nombreCompleto)) { toast.error(ERROR_NOMBRE_INCOMPLETO); return }
     if (telClean.length < 10) { toast.error('Ingresa tu número de WhatsApp (10 dígitos)'); return }
-    const conv = convertGlassesToContacts(pendingRx)
+    const conv = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto')
     let saveOk = false
     try {
       const res = await fetch('/api/calculator-leads/save', {
