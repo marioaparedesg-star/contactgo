@@ -21,7 +21,10 @@ async function notificarEstadoPedido(order_id: string, nuevo_estado: string) {
   try {
     const response = await fetch(`${base}/api/notify`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-secret': process.env.CRON_SECRET ?? '',
+      },
       body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado }),
     })
     const result = await response.json().catch(() => ({ error: 'Respuesta inválida del servicio de correo' }))
