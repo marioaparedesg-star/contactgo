@@ -9,9 +9,10 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 const WA = (process.env.NEXT_PUBLIC_WHATSAPP ?? '18096942268').replace(/\D/g, '')
 
 function esc(value: unknown): string {
-  return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  const entities: Record<string, string> = {
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-  })[char]!)
+  }
+  return String(value ?? '').replace(/[&<>"']/g, (char) => entities[char] ?? char)
 }
 function money(value: unknown): string {
   return `RD$${Number(value ?? 0).toLocaleString('es-DO', { maximumFractionDigits: 2 })}`
