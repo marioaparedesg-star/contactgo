@@ -1260,20 +1260,28 @@ export default function CuentaPage() {
                 ))}
                 <div className="flex gap-2">
                   <button onClick={async () => {
+                    if (!recetaForm.od_sph && !recetaForm.oi_sph) { toast.error('Ingresa al menos la esfera de un ojo.'); return }
+                    const axisValues = [recetaForm.od_axis, recetaForm.oi_axis].filter(Boolean).map(Number)
+                    if (axisValues.some(v => !Number.isInteger(v) || v < 0 || v > 180)) { toast.error('El eje debe estar entre 0° y 180°.'); return }
                     const diagnostico = detectarDiagnostico(recetaForm)
                     const sb = createClient()
-                    const { data } = await sb.from('saved_prescriptions').insert({
-                      user_id: user.id, ...recetaForm, diagnostico,
-                      fecha_emision: fechaEmisionForm || null,
+                    const { data, error } = await sb.from('saved_prescriptions').insert({
+                      user_id: user.id,
+                      nombre: recetaForm.nombre.trim() || 'Mi receta',
+                      od_sph: recetaForm.od_sph ? Number(recetaForm.od_sph) : null,
+                      od_cyl: recetaForm.od_cyl ? Number(recetaForm.od_cyl) : null,
+                      od_axis: recetaForm.od_axis ? Number(recetaForm.od_axis) : null,
+                      oi_sph: recetaForm.oi_sph ? Number(recetaForm.oi_sph) : null,
+                      oi_cyl: recetaForm.oi_cyl ? Number(recetaForm.oi_cyl) : null,
+                      oi_axis: recetaForm.oi_axis ? Number(recetaForm.oi_axis) : null,
+                      add_power: recetaForm.od_add ? Number(recetaForm.od_add) : recetaForm.oi_add ? Number(recetaForm.oi_add) : null,
+                      notas: diagnostico || null,
                     }).select().single()
-                    if (data) {
-                      setRecetas(rs => [data, ...rs])
-                      setAgregandoReceta(false)
-                      setRecetaAnalizada(null)
-                      setRecetaImagenPreview(null)
-                      setFechaEmisionForm('')
-                      setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
-                    }
+                    if (error || !data) { toast.error('No se pudo guardar la receta. Inténtalo de nuevo.'); return }
+                    setRecetas(rs => [data, ...rs])
+                    setAgregandoReceta(false)
+                    setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
+                    toast.success('Receta guardada correctamente.')
                   }} className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
                   <button onClick={() => { setAgregandoReceta(false); setRecetaAnalizada(null); setFechaEmisionForm('') }}
                     className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
