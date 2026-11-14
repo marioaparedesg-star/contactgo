@@ -78,7 +78,7 @@ export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event:
   const name = esc(String(order.cliente_nombre ?? 'Cliente').trim().split(/\s+/)[0])
   const total = money(order.total)
   const shipping = Number(order.envio ?? 0)
-  const trackingUrl = order.numero_orden ? `${SITE}/pedido/${encodeURIComponent(String(order.numero_orden))}` : `${SITE}/cuenta`
+  const trackingUrl = `${SITE}/cuenta/pedidos`
   const isPaid = order.pago_estado === 'pagado'
   const delivery = deliveryText(items)
   const eventTitle = event === 'nuevo_pedido' && isPaid ? 'Pedido recibido y pago confirmado' : meta.title
