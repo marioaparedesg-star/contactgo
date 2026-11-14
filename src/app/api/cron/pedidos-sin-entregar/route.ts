@@ -90,7 +90,7 @@ async function enviarWhatsApp(total: number, lista: string) {
       language: { code: 'es' },
       components: [{ type: 'body', parameters: [
         { type: 'text', text: String(total) },
-        { type: 'text', text: lista },
+        { type: 'text', text: lista.replace(/[\r\n\t ]+/g, ' ').trim() },
       ] }],
     },
   }
