@@ -82,12 +82,13 @@ export default function CheckoutPage() {
   const [authTel, setAuthTel] = useState('')
   const [authLoading, setAuthLoading] = useState(false)
   const [authMsg, setAuthMsg] = useState('')
-  const [step, setStep] = useState<1|2|3>(3)
+  const [step, setStep] = useState<1|2|3>(1)
   const [savedAddresses, setSavedAddresses] = useState<any[]>([])
+  const [addressesLoaded, setAddressesLoaded] = useState(false)
   const [selectedAddrId, setSelectedAddrId] = useState<string|null>(null)
   const [showAddressEditor, setShowAddressEditor] = useState(false)
   const [savingAddress, setSavingAddress] = useState(false)
-  const [addressDraft, setAddressDraft] = useState({ etiqueta: 'Casa', direccion: '', ciudad: 'Santo Domingo', referencias: '' })
+  const [addressDraft, setAddressDraft] = useState({ etiqueta: 'Casa', direccion: '', sector: '', complemento: '', ciudad: 'Santo Domingo', ciudadPersonalizada: '', provincia: 'Santo Domingo', referencias: '' })
   // El checkout público acepta únicamente pago con tarjeta vía AZUL.
   // Los cobros en efectivo siguen disponibles en el panel administrativo.
 
@@ -124,15 +125,16 @@ export default function CheckoutPage() {
           if (emailGuardado) setValue('email', emailGuardado)
           if (telefonoGuardado) setValue('telefono', telefonoGuardado)
         })
-        sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: a }) => {
-          if (a && a.length > 0) {
+        sb.from('addresses').select('*').eq('user_id', user.id).order('principal', { ascending: false }).then(({ data: a, error }) => {
+          if (!error && a && a.length > 0) {
             setSavedAddresses(a)
             const principal = a.find((x:any) => x.principal) ?? a[0]
             setSelectedAddrId(principal.id)
             setValue('direccion', principal.direccion)
             if (principal.ciudad) setValue('ciudad', principal.ciudad)
           }
-        })
+          setAddressesLoaded(true)
+        }).catch(() => setAddressesLoaded(true))
       }
     })
   }, [items, router])
@@ -141,28 +143,39 @@ export default function CheckoutPage() {
     setAddressDraft({
       etiqueta: addr?.etiqueta ?? 'Casa',
       direccion: addr?.direccion ?? getValues('direccion') ?? '',
+      sector: '',
+      complemento: '',
       ciudad: addr?.ciudad ?? getValues('ciudad') ?? 'Santo Domingo',
+      ciudadPersonalizada: '',
+      provincia: addr?.provincia ?? 'Santo Domingo',
       referencias: addr?.referencias ?? '',
     })
     setShowAddressEditor(true)
   }
 
   const guardarDireccionCheckout = async () => {
-    if (addressDraft.direccion.trim().length < 5 || !addressDraft.ciudad.trim()) {
-      toast.error('Completa la dirección y la ciudad')
+    const ciudadFinal = addressDraft.ciudad === 'Otra ciudad' ? addressDraft.ciudadPersonalizada.trim() : addressDraft.ciudad.trim()
+    if (addressDraft.direccion.trim().length < 5 || !ciudadFinal || (addressDraft.ciudad === 'Otra ciudad' && !ciudadFinal)) {
+      toast.error('Completa la calle, número y ciudad de entrega')
       return
     }
     setSavingAddress(true)
     try {
       const sb = createClient()
       const { data: { user } } = await sb.auth.getUser()
-      if (!user) { toast.error('Inicia sesión para guardar tu dirección'); return }
+      if (!user) throw new Error('Tu sesión expiró. Inicia sesión para guardar la dirección.')
+      const direccionBase = [addressDraft.direccion.trim(), addressDraft.sector.trim() ? `Sector: ${addressDraft.sector.trim()}` : '', addressDraft.complemento.trim() ? `Edificio / apartamento: ${addressDraft.complemento.trim()}` : ''].filter(Boolean).join(' · ')
+      const provinciaFinal = addressDraft.provincia.trim() || null
+      const referenciasFinal = addressDraft.referencias.trim() || null
+      const direccionFormateada = [direccionBase, ciudadFinal, provinciaFinal ? `Provincia: ${provinciaFinal}` : '', referenciasFinal ? `Referencia para llegar: ${referenciasFinal}` : ''].filter(Boolean).join(' · ')
       const payload = {
         user_id: user.id,
         etiqueta: addressDraft.etiqueta,
-        direccion: addressDraft.direccion.trim(),
-        ciudad: addressDraft.ciudad.trim(),
-        referencias: addressDraft.referencias.trim() || null,
+        direccion: direccionBase,
+        ciudad: ciudadFinal,
+        provincia: provinciaFinal,
+        direccion_formateada: direccionFormateada,
+        referencias: referenciasFinal,
         telefono: getValues('telefono') || null,
       }
       let result: any
@@ -173,14 +186,27 @@ export default function CheckoutPage() {
       }
       if (result.error || !result.data) throw result.error ?? new Error('No se pudo guardar la dirección')
       const saved = result.data
+      // Actualizar el estado local inmediatamente: si falla la sincronización del perfil,
+      // el siguiente intento actualizará esta misma dirección en vez de crear un duplicado.
       setSavedAddresses(prev => selectedAddrId
         ? prev.map(a => a.id === saved.id ? saved : a)
         : [...prev, saved])
       setSelectedAddrId(saved.id)
       setValue('direccion', saved.direccion, { shouldValidate: true })
       setValue('ciudad', saved.ciudad, { shouldValidate: true })
+      const { data: profile, error: profileError } = await sb.from('profiles').update({
+        direccion: saved.direccion,
+        ciudad: saved.ciudad,
+        direccion_completa: saved.direccion_formateada,
+      }).eq('id', user.id).select('id').maybeSingle()
+      if (profileError || !profile) throw profileError ?? new Error('La dirección se guardó, pero no pudimos sincronizarla con tu perfil. Intenta guardar nuevamente.')
       setShowAddressEditor(false)
-      toast.success('Dirección guardada')
+      toast.success('Dirección guardada en tu perfil y libreta de direcciones')
+      if (!disclaimerAceptado) setShowDisclaimer(true)
+      else {
+        setStep(3)
+        trackCheckoutReviewed(items.map((i: any) => ({ id: i.product.id, nombre: i.product.nombre, precio: Number(i.precio_final ?? i.product.precio) })), subtotal())
+      }
     } catch (err: any) {
       toast.error(err?.message ?? 'No se pudo guardar la dirección')
     } finally {
@@ -279,10 +305,12 @@ export default function CheckoutPage() {
 
       // 1. Crear la orden en Supabase primero (necesitamos el ID para la URL de retorno)
       const orderNum = `CG-${Date.now().toString().slice(-8)}`
+      const direccionSeleccionada = savedAddresses.find(a => a.id === selectedAddrId)
+      const direccionPedido = direccionSeleccionada?.direccion_formateada || [data.direccion, data.ciudad, direccionSeleccionada?.provincia, direccionSeleccionada?.referencias ? `Referencia para llegar: ${direccionSeleccionada.referencias}` : ''].filter(Boolean).join(' · ')
       const { data: order, error } = await sb.from('orders').insert({
         user_id: user?.id ?? null,
         cliente_nombre: nombreCompleto, cliente_email: data.email, cliente_telefono: data.telefono,
-        direccion_texto: `${data.direccion}, ${data.ciudad === 'Otra ciudad' && data.ciudadPersonalizada ? data.ciudadPersonalizada : data.ciudad}${savedAddresses.find(a => a.id === selectedAddrId)?.referencias ? ` · Referencia: ${savedAddresses.find(a => a.id === selectedAddrId)?.referencias}` : ''}`,
+        direccion_texto: direccionPedido,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
         descuento, metodo_pago: metodoPagoReal, pago_estado: 'pendiente',
         numero_orden: orderNum,
@@ -390,7 +418,7 @@ export default function CheckoutPage() {
             cliente_nombre:    nombreCompleto,
             cliente_email:     data.email,
             cliente_telefono:  data.telefono,
-            direccion_texto:   `${data.direccion}, ${data.ciudad}`,
+            direccion_texto:   direccionPedido,
             items:             grp.items_snap,
             frecuencia,
             descuento_pct:     grp.descuento_pct,
@@ -495,6 +523,7 @@ export default function CheckoutPage() {
     if (step === 1) {
       const ok = await trigger(['nombre','apellido','email','telefono'])
       if (!ok) return
+      if (!addressesLoaded) { toast('Estamos cargando tus direcciones…'); return }
       try {
         const sb2 = createClient()
         const vals = getValues()
@@ -538,35 +567,28 @@ export default function CheckoutPage() {
         }
       } catch { /* no bloquear flujo si falla */ }
       setStep(2)
+      if (savedAddresses.length === 0) abrirEditorDireccion()
     } else if (step === 2) {
       const ok = await trigger(['direccion','ciudad'])
       if (!ok) return
+      if (!selectedAddrId || !savedAddresses.some(a => a.id === selectedAddrId)) {
+        setShowAddressEditor(true)
+        toast.error('Guarda tu dirección de entrega para continuar')
+        return
+      }
+      const sb2 = createClient()
+      const { data: { user: u } } = await sb2.auth.getUser()
+      const selected = savedAddresses.find(a => a.id === selectedAddrId)
+      if (u && selected) {
+        const direccionFormateada = selected.direccion_formateada || [selected.direccion, selected.ciudad, selected.provincia, selected.referencias ? `Referencia para llegar: ${selected.referencias}` : ''].filter(Boolean).join(' · ')
+        const { error: profileError } = await sb2.from('profiles').update({
+          direccion: selected.direccion,
+          ciudad: selected.ciudad,
+          direccion_completa: direccionFormateada,
+        }).eq('id', u.id)
+        if (profileError) { toast.error('No pudimos actualizar tu dirección en el perfil. Inténtalo nuevamente.'); return }
+      }
       if (!disclaimerAceptado) { setShowDisclaimer(true); return }
-      // Guardar dirección principal para pre-llenar próxima compra
-      try {
-        const sb2 = createClient()
-        const { data: { user: u } } = await sb2.auth.getUser()
-        const vals = getValues()
-        if (u && vals.direccion) {
-          const nombreCompletoVals = vals.nombre && vals.apellido ? `${vals.nombre.trim()} ${vals.apellido.trim()}` : (vals.nombre ?? null)
-          const ciudadFinal = vals.ciudad === 'Otra ciudad' && (vals as any).ciudadPersonalizada ? (vals as any).ciudadPersonalizada : vals.ciudad
-          if (selectedAddrId) {
-            // Actualiza solo la dirección elegida; nunca sobrescribe por accidente
-            // la dirección principal cuando el cliente selecciona otra guardada.
-            await sb2.from('addresses').update({
-              direccion: vals.direccion, ciudad: ciudadFinal, telefono: vals.telefono ?? null,
-            }).eq('id', selectedAddrId).eq('user_id', u.id)
-          } else {
-            const { data: existing } = await sb2.from('addresses').select('id').eq('user_id', u.id).eq('principal', true).maybeSingle()
-            if (!existing) {
-              await sb2.from('addresses').insert({
-                user_id: u.id, nombre: nombreCompletoVals, direccion: vals.direccion,
-                ciudad: ciudadFinal, telefono: vals.telefono ?? null, principal: true,
-              })
-            }
-          }
-        }
-      } catch { /* silencioso */ }
       setStep(3)
       trackCheckoutReviewed(items.map((i: any) => ({ id: i.product.id, nombre: i.product.nombre, precio: Number(i.precio_final ?? i.product.precio) })), subtotal())
     }
@@ -768,7 +790,7 @@ export default function CheckoutPage() {
                     </div>
                     <div>
                       <p className="font-bold text-gray-900 text-base">Dirección de entrega</p>
-                      {step > 2 && <p className="text-xs text-gray-400 mt-0.5">{getValues('direccion')}, {getValues('ciudad')}</p>}
+                      {step > 2 && <p className="text-xs text-gray-400 mt-0.5">{savedAddresses.find(a => a.id === selectedAddrId)?.direccion_formateada || [getValues('direccion'), getValues('ciudad')].filter(Boolean).join(' · ')}</p>}
                     </div>
                   </div>
                   {step > 2 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
@@ -777,108 +799,100 @@ export default function CheckoutPage() {
                 {step === 2 && (
                   <div className="px-4 sm:px-6 pb-5 sm:pb-6 space-y-4 border-t border-slate-100 pt-5">
 
-                    {/* Selector de direcciones guardadas */}
-                    {savedAddresses.length > 0 ? (
+                    {/* Libreta de direcciones y formulario ampliado */}
+                    {savedAddresses.length > 0 && (
                       <div className="space-y-2">
-                        <p className="text-xs font-bold text-gray-500 uppercase">Selecciona tu dirección</p>
+                        <p className="text-xs font-bold text-gray-500 uppercase">Tus direcciones guardadas</p>
                         {savedAddresses.map((addr:any) => {
-                          const ICON: Record<string,string> = { Casa:'🏠', Trabajo:'💼', Otro:'📍' }
                           const isSelected = selectedAddrId === addr.id
+                          const detalle = addr.direccion_formateada || [addr.direccion, addr.ciudad, addr.provincia, addr.referencias].filter(Boolean).join(' · ')
                           return (
-                            <button key={addr.id} type="button"
-                              onClick={() => {
-                                setSelectedAddrId(addr.id)
-                                setValue('direccion', addr.direccion)
-                                if (addr.ciudad) setValue('ciudad', addr.ciudad)
-                              }}
-                              className={`w-full text-left p-3 rounded-xl border-2 transition-all ${isSelected ? 'border-primary-500 bg-teal-50/50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                            <button key={addr.id} type="button" onClick={() => {
+                              setSelectedAddrId(addr.id)
+                              setValue('direccion', addr.direccion, { shouldValidate: true })
+                              setValue('ciudad', addr.ciudad, { shouldValidate: true })
+                            }} className={`w-full text-left p-3 rounded-xl border-2 transition-all ${isSelected ? 'border-primary-500 bg-teal-50/50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
                               <div className="flex items-start gap-2">
-                                <span className="text-base shrink-0 mt-0.5">{ICON[addr.etiqueta ?? 'Casa'] ?? '📍'}</span>
+                                <MapPin className="w-4 h-4 mt-0.5 text-teal-600 shrink-0" />
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-bold text-gray-900 flex items-center gap-2">
-                                    {addr.etiqueta ?? 'Dirección'}
-                                    {addr.principal && <span className="text-[10px] font-semibold text-primary-600 bg-teal-50 px-1.5 py-0.5 rounded-full">Principal</span>}
-                                  </p>
-                                  <p className="text-xs text-gray-600 truncate">{addr.direccion}</p>
-                                  <p className="text-xs text-gray-400">{addr.ciudad}</p>
-                                  {addr.referencias && <p className="text-xs text-gray-400 italic">{addr.referencias}</p>}
+                                  <p className="text-sm font-bold text-gray-900">{addr.etiqueta || 'Dirección'} {addr.principal && <span className="text-[10px] font-semibold text-primary-600 bg-teal-50 px-1.5 py-0.5 rounded-full ml-1">Principal</span>}</p>
+                                  <p className="text-xs text-gray-600 whitespace-normal break-words">{detalle}</p>
                                 </div>
-                                {isSelected && <div className="w-5 h-5 bg-teal-500 rounded-full flex items-center justify-center shrink-0"><svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/></svg></div>}
+                                {isSelected && <Check className="w-5 h-5 text-teal-600 shrink-0" />}
                               </div>
-
                             </button>
                           )
                         })}
-                        <div className="flex flex-wrap gap-3 pt-2">
-                          <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
-                            className="text-xs text-primary-600 font-semibold flex items-center gap-1">
-                            <MapPin className="w-3 h-3"/> Agregar dirección de entrega
-                          </button>
-                          {selectedAddrId && (
-                            <button type="button" onClick={() => abrirEditorDireccion(savedAddresses.find(a => a.id === selectedAddrId))}
-                              className="text-xs text-primary-600 font-semibold">Editar dirección seleccionada</button>
-                          )}
+                      </div>
+                    )}
+
+                    {!showAddressEditor && (
+                      <div className="flex flex-wrap gap-3">
+                        <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }} className="text-sm text-primary-600 font-semibold flex items-center gap-1">
+                          <MapPin className="w-4 h-4"/> {savedAddresses.length ? 'Agregar otra dirección' : 'Agregar dirección de entrega'}
+                        </button>
+                        {selectedAddrId && (
+                          <button type="button" onClick={() => abrirEditorDireccion(savedAddresses.find(a => a.id === selectedAddrId))} className="text-sm text-primary-600 font-semibold">Editar dirección seleccionada</button>
+                        )}
+                      </div>
+                    )}
+
+                    {showAddressEditor && (
+                      <div className="rounded-2xl border border-teal-200 bg-teal-50/40 p-4 sm:p-5 space-y-3">
+                        <div>
+                          <p className="text-base font-bold text-gray-900">{selectedAddrId ? 'Editar dirección de entrega' : 'Nueva dirección de entrega'}</p>
+                          <p className="text-xs text-gray-500 mt-1">Incluye todos los detalles que ayuden al mensajero a encontrar tu ubicación.</p>
                         </div>
-                        {showAddressEditor && (
-                          <div className="rounded-xl border border-teal-200 bg-teal-50/40 p-3 space-y-3">
-                            <p className="text-sm font-bold text-gray-900">{selectedAddrId ? 'Editar dirección' : 'Nueva dirección de envío'}</p>
-                            <div className="flex gap-2">
-                              {['Casa','Trabajo','Otro'].map(label => (
-                                <button key={label} type="button" onClick={() => setAddressDraft(d => ({ ...d, etiqueta: label }))}
-                                  className={`flex-1 rounded-lg border px-2 py-2 text-xs font-semibold ${addressDraft.etiqueta === label ? 'border-teal-500 bg-teal-500 text-white' : 'border-gray-200 bg-white text-gray-600'}`}>
-                                  {label}
-                                </button>
-                              ))}
-                            </div>
-                            <input value={addressDraft.direccion} onChange={e => setAddressDraft(d => ({ ...d, direccion: e.target.value }))}
-                              placeholder="Calle, número, sector *" className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm" />
-                            <select value={addressDraft.ciudad} onChange={e => setAddressDraft(d => ({ ...d, ciudad: e.target.value }))}
-                              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm">
+                        <div className="flex gap-2">
+                          {['Casa','Trabajo','Otro'].map(label => (
+                            <button key={label} type="button" onClick={() => setAddressDraft(d => ({ ...d, etiqueta: label }))} className={`flex-1 rounded-lg border px-2 py-2.5 text-sm font-semibold ${addressDraft.etiqueta === label ? 'border-teal-500 bg-teal-500 text-white' : 'border-gray-200 bg-white text-gray-600'}`}>{label}</button>
+                          ))}
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 mb-1">Calle, avenida, número o residencial *</label>
+                          <textarea value={addressDraft.direccion} onChange={e => setAddressDraft(d => ({ ...d, direccion: e.target.value }))} placeholder="Ej.: Av. Winston Churchill #25, Residencial Los Robles, casa 4" rows={2} maxLength={300} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm resize-y focus:outline-none focus:border-teal-500" />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-600 mb-1">Sector o urbanización</label>
+                            <input value={addressDraft.sector} onChange={e => setAddressDraft(d => ({ ...d, sector: e.target.value }))} placeholder="Ej.: Piantini, Los Prados" maxLength={120} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-600 mb-1">Edificio, torre, apartamento o nivel</label>
+                            <input value={addressDraft.complemento} onChange={e => setAddressDraft(d => ({ ...d, complemento: e.target.value }))} placeholder="Ej.: Torre B, apto. 4-C, piso 4" maxLength={160} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm" />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-600 mb-1">Ciudad o municipio *</label>
+                            <select value={addressDraft.ciudad} onChange={e => setAddressDraft(d => ({ ...d, ciudad: e.target.value }))} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm">
                               {CIUDADES.map(city => <option key={city} value={city}>{city}</option>)}
                             </select>
-                            <input value={addressDraft.referencias} onChange={e => setAddressDraft(d => ({ ...d, referencias: e.target.value }))}
-                              placeholder="Referencias (opcional)" className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm" />
-                            <div className="flex gap-2">
-                              <button type="button" onClick={() => setShowAddressEditor(false)} className="flex-1 rounded-lg bg-white border border-gray-200 py-2 text-sm">Cancelar</button>
-                              <button type="button" disabled={savingAddress} onClick={guardarDireccionCheckout}
-                                className="flex-1 rounded-lg bg-teal-500 text-white py-2 text-sm font-bold disabled:opacity-50">
-                                {savingAddress ? 'Guardando…' : 'Guardar dirección'}
-                              </button>
-                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-600 mb-1">Provincia</label>
+                            <input value={addressDraft.provincia} onChange={e => setAddressDraft(d => ({ ...d, provincia: e.target.value }))} placeholder="Ej.: Santo Domingo" maxLength={100} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm" />
+                          </div>
+                        </div>
+                        {addressDraft.ciudad === 'Otra ciudad' && (
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-600 mb-1">Especifica la ciudad o municipio *</label>
+                            <input value={addressDraft.ciudadPersonalizada} onChange={e => setAddressDraft(d => ({ ...d, ciudadPersonalizada: e.target.value }))} placeholder="Escribe tu ciudad" maxLength={100} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm" />
                           </div>
                         )}
-                      </div>
-                    ) : (
-                      /* Sin direcciones guardadas — input manual */
-                      <div className="space-y-3">
-                        <div className="relative">
-                          <MapPin className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
-                          <label htmlFor="direccion" className="sr-only">Dirección</label>
-                          <input id="direccion" {...register('direccion')} placeholder="Calle, número, sector, referencias" autoComplete="street-address"
-                            aria-label="Dirección de entrega"
-                            className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors" />
-                          {errors.direccion && <p className="text-red-500 text-xs mt-1">⚠️ {errors.direccion.message}</p>}
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 mb-1">Referencias para encontrar la dirección</label>
+                          <textarea value={addressDraft.referencias} onChange={e => setAddressDraft(d => ({ ...d, referencias: e.target.value }))} placeholder="Ej.: Frente al supermercado..., portón negro, casa de dos niveles, entrar por la calle lateral. Si es necesario, llamar al llegar." rows={4} maxLength={1000} className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm resize-y focus:outline-none focus:border-teal-500" />
+                          <p className="text-[11px] text-gray-400 text-right">{addressDraft.referencias.length}/1000 caracteres</p>
                         </div>
-                        <select {...register('ciudad')}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 bg-white transition-colors">
-                          <option value="">Selecciona tu ciudad</option>
-                          {CIUDADES.map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
-                        {watch('ciudad') === 'Otra ciudad' && (
-                          <input
-                            {...register('ciudadPersonalizada')}
-                            placeholder="Escribe tu ciudad *"
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary-500 transition-colors mt-2"
-                          />
-                        )}
-                        {errors.ciudad && <p className="text-red-500 text-xs">⚠️ {errors.ciudad.message}</p>}
-                        {isLoggedIn && (
-                          <button type="button" onClick={() => { setSelectedAddrId(null); abrirEditorDireccion() }}
-                            className="text-xs text-primary-600 font-semibold flex items-center gap-1">
-                            <MapPin className="w-3 h-3"/> Agregar y guardar dirección de entrega
-                          </button>
-                        )}
+                        <div className="flex gap-2">
+                          <button type="button" onClick={() => setShowAddressEditor(false)} className="flex-1 rounded-xl bg-white border border-gray-200 py-3 text-sm font-semibold">Cancelar</button>
+                          <button type="button" disabled={savingAddress} onClick={guardarDireccionCheckout} className="flex-1 rounded-xl bg-teal-500 hover:bg-teal-600 text-white py-3 text-sm font-bold disabled:opacity-50">{savingAddress ? 'Guardando…' : 'Guardar dirección y continuar'}</button>
+                        </div>
                       </div>
+                    )}
+                    {!showAddressEditor && selectedAddrId && (
+                      <p className="text-xs text-green-700 bg-green-50 rounded-lg p-3">Dirección seleccionada. Puedes continuar al siguiente paso.</p>
                     )}
 
                     {items.some(i => i.product.tipo === 'torico') && (
