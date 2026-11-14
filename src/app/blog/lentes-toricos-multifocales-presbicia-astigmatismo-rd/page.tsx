@@ -48,7 +48,7 @@ export default function Page() {
 
       <p>El astigmatismo es una irregularidad en la curvatura de la córnea o el cristalino, presente desde temprana edad en la mayoría de casos. La presbicia, en cambio, es la pérdida gradual de la capacidad de enfocar objetos cercanos, causada por el endurecimiento natural del cristalino con la edad — aparece típicamente después de los 40 años, <strong>sin importar si ya tenías astigmatismo o no</strong>.</p>
 
-      <p>Es decir: si tenías astigmatismo a los 25, es muy probable que a los 45 tengas astigmatismo <em>y</em> presbicia al mismo tiempo. No es que "empeoró" tu condición — son dos cosas distintas que coexisten.</p>
+      <p>Es decir: si tenías astigmatismo a los 25, es muy probable que a los 45 tengas astigmatismo <em>y</em> presbicia al mismo tiempo. No es que &quot;empeoró&quot; tu condición — son dos cosas distintas que coexisten.</p>
 
       <h2>¿Cómo funcionan los lentes tórico-multifocales?</h2>
 

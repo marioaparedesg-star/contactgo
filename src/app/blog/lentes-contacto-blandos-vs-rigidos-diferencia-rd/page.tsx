@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Cuando investigas sobre lentes de contacto, tarde o temprano aparece el término "RGP" o "lentes rígidos". La gran mayoría de usuarios en República Dominicana (y en el mundo) usan <strong>lentes blandos</strong> — pero vale la pena entender la diferencia, sobre todo si tienes una condición ocular particular.</p>
+      <p>Cuando investigas sobre lentes de contacto, tarde o temprano aparece el término &quot;RGP&quot; o &quot;lentes rígidos&quot;. La gran mayoría de usuarios en República Dominicana (y en el mundo) usan <strong>lentes blandos</strong> — pero vale la pena entender la diferencia, sobre todo si tienes una condición ocular particular.</p>
 
       <h2>Lentes de contacto blandos (los más comunes)</h2>
       <p>Fabricados con hidrogel o silicona hidrogel — materiales flexibles que se adaptan a la forma de tu córnea. Son los que verás en el 95%+ del mercado, incluyendo todas las marcas que manejamos en ContactGo: ACUVUE, Biofinity, Air Optix, Bausch+Lomb, Avaira, entre otras.</p>

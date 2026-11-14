@@ -12,6 +12,7 @@
 // ============================================================
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { fetchWA } from '@/lib/whatsapp'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -93,7 +94,7 @@ async function enviarWhatsApp(total: number, lista: string) {
       ] }],
     },
   }
-  const r = await fetch(`${WA_API}/${process.env.WHATSAPP_PHONE_ID}/messages`, {
+  const r = await fetchWA('18096942268', {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

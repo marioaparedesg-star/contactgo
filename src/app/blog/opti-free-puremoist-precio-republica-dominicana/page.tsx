@@ -67,22 +67,22 @@ export default function Page() {
 
         <div className="space-y-3 mb-6">
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Precios actuales en ContactGo</p>
-            <a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
+            <Link href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Opti-Free Puremoist 90ml</p><p className="text-xs text-gray-500">Para llevar</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$650</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
+            </Link>
+            <Link href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Opti-Free Puremoist 300ml</p><p className="text-xs text-gray-500">Mayor rendimiento</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$650</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/dream-eye-solucion-lentes-contacto-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
+            </Link>
+            <Link href="/producto/dream-eye-solucion-lentes-contacto-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Dream Eye Solución 80ml</p><p className="text-xs text-gray-500">Alternativa accesible</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$650</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/prolub-hyfresh-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
+            </Link>
+            <Link href="/producto/prolub-hyfresh-solucion-multiproposito-dominicana" className="flex items-center justify-between p-4 border-2 border-blue-100 rounded-2xl hover:border-blue-300 hover:shadow-sm transition-all group bg-blue-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Prolub Hyfresh 60ml</p><p className="text-xs text-gray-500">Alta hidratación</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$900</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
+            </Link>
 
           <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
         </div>
@@ -97,19 +97,19 @@ export default function Page() {
                 <thead><tr className="bg-gray-50"><th className="p-3 text-left border border-gray-100 font-bold">Producto</th><th className="p-3 text-right border border-gray-100 font-bold">Precio RD$</th></tr></thead>
                 <tbody>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Opti-Free Puremoist 90ml</a><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Para llevar</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Opti-Free Puremoist 90ml</Link><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Para llevar</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$650</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Opti-Free Puremoist 300ml</a><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Mayor rendimiento</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/opti-free-puremoist-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Opti-Free Puremoist 300ml</Link><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Mayor rendimiento</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$650</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/dream-eye-solucion-lentes-contacto-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Dream Eye Solución 80ml</a><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Alternativa accesible</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/dream-eye-solucion-lentes-contacto-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Dream Eye Solución 80ml</Link><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Alternativa accesible</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$650</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/prolub-hyfresh-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Prolub Hyfresh 60ml</a><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Alta hidratación</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/prolub-hyfresh-solucion-multiproposito-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Prolub Hyfresh 60ml</Link><span className="ml-2 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full font-bold">Alta hidratación</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$900</td>
               </tr>
 
@@ -161,10 +161,10 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/soluciones" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todas las soluciones disponibles</p><p className="text-xs text-gray-500 mt-0.5">Opti-Free, Dream Eye, Prolub</p></a>
-            <a href="/blog/solucion-limpieza-lentes-contacto" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo elegir la mejor solución</p><p className="text-xs text-gray-500 mt-0.5">Guía completa de soluciones</p></a>
-            <a href="/blog/como-usar-lentes-de-contacto-primera-vez" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo limpiar los lentes correctamente</p><p className="text-xs text-gray-500 mt-0.5">Guía para principiantes</p></a>
-            <a href="/blog/dormir-con-lentes-de-contacto-riesgos" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Riesgos de no limpiar los lentes</p><p className="text-xs text-gray-500 mt-0.5">Por qué la higiene es crítica</p></a>
+            <Link href="/soluciones" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todas las soluciones disponibles</p><p className="text-xs text-gray-500 mt-0.5">Opti-Free, Dream Eye, Prolub</p></Link>
+            <Link href="/blog/solucion-limpieza-lentes-contacto" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo elegir la mejor solución</p><p className="text-xs text-gray-500 mt-0.5">Guía completa de soluciones</p></Link>
+            <Link href="/blog/como-usar-lentes-de-contacto-primera-vez" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo limpiar los lentes correctamente</p><p className="text-xs text-gray-500 mt-0.5">Guía para principiantes</p></Link>
+            <Link href="/blog/dormir-con-lentes-de-contacto-riesgos" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Riesgos de no limpiar los lentes</p><p className="text-xs text-gray-500 mt-0.5">Por qué la higiene es crítica</p></Link>
 
           </div>
         </div>

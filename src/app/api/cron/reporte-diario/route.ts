@@ -25,6 +25,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
+import { fetchWA } from '@/lib/whatsapp'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -291,7 +292,7 @@ export async function GET(req: Request) {
     // respuesta real y se loguea el detalle si Meta la rechaza.
     try {
       const WA_API = 'https://graph.facebook.com/v20.0'
-      const waRes = await fetch(`${WA_API}/${process.env.WHATSAPP_PHONE_ID}/messages`, {
+      const waRes = await fetchWA('18096942268', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({

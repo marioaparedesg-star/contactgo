@@ -653,7 +653,7 @@ export default function PedidosPage() {
                         <div>
                           <span className="font-mono font-bold text-gray-800">RD${Number(p.monto).toLocaleString()}</span>
                           <span className="text-gray-500 ml-1.5">· {p.metodo}</span>
-                          {p.nota && <span className="text-gray-400 italic ml-1.5">"{p.nota}"</span>}
+                          {p.nota && <span className="text-gray-400 italic ml-1.5">&quot;{p.nota}&quot;</span>}
                         </div>
                         <span className="text-[10px] text-gray-400">{new Date(p.created_at).toLocaleDateString('es-DO', {day:'2-digit',month:'short'})}</span>
                       </div>

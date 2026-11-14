@@ -2,6 +2,7 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
+import Link from 'next/link'
 
 function fmtSph(v: any) {
   if (v == null) return null
@@ -184,18 +185,18 @@ function ReciboContent() {
             >
               💬 Contactar soporte por WhatsApp
             </a>
-            <a
+            <Link
               href="/cuenta"
               style={{display:'block',background:'#f3f4f6',color:'#374151',textDecoration:'none',padding:'12px 20px',borderRadius:'10px',fontSize:'14px',fontWeight:'600'}}
             >
               📦 Ir a Mis Pedidos
-            </a>
-            <a
+            </Link>
+            <Link
               href="/"
               style={{display:'block',color:'#9ca3af',textDecoration:'none',padding:'8px 0',fontSize:'13px'}}
             >
               Ir al inicio
-            </a>
+            </Link>
           </div>
           <p style={{color:'#d1d5db',fontSize:'11px',marginTop:'20px',marginBottom:0}}>
             ContactGo · (809) 694-2268 · info@contactgo.net

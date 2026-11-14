@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
-export default function CheckoutOrderPage({ params }: { params: { orderId: string } }) {
-  redirect('/confirmacion?orden=' + params.orderId)
+export default async function CheckoutOrderPage({ params }: { params: Promise<{ orderId: string }> }) {
+  const { orderId } = await params
+  redirect('/confirmacion?orden=' + orderId)
 }

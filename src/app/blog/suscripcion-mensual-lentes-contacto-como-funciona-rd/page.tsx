@@ -69,7 +69,7 @@ export default function Page() {
       <h2>¿Para quién tiene más sentido suscribirse?</h2>
       <ul>
         <li><strong>Usuarios de lentes diarios</strong> — se acaban rápido (cada 15-30 días) y es fácil perder la cuenta.</li>
-        <li><strong>Personas con rutina ocupada</strong> — elimina el "se me olvidó pedir a tiempo".</li>
+        <li><strong>Personas con rutina ocupada</strong> — elimina el &quot;se me olvidó pedir a tiempo&quot;.</li>
         <li><strong>Quien ya sabe exactamente qué producto usa</strong> — no tienes que volver a explicar tu receta cada vez.</li>
       </ul>
 

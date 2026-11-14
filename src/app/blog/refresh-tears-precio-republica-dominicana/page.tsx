@@ -2,6 +2,7 @@ export const revalidate = 86400
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Refresh Tears precio en República Dominicana 2026 — ContactGo', description: 'Precio de Refresh Tears Lubricant Eye Drops en RD: RD$800. Lágrimas artificiales de Allergan. Compatibles con lentes de contacto. Entrega 24-48h en toda República Dominicana.',
   alternates: { canonical: 'https://www.contactgo.net/blog/refresh-tears-precio-republica-dominicana' },
@@ -18,7 +19,7 @@ export default function Page() {
           { "@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.contactgo.net"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.contactgo.net/blog"},{"@type":"ListItem","position":3,"name":"Refresh Tears precio en República Dominicana 2026","item":"https://www.contactgo.net/blog/refresh-tears-precio-republica-dominicana"}] }
         ]) }} />
         <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
-          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span><a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span><span className="text-gray-600 truncate">Refresh Tears precio en República Domini</span>
+          <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span><Link href="/blog" className="hover:text-primary-600">Blog</Link><span>/</span><span className="text-gray-600 truncate">Refresh Tears precio en República Domini</span>
         </div>
         <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">💧 Gotas oculares · Precio</span>
         <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Refresh Tears precio en República Dominicana 2026</h1>
@@ -51,11 +52,11 @@ export default function Page() {
           <section id="productos">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Entrega 24-48h</h2>
             <div className="space-y-2">
-            <a href="/producto/refresh-tears-gotas-lubricantes-ojos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Tears Lubricant</p><p className="text-xs text-gray-500">Lágrimas artificiales básicas</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$800</span></a>
-            <a href="/producto/refresh-optive-lubricant-gotas-oculares-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Lubricant</p><p className="text-xs text-gray-500">Doble acción</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$900</span></a>
-            <a href="/producto/refresh-optive-advanced-gotas-ojos-secos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Advanced</p><p className="text-xs text-gray-500">Triple acción</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$1,000</span></a>
+            <Link href="/producto/refresh-tears-gotas-lubricantes-ojos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Tears Lubricant</p><p className="text-xs text-gray-500">Lágrimas artificiales básicas</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$800</span></Link>
+            <Link href="/producto/refresh-optive-lubricant-gotas-oculares-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Lubricant</p><p className="text-xs text-gray-500">Doble acción</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$900</span></Link>
+            <Link href="/producto/refresh-optive-advanced-gotas-ojos-secos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Advanced</p><p className="text-xs text-gray-500">Triple acción</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$1,000</span></Link>
             </div>
-            <a href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</a>
+            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</Link>
           </section>
           <section id="faq">
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
@@ -79,9 +80,9 @@ export default function Page() {
             </div>
           </section>
           <div className="grid gap-2"><h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/blog/refresh-optive-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Refresh Optive precio en RD</p><p className="text-xs text-gray-500 mt-0.5">La versión más completa de Refresh</p></a>
-            <a href="/blog/gotas-para-ojos-secos-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Las mejores gotas para ojos secos en RD</p><p className="text-xs text-gray-500 mt-0.5">Comparativa completa</p></a>
-            <a href="/blog/ojos-secos-lentes-contacto" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ojos secos y lentes de contacto</p><p className="text-xs text-gray-500 mt-0.5">Soluciones para sequedad con lentes</p></a>
+            <Link href="/blog/refresh-optive-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Refresh Optive precio en RD</p><p className="text-xs text-gray-500 mt-0.5">La versión más completa de Refresh</p></Link>
+            <Link href="/blog/gotas-para-ojos-secos-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Las mejores gotas para ojos secos en RD</p><p className="text-xs text-gray-500 mt-0.5">Comparativa completa</p></Link>
+            <Link href="/blog/ojos-secos-lentes-contacto" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ojos secos y lentes de contacto</p><p className="text-xs text-gray-500 mt-0.5">Soluciones para sequedad con lentes</p></Link>
           </div>
         </div>
         <div className="border-l-4 border-blue-500 bg-blue-50 rounded-r-xl p-4 my-6">
@@ -92,8 +93,8 @@ export default function Page() {
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en toda República Dominicana en 24-48h</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</a>
+            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</Link>
+            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

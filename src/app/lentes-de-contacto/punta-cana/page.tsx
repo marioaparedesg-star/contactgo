@@ -27,7 +27,7 @@ const faqs = [
 ]
 
 export default async function Page() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: products } = await sb.from('products').select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado')
     .eq('activo', true).gt('stock', 0)
     .in('tipo', ['esferico','torico','multifocal','color'])
@@ -82,7 +82,7 @@ export default async function Page() {
           
           <h3 className="font-bold text-gray-900 text-lg mt-6">Testimonio de cliente en Bávaro</h3>
           <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
-            <p className="text-gray-700 text-sm italic">"Vivo en Punta Cana y siempre era difícil conseguir mis Acuvue Oasys. ContactGo los envía sin problema. Recomendado 100%."</p>
+            <p className="text-gray-700 text-sm italic">&quot;Vivo en Punta Cana y siempre era difícil conseguir mis Acuvue Oasys. ContactGo los envía sin problema. Recomendado 100%.&quot;</p>
             <p className="text-xs text-gray-500 mt-2 font-semibold">— Roberto S., Bávaro ⭐⭐⭐⭐⭐</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     if (!subscription_id) return NextResponse.json({ error: 'subscription_id requerido' }, { status: 400 })
 
     // Auth check PRIMERO — antes de cualquier query a DB
-    const sbServer = createServerSupabaseClient()
+    const sbServer = await createServerSupabaseClient()
     const { data: { user } } = await sbServer.auth.getUser()
     if (!user) return NextResponse.json({ error: 'Sesión requerida' }, { status: 401 })
 

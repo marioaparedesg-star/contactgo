@@ -276,7 +276,7 @@ export default function AdminDGII() {
               </table>
             </div>
             <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-3">
-              <p className="text-xs text-amber-700">⚠️ Series <strong>E02/E04 son de PRUEBA</strong> — no válidas para declarar en la DGII. Cuando tengas las secuencias B01/B02 autorizadas, actualiza la tabla <code>ncf_sequences</code> en Supabase y cambia <code>modo = 'produccion'</code>.</p>
+              <p className="text-xs text-amber-700">⚠️ Series <strong>E02/E04 son de PRUEBA</strong> — no válidas para declarar en la DGII. Cuando tengas las secuencias B01/B02 autorizadas, actualiza la tabla <code>ncf_sequences</code> en Supabase y cambia <code>modo = &apos;produccion&apos;</code>.</p>
             </div>
           </div>
         )}

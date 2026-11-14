@@ -22,7 +22,7 @@ export const metadata = {
 }
 
 export default async function BauschLombPage() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: productos } = await sb.from('products').select('*').eq('marca', 'BAUSCH+LOMB').order('tipo')
   const TIPO: Record<string,string> = {esferico:'Esférico',torico:'Tórico',multifocal:'Multifocal',solucion:'Solución'}
   return (

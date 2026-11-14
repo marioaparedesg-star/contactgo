@@ -42,11 +42,11 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Si un óptico u oftalmólogo te mencionó "lentes esclerales" y no sabes bien qué son, no estás solo — son mucho menos conocidos que los lentes de contacto convencionales, pero para ciertas condiciones oculares son la mejor solución que existe.</p>
+      <p>Si un óptico u oftalmólogo te mencionó &quot;lentes esclerales&quot; y no sabes bien qué son, no estás solo — son mucho menos conocidos que los lentes de contacto convencionales, pero para ciertas condiciones oculares son la mejor solución que existe.</p>
 
       <h2>¿Qué son los lentes esclerales?</h2>
 
-      <p>Son lentes de contacto <strong>rígidos y de diámetro grande</strong> — mucho más grandes que un lente de contacto blando convencional. En vez de apoyarse directamente sobre la córnea (como hacen los lentes normales), los lentes esclerales <strong>"saltan" por encima de toda la córnea</strong> y se apoyan en la esclerótica (la parte blanca del ojo), creando un espacio lleno de lágrima artificial entre el lente y la córnea.</p>
+      <p>Son lentes de contacto <strong>rígidos y de diámetro grande</strong> — mucho más grandes que un lente de contacto blando convencional. En vez de apoyarse directamente sobre la córnea (como hacen los lentes normales), los lentes esclerales <strong>&quot;saltan&quot; por encima de toda la córnea</strong> y se apoyan en la esclerótica (la parte blanca del ojo), creando un espacio lleno de lágrima artificial entre el lente y la córnea.</p>
 
       <p>Ese diseño es justamente lo que los hace tan útiles para ciertos casos difíciles.</p>
 
@@ -59,7 +59,7 @@ export default function Page() {
       <p>El espacio lleno de líquido entre el lente y la córnea actúa como un reservorio constante de humedad — mucho más efectivo que gotas para casos de sequedad ocular severa que no responden a tratamientos convencionales.</p>
 
       <h3>Córneas irregulares tras cirugía o trauma</h3>
-      <p>Después de un trasplante de córnea, cirugía refractiva complicada, o una lesión ocular, la superficie del ojo puede quedar irregular. Los esclerales "esconden" esa irregularidad creando una superficie óptica nueva y uniforme.</p>
+      <p>Después de un trasplante de córnea, cirugía refractiva complicada, o una lesión ocular, la superficie del ojo puede quedar irregular. Los esclerales &quot;esconden&quot; esa irregularidad creando una superficie óptica nueva y uniforme.</p>
 
       <h3>Astigmatismo muy alto o irregular</h3>
       <p>Cuando el astigmatismo es tan pronunciado que los lentes tóricos convencionales no logran estabilizarse bien en el ojo.</p>

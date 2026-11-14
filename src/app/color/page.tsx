@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function Page() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: products } = await sb.from('products').select('*').eq('activo', true).eq('tipo', 'color').order('nombre')
 
   return (

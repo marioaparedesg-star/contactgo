@@ -42,7 +42,7 @@ export default function Page() {
         <li>Crean bordes ásperos que pueden rayar la córnea</li>
         <li>Reducen la efectividad óptica (visión borrosa o distorsionada)</li>
       </ul>
-      <p>Descártalo y usa uno nuevo. Sé que es frustrante, especialmente con lentes mensuales donde "pierdes" parte de tu inversión — pero el riesgo para tu ojo no vale la pena.</p>
+      <p>Descártalo y usa uno nuevo. Sé que es frustrante, especialmente con lentes mensuales donde &quot;pierdes&quot; parte de tu inversión — pero el riesgo para tu ojo no vale la pena.</p>
 
       <h2>¿Por qué se dañan los lentes al manipularlos?</h2>
 
@@ -68,7 +68,7 @@ export default function Page() {
       </ul>
 
       <h2>¿Qué hago si se me acabó la caja por daños repetidos?</h2>
-      <p>Si perdiste varios lentes por daños antes de tiempo, no hay una "garantía de reemplazo" estándar en la industria — es parte del uso normal del producto. Pero si el problema persiste consistentemente, puede valer la pena:</p>
+      <p>Si perdiste varios lentes por daños antes de tiempo, no hay una &quot;garantía de reemplazo&quot; estándar en la industria — es parte del uso normal del producto. Pero si el problema persiste consistentemente, puede valer la pena:</p>
       <ul>
         <li>Revisar si tu técnica necesita ajuste (mira nuestra guía de <Link href="/blog/como-poner-lentes-de-contacto">cómo poner lentes de contacto</Link>)</li>
         <li>Considerar cambiar a lentes diarios si el problema ocurre principalmente en la manipulación nocturna de mensuales (menos manipulación repetida = menos riesgo)</li>

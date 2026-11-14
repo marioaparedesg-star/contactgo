@@ -91,7 +91,7 @@ export default function Page() {
 
           <section id="planes-complementarios">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Los planes complementarios sí pueden ayudar</h2>
-            <p>Si tienes un <strong>seguro complementario privado</strong> (a través de tu empleador, por ejemplo con Humano, Universal o Mapfre BHD en su modalidad de "seguro de salud" fuera del PBS), es más común que exista un beneficio óptico más amplio que sí incluya lentes de contacto o un reembolso parcial. Esto varía mucho de una póliza a otra — lo más seguro es llamar directamente a tu ARS y preguntar por el "beneficio de óptica" o "subsidio óptico" de tu plan específico.</p>
+            <p>Si tienes un <strong>seguro complementario privado</strong> (a través de tu empleador, por ejemplo con Humano, Universal o Mapfre BHD en su modalidad de &quot;seguro de salud&quot; fuera del PBS), es más común que exista un beneficio óptico más amplio que sí incluya lentes de contacto o un reembolso parcial. Esto varía mucho de una póliza a otra — lo más seguro es llamar directamente a tu ARS y preguntar por el &quot;beneficio de óptica&quot; o &quot;subsidio óptico&quot; de tu plan específico.</p>
           </section>
 
           <section id="como-comprar-sin-cobertura">

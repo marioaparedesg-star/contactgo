@@ -27,7 +27,7 @@ const faqs = [
 ]
 
 export default async function Page() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: products } = await sb.from('products').select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado')
     .eq('activo', true).gt('stock', 0)
     .in('tipo', ['esferico','torico','multifocal','color'])
@@ -87,11 +87,11 @@ export default async function Page() {
           <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santo Domingo</h3>
           <div className="space-y-3">
             <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
-              <p className="text-gray-700 text-sm italic">"Excelente servicio, llegaron en 24 horas como prometieron. Los Acuvue son directo del fabricante, igual que en la óptica pero más baratos."</p>
+              <p className="text-gray-700 text-sm italic">&quot;Excelente servicio, llegaron en 24 horas como prometieron. Los Acuvue son directo del fabricante, igual que en la óptica pero más baratos.&quot;</p>
               <p className="text-xs text-gray-500 mt-2 font-semibold">— María R., Piantini ⭐⭐⭐⭐⭐</p>
             </div>
             <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
-              <p className="text-gray-700 text-sm italic">"Llevo 6 meses comprando aquí. Los precios son mucho mejores que en cualquier óptica y siempre llegan rápido a Arroyo Hondo."</p>
+              <p className="text-gray-700 text-sm italic">&quot;Llevo 6 meses comprando aquí. Los precios son mucho mejores que en cualquier óptica y siempre llegan rápido a Arroyo Hondo.&quot;</p>
               <p className="text-xs text-gray-500 mt-2 font-semibold">— Feyilina P., Arroyo Hondo ⭐⭐⭐⭐⭐</p>
             </div>
           </div>

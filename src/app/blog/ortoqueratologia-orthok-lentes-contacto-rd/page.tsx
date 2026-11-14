@@ -86,7 +86,7 @@ export default function Page() {
 
       <h3>Limitaciones reales</h3>
       <ul>
-        <li>❌ Requiere uso casi todas las noches, indefinidamente — no es "una vez y ya"</li>
+        <li>❌ Requiere uso casi todas las noches, indefinidamente — no es &quot;una vez y ya&quot;</li>
         <li>❌ El costo inicial de evaluación y lentes personalizados es más alto que lentes convencionales</li>
         <li>❌ No todos los grados de miopía o astigmatismo son candidatos</li>
         <li>❌ Requiere seguimiento profesional periódico, no es autoservicio</li>

@@ -72,7 +72,7 @@ export default function Page() {
       <p>Tu receta tiene valores clave: <strong>SPH</strong> (esfera, tu graduación principal), <strong>CYL/EJE</strong> (si tienes astigmatismo), y <strong>ADD</strong> (si tienes presbicia). Si no sabes interpretarla, revisa nuestra guía de <Link href="/blog/como-leer-receta-optica-rd">cómo leer tu receta óptica</Link>, o usa nuestra <Link href="/receta">calculadora gratuita</Link> que te recomienda el producto exacto según tus valores.</p>
 
       <h2>6. Cuidado y uso correcto</h2>
-      <p>Independientemente de la marca, hay reglas universales: nunca duermas con lentes que no estén diseñados para uso prolongado, siempre lávate las manos antes de manipularlos, y respeta el tiempo de reemplazo (diario, quincenal o mensual) sin excederlo, incluso si "se ven bien todavía".</p>
+      <p>Independientemente de la marca, hay reglas universales: nunca duermas con lentes que no estén diseñados para uso prolongado, siempre lávate las manos antes de manipularlos, y respeta el tiempo de reemplazo (diario, quincenal o mensual) sin excederlo, incluso si &quot;se ven bien todavía&quot;.</p>
 
       <h2>7. Entrega en toda República Dominicana</h2>
       <p>Ya sea que estés en el Distrito Nacional, Santiago, Punta Cana, o cualquier otra provincia, la mayoría de tiendas especializadas entregan en 24-72h a todo el país. Revisa la cobertura específica de <Link href="/blog/lentes-contacto-toda-republica-dominicana">entrega a nivel nacional</Link>.</p>

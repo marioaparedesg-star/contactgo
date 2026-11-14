@@ -249,7 +249,7 @@ export default function ERPDashboard() {
               {Object.keys(gastosPorCanal).length===0 ? (
                 <div className="text-center py-8 text-gray-400">
                   <p className="text-sm">Registra gastos con canal de marketing para ver el ROI</p>
-                  <p className="text-xs mt-1">Usa el botón "Registrar gasto" y selecciona el canal</p>
+                  <p className="text-xs mt-1">Usa el botón &quot;Registrar gasto&quot; y selecciona el canal</p>
                 </div>
               ) : (
                 <div className="space-y-3">

@@ -79,7 +79,7 @@ export default function SeguridadPage() {
               </div>
             </div>
             <p className="text-sm leading-relaxed mb-3">
-              <strong>"Verified by Visa"</strong> y <strong>"Mastercard ID Check"</strong> son programas de las marcas Visa y Mastercard, respectivamente, que proporcionan un método de autenticación del tarjetahabiente para asegurar que la compra la está efectuando el propietario legítimo de la tarjeta.
+              <strong>&quot;Verified by Visa&quot;</strong> y <strong>&quot;Mastercard ID Check&quot;</strong> son programas de las marcas Visa y Mastercard, respectivamente, que proporcionan un método de autenticación del tarjetahabiente para asegurar que la compra la está efectuando el propietario legítimo de la tarjeta.
             </p>
             <p className="text-sm leading-relaxed mb-3">
               <strong>¿Cómo funciona?</strong> Cuando un tarjetahabiente procesa su pago, si su tarjeta está enrolada al programa, será dirigido a la página de Visa o Mastercard (según corresponda), en la que deberá autenticarse según el método definido por su banco emisor. Una vez el cliente es autenticado, se completa la transacción de la forma habitual.

@@ -14,7 +14,7 @@ export type AdminGuardResult =
 
 export async function requireAdmin(): Promise<AdminGuardResult> {
   try {
-    const sbServer = createServerSupabaseClient()
+    const sbServer = await createServerSupabaseClient()
     const { data: { user }, error: userErr } = await sbServer.auth.getUser()
 
     if (userErr || !user) {

@@ -22,7 +22,7 @@ export const metadata = {
 }
 
 export default async function AlconPage() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: productos } = await sb.from('products').select('*').eq('marca', 'ALCON').order('tipo')
   const TIPO: Record<string,string> = {esferico:'Esférico',torico:'Tórico',multifocal:'Multifocal',color:'Color',gota:'Gotas',solucion:'Solución'}
   return (

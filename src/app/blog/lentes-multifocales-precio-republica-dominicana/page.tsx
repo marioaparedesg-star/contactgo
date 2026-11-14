@@ -67,38 +67,38 @@ export default function Page() {
 
         <div className="space-y-3 mb-6">
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Precios actuales en ContactGo</p>
-            <a href="/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
+            <Link href="/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Biofinity® Multifocal 6u</p><p className="text-xs text-gray-500">Más vendido</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$9,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/acuvue-oasys-multifocal-lentes-contacto-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
+            </Link>
+            <Link href="/producto/acuvue-oasys-multifocal-lentes-contacto-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
               <div><p className="font-bold text-gray-900 text-sm">ACUVUE® OASYS® Multifocal 6u</p><p className="text-xs text-gray-500">Quincenal J&J</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$8,200</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/air-optix-hydraglyde-multifocal-lentes-presbicia-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
+            </Link>
+            <Link href="/producto/air-optix-hydraglyde-multifocal-lentes-presbicia-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
               <div><p className="font-bold text-gray-900 text-sm">AIR OPTIX® HydraGlyde® Multifocal 6u</p><p className="text-xs text-gray-500">Mensual Alcon</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$7,250</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/proclear-multifocal-lentes-presbicia-mensual-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
+            </Link>
+            <Link href="/producto/proclear-multifocal-lentes-presbicia-mensual-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Proclear® Multifocal 6u</p><p className="text-xs text-gray-500">CooperVision</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$7,250</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
+            </Link>
+            <Link href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
               <div><p className="font-bold text-gray-900 text-sm">clariti® 1 day multifocal 30u</p><p className="text-xs text-gray-500">Diario accesible</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$6,000</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
+            </Link>
+            <Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</p><p className="text-xs text-gray-500">Menor precio</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,100</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/proclear-multifocal-xr-lentes-presbicia-alta-graduacion-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
+            </Link>
+            <Link href="/producto/proclear-multifocal-xr-lentes-presbicia-alta-graduacion-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Proclear® Multifocal XR 6u</p><p className="text-xs text-gray-500">Alta graduación</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$18,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
+            </Link>
+            <Link href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Proclear® Multifocal Toric 6u</p><p className="text-xs text-gray-500">Multi + astigmatismo</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$20,000</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
+            </Link>
 
           <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
         </div>
@@ -113,35 +113,35 @@ export default function Page() {
                 <thead><tr className="bg-gray-50"><th className="p-3 text-left border border-gray-100 font-bold">Producto</th><th className="p-3 text-right border border-gray-100 font-bold">Precio RD$</th></tr></thead>
                 <tbody>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biofinity® Multifocal 6u</a><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Más vendido</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biofinity® Multifocal 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Más vendido</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$9,500</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/acuvue-oasys-multifocal-lentes-contacto-dominicana" className="font-medium text-primary-600 hover:underline text-sm">ACUVUE® OASYS® Multifocal 6u</a><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Quincenal J&J</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/acuvue-oasys-multifocal-lentes-contacto-dominicana" className="font-medium text-primary-600 hover:underline text-sm">ACUVUE® OASYS® Multifocal 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Quincenal J&J</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$8,200</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/air-optix-hydraglyde-multifocal-lentes-presbicia-dominicana" className="font-medium text-primary-600 hover:underline text-sm">AIR OPTIX® HydraGlyde® Multifocal 6u</a><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Mensual Alcon</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/air-optix-hydraglyde-multifocal-lentes-presbicia-dominicana" className="font-medium text-primary-600 hover:underline text-sm">AIR OPTIX® HydraGlyde® Multifocal 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Mensual Alcon</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$7,250</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/proclear-multifocal-lentes-presbicia-mensual-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Proclear® Multifocal 6u</a><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">CooperVision</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/proclear-multifocal-lentes-presbicia-mensual-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Proclear® Multifocal 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">CooperVision</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$7,250</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day multifocal 30u</a><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Diario accesible</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day multifocal 30u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Diario accesible</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$6,000</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</a><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Menor precio</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Menor precio</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,100</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/proclear-multifocal-xr-lentes-presbicia-alta-graduacion-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Proclear® Multifocal XR 6u</a><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Alta graduación</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/proclear-multifocal-xr-lentes-presbicia-alta-graduacion-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Proclear® Multifocal XR 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Alta graduación</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$18,500</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Proclear® Multifocal Toric 6u</a><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Multi + astigmatismo</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Proclear® Multifocal Toric 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Multi + astigmatismo</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$20,000</td>
               </tr>
 
@@ -197,10 +197,10 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/multifocales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todos los lentes multifocales</p><p className="text-xs text-gray-500 mt-0.5">Catálogo completo de presbicia</p></a>
-            <a href="/blog/lentes-multifocales-presbicia-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Guía completa de lentes multifocales</p><p className="text-xs text-gray-500 mt-0.5">Qué son y cómo funcionan</p></a>
-            <a href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity Multifocal precio RD</p><p className="text-xs text-gray-500 mt-0.5">El más vendido en detalle</p></a>
-            <a href="/receta" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Calculadora de receta gratuita</p><p className="text-xs text-gray-500 mt-0.5">Encuentra tu multifocal correcto</p></a>
+            <Link href="/multifocales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todos los lentes multifocales</p><p className="text-xs text-gray-500 mt-0.5">Catálogo completo de presbicia</p></Link>
+            <Link href="/blog/lentes-multifocales-presbicia-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Guía completa de lentes multifocales</p><p className="text-xs text-gray-500 mt-0.5">Qué son y cómo funcionan</p></Link>
+            <Link href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity Multifocal precio RD</p><p className="text-xs text-gray-500 mt-0.5">El más vendido en detalle</p></Link>
+            <Link href="/receta" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Calculadora de receta gratuita</p><p className="text-xs text-gray-500 mt-0.5">Encuentra tu multifocal correcto</p></Link>
 
           </div>
         </div>

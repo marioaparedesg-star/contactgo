@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     // El checkout exige sesión. Nunca permitir que un visitante cambie
     // los artículos de una orden ajena conociendo solamente su UUID.
-    const authSb = createServerSupabaseClient()
+    const authSb = await createServerSupabaseClient()
     const { data: { user }, error: authError } = await authSb.auth.getUser()
     if (authError || !user) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })

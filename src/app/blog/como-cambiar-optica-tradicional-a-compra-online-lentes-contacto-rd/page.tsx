@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Llevas años yendo a la misma óptica, conoces al personal, confías en el lugar — pero cada vez te cuesta más el tiempo, el desplazamiento, o simplemente notas que el precio no es el mejor del mercado. Hacer el cambio a comprar online no significa "abandonar" tu óptica de confianza — significa optimizar dónde compras tu reposición regular.</p>
+      <p>Llevas años yendo a la misma óptica, conoces al personal, confías en el lugar — pero cada vez te cuesta más el tiempo, el desplazamiento, o simplemente notas que el precio no es el mejor del mercado. Hacer el cambio a comprar online no significa &quot;abandonar&quot; tu óptica de confianza — significa optimizar dónde compras tu reposición regular.</p>
 
       <h2>Paso 1: Reúne tu información de receta</h2>
       <p>Antes de cualquier cambio, necesitas tener a mano:</p>
@@ -50,7 +50,7 @@ export default function Page() {
       <p>Las recetas de lentes de contacto se consideran válidas generalmente hasta 12 meses. Si la tuya es más antigua, considera hacer una revisión rápida antes de tu primer pedido online — no necesariamente tienes que cambiar de graduación, solo confirmar que sigue siendo la correcta.</p>
 
       <h2>Paso 3: Haz tu primera compra con la MISMA marca que ya usas</h2>
-      <p>El error más común al cambiar de proveedor es aprovechar para "probar algo nuevo" en la misma compra. No lo hagas en tu primer pedido. Compra exactamente la misma marca y presentación que ya conoces — así, si algo no coincide (precio, tiempo de entrega, calidad del servicio), sabes que la variable es la tienda, no el producto.</p>
+      <p>El error más común al cambiar de proveedor es aprovechar para &quot;probar algo nuevo&quot; en la misma compra. No lo hagas en tu primer pedido. Compra exactamente la misma marca y presentación que ya conoces — así, si algo no coincide (precio, tiempo de entrega, calidad del servicio), sabes que la variable es la tienda, no el producto.</p>
 
       <p>Una vez que confirmes que el servicio te funciona bien, ahí sí puedes explorar otras marcas o promociones con confianza.</p>
 

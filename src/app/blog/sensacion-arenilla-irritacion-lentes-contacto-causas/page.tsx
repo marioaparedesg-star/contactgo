@@ -74,7 +74,7 @@ export default function Page() {
 
       <h2>Causa 4: El lente lleva más días de los que debería</h2>
       <p>Los lentes mensuales duran <strong>máximo 30 días de uso diario</strong>. Los quincenales, 14 días. Después empiezan a acumular depósitos de proteínas y lípidos que causan molestia constante.</p>
-      <p><strong>Solución:</strong> marca la fecha en que abres cada caja. Si no te acuerdas, apps como "Timer lentes" pueden ayudar. Nunca extiendas la vida útil "para ahorrar" — el ojo te va a cobrar la factura.</p>
+      <p><strong>Solución:</strong> marca la fecha en que abres cada caja. Si no te acuerdas, apps como &quot;Timer lentes&quot; pueden ayudar. Nunca extiendas la vida útil &quot;para ahorrar&quot; — el ojo te va a cobrar la factura.</p>
 
       <h2>Causa 5: La solución multipropósito está causando reacción</h2>
       <p>Algunas personas desarrollan sensibilidad a los conservantes de ciertas soluciones. Los síntomas: molestia constante que empeora después de días de uso.</p>
@@ -101,7 +101,7 @@ export default function Page() {
 
       <h2>Causa 8: El agua tocó tus lentes</h2>
       <p>El agua del grifo, la piscina o el mar contiene microorganismos que se adhieren a los lentes y causan irritación (y en casos graves, queratitis por Acanthamoeba — una infección peligrosa).</p>
-      <p><strong>Solución:</strong> descarta el lente inmediatamente y usa uno nuevo. Nunca "enjuagues" un lente con agua para reutilizarlo. Si tuviste contacto con agua, cambia el lente por completo.</p>
+      <p><strong>Solución:</strong> descarta el lente inmediatamente y usa uno nuevo. Nunca &quot;enjuagues&quot; un lente con agua para reutilizarlo. Si tuviste contacto con agua, cambia el lente por completo.</p>
 
       <h2>Cuándo consultar con un profesional (urgente)</h2>
       <p>La sensación de arenilla es normal en la mayoría de casos. Pero es señal de alarma si va acompañada de:</p>
@@ -111,15 +111,15 @@ export default function Page() {
         <li>❌ Sensibilidad extrema a la luz</li>
         <li>❌ Visión borrosa que persiste al quitarse el lente</li>
         <li>❌ Secreción amarilla o verde</li>
-        <li>❌ Sensación de "algo picándome" muy fuerte</li>
+        <li>❌ Sensación de &quot;algo picándome&quot; muy fuerte</li>
       </ul>
       <p>En estos casos: retira el lente inmediatamente, no vuelvas a usarlo, y consulta con un oftalmólogo. Puede ser una úlcera corneal o infección que requiere tratamiento urgente.</p>
 
       <h2>Prevención: rutina para minimizar molestias</h2>
       <ul>
         <li>Lávate y seca bien las manos antes de tocar los lentes.</li>
-        <li>Frota suavemente cada lente con solución 20 segundos antes de guardarlo (aunque tu solución diga "no rub").</li>
-        <li>Cambia la solución del estuche cada vez (nunca "rellenes").</li>
+        <li>Frota suavemente cada lente con solución 20 segundos antes de guardarlo (aunque tu solución diga &quot;no rub&quot;).</li>
+        <li>Cambia la solución del estuche cada vez (nunca &quot;rellenes&quot;).</li>
         <li>Cambia tu estuche cada 3 meses.</li>
         <li>Ten siempre gotas humectantes contigo.</li>
         <li>No excedas 10 horas de uso diario los primeros meses.</li>

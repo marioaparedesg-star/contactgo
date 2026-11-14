@@ -36,10 +36,11 @@ async function getLinkValido(token: string) {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
+  const { token } = await params
   try {
-    const { error, status, link } = await getLinkValido(params.token)
+    const { error, status, link } = await getLinkValido(token)
     if (error && error !== 'completado') {
       return NextResponse.json({ error }, { status })
     }
@@ -71,13 +72,14 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
+  const { token } = await params
   try {
     const guardErr = guardRequest(req, { limitPerMin: 10, requireOrigin: false })
     if (guardErr) return guardErr
 
-    const { error, status, link, sb } = await getLinkValido(params.token)
+    const { error, status, link, sb } = await getLinkValido(token)
     if (error) return NextResponse.json({ error: error === 'completado' ? 'Este pedido ya fue registrado.' : error }, { status })
 
     const body = await req.json()

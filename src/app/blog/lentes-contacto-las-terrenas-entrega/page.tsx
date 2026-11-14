@@ -2,6 +2,7 @@ export const revalidate = 86400
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Lentes de contacto en Las Terrenas — Entrega domicilio | Con', description: 'Lentes de contacto con entrega en Las Terrenas en 24-72h. ACUVUE, Biofinity, Air Optix certificados. Pago con tarjeta AZUL.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-las-terrenas-entrega' },
@@ -14,7 +15,7 @@ export default function Page() {
       {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":'Entregan lentes de contacto en Las Terrenas?',"acceptedAnswer":{"@type":"Answer","text":'Si. ContactGo entrega lentes ACUVUE, Biofinity y Air Optix certificados en Las Terrenas y alrededores en 24-72 horas. Pago seguro con tarjeta AZUL/Banco Popular.'}},{"@type":"Question","name":'En cuanto tiempo llegan los lentes a Las Terrenas?',"acceptedAnswer":{"@type":"Answer","text":'Los pedidos realizados antes de las 3pm generalmente se entregan en 24 a 72 horas en Las Terrenas. Para mayor rapidez, escribe por WhatsApp.'}},{"@type":"Question","name":'Aceptan tarjetas de credito internacionales?',"acceptedAnswer":{"@type":"Answer","text":'Si. Aceptamos Visa y Mastercard a traves de AZUL/Banco Popular. Tarjetas nacionales e internacionales.'}}]},
       {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.contactgo.net"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.contactgo.net/blog"},{"@type":"ListItem","position":3,"name":"Lentes de contacto en Las Terrenas — Entrega a dom","item":"https://www.contactgo.net/blog/lentes-contacto-las-terrenas-entrega"}]}
     ]) }} />
-    <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4"><a href="/" className="hover:text-primary-600">Inicio</a><span>/</span><a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span><span className="text-gray-600 truncate">Lentes de contacto en Las Terrenas — Ent</span></div>
+    <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4"><Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span><Link href="/blog" className="hover:text-primary-600">Blog</Link><span>/</span><span className="text-gray-600 truncate">Lentes de contacto en Las Terrenas — Ent</span></div>
     <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">📍 Entrega · Las Terrenas</span>
     <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Lentes de contacto en Las Terrenas — Entrega a domicilio</h1>
     <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
@@ -57,24 +58,24 @@ export default function Page() {
       </section>
       <div className="grid gap-2">
         <h3 className="font-bold text-gray-900 text-lg">Articulos relacionados</h3>
-        <a href="/blog/lentes-contacto-toda-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Entrega en toda la Republica Dominicana</p><p className="text-xs text-gray-500 mt-0.5">Guia completa de envios</p></a>
-        <a href="/blog/comprar-lentes-contacto-online-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Comprar lentes online en RD</p><p className="text-xs text-gray-500 mt-0.5">Guia de compra segura</p></a>
+        <Link href="/blog/lentes-contacto-toda-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Entrega en toda la Republica Dominicana</p><p className="text-xs text-gray-500 mt-0.5">Guia completa de envios</p></Link>
+        <Link href="/blog/comprar-lentes-contacto-online-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Comprar lentes online en RD</p><p className="text-xs text-gray-500 mt-0.5">Guia de compra segura</p></Link>
       </div>
       <section id="productos"><h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — 24-72h</h2>
         <div className="space-y-2">
-          <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE Oasys 6u</p><p className="text-xs text-gray-500">El mas popular</p></div><span className="font-black text-gray-900 text-sm">RD$3,350</span></a>
-          <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Biofinity 6u</p><p className="text-xs text-gray-500">Mensual · CooperVision</p></div><span className="font-black text-gray-900 text-sm">RD$3,650</span></a>
-          <a href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Air Optix HydraGlyde 6u</p><p className="text-xs text-gray-500">Mensual · Alcon</p></div><span className="font-black text-gray-900 text-sm">RD$3,700</span></a>
+          <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE Oasys 6u</p><p className="text-xs text-gray-500">El mas popular</p></div><span className="font-black text-gray-900 text-sm">RD$3,350</span></Link>
+          <Link href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Biofinity 6u</p><p className="text-xs text-gray-500">Mensual · CooperVision</p></div><span className="font-black text-gray-900 text-sm">RD$3,650</span></Link>
+          <Link href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Air Optix HydraGlyde 6u</p><p className="text-xs text-gray-500">Mensual · Alcon</p></div><span className="font-black text-gray-900 text-sm">RD$3,700</span></Link>
         </div>
-        <a href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catalogo completo →</a>
+        <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catalogo completo →</Link>
       </section>
     </div>
     <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
       <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en Las Terrenas en 24-72h</h3>
       <p className="text-sm text-gray-500 mb-4">directo del fabricante · Sellados de fabrica · Pago seguro con AZUL</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catalogo →</a>
-        <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</a>
+        <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catalogo →</Link>
+        <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
         <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Pedir por WhatsApp</a>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { guardRequest } from '@/lib/api-guard'
-import { clienteBloqueadoPorPausa } from '@/lib/whatsapp'
+import { fetchWA } from '@/lib/whatsapp'
 
 // Envía el WhatsApp de resultado de la calculadora con LOS MISMOS productos
 // y precios que la persona vio en pantalla.
@@ -97,9 +97,7 @@ export async function POST(req: NextRequest) {
     const nombreCorto = safeParam((nombre || 'Cliente').split(' ')[0])
 
     async function enviar(tpl: string, params: { type: string; text: string }[]) {
-      // PAUSA: no enviar al lead (cliente) mientras la pausa esté activa
-      if (await clienteBloqueadoPorPausa(phone)) return { error: { message: 'whatsapp_clientes_pausado' } }
-      const r = await fetch(`https://graph.facebook.com/v21.0/${WA_PHONE_ID}/messages`, {
+      const r = await fetchWA(phone, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({

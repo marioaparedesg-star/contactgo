@@ -68,7 +68,7 @@ export default function Page() {
       <h2>¿Cuándo elegir Avaira Vitality?</h2>
       <ul>
         <li>✅ Buscas la mejor relación costo-beneficio dentro de CooperVision</li>
-        <li>✅ Tienes ojos "normales", sin sensibilidad particular</li>
+        <li>✅ Tienes ojos &quot;normales&quot;, sin sensibilidad particular</li>
         <li>✅ Es tu primera vez probando lentes mensuales y no quieres invertir de más antes de confirmar que te adaptas bien</li>
         <li>✅ El ahorro de RD$550 por caja (RD$2,200 al año, considerando 4 cajas) es significativo para tu presupuesto</li>
       </ul>

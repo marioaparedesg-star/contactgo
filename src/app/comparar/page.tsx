@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 export default async function ComparadorPage() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   // BUG CORREGIDO (2026-08-13): 'ojo' y 'size' NO existen en la tabla
   // products (son campos de order_items, no del catálogo) — pedirlos
   // aquí hacía fallar la consulta completa en silencio (el código no

@@ -41,7 +41,7 @@ const faqs = [
 ]
 
 export default async function Page() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: gotas } = await sb
     .from('products')
     .select('*')

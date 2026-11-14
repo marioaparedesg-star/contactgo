@@ -46,13 +46,13 @@ export default function Page() {
 
       <h2>La respuesta corta: no deberían doler</h2>
 
-      <p>Un lente de contacto bien puesto, de la graduación correcta, <strong>no debe causar dolor</strong>. Si sientes dolor real (no solo la sensación de "algo ahí"), algo está mal — el lente puede estar al revés, mal colocado, o haber algo más que amerita revisión.</p>
+      <p>Un lente de contacto bien puesto, de la graduación correcta, <strong>no debe causar dolor</strong>. Si sientes dolor real (no solo la sensación de &quot;algo ahí&quot;), algo está mal — el lente puede estar al revés, mal colocado, o haber algo más que amerita revisión.</p>
 
       <h2>¿Qué es normal sentir, entonces?</h2>
 
       <p>Los primeros días, especialmente si nunca has usado lentes de contacto, es normal sentir una <strong>ligera conciencia</strong> del lente — casi como saber que está ahí, sin que sea molesto. Esto suele desaparecer conforme tu ojo se acostumbra, generalmente en pocos días.</p>
 
-      <h2>Causas comunes de molestia (que no son "dolor normal")</h2>
+      <h2>Causas comunes de molestia (que no son &quot;dolor normal&quot;)</h2>
 
       <ul>
         <li><strong>Lente al revés</strong> — un error común en principiantes, causa una sensación de irritación notoria</li>
@@ -72,7 +72,7 @@ export default function Page() {
         <li>🔴 Secreción o legañas inusuales</li>
       </ul>
 
-      <p>Ante cualquiera de estas señales, quítate el lente de inmediato y consulta a un oftalmólogo — no es normal, y no debe ignorarse ni "aguantarse".</p>
+      <p>Ante cualquiera de estas señales, quítate el lente de inmediato y consulta a un oftalmólogo — no es normal, y no debe ignorarse ni &quot;aguantarse&quot;.</p>
 
       <h2>Cómo hacer que la adaptación sea más cómoda</h2>
 

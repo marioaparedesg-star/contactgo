@@ -129,10 +129,10 @@ export default function Page() {
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">¿Cómo saber si necesito lentes tóricos?</h2>
             <p>Revisa tu receta óptica. Si tienes astigmatismo, verás estos valores:</p>
             <div className="mt-4 bg-gray-900 text-green-400 rounded-2xl p-4 font-mono text-sm">
-              <p className="text-gray-400 text-xs mb-3">// Ejemplo de receta con astigmatismo</p>
+              <p className="text-gray-400 text-xs mb-3">{'// Ejemplo de receta con astigmatismo'}</p>
               <p>OD: SPH -2.50 | CYL <span className="text-yellow-400">-1.25</span> | AXIS <span className="text-yellow-400">180°</span></p>
               <p>OI: SPH -2.00 | CYL <span className="text-yellow-400">-0.75</span> | AXIS <span className="text-yellow-400">165°</span></p>
-              <p className="text-gray-400 text-xs mt-3">// Si CYL ≠ 0 → necesitas lentes tóricos</p>
+              <p className="text-gray-400 text-xs mt-3">{'// Si CYL ≠ 0 → necesitas lentes tóricos'}</p>
             </div>
             <div className="mt-4 grid gap-3">
               {[

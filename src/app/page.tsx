@@ -20,7 +20,7 @@ import type { Product } from '@/types'
 export const revalidate = 60
 
 async function getFeaturedProducts(): Promise<{ products: Product[], reseñasCount: number, reseñasAvg: number, precioOasys: number, preciosHero: Record<string, number> }> {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data } = await sb.from('products')
     .select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, precio_anterior')
     .eq('activo', true)

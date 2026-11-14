@@ -36,7 +36,7 @@ export default function Page() {
       <p>Encontraste una caja de lentes de contacto en el fondo de un cajón — compraste de más hace un tiempo, cambiaste de graduación, o simplemente se te olvidó que la tenías. La pregunta obvia: <strong>¿todavía sirve o ya se venció?</strong></p>
 
       <h2>Sí, los lentes de contacto sin abrir también se vencen</h2>
-      <p>Es un error común pensar que "si está sellado, dura para siempre". No es así. Cada blister individual (el paquete pequeño que contiene un lente) tiene impresa una <strong>fecha de vencimiento</strong>, generalmente entre <strong>3 y 4 años</strong> desde la fecha de fabricación.</p>
+      <p>Es un error común pensar que &quot;si está sellado, dura para siempre&quot;. No es así. Cada blister individual (el paquete pequeño que contiene un lente) tiene impresa una <strong>fecha de vencimiento</strong>, generalmente entre <strong>3 y 4 años</strong> desde la fecha de fabricación.</p>
 
       <p>Dentro del blister sellado, el lente está sumergido en una solución de conservación que lo mantiene hidratado y estéril. Con el tiempo, esa solución puede degradarse — perdiendo efectividad para mantener el lente en condiciones óptimas.</p>
 
@@ -44,7 +44,7 @@ export default function Page() {
       <ul>
         <li><strong>En cada blister individual</strong> — usualmente en la parte de atrás, junto al número de lote</li>
         <li><strong>En la caja exterior</strong> — generalmente en la parte inferior o lateral</li>
-        <li>El formato suele ser mes/año (por ejemplo, "EXP 08/2028")</li>
+        <li>El formato suele ser mes/año (por ejemplo, &quot;EXP 08/2028&quot;)</li>
       </ul>
 
       <h2>¿Qué pasa si uso un lente vencido?</h2>

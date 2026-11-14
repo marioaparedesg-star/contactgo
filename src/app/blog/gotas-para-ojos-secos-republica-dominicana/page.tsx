@@ -2,6 +2,7 @@ export const revalidate = 86400
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Las mejores gotas para ojos secos en RD 2026 — Guía completa',
@@ -40,8 +41,8 @@ export default function Page() {
         ]) }} />
 
         <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
-          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
-          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span>
+          <Link href="/blog" className="hover:text-primary-600">Blog</Link><span>/</span>
           <span className="text-gray-600 truncate">Las mejores gotas para ojos secos en Repúblic</span>
         </div>
 
@@ -126,12 +127,12 @@ export default function Page() {
           <section id="productos">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Entrega 24-48h</h2>
             <div className="space-y-2">
-            <a href="/producto/refresh-optive-advanced-gotas-ojos-secos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Advanced</p><p className="text-xs text-gray-500">Triple acción · Ojo seco severo</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$1,000</span></a>
-            <a href="/producto/refresh-optive-lubricant-gotas-oculares-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Lubricant</p><p className="text-xs text-gray-500">Doble acción · Ojo seco moderado</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$900</span></a>
-            <a href="/producto/refresh-tears-gotas-lubricantes-ojos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Tears</p><p className="text-xs text-gray-500">Básica · Molestias ocasionales</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$800</span></a>
-            <a href="/producto/manzanilla-sophia-gotas-ojos-naturales-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Manzanilla Sophia</p><p className="text-xs text-gray-500">Natural · Sin conservantes</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$600</span></a>
+            <Link href="/producto/refresh-optive-advanced-gotas-ojos-secos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Advanced</p><p className="text-xs text-gray-500">Triple acción · Ojo seco severo</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$1,000</span></Link>
+            <Link href="/producto/refresh-optive-lubricant-gotas-oculares-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Optive Lubricant</p><p className="text-xs text-gray-500">Doble acción · Ojo seco moderado</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$900</span></Link>
+            <Link href="/producto/refresh-tears-gotas-lubricantes-ojos-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Refresh Tears</p><p className="text-xs text-gray-500">Básica · Molestias ocasionales</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$800</span></Link>
+            <Link href="/producto/manzanilla-sophia-gotas-ojos-naturales-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Manzanilla Sophia</p><p className="text-xs text-gray-500">Natural · Sin conservantes</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$600</span></Link>
             </div>
-            <a href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</a>
+            <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</Link>
           </section>
 
           <section id="faq">
@@ -143,7 +144,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo usar gotas para ojos secos con lentes de contacto?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí, pero debes verificar que la etiqueta indique "compatible con lentes de contacto". Refresh Optive, Refresh Tears y Prolub Hyfresh son compatibles. Manzanilla Sophia también puede usarse, aunque algunos especialistas prefieren gotas específicamente formuladas para lentes.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí, pero debes verificar que la etiqueta indique &quot;compatible con lentes de contacto&quot;. Refresh Optive, Refresh Tears y Prolub Hyfresh son compatibles. Manzanilla Sophia también puede usarse, aunque algunos especialistas prefieren gotas específicamente formuladas para lentes.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Con qué frecuencia puedo usar gotas lubricantes?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
@@ -158,10 +159,10 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/blog/refresh-optive-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Refresh Optive precio en RD</p><p className="text-xs text-gray-500 mt-0.5">Guía completa de la gama Refresh</p></a>
-            <a href="/blog/ojos-secos-lentes-contacto" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ojos secos y lentes de contacto</p><p className="text-xs text-gray-500 mt-0.5">Los mejores lentes para sequedad ocular</p></a>
-            <a href="/blog/lentes-contacto-computadora-pantallas" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes de contacto para pantallas</p><p className="text-xs text-gray-500 mt-0.5">Cómo reducir la fatiga ocular digital</p></a>
-            <a href="/soluciones" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todas las soluciones en ContactGo</p><p className="text-xs text-gray-500 mt-0.5">Catálogo completo de soluciones</p></a>
+            <Link href="/blog/refresh-optive-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Refresh Optive precio en RD</p><p className="text-xs text-gray-500 mt-0.5">Guía completa de la gama Refresh</p></Link>
+            <Link href="/blog/ojos-secos-lentes-contacto" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ojos secos y lentes de contacto</p><p className="text-xs text-gray-500 mt-0.5">Los mejores lentes para sequedad ocular</p></Link>
+            <Link href="/blog/lentes-contacto-computadora-pantallas" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes de contacto para pantallas</p><p className="text-xs text-gray-500 mt-0.5">Cómo reducir la fatiga ocular digital</p></Link>
+            <Link href="/soluciones" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todas las soluciones en ContactGo</p><p className="text-xs text-gray-500 mt-0.5">Catálogo completo de soluciones</p></Link>
           </div>
         </div>
 
@@ -178,8 +179,8 @@ export default function Page() {
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en toda República Dominicana en 24-48h</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</a>
+            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</Link>
+            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

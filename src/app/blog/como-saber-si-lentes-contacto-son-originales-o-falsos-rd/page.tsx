@@ -33,9 +33,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>En redes sociales y marketplaces circulan "lentes de contacto" a precios que parecen demasiado buenos para ser verdad — cajas de Acuvue o Biofinity a la mitad del precio de mercado. La pregunta que deberías hacerte antes de comprar: <strong>¿esto es realmente seguro para mis ojos?</strong></p>
+      <p>En redes sociales y marketplaces circulan &quot;lentes de contacto&quot; a precios que parecen demasiado buenos para ser verdad — cajas de Acuvue o Biofinity a la mitad del precio de mercado. La pregunta que deberías hacerte antes de comprar: <strong>¿esto es realmente seguro para mis ojos?</strong></p>
 
-      <p>Los lentes de contacto son <strong>dispositivos médicos regulados</strong>. Un producto falsificado no es solo "una copia barata" — puede tener consecuencias serias para tu salud visual.</p>
+      <p>Los lentes de contacto son <strong>dispositivos médicos regulados</strong>. Un producto falsificado no es solo &quot;una copia barata&quot; — puede tener consecuencias serias para tu salud visual.</p>
 
       <h2>5 señales de que un lente de contacto puede ser falso</h2>
 
@@ -43,15 +43,15 @@ export default function Page() {
       <p>Si una caja de ACUVUE Oasys que normalmente cuesta RD$4,000-4,500 aparece por RD$1,500, algo no cuadra. Los distribuidores autorizados tienen costos fijos por su cadena de suministro oficial — no pueden vender tan barato y seguir siendo legítimos.</p>
 
       <h3>2. Empaque sin sellos de fábrica intactos</h3>
-      <p>Cada lente original viene en un blister individual sellado herméticamente por el fabricante. Si el sello está roto, pegado de forma irregular, o el blister se ve "reempacado", es señal de alarma.</p>
+      <p>Cada lente original viene en un blister individual sellado herméticamente por el fabricante. Si el sello está roto, pegado de forma irregular, o el blister se ve &quot;reempacado&quot;, es señal de alarma.</p>
 
       <h3>3. Falta información de lote y vencimiento</h3>
       <p>Todo producto original trae impreso: número de lote, fecha de fabricación, fecha de vencimiento y datos del fabricante. Si esta información está borrosa, ausente, o parece agregada después (sticker mal pegado), desconfía.</p>
 
       <h3>4. Vendedor sin trazabilidad clara</h3>
-      <p>Pregúntale al vendedor: "¿quién es su distribuidor autorizado en RD?". Un negocio legítimo responde sin titubear. Si evade la pregunta o no tiene respuesta clara, es señal de que el producto no viene de la cadena oficial.</p>
+      <p>Pregúntale al vendedor: &quot;¿quién es su distribuidor autorizado en RD?&quot;. Un negocio legítimo responde sin titubear. Si evade la pregunta o no tiene respuesta clara, es señal de que el producto no viene de la cadena oficial.</p>
 
-      <h3>5. Diseño de caja o tipografía "ligeramente diferente"</h3>
+      <h3>5. Diseño de caja o tipografía &quot;ligeramente diferente&quot;</h3>
       <p>Las falsificaciones a veces replican el diseño casi perfecto pero con pequeñas diferencias: tipografía distinta, colores ligeramente apagados, calidad de impresión inferior. Compara con fotos oficiales del fabricante si tienes dudas.</p>
 
       <h2>¿Por qué es tan peligroso usar lentes falsificados?</h2>

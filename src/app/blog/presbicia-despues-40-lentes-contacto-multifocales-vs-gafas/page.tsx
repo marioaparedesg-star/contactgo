@@ -48,7 +48,7 @@ export default function Page() {
       <p>La pregunta no es si te va a pasar, sino qué haces cuando pasa. Las 3 opciones principales: <strong>gafas de lectura, lentes de contacto multifocales, o mono-vision</strong>. Aquí la comparativa honesta.</p>
 
       <h2>¿Qué es la presbicia exactamente?</h2>
-      <p>Con la edad, el cristalino del ojo (la "lente natural") pierde flexibilidad. Ya no puede cambiar de forma tan fácilmente para enfocar objetos cercanos. Resultado: la visión de lejos se mantiene bien, pero la de cerca se vuelve borrosa.</p>
+      <p>Con la edad, el cristalino del ojo (la &quot;lente natural&quot;) pierde flexibilidad. Ya no puede cambiar de forma tan fácilmente para enfocar objetos cercanos. Resultado: la visión de lejos se mantiene bien, pero la de cerca se vuelve borrosa.</p>
 
       <p>Los síntomas típicos:</p>
       <ul>
@@ -72,7 +72,7 @@ export default function Page() {
       <h3>Desventajas:</h3>
       <ul>
         <li>Tienes que estar poniendo y quitando constantemente</li>
-        <li>Si eres miope también, necesitas dos pares o gafas bifocales (que se ven "viejas")</li>
+        <li>Si eres miope también, necesitas dos pares o gafas bifocales (que se ven &quot;viejas&quot;)</li>
         <li>Se te olvidan, se te pierden</li>
         <li>Poco prácticas para trabajos que cambian entre cerca y lejos frecuentemente (chef, doctor, mecánico)</li>
       </ul>
@@ -140,10 +140,10 @@ export default function Page() {
       <h2>Nuestra recomendación según tu perfil</h2>
 
       <h3>Si tu trabajo es 90% en pantalla + escritorio</h3>
-      <p>Gafas progresivas de trabajo (llamadas también "computer glasses") o multifocales de contacto. Ambas opciones son válidas.</p>
+      <p>Gafas progresivas de trabajo (llamadas también &quot;computer glasses&quot;) o multifocales de contacto. Ambas opciones son válidas.</p>
 
       <h3>Si trabajas con clientes cara a cara, das clases o eres profesional de la salud</h3>
-      <p><strong>Multifocales de contacto</strong> son claramente superiores. Nada de "quitarme las gafas para ver al cliente y ponérmelas para leer papeles".</p>
+      <p><strong>Multifocales de contacto</strong> son claramente superiores. Nada de &quot;quitarme las gafas para ver al cliente y ponérmelas para leer papeles&quot;.</p>
 
       <h3>Si eres muy activo (deportes, viajes, socializar)</h3>
       <p><strong>Multifocales de contacto</strong>, sin duda. Comodidad y estética.</p>
