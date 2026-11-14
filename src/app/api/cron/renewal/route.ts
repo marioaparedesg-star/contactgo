@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { clienteBloqueadoPorPausa } from '@/lib/whatsapp'
 
 const PHONE_NUMBER_ID = '1237770472751989'
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -61,6 +62,9 @@ export async function GET(req: Request) {
   for (const c of toSend) {
     let phone = c.phone.replace(/[^0-9+]/g, '').replace(/^\+/, '')
     if (/^(809|829|849)/.test(phone) && phone.length === 10) phone = '1' + phone
+
+    // PAUSA (2026-10-23): no enviar a clientes mientras Mario tenga la pausa activa
+    if (await clienteBloqueadoPorPausa(phone)) continue
 
     try {
       const res = await fetch(`https://graph.facebook.com/v21.0/${PHONE_NUMBER_ID}/messages`, {

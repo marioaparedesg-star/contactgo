@@ -42,8 +42,17 @@ async function clientesPausados(): Promise<boolean> {
     _pausaCache = { valor, expira: Date.now() + 30000 }
     return valor
   } catch {
-    return false // si falla la consulta, no bloquear por un error de infraestructura
+    // FAIL-CLOSED: si no podemos leer la bandera, NO enviar a clientes.
+    // Una pausa pedida por el dueño no puede fallar abierta.
+    return true
   }
+}
+
+// Usado por rutas que envían por fetch directo (no pasan por sendText/sendTemplate).
+// true = este destinatario es un CLIENTE y la pausa está activa → no enviar.
+export async function clienteBloqueadoPorPausa(to: string): Promise<boolean> {
+  if (normalizePhone(to) === NUMERO_ADMIN_MARIO) return false
+  return clientesPausados()
 }
 
 // Lanza si el envío a `to` debe bloquearse ahora mismo (cliente + pausa activa)
