@@ -174,11 +174,22 @@ export default function PedidosPage() {
     toast.success('Cliente puede ver el tracking en /pedido/' + (selected?.numero_orden ?? ''), {duration:3000, icon:'📦'})
 
     // 4. Notificar al cliente por email
-    fetch('/api/notify',{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({order_id:orderId, evento:'estado_cambio', nuevo_estado:estado})
-    }).then(r=>r.ok&&toast.success('Email enviado ✉️',{duration:2000,icon:'📧'}))
-      .catch(()=>{})
+    try {
+      const emailRes = await fetch('/api/notify',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({order_id:orderId, evento:'estado_cambio', nuevo_estado:estado})
+      })
+      const emailResult = await emailRes.json().catch(() => ({}))
+      if (emailRes.ok && emailResult.email_cliente === 'sent') {
+        toast.success('Correo enviado al cliente ✉️',{duration:3000,icon:'📧'})
+      } else if (emailResult.email_cliente === 'skipped') {
+        toast('No se envió el correo: verifica el email del cliente.',{duration:4000,icon:'⚠️'})
+      } else {
+        toast.error('Estado actualizado, pero falló el correo. Revisa el registro de notificaciones.',{duration:5000})
+      }
+    } catch {
+      toast.error('Estado actualizado, pero no se pudo confirmar el envío del correo.',{duration:5000})
+    }
 
     // 5. Notificar al cliente por WhatsApp (TODOS los estados del UI)
     const mapaEstadoWA: Record<string, string> = {
