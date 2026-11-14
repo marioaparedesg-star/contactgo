@@ -264,6 +264,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({
         ok: true,
         pago_estado: nuevoPagoEstado,
+        estado: debeAvanzarAPagoAprobado && cubrio100 ? 'pago_aprobado' : order.estado,
         total_pagado: totalPagadoNuevo,
         total_pedido: totalPedido,
         cubrio_total: cubrio100,
