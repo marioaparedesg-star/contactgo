@@ -497,8 +497,8 @@ export async function GET(req: NextRequest) {
         asunto: '¿Cómo va tu adaptación? 👁️',
         contenido: (nombre: string, tipo: TipoPrincipal) => `
           <h2 style="color:#111;font-size:18px">${nombre}, ya llevas un tiempo con tus lentes 👁️</h2>
-          <p style="color:#374151;font-size:14px">A estas alturas, ya deberías sentirlos completamente cómodos, casi como si no los tuvieras puestos.</p>
-          <p style="color:#374151;font-size:14px">Si todavía sientes molestia frecuente, o la visión no es tan nítida como esperabas, no es algo que debas simplemente aguantar — escríbenos y te ayudamos a revisar qué puede estar pasando.</p>
+          <p style="color:#374151;font-size:14px">La comodidad y la calidad visual deben mantenerse dentro de lo esperado para tu adaptación. No ignores molestias persistentes ni intentes acostumbrarte al dolor.</p>
+          <p style="color:#374151;font-size:14px">Si notas molestias persistentes, enrojecimiento o cambios en la visión, retira los lentes y consulta con tu profesional de salud visual. ContactGo puede ayudarte con dudas sobre tu pedido, pero no sustituye una evaluación clínica.</p>
           <p style="color:#374151;font-size:14px">Si todo va bien, ¡nos alegra mucho! Solo queríamos saber cómo te ha ido. 😊</p>`,
       },
     ]
@@ -514,8 +514,8 @@ export async function GET(req: NextRequest) {
         .eq('es_prueba', false)
         .eq(etapa.campo, false)
         .not('cliente_email', 'is', null)
-        .gte('updated_at', desde)
-        .lte('updated_at', hasta)
+        .gte('entregado_at', desde)
+        .lte('entregado_at', hasta)
         .limit(30)
 
       for (const o of ordenes ?? []) {
