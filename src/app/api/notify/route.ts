@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
     }
 
 
-    const failed = result.email_cliente === 'error' || result.email_admin === 'error'
+    const failed = result.email_cliente === 'error' || ('email_admin' in result && result.email_admin === 'error')
     return NextResponse.json({ ok: !failed, ...result }, { status: failed ? 502 : 200 })
   } catch (error: any) {
     console.error('[notify]', error)
