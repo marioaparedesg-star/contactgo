@@ -189,7 +189,7 @@ return [
         name: '¿ContactGo entrega lentes de contacto en Santo Domingo?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sí. Entregamos en toda el área metropolitana de Santo Domingo (Distrito Nacional, Santo Domingo Este, Norte y Oeste), igual que en Santiago, Punta Cana, La Romana, Higüey, San Pedro, Puerto Plata, Barahona y el resto del país. El transporte tarda 24-48 horas en Santo Domingo y 2-4 días en el resto del país. A ese plazo se suma, cuando aplique, el tiempo de preparación o fabricación: color plano disponible, al día siguiente; esféricos, 24-48 horas; multifocales, 1-5 días; tóricos, 25-40 días.',
+          text: 'Sí. Entregamos en toda el área metropolitana de Santo Domingo (Distrito Nacional, Santo Domingo Este, Norte y Oeste), igual que en Santiago, Punta Cana, La Romana, Higüey, San Pedro, Puerto Plata, Barahona y el resto del país. El transporte tarda 24-48 horas en Santo Domingo y 2-4 días en el resto del país. Los tiempos estimados de entrega son: color plano disponible, al día siguiente; esféricos, 24-48 horas; multifocales, de 1 a 5 días; tóricos, de 25 a 45 días.',
         },
       },
     ],
