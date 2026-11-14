@@ -1176,13 +1176,13 @@ export default function CuentaPage() {
                       oi_sph: recetaForm.oi_sph ? Number(recetaForm.oi_sph) : null,
                       oi_cyl: recetaForm.oi_cyl ? Number(recetaForm.oi_cyl) : null,
                       oi_axis: recetaForm.oi_axis ? Number(recetaForm.oi_axis) : null,
-                      add_power: recetaForm.od_add ? Number(recetaForm.od_add) : recetaForm.oi_add ? Number(recetaForm.oi_add) : null,
+                      add_power: recetaForm.add_power ? Number(recetaForm.add_power) : null,
                       notas: diagnostico || null,
                     }).select().single()
                     if (error || !data) { toast.error('No se pudo guardar la receta. Inténtalo de nuevo.'); return }
                     setRecetas(rs => [data, ...rs])
                     setAgregandoReceta(false)
-                    setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
+                    setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',oi_sph:'',oi_cyl:'',oi_axis:'',add_power:'' })
                     toast.success('Receta guardada correctamente.')
                   }} className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
                   <button onClick={() => { setAgregandoReceta(false);  }}
