@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
     // ignora cualquier nuevo_estado que no coincida con order.estado —
     // el mensaje siempre refleja el estado real guardado en la base de datos.
     const nuevoEstadoSeguro = (nuevo_estado && nuevo_estado === order.estado) ? nuevo_estado : order.estado
-    if (evento === 'pago_aprobado' && order.pago_estado !== 'pagado') return NextResponse.json({ error: 'No se puede notificar un pago que no está aprobado' }, { status: 409 })
+    if ((evento === 'pago_aprobado' || (evento === 'estado_cambio' && nuevoEstadoSeguro === 'pago_aprobado')) && order.pago_estado !== 'pagado') return NextResponse.json({ error: 'No se puede notificar un pago que no está aprobado' }, { status: 409 })
 
     const { data: items } = await getSb().from('order_items')
       .select('*, products(tipo)')
@@ -98,9 +98,10 @@ export async function POST(req: NextRequest) {
         : `ContactGo · Pedido #${pedidoId}: ${estadoLabel}`
 
     // Email al cliente + log de entrega — con protección contra duplicados
-    const emailTemplate = evento === 'nuevo_pedido'
-      ? 'confirmacion_orden'
-      : evento === 'pago_aprobado' ? 'pago_aprobado' : `actualizacion_estado_${nuevoEstadoSeguro}`
+    const esPagoAprobado = evento === 'pago_aprobado' || (evento === 'nuevo_pedido' && order.pago_estado === 'pagado')
+    const emailTemplate = esPagoAprobado
+      ? 'pago_aprobado'
+      : evento === 'nuevo_pedido' ? 'confirmacion_orden' : `actualizacion_estado_${nuevoEstadoSeguro}`
     let emailClienteStatus: 'sent' | 'error' | 'skipped' = 'skipped'
     let emailClienteError: string | undefined
     if (order.cliente_email) {
@@ -198,7 +199,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Email al admin — con la misma protección contra duplicados
-    const adminTemplate = evento === 'nuevo_pedido' ? 'admin_nuevo_pedido' : evento === 'pago_aprobado' ? 'admin_pago_aprobado' : `admin_estado_${nuevoEstadoSeguro}`
+    const adminTemplate = esPagoAprobado ? 'admin_pago_aprobado' : evento === 'nuevo_pedido' ? 'admin_nuevo_pedido' : `admin_estado_${nuevoEstadoSeguro}`
     const { data: adminYaEnviado } = await sbAdmin.from('email_log')
       .select('id').eq('order_id', order_id).eq('template', adminTemplate).eq('status', 'sent')
       .maybeSingle()
