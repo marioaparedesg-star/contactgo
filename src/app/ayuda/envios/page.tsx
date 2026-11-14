@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Envíos y Entregas | ContactGo República Dominicana',
-  description: 'Envíos: Santo Domingo y Santiago 24-48 horas, resto del país, 2-4 días. Consulta los tiempos estimados de entrega según el tipo de lente.',
+  description: 'Esféricos: Santo Domingo 24-48 horas e interior 24-72 horas. Consulta los tiempos estimados de entrega según el tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/ayuda/envios' },
   openGraph: {
     title: 'Envíos y Entregas | ContactGo República Dominicana',
-    description: 'Envíos en 24-48 horas a Santo Domingo, Santiago y toda la República Dominicana. Costo de envío, zonas de cobertura y política de entregas.',
+    description: 'Envíos a toda República Dominicana. Consulta costos y tiempos estimados según destino y tipo de lente.',
     url: 'https://www.contactgo.net/ayuda/envios',
     locale: 'es_DO',
     siteName: 'ContactGo',
@@ -27,7 +27,7 @@ export default function EnviosPage() {
         </div>
         <div className="space-y-6">
           {[
-            { title: '⏱️ Tiempo de entrega', body: 'Transporte: 24 a 48 horas en Santo Domingo y de 2 a 4 días en el interior. Entrega de lentes esféricos: 24 a 48 horas; multifocales: de 1 a 5 días; tóricos: de 25 a 40 días. Lentes de color planos disponibles: al día siguiente.' },
+            { title: '⏱️ Tiempo de entrega', body: 'Santo Domingo: 24-48 horas para lentes esféricos. Interior del país: 24-72 horas. Lentes de color disponibles: al día siguiente; multifocales: de 1 a 5 días; tóricos: de 25 a 45 días; soluciones y gotas: 24 horas.' },
             { title: '💵 Costo de envío', body: 'Santo Domingo y Gran Santo Domingo: RD$250. Interior del país: RD$350. En compras desde RD$8,000, el envío es GRATIS.' },
             { title: '🗺️ Cobertura', body: 'Hacemos envíos a todas las provincias de República Dominicana, incluyendo zonas rurales y turísticas como Punta Cana, Samaná y Las Terrenas.' },
             { title: '📱 Seguimiento de pedido', body: 'Una vez confirmado tu pedido te notificamos por WhatsApp. Cuando esté en camino recibirás los datos del mensajero para coordinar la entrega.' },
