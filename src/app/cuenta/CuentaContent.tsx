@@ -202,7 +202,7 @@ export default function CuentaPage() {
   useEffect(() => {
     if (!tab) return
     try { window.history.replaceState(null, '', `#${tab}`) } catch {}
-    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior }))
+    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'auto' }))
   }, [tab])
 
   // ── Cambiar contraseña ──
