@@ -61,20 +61,6 @@ export default function CartPage() {
     } catch {}
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  const [emailCapturado, setEmailCapturado] = useState('')
-  const [emailEnviado, setEmailEnviado] = useState(false)
-
-  const registrarCarritoAbandonado = async (email: string) => {
-    if (!email || emailEnviado || !email.includes('@')) return
-    try {
-      await fetch('/api/abandoned-cart/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, items: items.map((i: any) => ({ product_id: i.product.id, nombre: i.product.nombre, precio: i.product.precio, cantidad: i.cantidad })) }),
-      })
-      setEmailEnviado(true)
-    } catch { /* silencioso */ }
-  }
   const [cuponInput, setCuponInput] = useState(cuponCodigo ?? '')
   const [descuento,  setDescuento]  = useState(cuponDescuento)
   const [solucionSugerida, setSolucionSugerida] = useState<any>(null)
@@ -414,7 +400,6 @@ export default function CartPage() {
 
               {/* Email capture movido aquí — captura discreta en el blur del CTA, no antes */}
               <Link href="/checkout"
-                onClick={() => { if (emailCapturado.includes('@')) registrarCarritoAbandonado(emailCapturado) }}
                 className="w-full btn-primary flex items-center justify-center gap-2 py-3 text-sm font-bold rounded-xl">
                 Continuar al pago <ChevronRight className="w-5 h-5" />
               </Link>
