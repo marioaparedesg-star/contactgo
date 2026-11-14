@@ -69,14 +69,10 @@ export default function Page() {
         <div className="space-y-8 text-gray-700 leading-relaxed">
           <p>El <strong>ojo seco</strong> es una de las condiciones oculares más frecuentes en República Dominicana — y el uso de lentes de contacto, el aire acondicionado y las horas frente a pantallas lo agravan. Si buscas las mejores gotas para tratar la sequedad ocular en RD con entrega a domicilio, esta guía tiene todo lo que necesitas.</p>
         <section id="tipos">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Tipos de gotas disponibles en ContactGo</h2>
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Producto relacionado disponible en ContactGo</h2>
           <div className="space-y-4">
             {[
-              { nombre: 'Refresh Optive Advanced', precio: 'RD$1,000', para: 'Ojo seco moderado a severo · Triple acción (acuosa, mucínica y lipídica)', slug: 'refresh-optive-advanced-gotas-ojos-secos-dominicana', rec: '⭐ Más recomendada' },
-              { nombre: 'Refresh Optive Lubricant', precio: 'RD$900', para: 'Ojo seco moderado · Compatible con lentes de contacto', slug: 'refresh-optive-lubricant-gotas-oculares-dominicana', rec: 'Popular' },
-              { nombre: 'Refresh Tears', precio: 'RD$800', para: 'Molestias ocasionales · Alivio rápido y económico', slug: 'refresh-tears-gotas-lubricantes-ojos-dominicana', rec: 'Básica' },
-              { nombre: 'Prolub Hyfresh', precio: 'RD$900', para: 'Alta hidratación · Especial para usuarios de lentes', slug: 'prolub-hyfresh-solucion-multiproposito-dominicana', rec: 'Para lentes' },
-              { nombre: 'Manzanilla Sophia', precio: 'RD$600', para: 'Alivio natural · Irritación leve · Sin conservantes', slug: 'manzanilla-sophia-gotas-ojos-naturales-dominicana', rec: 'Natural' },
+              { nombre: 'Prolub Hyfresh', precio: 'RD$900', para: 'Solución para limpieza y cuidado de lentes de contacto', slug: 'prolub-hyfresh-solucion-multiproposito-dominicana', rec: 'Disponible' },
             ].map((g, i) => (
               <a key={i} href={`/producto/${g.slug}`} className="flex items-start gap-3 p-4 border border-gray-100 rounded-2xl hover:border-teal-200 hover:bg-teal-50/20 transition-all group">
                 <div className="flex-1">
