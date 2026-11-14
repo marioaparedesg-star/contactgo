@@ -21,15 +21,6 @@ export const dynamic = 'force-dynamic'
 
 const getSb = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-// República Dominicana es UTC-4 fijo (sin horario de verano).
-const RD_OFFSET_MS = 4 * 3600000
-
-function inicioDeHoyRD(): Date {
-  const nowRD = new Date(Date.now() - RD_OFFSET_MS)
-  const inicioRD = Date.UTC(nowRD.getUTCFullYear(), nowRD.getUTCMonth(), nowRD.getUTCDate())
-  return new Date(inicioRD + RD_OFFSET_MS)
-}
-
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET ?? 'contactgo_cron_2026'
