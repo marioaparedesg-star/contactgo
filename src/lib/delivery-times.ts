@@ -53,16 +53,16 @@ const T_ESFERICO: EntregaInfo = {
 }
 
 const T_MULTIFOCAL: EntregaInfo = {
-  etiqueta: 'Preparación en 1-5 días',
-  detalle:  'Tiempo estimado de preparación del lente multifocal: 1 a 5 días. El transporte se calcula según el destino: Santo Domingo y Santiago 24-48 horas, resto del país, 2-4 días.',
+  etiqueta: 'Entrega de 1 a 5 días',
+  detalle:  'Entrega estimada del lente multifocal: de 1 a 5 días.',
   dias_min: 1, dias_max: 5,
   especial: true,
   icono:    '📦',
 }
 
 const T_TORICO: EntregaInfo = {
-  etiqueta: 'Fabricación en 25-40 días',
-  detalle:  'Lente tórico fabricado a medida. El proceso toma de 25 a 45 días; después se suma el transporte según el destino.',
+  etiqueta: 'Entrega de 25 a 45 días',
+  detalle:  'Entrega estimada del lente tórico: de 25 a 45 días.',
   dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',
