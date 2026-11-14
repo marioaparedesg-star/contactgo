@@ -436,7 +436,7 @@ export async function POST(req: NextRequest) {
     }
 
     // WhatsApp al cliente — cuando pedido cambia de estado (TODOS los estados)
-    if (evento === 'estado_cambio' && nuevo_estado && order.cliente_telefono) {
+    if (evento === 'estado_cambio' && nuevoEstadoSeguro && order.cliente_telefono) {
       const mapaEstadoWA: Record<string, string> = {
         recibido:      'estado_recibido',
         pago_aprobado: 'estado_pago_aprobado',
@@ -448,7 +448,7 @@ export async function POST(req: NextRequest) {
         entregado:     'estado_entregado',
         cancelado:     'estado_cancelado',
       }
-      const tipoWA = mapaEstadoWA[nuevo_estado]
+      const tipoWA = mapaEstadoWA[nuevoEstadoSeguro]
       if (tipoWA) {
         const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
         try {
@@ -511,7 +511,7 @@ export async function POST(req: NextRequest) {
           from: FROM_EMAIL,
           to: [ADMIN_EMAIL],
           subject: adminSubject,
-          html: emailAdmin(order, itemsList, evento, nuevo_estado),
+          html: emailAdmin(order, itemsList, evento, nuevoEstadoSeguro),
         })
         adminResendId = sentAdmin?.id
         if (adminSendErr) adminError = adminSendErr.message
