@@ -3,11 +3,10 @@
  *
  * REGLAS DE NEGOCIO (definidas por Mario, 2026-08-03 — aplican a TODO el país,
  * ya no varían por zona ni por signo de graduación):
- *  - Color plano → al día siguiente
- *  - Esférico    → 24-48 horas
- *  - Multifocal  → 1-5 días
- *  - Tórico      → 25-40 días
- *  - Color graduado → 2-4 días (pedido especial; no confundir con color plano)
+ *  - Color → al día siguiente
+ *  - Esférico → 24-48 horas en Santo Domingo y 24-72 horas en el interior
+ *  - Multifocal → 1-5 días
+ *  - Tórico → 25-45 días
  *  - Solución / Gota → 24 horas
  */
 
@@ -37,8 +36,8 @@ const T_24H: EntregaInfo = {
 }
 
 const T_24_72H: EntregaInfo = {
-  etiqueta: 'Entrega 24-72 h',
-  detalle:  'Entrega estimada: entre 24 y 72 horas laborables.',
+  etiqueta: 'Entrega 24-72 horas',
+  detalle:  'Entrega estimada entre 24 y 72 horas laborables, según el destino.',
   dias_min: 1, dias_max: 3,
   especial: false,
   icono:    '📦',
@@ -61,8 +60,8 @@ const T_MULTIFOCAL: EntregaInfo = {
 }
 
 const T_TORICO: EntregaInfo = {
-  etiqueta: 'Entrega de 25 a 40 días',
-  detalle:  'Entrega estimada del lente tórico: de 25 a 40 días.',
+  etiqueta: 'Entrega de 25 a 45 días',
+  detalle:  'Entrega estimada del lente tórico: de 25 a 45 días.',
   dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',
@@ -81,15 +80,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
   if (tipo === 'multifocal') return T_MULTIFOCAL
   if (tipo === 'torico')     return T_TORICO
 
-  // Parsear SPH (solo relevante para color: plano vs. con graduación)
-  const sphNum = sph != null ? parseFloat(String(sph)) : null
-
-  if (tipo === 'color') {
-    // Color CON graduación (positivo o negativo) → 2-4 días
-    // Color PLANO (0.00) o sin seleccionar → 24h
-    if (sphNum != null && sphNum !== 0) return T_24_72H
-    return T_COLOR_PLANO
-  }
+  if (tipo === 'color') return T_COLOR_PLANO
 
   if (tipo === 'solucion')   return T_24H
   if (tipo === 'gota')       return T_24H
