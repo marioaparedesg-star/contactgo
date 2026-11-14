@@ -908,28 +908,31 @@ export default function CheckoutPage() {
 
                     {/* Resumen compacto del pedido */}
                     <div className="rounded-2xl border border-slate-200/80 bg-[#fbfcfe] px-3.5 sm:px-4 py-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="min-w-0">
-                          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500 mb-3">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
-                          <div className="mt-1 space-y-1">
-                            {items.map((item: any, index: number) => {
-                              const isColor = item.product?.tipo === 'color'
-                              const bilateralDifferent = !isColor && item.ojo_mode === 'AMBOS' && item.misma_receta === false
-                              const rx = isColor ? '' : bilateralDifferent
-                                ? `OD ${item.sph_od != null ? Number(item.sph_od).toFixed(2) : '—'} / OI ${item.sph_oi != null ? Number(item.sph_oi).toFixed(2) : '—'}`
-                                : item.sph != null && Number(item.sph) !== 0 ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${Number(item.cyl).toFixed(2)}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
-                              const eyes = isColor ? 'Par para ambos ojos' : item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
-                              return (
-                                <div key={item.product.id + '-' + index} className="flex items-center gap-3 rounded-xl bg-white p-2.5 border border-slate-100">
-                                  {item.product.imagen_url ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={56} height={56} className="h-14 w-14 shrink-0 rounded-lg bg-slate-50 object-contain p-1" unoptimized /> : <div className="h-14 w-14 shrink-0 rounded-lg bg-slate-100" />}
-                                  <div className="min-w-0 flex-1">
-                                    <p className="text-xs font-bold leading-snug text-[#002455]">{item.product.nombre} <span className="font-medium text-slate-500">×{item.cantidad}</span></p>
-                                    <p className="mt-1 text-[11px] leading-relaxed text-slate-500 break-words">{[eyes, rx, item.color ? `Color: ${item.color}` : '', item.add_power ? `ADD ${item.add_power}` : ''].filter(Boolean).join(' · ')}</p>
-                                  </div>
+                      <div className="w-full min-w-0">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500 mb-3">Tu pedido · {items.reduce((n, item) => n + item.cantidad, 0)} {items.reduce((n, item) => n + item.cantidad, 0) === 1 ? 'producto' : 'productos'}</p>
+                        <div className="mt-1 w-full space-y-2">
+                          {items.map((item: any, index: number) => {
+                            const isColor = item.product?.tipo === 'color'
+                            const bilateralDifferent = !isColor && item.ojo_mode === 'AMBOS' && item.misma_receta === false
+                            const rx = isColor ? '' : bilateralDifferent
+                              ? `OD ${item.sph_od != null ? Number(item.sph_od).toFixed(2) : '—'} / OI ${item.sph_oi != null ? Number(item.sph_oi).toFixed(2) : '—'}`
+                              : item.sph != null && Number(item.sph) !== 0 ? `SPH ${Number(item.sph).toFixed(2)}${item.cyl != null ? ` · CYL ${item.cyl}` : ''}${item.axis != null ? ` · AXIS ${item.axis}°` : ''}` : ''
+                            const eyes = isColor ? 'Par para ambos ojos' : item.ojo_mode === 'OD' ? 'Ojo derecho' : item.ojo_mode === 'OI' ? 'Ojo izquierdo' : item.ojo_mode === 'AMBOS' ? 'Ambos ojos' : ''
+                            return (
+                              <div key={item.product.id + '-' + index} className="flex w-full items-center gap-4 rounded-xl border border-slate-100 bg-white p-3">
+                                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-slate-50 p-2">
+                                  {item.product.imagen_url ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={96} height={96} className="h-full w-full object-contain" unoptimized /> : <div className="h-full w-full rounded-lg bg-slate-100" />}
                                 </div>
-                              )
-                            })}
-                          </div>
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-bold leading-snug text-[#002455]">{item.product.nombre}</p>
+                                  <p className="mt-1 text-xs font-semibold text-slate-500">Cantidad: {item.cantidad}</p>
+                                  {item.color && <span className="mt-2 inline-flex rounded-full bg-[#e5fafa] px-2.5 py-1 text-[11px] font-semibold text-[#00666b]">Color: {item.color}</span>}
+                                  {(eyes || rx || item.add_power) && <p className="mt-2 text-[11px] leading-relaxed text-slate-500 break-words">{[eyes, rx, item.add_power ? `ADD ${item.add_power}` : ''].filter(Boolean).join(' · ')}</p>}
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
                           <div className="mt-2 space-y-1 border-t border-gray-200 pt-2 text-xs">
                             <div className="flex justify-between gap-3 text-gray-600"><span>Subtotal</span><span>RD${sub.toLocaleString()}</span></div>
                             {descuento > 0 && <div className="flex justify-between gap-3 text-green-700"><span>Descuento</span><span>−RD${descuento.toLocaleString()}</span></div>}
