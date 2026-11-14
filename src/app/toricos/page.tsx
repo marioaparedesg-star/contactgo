@@ -23,7 +23,7 @@ export const revalidate = 60
 const faqs = [
   { q: '¿Qué son los lentes tóricos?', a: 'Los lentes tóricos están diseñados específicamente para corregir el astigmatismo. A diferencia de los lentes esféricos, tienen una curvatura diferente en cada eje para compensar la forma irregular de la córnea.' },
   { q: '¿Cómo sé si necesito lentes tóricos?', a: 'Si tu receta tiene valores de CYL (cilindro) y AXIS (eje), tienes astigmatismo y necesitas lentes tóricos. El valor de AXIS indica la orientación del astigmatismo (0°–180°).' },
-  { q: '¿Por qué tardan más en llegar los lentes tóricos?', a: 'Los lentes tóricos se fabrican a medida según tu graduación exacta (Esfera, Cilindro y Eje). Por eso el tiempo de entrega es de 25-40 días, en lugar de las 24-48 horas de los esféricos.' },
+  { q: '¿Por qué tardan más en llegar los lentes tóricos?', a: 'Los lentes tóricos se fabrican a medida según tu graduación exacta (Esfera, Cilindro y Eje). Por eso el tiempo de entrega es de 25-45 días, en lugar de las 24-48 horas de los esféricos.' },
   { q: '¿Son más caros los lentes tóricos?', a: 'Sí, generalmente cuestan un poco más que los esféricos del mismo material porque requieren fabricación especializada. Sin embargo, son indispensables para corregir el astigmatismo correctamente.' },
 ]
 
@@ -42,9 +42,9 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-purple-700 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para astigmatismo</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes Tóricos para Astigmatismo en RD</h1>
-          <p className="text-purple-100 text-lg max-w-xl mx-auto">Fabricados a medida según tu SPH, CYL y AXIS. Entrega en 25-40 días en República Dominicana.</p>
+          <p className="text-purple-100 text-lg max-w-xl mx-auto">Fabricados a medida según tu SPH, CYL y AXIS. Entrega en 25-45 días en República Dominicana.</p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-400/20 border border-amber-300/30 text-amber-100 text-xs px-4 py-2 rounded-full">
-            ⏱ Tiempo de entrega: 25-40 días (fabricación a medida)
+            ⏱ Tiempo de entrega: 25-45 días (fabricación a medida)
           </div>
         </section>
 
