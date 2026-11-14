@@ -354,9 +354,16 @@ function emailAdmin(order: any, items: any[], evento: string, nuevoEstado?: stri
 }
 
 export async function POST(req: NextRequest) {
-  // Seguridad: origin + rate limit
-  const guardErr = guardRequest(req, { limitPerMin: 10 })
-  if (guardErr) return guardErr
+  // Seguridad: las llamadas del navegador siguen protegidas por origin + rate limit.
+  // Solo permitimos omitir el chequeo de Origin a llamadas internas autenticadas
+  // con el secreto compartido del servidor (nunca aceptar secreto vacío).
+  const internalSecret = process.env.CRON_SECRET
+  const providedSecret = req.headers.get('x-internal-secret')
+  const isInternalCall = Boolean(internalSecret && providedSecret && providedSecret === internalSecret)
+  if (!isInternalCall) {
+    const guardErr = guardRequest(req, { limitPerMin: 10 })
+    if (guardErr) return guardErr
+  }
   const ip = getIP(req)
 
 
