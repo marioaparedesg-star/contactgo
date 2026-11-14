@@ -6,7 +6,7 @@
  *  - Color plano → al día siguiente
  *  - Esférico    → 24-48 horas
  *  - Multifocal  → 1-5 días
- *  - Tórico      → 25-40 días
+ *  - Tórico      → 25-45 días
  *  - Color graduado → 2-4 días (pedido especial; no confundir con color plano)
  *  - Solución / Gota → 24 horas
  */
