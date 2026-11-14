@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'article',
     title: 'ACUVUE Oasys precio en República Dominicana 2026',
-    description: 'Precio actualizado ACUVUE Oasys en RD. Todos los modelos disponibles con entrega 24-48h.',
+    description: 'Guía de compra ACUVUE Oasys en República Dominicana. Consulta precios y tiempos de entrega vigentes en cada ficha.',
     url: 'https://www.contactgo.net/blog/acuvue-oasys-precio-republica-dominicana',
     siteName: 'ContactGo',
     locale: 'es_DO',
@@ -40,7 +40,7 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "Article",
             "headline": "ACUVUE Oasys precio en República Dominicana 2026",
-            "description": "Precio actualizado de ACUVUE Oasys en RD. Todos los modelos disponibles con entrega en 24-48 horas.",
+            "description": "Guía de ACUVUE Oasys en RD. Consulta precio y entrega vigentes en la ficha de cada modelo.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-01",
@@ -52,8 +52,8 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "¿Cuánto cuesta ACUVUE Oasys en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo, ACUVUE Oasys (6 lentes quincenales) cuesta RD$3,875. El modelo para astigmatismo está en RD$6,250 y el multifocal en RD$8,200. Los precios incluyen envío en 24-48h en toda la RD." } },
-              { "@type": "Question", "name": "¿Dónde comprar ACUVUE Oasys en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar ACUVUE Oasys directo del fabricante en ContactGo con entrega en 24-48h en toda República Dominicana. Son los mismos lentes que encuentras en clínicas y tiendas físicas pero con la comodidad de recibirlos en tu puerta." } },
+              { "@type": "Question", "name": "¿Cuánto cuesta ACUVUE Oasys en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "El precio de ACUVUE Oasys, sus versiones para astigmatismo y multifocales se muestra actualizado en la ficha de cada producto. El tiempo de entrega depende del modelo y del destino." } },
+              { "@type": "Question", "name": "¿Dónde comprar ACUVUE Oasys en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar ACUVUE Oasys en ContactGo y recibirlo en tu domicilio. El tiempo estimado es de 24-48 horas en Santo Domingo y 24-72 horas en el interior, según disponibilidad." } },
               { "@type": "Question", "name": "¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?", "acceptedAnswer": { "@type": "Answer", "text": "ACUVUE Oasys usa silicona hidrogel (Senofilcon A) con tecnología HYDRACLEAR Plus y ofrece mayor transmisión de oxígeno y comodidad. ACUVUE 2 usa hidrogel estándar. El Oasys es más cómodo, especialmente para uso prolongado o frente a pantallas." } },
               { "@type": "Question", "name": "¿Cuánto duran los ACUVUE Oasys?", "acceptedAnswer": { "@type": "Answer", "text": "ACUVUE Oasys son lentes quincenales — se usan durante 14 días y luego se descartan. Cada caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos." } }
             ]
@@ -89,7 +89,7 @@ export default function Page() {
           </div>
           <div>
             <p className="text-sm font-bold text-gray-900">Equipo ContactGo</p>
-            <p className="text-xs text-gray-500">Precios actualizados junio 2026 · Entrega 24-48h en RD</p>
+            <p className="text-xs text-gray-500">Consulta el precio vigente en cada ficha · Entrega según destino</p>
           </div>
         </div>
 
@@ -118,7 +118,7 @@ export default function Page() {
             <p className="text-4xl font-black text-gray-900">RD$3,875</p>
             <p className="text-gray-500 text-sm">caja de 6 lentes</p>
           </div>
-          <p className="text-sm text-gray-600 mt-1">ACUVUE® Oasys® quincenal · Entrega en 24-48h</p>
+          <p className="text-sm text-gray-600 mt-1">ACUVUE® Oasys® quincenal · Entrega según destino</p>
           <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana"
             className="mt-4 inline-flex items-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">
             Comprar ACUVUE Oasys →
@@ -127,7 +127,7 @@ export default function Page() {
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
 
-          <p>Si buscas el precio de <strong>ACUVUE Oasys en República Dominicana</strong>, llegaste al lugar correcto. En ContactGo somos la tienda especializada en lentes de contacto con el catálogo completo de la línea ACUVUE — directo del fabricante y con entrega en 24-48 horas a toda la República Dominicana.</p>
+          <p>Si buscas el precio de <strong>ACUVUE Oasys en República Dominicana</strong>, llegaste al lugar correcto. En ContactGo somos la tienda especializada en lentes de contacto con el catálogo completo de la línea ACUVUE — directo del fabricante y con entrega estimada de 24-48 horas en Santo Domingo y 24-72 horas en el interior.</p>
 
           {/* Tabla de precios */}
           <section>
@@ -287,7 +287,7 @@ export default function Page() {
               {[
                 { paso: '1', desc: 'Selecciona tu modelo ACUVUE y la graduación de tu receta (SPH, y CYL/AXIS si tienes astigmatismo)' },
                 { paso: '2', desc: 'Paga de forma segura con tu tarjeta VISA o Mastercard a través de AZUL/Banco Popular' },
-                { paso: '3', desc: 'Recibe tu pedido en 24-48h en Santo Domingo, Santiago o donde estés en RD' },
+                { paso: '3', desc: 'Recibe tu pedido en 24-48 horas en Santo Domingo y 24-72 horas en el interior' },
               ].map(({ paso, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl text-sm">
                   <span className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-xs shrink-0">{paso}</span>
@@ -310,8 +310,8 @@ export default function Page() {
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes sobre ACUVUE Oasys en RD</h2>
             <div className="space-y-3">
               {[
-                { q: '¿Cuánto cuesta ACUVUE Oasys en República Dominicana?', a: 'En ContactGo, ACUVUE Oasys (6 lentes quincenales) cuesta RD$3,875. El modelo para astigmatismo está en RD$6,250 y el multifocal en RD$8,200. Los precios incluyen envío en 24-48h en toda la RD.' },
-                { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys directo del fabricante, directo del fabricante, con entrega a domicilio en 24-48 horas. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
+                { q: '¿Cuánto cuesta ACUVUE Oasys en República Dominicana?', a: 'En ContactGo, ACUVUE Oasys (6 lentes quincenales) cuesta RD$3,875. El modelo para astigmatismo está en RD$6,250 y el multifocal en RD$8,200. Consulta el precio vigente en la ficha de cada producto. El envío depende del destino.' },
+                { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys directo del fabricante, directo del fabricante, con entrega a domicilio estimada de 24-48 horas en Santo Domingo y 24-72 horas en el interior. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
                 { q: '¿Cuánto duran los ACUVUE Oasys?', a: 'Son lentes quincenales — se usan durante 14 días consecutivos y luego se descartan. Una caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos.' },
                 { q: '¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?', a: 'ACUVUE Oasys usa silicona hidrogel con HYDRACLEAR Plus (mayor oxígeno, mayor comodidad). ACUVUE 2 usa hidrogel convencional y es una opción más económica a RD$3,350.' },
                 { q: '¿ACUVUE Oasys sirve para astigmatismo?', a: 'Sí, pero necesitas el modelo específico: ACUVUE Oasys for Astigmatism. Este tiene un diseño tórico que estabiliza el lente para corregir el astigmatismo con precisión. Cuesta RD$6,250 en ContactGo.' },
@@ -348,7 +348,7 @@ export default function Page() {
 
         {/* CTA final */}
         <div className="mt-10 bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">ACUVUE Oasys — entrega en 24-48h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">ACUVUE Oasys — entrega según destino</h3>
           <p className="text-sm text-gray-600 mb-1">Los mismos lentes que en la clínica, directo a tu puerta en toda República Dominicana.</p>
           <p className="text-xs text-gray-400 mb-4">directo del fabricante · Directo del fabricante · Pago seguro AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -363,7 +363,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda República Dominicana</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48 horas en Santo Domingo y 24-72 horas en el interior</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
