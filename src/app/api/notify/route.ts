@@ -1,7 +1,6 @@
 import { guardRequest, getIP } from '@/lib/api-guard'
 // ============================================================
 // ContactGo — API: Notificaciones de pedidos
-import { getEntregaTextoEmail } from '@/lib/delivery-times'
 // Envía email al cliente + email al admin cuando cambia estado
 // POST /api/notify  { order_id, evento: 'nuevo_pedido' | 'estado_cambio', nuevo_estado? }
 // ============================================================
