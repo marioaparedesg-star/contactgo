@@ -1,8 +1,8 @@
-import { createServerSupabaseClient } from '@/lib/supabase-server'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getEntrega } from '@/lib/delivery-times'
 import ProductoClient from './ProductoClient'
+import { createClient } from '@supabase/supabase-js'
 export const revalidate = 300
 
 // ═══════════════════════════════════════════════════════════════════
@@ -26,7 +26,8 @@ export const revalidate = 300
 //     y devuelve todas las combos sin límite implícito
 // ═══════════════════════════════════════════════════════════════════
 async function getProduct(slug: string) {
-  const sb = await createServerSupabaseClient()
+  // Catálogo público: cliente anónimo SIN cookies (evita DYNAMIC_SERVER_USAGE en páginas estáticas de Next 15)
+  const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
   // Buscar primero por slug, si no encuentra intenta por id (UUID)
   // Cubre links viejos que usaban el UUID como identificador
   let { data } = await sb.from('products')
