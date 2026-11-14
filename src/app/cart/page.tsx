@@ -35,16 +35,13 @@ export default function CartPage() {
         axis: i.axis ?? null, add_power: i.add_power ?? null,
         size: i.size ?? null, suscripcion: i.suscripcion ?? null,
       }))
-      await sb.from('abandoned_carts').upsert({
-        cliente_email: user.email,
-        cliente_nombre: perfil?.nombre ?? user.user_metadata?.nombre ?? null,
-        cliente_telefono: perfil?.telefono ?? null,
-        items: JSON.stringify(snapshot),
-        total: snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0) + (snapshot.reduce((sum: number, item: any) => sum + item.precio * item.cantidad, 0) >= 8000 ? 0 : 250),
-        recuperado: false,
-        updated_at: new Date().toISOString(),
-      }, { onConflict: 'cliente_email', ignoreDuplicates: false })
-    }).catch(() => { if (active) window.location.replace('/cuenta?next=/cart') })
+      // No escribir carritos abandonados desde el cliente público:
+      // abandoned_carts está restringida por RLS y el seguimiento operativo
+      // se centraliza en /api/carrito/track con service role.
+      void snapshot
+    }).catch((error) => {
+      console.error('[cart] No se pudo cargar el perfil del carrito', error)
+    })
     return () => { active = false }
   }, [items])
 
