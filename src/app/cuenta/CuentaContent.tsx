@@ -1699,6 +1699,7 @@ export default function CuentaPage() {
                   <div className="space-y-3">
                     {historialPedido.map((h: any, i: number) => {
                       const ESTADO_ICON: Record<string,string> = { recibido:'📋', pago_aprobado:'💳', pendiente:'📋', confirmado:'✅', preparando:'📦', fabricante:'🏭', enviado:'🚚', transito:'🚚', entregado:'🎉', cancelado:'❌' }
+                      const ESTADO_LABEL: Record<string,string> = { recibido:'Pedido recibido', pago_aprobado:'Pago aprobado', pendiente:'Pendiente', confirmado:'Confirmado', preparando:'Preparando pedido', fabricante:'En proceso especial', enviado:'Enviado', transito:'En tránsito', entregado:'Entregado', cancelado:'Cancelado' }
                       const isLast = i === historialPedido.length - 1
                       return (
                         <div key={h.id ?? i} className="flex items-start gap-3 pl-1">
@@ -1706,7 +1707,7 @@ export default function CuentaPage() {
                             {ESTADO_ICON[h.estado] ?? '•'}
                           </div>
                           <div>
-                            <p className={`text-sm font-semibold capitalize ${isLast ? 'text-primary-600' : 'text-gray-600'}`}>{{recibido:'Pedido recibido',pago_aprobado:'Pago aprobado',pendiente:'Pendiente',confirmado:'Confirmado',preparando:'Preparando pedido',fabricante:'En proceso especial',enviado:'Enviado',transito:'En tránsito',entregado:'Entregado',cancelado:'Cancelado'} as Record<string,string>)[h.estado] || h.estado}</p>
+                            <p className={`text-sm font-semibold capitalize ${isLast ? 'text-primary-600' : 'text-gray-600'}`}>{ESTADO_LABEL[h.estado] ?? h.estado}</p>
                             <p className="text-xs text-gray-400">
                               {new Date(h.created_at).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {new Date(h.created_at).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'})}
                             </p>
