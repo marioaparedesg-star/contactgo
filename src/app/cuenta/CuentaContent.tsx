@@ -187,9 +187,8 @@ export default function CuentaPage() {
           sb.from('orders').select('*, order_items(*, product:products(nombre,tipo,imagen_url))').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('addresses').select('*').eq('user_id', user.id).order('created_at'),
           sb.from('saved_prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
-          sb.from('payment_methods').select('*').eq('user_id', user.id).order('created_at'),
           sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
-        ]).then(([rPerfil, rOrdenes, rDirs, rRecetas, rPagos, rSubs]) => {
+        ]).then(([rPerfil, rOrdenes, rDirs, rRecetas, rSubs]) => {
           if (rPerfil.status === 'fulfilled' && rPerfil.value.data) {
             const d = rPerfil.value.data
             setPerfil(d)
@@ -198,7 +197,6 @@ export default function CuentaPage() {
           if (rOrdenes.status === 'fulfilled')  setPedidos(rOrdenes.value.data || [])
           if (rDirs.status === 'fulfilled')     setDirecciones(rDirs.value.data || [])
           if (rRecetas.status === 'fulfilled')  setRecetas(rRecetas.value.data || [])
-          if (rPagos.status === 'fulfilled')    setPagos(rPagos.value.data || [])
           if (rSubs.status === 'fulfilled')     setSuscripciones(rSubs.value.data || [])
         }).catch(err => console.error('[cuenta] load error:', err))
       })
@@ -848,8 +846,8 @@ export default function CuentaPage() {
                 className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-left hover:border-primary-200 hover:shadow-md transition-all">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <p className="font-bold text-gray-900">Pedido #{p.id.slice(-6).toUpperCase()}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{new Date(p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}</p>
+                    <p className="font-bold text-gray-900">Pedido #{String(p.numero_orden || p.id).slice(-6).toUpperCase()}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}</p>
                   </div>
                   <span className={"px-3 py-1 rounded-full text-xs font-bold " + (ESTADO[p.estado]||'bg-gray-50 text-gray-600')}>{p.estado}</span>
                 </div>
@@ -1592,8 +1590,8 @@ export default function CuentaPage() {
               <X className="w-5 h-5 text-gray-600" />
             </button>
             <div>
-              <p className="font-bold text-gray-900">{"Pedido #"+selectedPedido.id.slice(-6).toUpperCase()}</p>
-              <p className="text-xs text-gray-400">{new Date(selectedPedido.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}</p>
+              <p className="font-bold text-gray-900">{"Pedido #"+String(selectedPedido.numero_orden || selectedPedido.id).slice(-6).toUpperCase()}</p>
+              <p className="text-xs text-gray-400">{new Date(selectedPedido.created_at || selectedPedido.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}</p>
             </div>
             <span className={"ml-auto px-3 py-1 rounded-full text-xs font-bold " + (ESTADO[selectedPedido.estado]||'bg-gray-50 text-gray-600')}>
               {selectedPedido.estado}
@@ -1704,7 +1702,7 @@ export default function CuentaPage() {
                   <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gray-100" />
                   <div className="space-y-3">
                     {historialPedido.map((h: any, i: number) => {
-                      const ESTADO_ICON: Record<string,string> = { pendiente:'📋', confirmado:'✅', preparando:'📦', enviado:'🚚', entregado:'🎉', cancelado:'❌' }
+                      const ESTADO_ICON: Record<string,string> = { recibido:'📋', pago_aprobado:'💳', pendiente:'📋', confirmado:'✅', preparando:'📦', fabricante:'🏭', enviado:'🚚', transito:'🚚', entregado:'🎉', cancelado:'❌' }
                       const isLast = i === historialPedido.length - 1
                       return (
                         <div key={h.id ?? i} className="flex items-start gap-3 pl-1">
@@ -1712,7 +1710,7 @@ export default function CuentaPage() {
                             {ESTADO_ICON[h.estado] ?? '•'}
                           </div>
                           <div>
-                            <p className={`text-sm font-semibold capitalize ${isLast ? 'text-primary-600' : 'text-gray-600'}`}>{h.estado}</p>
+                            <p className={`text-sm font-semibold capitalize ${isLast ? 'text-primary-600' : 'text-gray-600'}`}>{{recibido:'Pedido recibido',pago_aprobado:'Pago aprobado',pendiente:'Pendiente',confirmado:'Confirmado',preparando:'Preparando pedido',fabricante:'En proceso especial',enviado:'Enviado',transito:'En tránsito',entregado:'Entregado',cancelado:'Cancelado'} as Record<string,string>)[h.estado] || h.estado}</p>
                             <p className="text-xs text-gray-400">
                               {new Date(h.created_at).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {new Date(h.created_at).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'})}
                             </p>
