@@ -1,485 +1,29 @@
-import { guardRequest, getIP } from '@/lib/api-guard'
-// ============================================================
-// ContactGo — API: Notificaciones de pedidos
-import { getEntregaTextoEmail } from '@/lib/delivery-times'
-// Envía email al cliente + email al admin cuando cambia estado
-// POST /api/notify  { order_id, evento: 'nuevo_pedido' | 'estado_cambio', nuevo_estado? }
-// ============================================================
+import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
-
-function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
-
-function esperar(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
-// FIX (2026-08-30): mismo hallazgo que en WhatsApp — un fallo de Resend
-// (caída momentánea, timeout de red) hacía perder el correo de confirmación
-// para siempre, sin ningún reintento. Ahora reintenta hasta 3 veces con
-// espera progresiva antes de registrar el error final. Tiempos cortos
-// deliberadamente (igual que en WhatsApp): esta función se llama con
-// await desde /api/notify, que a su vez AZUL espera antes de redirigir
-// al cliente — no queremos acercarnos al límite de tiempo de la función.
-async function enviarEmailConReintentos(resend: Resend, params: { from: string; to: string; subject: string; html: string }) {
-  const ESPERAS_MS = [800, 1600]
-  let ultimoError: string | undefined
-  for (let intento = 1; intento <= 3; intento++) {
-    try {
-      const { data, error } = await resend.emails.send(params)
-      if (!error) return { resendId: data?.id, error: undefined, intentos: intento }
-      ultimoError = error.message
-    } catch (e: any) {
-      ultimoError = e?.message ?? 'Error desconocido'
-    }
-    if (intento < 3) await esperar(ESPERAS_MS[intento - 1])
-  }
-  return { resendId: undefined, error: ultimoError, intentos: 3 }
-}
-
-const BASE_URL    = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-// Admin recibe notificaciones en este email
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'info@contactgo.net'
-// FROM: si RESEND_FROM está configurado con dominio verificado, úsalo.
-// Si no, usa onboarding@resend.dev (funciona sin verificar dominio propio)
-const FROM_EMAIL  = process.env.RESEND_FROM ?? 'ContactGo <notifications@contactgo.net>'
-
-const ESTADO_LABEL: Record<string, string> = {
-  recibido:      'Pedido recibido',
-  pendiente:     'Pedido recibido',
-  pago_aprobado: 'Pago aprobado',
-  confirmado:    'Pedido confirmado',
-  preparando:    'En preparación',
-  fabricante:    'En fabricación',
-  transito:      'En tránsito',
-  enviado:       'En camino',
-  entregado:     'Entregado',
-  cancelado:     'Cancelado',
-}
-
-const ESTADO_MSG: Record<string, string> = {
-  recibido:      'Hemos recibido tu pedido y estamos validando los detalles.',
-  pendiente:     'Hemos recibido tu pedido y está pendiente de confirmación.',
-  pago_aprobado: 'Tu pago fue aprobado. Estamos preparando tu pedido.',
-  confirmado:    'Tu pedido está confirmado. Lo estamos preparando para que llegue lo antes posible.',
-  preparando:    'Estamos preparando tus lentes con mucho cuidado.',
-  fabricante:    'Tu pedido está en proceso de fabricación con el proveedor.',
-  transito:      'Tu pedido está en tránsito hacia su destino.',
-  enviado:       'Tus lentes están en camino. En poco tiempo los tendrás en tu puerta.',
-  entregado:     'Tu pedido figura como entregado. Esperamos que disfrutes tus lentes.',
-  cancelado:     'Tu pedido fue cancelado. Escríbenos y te ayudaremos.',
-}
-
-function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: string): string {
-  const estado      = nuevoEstado ?? order.estado
-  const estadoMsg   = ESTADO_MSG[estado] ?? ''
-  const pedidoId    = (order.numero_orden ?? order.id.slice(-8).toUpperCase())
-  const isNuevo     = evento === 'nuevo_pedido'
-  const totalNum    = order.total ?? 0
-  const envioNum    = order.envio ?? 0
-  const descNum     = order.descuento ?? 0
-  const subtotalConITBIS = totalNum - envioNum - descNum
-  const itbis       = Math.round(subtotalConITBIS * 18 / 118)
-  const subtotalSinITBIS = subtotalConITBIS - itbis
-  const fecha       = new Date(order.created_at ?? Date.now())
-    .toLocaleDateString('es-DO', { day:'2-digit', month:'long', year:'numeric' })
-
-  // Tiempo de entrega (puede haber ítems de diferentes categorías — usar el más largo)
-  // tipo viene del join con products (order_items no tiene columna tipo directa)
-  const tiposItems = [...new Set(items.map((i: any) => i.tipo ?? i.products?.tipo).filter(Boolean))]
-  const entregaTexto = tiposItems.length
-    ? getEntregaTextoEmail(tiposItems.includes('torico') ? 'torico' : tiposItems.includes('multifocal') ? 'multifocal' : tiposItems[0])
-    : 'Entrega estimada: 24 horas laborables.'
-
-  const metodoPagoLabel = order.metodo_pago === 'contra_entrega' ? 'Pago contra entrega' : order.metodo_pago === 'transferencia' ? 'Transferencia bancaria' : order.metodo_pago === 'efectivo' ? 'Efectivo' : order.metodo_pago === 'azul' || order.metodo_pago === 'tarjeta' ? 'Tarjeta de crédito/débito' : 'Por confirmar'
-
-  // Fila de cada producto con prescripción completa
-  const itemsRows = items.map(i => {
-    const sph = i.sph != null ? (Number(i.sph) > 0 ? `+${Number(i.sph).toFixed(2)}` : Number(i.sph).toFixed(2)) : null
-    // Para AMBOS con diferente receta
-    const sphOD = i.sph_od != null ? (Number(i.sph_od) > 0 ? `+${Number(i.sph_od).toFixed(2)}` : Number(i.sph_od).toFixed(2)) : null
-    const sphOI = i.sph_oi != null ? (Number(i.sph_oi) > 0 ? `+${Number(i.sph_oi).toFixed(2)}` : Number(i.sph_oi).toFixed(2)) : null
-    const subMap: Record<string,string> = {mensual:'📦 Mensual', trimestral:'⭐ Trimestral', semestral:'💎 Semestral', '15_dias':'📦 Quincenal'}
-    const subLabel = i.suscripcion ? (subMap[i.suscripcion] ?? i.suscripcion) : null
-    const receta = [
-      sph ? `Esfera ${sph}` : null,
-      sphOD ? `OD: ${sphOD}` : null,
-      sphOI ? `OI: ${sphOI}` : null,
-      i.cyl && i.cyl !== 0 ? `Cil. ${Number(i.cyl).toFixed(2)}` : null,
-      i.axis ? `${i.axis}°` : null,
-      i.add_power ? `ADD ${i.add_power}` : null,
-      i.color ? i.color : null,
-    ].filter(Boolean).join(' · ')
-    // ojo_mode es el nuevo campo; i.ojo es el legacy para retrocompat
-    const ojoDisplay = i.ojo_mode ?? i.ojo
-    const ojoLabel = ojoDisplay === 'AMBOS' ? '👀 Ambos ojos'
-                   : ojoDisplay === 'OD'    ? '👁 Ojo Derecho'
-                   : ojoDisplay === 'OI'    ? '👁 Ojo Izquierdo'
-                   : null
-    const subtotal = (Number(i.precio ?? 0) * Number(i.cantidad ?? 1))
-    return `
-      <tr>
-        <td style="padding:10px 0;border-bottom:1px solid #f3f4f6;vertical-align:top;">
-          <p style="margin:0;font-weight:700;color:#111;font-size:13px;">${i.nombre}</p>
-          ${ojoLabel ? `<span style="display:inline-block;background:${ojoDisplay==='OD'?'#dbeafe':ojoDisplay==='AMBOS'?'#ede9fe':'#ccfbf1'};color:${ojoDisplay==='OD'?'#1d4ed8':ojoDisplay==='AMBOS'?'#6d28d9':'#0f766e'};font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;margin:3px 0;">${ojoLabel}</span>` : ''}
-          ${i.color ? `<span style="display:inline-block;background:#f3e8ff;color:#7c3aed;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;margin:2px 0;">🎨 ${i.color}</span>` : ''}
-          ${subLabel ? `<span style="display:inline-block;background:#f0fdf4;color:#166534;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;margin:2px 0">${subLabel}</span>` : ''}
-          ${receta ? `<p style="margin:3px 0 0;color:#4b5563;font-size:11px;font-family:monospace;">${receta}</p>` : ''}
-          <p style="margin:3px 0 0;color:#9ca3af;font-size:11px;">Cantidad: ${i.cantidad}</p>
-        </td>
-        <td style="padding:10px 0;border-bottom:1px solid #f3f4f6;text-align:right;vertical-align:top;white-space:nowrap;">
-          <p style="margin:0;font-weight:700;color:#111;font-size:13px;">RD$${subtotal.toLocaleString()}</p>
-          <p style="margin:2px 0 0;color:#9ca3af;font-size:11px;">RD$${Number(i.precio ?? 0).toLocaleString()} c/u</p>
-        </td>
-      </tr>`
-  }).join('')
-
-  return `<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Comprobante ContactGo #${pedidoId}</title>
-</head>
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px 16px;">
-<tr><td>
-<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-
-  <!-- HEADER -->
-  <tr><td style="background:#16a34a;padding:24px 32px;">
-    <table width="100%" cellpadding="0" cellspacing="0">
-      <tr>
-        <td>
-          <p style="margin:0;color:#ffffff;font-size:24px;font-weight:900;letter-spacing:-0.5px;">ContactGo</p>
-          <p style="margin:2px 0 0;color:#bbf7d0;font-size:12px;">Lentes de Contacto · República Dominicana</p>
-        </td>
-        <td style="text-align:right;">
-          <p style="margin:0;color:#bbf7d0;font-size:11px;">COMPROBANTE DE PAGO</p>
-          <p style="margin:2px 0 0;color:#ffffff;font-weight:700;font-size:14px;">#${pedidoId}</p>
-          <p style="margin:2px 0 0;color:#bbf7d0;font-size:11px;">${fecha}</p>
-        </td>
-      </tr>
-    </table>
-  </td></tr>
-
-  <!-- SALUDO -->
-  <tr><td style="padding:24px 32px 0;">
-    <p style="margin:0;font-size:16px;color:#111;font-weight:700;">
-      ${isNuevo ? `¡Hola ${order.cliente_nombre?.split(' ')[0] ?? ''}! Tu pedido está confirmado 🎉` : `Actualización de tu pedido #${pedidoId}`}
-    </p>
-    <p style="margin:6px 0 0;font-size:13px;color:#6b7280;">
-      ${isNuevo ? 'Hemos recibido tu pedido y estamos procesándolo. A continuación tu comprobante completo.' : estadoMsg}
-    </p>
-  </td></tr>
-
-  <!-- TIEMPO DE ENTREGA ESTIMADO -->
-  ${isNuevo ? `<tr><td style="padding:16px 32px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;">
-      <tr><td>
-        <p style="margin:0;font-size:11px;font-weight:700;color:#92400e;">⏱️ TIEMPO DE ENTREGA ESTIMADO</p>
-        <p style="margin:4px 0 0;font-size:13px;color:#78350f;">${entregaTexto}</p>
-      </td></tr>
-    </table>
-  </td></tr>` : ''}
-
-  <!-- DATOS CLIENTE Y ENTREGA -->
-  <tr><td style="padding:16px 32px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-      <tr>
-        <td style="padding:12px 16px;background:#f9fafb;border-bottom:1px solid #e5e7eb;" colspan="2">
-          <p style="margin:0;font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;">Datos del pedido</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:10px 16px;border-right:1px solid #e5e7eb;vertical-align:top;width:50%;">
-          <p style="margin:0;font-size:10px;color:#9ca3af;font-weight:600;">CLIENTE</p>
-          <p style="margin:3px 0 0;font-size:13px;font-weight:700;color:#111;">${order.cliente_nombre}</p>
-          <p style="margin:2px 0 0;font-size:12px;color:#6b7280;">${order.cliente_email}</p>
-          <p style="margin:2px 0 0;font-size:12px;color:#6b7280;">${order.cliente_telefono ?? ''}</p>
-        </td>
-        <td style="padding:10px 16px;vertical-align:top;width:50%;">
-          <p style="margin:0;font-size:10px;color:#9ca3af;font-weight:600;">ENTREGA</p>
-          <p style="margin:3px 0 0;font-size:13px;font-weight:700;color:#111;">${order.cliente_nombre}</p>
-          <p style="margin:2px 0 0;font-size:12px;color:#6b7280;">${order.direccion_texto ?? ''}</p>
-          <p style="margin:2px 0 0;font-size:12px;color:#6b7280;">República Dominicana</p>
-        </td>
-      </tr>
-    </table>
-  </td></tr>
-
-  <!-- PRODUCTOS -->
-  ${items.length > 0 ? `
-  <tr><td style="padding:16px 32px 0;">
-    <p style="margin:0 0 8px;font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;">Productos ordenados</p>
-    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-      <tr style="background:#f9fafb;">
-        <td style="padding:8px 12px;font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;">Producto</td>
-        <td style="padding:8px 12px;font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;text-align:right;">Subtotal</td>
-      </tr>
-      ${itemsRows}
-    </table>
-  </td></tr>` : ''}
-
-  <!-- TOTALES -->
-  <tr><td style="padding:12px 32px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-      ${descNum > 0 ? `<tr>
-        <td style="padding:8px 16px;font-size:12px;color:#16a34a;border-bottom:1px solid #f3f4f6;">Descuento</td>
-        <td style="padding:8px 16px;font-size:12px;color:#16a34a;text-align:right;border-bottom:1px solid #f3f4f6;">-RD$${descNum.toLocaleString()}</td>
-      </tr>` : ''}
-      <tr>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;border-bottom:1px solid #f3f4f6;">Envío</td>
-        <td style="padding:8px 16px;font-size:12px;color:#6b7280;text-align:right;border-bottom:1px solid #f3f4f6;">${envioNum > 0 ? `RD$${envioNum.toLocaleString()}` : 'Gratis'}</td>
-      </tr>
-      <tr style="background:#f0fdf4;">
-        <td style="padding:12px 16px;font-size:16px;font-weight:900;color:#16a34a;">TOTAL</td>
-        <td style="padding:12px 16px;font-size:16px;font-weight:900;color:#16a34a;text-align:right;">RD$${totalNum.toLocaleString()}</td>
-      </tr>
-    </table>
-  </td></tr>
-
-  <!-- MÉTODO DE PAGO -->
-  <tr><td style="padding:12px 32px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-      <tr>
-        <td style="padding:10px 16px;border-right:1px solid #e5e7eb;width:50%;vertical-align:top;">
-          <p style="margin:0;font-size:10px;color:#9ca3af;font-weight:600;text-transform:uppercase;">Método de pago</p>
-          <p style="margin:4px 0 0;font-size:12px;font-weight:700;color:#111;">${metodoPagoLabel}</p>
-          <p style="margin:2px 0 0;font-size:11px;color:#6b7280;">Moneda: Peso Dominicano (RD$)</p>
-        </td>
-        <td style="padding:10px 16px;vertical-align:top;">
-          <p style="margin:0;font-size:10px;color:#9ca3af;font-weight:600;text-transform:uppercase;">Estado</p>
-          <p style="margin:4px 0 0;font-size:14px;font-weight:900;color:${order.pago_estado==='pagado'?'#16a34a':'#d97706'};">
-            ${order.pago_estado === 'pagado' ? '✅ PAGADO' : '⏳ PENDIENTE'}
-          </p>
-        </td>
-      </tr>
-    </table>
-  </td></tr>
-
-  <!-- BOTONES CTA -->
-  <tr><td style="padding:20px 32px;text-align:center;">
-    <a href="${BASE_URL}/recibo?token=${order.public_token}" 
-       style="display:inline-block;background:#0d6efd;color:#fff;text-decoration:none;font-weight:700;font-size:13px;padding:11px 24px;border-radius:8px;margin:0 6px 8px;">
-      🧾 Ver comprobante completo
-    </a>
-    <a href="${BASE_URL}/cuenta"
-       style="display:inline-block;background:#16a34a;color:#fff;text-decoration:none;font-weight:700;font-size:13px;padding:11px 24px;border-radius:8px;margin:0 6px 8px;">
-      📦 Seguir mi pedido
-    </a>
-    <p style="margin:12px 0 0;font-size:12px;color:#9ca3af;">
-      ¿Dudas? Escríbenos por
-      <a href="https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP ?? '18096942268'}?text=Hola%2C+tengo+una+pregunta+sobre+mi+pedido+%23${pedidoId}" style="color:#16a34a;font-weight:600;"> WhatsApp (809) 694-2268</a>
-    </p>
-  </td></tr>
-
-  <!-- RESEÑA GOOGLE -->
-  <tr><td style="padding:0 32px 20px;">
-    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:16px;text-align:center;">
-      <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#92400e;">⭐ ¿Ya recibiste tus lentes?</p>
-      <p style="margin:0 0 12px;font-size:12px;color:#78350f;">Tu reseña en Google ayuda a otros dominicanos a encontrarnos. Solo toma 1 minuto.</p>
-      <a href="https://g.page/r/Cb-RwE6S9vzgEAE/review"
-        style="display:inline-block;background:#facc15;color:#111;font-weight:700;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:13px;">
-        ⭐ Dejar reseña en Google
-      </a>
-    </div>
-  </td></tr>
-
-  <!-- SEGURIDAD -->
-  <tr><td style="padding:0 32px 20px;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;padding:10px 14px;">
-      <tr>
-        <td style="font-size:10px;color:#9ca3af;padding:0 8px 0 0;white-space:nowrap;">Pago seguro:</td>
-        <td>
-          <span style="font-size:10px;background:#1a1f71;color:#fff;padding:2px 7px;border-radius:3px;font-weight:700;margin-right:4px;">VISA</span>
-          <span style="font-size:10px;background:#EB001B;color:#fff;padding:2px 7px;border-radius:3px;font-weight:700;margin-right:4px;">Mastercard</span>
-          <span style="font-size:10px;border:1px solid #1a1f71;color:#1a1f71;padding:2px 7px;border-radius:3px;font-weight:700;margin-right:4px;">Verified by VISA</span>
-          <span style="font-size:10px;border:1px solid #EB001B;color:#EB001B;padding:2px 7px;border-radius:3px;font-weight:700;margin-right:4px;">Mastercard ID Check</span>
-          <span style="font-size:10px;background:#16a34a;color:#fff;padding:2px 7px;border-radius:3px;font-weight:700;">🔒 SSL</span>
-        </td>
-      </tr>
-    </table>
-  </td></tr>
-
-  <!-- FOOTER -->
-  <tr><td style="background:#f9fafb;padding:14px 32px;text-align:center;border-top:1px solid #f3f4f6;">
-    <p style="margin:0;font-size:11px;color:#9ca3af;line-height:1.6;">
-      <strong style="color:#6b7280;">ContactGo</strong> · contactgo.net · info@contactgo.net · (809) 694-2268<br>
-      Santo Domingo, República Dominicana · No aceptamos devoluciones después de 30 días.
-    </p>
-  </td></tr>
-
-</table>
-</td></tr>
-</table>
-</body>
-</html>`
-}
-
-function escapeEmailHtml(value: unknown): string {
-  const entities: Record<string, string> = {
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-  }
-  return String(value ?? '').replace(/[&<>"']/g, char => entities[char] ?? char)
-}
-
-// Plantilla transaccional rediseñada: compacta, limpia y consistente con la
-// identidad visual azul/turquesa de ContactGo. Se usa para cada cambio de estado.
-function emailEstado(order: any, estado: string): string {
-  const pedidoId = escapeEmailHtml(order.numero_orden ?? order.id.slice(-8).toUpperCase())
-  const nombre = escapeEmailHtml(order.cliente_nombre?.split(' ')[0] ?? 'Cliente')
-  const label = escapeEmailHtml(ESTADO_LABEL[estado] ?? estado)
-  const mensaje = escapeEmailHtml(ESTADO_MSG[estado] ?? 'El estado de tu pedido fue actualizado.')
-  const base = BASE_URL
-  const fecha = new Date().toLocaleDateString('es-DO', { day: '2-digit', month: 'long', year: 'numeric' })
-  const total = Number(order.total ?? 0).toLocaleString('es-DO')
-  const color = estado === 'entregado' ? '#0f766e' : '#0b2b50'
-  return `<!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Actualización de pedido #${pedidoId} | ContactGo</title></head>
-<body style="margin:0;padding:0;background:#f4f7fb;font-family:Arial,Helvetica,sans-serif;color:#172b4d">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7fb;padding:32px 12px"><tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fff;border:1px solid #e5eaf1;border-radius:16px;overflow:hidden">
-<tr><td style="padding:24px 30px;background:#002455">
-<p style="margin:0;color:#fff;font-size:23px;font-weight:800;letter-spacing:-.5px">Contact<span style="color:#01b2b7">Go</span></p>
-<p style="margin:5px 0 0;color:#c7d6e8;font-size:11px;letter-spacing:1.2px;text-transform:uppercase">Actualización de tu pedido</p></td></tr>
-<tr><td style="padding:30px 30px 12px">
-<p style="margin:0 0 8px;color:#64748b;font-size:12px">Hola ${nombre},</p>
-<h1 style="margin:0;color:#102a43;font-size:24px;line-height:1.25">Tu pedido está: ${label}</h1>
-<p style="margin:12px 0 0;color:#526579;font-size:14px;line-height:1.7">${mensaje}</p>
-</td></tr>
-<tr><td style="padding:12px 30px 24px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7fafc;border:1px solid #e5edf5;border-radius:12px">
-<tr><td style="padding:16px 18px"><p style="margin:0;color:#8191a5;font-size:10px;font-weight:700;letter-spacing:1px">NÚMERO DE PEDIDO</p><p style="margin:5px 0 0;color:#102a43;font-size:18px;font-weight:800">#${pedidoId}</p></td>
-<td align="right" style="padding:16px 18px"><p style="margin:0;color:#8191a5;font-size:10px;font-weight:700;letter-spacing:1px">TOTAL</p><p style="margin:5px 0 0;color:#102a43;font-size:16px;font-weight:800">RD${total}</p></td></tr></table></td></tr>
-<tr><td align="center" style="padding:0 30px 28px"><a href="${base}/cuenta" style="display:inline-block;background:#002455;color:#fff;text-decoration:none;font-size:14px;font-weight:700;padding:13px 25px;border-radius:8px">Consultar mi pedido</a></td></tr>
-<tr><td style="padding:18px 30px;background:#f8fafc;border-top:1px solid #edf1f5;text-align:center"><p style="margin:0;color:#64748b;font-size:11px;line-height:1.7">¿Necesitas ayuda? Escríbenos por WhatsApp al (809) 694-2268.<br>ContactGo · República Dominicana · ${fecha}</p><p style="margin:8px 0 0;color:#9aa8b8;font-size:10px">Este correo es una notificación automática sobre tu pedido.</p></td></tr>
-</table></td></tr></table></body></html>`
-}
-
-function emailAdmin(order: any, items: any[], evento: string, nuevoEstado?: string): string {
-  const pedidoId = order.id.slice(-8).toUpperCase()
-  const isNuevo  = evento === 'nuevo_pedido'
-  const estado   = nuevoEstado ?? order.estado
-
-  return `<!DOCTYPE html>
-<html>
-<body style="font-family:sans-serif;padding:24px;background:#f9fafb;">
-  <div style="max-width:480px;margin:0 auto;background:#fff;border-radius:12px;padding:24px;border:1px solid #e5e7eb;">
-    <h2 style="margin:0 0 4px;color:#111;">${isNuevo ? '🛍️ Nuevo pedido' : `📋 Estado actualizado: ${ESTADO_LABEL[estado] ?? estado}`}</h2>
-    <p style="color:#6b7280;font-size:13px;margin:0 0 16px;">Pedido #${pedidoId}</p>
-    
-    <table width="100%" cellpadding="0" cellspacing="0" style="font-size:13px;">
-      <tr><td style="padding:4px 0;color:#6b7280;">Cliente</td><td style="padding:4px 0;font-weight:600;text-align:right;">${order.cliente_nombre}</td></tr>
-      <tr><td style="padding:4px 0;color:#6b7280;">Teléfono</td><td style="padding:4px 0;text-align:right;"><a href="https://wa.me/${(order.cliente_telefono ?? '').replace(/\D/g, '')}" style="color:#16a34a;">${order.cliente_telefono}</a></td></tr>
-      <tr><td style="padding:4px 0;color:#6b7280;">Email</td><td style="padding:4px 0;text-align:right;">${order.cliente_email ?? '—'}</td></tr>
-      <tr><td style="padding:4px 0;color:#6b7280;">Total</td><td style="padding:4px 0;font-weight:700;text-align:right;color:#16a34a;">RD$${order.total?.toLocaleString()}</td></tr>
-      <tr><td style="padding:4px 0;color:#6b7280;">Método</td><td style="padding:4px 0;text-align:right;">${order.metodo_pago?.replace('_', ' ')}</td></tr>
-      <tr><td style="padding:4px 0;color:#6b7280;">Dirección</td><td style="padding:4px 0;text-align:right;">${order.direccion_texto ?? '—'}</td></tr>
-    </table>
-
-    ${items.length > 0 ? `
-    <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;">
-    <p style="font-weight:600;font-size:12px;color:#6b7280;margin:0 0 8px;">PRODUCTOS</p>
-    ${items.map(i => `<p style="margin:2px 0;font-size:13px;"><strong>${i.nombre}</strong>${i.sph != null ? ` · Esf:${i.sph > 0 ? '+' : ''}${i.sph}` : ''}${i.cyl ? ` Cil:${i.cyl}` : ''}${i.color ? ` ${i.color}` : ''}${i.ojo ? ` ${i.ojo}` : ''} × ${i.cantidad}</p>`).join('')}
-    ` : ''}
-
-    <div style="margin-top:16px;text-align:center;">
-      <a href="${BASE_URL}/admin/pedidos" style="display:inline-block;background:#111;color:#fff;text-decoration:none;font-size:13px;font-weight:600;padding:10px 20px;border-radius:8px;">Ver en Admin</a>
-    </div>
-  </div>
-</body>
-</html>`
-}
+import { enviarNotificacionPedido } from '@/lib/email/order-notifications'
 
 export async function POST(req: NextRequest) {
-  // Seguridad: las llamadas del navegador siguen protegidas por origin + rate limit.
-  // Solo permitimos omitir el chequeo de Origin a llamadas internas autenticadas
-  // con el secreto compartido del servidor (nunca aceptar secreto vacío).
-  const internalSecret = process.env.CRON_SECRET
-  const providedSecret = req.headers.get('x-internal-secret')
-  const isInternalCall = Boolean(internalSecret && providedSecret && providedSecret === internalSecret)
-  if (!isInternalCall) {
-    const guardErr = guardRequest(req, { limitPerMin: 10 })
-    if (guardErr) return guardErr
-  }
-  const ip = getIP(req)
-
+  // Endpoint de compatibilidad HTTP. El panel administrativo invoca el
+  // servicio interno directamente y no pasa por una petición HTTP pública.
+  const guardErr = guardRequest(req, { limitPerMin: 10 })
+  if (guardErr) return guardErr
 
   try {
     const { order_id, evento = 'nuevo_pedido', nuevo_estado } = await req.json()
-
     if (!order_id) return NextResponse.json({ error: 'order_id requerido' }, { status: 400 })
-    if (!process.env.RESEND_API_KEY) return NextResponse.json({ error: 'RESEND_API_KEY no configurado' }, { status: 500 })
-
-    const resend = new Resend(process.env.RESEND_API_KEY)
-    const sbAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
-
-    // Obtener orden + items
-    const { data: order } = await getSb().from('orders').select('*').eq('id', order_id).single()
-    if (!order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 })
-
-    // FIX AUDITORÍA (2026-08-09): antes se usaba nuevo_estado tal cual lo
-    // mandara quien llamara al endpoint, sin comparar contra el estado REAL
-    // de la orden — alguien con un order_id válido podía hacer que un
-    // cliente real recibiera una notificación de "tu pedido fue cancelado"
-    // (o cualquier otro estado) sin que eso fuera cierto de verdad. Ahora se
-    // ignora cualquier nuevo_estado que no coincida con order.estado —
-    // el mensaje siempre refleja el estado real guardado en la base de datos.
-    const nuevoEstadoSeguro = (nuevo_estado && nuevo_estado === order.estado) ? nuevo_estado : order.estado
-
-    const { data: items } = await getSb().from('order_items')
-      .select('*, products(tipo)')
-      .eq('order_id', order_id)
-    const itemsList = items ?? []
-
-    const pedidoId = order.id.slice(-8).toUpperCase()
-    const estadoLabel = ESTADO_LABEL[nuevoEstadoSeguro] ?? nuevoEstadoSeguro
-
-    const subject = evento === 'nuevo_pedido'
-      ? `✅ Pedido #${pedidoId} recibido — ContactGo`
-      : `ContactGo · Tu pedido #${pedidoId} está ${estadoLabel} 👁️`
-
-    // Email al cliente + log de entrega — con protección contra duplicados
-    const emailTemplate = evento === 'nuevo_pedido'
-      ? 'confirmacion_orden'
-      : `actualizacion_estado_${nuevoEstadoSeguro}`
-    let emailClienteStatus: 'sent' | 'error' | 'skipped' = 'skipped'
-    let emailClienteError: string | undefined
-    if (order.cliente_email) {
-      // Verificar si ya se envió este mismo email para esta orden (evita duplicados
-      // por reintentos, doble-clic del cliente, o pruebas manuales del endpoint)
-      const { data: yaEnviado } = await sbAdmin.from('email_log')
-        .select('id').eq('order_id', order_id).eq('template', emailTemplate).eq('status', 'sent')
-        .maybeSingle()
-
-      if (!yaEnviado) {
-        const { resendId, error: emailError } = await enviarEmailConReintentos(resend, {
-          from: FROM_EMAIL,
-          to: order.cliente_email,
-          subject,
-          html: evento === 'estado_cambio' ? emailEstado(order, nuevoEstadoSeguro) : emailCliente(order, itemsList, evento, nuevoEstadoSeguro),
-        })
-        emailClienteStatus = emailError ? 'error' : 'sent'
-        emailClienteError = emailError
-        // Registrar en email_log para auditoría — nombres de columna correctos
-        // (bug anterior: usaba tipo/asunto/enviado/error_msg que no existen en la tabla real)
-        await sbAdmin.from('email_log').insert({
-          order_id:    order_id,
-          template:    emailTemplate,
-          to_email:    order.cliente_email,
-          subject:     subject,
-          resend_id:   resendId ?? null,
-          status:      emailError ? 'error' : 'sent',
-        }).then(() => {})
-      } else {
-        emailClienteStatus = 'sent'
-        console.log('[notify] Email ya enviado para este estado, se omite duplicado:', emailTemplate, order_id)
-      }
-    } else {
-      emailClienteStatus = 'skipped'
-      emailClienteError = 'La orden no tiene correo electrónico de cliente'
+    if (!['nuevo_pedido', 'estado_cambio', 'pago_aprobado'].includes(evento)) {
+      return NextResponse.json({ error: 'Evento no permitido' }, { status: 400 })
     }
+
+    const result = await enviarNotificacionPedido(order_id, evento, nuevo_estado)
+
+    // Read the persisted order and preserve legacy non-email side effects.
+    const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+    const { data: order } = await sb.from('orders').select('id, estado, cliente_email, cliente_telefono').eq('id', order_id).single()
+    if (!order) return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 })
+    const nuevoEstadoSeguro = String(order.estado ?? 'recibido')
+    const sbAdmin = sb
 
     // WhatsApp al cliente — cuando pedido cambia de estado (TODOS los estados)
     if (evento === 'estado_cambio' && nuevoEstadoSeguro && order.cliente_telefono) {
@@ -540,42 +84,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Email al admin — con la misma protección contra duplicados
-    const adminTemplate = evento === 'nuevo_pedido' ? 'admin_nuevo_pedido' : 'admin_estado_cambio'
-    const { data: adminYaEnviado } = await sbAdmin.from('email_log')
-      .select('id').eq('order_id', order_id).eq('template', adminTemplate).eq('status', 'sent')
-      .maybeSingle()
-
-    if (!adminYaEnviado) {
-      const adminSubject = evento === 'nuevo_pedido'
-        ? `🛍️ Nuevo pedido #${pedidoId} — RD$${order.total?.toLocaleString()}`
-        : `📋 Pedido #${pedidoId} → ${estadoLabel}`
-      let adminResendId: string | undefined
-      let adminError: string | undefined
-      try {
-        const { data: sentAdmin, error: adminSendErr } = await resend.emails.send({
-          from: FROM_EMAIL,
-          to: [ADMIN_EMAIL],
-          subject: adminSubject,
-          html: emailAdmin(order, itemsList, evento, nuevoEstadoSeguro),
-        })
-        adminResendId = sentAdmin?.id
-        if (adminSendErr) adminError = adminSendErr.message
-      } catch (e: any) {
-        adminError = e?.message ?? 'Error desconocido'
-      }
-      await sbAdmin.from('email_log').insert({
-        order_id:  order_id,
-        template:  adminTemplate,
-        to_email:  ADMIN_EMAIL,
-        subject:   adminSubject,
-        resend_id: adminResendId ?? null,
-        status:    adminError ? 'error' : 'sent',
-      }).then(() => {})
-    } else {
-      console.log('[notify] Email admin ya enviado antes, se omite duplicado:', adminTemplate, order_id)
-    }
-
     // Marcar lead de calculadora como convertido cuando su email/teléfono
     // coincide con un pedido nuevo. No bloqueante: si falla, no afecta el
     // resto del flujo de notificación.
@@ -598,51 +106,55 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Registrar recompra automáticamente para pedidos nuevos
+    // Record reorder reminders and automatic replenishment once for new orders.
     if (evento === 'nuevo_pedido') {
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'}/api/recompra/registrar`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order_id })
+          body: JSON.stringify({ order_id }),
         })
-      } catch (e) { /* no bloquear si falla */ }
+      } catch (error) {
+        console.error('[notify] recompra/registrar no bloqueante:', error)
+      }
 
-      // Reposición automática: suscripción con duración exacta calculada
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'}/api/suscripciones/auto-crear`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order_id })
+          body: JSON.stringify({ order_id }),
         })
-      } catch (e) { /* no bloquear si falla */ }
+      } catch (error) {
+        console.error('[notify] suscripciones/auto-crear no bloqueante:', error)
+      }
 
-      // Marcar como convertido el lead de la calculadora que originó esta compra
-      // (match por email o teléfono). No bloqueante: si falla, el pedido sigue su curso.
+      // Match the originating calculator lead by email/phone, once.
       try {
-        const telefonoOrden = order.cliente_telefono ? String(order.cliente_telefono).replace(/\D/g, '') : null
+        const phone = order.cliente_telefono ? String(order.cliente_telefono).replace(/\\D/g, '') : null
         let query = sbAdmin.from('calculator_leads').update({ convertido: true, order_id }).eq('convertido', false)
-        if (order.cliente_email && telefonoOrden) {
-          query = query.or(`email.eq.${order.cliente_email},telefono.eq.${telefonoOrden}`)
+        if (order.cliente_email && phone) {
+          query = query.or(`email.eq.${order.cliente_email},telefono.eq.${phone}`)
         } else if (order.cliente_email) {
-          query = query.eq('email', order.cliente_email)
-        } else if (telefonoOrden) {
-          query = query.eq('telefono', telefonoOrden)
+          query = query.eq('email', order.cliente_email.toLowerCase().trim())
+        } else if (phone) {
+          query = query.eq('telefono', phone)
         } else {
           query = null as any
         }
         if (query) {
-          const { error: convError } = await query
-          if (convError) console.error('[notify] calculator_leads convertido error:', convError.message)
+          const { error: conversionError } = await query
+          if (conversionError) console.error('[notify] calculator_leads convertido error:', conversionError.message)
         }
-      } catch (e) {
-        console.error('[notify] calculator_leads convertido excepción:', e)
+      } catch (error) {
+        console.error('[notify] calculator_leads convertido excepción:', error)
       }
     }
 
-    return NextResponse.json({ ok: emailClienteStatus !== 'error', email_cliente: emailClienteStatus, ...(emailClienteError ? { email_error: emailClienteError } : {}) }, { status: emailClienteStatus === 'error' ? 502 : 200 })
-  } catch (err: any) {
-    console.error('[notify]', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+
+    const failed = result.email_cliente === 'error' || result.email_admin === 'error'
+    return NextResponse.json({ ok: !failed, ...result }, { status: failed ? 502 : 200 })
+  } catch (error: any) {
+    console.error('[notify]', error)
+    return NextResponse.json({ error: error?.message ?? 'Error de notificación' }, { status: 500 })
   }
 }

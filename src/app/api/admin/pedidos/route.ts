@@ -17,25 +17,45 @@ function getSb() {
 }
 
 async function notificarEstadoPedido(order_id: string, nuevo_estado: string) {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
   try {
-    const response = await fetch(`${base}/api/notify`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-internal-secret': process.env.CRON_SECRET ?? '',
-      },
-      body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado }),
-    })
-    const result = await response.json().catch(() => ({ error: 'Respuesta inválida del servicio de correo' }))
-    if (!response.ok) {
-      console.error('[admin/pedidos] notificación no completada:', response.status, result)
-      return { email_cliente: 'error', ...result }
+    const { enviarNotificacionPedido } = await import('@/lib/email/order-notifications')
+    const notification = await enviarNotificacionPedido(
+      order_id,
+      nuevo_estado === 'pago_aprobado' ? 'pago_aprobado' : 'estado_cambio',
+      nuevo_estado
+    )
+
+    // Preserve the existing WhatsApp state notification without a public
+    // /api/notify hop. wa/dispatch still requires the shared internal secret.
+    const waTypes: Record<string, string> = {
+      recibido: 'estado_recibido',
+      pago_aprobado: 'estado_pago_aprobado',
+      confirmado: 'estado_confirmado',
+      preparando: 'estado_preparando',
+      fabricante: 'estado_fabricante',
+      enviado: 'estado_enviado',
+      transito: 'estado_transito',
+      entregado: 'estado_entregado',
+      cancelado: 'estado_cancelado',
     }
-    return result
+    const tipoWA = waTypes[nuevo_estado]
+    if (tipoWA && process.env.CRON_SECRET) {
+      const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+      try {
+        const response = await fetch(`${base}/api/wa/dispatch`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-internal-secret': process.env.CRON_SECRET },
+          body: JSON.stringify({ tipo: tipoWA, order_id }),
+        })
+        if (!response.ok) console.error('[admin/pedidos] WA estado falló:', response.status)
+      } catch (error) {
+        console.error('[admin/pedidos] WA estado error:', error)
+      }
+    }
+    return notification
   } catch (error) {
-    console.error('[admin/pedidos] error invocando notificación:', error)
-    return { email_cliente: 'error', error: 'No se pudo contactar el servicio de notificaciones' }
+    console.error('[admin/pedidos] error enviando notificación:', error)
+    return { email_cliente: 'error', error: 'No se pudo enviar la notificación' }
   }
 }
 
