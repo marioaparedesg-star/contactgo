@@ -22,7 +22,7 @@ const FAQS = [
   {
     categoria: '🚚 Envíos',
     preguntas: [
-      { q: '¿Cuánto tarda el envío?', a: 'Transporte: 24-48 horas en Santo Domingo y 2-4 días en el resto del país. Entrega: color plano, al día siguiente; esféricos, 24-48 horas; multifocales, de 1 a 5 días; tóricos, de 25 a 45 días.' },
+      { q: '¿Cuánto tarda el envío?', a: 'Transporte: 24-48 horas en Santo Domingo y 2-4 días en el resto del país. Entrega: color plano, al día siguiente; esféricos, 24-48 horas; multifocales, de 1 a 5 días; tóricos, de 25 a 40 días.' },
       { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Gran Santo Domingo: RD$250. Interior del país: RD$350. Envío gratis en compras desde RD$8,000.' },
       { q: '¿Envían a todo el país?', a: 'Sí, hacemos envíos a todas las provincias de República Dominicana.' },
       { q: '¿Puedo rastrear mi pedido?', a: 'Sí. Una vez confirmado tu pedido, te notificamos por WhatsApp cuando esté en camino con los datos del mensajero.' },

@@ -6,7 +6,7 @@
  *  - Color plano → al día siguiente
  *  - Esférico    → 24-48 horas
  *  - Multifocal  → 1-5 días
- *  - Tórico      → 25-45 días
+ *  - Tórico      → 25-40 días
  *  - Color graduado → 2-4 días (pedido especial; no confundir con color plano)
  *  - Solución / Gota → 24 horas
  */
@@ -61,8 +61,8 @@ const T_MULTIFOCAL: EntregaInfo = {
 }
 
 const T_TORICO: EntregaInfo = {
-  etiqueta: 'Entrega de 25 a 45 días',
-  detalle:  'Entrega estimada del lente tórico: de 25 a 45 días.',
+  etiqueta: 'Entrega de 25 a 40 días',
+  detalle:  'Entrega estimada del lente tórico: de 25 a 40 días.',
   dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',

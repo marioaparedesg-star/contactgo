@@ -96,7 +96,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" onClick={(e) => { e.preventDefault(); window.location.href = 'mailto:' + 'info' + '@' + 'contactgo.net' }}
+                <a href="mailto:info@contactgo.net"
                   className="text-gray-400 hover:text-white transition-colors">
                   info@contactgo.net
                 </a>
