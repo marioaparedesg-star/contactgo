@@ -1169,7 +1169,7 @@ export default function CuentaPage() {
                   <button onClick={async () => {
                     if (!recetaForm.od_sph && !recetaForm.oi_sph) { toast.error('Ingresa al menos la esfera de un ojo.'); return }
                     const axisValues = [recetaForm.od_axis, recetaForm.oi_axis].filter(Boolean).map(Number)
-                    if (axisValues.some(v => !Number.isInteger(v) || v < 0 || v > 180)) { toast.error('El eje debe estar entre 0° y 180°.'); return }
+                    if (axisValues.some(v => !Number.isInteger(v) || v < 1 || v > 180)) { toast.error('El eje debe estar entre 0° y 180°.'); return }
                     const diagnostico = detectarDiagnostico(recetaForm)
                     const sb = createClient()
                     const { data, error } = await sb.from('saved_prescriptions').insert({
