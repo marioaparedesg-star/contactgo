@@ -17,25 +17,14 @@ function getSb() {
 }
 
 async function notificarEstadoPedido(order_id: string, nuevo_estado: string) {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+  // La llamada es interna: la extracción posterior del servicio compartido
+  // evita una petición HTTP pública y conserva los controles de requireAdmin.
   try {
-    const response = await fetch(`${base}/api/notify`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-internal-secret': process.env.CRON_SECRET ?? '',
-      },
-      body: JSON.stringify({ order_id, evento: 'estado_cambio', nuevo_estado }),
-    })
-    const result = await response.json().catch(() => ({ error: 'Respuesta inválida del servicio de correo' }))
-    if (!response.ok) {
-      console.error('[admin/pedidos] notificación no completada:', response.status, result)
-      return { email_cliente: 'error', ...result }
-    }
-    return result
+    const { enviarNotificacionPedido } = await import('@/lib/email/order-notifications')
+    return await enviarNotificacionPedido(order_id, 'estado_cambio', nuevo_estado)
   } catch (error) {
-    console.error('[admin/pedidos] error invocando notificación:', error)
-    return { email_cliente: 'error', error: 'No se pudo contactar el servicio de notificaciones' }
+    console.error('[admin/pedidos] error enviando notificación:', error)
+    return { email_cliente: 'error', error: 'No se pudo enviar la notificación' }
   }
 }
 
