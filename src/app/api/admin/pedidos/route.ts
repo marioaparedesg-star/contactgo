@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       })
 
       const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-      fetch(`${base}/api/notify`, {
+      await fetch(`${base}/api/notify`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ order_id, evento: 'pago_aprobado' }),
       }).catch(err => console.error('[admin/pedidos marcar_pagado] notify falló:', err))
@@ -168,7 +168,7 @@ export async function POST(req: NextRequest) {
       // (si es abono parcial, no tiene sentido notificar 'tu pedido está pagado')
       if (notificar && cubrio100) {
         const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
-        fetch(`${base}/api/notify`, {
+        await fetch(`${base}/api/notify`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ order_id, evento: 'pago_aprobado' }),
         }).catch(err => console.error('[admin/pedidos registrar_pago] notify falló:', err))
