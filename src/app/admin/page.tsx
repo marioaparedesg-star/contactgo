@@ -491,6 +491,7 @@ export default function AdminDashboard() {
             {label:'Productos', path:'/admin/inventario'},
             {label:'Finanzas', path:'/admin/reportes'},
             {label:'Marketing', path:'/admin/calculadora'},
+            {label:'Correos', path:'/admin/correos'},
           ].map(n=>(
             <button key={n.path} onClick={()=>router.push(n.path)}
               className={`text-left md:text-center px-2 py-1.5 md:py-0 rounded-lg md:rounded-none ${n.activo?'text-primary-600':'text-gray-500 hover:text-gray-800'}`}>
