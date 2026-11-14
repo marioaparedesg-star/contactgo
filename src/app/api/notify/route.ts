@@ -46,21 +46,29 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMA
 const FROM_EMAIL  = process.env.RESEND_FROM ?? 'ContactGo <notifications@contactgo.net>'
 
 const ESTADO_LABEL: Record<string, string> = {
-  pendiente:  '⏳ Recibido',
-  confirmado: '✅ Confirmado',
-  preparando: '📦 Preparando',
-  enviado:    '🚚 En camino',
-  entregado:  '🎉 Entregado',
-  cancelado:  '❌ Cancelado',
+  recibido:      'Pedido recibido',
+  pendiente:     'Pedido recibido',
+  pago_aprobado: 'Pago aprobado',
+  confirmado:    'Pedido confirmado',
+  preparando:    'En preparación',
+  fabricante:    'En fabricación',
+  transito:      'En tránsito',
+  enviado:       'En camino',
+  entregado:     'Entregado',
+  cancelado:     'Cancelado',
 }
 
 const ESTADO_MSG: Record<string, string> = {
-  pendiente:  'Hemos recibido tu pedido y está pendiente de confirmación.',
-  confirmado: 'Tu pedido está confirmado. Lo estamos preparando para que llegue lo antes posible.',
-  preparando: 'Estamos preparando tus lentes con mucho cuidado.',
-  enviado:    'Tus lentes están en camino. En poco tiempo los tendrás en tu puerta.',
-  entregado:  '¡Tus lentes han llegado! Esperamos que los disfrutes. Si tienes alguna duda, estamos aquí.',
-  cancelado:  'Tu pedido fue cancelado. Escríbenos y lo resolvemos de inmediato.',
+  recibido:      'Hemos recibido tu pedido y estamos validando los detalles.',
+  pendiente:     'Hemos recibido tu pedido y está pendiente de confirmación.',
+  pago_aprobado: 'Tu pago fue aprobado. Estamos preparando tu pedido.',
+  confirmado:    'Tu pedido está confirmado. Lo estamos preparando para que llegue lo antes posible.',
+  preparando:    'Estamos preparando tus lentes con mucho cuidado.',
+  fabricante:    'Tu pedido está en proceso de fabricación con el proveedor.',
+  transito:      'Tu pedido está en tránsito hacia su destino.',
+  enviado:       'Tus lentes están en camino. En poco tiempo los tendrás en tu puerta.',
+  entregado:     'Tu pedido figura como entregado. Esperamos que disfrutes tus lentes.',
+  cancelado:     'Tu pedido fue cancelado. Escríbenos y te ayudaremos.',
 }
 
 function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: string): string {
@@ -84,7 +92,7 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
     ? getEntregaTextoEmail(tiposItems.includes('torico') ? 'torico' : tiposItems.includes('multifocal') ? 'multifocal' : tiposItems[0])
     : 'Entrega estimada: 24 horas laborables.'
 
-  const metodoPagoLabel = '💳 Tarjeta de crédito/débito (AZUL)'
+  const metodoPagoLabel = order.metodo_pago === 'contra_entrega' ? 'Pago contra entrega' : order.metodo_pago === 'transferencia' ? 'Transferencia bancaria' : order.metodo_pago === 'efectivo' ? 'Efectivo' : order.metodo_pago === 'azul' || order.metodo_pago === 'tarjeta' ? 'Tarjeta de crédito/débito' : 'Por confirmar'
 
   // Fila de cada producto con prescripción completa
   const itemsRows = items.map(i => {
@@ -239,7 +247,6 @@ function emailCliente(order: any, items: any[], evento: string, nuevoEstado?: st
         <td style="padding:10px 16px;border-right:1px solid #e5e7eb;width:50%;vertical-align:top;">
           <p style="margin:0;font-size:10px;color:#9ca3af;font-weight:600;text-transform:uppercase;">Método de pago</p>
           <p style="margin:4px 0 0;font-size:12px;font-weight:700;color:#111;">${metodoPagoLabel}</p>
-          ${order.azul_auth_code ? `<p style="margin:2px 0 0;font-size:11px;color:#6b7280;">Auth: ${order.azul_auth_code}</p>` : ''}
           <p style="margin:2px 0 0;font-size:11px;color:#6b7280;">Moneda: Peso Dominicano (RD$)</p>
         </td>
         <td style="padding:10px 16px;vertical-align:top;">
@@ -405,7 +412,7 @@ export async function POST(req: NextRequest) {
           from: FROM_EMAIL,
           to: order.cliente_email,
           subject,
-          html: emailCliente(order, itemsList, evento, nuevo_estado),
+          html: emailCliente(order, itemsList, evento, nuevoEstadoSeguro),
         })
         emailClienteStatus = emailError ? 'error' : 'sent'
         emailClienteError = emailError
