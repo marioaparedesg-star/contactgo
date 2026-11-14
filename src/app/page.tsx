@@ -289,7 +289,7 @@ export default async function HomePage() {
                   La única tienda dominicana<br className="hidden md:block" /> especializada 100% en lentes de contacto
                 </h2>
                 <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-5 max-w-lg">
-                  Tus lentes favoritos directo del fabricante a tu puerta. Sin intermediarios, sin filas, sin salir de casa. Compra en minutos, recibe mañana.
+                  Tus lentes favoritos directo del fabricante a tu puerta. Sin intermediarios, sin filas, sin salir de casa. Compra en minutos, recibe en 24-48 h.
                 </p>
                 <div className="flex flex-col gap-2">
                   {[

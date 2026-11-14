@@ -6,8 +6,8 @@
  *  - Color plano → al día siguiente
  *  - Esférico    → 24-48 horas
  *  - Multifocal  → 1-5 días
- *  - Tórico      → 25-45 días
- *  - Color graduado → 24-72 horas (pedido especial; no confundir con color plano)
+ *  - Tórico      → 25-40 días
+ *  - Color graduado → 2-4 días (pedido especial; no confundir con color plano)
  *  - Solución / Gota → 24 horas
  */
 
@@ -46,7 +46,7 @@ const T_24_72H: EntregaInfo = {
 
 const T_ESFERICO: EntregaInfo = {
   etiqueta: 'Entrega en 24-48 horas',
-  detalle:  'Tiempo estimado de preparación y disponibilidad para lentes esféricos: 24 a 48 horas. El transporte se calcula según el destino: Santo Domingo 24-48 horas; interior 24-72 horas.',
+  detalle:  'Tiempo estimado de preparación y disponibilidad para lentes esféricos: 24 a 48 horas. El transporte se calcula según el destino: Santo Domingo y Santiago 24-48 horas, resto del país, 2-4 días.',
   dias_min: 1, dias_max: 2,
   especial: false,
   icono:    '🚀',
@@ -54,14 +54,14 @@ const T_ESFERICO: EntregaInfo = {
 
 const T_MULTIFOCAL: EntregaInfo = {
   etiqueta: 'Preparación en 1-5 días',
-  detalle:  'Tiempo estimado de preparación del lente multifocal: 1 a 5 días. El transporte se calcula según el destino: Santo Domingo 24-48 horas; interior 24-72 horas.',
+  detalle:  'Tiempo estimado de preparación del lente multifocal: 1 a 5 días. El transporte se calcula según el destino: Santo Domingo y Santiago 24-48 horas, resto del país, 2-4 días.',
   dias_min: 1, dias_max: 5,
   especial: true,
   icono:    '📦',
 }
 
 const T_TORICO: EntregaInfo = {
-  etiqueta: 'Fabricación en 25-45 días',
+  etiqueta: 'Fabricación en 25-40 días',
   detalle:  'Lente tórico fabricado a medida. El proceso toma de 25 a 45 días; después se suma el transporte según el destino.',
   dias_min: 25, dias_max: 45,
   especial: true,
@@ -85,7 +85,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
   const sphNum = sph != null ? parseFloat(String(sph)) : null
 
   if (tipo === 'color') {
-    // Color CON graduación (positivo o negativo) → 24-72h
+    // Color CON graduación (positivo o negativo) → 2-4 días
     // Color PLANO (0.00) o sin seleccionar → 24h
     if (sphNum != null && sphNum !== 0) return T_24_72H
     return T_COLOR_PLANO
