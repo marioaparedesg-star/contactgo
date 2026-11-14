@@ -106,44 +106,50 @@ export async function POST(req: NextRequest) {
       }
     }
 
-try {
+    // Record reorder reminders and automatic replenishment once for new orders.
+    if (evento === 'nuevo_pedido') {
+      try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'}/api/recompra/registrar`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order_id })
+          body: JSON.stringify({ order_id }),
         })
-      } catch (e) { /* no bloquear si falla */ }
+      } catch (error) {
+        console.error('[notify] recompra/registrar no bloqueante:', error)
+      }
 
-      // Reposición automática: suscripción con duración exacta calculada
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'}/api/suscripciones/auto-crear`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order_id })
+          body: JSON.stringify({ order_id }),
         })
-      } catch (e) { /* no bloquear si falla */ }
+      } catch (error) {
+        console.error('[notify] suscripciones/auto-crear no bloqueante:', error)
+      }
 
-      // Marcar como convertido el lead de la calculadora que originó esta compra
-      // (match por email o teléfono). No bloqueante: si falla, el pedido sigue su curso.
+      // Match the originating calculator lead by email/phone, once.
       try {
-        const telefonoOrden = order.cliente_telefono ? String(order.cliente_telefono).replace(/\D/g, '') : null
+        const phone = order.cliente_telefono ? String(order.cliente_telefono).replace(/\\D/g, '') : null
         let query = sbAdmin.from('calculator_leads').update({ convertido: true, order_id }).eq('convertido', false)
-        if (order.cliente_email && telefonoOrden) {
-          query = query.or(`email.eq.${order.cliente_email},telefono.eq.${telefonoOrden}`)
+        if (order.cliente_email && phone) {
+          query = query.or(`email.eq.${order.cliente_email},telefono.eq.${phone}`)
         } else if (order.cliente_email) {
-          query = query.eq('email', order.cliente_email)
-        } else if (telefonoOrden) {
-          query = query.eq('telefono', telefonoOrden)
+          query = query.eq('email', order.cliente_email.toLowerCase().trim())
+        } else if (phone) {
+          query = query.eq('telefono', phone)
         } else {
           query = null as any
         }
         if (query) {
-          const { error: convError } = await query
-          if (convError) console.error('[notify] calculator_leads convertido error:', convError.message)
+          const { error: conversionError } = await query
+          if (conversionError) console.error('[notify] calculator_leads convertido error:', conversionError.message)
         }
-      } catch (e) {
-        console.error('[notify] calculator_leads convertido excepción:', e)
+      } catch (error) {
+        console.error('[notify] calculator_leads convertido excepción:', error)
       }
+    }
+
 
     const failed = result.email_cliente === 'error' || result.email_admin === 'error'
     return NextResponse.json({ ok: !failed, ...result }, { status: failed ? 502 : 200 })
