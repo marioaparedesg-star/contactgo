@@ -81,24 +81,73 @@ export async function GET(req: Request) {
 
 async function enviarWhatsApp(total: number, lista: string) {
   const WA_API = 'https://graph.facebook.com/v20.0'
-  const body = {
-    messaging_product: 'whatsapp',
-    to: '18096942268',
-    type: 'template',
-    template: {
-      name: 'pedidos_sin_entregar',
-      language: { code: 'es' },
-      components: [{ type: 'body', parameters: [
-        { type: 'text', text: String(total) },
-        { type: 'text', text: lista.replace(/[\r\n\t ]+/g, ' ').trim() },
-      ] }],
-    },
+  // Meta rechaza parámetros con saltos, tabulaciones, controles invisibles
+  // o más de 1,024 caracteres. Normalizamos Unicode y enviamos la lista
+  // en partes para no perder pedidos cuando el volumen sea alto.
+  const lineas = lista
+    .normalize('NFKC')
+    .split(/[\\r\\n\\u2028\\u2029]+/u)
+    .map(linea => linea
+      .replace(/[\\p{Cc}\\p{Cf}\\p{Z}]+/gu, ' ')
+      .replace(/\\s+/gu, ' ')
+      .trim()
+    )
+    .filter(Boolean)
+
+  const limite = 900
+  const partes: string[] = []
+  let parte = ''
+  for (const linea of lineas) {
+    const candidata = parte ? `${parte} | ${linea}` : linea
+    if (candidata.length > limite && parte) {
+      partes.push(parte)
+      parte = linea
+    } else {
+      parte = candidata
+    }
+    // Una sola línea excepcionalmente larga se divide sin exceder el límite.
+    while (parte.length > limite) {
+      partes.push(parte.slice(0, limite))
+      parte = parte.slice(limite).trim()
+    }
   }
-  const r = await fetchWA('18096942268', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  const data = await r.json()
-  if (data?.error) console.error('[pedidos-sin-entregar] WhatsApp falló:', JSON.stringify(data.error))
+  if (parte) partes.push(parte)
+  if (partes.length === 0) partes.push('Sin detalle disponible.')
+
+  for (let i = 0; i < partes.length; i++) {
+    const detalle = partes.length > 1
+      ? `Parte ${i + 1}/${partes.length}: ${partes[i]}`
+      : partes[i]
+    const parametro = detalle
+      .normalize('NFKC')
+      .replace(/[\\p{Cc}\\p{Cf}\\p{Z}]+/gu, ' ')
+      .replace(/\\s+/gu, ' ')
+      .trim()
+      .slice(0, 1024)
+
+    const body = {
+      messaging_product: 'whatsapp',
+      to: '18096942268',
+      type: 'template',
+      template: {
+        name: 'pedidos_sin_entregar',
+        language: { code: 'es' },
+        components: [{ type: 'body', parameters: [
+          { type: 'text', text: String(total) },
+          { type: 'text', text: parametro },
+        ] }],
+      },
+    }
+
+    const r = await fetchWA('18096942268', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    const data = await r.json()
+    if (!r.ok || data?.error) {
+      console.error('[pedidos-sin-entregar] WhatsApp falló:', JSON.stringify(data?.error ?? data))
+      throw new Error('No se pudo enviar el resumen de pedidos por WhatsApp.')
+    }
+  }
 }
