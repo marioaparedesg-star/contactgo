@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
     const pedidoId = order.id.slice(-8).toUpperCase()
     const estadoLabel = ESTADO_LABEL[nuevoEstadoSeguro] ?? nuevoEstadoSeguro
 
-    const subject = evento === 'pago_aprobado'
+    const subject = evento === 'pago_aprobado' || (evento === 'nuevo_pedido' && order.pago_estado === 'pagado')
       ? `Pago aprobado · Pedido #${pedidoId} — ContactGo`
       : evento === 'nuevo_pedido'
         ? `Pedido #${pedidoId} recibido — ContactGo`
@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
     }
 
     // WhatsApp al cliente — cuando pedido cambia de estado (TODOS los estados)
-    if (evento === 'estado_cambio' && nuevo_estado && order.cliente_telefono) {
+    if (evento === 'estado_cambio' && nuevoEstadoSeguro && order.cliente_telefono) {
       const mapaEstadoWA: Record<string, string> = {
         recibido:      'estado_recibido',
         pago_aprobado: 'estado_pago_aprobado',
@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
         entregado:     'estado_entregado',
         cancelado:     'estado_cancelado',
       }
-      const tipoWA = mapaEstadoWA[nuevo_estado]
+      const tipoWA = mapaEstadoWA[nuevoEstadoSeguro]
       if (tipoWA) {
         const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
         try {
@@ -165,7 +165,7 @@ export async function POST(req: NextRequest) {
           try { d = JSON.parse(responseText) } catch {
             d = { ok: false, error: `Respuesta no JSON (HTTP ${r.status}): ${responseText.slice(0, 180)}` }
           }
-          console.log('[notify] WA estado:', nuevo_estado, d?.ok ? 'OK' : d)
+          console.log('[notify] WA estado:', nuevoEstadoSeguro, d?.ok ? 'OK' : d)
         } catch (e) {
           console.error('[notify] WA error:', e)
         }
