@@ -161,7 +161,17 @@ export default function PedidosPage() {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ accion:'cambiar_estado', order_id:orderId, nuevo_estado:estado })
     })
-    if (!upd.ok) { toast.error('No se pudo actualizar el estado'); return }
+    const updateResult = await upd.json().catch(() => ({}))
+    if (!upd.ok) { toast.error(updateResult.error ?? 'No se pudo actualizar el estado'); return }
+
+    const emailResult = updateResult.notification ?? {}
+    if (emailResult.email_cliente === 'sent') {
+      toast.success('Correo aceptado para envío al cliente', { duration: 3000, icon: '✉️' })
+    } else if (emailResult.email_cliente === 'skipped') {
+      toast('No se envió correo: verifica el email del cliente.', { duration: 4000, icon: '⚠️' })
+    } else {
+      toast.error('Estado actualizado, pero el correo no pudo enviarse. Revisa notificaciones.', { duration: 5000 })
+    }
 
     // El trigger de base de datos trg_sync_order_event registra automáticamente
     // order_status_history y order_events al cambiar orders.estado. No insertar
@@ -173,44 +183,8 @@ export default function PedidosPage() {
     toast.success(`✅ Estado actualizado → ${estado}`)
     toast.success('Cliente puede ver el tracking en /pedido/' + (selected?.numero_orden ?? ''), {duration:3000, icon:'📦'})
 
-    // 4. Notificar al cliente por email
-    try {
-      const emailRes = await fetch('/api/notify',{
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({order_id:orderId, evento:'estado_cambio', nuevo_estado:estado})
-      })
-      const emailResult = await emailRes.json().catch(() => ({}))
-      if (emailRes.ok && emailResult.email_cliente === 'sent') {
-        toast.success('Correo enviado al cliente ✉️',{duration:3000,icon:'📧'})
-      } else if (emailResult.email_cliente === 'skipped') {
-        toast('No se envió el correo: verifica el email del cliente.',{duration:4000,icon:'⚠️'})
-      } else {
-        toast.error('Estado actualizado, pero falló el correo. Revisa el registro de notificaciones.',{duration:5000})
-      }
-    } catch {
-      toast.error('Estado actualizado, pero no se pudo confirmar el envío del correo.',{duration:5000})
-    }
-
-    // 5. Notificar al cliente por WhatsApp (TODOS los estados del UI)
-    const mapaEstadoWA: Record<string, string> = {
-      recibido:      'estado_recibido',
-      pago_aprobado: 'estado_pago_aprobado',
-      confirmado:    'estado_confirmado',
-      preparando:    'estado_preparando',
-      fabricante:    'estado_fabricante',
-      enviado:       'estado_enviado',
-      transito:      'estado_transito',
-      entregado:     'estado_entregado',
-      cancelado:     'estado_cancelado',
-    }
-    const tipoWA = mapaEstadoWA[estado]
-    if (tipoWA) {
-      fetch('/api/wa/dispatch',{
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({tipo: tipoWA, order_id: orderId})
-      }).then(r=>r.ok&&toast.success('WhatsApp enviado 💬',{duration:2000,icon:'✅'}))
-        .catch(()=>{})
-    }
+    // Email y WhatsApp se disparan desde el servidor al cambiar el estado.
+    // Evita depender del navegador y evita enviar dos veces el mismo evento.
   }
 
 
