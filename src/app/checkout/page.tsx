@@ -134,7 +134,7 @@ export default function CheckoutPage() {
             if (principal.ciudad) setValue('ciudad', principal.ciudad)
           }
           setAddressesLoaded(true)
-        }, () => setAddressesLoaded(true))
+        }).then(undefined, () => setAddressesLoaded(true))
       }
     })
   }, [items, router])
