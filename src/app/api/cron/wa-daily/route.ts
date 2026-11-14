@@ -39,6 +39,17 @@ async function logAutomation(sb: any, order_id: string | null, telefono: string,
   } catch {}
 }
 
+function emailEducativoHtml(contenido: string): string {
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>' +
+    '<body style="margin:0;padding:24px 12px;background:#f3f6fa;font-family:Arial,Helvetica,sans-serif;color:#172b4d">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:16px;overflow:hidden">' +
+    '<tr><td style="padding:25px 30px;background:#002455"><div style="font-size:25px;font-weight:800;color:#fff">Contact<span style="color:#01B2B7">Go</span></div><div style="margin-top:7px;font-size:11px;letter-spacing:1.3px;color:#d6e4f3">GUÍA DE CUIDADO · LENTES DE CONTACTO</div></td></tr>' +
+    '<tr><td style="padding:30px;font-size:14px;line-height:1.8;color:#40536a">' + contenido +
+    '<div style="margin-top:24px;padding:15px 17px;background:#f2f8fa;border-left:3px solid #01B2B7;border-radius:6px;font-size:12px;line-height:1.7;color:#536579">Esta información es educativa y no sustituye las instrucciones del fabricante ni la orientación de tu profesional de salud visual. Si presentas dolor, enrojecimiento, sensibilidad a la luz, secreción o visión borrosa repentina, retira los lentes y busca atención profesional.</div>' +
+    '<p style="margin:22px 0 0;text-align:center;font-size:12px;color:#718096">¿Tienes dudas? <a href="https://wa.me/18096942268" style="color:#007f84;font-weight:700;text-decoration:none">Escríbenos por WhatsApp</a></p></td></tr>' +
+    '<tr><td style="padding:18px 30px;background:#f7f9fc;text-align:center;font-size:11px;color:#8291a2">ContactGo · contactgo.net · República Dominicana</td></tr></table></td></tr></table></body></html>'
+}
 export async function GET(req: NextRequest) {
   // Seguridad: solo Vercel Cron o llamadas con secret
   const auth = req.headers.get('authorization')
@@ -535,19 +546,7 @@ export async function GET(req: NextRequest) {
             from: 'ContactGo <info@contactgo.net>',
             to: o.cliente_email,
             subject: asunto,
-            html: `
-<div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
-  <div style="background:#0f766e;padding:20px;border-radius:12px 12px 0 0;text-align:center">
-    <p style="color:white;font-weight:900;font-size:20px;margin:0">ContactGo</p>
-    <p style="color:#99f6e4;font-size:11px;margin:2px 0 0">Cuidado de tus lentes</p>
-  </div>
-  <div style="background:#f9fafb;padding:24px;border-radius:0 0 12px 12px">
-    ${contenidoHtml}
-    <p style="color:#9ca3af;font-size:12px;text-align:center;margin-top:20px">
-      ¿Dudas? Escríbenos por WhatsApp: +1 809 694-2268
-    </p>
-  </div>
-</div>`,
+            html: emailEducativoHtml(contenidoHtml),
           })
           await sb.from('orders').update({ [etapa.campo]: true }).eq('id', o.id)
           if (etapa.dias === 3) resultsEducativo.dia3++
