@@ -744,11 +744,18 @@ export default function PedidosPage() {
 
                     // Actualizar UI local
                     if (j.cubrio_total) {
-                      setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, pago_estado:'pagado', estado:'confirmado'} : p))
-                      setSelected((s:any) => ({...s, pago_estado:'pagado', estado:'confirmado'}))
-                      toast.success(payNotificar
-                        ? `✅ Pago completo — cliente notificado (${payMetodo})`
-                        : `✅ Pago completo registrado — SIN notificar (${payMetodo})`)
+                      const estadoActualizado = j.estado ?? selected.estado
+                      setPedidos(ps => ps.map(p => p.id===selected.id ? {...p, pago_estado:'pagado', estado:estadoActualizado} : p))
+                      setSelected((s:any) => ({...s, pago_estado:'pagado', estado:estadoActualizado}))
+                      if (!payNotificar) {
+                        toast.success(`Pago completo registrado sin notificar (${payMetodo})`)
+                      } else if (j.notification?.email_cliente === 'sent') {
+                        toast.success(`Pago completo · correo aceptado para envío (${payMetodo})`)
+                      } else if (j.notification?.email_cliente === 'error') {
+                        toast.error('Pago registrado, pero falló el correo. Revisa el registro de notificaciones.')
+                      } else {
+                        toast.success(`Pago completo registrado (${payMetodo})`)
+                      }
                     } else {
                       toast.success(`💵 Abono RD$${monto.toLocaleString()} registrado · Pendiente: RD$${j.pendiente.toLocaleString()}`)
                     }
