@@ -190,7 +190,7 @@ export function getRangoEntregaDesdeFecha(
     return { texto: 'Fecha de entrega por confirmar', fechaMin: '', fechaMax: '' }
   }
   const local = partesFechaDR(fecha)
-  let base = fechaCalendario(local.year, local.month, local.day)
+  const base = fechaCalendario(local.year, local.month, local.day)
   // Si la orden se creó desde las 15:00 (hora RD), el conteo inicia al próximo día.
   if (local.hour >= 15) base.setUTCDate(base.getUTCDate() + 1)
   const min = sumarDiasLaborables(base, info.dias_min)

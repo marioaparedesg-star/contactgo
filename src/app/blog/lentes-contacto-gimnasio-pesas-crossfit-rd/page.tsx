@@ -57,7 +57,7 @@ export default function Page() {
       </ul>
 
       <h2>Si un lente se mueve o se sale durante el entrenamiento</h2>
-      <p>Detente, no sigas el ejercicio con visión afectada. Lávate las manos si tienes acceso a un baño cerca, y sigue el proceso normal para reposicionar un lente — nunca se pierde "dentro" del ojo, es imposible físicamente. Si no logras resolverlo en el momento, retíralo y continúa con el otro ojo o pospón el resto de la sesión.</p>
+      <p>Detente, no sigas el ejercicio con visión afectada. Lávate las manos si tienes acceso a un baño cerca, y sigue el proceso normal para reposicionar un lente — nunca se pierde &quot;dentro&quot; del ojo, es imposible físicamente. Si no logras resolverlo en el momento, retíralo y continúa con el otro ojo o pospón el resto de la sesión.</p>
 
       <h2>Deportes de contacto o alto impacto</h2>
       <p>Para boxeo, artes marciales, o deportes donde hay contacto físico directo cerca de los ojos, consulta con tu entrenador y considera protección adicional — los lentes de contacto por sí solos no ofrecen protección física ante un golpe directo, igual que no la ofrecerían tus propios ojos sin nada.</p>

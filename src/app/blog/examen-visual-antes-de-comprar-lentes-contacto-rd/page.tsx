@@ -33,13 +33,13 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Antes de comprar tu primera caja de lentes de contacto (o si nunca has hecho una "adaptación" formal), necesitas pasar por un examen visual específico. No es el mismo examen que para gafas — aquí te explicamos exactamente qué incluye, cuánto cuesta en RD, y cómo prepararte.</p>
+      <p>Antes de comprar tu primera caja de lentes de contacto (o si nunca has hecho una &quot;adaptación&quot; formal), necesitas pasar por un examen visual específico. No es el mismo examen que para gafas — aquí te explicamos exactamente qué incluye, cuánto cuesta en RD, y cómo prepararte.</p>
 
       <h2>¿Por qué necesito un examen específico para lentes de contacto?</h2>
       <p>Un lente de contacto no solo corrige tu visión — también <strong>está en contacto directo con tu córnea</strong> durante horas. Eso requiere mediciones que un examen de gafas no incluye:</p>
       <ul>
-        <li><strong>Curvatura corneal (queratometría):</strong> determina qué "curvatura base" (BC) de lente calza bien en tu ojo. Valores típicos: 8.4, 8.6, 8.8.</li>
-        <li><strong>Diámetro de la córnea:</strong> define el "diámetro" (DIA) del lente que necesitas, usualmente entre 14.0 y 14.5mm.</li>
+        <li><strong>Curvatura corneal (queratometría):</strong> determina qué &quot;curvatura base&quot; (BC) de lente calza bien en tu ojo. Valores típicos: 8.4, 8.6, 8.8.</li>
+        <li><strong>Diámetro de la córnea:</strong> define el &quot;diámetro&quot; (DIA) del lente que necesitas, usualmente entre 14.0 y 14.5mm.</li>
         <li><strong>Evaluación de la película lagrimal:</strong> qué tan bien produces lágrimas — importante para elegir el material del lente (algunos son mejores para ojo seco).</li>
         <li><strong>Salud de la superficie ocular:</strong> el óptico revisa que no haya alergias, infecciones o condiciones que contraindiquen el uso de lentes de contacto.</li>
       </ul>

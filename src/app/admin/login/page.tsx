@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { Eye, Lock, Mail } from 'lucide-react'
+import Link from 'next/link'
 
 export default function AdminLogin() {
   const router = useRouter()
@@ -48,12 +49,12 @@ export default function AdminLogin() {
       <div className="w-full max-w-md bg-gray-800 rounded-2xl p-8 shadow-2xl">
         {/* Link a la tienda — siempre visible */}
         <div className="mb-6 text-center">
-          <a href="/" className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-primary-400 transition-colors">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-primary-400 transition-colors">
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
             </svg>
             Volver a la tienda
-          </a>
+          </Link>
         </div>
         <div className="flex flex-col items-center mb-8">
           <div className="w-16 h-16 bg-teal-400 rounded-2xl flex items-center justify-center mb-4">

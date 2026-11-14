@@ -25,8 +25,8 @@ export default function Page() {
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-12 pb-24">
         <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
-          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
-          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span>
+          <Link href="/blog" className="hover:text-primary-600">Blog</Link><span>/</span>
           <span className="text-gray-600">Tipos de lentes de contacto</span>
         </div>
 
@@ -45,7 +45,7 @@ export default function Page() {
         <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
           <span>📅 10 de mayo, 2026</span>
           <span>·</span>
-          <a href="/autor/equipo-contactgo" className="hover:text-primary-600 transition-colors">✍️ Equipo ContactGo</a>
+          <Link href="/autor/equipo-contactgo" className="hover:text-primary-600 transition-colors">✍️ Equipo ContactGo</Link>
           <span>·</span>
           <span>⏱ 5 min lectura</span>
         </div>
@@ -197,9 +197,9 @@ export default function Page() {
         <div className="mt-6 p-4 bg-gray-50 rounded-2xl">
           <p className="text-sm font-bold text-gray-900 mb-3">Productos recomendados en ContactGo</p>
           <div className="grid gap-2">
-            <a href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="text-sm text-primary-600 hover:underline">→ ACUVUE® Oasys® — Quincenal premium desde RD$3,350</a>
-            <a href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="text-sm text-primary-600 hover:underline">→ Biofinity® — Mensual alto oxígeno desde RD$3,650</a>
-            <a href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="text-sm text-primary-600 hover:underline">→ Air Optix® HydraGlyde® — Mensual Alcon desde RD$4,375</a>
+            <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="text-sm text-primary-600 hover:underline">→ ACUVUE® Oasys® — Quincenal premium desde RD$3,350</Link>
+            <Link href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="text-sm text-primary-600 hover:underline">→ Biofinity® — Mensual alto oxígeno desde RD$3,650</Link>
+            <Link href="/producto/air-optix-plus-hydraglyde-lentes-contacto-mensuales-dominicana" className="text-sm text-primary-600 hover:underline">→ Air Optix® HydraGlyde® — Mensual Alcon desde RD$4,375</Link>
           </div>
         </div>
       </main>

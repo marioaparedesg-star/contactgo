@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
     // Traer info de órdenes asociadas
     const orderIds = (links ?? []).map(l => l.order_id).filter(Boolean)
     let ordersMap: Record<string, any> = {}
-    let itemsMap: Record<string, any[]> = {}
+    const itemsMap: Record<string, any[]> = {}
     if (orderIds.length) {
       const { data: orders } = await sb
         .from('orders')

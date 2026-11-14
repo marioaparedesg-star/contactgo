@@ -4,6 +4,7 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import MailLink from '@/components/ui/MailLink'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export default function ContactoPage() {
   const [form, setForm] = useState({ nombre: '', email: '', telefono: '', tipo: 'Consulta sobre lentes', mensaje: '' })
@@ -40,7 +41,7 @@ export default function ContactoPage() {
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-6">
-        <a href="/" className="hover:text-primary-600">Inicio</a>
+        <Link href="/" className="hover:text-primary-600">Inicio</Link>
         <span>/</span>
         <span className="text-gray-600">Contacto</span>
       </div>
@@ -78,7 +79,7 @@ export default function ContactoPage() {
           </div>
           <h2 className="font-bold text-gray-900 text-xl mb-2">¡Mensaje recibido!</h2>
           <p className="text-gray-600 text-sm mb-6">Te responderemos lo antes posible. Si dejaste tu email, también te enviamos una confirmación.</p>
-          <a href="/catalogo" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo de lentes →</a>
+          <Link href="/catalogo" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo de lentes →</Link>
         </div>
       ) : (
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
@@ -164,7 +165,7 @@ export default function ContactoPage() {
       <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
         <p className="font-bold text-gray-900 mb-1">¿Buscas lentes de contacto?</p>
         <p className="text-sm text-gray-500 mb-4">Envíos: Santo Domingo 24-48h · Interior 24-72h · Pago seguro con AZUL</p>
-        <a href="/catalogo" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
+        <Link href="/catalogo" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
       </div>
 
     </main>

@@ -49,7 +49,7 @@ export default function Page() {
       <p>Si prefieres mantener los lentes de contacto puestos, gotas lubricantes compatibles cada 2-3 horas durante el vuelo ayudan considerablemente. Revisa las normas de líquidos en cabina de tu aerolínea (generalmente 100ml o menos por envase).</p>
 
       <h3>Opción 3: Lentes diarios para el día del viaje</h3>
-      <p>Si normalmente usas lentes quincenales o mensuales, considera usar un par de lentes diarios específicamente el día del vuelo — así no "gastas" días de uso de tu par regular en un ambiente que de por sí va a ser más incómodo de lo normal.</p>
+      <p>Si normalmente usas lentes quincenales o mensuales, considera usar un par de lentes diarios específicamente el día del vuelo — así no &quot;gastas&quot; días de uso de tu par regular en un ambiente que de por sí va a ser más incómodo de lo normal.</p>
 
       <h2>Durante el vuelo</h2>
       <ul>

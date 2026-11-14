@@ -67,18 +67,18 @@ export default function Page() {
 
         <div className="space-y-3 mb-6">
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Precios actuales en ContactGo</p>
-            <a href="/producto/clariti-1-day-lentes-contacto-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
+            <Link href="/producto/clariti-1-day-lentes-contacto-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
               <div><p className="font-bold text-gray-900 text-sm">clariti® 1 day 30u</p><p className="text-xs text-gray-500">Esférico — más popular</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,050</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
+            </Link>
+            <Link href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
               <div><p className="font-bold text-gray-900 text-sm">clariti® 1 day toric 30u</p><p className="text-xs text-gray-500">Para astigmatismo</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,250</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
+            </Link>
+            <Link href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-green-100 rounded-2xl hover:border-green-300 hover:shadow-sm transition-all group bg-green-50/20">
               <div><p className="font-bold text-gray-900 text-sm">clariti® 1 day multifocal 30u</p><p className="text-xs text-gray-500">Para presbicia</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,450</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
+            </Link>
 
           <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
         </div>
@@ -93,15 +93,15 @@ export default function Page() {
                 <thead><tr className="bg-gray-50"><th className="p-3 text-left border border-gray-100 font-bold">Producto</th><th className="p-3 text-right border border-gray-100 font-bold">Precio RD$</th></tr></thead>
                 <tbody>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/clariti-1-day-lentes-contacto-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day 30u</a><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Esférico — más popular</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/clariti-1-day-lentes-contacto-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day 30u</Link><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Esférico — más popular</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$3,050</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day toric 30u</a><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Para astigmatismo</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day toric 30u</Link><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Para astigmatismo</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,250</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day multifocal 30u</a><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Para presbicia</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day multifocal 30u</Link><span className="ml-2 text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full font-bold">Para presbicia</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,450</td>
               </tr>
 
@@ -153,10 +153,10 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/blog/lentes-diarios-vs-mensuales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes diarios vs mensuales</p><p className="text-xs text-gray-500 mt-0.5">¿Cuál tipo es para ti?</p></a>
-            <a href="/blog/acuvue-moist-1-day-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ 1-DAY ACUVUE Moist precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa diaria J&J</p></a>
-            <a href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual CooperVision</p></a>
-            <a href="/marca/coopervision" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los productos CooperVision</p><p className="text-xs text-gray-500 mt-0.5">Biofinity, Avaira, Proclear y más</p></a>
+            <Link href="/blog/lentes-diarios-vs-mensuales" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes diarios vs mensuales</p><p className="text-xs text-gray-500 mt-0.5">¿Cuál tipo es para ti?</p></Link>
+            <Link href="/blog/acuvue-moist-1-day-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ 1-DAY ACUVUE Moist precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa diaria J&J</p></Link>
+            <Link href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual CooperVision</p></Link>
+            <Link href="/marca/coopervision" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los productos CooperVision</p><p className="text-xs text-gray-500 mt-0.5">Biofinity, Avaira, Proclear y más</p></Link>
 
           </div>
         </div>

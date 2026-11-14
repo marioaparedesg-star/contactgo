@@ -57,7 +57,7 @@ export default function Page() {
         <li><strong>Diámetro (DIA):</strong> tamaño del lente. Suele ser 14.0 a 14.5.</li>
       </ul>
 
-      <p>Si tienes receta reciente de gafas (menos de 12 meses), puedes usarla temporalmente asumiendo curvatura estándar. Pero lo ideal es visitar un óptico para una "adaptación" formal de lentes de contacto — cuesta RD$800-1,500 en RD y toma 30 minutos.</p>
+      <p>Si tienes receta reciente de gafas (menos de 12 meses), puedes usarla temporalmente asumiendo curvatura estándar. Pero lo ideal es visitar un óptico para una &quot;adaptación&quot; formal de lentes de contacto — cuesta RD$800-1,500 en RD y toma 30 minutos.</p>
 
       <p>Si ya tienes tu receta de gafas y quieres saber qué lentes de contacto corresponden, usa nuestra <Link href="/receta">calculadora gratuita</Link>: ingresas tu graduación y te dice los productos compatibles con precios reales.</p>
 
@@ -116,7 +116,7 @@ export default function Page() {
 
       <ol>
         <li><strong>Lávate las manos con jabón</strong> y sécalas bien con toalla que no suelte pelusa.</li>
-        <li><strong>Verifica que el lente esté "derecho":</strong> ponlo en la yema de tu dedo índice. Si tiene forma de tacita perfecta, está bien. Si los bordes están volteados hacia afuera (como plato de sopa), está al revés — voltéalo suavemente.</li>
+        <li><strong>Verifica que el lente esté &quot;derecho&quot;:</strong> ponlo en la yema de tu dedo índice. Si tiene forma de tacita perfecta, está bien. Si los bordes están volteados hacia afuera (como plato de sopa), está al revés — voltéalo suavemente.</li>
         <li><strong>Con la mano opuesta,</strong> abre bien tu párpado superior desde arriba (usa los dedos medios).</li>
         <li><strong>Con la misma mano,</strong> baja tu párpado inferior con el pulgar.</li>
         <li><strong>Mira hacia arriba y ligeramente hacia el lado opuesto.</strong> Coloca el lente sobre la parte blanca del ojo (esclera) — no directamente sobre la pupila.</li>
@@ -156,7 +156,7 @@ export default function Page() {
         <li><strong>Nadar o bañarse con lentes puestos</strong> — mismo riesgo.</li>
         <li><strong>Dormir con los lentes puestos</strong> — reduce oxígeno a la córnea drásticamente. Salvo lentes específicamente aprobados para uso nocturno.</li>
         <li><strong>Excederse en el tiempo</strong> — 8-10 horas máximo al día como principiante. Si excedes, ojos rojos e irritados.</li>
-        <li><strong>"Rellenar" la solución del estuche</strong> — siempre solución nueva cada vez. La vieja está contaminada.</li>
+        <li><strong>&quot;Rellenar&quot; la solución del estuche</strong> — siempre solución nueva cada vez. La vieja está contaminada.</li>
         <li><strong>Usar los lentes más allá de su vida útil</strong> — un mensual usado por 45 días acumula depósitos y puede infectarte.</li>
         <li><strong>Compartir lentes</strong> — obvio pero pasa. Nunca.</li>
       </ul>

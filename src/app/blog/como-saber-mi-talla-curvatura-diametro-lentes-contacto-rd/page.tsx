@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Tu receta de gafas te da la graduación (SPH, y si aplica CYL/AXIS), pero para lentes de contacto necesitas dos datos adicionales que mucha gente no conoce: la <strong>curvatura base (BC)</strong> y el <strong>diámetro (DIA)</strong>. Piénsalo como "la talla" de tu lente — sin esto correcto, el producto no calza bien sin importar que la graduación sea perfecta.</p>
+      <p>Tu receta de gafas te da la graduación (SPH, y si aplica CYL/AXIS), pero para lentes de contacto necesitas dos datos adicionales que mucha gente no conoce: la <strong>curvatura base (BC)</strong> y el <strong>diámetro (DIA)</strong>. Piénsalo como &quot;la talla&quot; de tu lente — sin esto correcto, el producto no calza bien sin importar que la graduación sea perfecta.</p>
 
       <h2>¿Qué es la curvatura base (BC)?</h2>
       <p>Es una medida en milímetros de qué tan curvo debe ser el lente para adaptarse a la curva natural de tu córnea. Valores típicos van de <strong>8.3 a 8.9</strong> — mientras más bajo el número, más curvado es el lente.</p>
@@ -47,12 +47,12 @@ export default function Page() {
       <h2>¿Qué es el diámetro (DIA)?</h2>
       <p>Es el tamaño total del lente, medido en milímetros de borde a borde, generalmente entre <strong>13.8 y 14.5mm</strong>. Determina cuánto cubre el lente sobre tu córnea y la parte blanca del ojo (esclera) que la rodea.</p>
 
-      <p>A diferencia de la curvatura (que varía según tu ojo), el diámetro suele ser <strong>un valor fijo por marca</strong> — no es algo que tú "elijas" como si fuera una talla de ropa, viene predeterminado en el diseño del producto.</p>
+      <p>A diferencia de la curvatura (que varía según tu ojo), el diámetro suele ser <strong>un valor fijo por marca</strong> — no es algo que tú &quot;elijas&quot; como si fuera una talla de ropa, viene predeterminado en el diseño del producto.</p>
 
       <h2>¿Dónde consigo estos valores?</h2>
       <p>Tres formas:</p>
       <ol>
-        <li><strong>En tu receta de lentes de contacto</strong> (no la de gafas) — si ya tuviste una "adaptación" formal con un óptico, estos valores aparecen ahí.</li>
+        <li><strong>En tu receta de lentes de contacto</strong> (no la de gafas) — si ya tuviste una &quot;adaptación&quot; formal con un óptico, estos valores aparecen ahí.</li>
         <li><strong>En la caja de tu marca actual</strong> — si ya usas lentes de contacto, revisa el empaque; el BC y DIA están impresos.</li>
         <li><strong>Con una consulta de adaptación</strong> — si nunca has usado lentes de contacto, un óptico mide tu córnea con un instrumento (queratómetro o topógrafo) y te da los valores exactos.</li>
       </ol>

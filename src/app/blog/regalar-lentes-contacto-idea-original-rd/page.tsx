@@ -35,8 +35,8 @@ export default function Page() {
     <BlogArticle meta={meta}>
       <p>Tu pareja, hermano, hijo o amigo usa lentes de contacto y quieres sorprenderlo con algo útil que realmente vaya a usar. Es una excelente idea de regalo — mucho más práctica que muchas alternativas — pero tiene sus particularidades que conviene conocer antes de comprar.</p>
 
-      <h2>¿Por qué no es tan simple como "comprar y regalar"?</h2>
-      <p>A diferencia de ropa o perfume, los lentes de contacto son <strong>productos personalizados a la medida del ojo de cada persona</strong>. No basta con saber que "usa lentes de contacto" — necesitas datos específicos:</p>
+      <h2>¿Por qué no es tan simple como &quot;comprar y regalar&quot;?</h2>
+      <p>A diferencia de ropa o perfume, los lentes de contacto son <strong>productos personalizados a la medida del ojo de cada persona</strong>. No basta con saber que &quot;usa lentes de contacto&quot; — necesitas datos específicos:</p>
       <ul>
         <li><strong>Graduación (SPH):</strong> la potencia exacta para cada ojo</li>
         <li><strong>Marca que usa habitualmente:</strong> cada marca tiene curvatura base y diámetro distintos</li>
@@ -50,7 +50,7 @@ export default function Page() {
       <p>La forma más segura: pregúntale qué marca usa y su graduación (mucha gente la tiene guardada en el celular o en su cuenta de la tienda donde compra habitualmente). Pierdes el factor sorpresa, pero garantizas acertar.</p>
 
       <h3>2. Pídele que te muestre su caja actual</h3>
-      <p>Sin preguntar directamente "qué regalo quieres", puedes pedir ver su caja de lentes actual con la excusa de curiosidad. Ahí está toda la información: marca, graduación, curvatura, diámetro.</p>
+      <p>Sin preguntar directamente &quot;qué regalo quieres&quot;, puedes pedir ver su caja de lentes actual con la excusa de curiosidad. Ahí está toda la información: marca, graduación, curvatura, diámetro.</p>
 
       <h3>3. Coordina con alguien cercano a la persona</h3>
       <p>Si buscas mantener la sorpresa completa, pregúntale a su pareja, madre o alguien que sepa exactamente qué usa. Ellos pueden tener acceso a esa información sin levantar sospechas.</p>
@@ -61,11 +61,11 @@ export default function Page() {
         <li><strong>Solución multipropósito</strong> (Opti-Free, Renu, Biotrue) — todos los usuarios de lentes mensuales o quincenales la necesitan constantemente</li>
         <li><strong>Gotas humectantes</strong> (Systane, Refresh) — útiles para cualquier usuario, sin importar su graduación</li>
         <li><strong>Estuche de lentes de diseño</strong> — un accesorio práctico y personal</li>
-        <li><strong>Certificado o pedido "por encargo"</strong> — le transfieres el monto o coordinas con nosotros para que él mismo elija su producto y tú cubras el costo</li>
+        <li><strong>Certificado o pedido &quot;por encargo&quot;</strong> — le transfieres el monto o coordinas con nosotros para que él mismo elija su producto y tú cubras el costo</li>
       </ul>
 
       <h2>Si la persona nunca ha usado lentes de contacto</h2>
-      <p>Aquí hay que tener más cuidado. Ponerse lentes de contacto por primera vez requiere adaptación, y no todo el mundo se siente cómodo de inmediato. No es el mejor regalo "sorpresa total" para alguien sin experiencia previa — mejor:</p>
+      <p>Aquí hay que tener más cuidado. Ponerse lentes de contacto por primera vez requiere adaptación, y no todo el mundo se siente cómodo de inmediato. No es el mejor regalo &quot;sorpresa total&quot; para alguien sin experiencia previa — mejor:</p>
       <ul>
         <li>Conversa primero sobre si le interesaría probar lentes de contacto</li>
         <li>Si dice que sí, considera regalarle la consulta con un óptico para su primera adaptación, y después tú cubres su primera caja</li>
@@ -73,7 +73,7 @@ export default function Page() {
       </ul>
 
       <h2>Lentes de color como regalo — más flexible</h2>
-      <p>Si la persona ya usa lentes de contacto regularmente y quieres sorprenderla con algo extra (no su reposición habitual), los <Link href="/color">lentes de color</Link> son una buena opción — un cambio divertido que no reemplaza su compra regular. Aun así necesitas su graduación si busca versión graduada, o puedes optar por la versión "plano" si su interés es puramente estético (aunque igual requiere verificar la curvatura correcta para su ojo).</p>
+      <p>Si la persona ya usa lentes de contacto regularmente y quieres sorprenderla con algo extra (no su reposición habitual), los <Link href="/color">lentes de color</Link> son una buena opción — un cambio divertido que no reemplaza su compra regular. Aun así necesitas su graduación si busca versión graduada, o puedes optar por la versión &quot;plano&quot; si su interés es puramente estético (aunque igual requiere verificar la curvatura correcta para su ojo).</p>
 
       <h2>Cómo coordinar el regalo con ContactGo</h2>
       <p>Si tienes la receta de la persona (marca, graduación, y si aplica cilindro/eje), puedes hacer el pedido directamente a su dirección de entrega. Si prefieres coordinar algo personalizado — por ejemplo, que nosotros le enviemos un mensaje especial junto al pedido, o que te ayudemos a verificar qué producto exacto necesita — escríbenos por WhatsApp al <strong>(809) 694-2268</strong> y lo armamos juntos.</p>

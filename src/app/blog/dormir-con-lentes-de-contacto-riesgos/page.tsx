@@ -311,7 +311,7 @@ export default function Page() {
                       {verdad ? '⚠️ PUEDE SER CIERTO' : '❌ MITO'}
                     </span>
                   </div>
-                  <p className="font-semibold text-gray-900 text-sm mb-1">"{mito}"</p>
+                  <p className="font-semibold text-gray-900 text-sm mb-1">&quot;{mito}&quot;</p>
                   <p className="text-gray-600 text-xs">{explicacion}</p>
                 </div>
               ))}

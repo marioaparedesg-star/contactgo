@@ -39,7 +39,7 @@ export default function Page() {
 
       <h2>Por qué funcionan mejor que las gafas en estos casos</h2>
       <ul>
-        <li><strong>Compatibilidad con equipo de protección</strong> — cascos, gafas tácticas, máscaras antigás, todo se ajusta sin el problema de "¿dónde pongo mis gafas graduadas?"</li>
+        <li><strong>Compatibilidad con equipo de protección</strong> — cascos, gafas tácticas, máscaras antigás, todo se ajusta sin el problema de &quot;¿dónde pongo mis gafas graduadas?&quot;</li>
         <li><strong>Campo visual completo</strong> — sin el marco limitando tu visión periférica, relevante en trabajos donde la percepción del entorno es crítica</li>
         <li><strong>Sin deslizamiento por sudor</strong> — en turnos físicamente exigentes o climas calurosos, las gafas se resbalan; los lentes de contacto no</li>
         <li><strong>Compatibles con gafas de sol no graduadas</strong> — puedes usar cualquier gafa de sol táctica o de protección solar sin necesidad de que sea graduada</li>
@@ -52,7 +52,7 @@ export default function Page() {
       <p>Algunas instituciones (fuerzas armadas, aviación, ciertos cuerpos policiales) tienen normativas propias sobre el uso de lentes de contacto durante el servicio activo — algunas lo permiten sin restricción, otras tienen condiciones específicas. Este es un tema que corresponde consultar directamente con la normativa de tu institución, no algo que nosotros podamos confirmar de forma general.</p>
 
       <h2>Si tu trabajo implica exposición a polvo o ambientes con partículas</h2>
-      <p>Marcas con tecnología anti-depósitos como Air Optix (con SmartShield) ayudan a que el lente se mantenga más "limpio" durante el día en ambientes con polvo o partículas en el aire.</p>
+      <p>Marcas con tecnología anti-depósitos como Air Optix (con SmartShield) ayudan a que el lente se mantenga más &quot;limpio&quot; durante el día en ambientes con polvo o partículas en el aire.</p>
 
       <h2>Lentes diarios para simplicidad en turnos rotativos</h2>
       <p>Si trabajas en turnos rotativos o irregulares, los lentes diarios eliminan la necesidad de cargar solución y estuche — cada día empiezas con un par nuevo, sin importar dónde estés o qué tan cambiante sea tu horario.</p>

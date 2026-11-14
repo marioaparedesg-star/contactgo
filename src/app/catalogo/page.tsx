@@ -6,6 +6,7 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Product } from '@/types'
+import Link from 'next/link'
 
 // CRÍTICO-1b: Sin searchParams en el Server Component → ISR real
 // El filtrado lo hace CatalogoGrid (client) via useSearchParams
@@ -39,7 +40,7 @@ const ORDENES = [
 const CARD_FIELDS = 'id, nombre, slug, precio, precio_anterior, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado, dias_uso'
 
 async function getAllProducts(): Promise<Product[]> {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data } = await sb.from('products')
     .select(CARD_FIELDS)
     .eq('activo', true)
@@ -49,7 +50,7 @@ async function getAllProducts(): Promise<Product[]> {
 }
 
 async function getMarcas(): Promise<string[]> {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data } = await sb.from('products')
     .select('marca')
     .eq('activo', true)
@@ -72,7 +73,7 @@ export default async function CatalogoPage() {
       <main id="main-content" className="max-w-7xl mx-auto px-4 py-6 pb-24">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
-          <a href="/" className="hover:text-primary-600 transition-colors">Inicio</a>
+          <Link href="/" className="hover:text-primary-600 transition-colors">Inicio</Link>
           <span>/</span>
           <span className="text-gray-700 font-medium">Catálogo</span>
         </nav>

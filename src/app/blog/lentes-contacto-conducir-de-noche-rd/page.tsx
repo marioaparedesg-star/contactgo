@@ -41,7 +41,7 @@ export default function Page() {
       <p>De noche, tu pupila se dilata para captar más luz. Si tu pupila dilatada es más grande que la zona óptica del lente (la parte central que corrige tu visión), la luz entra también por el borde del lente, causando halos o destellos alrededor de las luces.</p>
 
       <h3>Sequedad ocular</h3>
-      <p>Un lente con poca humedad distorsiona ligeramente la luz que pasa a través de él, generando la sensación de "aura" alrededor de fuentes lumínicas intensas como los faros de otros vehículos.</p>
+      <p>Un lente con poca humedad distorsiona ligeramente la luz que pasa a través de él, generando la sensación de &quot;aura&quot; alrededor de fuentes lumínicas intensas como los faros de otros vehículos.</p>
 
       <h3>Lente descentrado</h3>
       <p>Si el lente no está perfectamente centrado sobre tu pupila (puede pasar con parpadeos frecuentes o lentes de curvatura no ideal para tu ojo), la distorsión aumenta especialmente en condiciones de contraste alto como conducir de noche.</p>

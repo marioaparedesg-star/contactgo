@@ -42,17 +42,17 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>Si tienes daltonismo (discromatopsia) o conoces a alguien que lo tiene, seguramente has visto videos virales de personas viendo colores "por primera vez" con gafas especiales. La pregunta que nos hacen seguido: ¿existe lo mismo en lentes de contacto? Aquí la respuesta honesta.</p>
+      <p>Si tienes daltonismo (discromatopsia) o conoces a alguien que lo tiene, seguramente has visto videos virales de personas viendo colores &quot;por primera vez&quot; con gafas especiales. La pregunta que nos hacen seguido: ¿existe lo mismo en lentes de contacto? Aquí la respuesta honesta.</p>
 
       <h2>Primero, ¿qué es el daltonismo?</h2>
 
-      <p>El daltonismo es una condición genética (en la gran mayoría de casos, hereditaria y ligada al cromosoma X, por eso es mucho más común en hombres) donde los fotorreceptores del ojo — los conos, responsables de detectar color — no funcionan de forma típica. No es "ver en blanco y negro" como se cree popularmente; la mayoría de personas con daltonismo ven colores, pero les cuesta distinguir ciertas combinaciones, especialmente rojo-verde.</p>
+      <p>El daltonismo es una condición genética (en la gran mayoría de casos, hereditaria y ligada al cromosoma X, por eso es mucho más común en hombres) donde los fotorreceptores del ojo — los conos, responsables de detectar color — no funcionan de forma típica. No es &quot;ver en blanco y negro&quot; como se cree popularmente; la mayoría de personas con daltonismo ven colores, pero les cuesta distinguir ciertas combinaciones, especialmente rojo-verde.</p>
 
-      <h2>¿Qué hacen realmente los lentes o gafas "para daltonismo"?</h2>
+      <h2>¿Qué hacen realmente los lentes o gafas &quot;para daltonismo&quot;?</h2>
 
-      <p>Es importante ser claros: <strong>no corrigen el daltonismo</strong> en el sentido de "arreglarlo". Lo que hacen es aplicar un <strong>filtro de color especializado</strong> que bloquea ciertas longitudes de onda de luz específicas, lo que puede ayudar al cerebro a distinguir mejor la diferencia entre colores que antes se confundían.</p>
+      <p>Es importante ser claros: <strong>no corrigen el daltonismo</strong> en el sentido de &quot;arreglarlo&quot;. Lo que hacen es aplicar un <strong>filtro de color especializado</strong> que bloquea ciertas longitudes de onda de luz específicas, lo que puede ayudar al cerebro a distinguir mejor la diferencia entre colores que antes se confundían.</p>
 
-      <p>Es similar a cómo un filtro polarizado no "cura" el reflejo del sol, sino que cambia cómo tu ojo lo percibe. Funciona como una ayuda de contraste, no como una cura médica.</p>
+      <p>Es similar a cómo un filtro polarizado no &quot;cura&quot; el reflejo del sol, sino que cambia cómo tu ojo lo percibe. Funciona como una ayuda de contraste, no como una cura médica.</p>
 
       <h2>¿Por qué casi todo lo que existe es en gafas y no en lentes de contacto?</h2>
 
@@ -64,7 +64,7 @@ export default function Page() {
       <ul>
         <li>Funcionan mejor para <strong>deficiencia rojo-verde</strong> (la forma más común de daltonismo)</li>
         <li>Suelen ser menos efectivos o no funcionar en absoluto para daltonismo azul-amarillo (mucho menos común)</li>
-        <li>No "restauran" la visión de color normal — mejoran el <strong>contraste y la distinción</strong> entre ciertos tonos</li>
+        <li>No &quot;restauran&quot; la visión de color normal — mejoran el <strong>contraste y la distinción</strong> entre ciertos tonos</li>
         <li>La percepción de mejora es subjetiva y varía según el grado de daltonismo de cada persona</li>
       </ul>
 

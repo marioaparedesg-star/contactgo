@@ -42,18 +42,18 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>La gran mayoría de lentes de contacto que se usan hoy son "blandos" — flexibles, cómodos desde el primer momento. Pero existe otra categoría, menos conocida pero muy relevante para ciertos casos: los <strong>lentes RGP (rígidos permeables al gas)</strong>. Aquí te explicamos qué son y cuándo realmente valen la pena.</p>
+      <p>La gran mayoría de lentes de contacto que se usan hoy son &quot;blandos&quot; — flexibles, cómodos desde el primer momento. Pero existe otra categoría, menos conocida pero muy relevante para ciertos casos: los <strong>lentes RGP (rígidos permeables al gas)</strong>. Aquí te explicamos qué son y cuándo realmente valen la pena.</p>
 
       <h2>¿Qué son los lentes RGP?</h2>
 
-      <p>Son lentes de contacto fabricados con un material <strong>rígido pero que permite el paso de oxígeno</strong> a través de su estructura hacia la córnea (de ahí el nombre "permeable al gas" — a diferencia de los lentes rígidos antiguos de plástico sólido de décadas pasadas, que bloqueaban el oxígeno y ya casi no se usan).</p>
+      <p>Son lentes de contacto fabricados con un material <strong>rígido pero que permite el paso de oxígeno</strong> a través de su estructura hacia la córnea (de ahí el nombre &quot;permeable al gas&quot; — a diferencia de los lentes rígidos antiguos de plástico sólido de décadas pasadas, que bloqueaban el oxígeno y ya casi no se usan).</p>
 
       <p>Mantienen su forma fija sobre el ojo, sin adaptarse a la superficie ocular como hace un lente blando flexible — y esa rigidez es precisamente lo que los hace especiales para ciertos casos.</p>
 
       <h2>Ventajas reales de los lentes RGP</h2>
 
       <h3>1. Visión más nítida en casos irregulares</h3>
-      <p>Como el lente mantiene su forma propia en vez de adaptarse a la córnea, "corrige" mejor las irregularidades corneales — por eso son la opción preferida para <Link href="/blog/queratocono-lentes-contacto-opciones-rd">queratocono</Link> y astigmatismos muy pronunciados que los lentes blandos no logran estabilizar bien.</p>
+      <p>Como el lente mantiene su forma propia en vez de adaptarse a la córnea, &quot;corrige&quot; mejor las irregularidades corneales — por eso son la opción preferida para <Link href="/blog/queratocono-lentes-contacto-opciones-rd">queratocono</Link> y astigmatismos muy pronunciados que los lentes blandos no logran estabilizar bien.</p>
 
       <h3>2. Mayor durabilidad</h3>
       <p>Con el cuidado adecuado, un lente RGP puede durar de 1 a 3 años — comparado con el reemplazo mensual o diario de los lentes blandos convencionales. Esto puede hacerlos más económicos a largo plazo, a pesar de un costo inicial más alto.</p>

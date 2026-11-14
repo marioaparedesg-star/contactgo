@@ -22,7 +22,7 @@ export const metadata = {
 }
 
 export default async function CooperVisionPage() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: productos } = await sb.from('products').select('*').eq('marca', 'COOPERVISION').order('tipo')
   const TIPO: Record<string,string> = {esferico:'Esférico',torico:'Tórico',multifocal:'Multifocal'}
   return (

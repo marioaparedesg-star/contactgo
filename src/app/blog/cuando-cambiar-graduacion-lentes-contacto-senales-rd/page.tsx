@@ -52,7 +52,7 @@ export default function Page() {
       <h3>5. Fatiga visual acelerada frente a pantallas</h3>
       <p>Si antes podías trabajar horas frente a la computadora sin molestia y ahora sientes cansancio visual mucho más rápido, puede ser tanto un tema de graduación como de sequedad ocular — vale la pena revisar ambos factores.</p>
 
-      <h3>6. Visión doble o "fantasma" ocasional</h3>
+      <h3>6. Visión doble o &quot;fantasma&quot; ocasional</h3>
       <p>Especialmente en personas con astigmatismo — si el eje o cilindro de tu graduación cambió ligeramente, puedes empezar a notar sombras dobles alrededor de letras o luces.</p>
 
       <h2>¿Con qué frecuencia cambia normalmente la graduación?</h2>
@@ -65,15 +65,15 @@ export default function Page() {
 
       <h2>¿Qué NO debes hacer</h2>
       <ul>
-        <li><strong>No aumentes tu graduación por tu cuenta</strong> pidiendo un lente "más fuerte" sin medición profesional — puedes terminar con sobrecorrección, que causa los mismos síntomas de fatiga que la subcorrección</li>
+        <li><strong>No aumentes tu graduación por tu cuenta</strong> pidiendo un lente &quot;más fuerte&quot; sin medición profesional — puedes terminar con sobrecorrección, que causa los mismos síntomas de fatiga que la subcorrección</li>
         <li><strong>No sigas forzando la vista</strong> con una graduación claramente desactualizada por meses — puede generar más fatiga visual acumulada innecesaria</li>
-        <li><strong>No asumas que es "solo cansancio"</strong> si el síntoma persiste por varias semanas — vale la pena descartar cambio de graduación</li>
+        <li><strong>No asumas que es &quot;solo cansancio&quot;</strong> si el síntoma persiste por varias semanas — vale la pena descartar cambio de graduación</li>
       </ul>
 
       <h2>Qué hacer si notas estas señales</h2>
       <ol>
         <li><strong>Agenda un examen visual</strong> con tu óptico u oftalmólogo — confirma si realmente hubo cambio de graduación</li>
-        <li><strong>No esperes a que tu receta actual "venza"</strong> si ya notas síntomas — no hay necesidad de aguantar molestia innecesaria</li>
+        <li><strong>No esperes a que tu receta actual &quot;venza&quot;</strong> si ya notas síntomas — no hay necesidad de aguantar molestia innecesaria</li>
         <li><strong>Actualiza tu receta con nosotros</strong> una vez que tengas la nueva graduación confirmada</li>
       </ol>
 

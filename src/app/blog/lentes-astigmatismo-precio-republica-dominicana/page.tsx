@@ -67,34 +67,34 @@ export default function Page() {
 
         <div className="space-y-3 mb-6">
           <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Precios actuales en ContactGo</p>
-            <a href="/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
+            <Link href="/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">ACUVUE® OASYS® for Astigmatism 6u</p><p className="text-xs text-gray-500">⭐ Más recomendado</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$5,800</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
+            </Link>
+            <Link href="/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">1-DAY ACUVUE® MOIST® for Astigmatism 30u</p><p className="text-xs text-gray-500">Diario J&J</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$5,800</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
+            </Link>
+            <Link href="/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Biofinity® Toric 6u</p><p className="text-xs text-gray-500">Mensual premium</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,800</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
+            </Link>
+            <Link href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">clariti® 1 day toric 30u</p><p className="text-xs text-gray-500">Diario accesible</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,250</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
+            </Link>
+            <Link href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Avaira Vitality® Toric 6u</p><p className="text-xs text-gray-500">Mejor precio mensual</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,900</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
+            </Link>
+            <Link href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</p><p className="text-xs text-gray-500">Opción económica</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
-            <a href="/producto/biofinity-xr-toric-lentes-alta-graduacion-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
+            </Link>
+            <Link href="/producto/biofinity-xr-toric-lentes-alta-graduacion-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Biofinity® XR Toric 6u</p><p className="text-xs text-gray-500">Astigmatismo severo</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$9,400</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
-            </a>
+            </Link>
 
           <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
         </div>
@@ -109,31 +109,31 @@ export default function Page() {
                 <thead><tr className="bg-gray-50"><th className="p-3 text-left border border-gray-100 font-bold">Producto</th><th className="p-3 text-right border border-gray-100 font-bold">Precio RD$</th></tr></thead>
                 <tbody>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana" className="font-medium text-primary-600 hover:underline text-sm">ACUVUE® OASYS® for Astigmatism 6u</a><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">⭐ Más recomendado</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana" className="font-medium text-primary-600 hover:underline text-sm">ACUVUE® OASYS® for Astigmatism 6u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">⭐ Más recomendado</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$5,800</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">1-DAY ACUVUE® MOIST® for Astigmatism 30u</a><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Diario J&J</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">1-DAY ACUVUE® MOIST® for Astigmatism 30u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Diario J&J</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$5,800</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biofinity® Toric 6u</a><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Mensual premium</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biofinity® Toric 6u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Mensual premium</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,800</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day toric 30u</a><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Diario accesible</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day toric 30u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Diario accesible</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,250</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Avaira Vitality® Toric 6u</a><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Mejor precio mensual</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Avaira Vitality® Toric 6u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Mejor precio mensual</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$3,900</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</a><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Opción económica</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Opción económica</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,500</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><a href="/producto/biofinity-xr-toric-lentes-alta-graduacion-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biofinity® XR Toric 6u</a><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Astigmatismo severo</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/biofinity-xr-toric-lentes-alta-graduacion-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Biofinity® XR Toric 6u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Astigmatismo severo</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$9,400</td>
               </tr>
 
@@ -189,10 +189,10 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>
-            <a href="/toricos" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todos los lentes tóricos disponibles</p><p className="text-xs text-gray-500 mt-0.5">Catálogo completo de lentes para astigmatismo</p></a>
-            <a href="/blog/acuvue-oasys-for-astigmatism-precio-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ ACUVUE Oasys Astigmatism — Guía completa</p><p className="text-xs text-gray-500 mt-0.5">El más recomendado en detalle</p></a>
-            <a href="/blog/como-leer-receta-optica-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo leer tu receta óptica</p><p className="text-xs text-gray-500 mt-0.5">Qué significa CYL y AXIS</p></a>
-            <a href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity Toric precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual</p></a>
+            <Link href="/toricos" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Ver todos los lentes tóricos disponibles</p><p className="text-xs text-gray-500 mt-0.5">Catálogo completo de lentes para astigmatismo</p></Link>
+            <Link href="/blog/acuvue-oasys-for-astigmatism-precio-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ ACUVUE Oasys Astigmatism — Guía completa</p><p className="text-xs text-gray-500 mt-0.5">El más recomendado en detalle</p></Link>
+            <Link href="/blog/como-leer-receta-optica-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Cómo leer tu receta óptica</p><p className="text-xs text-gray-500 mt-0.5">Qué significa CYL y AXIS</p></Link>
+            <Link href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity Toric precio RD</p><p className="text-xs text-gray-500 mt-0.5">Alternativa mensual</p></Link>
 
           </div>
         </div>

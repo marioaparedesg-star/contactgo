@@ -68,7 +68,7 @@ export default function Page() {
       <h3>Desventajas</h3>
       <ul>
         <li><strong>No reemplaza el examen visual.</strong> Necesitas una receta vigente de una consulta previa.</li>
-        <li>No puedes "probarte" el lente físicamente antes de recibirlo.</li>
+        <li>No puedes &quot;probarte&quot; el lente físicamente antes de recibirlo.</li>
         <li>Adaptaciones complejas (córnea irregular, ojo seco severo) requieren seguimiento profesional presencial.</li>
       </ul>
 
@@ -94,7 +94,7 @@ export default function Page() {
       <h2>La combinación ideal</h2>
       <p>La mayoría de usuarios experimentados hacen ambas cosas: <strong>visitan la óptica una vez al año</strong> para su examen visual y actualización de receta, y <strong>compran su reposición regular en una tienda especializada online</strong> por comodidad y precio.</p>
 
-      <p>No es "una u otra" — son complementarias. El examen visual profesional sigue siendo insustituible; la compra recurrente es donde la especialización online agrega valor real.</p>
+      <p>No es &quot;una u otra&quot; — son complementarias. El examen visual profesional sigue siendo insustituible; la compra recurrente es donde la especialización online agrega valor real.</p>
 
       <h2>Cómo funciona en ContactGo</h2>
       <p>En ContactGo somos exclusivamente una tienda de lentes de contacto — no hacemos exámenes visuales ni vendemos monturas. Nuestro valor está en: catálogo amplio de marcas originales, precios competitivos, entrega a domicilio en 24-48h en toda RD, y asesoría por WhatsApp para ayudarte a elegir el producto correcto según tu receta ya existente.</p>

@@ -64,7 +64,7 @@ export default function Page() {
       <p>Ambos son excelentes lentes diarios de silicona hidrogel — la diferencia principal está en <strong>cómo cada uno logra la hidratación durante el día</strong>, y eso se siente distinto según la persona:</p>
 
       <ul>
-        <li><strong>clariti 1 day</strong> usa un material con alto contenido de agua desde su fabricación — la hidratación es "parte del material" mismo.</li>
+        <li><strong>clariti 1 day</strong> usa un material con alto contenido de agua desde su fabricación — la hidratación es &quot;parte del material&quot; mismo.</li>
         <li><strong>1-DAY ACUVUE Moist</strong> usa tecnología LACREON, que incorpora un agente humectante (similar a un componente de la lágrima natural) dentro del lente para retener humedad activamente durante el uso.</li>
       </ul>
 
@@ -88,7 +88,7 @@ export default function Page() {
       <p>Ambas marcas ofrecen versiones especializadas: <strong>clariti 1 day toric</strong> y <strong>1-DAY ACUVUE Moist for Astigmatism</strong> para astigmatismo, y <strong>clariti 1 day multifocal</strong> para presbicia (ACUVUE no tiene versión multifocal diaria en nuestro catálogo actual, solo quincenal con ACUVUE OASYS Multifocal).</p>
 
       <h2>Nuestra recomendación honesta</h2>
-      <p>Si el precio es tu factor decisivo, <strong>clariti 1 day</strong> te da prácticamente la misma calidad por menos. Si prefieres ir a la marca con más trayectoria mundial y no te importa la diferencia de precio, <strong>1-DAY ACUVUE Moist</strong> sigue siendo una apuesta segura. La buena noticia: con ambas cuentas con protección UV y calidad certificada — no hay una "mala" elección aquí.</p>
+      <p>Si el precio es tu factor decisivo, <strong>clariti 1 day</strong> te da prácticamente la misma calidad por menos. Si prefieres ir a la marca con más trayectoria mundial y no te importa la diferencia de precio, <strong>1-DAY ACUVUE Moist</strong> sigue siendo una apuesta segura. La buena noticia: con ambas cuentas con protección UV y calidad certificada — no hay una &quot;mala&quot; elección aquí.</p>
 
       <p>¿Quieres probar ambas y decidir tú mismo cuál se siente mejor? Usa nuestra <Link href="/receta">calculadora gratuita</Link> con tu graduación, o escríbenos por WhatsApp al <strong>(809) 694-2268</strong>.</p>
     </BlogArticle>

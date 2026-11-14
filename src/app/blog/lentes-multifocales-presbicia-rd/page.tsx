@@ -25,8 +25,8 @@ export default function Page() {
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-12 pb-24">
         <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
-          <a href="/" className="hover:text-primary-600">Inicio</a><span>/</span>
-          <a href="/blog" className="hover:text-primary-600">Blog</a><span>/</span>
+          <Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span>
+          <Link href="/blog" className="hover:text-primary-600">Blog</Link><span>/</span>
           <span className="text-gray-600">Lentes multifocales para presbicia en RD</span>
         </div>
 
@@ -45,7 +45,7 @@ export default function Page() {
         <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
           <span>📅 10 de mayo, 2026</span>
           <span>·</span>
-          <a href="/autor/equipo-contactgo" className="hover:text-primary-600 transition-colors">✍️ Equipo ContactGo</a>
+          <Link href="/autor/equipo-contactgo" className="hover:text-primary-600 transition-colors">✍️ Equipo ContactGo</Link>
           <span>·</span>
           <span>⏱ 5 min lectura</span>
         </div>
@@ -63,7 +63,7 @@ export default function Page() {
 
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Después de los 40-45 años, casi todos necesitamos ayuda para ver de cerca. La presbicia (también llamada "vista cansada") afecta a millones de dominicanos. La buena noticia: los lentes de contacto multifocales te permiten ver bien a todas las distancias sin depender de gafas de lectura.</p>
+          <p>Después de los 40-45 años, casi todos necesitamos ayuda para ver de cerca. La presbicia (también llamada &quot;vista cansada&quot;) afecta a millones de dominicanos. La buena noticia: los lentes de contacto multifocales te permiten ver bien a todas las distancias sin depender de gafas de lectura.</p>
 
           <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5">
             <h2 className="font-bold text-orange-900 mb-2">¿Qué es la presbicia?</h2>
@@ -159,9 +159,9 @@ export default function Page() {
       
         <div className="mt-10 bg-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <p className="text-sm text-gray-600 mb-3">ACUVUE, Air Optix y Proclear para presbicia</p>
-          <a href="/multifocales" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
+          <Link href="/multifocales" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
             Ver lentes multifocales →
-          </a>
+          </Link>
         </div>
 
         <section id="faq">
@@ -190,8 +190,8 @@ export default function Page() {
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
-            <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
+            <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
+            <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</Link>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
           </div>
         </div>

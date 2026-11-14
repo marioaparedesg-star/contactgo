@@ -26,7 +26,7 @@ export const revalidate = 300
 //     y devuelve todas las combos sin límite implícito
 // ═══════════════════════════════════════════════════════════════════
 async function getProduct(slug: string) {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   // Buscar primero por slug, si no encuentra intenta por id (UUID)
   // Cubre links viejos que usaban el UUID como identificador
   let { data } = await sb.from('products')

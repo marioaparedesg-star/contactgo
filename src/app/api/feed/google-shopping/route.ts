@@ -15,7 +15,7 @@ function esc(s = '') {
 }
 
 export async function GET() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: products, error } = await sb
     .from('products')
     .select('id, nombre, slug, tipo, marca, fabricante_nombre, precio, descripcion, imagen_url, gtin, upc, sku, stock')

@@ -60,7 +60,7 @@ export default function Page() {
       <h2>¿Por qué algunos tipos de lente tardan más que otros?</h2>
 
       <h3>Tóricos (astigmatismo)</h3>
-      <p>Estos lentes tienen un diseño especial que debe mantenerse en una orientación específica para corregir el astigmatismo correctamente. El ojo necesita un poco más de tiempo para "aprender" a mantener esa estabilidad de forma natural.</p>
+      <p>Estos lentes tienen un diseño especial que debe mantenerse en una orientación específica para corregir el astigmatismo correctamente. El ojo necesita un poco más de tiempo para &quot;aprender&quot; a mantener esa estabilidad de forma natural.</p>
 
       <h3>Multifocales (presbicia)</h3>
       <p>Tienen distintas zonas de graduación dentro del mismo lente (para lejos, cerca, y distancia intermedia). El cerebro necesita tiempo para aprender a usar la zona correcta según lo que estés mirando — es un ajuste más neurológico que físico.</p>
@@ -71,7 +71,7 @@ export default function Page() {
         <li><strong>Sigue el horario de uso recomendado</strong> — no empieces usándolos 16 horas el primer día; ve aumentando gradualmente si tu especialista lo indica así</li>
         <li><strong>Parpadea con normalidad</strong> — evitar parpadear no ayuda, al contrario, reseca más el ojo</li>
         <li><strong>Mantén tus manos y el lente limpios</strong> — cualquier partícula extra solo prolonga la sensación de molestia</li>
-        <li><strong>No te los quites y pongas constantemente</strong> los primeros días "para probar" — dale tiempo continuo al ojo para acostumbrarse</li>
+        <li><strong>No te los quites y pongas constantemente</strong> los primeros días &quot;para probar&quot; — dale tiempo continuo al ojo para acostumbrarse</li>
         <li><strong>Ten paciencia con los multifocales</strong> específicamente — es normal necesitar un poco más de tiempo</li>
       </ol>
 
