@@ -202,7 +202,12 @@ export default function CuentaPage() {
   useEffect(() => {
     if (!tab) return
     try { window.history.replaceState(null, '', `#${tab}`) } catch {}
-    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'auto' }))
+    // Wait for the active account section to render before scrolling it into view.
+    requestAnimationFrame(() => {
+      const section = document.querySelector('[data-account-section="active"]')
+      if (section) section.scrollIntoView({ block: 'start', behavior: 'auto' })
+      else window.scrollTo({ top: 0, behavior: 'auto' })
+    })
   }, [tab])
 
   // ── Cambiar contraseña ──
@@ -783,7 +788,7 @@ export default function CuentaPage() {
 
         {/* TAB: PEDIDOS */}
         {tab==='pedidos' && (
-          <div className="space-y-3">
+          <div data-account-section="active" className="scroll-mt-20 space-y-3">
             {pedidos.length===0 ? (
               <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
                 <Package className="w-12 h-12 text-gray-200 mx-auto mb-3" />
@@ -868,7 +873,7 @@ export default function CuentaPage() {
 
         {/* TAB: SUSCRIPCIONES */}
         {tab==='suscripciones' && (
-          <div className="space-y-3 pt-1">
+          <div data-account-section="active" className="scroll-mt-20 space-y-3 pt-1">
             {/* Encabezado de sección */}
             <div className="mb-2">
               <h2 className="font-black text-gray-900 text-lg">Suscripciones</h2>
@@ -1067,7 +1072,7 @@ export default function CuentaPage() {
 
         {/* TAB: RECETAS */}
         {tab==='recetas' && (
-          <div className="space-y-3">
+          <div data-account-section="active" className="scroll-mt-20 space-y-3">
 
             {/* Recetas guardadas */}
             {recetas.map(r => (
@@ -1096,7 +1101,7 @@ export default function CuentaPage() {
 
                   {/* Botones acción */}
                   <div className="flex gap-2">
-                    <a href={`/receta?od_sph=${r.od_sph}&od_cyl=${r.od_cyl}&oi_sph=${r.oi_sph}&oi_cyl=${r.oi_cyl}`}
+                    <a href={`/receta?od_sph=${r.od_sph ?? ''}&od_cyl=${r.od_cyl ?? ''}&od_axis=${r.od_axis ?? ''}&oi_sph=${r.oi_sph ?? ''}&oi_cyl=${r.oi_cyl ?? ''}&oi_axis=${r.oi_axis ?? ''}&od_add=${r.add_power ?? ''}&oi_add=${r.add_power ?? ''}`}
                       className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-teal-600 transition-colors">
                       🛒 Ver mis lentes
                     </a>
@@ -1195,7 +1200,7 @@ export default function CuentaPage() {
 
         {/* TAB: PERFIL */}
         {tab==='perfil' && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div data-account-section="active" className="scroll-mt-20 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
               <h2 className="font-bold text-gray-900">Información personal</h2>
               {!editando ? (
@@ -1244,7 +1249,7 @@ export default function CuentaPage() {
 
         {/* TAB: DIRECCIONES */}
         {tab==='direcciones' && (
-          <div className="space-y-3">
+          <div data-account-section="active" className="scroll-mt-20 space-y-3">
 
             {/* Lista de direcciones guardadas */}
             {direcciones.map(d => {
@@ -1335,7 +1340,7 @@ export default function CuentaPage() {
 
         {/* TAB: SEGURIDAD ─────────────────────────────────────────────── */}
         {tab==='seguridad' && (
-          <div className="space-y-4">
+          <div data-account-section="active" className="scroll-mt-20 space-y-4">
 
             {/* ── Cambiar contraseña ── */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
