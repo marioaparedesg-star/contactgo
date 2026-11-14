@@ -89,7 +89,7 @@ export default function RecetaPage() {
               body: JSON.stringify({
                 tipo,
                 od_sph: rx.sph ?? 0, oi_sph: rx.sph ?? 0,
-                od_cyl: rx.cyl ?? 0,
+                od_cyl: rx.cyl ?? 0, oi_cyl: rx.cyl ?? 0,
               })
             })
             const json = await res.json()
@@ -110,7 +110,7 @@ export default function RecetaPage() {
       // ── CASO ESTANDAR: 1 tipo de producto para ambos ojos ─────────────
       const res = await fetch('/api/receta/recomendar', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0 })
+        body: JSON.stringify({ tipo: conv.tipo, od_sph: conv.od.sph ?? 0, oi_sph: conv.oi.sph ?? 0, od_cyl: conv.od.cyl ?? 0, oi_cyl: conv.oi.cyl ?? 0 })
       })
       const json = await res.json()
       const lista = json.productos ?? []
@@ -131,8 +131,7 @@ export default function RecetaPage() {
       oi: { sph: parseN(oi.sph) ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
     }
     setPendingRx(rx)
-    // Pop-up de captura aparece INMEDIATAMENTE al dar clic — cerrable con X
-    if (!leadCaptured) { setShowLead(true); return }
+    // El cálculo es libre y no exige registro ni datos personales.
     await ejecutarCalculo(rx)
   }
 
@@ -144,9 +143,8 @@ export default function RecetaPage() {
     return lista
   }
 
-  // El formulario de datos es obligatorio para ver resultados.
-  // Ya NO se guardan leads anónimos "Sin nombre" — todo lead tiene
-  // nombre + WhatsApp, lo que los hace contactables y accionables.
+  // La captura de datos es opcional: los resultados nunca dependen de guardar un lead.
+  // Si el usuario decide guardar sus datos, se procesa sin bloquear la calculadora.
   const handleLeadSubmit = async () => {
     if (!pendingRx) return
     const telClean = leadTelefono.replace(/\D/g,'')
@@ -155,7 +153,7 @@ export default function RecetaPage() {
     const nombreCompleto = `${leadNombre.trim()} ${leadApellido.trim()}`
     if (!tieneNombreYApellido(nombreCompleto)) { toast.error(ERROR_NOMBRE_INCOMPLETO); return }
     if (telClean.length < 10) { toast.error('Ingresa tu número de WhatsApp (10 dígitos)'); return }
-    const conv = convertGlassesToContacts(pendingRx)
+    const conv = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto')
     let saveOk = false
     try {
       const res = await fetch('/api/calculator-leads/save', {
@@ -295,12 +293,13 @@ export default function RecetaPage() {
 
         {/* Pop-up de captura — aparece INMEDIATAMENTE al dar clic en "Calcular", cerrable con X */}
         {showLead && !leadCaptured && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative">
+          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowLead(false)}>
+            <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative" role="dialog" aria-modal="true" aria-labelledby="lead-dialog-title" onClick={e => e.stopPropagation()}>
+              <button type="button" onClick={() => setShowLead(false)} aria-label="Cerrar formulario" className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-700">×</button>
               <div className="flex flex-col items-center text-center mb-5">
                 <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-3"><Mail className="w-6 h-6 text-green-600" /></div>
-                <h3 className="font-black text-gray-900 text-lg">Tu resultado está listo 🎉</h3>
-                <p className="text-xs text-gray-500 mt-1">Déjanos tus datos para mostrarte qué lentes te sirven y avisarte cuando toque reponer</p>
+                <h3 id="lead-dialog-title" className="font-black text-gray-900 text-lg">Guarda tu receta para la próxima vez</h3>
+                <p className="text-xs text-gray-500 mt-1">Completa tus datos si quieres que guardemos esta receta y podamos ayudarte con futuras reposiciones.</p>
               </div>
               <div className="space-y-3 mb-4">
                 <div className="flex gap-2">
@@ -315,7 +314,7 @@ export default function RecetaPage() {
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary-500" />
               </div>
               <button onClick={handleLeadSubmit} className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
-                Ver mi resultado →
+                Guardar mi receta →
               </button>
               <p className="text-[10px] text-gray-400 text-center">🔒 Tus datos están seguros. Nunca spam.</p>
             </div>

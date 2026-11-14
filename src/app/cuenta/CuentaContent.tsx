@@ -131,14 +131,9 @@ export default function CuentaPage() {
   const [recetas, setRecetas] = useState<any[]>([])
   const [agregandoReceta, setAgregandoReceta] = useState(false)
   const [recetaForm, setRecetaForm] = useState({
-    nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',
-    oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:''
+    nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',
+    oi_sph:'',oi_cyl:'',oi_axis:'',add_power:''
   })
-  const [subiendoReceta, setSubiendoReceta] = useState(false)
-  const [analizandoIA, setAnalizandoIA] = useState(false)
-  const [recetaAnalizada, setRecetaAnalizada] = useState<any>(null)
-  const [recetaImagenPreview, setRecetaImagenPreview] = useState<string | null>(null)
-  const [fechaEmisionForm, setFechaEmisionForm] = useState('')
   const [agregandoPago, setAgregandoPago] = useState(false)
   const [pagoForm, setPagoForm] = useState({ titular:'', ultimos4:'', vencimiento:'' })
   const [pagos, setPagos]     = useState<any[]>([])
@@ -203,6 +198,18 @@ export default function CuentaPage() {
       .catch(err => { console.error('[cuenta] getUser error:', err); setAuthChecked(true) })
   }, [])
 
+  // Reposicionar cada sección al inicio al cambiar de pestaña (especialmente Safari móvil).
+  useEffect(() => {
+    if (!tab) return
+    try { window.history.replaceState(null, '', `#${tab}`) } catch {}
+    // Wait for the active account section to render before scrolling it into view.
+    requestAnimationFrame(() => {
+      const section = document.querySelector('[data-account-section="active"]')
+      if (section) section.scrollIntoView({ block: 'start', behavior: 'auto' })
+      else window.scrollTo({ top: 0, behavior: 'auto' })
+    })
+  }, [tab])
+
   // ── Cambiar contraseña ──
   const cambiarContrasena = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -252,77 +259,12 @@ export default function CuentaPage() {
     setPasskeyMsg({ type:'ok', text:'Acceso biométrico eliminado.' })
   }
 
-  const subirYAnalizarReceta = async (file: File) => {
-    setAnalizandoIA(true)
-    setRecetaAnalizada(null)
-    try {
-      // Preview local
-      const reader = new FileReader()
-      reader.onload = (e) => setRecetaImagenPreview(e.target?.result as string)
-      reader.readAsDataURL(file)
-
-      // Redimensionar a max 1024px y convertir a base64
-      const imgEl = new Image()
-      const objUrl = URL.createObjectURL(file)
-      imgEl.onload = async () => {
-        const MAX = 1024
-        let w = imgEl.width, h = imgEl.height
-        if (w > MAX || h > MAX) {
-          if (w > h) { h = Math.round(h * MAX / w); w = MAX }
-          else       { w = Math.round(w * MAX / h); h = MAX }
-        }
-        const cv = document.createElement('canvas')
-        cv.width = w; cv.height = h
-        cv.getContext('2d')!.drawImage(imgEl, 0, 0, w, h)
-        URL.revokeObjectURL(objUrl)
-        const base64 = cv.toDataURL('image/jpeg', 0.85).split(',')[1]
-        const mediaType = 'image/jpeg'
-
-        const res = await fetch('/api/ocr-receta', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image: base64, mimeType: mediaType }),
-        })
-        const data = await res.json()
-        if (!res.ok || !data.ok || !data.receta) {
-          // Mostrar error sin alert() — dejar que el usuario ingrese manualmente
-          console.error('OCR error:', data.error)
-          setAnalizandoIA(false)
-          // Abrir formulario manual automáticamente
-          setAgregandoReceta(true)
-          return
-        }
-
-        const rx = data.receta
-        setRecetaAnalizada(rx)
-        // Pre-llenar formulario con valores leídos
-        setRecetaForm(f => ({
-          ...f,
-          od_sph:  rx.od_sph  != null ? String(rx.od_sph)  : f.od_sph,
-          od_cyl:  rx.od_cyl  != null ? String(rx.od_cyl)  : f.od_cyl,
-          od_axis: rx.od_axis != null ? String(rx.od_axis) : f.od_axis,
-          oi_sph:  rx.oi_sph  != null ? String(rx.oi_sph)  : f.oi_sph,
-          oi_cyl:  rx.oi_cyl  != null ? String(rx.oi_cyl)  : f.oi_cyl,
-          oi_axis: rx.oi_axis != null ? String(rx.oi_axis) : f.oi_axis,
-          od_add:  rx.add_power != null ? String(Math.abs(rx.add_power)) : f.od_add,
-          diagnostico: rx.diagnostico ?? f.diagnostico,
-        }))
-        setAnalizandoIA(false)
-        setAgregandoReceta(true)
-      }
-    } catch (err) {
-      console.error(err)
-      setAnalizandoIA(false)
-      alert('Error al analizar la imagen. Intenta de nuevo.')
-    }
-  }
-
   const detectarDiagnostico = (f: typeof recetaForm) => {
     const sph = parseFloat(f.od_sph || f.oi_sph || '0')
     const cyl = parseFloat(f.od_cyl || f.oi_cyl || '0')
-    const add = parseFloat(f.od_add || f.oi_add || '0')
+    const add = parseFloat(f.add_power || '0')
     const tieneCyl = cyl !== 0 && (f.od_cyl || f.oi_cyl)
-    const tieneAdd = add > 0 && (f.od_add || f.oi_add)
+    const tieneAdd = add > 0 && f.add_power
     if (tieneAdd && sph < 0 && tieneCyl) return 'Presbicia + Miopía + Astigmatismo'
     if (tieneAdd && sph < 0)  return 'Presbicia + Miopía'
     if (tieneAdd && sph >= 0) return 'Presbicia'
@@ -337,11 +279,23 @@ export default function CuentaPage() {
   const guardarReceta = async () => {
     const sb = createClient()
     const diagnostico = detectarDiagnostico(recetaForm)
-    const { data } = await sb.from('saved_prescriptions').insert({ user_id: user.id, ...recetaForm, diagnostico }).select().single()
+    const { data, error } = await sb.from('saved_prescriptions').insert({
+      user_id: user.id,
+      nombre: recetaForm.nombre.trim() || 'Mi receta',
+      od_sph: recetaForm.od_sph ? Number(recetaForm.od_sph) : null,
+      od_cyl: recetaForm.od_cyl ? Number(recetaForm.od_cyl) : null,
+      od_axis: recetaForm.od_axis ? Number(recetaForm.od_axis) : null,
+      oi_sph: recetaForm.oi_sph ? Number(recetaForm.oi_sph) : null,
+      oi_cyl: recetaForm.oi_cyl ? Number(recetaForm.oi_cyl) : null,
+      oi_axis: recetaForm.oi_axis ? Number(recetaForm.oi_axis) : null,
+      add_power: recetaForm.add_power ? Number(recetaForm.add_power) : null,
+      notas: diagnostico || null,
+    }).select().single()
+    if (error) { toast.error('No se pudo guardar la receta. Verifica los valores e inténtalo de nuevo.'); return }
     if (data) {
       setRecetas(r => [data, ...r])
       setAgregandoReceta(false)
-      setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
+      setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',oi_sph:'',oi_cyl:'',oi_axis:'',add_power:'' })
     }
   }
 
@@ -834,7 +788,7 @@ export default function CuentaPage() {
 
         {/* TAB: PEDIDOS */}
         {tab==='pedidos' && (
-          <div className="space-y-3">
+          <div data-account-section="active" className="scroll-mt-20 space-y-3">
             {pedidos.length===0 ? (
               <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
                 <Package className="w-12 h-12 text-gray-200 mx-auto mb-3" />
@@ -919,7 +873,7 @@ export default function CuentaPage() {
 
         {/* TAB: SUSCRIPCIONES */}
         {tab==='suscripciones' && (
-          <div className="space-y-3 pt-1">
+          <div data-account-section="active" className="scroll-mt-20 space-y-3 pt-1">
             {/* Encabezado de sección */}
             <div className="mb-2">
               <h2 className="font-black text-gray-900 text-lg">Suscripciones</h2>
@@ -1118,54 +1072,28 @@ export default function CuentaPage() {
 
         {/* TAB: RECETAS */}
         {tab==='recetas' && (
-          <div className="space-y-3">
+          <div data-account-section="active" className="scroll-mt-20 space-y-3">
 
             {/* Recetas guardadas */}
-            {recetas.map(r => {
-              const fechaEmision = r.fecha_emision ? new Date(r.fecha_emision) : null
-              const ahora = new Date()
-              const mesesDesde = fechaEmision ? (ahora.getFullYear() - fechaEmision.getFullYear()) * 12 + (ahora.getMonth() - fechaEmision.getMonth()) : null
-              const vencida = mesesDesde !== null && mesesDesde >= 12
-              const proxVencer = mesesDesde !== null && mesesDesde >= 10 && mesesDesde < 12
-              return (
-                <div key={r.id} className={`bg-white rounded-2xl border shadow-sm p-4 ${vencida ? 'border-red-200' : proxVencer ? 'border-amber-200' : 'border-gray-100'}`}>
-                  {/* Alerta vencimiento */}
-                  {vencida && (
-                    <div className="bg-red-50 border border-red-100 rounded-xl px-3 py-2.5 mb-3 flex items-start gap-2">
-                      <span className="text-red-500 text-base shrink-0 mt-0.5">⚠️</span>
-                      <div>
-                        <p className="text-red-700 font-bold text-xs">Receta vencida ({mesesDesde} meses)</p>
-                        <p className="text-red-600 text-xs mt-0.5">Tu receta tiene más de un año. Te recomendamos visitar un optometrista antes de comprar.</p>
-                        <a href="https://wa.me/18096942268?text=Hola%2C%20necesito%20información%20sobre%20revisión%20visual"
-                          target="_blank" rel="noopener noreferrer"
-                          className="text-xs font-bold text-red-600 underline mt-1 inline-block">Solicitar consulta →</a>
-                      </div>
-                    </div>
-                  )}
-                  {proxVencer && !vencida && (
-                    <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 mb-3 flex items-start gap-2">
-                      <span className="text-amber-500 text-base shrink-0 mt-0.5">🕐</span>
-                      <p className="text-amber-700 text-xs font-medium">Tu receta está próxima a vencer ({mesesDesde} meses). Considera hacer una revisión pronto.</p>
-                    </div>
-                  )}
-
+            {recetas.map(r => (
+                <div key={r.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-bold text-gray-900 text-sm">{r.nombre}</p>
                     <div className="flex items-center gap-1.5">
-                      {r.diagnostico && <span className="text-xs font-semibold px-2 py-0.5 bg-teal-50 text-primary-700 rounded-full capitalize">{r.diagnostico}</span>}
-                      {fechaEmision && <span className="text-xs text-gray-400">{fechaEmision.getFullYear()}</span>}
+                      {r.notas && <span className="text-xs font-semibold px-2 py-0.5 bg-teal-50 text-primary-700 rounded-full capitalize">{r.notas}</span>}
+                      {r.created_at && <span className="text-xs text-gray-400">{new Date(r.created_at).toLocaleDateString('es-DO')}</span>}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 mb-3">
-                    {[['OD Derecho',r.od_sph,r.od_cyl,r.od_axis,r.od_add],['OI Izquierdo',r.oi_sph,r.oi_cyl,r.oi_axis,r.oi_add]].map(([label,sph,cyl,axis,add]) => (
+                    {[['OD Derecho',r.od_sph,r.od_cyl,r.od_axis,r.add_power],['OI Izquierdo',r.oi_sph,r.oi_cyl,r.oi_axis,r.add_power]].map(([label,sph,cyl,axis,add]) => (
                       <div key={String(label)} className="bg-gray-50 rounded-xl p-3">
                         <p className="text-xs font-bold text-gray-500 mb-1.5">{label}</p>
                         <div className="space-y-1 text-xs font-mono">
-                          {sph && <p><span className="text-gray-400">Esfera </span><span className="font-bold text-gray-800">{Number(sph) > 0 ? '+' : ''}{sph}</span></p>}
-                          {cyl && <p><span className="text-gray-400">Cil. </span><span className="font-bold text-gray-800">{cyl}</span></p>}
-                          {axis && <p><span className="text-gray-400">Eje </span><span className="font-bold text-gray-800">{String(axis).padStart(3,'0')}°</span></p>}
-                          {add && <p><span className="text-gray-400">Ad. </span><span className="font-bold text-gray-800">{add}</span></p>}
+                          {sph != null && <p><span className="text-gray-400">Esfera </span><span className="font-bold text-gray-800">{Number(sph) > 0 ? '+' : ''}{sph}</span></p>}
+                          {cyl != null && <p><span className="text-gray-400">Cil. </span><span className="font-bold text-gray-800">{cyl}</span></p>}
+                          {axis != null && <p><span className="text-gray-400">Eje </span><span className="font-bold text-gray-800">{String(axis).padStart(3,'0')}°</span></p>}
+                          {add != null && <p><span className="text-gray-400">Ad. </span><span className="font-bold text-gray-800">{add}</span></p>}
                         </div>
                       </div>
                     ))}
@@ -1173,7 +1101,7 @@ export default function CuentaPage() {
 
                   {/* Botones acción */}
                   <div className="flex gap-2">
-                    <a href={`/receta?od_sph=${r.od_sph}&od_cyl=${r.od_cyl}&oi_sph=${r.oi_sph}&oi_cyl=${r.oi_cyl}`}
+                    <a href={`/receta?od_sph=${r.od_sph ?? ''}&od_cyl=${r.od_cyl ?? ''}&od_axis=${r.od_axis ?? ''}&oi_sph=${r.oi_sph ?? ''}&oi_cyl=${r.oi_cyl ?? ''}&oi_axis=${r.oi_axis ?? ''}&od_add=${r.add_power ?? ''}&oi_add=${r.add_power ?? ''}`}
                       className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 hover:bg-teal-600 transition-colors">
                       🛒 Ver mis lentes
                     </a>
@@ -1183,77 +1111,13 @@ export default function CuentaPage() {
                     </button>
                   </div>
                 </div>
-              )
-            })}
+            ))}
 
-            {/* Sección: subir imagen */}
             {!agregandoReceta && (
-              <div className="space-y-3">
-                {/* Upload con IA */}
-                <div className="bg-gradient-to-br from-blue-50 to-teal-50 border border-blue-100 rounded-2xl p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-lg">🤖</span>
-                    <p className="font-bold text-gray-900 text-sm">Subir foto de mi receta</p>
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold ml-auto">IA</span>
-                  </div>
-                  <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-                    Toma una foto clara de tu receta óptica y la IA leerá automáticamente la Esfera, Cilindro, Eje y Adición, y te recomendará los lentes ideales.
-                  </p>
-                  <label className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-xl py-5 cursor-pointer transition-all
-                    ${analizandoIA ? 'border-blue-400 bg-blue-50' : 'border-blue-200 hover:border-blue-400 hover:bg-blue-50/50'}`}>
-                    {analizandoIA ? (
-                      <div className="text-center">
-                        <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                        <p className="text-blue-700 font-semibold text-sm">Analizando tu receta...</p>
-                        <p className="text-blue-500 text-xs mt-0.5">La IA está leyendo los valores</p>
-                      </div>
-                    ) : recetaImagenPreview && recetaAnalizada ? (
-                      <div className="text-center">
-                        <span className="text-2xl">✅</span>
-                        <p className="text-green-700 font-bold text-sm mt-1">Receta leída correctamente</p>
-                        <p className="text-green-600 text-xs mt-0.5 capitalize">{recetaAnalizada.diagnostico}</p>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <span className="text-3xl mb-1 block">📷</span>
-                        <p className="text-blue-700 font-semibold text-sm">Toca para subir foto</p>
-                        <p className="text-gray-400 text-xs mt-0.5">JPG, PNG o PDF · máx 10MB</p>
-                      </div>
-                    )}
-                    <input type="file" accept="image/*,application/pdf" className="hidden"
-                      onChange={e => { const f = e.target.files?.[0]; if (f) subirYAnalizarReceta(f) }} />
-                  </label>
-                  {recetaAnalizada && (
-                    <div className="mt-3 bg-white rounded-xl p-3 border border-green-100">
-                      <p className="text-xs font-bold text-gray-500 uppercase mb-2">Valores detectados</p>
-                      <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                        {recetaAnalizada.od_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD Esf: <b>{recetaAnalizada.od_sph > 0 ? '+' : ''}{recetaAnalizada.od_sph}</b></span>}
-                        {recetaAnalizada.od_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD Cil: <b>{recetaAnalizada.od_cyl}</b></span>}
-                        {recetaAnalizada.oi_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI Esf: <b>{recetaAnalizada.oi_sph > 0 ? '+' : ''}{recetaAnalizada.oi_sph}</b></span>}
-                        {recetaAnalizada.oi_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI Cil: <b>{recetaAnalizada.oi_cyl}</b></span>}
-                        {recetaAnalizada.add_power != null && <span className="bg-purple-50 rounded-lg px-2 py-1 col-span-2">ADD: <b>+{recetaAnalizada.add_power}</b></span>}
-                      </div>
-                      {recetaAnalizada.notas && <p className="text-xs text-amber-600 mt-2 italic">💡 {recetaAnalizada.notas}</p>}
-                      <div className="flex gap-2 mt-3">
-                        <button onClick={() => { setAgregandoReceta(true) }}
-                          className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-xs font-bold transition-colors hover:bg-teal-600">
-                          Revisar y guardar receta
-                        </button>
-                        <a href={`/receta?od_sph=${recetaAnalizada.od_sph}&oi_sph=${recetaAnalizada.oi_sph}&od_cyl=${recetaAnalizada.od_cyl}&oi_cyl=${recetaAnalizada.oi_cyl}`}
-                          className="flex-1 bg-teal-600 text-white py-2.5 rounded-xl text-xs font-bold text-center transition-colors hover:bg-teal-700">
-                          Ver mis lentes 🛒
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Agregar manual */}
-                <button onClick={() => { setAgregandoReceta(true); setRecetaAnalizada(null); setRecetaImagenPreview(null) }}
-                  className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors text-sm">
-                  <Plus className="w-4 h-4" /> Ingresar valores manualmente
-                </button>
-              </div>
+              <button onClick={() => setAgregandoReceta(true)}
+                className="w-full bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-[#002455] hover:border-teal-400 transition-colors text-sm font-semibold">
+                <Plus className="w-4 h-4" /> Ingresar receta manualmente
+              </button>
             )}
 
             {/* Formulario manual */}
@@ -1261,18 +1125,11 @@ export default function CuentaPage() {
               <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
                 <div className="flex items-center justify-between mb-1">
                   <p className="font-bold text-gray-900 text-sm">Nueva receta</p>
-                  {recetaAnalizada && <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">🤖 Completada por IA</span>}
+                  
                 </div>
                 <input value={recetaForm.nombre} onChange={e => setRecetaForm(f => ({...f,nombre:e.target.value}))}
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-400"
                   placeholder="Nombre (ej: Receta 2025)" />
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 mb-1 block">Fecha de emisión de la receta</label>
-                  <input type="date" value={fechaEmisionForm} onChange={e => setFechaEmisionForm(e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
-                    max={new Date().toISOString().slice(0,10)} />
-                  <p className="text-xs text-gray-400 mt-1">Si tiene más de 1 año, te avisaremos que necesitas una revisión</p>
-                </div>
                 {(recetaForm.od_sph||recetaForm.oi_sph) && (
                   <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-2.5 text-sm text-blue-800 font-semibold">
                     Diagnóstico: {detectarDiagnostico(recetaForm)||'—'}
@@ -1286,7 +1143,7 @@ export default function CuentaPage() {
                           { label: 'Esfera (SPH)', key: 'sph', ph: '-2.50',  hint: 'Tu graduación principal' },
                           { label: 'Cilindro (CYL)', key: 'cyl', ph: '-0.75', hint: 'Astigmatismo' },
                           { label: 'Eje (AXIS)', key: 'axis', ph: '180',    hint: 'Orientación' },
-                          { label: 'Adición (ADD)', key: 'add', ph: '+1.50', hint: 'Para lectura' },
+                          
                         ].map(({ label: fieldLabel, key: fieldKey, ph, hint }) => {
                         const k = side+'_'+fieldKey
                         return (
@@ -1302,24 +1159,38 @@ export default function CuentaPage() {
                     </div>
                   </div>
                 ))}
+                <div>
+                  <label className="text-xs text-gray-500 font-semibold mb-1 block">Adición (ADD) · ambos ojos</label>
+                  <input value={recetaForm.add_power} onChange={e => setRecetaForm(f => ({...f,add_power:e.target.value}))}
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
+                    placeholder="+1.50 (si aplica)" inputMode="decimal" />
+                </div>
                 <div className="flex gap-2">
                   <button onClick={async () => {
+                    if (!recetaForm.od_sph && !recetaForm.oi_sph) { toast.error('Ingresa al menos la esfera de un ojo.'); return }
+                    const axisValues = [recetaForm.od_axis, recetaForm.oi_axis].filter(Boolean).map(Number)
+                    if (axisValues.some(v => !Number.isInteger(v) || v < 0 || v > 180)) { toast.error('El eje debe estar entre 0° y 180°.'); return }
                     const diagnostico = detectarDiagnostico(recetaForm)
                     const sb = createClient()
-                    const { data } = await sb.from('saved_prescriptions').insert({
-                      user_id: user.id, ...recetaForm, diagnostico,
-                      fecha_emision: fechaEmisionForm || null,
+                    const { data, error } = await sb.from('saved_prescriptions').insert({
+                      user_id: user.id,
+                      nombre: recetaForm.nombre.trim() || 'Mi receta',
+                      od_sph: recetaForm.od_sph ? Number(recetaForm.od_sph) : null,
+                      od_cyl: recetaForm.od_cyl ? Number(recetaForm.od_cyl) : null,
+                      od_axis: recetaForm.od_axis ? Number(recetaForm.od_axis) : null,
+                      oi_sph: recetaForm.oi_sph ? Number(recetaForm.oi_sph) : null,
+                      oi_cyl: recetaForm.oi_cyl ? Number(recetaForm.oi_cyl) : null,
+                      oi_axis: recetaForm.oi_axis ? Number(recetaForm.oi_axis) : null,
+                      add_power: recetaForm.add_power ? Number(recetaForm.add_power) : null,
+                      notas: diagnostico || null,
                     }).select().single()
-                    if (data) {
-                      setRecetas(rs => [data, ...rs])
-                      setAgregandoReceta(false)
-                      setRecetaAnalizada(null)
-                      setRecetaImagenPreview(null)
-                      setFechaEmisionForm('')
-                      setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
-                    }
+                    if (error || !data) { toast.error('No se pudo guardar la receta. Inténtalo de nuevo.'); return }
+                    setRecetas(rs => [data, ...rs])
+                    setAgregandoReceta(false)
+                    setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',oi_sph:'',oi_cyl:'',oi_axis:'',add_power:'' })
+                    toast.success('Receta guardada correctamente.')
                   }} className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
-                  <button onClick={() => { setAgregandoReceta(false); setRecetaAnalizada(null); setFechaEmisionForm('') }}
+                  <button onClick={() => { setAgregandoReceta(false);  }}
                     className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
                 </div>
               </div>
@@ -1329,7 +1200,7 @@ export default function CuentaPage() {
 
         {/* TAB: PERFIL */}
         {tab==='perfil' && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div data-account-section="active" className="scroll-mt-20 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
               <h2 className="font-bold text-gray-900">Información personal</h2>
               {!editando ? (
@@ -1378,7 +1249,7 @@ export default function CuentaPage() {
 
         {/* TAB: DIRECCIONES */}
         {tab==='direcciones' && (
-          <div className="space-y-3">
+          <div data-account-section="active" className="scroll-mt-20 space-y-3">
 
             {/* Lista de direcciones guardadas */}
             {direcciones.map(d => {
@@ -1469,7 +1340,7 @@ export default function CuentaPage() {
 
         {/* TAB: SEGURIDAD ─────────────────────────────────────────────── */}
         {tab==='seguridad' && (
-          <div className="space-y-4">
+          <div data-account-section="active" className="scroll-mt-20 space-y-4">
 
             {/* ── Cambiar contraseña ── */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
