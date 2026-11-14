@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 /**
- * Motor de recomendación real — NUNCA retorna lista vacía
+ * Motor de recomendación por compatibilidad de graduación; no devuelve alternativas fuera de rango
  * Soporta: esferico | torico | multifocal | multifocal_torico
  */
 export async function POST(req: NextRequest) {
