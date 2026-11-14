@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Envíos y Entregas | ContactGo República Dominicana',
-  description: 'Envíos: Santo Domingo y Santiago 24-48 horas, resto del país, 2-4 días. Consulta los tiempos de preparación según el tipo de lente.',
+  description: 'Envíos: Santo Domingo y Santiago 24-48 horas, resto del país, 2-4 días. Consulta los tiempos estimados de entrega según el tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/ayuda/envios' },
   openGraph: {
     title: 'Envíos y Entregas | ContactGo República Dominicana',
