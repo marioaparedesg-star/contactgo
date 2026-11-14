@@ -1265,9 +1265,7 @@ export default function CuentaPage() {
                         <p className="font-bold text-gray-900 text-sm">{d.etiqueta ?? 'Dirección'}</p>
                         {d.principal && <span className="text-[10px] font-bold text-primary-600 bg-teal-50 border border-primary-200 px-2 py-0.5 rounded-full">Principal</span>}
                       </div>
-                      <p className="text-sm text-gray-700 mt-0.5">{d.direccion}</p>
-                      <p className="text-xs text-gray-400">{d.ciudad}</p>
-                      {d.referencias && <p className="text-xs text-gray-400 italic mt-0.5">{d.referencias}</p>}
+                      <p className="text-sm text-gray-700 mt-0.5 whitespace-pre-wrap break-words">{d.direccion_formateada || [d.direccion, d.ciudad, d.provincia, d.referencias ? `Referencia: ${d.referencias}` : ''].filter(Boolean).join(' · ')}</p>
                     </div>
                     <button onClick={() => eliminarDireccion(d.id)} className="text-gray-300 hover:text-red-500 p-1 shrink-0">
                       <Trash2 className="w-4 h-4"/>
