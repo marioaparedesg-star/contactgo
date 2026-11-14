@@ -79,22 +79,24 @@ function encontrarMarca(slug: string) {
   return null
 }
 
-export async function generateMetadata({ params }: { params: { marca: string } }) {
-  const found = encontrarMarca(params.marca)
+export async function generateMetadata({ params }: { params: Promise<{ marca: string }> }) {
+  const { marca } = await params
+  const found = encontrarMarca(marca)
   if (!found) return { title: 'Marca no encontrada | ContactGo' }
   return {
-    alternates: { canonical: `https://www.contactgo.net/marca/${params.marca}` },
+    alternates: { canonical: `https://www.contactgo.net/marca/${marca}` },
     title: `Lentes de Contacto ${found.info.nombre} | ContactGo República Dominicana`,
     description: `Compra lentes de contacto ${found.info.nombre} en ContactGo. Envío rápido en toda República Dominicana. ${found.info.descripcion.slice(0, 100)}`,
   }
 }
 
-export default async function MarcaPage({ params }: { params: { marca: string } }) {
-  const found = encontrarMarca(params.marca)
+export default async function MarcaPage({ params }: { params: Promise<{ marca: string }> }) {
+  const { marca } = await params
+  const found = encontrarMarca(marca)
   if (!found) notFound()
   const { info } = found
 
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   // Buscar productos de esta marca
   const marcaDB = info.nombre.replace('®', '').replace('+', '+').trim()
   const { data: productos } = await sb

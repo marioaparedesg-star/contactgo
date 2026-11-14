@@ -13,7 +13,7 @@ const RNC_EMPRESA = process.env.DGII_RNC ?? '000000000'
 export async function GET(req: NextRequest) {
   // Auth: solo admins
   try {
-    const sbServer = createServerSupabaseClient()
+    const sbServer = await createServerSupabaseClient()
     const { data: { user } } = await sbServer.auth.getUser()
     if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     const { data: profile } = await sbServer.from('profiles').select('role').eq('id', user.id).single()
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       periodo: mes, rnc_empresa: RNC_EMPRESA,
       total_registros: orders.length,
-      total_monto: orders.reduce((s, o) => s + parseFloat(o.total ?? '0'), 0).toFixed(2),
+      total_monto: (orders as any[]).reduce((s: number, o: any) => s + parseFloat(o.total ?? "0"), 0).toFixed(2),
       modo: orders[0]?.ncf_tipo?.startsWith('E') ? 'PRUEBA' : 'PRODUCCION',
       registros,
     })

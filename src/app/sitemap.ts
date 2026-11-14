@@ -2,7 +2,7 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { BLOG_SLUGS } from '@/lib/blogSlugs.generated'
 
 export default async function sitemap() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
 
   const { data: products } = await sb.from('products').select('slug, id, updated_at').eq('activo', true)
 

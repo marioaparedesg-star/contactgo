@@ -22,7 +22,7 @@ const faqs = [
 ]
 
 export default async function Page() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: products } = await sb.from('products').select('*').eq('activo', true).eq('tipo', 'esferico').order('nombre')
 
   return (

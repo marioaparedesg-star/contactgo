@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
 
   // ── 2. Verificar sesión server-side ────────────────────────
   try {
-    const sbServer = createServerSupabaseClient()
+    const sbServer = await createServerSupabaseClient()
     const { data: { user }, error: userErr } = await sbServer.auth.getUser()
 
     if (userErr || !user) {

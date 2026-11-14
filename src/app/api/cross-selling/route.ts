@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   const exclude = searchParams.get('exclude') ?? ''
   const limit = Math.min(Number(searchParams.get('limit') ?? 4) || 4, 10)
 
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   let query = sb.from('products')
     .select('id, nombre, slug, precio, imagen_url, tipo')
     .in('tipo', tipos)

@@ -36,7 +36,7 @@ const SEO_LINKS = [
 ]
 
 export default async function LentesContactoPage() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: products } = await sb.from('products')
     .select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado')
     .eq('activo', true).gt('stock', 0)

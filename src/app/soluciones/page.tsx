@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function Page() {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data: soluciones } = await sb.from('products').select('*').eq('activo', true).eq('tipo', 'solucion').order('nombre')
   const { data: gotas } = await sb.from('products').select('*').eq('activo', true).eq('tipo', 'gota').order('nombre')
   // Mantenemos listas separadas para mostrarlas en secciones distintas

@@ -39,7 +39,7 @@ const ORDENES = [
 const CARD_FIELDS = 'id, nombre, slug, precio, precio_anterior, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado, dias_uso'
 
 async function getAllProducts(): Promise<Product[]> {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data } = await sb.from('products')
     .select(CARD_FIELDS)
     .eq('activo', true)
@@ -49,7 +49,7 @@ async function getAllProducts(): Promise<Product[]> {
 }
 
 async function getMarcas(): Promise<string[]> {
-  const sb = createServerSupabaseClient()
+  const sb = await createServerSupabaseClient()
   const { data } = await sb.from('products')
     .select('marca')
     .eq('activo', true)
