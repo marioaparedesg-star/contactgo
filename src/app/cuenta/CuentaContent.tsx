@@ -203,6 +203,13 @@ export default function CuentaPage() {
       .catch(err => { console.error('[cuenta] getUser error:', err); setAuthChecked(true) })
   }, [])
 
+  // Reposicionar cada sección al inicio al cambiar de pestaña (especialmente Safari móvil).
+  useEffect(() => {
+    if (!tab) return
+    try { window.history.replaceState(null, '', `#${tab}`) } catch {}
+    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior }))
+  }, [tab])
+
   // ── Cambiar contraseña ──
   const cambiarContrasena = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -337,7 +344,19 @@ export default function CuentaPage() {
   const guardarReceta = async () => {
     const sb = createClient()
     const diagnostico = detectarDiagnostico(recetaForm)
-    const { data } = await sb.from('saved_prescriptions').insert({ user_id: user.id, ...recetaForm, diagnostico }).select().single()
+    const { data, error } = await sb.from('saved_prescriptions').insert({
+      user_id: user.id,
+      nombre: recetaForm.nombre.trim() || 'Mi receta',
+      od_sph: recetaForm.od_sph ? Number(recetaForm.od_sph) : null,
+      od_cyl: recetaForm.od_cyl ? Number(recetaForm.od_cyl) : null,
+      od_axis: recetaForm.od_axis ? Number(recetaForm.od_axis) : null,
+      oi_sph: recetaForm.oi_sph ? Number(recetaForm.oi_sph) : null,
+      oi_cyl: recetaForm.oi_cyl ? Number(recetaForm.oi_cyl) : null,
+      oi_axis: recetaForm.oi_axis ? Number(recetaForm.oi_axis) : null,
+      add_power: recetaForm.od_add ? Number(recetaForm.od_add) : recetaForm.oi_add ? Number(recetaForm.oi_add) : null,
+      notas: diagnostico || null,
+    }).select().single()
+    if (error) { toast.error('No se pudo guardar la receta. Verifica los valores e inténtalo de nuevo.'); return }
     if (data) {
       setRecetas(r => [data, ...r])
       setAgregandoReceta(false)
@@ -1158,14 +1177,14 @@ export default function CuentaPage() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 mb-3">
-                    {[['OD Derecho',r.od_sph,r.od_cyl,r.od_axis,r.od_add],['OI Izquierdo',r.oi_sph,r.oi_cyl,r.oi_axis,r.oi_add]].map(([label,sph,cyl,axis,add]) => (
+                    {[['OD Derecho',r.od_sph,r.od_cyl,r.od_axis,r.add_power],['OI Izquierdo',r.oi_sph,r.oi_cyl,r.oi_axis,r.add_power]].map(([label,sph,cyl,axis,add]) => (
                       <div key={String(label)} className="bg-gray-50 rounded-xl p-3">
                         <p className="text-xs font-bold text-gray-500 mb-1.5">{label}</p>
                         <div className="space-y-1 text-xs font-mono">
-                          {sph && <p><span className="text-gray-400">Esfera </span><span className="font-bold text-gray-800">{Number(sph) > 0 ? '+' : ''}{sph}</span></p>}
-                          {cyl && <p><span className="text-gray-400">Cil. </span><span className="font-bold text-gray-800">{cyl}</span></p>}
-                          {axis && <p><span className="text-gray-400">Eje </span><span className="font-bold text-gray-800">{String(axis).padStart(3,'0')}°</span></p>}
-                          {add && <p><span className="text-gray-400">Ad. </span><span className="font-bold text-gray-800">{add}</span></p>}
+                          {sph != null && <p><span className="text-gray-400">Esfera </span><span className="font-bold text-gray-800">{Number(sph) > 0 ? '+' : ''}{sph}</span></p>}
+                          {cyl != null && <p><span className="text-gray-400">Cil. </span><span className="font-bold text-gray-800">{cyl}</span></p>}
+                          {axis != null && <p><span className="text-gray-400">Eje </span><span className="font-bold text-gray-800">{String(axis).padStart(3,'0')}°</span></p>}
+                          {add != null && <p><span className="text-gray-400">Ad. </span><span className="font-bold text-gray-800">{add}</span></p>}
                         </div>
                       </div>
                     ))}
@@ -1186,74 +1205,11 @@ export default function CuentaPage() {
               )
             })}
 
-            {/* Sección: subir imagen */}
             {!agregandoReceta && (
-              <div className="space-y-3">
-                {/* Upload con IA */}
-                <div className="bg-gradient-to-br from-blue-50 to-teal-50 border border-blue-100 rounded-2xl p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-lg">🤖</span>
-                    <p className="font-bold text-gray-900 text-sm">Subir foto de mi receta</p>
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold ml-auto">IA</span>
-                  </div>
-                  <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-                    Toma una foto clara de tu receta óptica y la IA leerá automáticamente la Esfera, Cilindro, Eje y Adición, y te recomendará los lentes ideales.
-                  </p>
-                  <label className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-xl py-5 cursor-pointer transition-all
-                    ${analizandoIA ? 'border-blue-400 bg-blue-50' : 'border-blue-200 hover:border-blue-400 hover:bg-blue-50/50'}`}>
-                    {analizandoIA ? (
-                      <div className="text-center">
-                        <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                        <p className="text-blue-700 font-semibold text-sm">Analizando tu receta...</p>
-                        <p className="text-blue-500 text-xs mt-0.5">La IA está leyendo los valores</p>
-                      </div>
-                    ) : recetaImagenPreview && recetaAnalizada ? (
-                      <div className="text-center">
-                        <span className="text-2xl">✅</span>
-                        <p className="text-green-700 font-bold text-sm mt-1">Receta leída correctamente</p>
-                        <p className="text-green-600 text-xs mt-0.5 capitalize">{recetaAnalizada.diagnostico}</p>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <span className="text-3xl mb-1 block">📷</span>
-                        <p className="text-blue-700 font-semibold text-sm">Toca para subir foto</p>
-                        <p className="text-gray-400 text-xs mt-0.5">JPG, PNG o PDF · máx 10MB</p>
-                      </div>
-                    )}
-                    <input type="file" accept="image/*,application/pdf" className="hidden"
-                      onChange={e => { const f = e.target.files?.[0]; if (f) subirYAnalizarReceta(f) }} />
-                  </label>
-                  {recetaAnalizada && (
-                    <div className="mt-3 bg-white rounded-xl p-3 border border-green-100">
-                      <p className="text-xs font-bold text-gray-500 uppercase mb-2">Valores detectados</p>
-                      <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                        {recetaAnalizada.od_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD Esf: <b>{recetaAnalizada.od_sph > 0 ? '+' : ''}{recetaAnalizada.od_sph}</b></span>}
-                        {recetaAnalizada.od_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OD Cil: <b>{recetaAnalizada.od_cyl}</b></span>}
-                        {recetaAnalizada.oi_sph != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI Esf: <b>{recetaAnalizada.oi_sph > 0 ? '+' : ''}{recetaAnalizada.oi_sph}</b></span>}
-                        {recetaAnalizada.oi_cyl != null && <span className="bg-gray-50 rounded-lg px-2 py-1">OI Cil: <b>{recetaAnalizada.oi_cyl}</b></span>}
-                        {recetaAnalizada.add_power != null && <span className="bg-purple-50 rounded-lg px-2 py-1 col-span-2">ADD: <b>+{recetaAnalizada.add_power}</b></span>}
-                      </div>
-                      {recetaAnalizada.notas && <p className="text-xs text-amber-600 mt-2 italic">💡 {recetaAnalizada.notas}</p>}
-                      <div className="flex gap-2 mt-3">
-                        <button onClick={() => { setAgregandoReceta(true) }}
-                          className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-xs font-bold transition-colors hover:bg-teal-600">
-                          Revisar y guardar receta
-                        </button>
-                        <a href={`/receta?od_sph=${recetaAnalizada.od_sph}&oi_sph=${recetaAnalizada.oi_sph}&od_cyl=${recetaAnalizada.od_cyl}&oi_cyl=${recetaAnalizada.oi_cyl}`}
-                          className="flex-1 bg-teal-600 text-white py-2.5 rounded-xl text-xs font-bold text-center transition-colors hover:bg-teal-700">
-                          Ver mis lentes 🛒
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Agregar manual */}
-                <button onClick={() => { setAgregandoReceta(true); setRecetaAnalizada(null); setRecetaImagenPreview(null) }}
-                  className="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-400 hover:border-primary-300 hover:text-primary-500 transition-colors text-sm">
-                  <Plus className="w-4 h-4" /> Ingresar valores manualmente
-                </button>
-              </div>
+              <button onClick={() => setAgregandoReceta(true)}
+                className="w-full bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-[#002455] hover:border-teal-400 transition-colors text-sm font-semibold">
+                <Plus className="w-4 h-4" /> Ingresar receta manualmente
+              </button>
             )}
 
             {/* Formulario manual */}
