@@ -11,13 +11,17 @@ export async function POST(req: NextRequest) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const { tipo, od_sph, oi_sph, od_cyl } = await req.json()
+  const { tipo, od_sph, oi_sph, od_cyl, oi_cyl } = await req.json()
   if (!tipo) return NextResponse.json({ error: 'tipo requerido' }, { status: 400 })
 
   const odS = Number(od_sph ?? 0)
   const oiS = Number(oi_sph ?? 0)
-  const cylV = Number(od_cyl ?? 0)
+  const odCyl = Number(od_cyl ?? 0)
+  const oiCyl = Number(oi_cyl ?? od_cyl ?? 0)
   const TOLERANCE = 0.50
+  const CYL_TOLERANCE = 0.25
+  const inCylRange = (cyls: number[], val: number) =>
+    Math.abs(val) < 0.01 ? true : !!cyls?.some(v => Math.abs(Number(v) - val) <= CYL_TOLERANCE)
 
   const inRange = (sphs: number[], val: number) =>
     !sphs?.length || (val >= Math.min(...sphs) - TOLERANCE && val <= Math.max(...sphs) + TOLERANCE)
@@ -30,7 +34,12 @@ export async function POST(req: NextRequest) {
       .eq('activo', true).eq('tipo', 'multifocal').eq('archivado', false)
       .order('precio', { ascending: true })
     
-    const conCyl = (mfAll ?? []).filter((p: any) => p.cyl_disponibles?.length > 0)
+    const conCyl = (mfAll ?? []).filter((p: any) =>
+      inRange((p.sph_disponibles ?? []).map(Number), odS) &&
+      inRange((p.sph_disponibles ?? []).map(Number), oiS) &&
+      inCylRange((p.cyl_disponibles ?? []).map(Number), odCyl) &&
+      inCylRange((p.cyl_disponibles ?? []).map(Number), oiCyl)
+    )
     if (conCyl.length >= 1) {
       // Dar 3 opciones aunque sean el mismo producto
       const resultado = conCyl.length >= 3 ? conCyl.slice(0, 3) :
@@ -61,7 +70,10 @@ export async function POST(req: NextRequest) {
     // Excluir XR de recomendaciones estándar (solo recomendar XR si la graduación lo requiere)
     const esXR = /XR/i.test(p.nombre ?? '')
     if (esXR && !esAltaGraduacion && tipo === 'esferico') return false
-    return inRange(sp, odS) && inRange(sp, oiS)
+    const cyls = (p.cyl_disponibles ?? []).map(Number)
+    const needsCyl = tipo === 'torico' || tipo === 'multifocal_torico'
+    return inRange(sp, odS) && inRange(sp, oiS) &&
+      (!needsCyl || (inCylRange(cyls, odCyl) && inCylRange(cyls, oiCyl)))
   })
 
   // Para tóricos: excluir productos tóricos XR de rango normal
@@ -76,15 +88,13 @@ export async function POST(req: NextRequest) {
     if (poolNoToric.length > 0) pool = poolNoToric
   }
 
-  // Fallback L1: todos del tipo sin filtro XR
-  if (!pool.length) pool = todos.filter((p: any) => inRange((p.sph_disponibles ?? []).map(Number), odS))
-  // Fallback L2: todos del tipo
-  if (!pool.length) pool = todos
-  // Fallback L3: cualquier lente activo
+  // No recomendar productos fuera del rango de graduación solicitado.
   if (!pool.length) {
-    const { data: fb } = await sb.from('products').select(FIELDS).eq('activo', true)
-      .in('tipo', ['esferico', 'torico', 'multifocal']).order('precio', { ascending: true }).limit(6)
-    pool = fb ?? []
+    return NextResponse.json({
+      productos: [],
+      total: 0,
+      nota: 'No encontramos lentes que coincidan con todos los valores de tu receta. Un especialista puede ayudarte a validar una opción.'
+    })
   }
 
   const sorted = [...pool].sort((a: any, b: any) => Number(a.precio) - Number(b.precio))
