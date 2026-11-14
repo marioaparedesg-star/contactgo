@@ -939,7 +939,6 @@ export default function CheckoutPage() {
                             <div className="flex justify-between gap-3 text-gray-600"><span>Envío</span><span>{envioGratis ? 'Gratis' : `RD${envio.toLocaleString()}`}</span></div>
                             <div className="flex justify-between gap-3 border-t border-gray-200 pt-2 text-sm font-black text-gray-900"><span>Total a pagar</span><span className="text-primary-700">RD${totalFinal.toLocaleString()}</span></div>
                           </div>
-                        </div>
                       </div>
                     </div>
 
