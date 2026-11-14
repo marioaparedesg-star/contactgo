@@ -30,7 +30,7 @@
     },
     {
       "path": "/api/cron/whatsapp-diferidos",
-      "schedule": "0 13-21 * * 1-6"
+      "schedule": "0 13 * * *"
     }
   ]
 }
