@@ -133,7 +133,7 @@ export function buildAdminOrderEmail(order: Order, items: OrderItem[], event: st
     <div style="max-width:580px;margin:auto;background:#fff;border-radius:14px;overflow:hidden">
       <div style="padding:22px 26px;background:${BRAND};color:#fff"><div style="font-size:22px;font-weight:800">Contact<span style="color:${ACCENT}">Go</span></div><div style="margin-top:5px;font-size:10px;letter-spacing:1px;color:#d6e4f3">AVISO OPERATIVO</div></div>
       <div style="padding:25px 26px"><div style="font-size:10px;font-weight:800;letter-spacing:1px;color:#00858a">${esc(event === 'pago_aprobado' ? 'PAGO APROBADO' : meta.tag)}</div>
-        <h2 style="margin:9px 0;font-size:21px;color:${BRAND}">${esc(event === 'nuevo_pedido' ? 'Nuevo pedido recibido' : event === 'pago_aprobado' ? 'Pago confirmado' : meta.title)}</h2>
+        <h2 style="margin:9px 0;font-size:21px;color:${BRAND}">${esc(event === 'nuevo_pedido' && order.pago_estado === 'pagado' ? 'Nuevo pedido · pago aprobado' : event === 'nuevo_pedido' ? 'Nuevo pedido recibido' : event === 'pago_aprobado' ? 'Pago confirmado' : meta.title)}</h2>
         <p style="font-size:13px;color:#64748b">Pedido #${id} · ${money(order.total)}</p>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:13px">
           <tr><td style="padding:7px 0;color:#64748b">Cliente</td><td align="right" style="font-weight:700">${esc(order.cliente_nombre)}</td></tr>
