@@ -708,7 +708,7 @@ export default function CheckoutPage() {
                   {step > 1 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
 
-                {(step === 1 || step === 3) && (
+                {step === 1 && (
                   <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-3.5 border-t border-slate-100 pt-4">
                     <div className="relative">
                       <User className="absolute left-3.5 top-9 w-4 h-4 text-gray-400" />
@@ -774,7 +774,7 @@ export default function CheckoutPage() {
                   {step > 2 && <span className="text-xs font-bold text-primary-600 bg-teal-50 px-2.5 py-1 rounded-full">Editar</span>}
                 </div>
 
-                {(step === 2 || step === 3) && (
+                {step === 2 && (
                   <div className="px-4 sm:px-6 pb-5 sm:pb-6 space-y-4 border-t border-slate-100 pt-5">
 
                     {/* Selector de direcciones guardadas */}
