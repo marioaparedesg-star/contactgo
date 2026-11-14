@@ -74,17 +74,18 @@ export async function POST(req: NextRequest) {
 
     // ── Registrar pago o abono parcial ──────────────────────────────────
     // Reemplaza a marcar_pagado para casos que necesitan control fino:
-    //   - Pagos parciales (cliente pagó 50%, resto contra entrega)
+    //   - Pagos parciales (cliente pagó 50%, resto pendiente)
     //   - Marcar como pagado SIN notificar al cliente
     //   - Trazabilidad completa de pagos por método
     if (accion === 'registrar_pago') {
       const monto = Number(body.monto)
-      const metodo = String(body.metodo ?? 'efectivo')
+      const metodo = String(body.metodo ?? 'otro')
       const nota = body.nota ? String(body.nota).slice(0, 500) : null
       const notificar = body.notificar !== false // default true
 
       if (!monto || monto <= 0) return NextResponse.json({ error: 'Monto inválido' }, { status: 400 })
-      if (!['efectivo', 'transferencia', 'tarjeta', 'otro', 'azul'].includes(metodo)) {
+      // 2026-10: 'efectivo' eliminado a pedido de Mario (el historial existente sigue visible)
+      if (!['transferencia', 'tarjeta', 'otro', 'azul'].includes(metodo)) {
         return NextResponse.json({ error: 'Método inválido' }, { status: 400 })
       }
 

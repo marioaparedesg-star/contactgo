@@ -88,7 +88,7 @@ export async function GET(req: NextRequest) {
           const mensaje = `Hola *${nombre}* 👋\n\n` +
             `Notamos que tu pedido *#${p.numero_orden}* en ContactGo quedó pendiente de pago y expiró.\n\n` +
             `¿Tuviste algún problema al completar tu compra? Te ayudamos a finalizarlo ahora mismo:\n\n` +
-            `💳 Si fue un problema con la tarjeta, tenemos otras opciones (transferencia, efectivo).\n` +
+            `💳 Si fue un problema con la tarjeta, tenemos otra opción de pago (transferencia).\n` +
             `📞 O si prefieres, coordinamos por aquí y te lo procesamos manualmente.\n\n` +
             `🎁 *Descuento especial:* usa *VUELVE5* para 5% off si completas hoy.\n\n` +
             `👉 www.contactgo.net/cart\n\n` +

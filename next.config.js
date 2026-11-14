@@ -100,6 +100,12 @@ const nextConfig = {
         destination: '/producto/acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana',
         permanent: true,
       },
+      // 2026-10: se eliminó el pago contra entrega — el artículo ya no aplica
+      {
+        source: '/blog/lentes-contacto-pago-contra-entrega-republica-dominicana',
+        destination: '/blog/primer-pedido-que-esperar-rd',
+        permanent: true,
+      },
       // Aliases de rutas
       { source: '/login',          destination: '/cuenta', permanent: true },
       { source: '/carrito',        destination: '/cart',   permanent: true },

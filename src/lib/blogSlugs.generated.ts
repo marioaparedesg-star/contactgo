@@ -146,7 +146,6 @@ export const BLOG_SLUGS: string[] = [
   "lentes-contacto-oficina-aire-acondicionado-rd",
   "lentes-contacto-ojos-secos-republica-dominicana",
   "lentes-contacto-originales-vs-falsificados-rd",
-  "lentes-contacto-pago-contra-entrega-republica-dominicana",
   "lentes-contacto-para-astigmatismo",
   "lentes-contacto-para-eventos-fiestas-halloween-quinceanera-rd",
   "lentes-contacto-parpadeo-fatiga-visual-rd",

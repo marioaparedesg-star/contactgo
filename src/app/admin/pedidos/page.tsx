@@ -81,7 +81,7 @@ export default function PedidosPage() {
   const [payModalOpen, setPayModalOpen] = useState(false)
   const [payType, setPayType] = useState<'completo' | 'parcial'>('completo')
   const [payMonto, setPayMonto] = useState<string>('')
-  const [payMetodo, setPayMetodo] = useState<'efectivo' | 'transferencia' | 'tarjeta' | 'otro' | 'azul'>('efectivo')
+  const [payMetodo, setPayMetodo] = useState<'transferencia' | 'tarjeta' | 'otro' | 'azul'>('transferencia')
   const [payNota, setPayNota] = useState('')
   const [payNotificar, setPayNotificar] = useState(true)
   const [paySaving, setPaySaving] = useState(false)
@@ -418,7 +418,7 @@ export default function PedidosPage() {
                     // Abrir modal con defaults sensatos
                     setPayType('completo')
                     setPayMonto(String(selected.total ?? ''))
-                    setPayMetodo('efectivo')
+                    setPayMetodo('transferencia')
                     setPayNota('')
                     setPayNotificar(true)
                     // Cargar historial de pagos previos
@@ -549,7 +549,6 @@ export default function PedidosPage() {
               className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-teal-300">
               <option value="todos">Todos</option>
               <option value="tarjeta">💳 Tarjeta AZUL</option>
-              <option value="contra_entrega">💵 Contra entrega</option>
             </select>
           </div>
 
@@ -696,7 +695,6 @@ export default function PedidosPage() {
                 <label className="text-[11px] font-bold text-gray-600 uppercase tracking-wide block mb-1.5">Método</label>
                 <div className="grid grid-cols-2 gap-1.5">
                   {([
-                    { v: 'efectivo', l: '💵 Efectivo' },
                     { v: 'transferencia', l: '🏦 Transfer.' },
                     { v: 'tarjeta', l: '💳 Tarjeta' },
                     { v: 'otro', l: '📝 Otro' },
@@ -714,7 +712,7 @@ export default function PedidosPage() {
                 <label className="text-[11px] font-bold text-gray-600 uppercase tracking-wide block mb-1.5">Nota interna (opcional)</label>
                 <textarea rows={2} maxLength={500}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500 resize-none"
-                  placeholder="Ej: Pagó 50% adelantado, resto contra entrega"
+                  placeholder="Ej: Pagó 50% adelantado, resto pendiente"
                   value={payNota}
                   onChange={e => setPayNota(e.target.value)}
                   disabled={paySaving}/>
