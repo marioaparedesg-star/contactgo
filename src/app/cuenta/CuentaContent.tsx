@@ -131,14 +131,9 @@ export default function CuentaPage() {
   const [recetas, setRecetas] = useState<any[]>([])
   const [agregandoReceta, setAgregandoReceta] = useState(false)
   const [recetaForm, setRecetaForm] = useState({
-    nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',
-    oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:''
+    nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',
+    oi_sph:'',oi_cyl:'',oi_axis:'',add_power:''
   })
-  const [subiendoReceta, setSubiendoReceta] = useState(false)
-  const [analizandoIA, setAnalizandoIA] = useState(false)
-  const [recetaAnalizada, setRecetaAnalizada] = useState<any>(null)
-  const [recetaImagenPreview, setRecetaImagenPreview] = useState<string | null>(null)
-  const [fechaEmisionForm, setFechaEmisionForm] = useState('')
   const [agregandoPago, setAgregandoPago] = useState(false)
   const [pagoForm, setPagoForm] = useState({ titular:'', ultimos4:'', vencimiento:'' })
   const [pagos, setPagos]     = useState<any[]>([])
@@ -259,77 +254,12 @@ export default function CuentaPage() {
     setPasskeyMsg({ type:'ok', text:'Acceso biométrico eliminado.' })
   }
 
-  const subirYAnalizarReceta = async (file: File) => {
-    setAnalizandoIA(true)
-    setRecetaAnalizada(null)
-    try {
-      // Preview local
-      const reader = new FileReader()
-      reader.onload = (e) => setRecetaImagenPreview(e.target?.result as string)
-      reader.readAsDataURL(file)
-
-      // Redimensionar a max 1024px y convertir a base64
-      const imgEl = new Image()
-      const objUrl = URL.createObjectURL(file)
-      imgEl.onload = async () => {
-        const MAX = 1024
-        let w = imgEl.width, h = imgEl.height
-        if (w > MAX || h > MAX) {
-          if (w > h) { h = Math.round(h * MAX / w); w = MAX }
-          else       { w = Math.round(w * MAX / h); h = MAX }
-        }
-        const cv = document.createElement('canvas')
-        cv.width = w; cv.height = h
-        cv.getContext('2d')!.drawImage(imgEl, 0, 0, w, h)
-        URL.revokeObjectURL(objUrl)
-        const base64 = cv.toDataURL('image/jpeg', 0.85).split(',')[1]
-        const mediaType = 'image/jpeg'
-
-        const res = await fetch('/api/ocr-receta', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image: base64, mimeType: mediaType }),
-        })
-        const data = await res.json()
-        if (!res.ok || !data.ok || !data.receta) {
-          // Mostrar error sin alert() — dejar que el usuario ingrese manualmente
-          console.error('OCR error:', data.error)
-          setAnalizandoIA(false)
-          // Abrir formulario manual automáticamente
-          setAgregandoReceta(true)
-          return
-        }
-
-        const rx = data.receta
-        setRecetaAnalizada(rx)
-        // Pre-llenar formulario con valores leídos
-        setRecetaForm(f => ({
-          ...f,
-          od_sph:  rx.od_sph  != null ? String(rx.od_sph)  : f.od_sph,
-          od_cyl:  rx.od_cyl  != null ? String(rx.od_cyl)  : f.od_cyl,
-          od_axis: rx.od_axis != null ? String(rx.od_axis) : f.od_axis,
-          oi_sph:  rx.oi_sph  != null ? String(rx.oi_sph)  : f.oi_sph,
-          oi_cyl:  rx.oi_cyl  != null ? String(rx.oi_cyl)  : f.oi_cyl,
-          oi_axis: rx.oi_axis != null ? String(rx.oi_axis) : f.oi_axis,
-          od_add:  rx.add_power != null ? String(Math.abs(rx.add_power)) : f.od_add,
-          diagnostico: rx.diagnostico ?? f.diagnostico,
-        }))
-        setAnalizandoIA(false)
-        setAgregandoReceta(true)
-      }
-    } catch (err) {
-      console.error(err)
-      setAnalizandoIA(false)
-      alert('Error al analizar la imagen. Intenta de nuevo.')
-    }
-  }
-
   const detectarDiagnostico = (f: typeof recetaForm) => {
     const sph = parseFloat(f.od_sph || f.oi_sph || '0')
     const cyl = parseFloat(f.od_cyl || f.oi_cyl || '0')
-    const add = parseFloat(f.od_add || f.oi_add || '0')
+    const add = parseFloat(f.add_power || '0')
     const tieneCyl = cyl !== 0 && (f.od_cyl || f.oi_cyl)
-    const tieneAdd = add > 0 && (f.od_add || f.oi_add)
+    const tieneAdd = add > 0 && f.add_power
     if (tieneAdd && sph < 0 && tieneCyl) return 'Presbicia + Miopía + Astigmatismo'
     if (tieneAdd && sph < 0)  return 'Presbicia + Miopía'
     if (tieneAdd && sph >= 0) return 'Presbicia'
@@ -353,14 +283,14 @@ export default function CuentaPage() {
       oi_sph: recetaForm.oi_sph ? Number(recetaForm.oi_sph) : null,
       oi_cyl: recetaForm.oi_cyl ? Number(recetaForm.oi_cyl) : null,
       oi_axis: recetaForm.oi_axis ? Number(recetaForm.oi_axis) : null,
-      add_power: recetaForm.od_add ? Number(recetaForm.od_add) : recetaForm.oi_add ? Number(recetaForm.oi_add) : null,
+      add_power: recetaForm.add_power ? Number(recetaForm.add_power) : null,
       notas: diagnostico || null,
     }).select().single()
     if (error) { toast.error('No se pudo guardar la receta. Verifica los valores e inténtalo de nuevo.'); return }
     if (data) {
       setRecetas(r => [data, ...r])
       setAgregandoReceta(false)
-      setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
+      setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',oi_sph:'',oi_cyl:'',oi_axis:'',add_power:'' })
     }
   }
 
@@ -1190,7 +1120,7 @@ export default function CuentaPage() {
               <div className="bg-white rounded-2xl border border-primary-200 shadow-sm p-4 space-y-3">
                 <div className="flex items-center justify-between mb-1">
                   <p className="font-bold text-gray-900 text-sm">Nueva receta</p>
-                  {recetaAnalizada && <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">🤖 Completada por IA</span>}
+                  
                 </div>
                 <input value={recetaForm.nombre} onChange={e => setRecetaForm(f => ({...f,nombre:e.target.value}))}
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -1208,7 +1138,7 @@ export default function CuentaPage() {
                           { label: 'Esfera (SPH)', key: 'sph', ph: '-2.50',  hint: 'Tu graduación principal' },
                           { label: 'Cilindro (CYL)', key: 'cyl', ph: '-0.75', hint: 'Astigmatismo' },
                           { label: 'Eje (AXIS)', key: 'axis', ph: '180',    hint: 'Orientación' },
-                          { label: 'Adición (ADD)', key: 'add', ph: '+1.50', hint: 'Para lectura' },
+                          
                         ].map(({ label: fieldLabel, key: fieldKey, ph, hint }) => {
                         const k = side+'_'+fieldKey
                         return (
@@ -1224,6 +1154,12 @@ export default function CuentaPage() {
                     </div>
                   </div>
                 ))}
+                <div>
+                  <label className="text-xs text-gray-500 font-semibold mb-1 block">Adición (ADD) · ambos ojos</label>
+                  <input value={recetaForm.add_power} onChange={e => setRecetaForm(f => ({...f,add_power:e.target.value}))}
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
+                    placeholder="+1.50 (si aplica)" inputMode="decimal" />
+                </div>
                 <div className="flex gap-2">
                   <button onClick={async () => {
                     if (!recetaForm.od_sph && !recetaForm.oi_sph) { toast.error('Ingresa al menos la esfera de un ojo.'); return }
@@ -1249,7 +1185,7 @@ export default function CuentaPage() {
                     setRecetaForm({ nombre:'Mi receta',diagnostico:'',od_sph:'',od_cyl:'',od_axis:'',od_add:'',oi_sph:'',oi_cyl:'',oi_axis:'',oi_add:'' })
                     toast.success('Receta guardada correctamente.')
                   }} className="flex-1 bg-teal-500 text-white py-2.5 rounded-xl text-sm font-semibold">Guardar receta</button>
-                  <button onClick={() => { setAgregandoReceta(false); setRecetaAnalizada(null); setFechaEmisionForm('') }}
+                  <button onClick={() => { setAgregandoReceta(false);  }}
                     className="flex-1 bg-gray-100 text-gray-600 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
                 </div>
               </div>
