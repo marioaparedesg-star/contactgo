@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const sb = getSb()
     let result: any
     let sentBody = ''
-    let payload: Record<string, any>
+    let payload: Record<string, any> | null = null
 
     if (tipo === 'envio' && order_id) {
       const { data: order } = await sb
@@ -64,6 +64,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'mensaje o tipo requerido' }, { status: 400 })
     }
 
+    if (!payload) return NextResponse.json({ error: 'No se encontró el pedido o el tipo de envío no es válido' }, { status: 404 })
     result = await enviarWAManual(telefono, payload)
 
     // Save outbound message to DB
