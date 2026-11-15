@@ -59,6 +59,32 @@ async function notificarEstadoPedido(order_id: string, nuevo_estado: string) {
   }
 }
 
+// GET: lista administrativa de pedidos desde servidor con service role.
+// requireAdmin valida sesión, UUID principal, rol y cuenta activa antes de consultar.
+export async function GET(req: NextRequest) {
+  try {
+    const auth = await requireAdmin()
+    if (auth.ok === false) return auth.response
+
+    const sb = getSb()
+    const { data, error } = await sb
+      .from('orders')
+      .select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,cliente_cedula,cliente_fecha_nacimiento,direccion_texto,ciudad,canal,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin,es_prueba')
+      .not('numero_orden', 'like', 'CG-TEST%')
+      .order('created_at', { ascending: false })
+      .limit(200)
+
+    if (error) {
+      console.error('[admin/pedidos GET] error cargando pedidos:', error.message)
+      return NextResponse.json({ error: 'No se pudieron cargar los pedidos' }, { status: 500 })
+    }
+    return NextResponse.json({ pedidos: data ?? [] }, { headers: { 'Cache-Control': 'no-store' } })
+  } catch (err: any) {
+    console.error('[admin/pedidos GET] error:', err?.message)
+    return NextResponse.json({ error: 'Error interno al cargar pedidos' }, { status: 500 })
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const guardErr = guardRequest(req, { limitPerMin: 60, requireOrigin: false })
