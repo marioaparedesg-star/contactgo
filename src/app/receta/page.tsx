@@ -87,7 +87,7 @@ export default function RecetaPage() {
     // Reset estado mixto en cada calculo
     setProductsOd([]); setProductsOi([]); setCasoMixto(null); setAlternativasRevision([])
 
-    const mixto = detectarCasoMixto(conv)
+    const mixto = { ...detectarCasoMixto(conv), esMixto: true }
 
     try {
       // ── CASO MIXTO: cargar productos separadamente por ojo ─────────────
@@ -294,17 +294,17 @@ export default function RecetaPage() {
       <main className="min-h-screen bg-gray-50 pb-16">
 
         {/* Encabezado de calculadora — identidad clínica y premium */}
-        <section className="border-b border-gray-100 bg-white px-5 py-9 text-center md:py-12">
+        <section className="border-b border-gray-100 bg-white px-5 py-6 text-center md:py-9">
           <div className="mx-auto max-w-3xl">
             <p className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary-700">
               <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
               Asistente de receta ContactGo
             </p>
-            <h1 className="font-display text-[30px] font-bold leading-tight tracking-tight text-slate-900 md:text-4xl">
+            <h1 className="font-display text-[27px] font-bold leading-[1.12] tracking-tight text-slate-900 md:text-4xl">
               Encuentra lentes compatibles
               <span className="block text-primary-600">con tu graduación.</span>
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500 md:text-base">
+            <p className="mx-auto mt-2 max-w-xl text-sm leading-5 text-slate-500 md:text-base">
               Introduce los valores de tu receta y consulta las opciones del catálogo que coinciden con sus parámetros.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-slate-500">
@@ -346,21 +346,21 @@ export default function RecetaPage() {
           </div>
         )}
 
-        <div className="max-w-3xl mx-auto px-4 py-5 space-y-4">
+        <div className="max-w-3xl mx-auto px-4 py-4 space-y-3">
 
 
 
 
 
           {/* Tipo de receta */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
+          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_2px_12px_rgba(15,35,65,.04)] md:p-5">
             <div className="mb-3">
               <h2 className="text-sm font-semibold text-slate-900">¿Qué tipo de receta tienes?</h2>
               <p className="mt-1 text-xs text-slate-500">Selecciona el documento del que provienen los valores.</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <button type="button" onClick={() => setRxSource('contacto')}
-                className={`flex min-h-[116px] flex-col items-start justify-between rounded-xl border p-3 text-left transition-colors md:p-4 ${
+                className={`flex min-h-[96px] flex-col items-start justify-between rounded-xl border p-3 text-left transition-colors md:p-4 ${
                   rxSource === 'contacto' ? 'border-primary-500 bg-teal-50/50 ring-1 ring-primary-500' : 'border-slate-200 hover:border-slate-300'
                 }`}>
                 <Eye className={`h-5 w-5 ${rxSource === 'contacto' ? 'text-primary-700' : 'text-slate-400'}`} />
@@ -437,10 +437,10 @@ export default function RecetaPage() {
                   // ═══════════ CASO MIXTO — 2 columnas OD/OI ═══════════
                   <>
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
-                      <p className="text-xs font-bold text-amber-900 mb-0.5">Tu receta necesita lentes distintos por ojo</p>
+                      <p className="text-xs font-bold text-amber-900 mb-0.5">Recomendaciones evaluadas por separado para cada ojo</p>
                       <p className="text-[11px] text-amber-800 leading-snug">
-                        Cada ojo tiene una necesidad diferente. Te mostramos las mejores opciones separadamente — puedes comprar
-                        <strong> 1 caja para OD</strong> y <strong>1 caja para OI</strong>. En el carrito llegan por separado.
+                        Validamos la graduación de cada ojo contra los parámetros reales de fabricación. Si los modelos coinciden, puedes seleccionar
+                        <strong> una caja para cada ojo</strong>. Las opciones que aparecen debajo cumplen los parámetros publicados para ese ojo.
                       </p>
                     </div>
 
@@ -455,7 +455,7 @@ export default function RecetaPage() {
                           <span className="text-[9px] bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded-full">OD</span>
                         </div>
                         {productsOd.length === 0 ? (
-                          <p className="text-xs text-gray-400 text-center py-6">Sin productos compatibles — contáctanos por WhatsApp</p>
+                          <p className="text-xs text-gray-400 text-center py-6">No encontramos una coincidencia confirmada para este ojo. Podemos revisar alternativas contigo.</p>
                         ) : (
                           <div className="grid grid-cols-1 gap-2">
                             {productsOd.slice(0, 3).map((p, i) => (
