@@ -127,6 +127,8 @@ export default function CuentaPage() {
   const [apellido, setApellido] = useState('')
   const [fechaNacimiento, setFechaNacimiento] = useState('')
   const [telefono, setTelefono] = useState('')
+  const [aceptaPrivacidad, setAceptaPrivacidad] = useState(false)
+  const [aceptaPromociones, setAceptaPromociones] = useState(false)
   const [loading, setLoading] = useState(false)
   const [recetas, setRecetas] = useState<any[]>([])
   const [agregandoReceta, setAgregandoReceta] = useState(false)
@@ -467,12 +469,13 @@ export default function CuentaPage() {
     }
     if (nombre.trim().length < 2 || apellido.trim().length < 2) { setMsg('Completa tu nombre y apellido.'); setLoading(false); return }
     if (!fechaNacimiento) { setMsg('Ingresa tu fecha de nacimiento.'); setLoading(false); return }
+    if (!aceptaPrivacidad) { setMsg('Debes aceptar las Condiciones de uso y confirmar que has leído la Política de privacidad.'); setLoading(false); return }
     const edad = (Date.now() - new Date(fechaNacimiento + 'T00:00:00').getTime()) / (365.25 * 24 * 60 * 60 * 1000)
     if (!Number.isFinite(edad) || edad < 18) { setMsg('Debes tener 18 años o más para crear una cuenta.'); setLoading(false); return }
     const nombreCompleto = nombre.trim() + ' ' + apellido.trim()
     const nextPath = new URLSearchParams(window.location.search).get('next') || '/cuenta'
     const sb = createClient()
-    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: window.location.origin + '/auth/callback?next=' + encodeURIComponent(nextPath), data: { nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento } } })
+    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: window.location.origin + '/auth/callback?next=' + encodeURIComponent(nextPath), data: { nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, acepta_privacidad: true, privacidad_version: '2026-11-14-v1', privacidad_aceptada_at: new Date().toISOString(), marketing_consent: aceptaPromociones, marketing_consent_version: '2026-11-14-v1', marketing_consent_source: 'registro_web' } } })
     if (error) { setMsg(error.message); setLoading(false); return }
     if (data.user) {
       await sb.from('profiles').upsert({ id: data.user.id, email, nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, role: 'customer' })
@@ -589,6 +592,19 @@ export default function CuentaPage() {
                   ¿Olvidaste tu contraseña?
                 </Link>
               </p>
+            )}
+
+            {modo === 'registro' && (
+              <div className="space-y-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
+                <label className="flex items-start gap-2 text-xs leading-5 text-gray-600">
+                  <input type="checkbox" checked={aceptaPrivacidad} onChange={e => setAceptaPrivacidad(e.target.checked)} required className="mt-1 h-4 w-4 shrink-0 accent-teal-600" />
+                  <span>Acepto las <Link href="/condiciones" target="_blank" className="font-semibold text-primary-700 underline">Condiciones de uso</Link> y confirmo que he leído la <Link href="/privacidad" target="_blank" className="font-semibold text-primary-700 underline">Política de privacidad</Link>. Es obligatorio para crear mi cuenta.</span>
+                </label>
+                <label className="flex items-start gap-2 text-xs leading-5 text-gray-600">
+                  <input type="checkbox" checked={aceptaPromociones} onChange={e => setAceptaPromociones(e.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-teal-600" />
+                  <span>Quiero recibir por correo electrónico promociones, descuentos, novedades y recomendaciones de ContactGo. Puedo retirar mi autorización cuando quiera.</span>
+                </label>
+              </div>
             )}
 
             <button type="submit" disabled={loading}
