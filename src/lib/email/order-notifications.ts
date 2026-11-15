@@ -91,7 +91,8 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
           order_id: orderId, template, to_email: order.cliente_email, subject,
           resend_id: sent.resendId ?? null, status: sent.error ? 'error' : 'sent',
         })
-        if (logError) console.error('[order-notifications] no se pudo guardar email_log cliente:', logError.message)
+        if (logError?.code === '23505') console.warn('[order-notifications] Resend aceptó el correo; email_log ya tenía esa plantilla para este pedido.')
+        else if (logError) console.error('[order-notifications] no se pudo guardar email_log cliente:', logError.message)
       }
     } else {
       result.email_cliente = 'skipped'
@@ -130,7 +131,8 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
           order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
           resend_id: adminResendId ?? null, status: adminError ? 'error' : 'sent',
         })
-        if (logError) console.error('[order-notifications] no se pudo guardar email_log admin:', logError.message)
+        if (logError?.code === '23505') console.warn('[order-notifications] Resend aceptó el aviso interno; email_log ya tenía esa plantilla para este pedido.')
+        else if (logError) console.error('[order-notifications] no se pudo guardar email_log admin:', logError.message)
       }
     }
     return result
