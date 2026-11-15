@@ -99,7 +99,7 @@ git push -u origin main
 
 ## PASO 4 — Configurar admin (5 min)
 
-1. Ve a `contactgo.net/admin/login`
+1. Ve a `contactgo.net/M1Alexander/login`
 2. **NO puedes entrar aún** — primero necesitas crear la cuenta:
 3. Ve a `contactgo.net/cuenta` → Registrarse con `info@contactgo.net`
 4. Verifica el email (Supabase envía un link)
@@ -107,7 +107,7 @@ git push -u origin main
 ```sql
 UPDATE profiles SET role = 'admin' WHERE email = 'info@contactgo.net';
 ```
-6. Ahora entra a `/admin/login` con tus credenciales
+6. Ahora entra a `/M1Alexander/login` con tus credenciales
 
 ---
 
