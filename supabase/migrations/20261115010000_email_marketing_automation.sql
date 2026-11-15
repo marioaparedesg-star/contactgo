@@ -31,19 +31,8 @@ create policy "Users can read own email preferences"
   on public.email_marketing_preferences for select to authenticated
   using ((select auth.uid()) = user_id);
 
-drop policy if exists "Users can create own email preferences" on public.email_marketing_preferences;
-create policy "Users can create own email preferences"
-  on public.email_marketing_preferences for insert to authenticated
-  with check ((select auth.uid()) = user_id);
-
-drop policy if exists "Users can update own email preferences" on public.email_marketing_preferences;
-create policy "Users can update own email preferences"
-  on public.email_marketing_preferences for update to authenticated
-  using ((select auth.uid()) = user_id)
-  with check ((select auth.uid()) = user_id);
-
 revoke all on public.email_marketing_preferences from anon;
-grant select, insert, update on public.email_marketing_preferences to authenticated;
+grant select on public.email_marketing_preferences to authenticated;
 grant all on public.email_marketing_preferences to service_role;
 
 create table if not exists public.email_automation_events (
