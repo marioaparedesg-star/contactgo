@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 30, requireOrigin: false })
   if (guardErr) return guardErr
   const auth = await requireAdmin()
-  if (!auth.ok) return auth.response
+  if (auth.ok === false) return auth.response
 
   try {
     const sb = db()
