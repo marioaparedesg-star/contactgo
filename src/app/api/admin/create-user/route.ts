@@ -18,7 +18,8 @@ async function getActiveAdmin(req: NextRequest) {
   if (error || !user) return { error: NextResponse.json({ error: 'No autorizado' }, { status: 401 }) }
   const { data: profile, error: profileError } = await sb.from('profiles')
     .select('role, activo').eq('id', user.id).single()
-  if (profileError || profile?.role !== 'admin' || profile?.activo !== true) {
+  const primaryAdminId = process.env.CONTACTGO_PRIMARY_ADMIN_ID ?? '0ae25176-4cb9-45da-bd19-5b1b5806c4ef'
+  if (profileError || profile?.role !== 'admin' || profile?.activo !== true || user.id !== primaryAdminId) {
     return { error: NextResponse.json({ error: 'Acceso denegado o cuenta desactivada' }, { status: 403 }) }
   }
   return { user }
