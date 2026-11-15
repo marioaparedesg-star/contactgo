@@ -9,6 +9,7 @@ import CookieConsent from '@/components/ui/CookieConsent'
 import { Toaster } from 'react-hot-toast'
 import WelcomePopup from '@/components/ui/WelcomePopup'
 import ScrollToTop from '@/components/ui/ScrollToTop'
+import ReferralTracker from '@/components/ui/ReferralTracker'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.contactgo.net'),
@@ -334,6 +335,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             src="https://www.facebook.com/tr?id=1516674003159165&ev=PageView&noscript=1"
           />
         </noscript>
+        <ReferralTracker />
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}} />
