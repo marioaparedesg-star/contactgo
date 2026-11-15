@@ -95,7 +95,7 @@ export default function ConfiguracionPage() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700"><Crown className="w-3 h-3 inline mr-1" />Administrador</span>
-              {!isMe && <button onClick={() => toggleActivo(u.id, u.activo === true)} className={\`p-2 rounded-lg \${u.activo === true ? 'bg-green-50 text-green-700 hover:bg-green-100' : 'bg-red-50 text-red-700 hover:bg-red-100'}\`} title={u.activo === true ? 'Revocar acceso' : 'Habilitar acceso'}>{u.activo === true ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}</button>}
+              {!isMe && <button onClick={() => toggleActivo(u.id, u.activo === true)} className={`p-2 rounded-lg ${u.activo === true ? 'bg-green-50 text-green-700 hover:bg-green-100' : 'bg-red-50 text-red-700 hover:bg-red-100'}`} title={u.activo === true ? 'Revocar acceso' : 'Habilitar acceso'}>{u.activo === true ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}</button>}
             </div>
           </div>
         })}
