@@ -75,7 +75,10 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       const { data: prior, error: priorError } = await sb.from('email_log').select('id')
         .eq('order_id', orderId).eq('template', template).eq('status', 'sent').maybeSingle()
       if (priorError) console.error('[order-notifications] duplicado: consulta de email_log falló:', priorError.message)
-      if (prior) {
+      // A status can legitimately be reached again after another transition.
+      // The API calls this service only when the persisted state actually changes,
+      // so deduplication must not suppress a new status-transition notification.
+      if (evento !== 'estado_cambio' && prior) {
         result.email_cliente = 'sent'
       } else {
         const sent = await enviarEmailConReintentos(resend, {
@@ -110,7 +113,8 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       const { data: adminPrior, error: adminPriorError } = await sb.from('email_log').select('id')
         .eq('order_id', orderId).eq('template', adminTemplate).eq('status', 'sent').maybeSingle()
       if (adminPriorError) console.error('[order-notifications] dedup admin lookup failed:', adminPriorError.message)
-      if (adminPrior) {
+      // As above, each real state transition deserves a fresh customer/admin notice.
+      if (evento !== 'estado_cambio' && adminPrior) {
         result.email_admin = 'sent'
       } else {
         // Los avisos internos usan la misma política de reintentos que los correos
