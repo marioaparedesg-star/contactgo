@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { fetchWA } from '@/lib/whatsapp'
+import { fetchWA, WHATSAPP_AUTOMATIONS_ENABLED, isWhatsAppClientPaused } from '@/lib/whatsapp'
 
 const PHONE_NUMBER_ID = '1237770472751989'
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -12,6 +12,10 @@ export async function GET(req: Request) {
   const isCron = req.headers.get('x-vercel-cron') === '1'
   if (!isCron && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  if (!WHATSAPP_AUTOMATIONS_ENABLED || await isWhatsAppClientPaused()) {
+    return NextResponse.json({ message: 'WhatsApp client messages paused', sent: 0, paused: true })
   }
 
   const token = process.env.WHATSAPP_TOKEN

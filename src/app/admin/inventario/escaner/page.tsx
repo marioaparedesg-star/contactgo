@@ -58,10 +58,10 @@ export default function EscanerPage() {
   // Verificar auth
   useEffect(() => {
     sb.auth.getUser().then(({ data }) => {
-      if (!data?.user) { router.push('/admin/login'); return }
-      sb.from('profiles').select('role').eq('id', data.user.id).single()
+      if (!data?.user) { router.push('/M1Alexander/login'); return }
+      sb.from('profiles').select('id, role, activo').eq('id', data.user.id).single()
         .then(({ data: p }) => {
-          if (p?.role !== 'admin') { router.push('/'); return }
+          if (p?.role !== 'admin' || p?.activo !== true || p?.id !== '0ae25176-4cb9-45da-bd19-5b1b5806c4ef') { router.push('/M1Alexander/login'); return }
           setIsAdmin(true)
         })
     })
@@ -162,7 +162,7 @@ export default function EscanerPage() {
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Header */}
       <div className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center gap-3">
-        <Link href="/admin/inventario" className="text-gray-400 hover:text-white">
+        <Link href="/M1Alexander/inventario" className="text-gray-400 hover:text-white">
           <ChevronLeft className="w-5 h-5" />
         </Link>
         <div className="flex items-center gap-2">

@@ -77,10 +77,14 @@ test.describe('SEO', () => {
 
 // ── Seguridad básica ──────────────────────────────────────────────────────
 test.describe('Seguridad', () => {
-  test('/admin redirige a login sin sesión', async ({ page }) => {
-    await page.goto('/admin')
-    // Debe terminar en /admin/login o mostrar login
-    await expect(page).toHaveURL(/\/admin\/login/, { timeout: 8_000 })
+  test('/admin queda oculto incluso sin sesión', async ({ page }) => {
+    const response = await page.goto('/admin')
+    expect(response?.status()).toBe(404)
+  })
+
+  test('la entrada privada muestra el login', async ({ page }) => {
+    await page.goto('/M1Alexander/login')
+    await expect(page.getByRole('heading', { name: 'ContactGo' })).toBeVisible()
   })
 
   test('/api/orders/items rechaza orden inválida', async ({ page }) => {
