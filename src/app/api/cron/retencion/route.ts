@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
     const fecha3 = en3dias.toISOString().split('T')[0]
 
     async function enviarRecompraEmail(sub: any, dias: number | 'hoy') {
-      if (!sub.cliente_email) return false
+      if (!sub.cliente_email || !(await hasMarketingConsent(sub.cliente_email))) return false
       const nombre = (sub.cliente_nombre ?? 'Cliente').split(' ')[0]
       const producto = (Array.isArray(sub.items) ? sub.items[0]?.nombre : null) ?? sub.producto_nombre ?? 'tus lentes de contacto'
       const mensaje = dias === 'hoy'
