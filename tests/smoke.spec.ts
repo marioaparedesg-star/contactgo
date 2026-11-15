@@ -78,8 +78,8 @@ test.describe('SEO', () => {
 // ── Seguridad básica ──────────────────────────────────────────────────────
 test.describe('Seguridad', () => {
   test('/admin redirige a login sin sesión', async ({ page }) => {
-    await page.goto('/admin')
-    // Debe terminar en /admin/login o mostrar login
+    await page.goto('/M1Alexander')
+    // Debe terminar en /M1Alexander/login o mostrar login
     await expect(page).toHaveURL(/\/admin\/login/, { timeout: 8_000 })
   })
 
@@ -125,5 +125,13 @@ test.describe('Infraestructura', () => {
     const json = await res.json()
     expect(json.valido).toBe(true)
     expect(json.descuento).toBe(750) // 15% de 5000
+  })
+})
+
+
+test.describe('Ruta administrativa privada', () => {
+  test('la ruta anterior /admin queda bloqueada', async ({ page }) => {
+    const response = await page.goto('/admin')
+    expect(response?.status()).toBe(404)
   })
 })
