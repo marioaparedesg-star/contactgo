@@ -8,7 +8,7 @@ function WhatsAppButtonInner() {
   const searchParams = useSearchParams()
 
   // Ocultar en checkout y admin
-  if (pathname?.includes('/checkout') || pathname?.includes('/admin') || pathname?.includes('/login')) return null
+  if (pathname?.includes('/checkout') || pathname?.includes('/M1Alexander') || pathname?.includes('/login')) return null
 
   const getMessage = () => {
     // Página de producto — incluye nombre del producto en la URL
