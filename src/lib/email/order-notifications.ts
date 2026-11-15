@@ -19,7 +19,7 @@ async function enviarEmailConReintentos(resend: Resend, params: { from: string; 
   }
   return { resendId: undefined, error: lastError ?? 'No se pudo enviar el correo' }
 }
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'info@contactgo.net'
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? 'maparedes0113@gmail.com'
 const FROM_EMAIL = process.env.RESEND_FROM ?? 'ContactGo <notifications@contactgo.net>'
 const ESTADO_LABEL: Record<string, string> = {
   recibido: 'Pedido recibido', pendiente: 'Pedido recibido', pago_aprobado: 'Pago aprobado',
