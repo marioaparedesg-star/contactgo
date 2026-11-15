@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 import { BIENVENIDA, buildEducationalEmail } from '@/lib/email/educational-templates'
-import { hasMarketingConsent } from '@/lib/email/marketing-consent'
+import { hasMarketingConsent, marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -10,7 +10,8 @@ const getAdmin = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, proce
 
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET
-  if (!secret || (req.headers.get('authorization') !== `Bearer ${secret}` && req.headers.get('x-vercel-cron') !== '1')) {
+  const authorized = (secret && req.headers.get('authorization') === `Bearer ${secret}`) || req.headers.get('x-vercel-cron') === '1'
+  if (!authorized) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   if (!process.env.RESEND_API_KEY) return NextResponse.json({ error: 'RESEND_API_KEY no configurado' }, { status: 500 })
@@ -49,14 +50,23 @@ export async function GET(req: NextRequest) {
     if (claim.error || !claim.data) continue
 
     const firstName = (event.recipient_email.split('@')[0] || 'Cliente').split(/[._-]/)[0]
-    const sent = await resend.emails.send({
-      from: 'ContactGo <info@contactgo.net>',
-      to: event.recipient_email,
-      replyTo: 'info@contactgo.net',
-      subject: step.subject,
-      html: buildEducationalEmail(step, firstName, event.recipient_email),
-      text: `${step.titulo}\n\n${step.parrafos.join('\n\n')}\n\nEste contenido es informativo y no sustituye las instrucciones del fabricante ni la orientación de un profesional de la salud visual.\nCancelar suscripción: ${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'}/cuenta`,
-    })
+    let sent: Awaited<ReturnType<typeof resend.emails.send>>
+    try {
+      const sent = await resend.emails.send({
+        from: 'ContactGo <info@contactgo.net>',
+        to: event.recipient_email,
+        replyTo: 'info@contactgo.net',
+        subject: step.subject,
+        html: buildEducationalEmail(step, firstName, event.recipient_email),
+        text: `${step.titulo}\n\n${step.parrafos.join('\n\n')}\n\nEste contenido es informativo y no sustituye las instrucciones del fabricante ni la orientación de un profesional de la salud visual.\nCancelar suscripción: ${marketingUnsubscribeUrl(event.recipient_email)}`,
+      })
+    } catch (sendError: any) {
+      const message = String(sendError?.message ?? 'Error de envío').slice(0, 1000)
+      await sb.from('email_automation_events').update({ status: 'failed', last_error: message, updated_at: new Date().toISOString() }).eq('id', event.id)
+      await sb.from('email_log').insert({ to_email: event.recipient_email, subject: step.subject, template: step.id, user_id: event.user_id, status: 'error' })
+      results.failed++
+      continue
+    }
     if (sent.error) {
       await sb.from('email_automation_events').update({ status: 'failed', last_error: sent.error.message, updated_at: new Date().toISOString() }).eq('id', event.id)
       await sb.from('email_log').insert({ to_email: event.recipient_email, subject: step.subject, template: step.id, user_id: event.user_id, status: 'error' })
