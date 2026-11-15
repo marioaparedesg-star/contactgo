@@ -34,7 +34,7 @@ const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 const FROM = process.env.RESEND_FROM ?? 'ContactGo <info@contactgo.net>'
 function getResend() { return new Resend(process.env.RESEND_API_KEY) }
 
-const ACTIVO = process.env.CARRITO_ABANDONADO_ACTIVO === 'true'
+const ACTIVO = true // Activo por solicitud del administrador; solo envía a clientes con consentimiento comercial.
 
 async function enviarEmailRespaldo(cart: any) {
   const nombre = cart.cliente_nombre?.split(' ')[0] ?? 'Cliente'
@@ -136,7 +136,7 @@ export async function GET(req: NextRequest) {
     .gte('updated_at', hace26h)
     .lte('updated_at', hace2h)
     .eq('recuperado', false)
-    .or('whatsapp_enviado.eq.false,email_sent.eq.false')
+    .eq('email_sent', false)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   if (!carritos?.length) return NextResponse.json({ activo: ACTIVO, candidatos: 0, enviados: 0 })
@@ -149,7 +149,7 @@ export async function GET(req: NextRequest) {
       candidatos: carritos.map(c => ({
         id: c.id, nombre: c.cliente_nombre, email: c.cliente_email,
         telefono: c.cliente_telefono, total: c.total,
-        canal_que_usaria: c.cliente_telefono ? 'whatsapp' : 'email',
+        canal_que_usaria: 'email',
       })),
     })
   }
