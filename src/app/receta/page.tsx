@@ -166,7 +166,7 @@ export default function RecetaPage() {
     // Se evita recomendar modelos multifocales automáticamente sin adaptación profesional.
     let lista: any[] = []
     if (conv.requiresClinicalReview) {
-      setProducts([]); setProductsOd([]); setProductsOi([]); setCasoMixto(null); setTotalDisp(0); setLoadingP(false)
+      setProducts([]); setAlternativasRevision([]); setProductsOd([]); setProductsOi([]); setCasoMixto(null); setTotalDisp(0); setLoadingP(false)
     } else {
       lista = await cargarProductos(conv)
     }
