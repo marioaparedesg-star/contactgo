@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase'
 import { Users, Plus, Shield, Eye, EyeOff, Check, X, Mail, Phone, Building2, Crown } from 'lucide-react'
 import toast from 'react-hot-toast'
 
+const PRIMARY_ADMIN_ID = '0ae25176-4cb9-45da-bd19-5b1b5806c4ef'
 const DEPARTAMENTOS = ['Administración', 'Operaciones', 'Ventas', 'Soporte', 'Contabilidad', 'Marketing']
 
 export default function ConfiguracionPage() {
@@ -77,7 +78,7 @@ export default function ConfiguracionPage() {
     <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5">
       <div className="flex items-start gap-3"><Shield className="w-5 h-5 text-blue-700 mt-0.5" /><div>
         <p className="font-semibold text-blue-900 text-sm">Acceso administrativo protegido</p>
-        <p className="text-blue-800 text-xs mt-1">El sistema solo reconoce el rol Administrador. Operaciones, Ventas y Soporte se habilitarán cuando existan permisos específicos en páginas, API y base de datos. No se asignarán roles que aparenten funcionar sin estar protegidos.</p>
+        <p className="text-blue-800 text-xs mt-1">El panel solo admite la cuenta principal autorizada. Las demás cuentas con rol Administrador no pueden entrar por la ruta privada, las API ni la base de datos. Los roles de Operaciones, Ventas y Soporte se habilitarán cuando existan permisos específicos.</p>
       </div></div>
     </div>
     <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
@@ -88,7 +89,7 @@ export default function ConfiguracionPage() {
           return <div key={u.id} className="px-5 py-4 flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-teal-500 rounded-xl flex items-center justify-center shrink-0"><span className="text-white font-bold">{(u.nombre ?? u.email ?? '?')[0].toUpperCase()}</span></div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap"><p className="font-semibold text-gray-900 text-sm">{u.nombre ?? '—'}</p>{isMe && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Tu cuenta</span>}{u.activo !== true && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Inactivo</span>}</div>
+              <div className="flex items-center gap-2 flex-wrap"><p className="font-semibold text-gray-900 text-sm">{u.nombre ?? '—'}</p>{isMe && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Tu cuenta</span>}{u.id === PRIMARY_ADMIN_ID ? <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Cuenta principal</span> : <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Sin acceso al panel</span>}{u.activo !== true && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Inactivo</span>}</div>
               <p className="text-xs text-gray-500 flex items-center gap-1"><Mail className="w-3 h-3" />{u.email}</p>
               {u.telefono && <p className="text-xs text-gray-500 flex items-center gap-1"><Phone className="w-3 h-3" />{u.telefono}</p>}
               {u.departamento && <p className="text-xs text-gray-500 flex items-center gap-1"><Building2 className="w-3 h-3" />{u.departamento}</p>}
