@@ -5,7 +5,7 @@
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { fetchWA } from '@/lib/whatsapp'
+import { fetchWA, WHATSAPP_AUTOMATIONS_ENABLED } from '@/lib/whatsapp'
 
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN ?? 'contactgo_webhook_2026'
 
@@ -120,6 +120,9 @@ export async function POST(req: NextRequest) {
         if (msg.referral) {
           console.log('[WA/webhook] Mensaje con origen de anuncio confirmado:', JSON.stringify(msg.referral))
         }
+
+        // Mantener la recepción y el registro de mensajes, sin auto-respuestas ni avisos salientes.
+        if (!WHATSAPP_AUTOMATIONS_ENABLED) continue
 
         // ── Skip auto-reply para admin y reacciones ──
         if (from === ADMIN_PHONE.replace(/^1/, '') || msgType === 'reaction') continue
