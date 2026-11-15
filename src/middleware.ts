@@ -29,41 +29,39 @@ export function middleware(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
   const origin = req.headers.get('origin') ?? ''
 
-  // ══════════════════════════════════════════════════════════
-  // 1. /admin/login — SIEMPRE PÚBLICO, sale inmediatamente
-  // ══════════════════════════════════════════════════════════
-  if (pathname === '/admin/login' || pathname === '/admin/login/') {
-    const res = NextResponse.next()
-    res.headers.set('Cache-Control', 'no-store, no-cache')
+  // Ruta privada: el navegador usa /M1Alexander, la app conserva internamente /admin.
+  // La ruta antigua /admin queda cerrada con 404, incluso si existe una sesión.
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    return new NextResponse('Not Found', { status: 404, headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' } })
+  }
+
+  if (pathname === '/M1Alexander/login' || pathname === '/M1Alexander/login/') {
+    const res = NextResponse.rewrite(new URL('/admin/login', req.url))
+    res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    res.headers.set('X-Robots-Tag', 'noindex, nofollow')
     return res
   }
 
-  // ══════════════════════════════════════════════════════════
-  // 2. /admin/* — verificar cookie de sesión de Supabase
-  //    Si no hay cookie de auth → redirect al login (server-side)
-  // ══════════════════════════════════════════════════════════
-  if (pathname.startsWith('/admin') && pathname !== '/admin/login' && !pathname.startsWith('/admin/login')) {
-    // Supabase SSR guarda la sesión en una cookie con este patrón
+  if (pathname === '/M1Alexander' || pathname.startsWith('/M1Alexander/')) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
-    const projectRef  = supabaseUrl.replace('https://', '').split('.')[0] // ej: atendbjolicwcsqfyiyh
-    // @supabase/ssr 0.4.x puede guardar la sesión como cookie única (key)
-    // o como chunks (key.0, key.1…) cuando el valor supera 3180 bytes
-    const cookieBase   = `sb-${projectRef}-auth-token`
-    const authCookie   = req.cookies.get(cookieBase)          // sin chunks
-      ?? req.cookies.get(`${cookieBase}.0`)                   // primer chunk
+    const projectRef = supabaseUrl.replace('https://', '').split('.')[0]
+    const cookieBase = `sb-${projectRef}-auth-token`
+    const authCookie = req.cookies.get(cookieBase)
+      ?? req.cookies.get(`${cookieBase}.0`)
       ?? req.cookies.get('sb-access-token')
       ?? req.cookies.get('supabase-auth-token')
 
-    // @supabase/ssr v0.4 almacena la sesión como JSON en texto plano (no JWT puro)
-    // posiblemente dividido en chunks (.0, .1…). Intentar parsear aquí es frágil.
-    // El admin layout ya valida con sb.auth.getUser() — aquí solo bloqueamos
-    // requests sin cookie alguna (visitantes no autenticados).
-    const cookieValue = authCookie?.value ?? ''
-    if (!cookieValue) {
-      const loginUrl = new URL('/admin/login', req.url)
+    if (!authCookie?.value) {
+      const loginUrl = new URL('/M1Alexander/login', req.url)
       loginUrl.searchParams.set('next', pathname)
       return NextResponse.redirect(loginUrl)
     }
+
+    const internalPath = pathname.replace(/^\\/M1Alexander(?=\\/|$)/, '/admin')
+    const res = NextResponse.rewrite(new URL(internalPath, req.url))
+    res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    res.headers.set('X-Robots-Tag', 'noindex, nofollow')
+    return res
   }
 
   // ══════════════════════════════════════════════════════════
@@ -116,7 +114,9 @@ export const config = {
   matcher: [
     // Protege /admin exacto Y /admin/* excluyendo /admin/login
     '/admin',
-    '/admin/((?!login(?:/|$)).*)',
+    '/admin/:path*',
+    '/M1Alexander',
+    '/M1Alexander/:path*',
     '/api/:path*',
     '/checkout',
     '/cart',
