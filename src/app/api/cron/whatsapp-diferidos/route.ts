@@ -10,6 +10,7 @@ const WA_API = 'https://graph.facebook.com/v21.0'
 const MAX_POR_CORRIDA = 50
 
 export async function GET(req: NextRequest) {
+  return NextResponse.json({ ok: true, paused: true, reason: 'WHATSAPP_AUTOMATIONS_DISABLED' }, { status: 202 })
   // Sin CRON_SECRET configurado no se procesa nada (falla cerrado)
   const secret = process.env.CRON_SECRET
   if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) {
