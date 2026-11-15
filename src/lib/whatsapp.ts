@@ -55,13 +55,10 @@ async function clientesPausados(): Promise<boolean> {
 
 const NUMERO_ADMIN = '18096942268' // admin exento: nunca se bloquea ni se encola
 
-// ─── PUNTO ÚNICO DE SALIDA A WHATSAPP ───
-// Toda salida (funciones, rutas, crons) pasa por aquí. Reglas:
-//  1) Admin → se envía siempre.
-//  2) Cliente con pausa activa → no se envía (lanza error).
-//  3) Cliente fuera de horario (lun–sáb 9:00–18:00 RD) → se ENCOLA para la
-//     siguiente ventana (wa_retry_queue) y lo envía el cron whatsapp-diferidos.
-//  4) Cliente dentro de horario y sin pausa → se envía.
+// ─── PUNTO ÚNICO DE SALIDA AUTOMÁTICA A WHATSAPP ───
+// La pausa global está desactivada por solicitud del administrador. Si se
+// reactiva en el futuro, se conservan las reglas anteriores de horario y cola.
+// El envío manual del panel utiliza enviarWAManual y exige sesión admin.
 export type ResultadoEnvio = { estado: 'enviado' | 'diferido'; data?: any }
 
 export async function enviarWA(to: string, body: Record<string, any>): Promise<ResultadoEnvio> {
