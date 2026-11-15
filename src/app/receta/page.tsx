@@ -527,7 +527,7 @@ export default function RecetaPage() {
 
                     <Link href={`/${tipoSlug(result.tipo)}`}
                       className="mt-3 flex items-center justify-center gap-1 text-primary-600 text-xs font-semibold hover:underline py-2">
-                      Ver todos los {tipoLabel(result.tipo).split(' ').slice(1).join(' ')} disponibles <ChevronRight className="w-3.5 h-3.5"/>
+                      Ver todos los {tipoLabel(result.tipo)} disponibles <ChevronRight className="w-3.5 h-3.5"/>
                     </Link>
                   </>
                 )}
