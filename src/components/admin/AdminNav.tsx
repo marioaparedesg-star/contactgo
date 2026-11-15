@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingBag, Package, Users, BarChart2,
-  Repeat, ShoppingCart, TrendingUp, Tag, Settings, ChevronLeft,
+  Repeat, ShoppingCart, TrendingUp, Tag, Gift, Settings, ChevronLeft,
   ChevronRight, LogOut, Menu, X, Bell, ExternalLink, FileText, Scan, AlertTriangle, CheckCircle, DollarSign
 } from 'lucide-react'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
@@ -36,6 +36,7 @@ const NAV_SECTIONS = [
     label: 'Clientes',
     items: [
       { href: '/admin/clientes',      icon: Users,           label: 'Clientes',       badge: null },
+      { href: '/admin/referidos',     icon: Gift,            label: 'Referidos',      badge: null },
       { href: '/admin/leads',         icon: TrendingUp,      label: '🎯 Leads Calculadora', badge: null },
       { href: '/admin/registrados',   icon: Users,           label: '👥 Registrados',  badge: null },
       { href: '/admin/abandonados',   icon: ShoppingCart,    label: 'Abandonados',    badge: null },
