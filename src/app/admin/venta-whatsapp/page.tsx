@@ -1,6 +1,6 @@
 'use client'
 // ============================================================
-// ContactGo — /admin/venta-whatsapp
+// ContactGo — /M1Alexander/venta-whatsapp
 // Genera links de venta por WhatsApp con selectores inteligentes
 // por tipo de producto (esférico/tórico/multifocal/color/solución/gota).
 // ============================================================
@@ -85,7 +85,7 @@ export default function VentaWhatsAppAdmin() {
   const cargarLinks = async () => {
     setCargandoLinks(true)
     try {
-      const r = await fetch('/api/venta-wa/admin')
+      const r = await fetch('/api/venta-wa/M1Alexander')
       const j = await r.json()
       if (r.ok) setLinks(j.links ?? [])
     } finally {
@@ -193,7 +193,7 @@ export default function VentaWhatsAppAdmin() {
 
   const marcarPagado = async (order_id: string, numero: string) => {
     if (!confirm(`¿Marcar el pedido ${numero} como PAGADO? Esto lo confirma y notifica al cliente.`)) return
-    const r = await fetch('/api/venta-wa/admin', {
+    const r = await fetch('/api/venta-wa/M1Alexander', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ accion: 'marcar_pagado', order_id }),
@@ -206,7 +206,7 @@ export default function VentaWhatsAppAdmin() {
 
   const cancelarLink = async (link_id: string) => {
     if (!confirm('¿Cancelar este link? El cliente ya no podrá usarlo.')) return
-    const r = await fetch('/api/venta-wa/admin', {
+    const r = await fetch('/api/venta-wa/M1Alexander', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ accion: 'cancelar_link', link_id }),
@@ -235,7 +235,7 @@ export default function VentaWhatsAppAdmin() {
       if (link.order_id) body.order_id = link.order_id
       else body.link_id = link.id
 
-      const r = await fetch('/api/venta-wa/admin', {
+      const r = await fetch('/api/venta-wa/M1Alexander', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
@@ -268,7 +268,7 @@ export default function VentaWhatsAppAdmin() {
     if (link.order_id) { body.order_id = link.order_id; body.item_id = itemId }
     else { body.link_id = link.id; body.item_index = itemIndex }
 
-    const r = await fetch('/api/venta-wa/admin', {
+    const r = await fetch('/api/venta-wa/M1Alexander', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     })
