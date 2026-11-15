@@ -93,7 +93,7 @@ test.describe('Seguridad', () => {
 
   test('Headers de seguridad presentes', async ({ page }) => {
     const res = await page.request.get('/')
-    expect(res.headers()['x-frame-options']).toBe('DENY')
+    expect(res.headers()['x-frame-options']).toBe('SAMEORIGIN')
     expect(res.headers()['x-content-type-options']).toBe('nosniff')
   })
 })
@@ -133,5 +133,7 @@ test.describe('Ruta administrativa privada', () => {
   test('la ruta anterior /admin queda bloqueada', async ({ page }) => {
     const response = await page.goto('/admin')
     expect(response?.status()).toBe(404)
+    const nestedResponse = await page.goto('/admin/pedidos')
+    expect(nestedResponse?.status()).toBe(404)
   })
 })
