@@ -131,7 +131,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (items.length === 0) router.push('/cart')
     const sb = createClient()
-    sb.auth.getUser().then(({ data: { user } }) => {
+    sb.auth.getUser().then(async ({ data: { user } }) => {
       setIsLoggedIn(!!user)
       if (!user) { router.replace('/cuenta?next=/cart'); return }
       if (user) {
