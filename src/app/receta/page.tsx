@@ -236,7 +236,7 @@ export default function RecetaPage() {
 
   // ── Agregar al carrito DIRECTO (esférico y color) o via PDP ────────────────
   // soloOjo: cuando viene de una card del modo mixto, agrega SOLO 1 caja para ese ojo
-  const handleAddToCart = (product: any, soloOjo?: 'OD' | 'OI', productResult?: ConvertedRx) => {
+  const handleAddToCart = (product: any, productResult?: ConvertedRx, soloOjo?: 'OD' | 'OI') => {
     if (!result) return
     const activeResult = productResult ?? result
     const isSimple = activeResult.tipo === 'esferico' && !casoMixto
@@ -460,7 +460,7 @@ export default function RecetaPage() {
                           <div className="grid grid-cols-1 gap-2">
                             {productsOd.slice(0, 3).map((p, i) => (
                               <ProductCard key={`od-${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'}
-                                onAction={(prod, rxResult) => handleAddToCart(prod, 'OD', rxResult)} cartAdded={cartAdded} soloOjo="OD" compact/>
+                                onAction={(prod, rxResult) => handleAddToCart(prod, rxResult, 'OD')} cartAdded={cartAdded} soloOjo="OD" compact/>
                             ))}
                           </div>
                         )}
@@ -481,7 +481,7 @@ export default function RecetaPage() {
                           <div className="grid grid-cols-1 gap-2">
                             {productsOi.slice(0, 3).map((p, i) => (
                               <ProductCard key={`oi-${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'}
-                                onAction={(prod, rxResult) => handleAddToCart(prod, 'OI', rxResult)} cartAdded={cartAdded} soloOjo="OI" compact/>
+                                onAction={(prod, rxResult) => handleAddToCart(prod, rxResult, 'OI')} cartAdded={cartAdded} soloOjo="OI" compact/>
                             ))}
                           </div>
                         )}
