@@ -80,7 +80,7 @@ test.describe('Seguridad', () => {
   test('/M1Alexander redirige a login sin sesión', async ({ page }) => {
     await page.goto('/M1Alexander')
     // Debe terminar en /M1Alexander/login o mostrar login
-    await expect(page).toHaveURL(/\/admin\/login/, { timeout: 8_000 })
+    await expect(page).toHaveURL(/\/M1Alexander\/login/, { timeout: 8_000 })
   })
 
   test('/api/orders/items rechaza orden inválida', async ({ page }) => {
