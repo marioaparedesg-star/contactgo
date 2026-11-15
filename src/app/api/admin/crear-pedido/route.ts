@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   const [{ data: customers, error: ce }, { data: products, error: pe }] = await Promise.all([
     sb.from('profiles').select('id,nombre,email,telefono,direccion,ciudad,direccion_completa,activo')
       .eq('role','customer').eq('activo',true)
-      .or(q ? \`nombre.ilike.%\${q}%,email.ilike.%\${q}%,telefono.ilike.%\${q}%\` : 'id.eq.00000000-0000-0000-0000-000000000000')
+      .or(q ? `nombre.ilike.%${q}%,email.ilike.%${q}%,telefono.ilike.%${q}%` : 'id.eq.00000000-0000-0000-0000-000000000000')
       .order('nombre').limit(30),
     sb.from('products').select('id,nombre,marca,tipo,precio,variantes,activo')
       .eq('activo',true).order('nombre').limit(500)
@@ -77,16 +77,16 @@ export async function POST(req: NextRequest) {
 
     if (action === 'quote') {
       if (!process.env.RESEND_API_KEY) return NextResponse.json({error:'El servicio de correo no está configurado.'},{status:503})
-      const rows = finalItems.map((i:any)=>\`<tr><td style="padding:12px;border-bottom:1px solid #e5e7eb">\${esc(i.nombre)} × \${i.cantidad}</td><td style="padding:12px;text-align:right;border-bottom:1px solid #e5e7eb">\${money(i.subtotal)}</td></tr>\`).join('')
-      const html = \`<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#172033"><div style="background:#002455;padding:24px;color:white"><h1 style="margin:0">ContactGo</h1><p style="margin:6px 0 0">Cotización de productos</p></div><div style="padding:24px"><p>Hola \${esc(customer.nombre || 'cliente')},</p><p>Te compartimos la cotización solicitada. Los precios y disponibilidad están sujetos a confirmación al momento de crear el pedido.</p><table style="width:100%;border-collapse:collapse">\${rows}<tr><td style="padding:10px">Subtotal</td><td style="text-align:right">\${money(subtotal)}</td></tr><tr><td style="padding:10px">Envío</td><td style="text-align:right">\${money(envio)}</td></tr><tr><td style="padding:10px">Descuento</td><td style="text-align:right">-\${money(descuento)}</td></tr><tr><td style="padding:14px;font-weight:bold;border-top:2px solid #002455">Total cotizado</td><td style="text-align:right;font-weight:bold;border-top:2px solid #002455;color:#002455">\${money(total)}</td></tr></table>\${notes ? \`<p><b>Notas:</b> \${esc(notes)}</p>\` : ''}<p style="margin-top:28px">Para confirmar esta cotización, responde a este correo o contáctanos por WhatsApp.</p><p>ContactGo</p></div></div>\`
+      const rows = finalItems.map((i:any)=>`<tr><td style="padding:12px;border-bottom:1px solid #e5e7eb">${esc(i.nombre)} × ${i.cantidad}</td><td style="padding:12px;text-align:right;border-bottom:1px solid #e5e7eb">${money(i.subtotal)}</td></tr>`).join('')
+      const html = `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#172033"><div style="background:#002455;padding:24px;color:white"><h1 style="margin:0">ContactGo</h1><p style="margin:6px 0 0">Cotización de productos</p></div><div style="padding:24px"><p>Hola ${esc(customer.nombre || 'cliente')},</p><p>Te compartimos la cotización solicitada. Los precios y disponibilidad están sujetos a confirmación al momento de crear el pedido.</p><table style="width:100%;border-collapse:collapse">${rows}<tr><td style="padding:10px">Subtotal</td><td style="text-align:right">${money(subtotal)}</td></tr><tr><td style="padding:10px">Envío</td><td style="text-align:right">${money(envio)}</td></tr><tr><td style="padding:10px">Descuento</td><td style="text-align:right">-${money(descuento)}</td></tr><tr><td style="padding:14px;font-weight:bold;border-top:2px solid #002455">Total cotizado</td><td style="text-align:right;font-weight:bold;border-top:2px solid #002455;color:#002455">${money(total)}</td></tr></table>${notes ? `<p><b>Notas:</b> ${esc(notes)}</p>` : ''}<p style="margin-top:28px">Para confirmar esta cotización, responde a este correo o contáctanos por WhatsApp.</p><p>ContactGo</p></div></div>`
       const resend = new Resend(process.env.RESEND_API_KEY)
       const {error} = await resend.emails.send({from:process.env.RESEND_FROM ?? 'ContactGo <notifications@contactgo.net>',to:customer.email,subject:'Tu cotización de ContactGo',html})
       if (error) return NextResponse.json({error:error.message},{status:502})
-      return NextResponse.json({ok:true,message:\`Cotización enviada a \${customer.email}\`})
+      return NextResponse.json({ok:true,message:`Cotización enviada a ${customer.email}`})
     }
 
     if (action !== 'create') return NextResponse.json({error:'Acción no válida.'},{status:400})
-    const orderNum = \`CG-\${Date.now().toString().slice(-8)}\`
+    const orderNum = `CG-${Date.now().toString().slice(-8)}`
     const address = String(body.direccion ?? customer.direccion_completa ?? customer.direccion ?? '').trim()
     const city = String(body.ciudad ?? customer.ciudad ?? '').trim()
     const {data:order,error:orderErr} = await sb.from('orders').insert({
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
       cliente_telefono:customer.telefono, direccion_texto:[address,city].filter(Boolean).join(', '),
       ciudad:city,estado:'recibido',subtotal,envio,descuento,total,
       metodo_pago:'tarjeta',pago_estado:'pendiente',numero_orden:orderNum,
-      canal:'admin',notas_admin:notes ? \`[Pedido manual] \${notes}\` : '[Pedido manual]'
+      canal:'admin',notas_admin:notes ? `[Pedido manual] ${notes}` : '[Pedido manual]'
     }).select('id,numero_orden').single()
     if (orderErr || !order) throw orderErr ?? new Error('No se pudo crear el pedido.')
     const rows = finalItems.map((i:any)=>({...i,order_id:order.id}))
