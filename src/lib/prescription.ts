@@ -105,7 +105,7 @@ function convertEyeFromGlasses(eye: EyeRx, vertexDistanceMm: number): ContactRx 
   const cyl = eye.cyl ?? 0
   if (sph === 0 && cyl === 0) return { sph: 0, cyl: null, axis: eye.axis, add: eye.add }
   if (cyl === 0) return { sph: roundStep(vertexCorrect(sph, vertexDistanceMm)), cyl: null, axis: null, add: eye.add }
-  const F1c = roundStep(vertexCorrect(sph))
+  const F1c = roundStep(vertexCorrect(sph, vertexDistanceMm))
   const F2c = roundStep(vertexCorrect(sph + cyl, vertexDistanceMm))
   const newCyl = parseFloat((F2c - F1c).toFixed(2))
   return {
