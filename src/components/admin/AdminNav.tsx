@@ -17,6 +17,7 @@ const NAV_SECTIONS = [
     items: [
       { href: '/M1Alexander',               icon: LayoutDashboard, label: 'Dashboard',      badge: null },
       { href: '/M1Alexander/pedidos',       icon: ShoppingBag,     label: 'Pedidos',        badge: 'pendientes' },
+      { href: '/M1Alexander/crear-pedido', icon: Plus,             label: 'Crear pedido',   badge: null },
       { href: '/M1Alexander/venta-whatsapp', icon: WhatsAppIcon,   label: '💰 Venta WhatsApp', badge: null },
       { href: '/M1Alexander/suscripciones', icon: Repeat,          label: 'Suscripciones',  badge: null },
     ]
