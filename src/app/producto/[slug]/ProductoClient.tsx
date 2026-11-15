@@ -571,6 +571,14 @@ export default function ProductoClient({ product, variants }: Props) {
       // Usar una sola vez — consumir
       sessionStorage.removeItem('cg_rx_pending')
 
+      // Determinar si ambos ojos comparten TODOS los parámetros de receta.
+      // Si son diferentes, cada ojo necesita su propia caja.
+      const recetasIguales =
+        rx.od.sph === rx.oi.sph &&
+        rx.od.cyl === rx.oi.cyl &&
+        rx.od.axis === rx.oi.axis &&
+        (rx.od as any).add === (rx.oi as any).add
+
       // Pre-llenar según el modo de ojo del producto — nuevo flujo eyeFlow
       setEyeFlow(prev => ({
         ...prev,
@@ -581,9 +589,12 @@ export default function ProductoClient({ product, variants }: Props) {
         cyl_oi: (rx.oi.cyl != null && rx.oi.cyl !== 0) ? String(rx.oi.cyl) : prev.cyl_oi,
         axis_od: rx.od.axis != null ? String(rx.od.axis) : prev.axis_od,
         axis_oi: rx.oi.axis != null ? String(rx.oi.axis) : prev.axis_oi,
-        mismaReceta: rx.od.sph === rx.oi.sph && rx.od.cyl === rx.oi.cyl,
-        sph: (rx.od.sph === rx.oi.sph && rx.od.sph != null) ? String(rx.od.sph) : prev.sph,
+        mismaReceta: recetasIguales,
+        sph: recetasIguales && rx.od.sph != null ? String(rx.od.sph) : prev.sph,
       }))
+      // La selección llega desde la calculadora sin pasar por handleColorChange.
+      // Sincronizar aquí también la cantidad: dos recetas distintas = dos cajas.
+      setQty(recetasIguales ? 1 : 2)
       // También llenar el selector simple (modo un solo ojo)
       const sphVal = rx.od.sph ?? rx.oi.sph
       if (sphVal != null) setEyeFlow(p => ({...p, sph: String(sphVal)}))
@@ -741,8 +752,13 @@ export default function ProductoClient({ product, variants }: Props) {
     }
 
     // ── Construir el item único ───────────────────────────────────────
+    // Dos graduaciones distintas requieren dos cajas, aunque el prellenado
+    // desde la calculadora no haya pasado por el selector interactivo.
+    const quantityFinal = isAmbosDifer ? Math.max(qty, 2) : qty
+    if (quantityFinal !== qty) setQty(quantityFinal)
+
     const baseOpts = {
-      cantidad:        qty,
+      cantidad:        quantityFinal,
       ojo_mode:        ojoMode,
       misma_receta:    mismaReceta,
       add_power:       add || undefined,
@@ -779,7 +795,7 @@ export default function ProductoClient({ product, variants }: Props) {
     trackEcommerce('add_to_cart', {
       items: [{ item_id: product.id, item_name: product.nombre,
         item_brand: (product as any).marca ?? '',
-        price, quantity: qty }],
+        price, quantity: quantityFinal }],
     }, addToCartEventId)
     // CAPI server-side — mismo eventId que el Pixel para deduplicación en Meta.
     // Mismo fix que ViewContent: si hay sesión iniciada, se manda el email real.
@@ -790,10 +806,10 @@ export default function ProductoClient({ product, variants }: Props) {
         email = user?.email ?? undefined
       } catch { /* visitante anónimo */ }
       sendCAPI('AddToCart', {
-        value: price * qty,
+        value: price * quantityFinal,
         currency: 'DOP',
         content_ids: [product.id],
-        num_items: qty,
+        num_items: quantityFinal,
       }, email ? { email } : undefined, addToCartEventId)
     })()
     if (redirectToCart) router.push('/cart')
