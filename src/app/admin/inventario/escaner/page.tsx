@@ -59,9 +59,9 @@ export default function EscanerPage() {
   useEffect(() => {
     sb.auth.getUser().then(({ data }) => {
       if (!data?.user) { router.push('/admin/login'); return }
-      sb.from('profiles').select('role').eq('id', data.user.id).single()
+      sb.from('profiles').select('role, activo').eq('id', data.user.id).single()
         .then(({ data: p }) => {
-          if (p?.role !== 'admin') { router.push('/'); return }
+          if (p?.role !== 'admin' || p?.activo !== true) { router.push('/admin/login'); return }
           setIsAdmin(true)
         })
     })
