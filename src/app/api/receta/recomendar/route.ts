@@ -21,7 +21,7 @@ function buildReviewAlternatives(products: ProductoFabricacion[], receta: {
   od: { sph: number; cyl: number; axis: number | null; add: number | null }
   oi: { sph: number; cyl: number; axis: number | null; add: number | null }
 }) {
-  if (receta.tipo !== 'torico' && receta.tipo !== 'multifocal_torico') return []
+  if (receta.tipo !== 'torico') return []
   return products.flatMap((p: any) => {
     const sphValues = Array.isArray(p.sph_disponibles) ? p.sph_disponibles.map(Number) : []
     const cylValues = Array.isArray(p.cyl_disponibles) ? p.cyl_disponibles.map(Number) : []
