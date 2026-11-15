@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
 export async function POST(req: NextRequest) {
-  const { email, nombre, telefono, user_id } = await req.json()
+  const { email, nombre } = await req.json()
   if (!email) return NextResponse.json({ ok: false })
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
