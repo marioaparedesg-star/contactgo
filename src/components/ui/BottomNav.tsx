@@ -8,7 +8,7 @@ export default function BottomNav() {
   const pathname  = usePathname()
   const itemCount = useCartStore(s => s.itemCount())
 
-  if (pathname.startsWith('/admin')) return null
+  if (pathname.startsWith('/M1Alexander')) return null
 
   const tabs = [
     { href: '/',        icon: Home,         label: 'Inicio'   },
