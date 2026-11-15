@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
-import { RefreshCw, Users, Clock, Gift, Ticket, Search, ExternalLink } from 'lucide-react'
+import { RefreshCw, Users, Clock, Gift, Ticket, Search } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 type Referral = {
