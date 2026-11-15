@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
     const sbServer = await createServerSupabaseClient()
     const { data: { user } } = await sbServer.auth.getUser()
     if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-    const { data: profile } = await sbServer.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'admin') return NextResponse.json({ error: 'Acceso denegado' }, { status: 403 })
+    const { data: profile } = await sbServer.from('profiles').select('role, activo').eq('id', user.id).single()
+    if (profile?.role !== 'admin' || profile?.activo !== true) return NextResponse.json({ error: 'Acceso denegado' }, { status: 403 })
   } catch {
     return NextResponse.json({ error: 'Error de autenticación' }, { status: 401 })
   }
