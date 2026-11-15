@@ -475,7 +475,7 @@ export default function CuentaPage() {
     const nombreCompleto = nombre.trim() + ' ' + apellido.trim()
     const nextPath = new URLSearchParams(window.location.search).get('next') || '/cuenta'
     const sb = createClient()
-    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: window.location.origin + '/auth/callback?next=' + encodeURIComponent(nextPath), data: { nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, acepta_privacidad: true, privacidad_version: '2026-11-14-v1', privacidad_aceptada_at: new Date().toISOString(), marketing_consent: aceptaPromociones, marketing_consent_version: '2026-11-14-v1', marketing_consent_source: 'registro_web' } } })
+    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: window.location.origin + '/auth/callback?next=' + encodeURIComponent(nextPath), data: { nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, acepta_privacidad: true, terminos_version: '2026-11-14-v1', privacidad_version: '2026-11-14-v1', privacidad_aceptada_at: new Date().toISOString(), marketing_consent: aceptaPromociones, marketing_consent_version: '2026-11-14-v1', marketing_consent_source: 'registro_web' } } })
     if (error) { setMsg(error.message); setLoading(false); return }
     if (data.user) {
       await sb.from('profiles').upsert({ id: data.user.id, email, nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, role: 'customer' })
