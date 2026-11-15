@@ -89,11 +89,18 @@ export default function PedidosPage() {
 
 
   useEffect(()=>{
-    sb.from('orders').select('id,numero_orden,estado,pago_estado,total,subtotal,envio,descuento,metodo_pago,pago_referencia,cliente_nombre,cliente_email,cliente_telefono,cliente_cedula,cliente_fecha_nacimiento,direccion_texto,ciudad,canal,created_at,fecha,ncf,ncf_tipo,azul_auth_code,azul_order_id,azul_iso_code,azul_rrn,azul_order_number,pagado_en,lat,lng,notas_admin,es_prueba').order('created_at', { ascending: false }).limit(200)
-      // Traemos todos los estados para verlos en el admin
-      .not('numero_orden','like','CG-TEST%')
-      .order('created_at',{ascending:false})
-      .then(({data})=>{ setPedidos(data??[]); setLoading(false) })
+    let activo = true
+    fetch('/api/admin/pedidos', { cache: 'no-store', credentials: 'same-origin' })
+      .then(async response => {
+        const result = await response.json().catch(() => ({}))
+        if (!response.ok) throw new Error(result.error ?? 'No se pudieron cargar los pedidos')
+        if (activo) setPedidos(result.pedidos ?? [])
+      })
+      .catch(error => {
+        if (activo) toast.error(error.message ?? 'Error cargando pedidos')
+      })
+      .finally(() => { if (activo) setLoading(false) })
+    return () => { activo = false }
   },[])
 
   const abrirPedido = async (p:any) => {
