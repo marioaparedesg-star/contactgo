@@ -12,7 +12,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [authorized, setAuthorized] = useState(false)
 
   useEffect(() => {
-    if (pathname === '/M1Alexander/login') {
+    if ((pathname === '/M1Alexander/login' || pathname === '/admin/login')) {
       setChecking(false)
       return
     }
@@ -67,7 +67,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return () => clearTimeout(timeoutRespaldo)
   }, [pathname, router])
 
-  if (pathname === '/M1Alexander/login') return <>{children}</>
+  if ((pathname === '/M1Alexander/login' || pathname === '/admin/login')) return <>{children}</>
 
   if (checking) return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
