@@ -87,7 +87,7 @@ export default function RecetaPage() {
     // Reset estado mixto en cada calculo
     setProductsOd([]); setProductsOi([]); setCasoMixto(null); setAlternativasRevision([])
 
-    const mixto = { ...detectarCasoMixto(conv), esMixto: true }
+    const mixto = detectarCasoMixto(conv)
 
     try {
       // ── CASO MIXTO: cargar productos separadamente por ojo ─────────────
@@ -392,16 +392,14 @@ export default function RecetaPage() {
           </section>
 
           {/* Formulario OD | OI */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100">
-              <label className="flex items-center gap-2 cursor-pointer select-none">
-                <input type="checkbox" checked={misma} onChange={e => { setMisma(e.target.checked); if(e.target.checked) setOi({...od}) }} className="w-3.5 h-3.5 rounded text-primary-600"/>
-                <span className="text-xs font-medium text-gray-600">Ambos ojos tienen la misma receta</span>
-              </label>
-            </div>
-            <div className="grid grid-cols-2 divide-x divide-gray-100">
-              <EyePanel label="OD · Ojo Derecho" eye={od} onChange={e => { setOd(e); if(misma) setOi(e) }} color="blue"/>
-              <EyePanel label="OI · Ojo Izquierdo" eye={oi} onChange={setOi} color="green" disabled={misma}/>
+          <div className="space-y-3">
+            <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-3 text-xs font-medium text-slate-600">
+              <input type="checkbox" checked={misma} onChange={e => { setMisma(e.target.checked); if(e.target.checked) setOi({...od}) }} className="h-4 w-4 rounded accent-[#01B2B7]"/>
+              Ambos ojos tienen la misma receta
+            </label>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <EyePanel label="OD · Ojo derecho" eye={od} onChange={e => { setOd(e); if(misma) setOi(e) }} color="blue"/>
+              <EyePanel label="OI · Ojo izquierdo" eye={oi} onChange={setOi} color="green" disabled={misma}/>
             </div>
           </div>
 
@@ -572,34 +570,40 @@ export default function RecetaPage() {
 function EyePanel({ label, eye, onChange, color, disabled }: { label: string; eye: EyeInput; onChange: (e: EyeInput) => void; color: 'blue'|'green'; disabled?: boolean }) {
   const s = (k: keyof EyeInput) => (v: string) => onChange({ ...eye, [k]: v })
   const hasCyl = !!eye.cyl && parseFloat(eye.cyl) !== 0
+  const field = "w-full min-w-0 appearance-none rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-800 outline-none transition focus:border-[#01B2B7] focus:ring-2 focus:ring-[#01B2B7]/15 disabled:bg-slate-50 disabled:text-slate-300"
   return (
-    <div className={`p-3 space-y-2.5 ${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
-      <div className="flex items-center gap-1.5"><div className={`w-2 h-2 rounded-full ${color==='blue'?'bg-blue-500':'bg-green-500'}`}/><p className="text-[11px] font-bold text-gray-700">{label}</p></div>
-      {([
-        {k:'sph' as const,lbl:'SPH *',opts:SPH_GLASSES,fmt:(v:number)=>v===0?'Plano':v>0?`+${v.toFixed(2)}`:v.toFixed(2),ph:'— Sel. —'},
-        {k:'cyl' as const,lbl:'CYL',opts:CYL_GLASSES.filter(v=>v!==0),fmt:(v:number)=>v.toFixed(2),ph:'— Sin —'},
-      ]).map(({k,lbl,opts,fmt,ph})=>(
-        <div key={k}><label className="text-[10px] font-semibold text-gray-400 block mb-1">{lbl}</label>
-          <select value={eye[k]} onChange={e=>s(k)(e.target.value)} className="w-full border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white outline-none focus:border-primary-400">
-            <option value="">{ph}</option>
-            {opts.map(v=><option key={v} value={String(v)}>{fmt(v)}</option>)}
+    <section className={`rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_2px_12px_rgba(15,35,65,.04)] ${disabled ? 'opacity-50' : ''}`}>
+      <div className="mb-3 flex items-center gap-2">
+        <span className={`h-2.5 w-2.5 rounded-full ${color === 'blue' ? 'bg-blue-600' : 'bg-[#01B2B7]'}`}/>
+        <h3 className="text-sm font-semibold text-[#002455]">{label}</h3>
+      </div>
+      <div className="grid grid-cols-2 gap-x-3 gap-y-3">
+        <label className="min-w-0 text-[11px] font-semibold text-slate-500">Esfera · SPH <span className="text-rose-500">*</span>
+          <select value={eye.sph} onChange={e=>s('sph')(e.target.value)} disabled={disabled} className={field}>
+            <option value="">Seleccionar</option>
+            {SPH_GLASSES.map(v=><option key={v} value={String(v)}>{v===0?'Plano':v>0?`+${v.toFixed(2)}`:v.toFixed(2)}</option>)}
           </select>
-        </div>
-      ))}
-      <div><label className="text-[10px] font-semibold text-gray-400 block mb-1">EJE {hasCyl&&<span className="text-red-400">*</span>}</label>
-        <select value={eye.axis} onChange={e=>s('axis')(e.target.value)} disabled={!hasCyl}
-          className={`w-full border rounded-lg px-2 py-2 text-xs bg-white outline-none focus:border-primary-400 ${hasCyl?'border-gray-200':'border-gray-100 text-gray-300'}`}>
-          <option value="">— —</option>
-          {AXIS_VALS.map(v=><option key={v} value={String(v)}>{String(v).padStart(3,'0')}°</option>)}
-        </select>
+        </label>
+        <label className="min-w-0 text-[11px] font-semibold text-slate-500">Cilindro · CYL
+          <select value={eye.cyl} onChange={e=>{s('cyl')(e.target.value);if(!e.target.value)s('axis')('')}} disabled={disabled} className={field}>
+            <option value="">Sin cilindro</option>
+            {CYL_GLASSES.filter(v=>v!==0).map(v=><option key={v} value={String(v)}>{v.toFixed(2)}</option>)}
+          </select>
+        </label>
+        <label className="min-w-0 text-[11px] font-semibold text-slate-500">Eje · AXIS {hasCyl&&<span className="text-rose-500">*</span>}
+          <select value={eye.axis} onChange={e=>s('axis')(e.target.value)} disabled={disabled||!hasCyl} className={field}>
+            <option value="">—</option>
+            {AXIS_VALS.map(v=><option key={v} value={String(v)}>{String(v).padStart(3,'0')}°</option>)}
+          </select>
+        </label>
+        <label className="min-w-0 text-[11px] font-semibold text-slate-500">Adición · ADD
+          <select value={eye.add} onChange={e=>s('add')(e.target.value)} disabled={disabled} className={field}>
+            <option value="">Sin adición</option>
+            {ADD_VALS.map(v=><option key={v} value={String(v)}>+{v.toFixed(2)}</option>)}
+          </select>
+        </label>
       </div>
-      <div><label className="text-[10px] font-semibold text-gray-400 block mb-1">ADD</label>
-        <select value={eye.add} onChange={e=>s('add')(e.target.value)} className="w-full border border-gray-200 rounded-lg px-2 py-2 text-xs bg-white outline-none focus:border-primary-400">
-          <option value="">— Sin —</option>
-          {ADD_VALS.map(v=><option key={v} value={String(v)}>+{v.toFixed(2)}</option>)}
-        </select>
-      </div>
-    </div>
+    </section>
   )
 }
 
@@ -684,7 +688,7 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
 
         {/* Receta que le corresponde a ESTE producto (estilo OptiExpert de CooperVision) */}
         <RecetaMini result={productResult} soloOjo={soloOjo} />
-        {p.ejes_ajustados && <p className="mt-2 text-[10px] leading-4 text-teal-800 bg-teal-50 rounded-lg px-2 py-1.5">Eje ajustado al valor disponible de este fabricante.</p>}
+        {p.requiere_revision && <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2 py-2 text-[10px] leading-4 text-amber-900">Parámetros cercanos de fabricación. El cilindro o eje difiere de tu cálculo; un especialista debe validar esta alternativa antes de comprar.</p>}
       </div>
       <div className="px-3 pb-3 space-y-1.5">
         <button onClick={() => onAction(p, productResult)}
