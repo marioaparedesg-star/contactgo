@@ -8,7 +8,9 @@ export default function BottomNav() {
   const pathname  = usePathname()
   const itemCount = useCartStore(s => s.itemCount())
 
-  if (pathname.startsWith('/M1Alexander')) return null
+  // El panel se sirve internamente bajo /admin mediante rewrite; ocultar
+  // la navegación de tienda tanto en la URL pública como en la ruta interna.
+  if (pathname.startsWith('/M1Alexander') || pathname === '/admin' || pathname.startsWith('/admin/')) return null
 
   const tabs = [
     { href: '/',        icon: Home,         label: 'Inicio'   },
