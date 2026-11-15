@@ -5,7 +5,7 @@
 // Anti-fatiga: localStorage — no vuelve a aparecer si:
 //   1) El usuario completo (nunca mas)
 //   2) El usuario lo cerro (7 dias de cooldown)
-//   3) Esta en checkout/admin/cuenta/venta/confirmacion
+//   3) Esta en checkout/M1Alexander/cuenta/venta/confirmacion
 // ============================================================
 import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
@@ -15,7 +15,7 @@ import toast from 'react-hot-toast'
 const STORAGE_KEY = 'cg_welcome_popup_state'  // 'completed' | 'dismissed_YYYY-MM-DD'
 const SHOW_AFTER_MS = 20_000
 const DISMISS_COOLDOWN_DAYS = 7
-const EXCLUDED_PATHS = ['/checkout', '/admin', '/cuenta', '/venta/', '/confirmacion', '/gracias', '/auth']
+const EXCLUDED_PATHS = ['/checkout', '/M1Alexander', '/cuenta', '/venta/', '/confirmacion', '/gracias', '/auth']
 
 export default function WelcomePopup() {
   const pathname = usePathname()
