@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { createClient } from '@supabase/supabase-js'
 
-const secret = () => process.env.CRON_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+const secret = () => process.env.EMAIL_UNSUBSCRIBE_SECRET || process.env.CRON_SECRET || ''
 
 export function createMarketingUnsubscribeToken(email: string): string {
   const normalized = email.trim().toLowerCase()
