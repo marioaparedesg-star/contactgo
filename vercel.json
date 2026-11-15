@@ -27,10 +27,6 @@
     {
       "path": "/api/cron/alertas-admin",
       "schedule": "0 13 * * *"
-    },
-    {
-      "path": "/api/cron/email-educativo",
-      "schedule": "0 17 * * *"
     }
   ]
 }
