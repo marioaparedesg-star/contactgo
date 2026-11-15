@@ -1,6 +1,6 @@
 // ============================================================
 // ContactGo — CRON diario 9am (DR)
-// Envía: notificación de envío, solicitud de reseña, renovación
+// Automatizaciones por correo postventa. Los envíos automáticos de WhatsApp están pausados.
 // GET /api/cron/wa-daily  (Vercel Cron)
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
