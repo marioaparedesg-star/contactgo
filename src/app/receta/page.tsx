@@ -159,7 +159,14 @@ export default function RecetaPage() {
 
   const ejecutarCalculo = async (rx: GlassesRx): Promise<any[]> => {
     const conv = convertGlassesToContacts(rx, rxSource ?? 'contacto', Number(vertexDistanceMm)); setResult(conv); setCartAdded(null)
-    const lista = await cargarProductos(conv)
+    // La ADD de gafas no se traduce directamente a la potencia/clase multifocal de un lente de contacto.
+    // Se evita recomendar modelos multifocales automáticamente sin adaptación profesional.
+    let lista: any[] = []
+    if (conv.requiresClinicalReview) {
+      setProducts([]); setProductsOd([]); setProductsOi([]); setCasoMixto(null); setTotalDisp(0); setLoadingP(false)
+    } else {
+      lista = await cargarProductos(conv)
+    }
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
     return lista
@@ -627,6 +634,7 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
         ))}
       </div>
       {r.needsVertex&&<p className="text-[10px] text-amber-800 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">Conversión óptica estimada desde gafas usando {r.vertexDistanceMm} mm de distancia al vértice. Los valores se ajustan a pasos de potencia y luego se contrastan con los parámetros de fabricación del producto. No constituye una adaptación ni una prescripción final.</p>}
+      {r.requiresClinicalReview&&<p className="text-[10px] text-amber-900 bg-amber-100 rounded-lg px-2.5 py-2 mb-3">Tu receta de gafas incluye ADD. La adición de gafas no se convierte directamente a una clase multifocal de lente de contacto. Por seguridad, no mostraremos un producto como compatible automáticamente; se requiere adaptación y selección profesional.</p>}
       {!r.needsVertex && r.condiciones.includes('Alta graduación') && <p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">⚡ Graduación alta — tenemos lentes de rango extendido (XR) especiales para tu receta</p>}
       {!r.needsVertex && !r.condiciones.includes('Alta graduación') && <p className="text-[10px] text-green-700 bg-green-50 rounded-lg px-2.5 py-1.5 mb-3">✅ Tu receta exacta para lentes de contacto — productos compatibles abajo</p>}
       <div className={`flex items-start gap-2 rounded-xl px-3 py-2 border ${compC.bg} ${compC.border}`}>
