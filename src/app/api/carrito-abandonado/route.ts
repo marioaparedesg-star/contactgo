@@ -15,14 +15,9 @@
 // abandoned_carts tenía 0 filas siempre. Ya corregido (constraint
 // agregada 2026-08-08).
 //
-// Este archivo reemplaza a ambos: WhatsApp real primero (plantilla
-// aprobada 'carrito_abandonado'), con email como respaldo si no hay
-// teléfono. recover-carts (Edge Function) queda huérfana y debe borrarse
-// de Supabase manualmente — no se puede eliminar desde este repo.
-//
-// INTERRUPTOR DE SEGURIDAD: apagado por defecto (Mario pidió explícitamente
-// "no envíe nada a nadie"). Se activa con
-// CARRITO_ABANDONADO_ACTIVO=true en Vercel — sin necesidad de otro deploy.
+// Este flujo ahora es exclusivamente por correo. WhatsApp queda pausado y
+// la Edge Function antigua recover-carts responde 202 sin procesar carritos.
+// Solo se envía a clientes con consentimiento comercial vigente.
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
@@ -158,9 +153,6 @@ export async function GET(req: NextRequest) {
   for (const cart of carritos) {
     try {
       if (!cart.cliente_email || !(await hasMarketingConsent(cart.cliente_email))) continue
-      const productos = (Array.isArray(cart.items) ? cart.items : [])
-        .slice(0, 2).map((p: any) => p.nombre ?? p.product?.nombre).filter(Boolean).join(', ')
-
       // El consentimiento comercial capturado en el registro cubre email, no WhatsApp.
       // No enviar promociones por WhatsApp hasta contar con una autorización separada.
       if (cart.cliente_email) {
