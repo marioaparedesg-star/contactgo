@@ -63,6 +63,7 @@ const NAV_SECTIONS = [
 
 export default function AdminNav() {
   const pathname  = usePathname()
+  const activePath = pathname.startsWith('/admin') ? pathname.replace(/^\\/admin/, '/M1Alexander') : pathname
   const router    = useRouter()
   const sb        = createClient()
   // En tablet (md: pero no lg:) el sidebar arranca colapsado para maximizar espacio
@@ -76,7 +77,7 @@ export default function AdminNav() {
 
   useEffect(() => {
     // Si estamos en /admin/pedidos, marcar como vistos y no mostrar badge
-    const enPedidos = pathname === '/M1Alexander/pedidos' || pathname === '/admin/pedidos'
+    const enPedidos = activePath === '/M1Alexander/pedidos'
     if (enPedidos) {
       // Guardar timestamp de última visita para calcular nuevos desde entonces
       localStorage.setItem('admin_pedidos_last_seen', new Date().toISOString())
@@ -144,7 +145,7 @@ export default function AdminNav() {
               </p>
             )}
             {section.items.map(({ href, icon: Icon, label, badge }) => {
-              const active = pathname === href || (href !== '/M1Alexander' && pathname.startsWith(href))
+              const active = activePath === href || (href !== '/M1Alexander' && activePath.startsWith(href))
               const badgeCount = getBadge(badge)
               return (
                 <Link key={href} href={href}
