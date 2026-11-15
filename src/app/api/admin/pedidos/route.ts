@@ -17,6 +17,9 @@ function getSb() {
 }
 
 async function notificarEstadoPedido(order_id: string, nuevo_estado: string) {
+  // Ejecuta el servicio de correo directamente desde el servidor.
+  // No hace una llamada HTTP a /api/notify, evitando el 403 del guard
+  // de origen/rate-limit que no aplica a una invocación interna.
   try {
     const { enviarNotificacionPedido } = await import('@/lib/email/order-notifications')
     const notification = await enviarNotificacionPedido(
@@ -25,8 +28,7 @@ async function notificarEstadoPedido(order_id: string, nuevo_estado: string) {
       nuevo_estado
     )
 
-    // Preserve the existing WhatsApp state notification without a public
-    // /api/notify hop. wa/dispatch still requires the shared internal secret.
+    // Mantener el envío de WhatsApp vía su endpoint interno protegido.
     const waTypes: Record<string, string> = {
       recibido: 'estado_recibido',
       pago_aprobado: 'estado_pago_aprobado',
