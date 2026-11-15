@@ -87,11 +87,22 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
         })
         result.email_cliente = sent.error ? 'error' : 'sent'
         if (sent.error) result.email_error = sent.error
-        const { error: logError } = await sb.from('email_log').insert({
-          order_id: orderId, template, to_email: order.cliente_email, subject,
-          resend_id: sent.resendId ?? null, status: sent.error ? 'error' : 'sent',
-        })
-        if (logError) console.error('[order-notifications] no se pudo guardar email_log cliente:', logError.message)
+        // Only a successfully accepted email participates in the unique
+        // (order_id, template) sent-event dedup index. Failed attempts stay
+        // in the audit log but can be retried without a unique-index conflict.
+        if (sent.error) {
+          const { error: logError } = await sb.from('email_log').insert({
+            order_id: orderId, template, to_email: order.cliente_email, subject,
+            resend_id: null, status: 'error',
+          })
+          if (logError) console.error('[order-notifications] no se pudo guardar error de email cliente:', logError.message)
+        } else {
+          const { error: logError } = await sb.from('email_log').insert({
+            order_id: orderId, template, to_email: order.cliente_email, subject,
+            resend_id: sent.resendId ?? null, status: 'sent',
+          })
+          if (logError) console.error('[order-notifications] no se pudo guardar email_log cliente:', logError.message)
+        }
       }
     } else {
       result.email_cliente = 'skipped'
@@ -126,11 +137,21 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
         const adminError = adminSent.error
         const adminResendId = adminSent.resendId
         result.email_admin = adminError ? 'error' : 'sent'
-        const { error: logError } = await sb.from('email_log').insert({
-          order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
-          resend_id: adminResendId ?? null, status: adminError ? 'error' : 'sent',
-        })
-        if (logError) console.error('[order-notifications] no se pudo guardar email_log admin:', logError.message)
+        // Persist failed attempts for diagnostics, but never let a failed
+        // attempt occupy the unique sent-event slot.
+        if (adminError) {
+          const { error: logError } = await sb.from('email_log').insert({
+            order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
+            resend_id: null, status: 'error',
+          })
+          if (logError) console.error('[order-notifications] no se pudo guardar error email_log admin:', logError.message)
+        } else {
+          const { error: logError } = await sb.from('email_log').insert({
+            order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
+            resend_id: adminResendId ?? null, status: 'sent',
+          })
+          if (logError) console.error('[order-notifications] no se pudo guardar email_log admin:', logError.message)
+        }
       }
     }
     return result
