@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { createClient } from '@supabase/supabase-js'
+import { enqueueWelcomeSequence } from '@/lib/email/educational-automation'
 
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url)
@@ -74,6 +75,10 @@ export async function GET(req: NextRequest) {
       const { data: current } = await admin.from('email_marketing_preferences').select('id').eq('email', email).maybeSingle()
       if (current?.id) await admin.from('email_marketing_preferences').update(preference).eq('id', current.id)
       else await admin.from('email_marketing_preferences').insert({ ...preference, created_at: new Date().toISOString() })
+      if (consent) {
+        try { await enqueueWelcomeSequence(email, user.id) }
+        catch (error) { console.error('[auth/callback] no se pudo encolar bienvenida educativa:', error) }
+      }
     }
   }
 
