@@ -27,13 +27,22 @@ export async function POST(req: NextRequest) {
 
   const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
   const now = new Date().toISOString()
-  const { error } = await sb.from('email_marketing_preferences').upsert({
+  const values = {
     email,
     marketing_consent: false,
     unsubscribed_at: now,
     suppression_reason: 'user_unsubscribe',
     updated_at: now,
-  }, { onConflict: 'email' })
+  }
+  const { data: current, error: lookupError } = await sb.from('email_marketing_preferences')
+    .select('id').ilike('email', email).maybeSingle()
+  if (lookupError) {
+    console.error('[email/unsubscribe] No se pudo consultar la preferencia:', lookupError.message)
+    return new NextResponse('No pudimos procesar tu solicitud. Inténtalo nuevamente.', { status: 500 })
+  }
+  const { error } = current?.id
+    ? await sb.from('email_marketing_preferences').update(values).eq('id', current.id)
+    : await sb.from('email_marketing_preferences').insert(values)
 
   if (error) {
     console.error('[email/unsubscribe] No se pudo registrar la baja:', error.message)
