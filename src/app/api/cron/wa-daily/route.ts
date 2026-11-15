@@ -5,7 +5,7 @@
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { sendText, normalizePhone } from '@/lib/whatsapp'
+import { sendText, normalizePhone, WHATSAPP_AUTOMATIONS_ENABLED } from '@/lib/whatsapp'
 import { notificarRenovacion, notificarRecompraPrevio } from '@/lib/wa-notifications'
 import { hasMarketingConsent } from '@/lib/email/marketing-consent'
 
@@ -102,7 +102,7 @@ export async function GET(req: NextRequest) {
   // products). Confirmado con Mario y recalculadas TODAS las suscripciones
   // existentes antes de reactivar este bloque.
   // ─────────────────────────────────────────────────────
-  try {
+  if (WHATSAPP_AUTOMATIONS_ENABLED) try {
     const hoy = new Date().toISOString().split('T')[0]
     const { data: subsVencidas } = await sb
       .from('subscriptions')
@@ -333,7 +333,7 @@ export async function GET(req: NextRequest) {
   // Backoff exponencial: 5min → 30min → 2h → giveup
   // ─────────────────────────────────────────────────────
   const resultsRetry = { reintentos: 0, resueltos: 0, descartados: 0 }
-  try {
+  if (WHATSAPP_AUTOMATIONS_ENABLED) try {
     const { data: retries } = await sb
       .from('wa_retry_queue')
       .select('*')
