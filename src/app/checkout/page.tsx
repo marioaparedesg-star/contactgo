@@ -135,6 +135,19 @@ export default function CheckoutPage() {
       setIsLoggedIn(!!user)
       if (!user) { router.replace('/cuenta?next=/cart'); return }
       if (user) {
+        try {
+          const sessionResult = await sb.auth.getSession()
+          const token = sessionResult.data.session?.access_token
+          if (token) {
+            const rr = await fetch('/api/referrals', { headers: { Authorization: 'Bearer ' + token }, cache: 'no-store' })
+            const referral = await rr.json()
+            if (referral.friend_coupon_code) {
+              const cr = await fetch('/api/validate-coupon', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ codigo: referral.friend_coupon_code, subtotal: subtotal(), email: user.email || '' }) })
+              const coupon = await cr.json()
+              if (coupon.valido) { setCupon(referral.friend_coupon_code); setDescuento(Number(coupon.descuento) || 150); setCuponAplicado(true); setCuponEnvioGratis(false) }
+            }
+          }
+        } catch (e) { console.error('[referrals] No se pudo aplicar descuento:', e) }
         sb.from('profiles').select('*').eq('id', user.id).single().then(({ data: p }) => {
           const nombreGuardado = p?.nombre || user.user_metadata?.full_name || user.user_metadata?.nombre ||
             [user.user_metadata?.first_name, user.user_metadata?.last_name].filter(Boolean).join(' ')
@@ -525,7 +538,7 @@ export default function CheckoutPage() {
     const sb = createClient()
     if (authMode === 'register') {
       const nombreCompletoAuth = `${authNombre.trim()} ${authApellido.trim()}`
-      const { data: signUp, error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: nombreCompletoAuth, phone: authTel, fecha_nacimiento: authFecha } } })
+      const { data: signUp, error } = await sb.auth.signUp({ email: authEmail, password: authPass, options: { data: { nombre: nombreCompletoAuth, phone: authTel, fecha_nacimiento: authFecha, referral_code: (() => { try { return localStorage.getItem('cg_referral_code') || '' } catch { return '' } })() } } })
       if (error) { setAuthMsg(error.message); setAuthLoading(false); return }
       fetch('/api/auth/welcome', {
         method: 'POST',
