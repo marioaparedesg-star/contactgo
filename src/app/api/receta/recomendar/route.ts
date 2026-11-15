@@ -3,56 +3,15 @@ import { createClient } from '@supabase/supabase-js'
 import { evaluarReceta, TIPOS, type TipoLente, type ProductoFabricacion } from '@/lib/prescription-recommend'
 
 
-function nearest(values: unknown, target: number, circularAxis = false): number | null {
+function nearestAxis(values: unknown, target: number): number | null {
   if (!Array.isArray(values)) return null
-  const nums = values.map(Number).filter(Number.isFinite)
-  if (!nums.length) return null
-  return nums.sort((a, b) => {
-    const distance = (v: number) => {
-      const raw = Math.abs(v - target)
-      return circularAxis ? Math.min(raw, 180 - raw) : raw
-    }
-    return distance(a) - distance(b) || Math.abs(a) - Math.abs(b)
-  })[0]
-}
-
-function buildReviewAlternatives(products: ProductoFabricacion[], receta: {
-  tipo: TipoLente
-  od: { sph: number; cyl: number; axis: number | null; add: number | null }
-  oi: { sph: number; cyl: number; axis: number | null; add: number | null }
-}) {
-  if (receta.tipo !== 'torico') return []
-  return products.flatMap((p: any) => {
-    const sphValues = Array.isArray(p.sph_disponibles) ? p.sph_disponibles.map(Number) : []
-    const cylValues = Array.isArray(p.cyl_disponibles) ? p.cyl_disponibles.map(Number) : []
-    const axisValues = Array.isArray(p.axis_disponibles) ? p.axis_disponibles.map(Number) : []
-    if (!sphValues.length || !cylValues.length || !axisValues.length) return []
-    const eyes = [receta.od, receta.oi]
-    const review = eyes.map((eye) => {
-      const sph = nearest(sphValues, eye.sph)
-      const cyl = nearest(cylValues, eye.cyl)
-      const axis = eye.axis == null ? null : nearest(axisValues, eye.axis, true)
-      const sphExact = sph != null && Math.abs(sph - eye.sph) <= 0.01
-      const cylClose = cyl != null && Math.abs(cyl - eye.cyl) <= 0.51
-      const axisClose = axis != null && Math.min(Math.abs(axis - (eye.axis ?? 0)), 180 - Math.abs(axis - (eye.axis ?? 0))) <= 5
-      return { sph: sphExact ? sph : null, cyl, axis, sphExact, cylClose, axisClose }
-    })
-    if (review.some((eye) => !eye.sphExact || !eye.cylClose || !eye.axisClose)) return []
-    const exact = review.every((eye, index) =>
-      eye.sphExact && Math.abs((eye.cyl ?? 99) - eyes[index].cyl) <= 0.01 &&
-      eye.axis != null && eyes[index].axis != null && Math.abs(eye.axis - eyes[index].axis) <= 0.5
-    )
-    if (exact) return []
-    return [{
-      id: p.id, nombre: p.nombre, marca: p.marca, precio: p.precio,
-      imagen_url: p.imagen_url, slug: p.slug,
-      parametros_revision: {
-        od: { sph: review[0].sph, cyl_disponible: review[0].cyl, axis_disponible: review[0].axis },
-        oi: { sph: review[1].sph, cyl_disponible: review[1].cyl, axis_disponible: review[1].axis },
-      },
-      requiere_validacion_profesional: true,
-    }]
-  }).sort((a: any, b: any) => Number(a.precio) - Number(b.precio)).slice(0, 3)
+  const axes = [...new Set(values.map(Number).filter(v => Number.isFinite(v) && v >= 1 && v <= 180))]
+  if (!axes.length) return null
+  const circularDistance = (a: number, b: number) => {
+    const d = Math.abs(a - b)
+    return Math.min(d, 180 - d)
+  }
+  return axes.sort((a, b) => circularDistance(a, target) - circularDistance(b, target) || a - b)[0]
 }
 
 // Solo filtra por parámetros de fabricación publicados. No sustituye la adaptación clínica.
@@ -84,9 +43,47 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No pudimos validar el catálogo en este momento' }, { status: 503 })
     }
 
-    const res = evaluarReceta(receta, (data ?? []) as ProductoFabricacion[])
-    if (res.ok === false) return NextResponse.json({ error: res.error }, { status: res.status })
-    return NextResponse.json({ productos: res.productos, total: res.total, sin_parametros: res.sin_parametros, nota: res.nota, alternativas_revision: res.productos.length ? [] : buildReviewAlternatives((data ?? []) as ProductoFabricacion[], receta) })
+    const catalogo = (data ?? []) as ProductoFabricacion[]
+    // Cada producto se evalúa con SUS ejes reales de fabricación. Se selecciona
+    // el eje disponible más cercano (distancia circular 1°–180°); SPH y CYL
+    // siguen siendo coincidencias exactas con los parámetros publicados.
+    const evaluados = tipo === 'torico' || tipo === 'multifocal_torico'
+      ? catalogo.flatMap((producto: any) => {
+          const odAxis = receta.od.axis == null ? null : nearestAxis(producto.axis_disponibles, receta.od.axis)
+          const oiAxis = receta.oi.axis == null ? null : nearestAxis(producto.axis_disponibles, receta.oi.axis)
+          if (odAxis == null || oiAxis == null) return []
+          const recetaFabricable = {
+            ...receta,
+            od: { ...receta.od, axis: odAxis },
+            oi: { ...receta.oi, axis: oiAxis },
+          }
+          const evaluacion = evaluarReceta(recetaFabricable, [producto])
+          if (evaluacion.ok === false || evaluacion.productos.length === 0) return []
+          return [{
+            ...producto,
+            receta_ajustada: {
+              od: { ...recetaFabricable.od },
+              oi: { ...recetaFabricable.oi },
+            },
+            ejes_ajustados: odAxis !== receta.od.axis || oiAxis !== receta.oi.axis,
+          }]
+        }).sort((a: any, b: any) => Number(a.precio) - Number(b.precio))
+      : (() => {
+          const evaluacion = evaluarReceta(receta, catalogo)
+          return evaluacion.ok ? evaluacion.productos : []
+        })()
+
+    const seleccion = evaluados.length > 3
+      ? [evaluados[0], evaluados[Math.floor(evaluados.length / 2)], evaluados[evaluados.length - 1]]
+      : evaluados
+    return NextResponse.json({
+      productos: seleccion,
+      total: evaluados.length,
+      sin_parametros: catalogo.filter(p => !Array.isArray(p.sph_disponibles) || p.sph_disponibles.length === 0).length,
+      nota: seleccion.some((p: any) => p.ejes_ajustados)
+        ? 'El eje se ajustó al valor más cercano disponible en la fabricación del producto. SPH y CYL coinciden con los parámetros publicados.'
+        : undefined,
+    })
   } catch (error) {
     console.error('[receta/recomendar] unexpected error:', error)
     return NextResponse.json({ error: 'No fue posible procesar la receta' }, { status: 500 })
