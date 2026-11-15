@@ -402,7 +402,7 @@ export async function GET(req: NextRequest) {
   // necesitar una tabla de eventos nueva. No se bloquea por incidencia
   // abierta (es contenido de ayuda, no comercial).
   // ─────────────────────────────────────────────────────
-  const resultsEducativo = { dia3: 0, dia7: 0, dia14: 0, sin_lentes_omitidos: 0 }
+  const resultsEducativo = { dia3: 0, dia7: 0, dia14: 0, dia25: 0, sin_lentes_omitidos: 0 }
   try {
     const { Resend } = await import('resend')
     const resend = new Resend(process.env.RESEND_API_KEY)
