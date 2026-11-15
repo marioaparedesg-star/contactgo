@@ -107,7 +107,7 @@ export default function RecetaPage() {
               })
             })
             const json = await res.json()
-            if (json.error) toast(json.error, { duration: 5000, icon: '⚠️' })
+            if (json.error) toast.error(json.error, { duration: 5000 })
             return json.productos ?? []
           } catch { return [] }
         }
@@ -134,11 +134,11 @@ export default function RecetaPage() {
         })
       })
       const json = await res.json()
-      if (json.error) toast(json.error, { duration: 5000, icon: '⚠️' })
+      if (json.error) toast.error(json.error, { duration: 5000 })
       const lista = json.productos ?? []
       setProducts(lista)
       setTotalDisp(json.total ?? 0)
-      if (json.nota) toast(json.nota, { duration: 4000, icon: '💡' })
+      if (json.nota) toast(json.nota, { duration: 4000 })
       return lista
     } catch { setProducts([]); return [] }
     finally { setLoadingP(false) }
@@ -261,7 +261,7 @@ export default function RecetaPage() {
     }
     setCartAdded(product.id)
     trackEvento('add_to_cart', { tipo_receta: result.tipo, producto_slug: product.slug })
-    toast.success(`¡${product.nombre} agregado con tu receta! 🛒`, { duration: 3000 })
+    toast.success(`¡${product.nombre} agregado con tu receta!`, { duration: 3000 })
   }
 
   const saveRxToSession = (soloOjo?: 'OD' | 'OI') => {
@@ -337,7 +337,7 @@ export default function RecetaPage() {
               <button onClick={handleLeadSubmit} className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
                 Guardar mi receta →
               </button>
-              <p className="text-[10px] text-gray-400 text-center">🔒 Tus datos están seguros. Nunca spam.</p>
+              <p className="text-[10px] text-gray-400 text-center">Tus datos están protegidos y solo se utilizarán para gestionar tu receta.</p>
             </div>
           </div>
         )}
@@ -433,7 +433,7 @@ export default function RecetaPage() {
                   // ═══════════ CASO MIXTO — 2 columnas OD/OI ═══════════
                   <>
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
-                      <p className="text-xs font-bold text-amber-900 mb-0.5">📋 Tu receta necesita lentes distintos por ojo</p>
+                      <p className="text-xs font-bold text-amber-900 mb-0.5">Tu receta necesita lentes distintos por ojo</p>
                       <p className="text-[11px] text-amber-800 leading-snug">
                         Cada ojo tiene una necesidad diferente. Te mostramos las mejores opciones separadamente — puedes comprar
                         <strong> 1 caja para OD</strong> y <strong>1 caja para OI</strong>. En el carrito llegan por separado.
@@ -486,7 +486,7 @@ export default function RecetaPage() {
 
                     <div className="mt-3 bg-green-50 border border-green-200 rounded-xl p-3">
                       <p className="text-xs text-green-900 leading-relaxed">
-                        <strong>💡 Tip:</strong> si prefieres que armemos tu pedido personalizado y te enviemos el link de pago,{' '}
+                        <strong>Importante:</strong> si prefieres que armemos tu pedido personalizado y te enviemos el link de pago,{' '}
                         <a href={`https://wa.me/18096942268?text=${buildWA(result)}`} target="_blank" rel="noopener noreferrer" className="underline font-bold">contáctanos por WhatsApp</a>.
                       </p>
                     </div>
@@ -659,7 +659,7 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
   const featured = tier === 'rec'
   const isSimple = result.tipo === 'esferico' && !soloOjo
   const wasAdded = cartAdded === p.id
-  const tierLabel = {eco:'ECONÓMICO',rec:'⭐ MEJOR OPCIÓN',prem:'PREMIUM'}[tier]
+  const tierLabel = {eco:'ECONÓMICO',rec:'RECOMENDADO',prem:'PREMIUM'}[tier]
   const tierColor = {eco:'bg-gray-100 text-gray-600',rec:'bg-teal-500 text-white',prem:'bg-gray-800 text-white'}[tier]
   return (
     <div className={`flex flex-col bg-white rounded-2xl border overflow-hidden transition-all ${featured?'border-primary-400 shadow-md ring-2 ring-teal-50':'border-gray-100 shadow-sm'}`}>
@@ -737,7 +737,7 @@ function RecetaMini({ result, soloOjo }: { result: ConvertedRx; soloOjo?: 'OD' |
         </p>
       ) : iguales ? (
         <p className="text-[11px] font-mono font-bold text-gray-900">
-          👀 Ambos: <span className="text-primary-700">{fmtOjo(od)}</span>
+          Ambos ojos: <span className="text-primary-700">{fmtOjo(od)}</span>
         </p>
       ) : (
         <div className="text-[10.5px] font-mono leading-snug">
@@ -759,12 +759,12 @@ function RecetaMini({ result, soloOjo }: { result: ConvertedRx; soloOjo?: 'OD' |
 function FallbackProductos({ result, buildWA }: { result: ConvertedRx; buildWA: (r: ConvertedRx) => string }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center shadow-sm">
-      <p className="text-2xl mb-2">💬</p>
+      
       <p className="font-bold text-gray-900 text-sm mb-1">Consultamos disponibilidad para ti</p>
       <p className="text-xs text-gray-500 mb-4">Un especialista te confirmará las opciones compatibles en minutos.</p>
       <a href={`https://wa.me/18096942268?text=${buildWA(result)}`} target="_blank" rel="noopener noreferrer"
         className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold text-sm px-5 py-3 rounded-xl shadow-md">
-        💬 Consultar disponibilidad →
+        Consultar disponibilidad →
       </a>
     </div>
   )
@@ -778,7 +778,7 @@ function AhorroCard({ precio }: { precio: number }) {
   const ahorroAnual = ahorro * 24
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-      <p className="font-bold text-gray-900 text-sm mb-3">💰 Tu ahorro comprando en ContactGo</p>
+      <p className="font-bold text-gray-900 text-sm mb-3">Tu ahorro comprando en ContactGo</p>
       <div className="grid grid-cols-3 gap-2 mb-3">
         {[{l:'Precio estimado',v:`RD$${optica.toLocaleString()}`,c:'text-gray-400 line-through',s:`estimado +${OPTICA_MULT*100-100|0}% aprox`},{l:'ContactGo',v:`RD$${precio.toLocaleString()}`,c:'text-primary-600',s:'precio oficial'},{l:'Ahorras',v:`RD$${ahorro.toLocaleString()}`,c:'text-green-600 font-black',s:`RD$${ahorroAnual.toLocaleString()}/año`}].map(({l,v,c,s})=>(
           <div key={l} className="bg-gray-50 rounded-xl p-2.5 text-center">
@@ -802,7 +802,7 @@ function ConsumoCard({ precio, frecuencia, onChange }: { precio: number; frecuen
   const {cajas} = d[frecuencia]; const anual = precio * cajas
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-      <p className="font-bold text-gray-900 text-sm mb-3">📦 Calculadora de consumo</p>
+      <p className="font-bold text-gray-900 text-sm mb-3">Calculadora de consumo</p>
       <div className="flex gap-1.5 mb-3">
         {(['diario','quincenal','mensual'] as const).map(f=>(
           <button key={f} onClick={()=>onChange(f)}
@@ -828,13 +828,13 @@ function WhatsAppCard({ result, buildMsg }: { result: ConvertedRx; buildMsg: (r:
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className={`font-bold text-sm ${comp.nivel==='rojo'?'text-red-900':'text-white'}`}>
-            {comp.nivel==='rojo'?'⚠️ Habla con un especialista':'¿Dudas con tu receta?'}
+            {comp.nivel==='rojo'?'Habla con un especialista':'¿Dudas con tu receta?'}
           </p>
           <p className={`text-xs mt-0.5 ${comp.nivel==='rojo'?'text-red-700':'text-gray-400'}`}>Respuesta en minutos</p>
         </div>
         <a href={`https://wa.me/18096942268?text=${buildMsg(result)}`} target="_blank" rel="noopener noreferrer"
           className="shrink-0 flex items-center gap-1.5 bg-[#25D366] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md whitespace-nowrap">
-          💬 WhatsApp →
+          WhatsApp →
         </a>
       </div>
     </div>
