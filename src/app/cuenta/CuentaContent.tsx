@@ -479,6 +479,17 @@ export default function CuentaPage() {
     if (error) { setMsg(error.message); setLoading(false); return }
     if (data.user) {
       await sb.from('profiles').upsert({ id: data.user.id, email, nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, role: 'customer' })
+      if (data.session) {
+        const consentResponse = await fetch('/api/email/consent', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${data.session.access_token}` },
+        })
+        if (!consentResponse.ok) {
+          setMsg('Tu cuenta se creó, pero no pudimos guardar tus preferencias. Inicia sesión nuevamente o contacta a soporte antes de continuar.')
+          setLoading(false)
+          return
+        }
+      }
       // Evento estándar para GTM (X Ads "GTM Sign up", GA4, y cualquier otra
       // plataforma que escuche este nombre de evento en el dataLayer)
       if (typeof window !== 'undefined') {
@@ -598,7 +609,7 @@ export default function CuentaPage() {
               <div className="space-y-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
                 <label className="flex items-start gap-2 text-xs leading-5 text-gray-600">
                   <input type="checkbox" checked={aceptaPrivacidad} onChange={e => setAceptaPrivacidad(e.target.checked)} required className="mt-1 h-4 w-4 shrink-0 accent-teal-600" />
-                  <span>Acepto las <Link href="/condiciones" target="_blank" className="font-semibold text-primary-700 underline">Condiciones de uso</Link> y confirmo que he leído la <Link href="/privacidad" target="_blank" className="font-semibold text-primary-700 underline">Política de privacidad</Link>. Es obligatorio para crear mi cuenta.</span>
+                  <span>Acepto las <Link href="/terminos" target="_blank" className="font-semibold text-primary-700 underline">Condiciones de uso</Link> y confirmo que he leído la <Link href="/privacidad" target="_blank" className="font-semibold text-primary-700 underline">Política de privacidad</Link>. Es obligatorio para crear mi cuenta.</span>
                 </label>
                 <label className="flex items-start gap-2 text-xs leading-5 text-gray-600">
                   <input type="checkbox" checked={aceptaPromociones} onChange={e => setAceptaPromociones(e.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-teal-600" />
