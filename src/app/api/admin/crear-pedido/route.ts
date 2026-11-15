@@ -97,7 +97,12 @@ export async function POST(req: NextRequest) {
       canal:'admin',notas_admin:notes ? `[Pedido manual] ${notes}` : '[Pedido manual]'
     }).select('id,numero_orden').single()
     if (orderErr || !order) throw orderErr ?? new Error('No se pudo crear el pedido.')
-    const rows = finalItems.map((i:any)=>({...i,order_id:order.id}))
+    // order_items.subtotal es GENERATED ALWAYS en Supabase; Postgres lo calcula desde precio * cantidad.
+    // No enviar ese campo en el INSERT para evitar el error 428C9.
+    const rows = finalItems.map((i:any)=>{
+      const { subtotal: _subtotalCalculado, ...item } = i
+      return { ...item, order_id: order.id }
+    })
     const {error:itemErr} = await sb.from('order_items').insert(rows)
     if (itemErr) {
       await sb.from('orders').delete().eq('id',order.id)
