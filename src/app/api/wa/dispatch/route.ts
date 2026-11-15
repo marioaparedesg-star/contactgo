@@ -24,6 +24,9 @@ async function fetchOrder(orderId: string) {
 }
 
 export async function POST(req: NextRequest) {
+  // Endpoint de automatización: permanece conectado, pero no despacha mensajes mientras la pausa esté activa.
+  return NextResponse.json({ ok: true, paused: true, reason: 'WHATSAPP_AUTOMATIONS_DISABLED' }, { status: 202 })
+
   // FIX AUDITORÍA (2026-08-09) + CORRECCIÓN INMEDIATA: la primera versión de
   // este fix usaba solo requireAdmin(), pero este endpoint también lo llaman
   // internamente OTRAS rutas del servidor (notify, auth/welcome,
