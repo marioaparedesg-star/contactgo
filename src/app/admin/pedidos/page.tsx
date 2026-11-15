@@ -487,8 +487,13 @@ export default function PedidosPage() {
     <div className="max-w-7xl mx-auto w-full">
 <div className="max-w-7xl mx-auto p-4 md:p-6">
 
-          <div className="mb-6">
-            <h1 className="text-xl font-bold text-gray-900">Pedidos</h1>
+          <div className="mb-6 flex items-start justify-between gap-3">
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">Pedidos</h1>
+            </div>
+            <a href="/M1Alexander/crear-pedido" className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-[#002455] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#001b40]">
+              <span>+</span> Crear pedido
+            </a>
             {/* FIX (2026-09-06): antes "X total" contaba TODO sin filtrar —
                 incluía pedidos de prueba de Mario y cancelados, inflando el
                 número (ej. mostraba "72" cuando los reales activos eran 43).
