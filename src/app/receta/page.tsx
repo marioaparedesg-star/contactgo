@@ -236,12 +236,13 @@ export default function RecetaPage() {
 
   // ── Agregar al carrito DIRECTO (esférico y color) o via PDP ────────────────
   // soloOjo: cuando viene de una card del modo mixto, agrega SOLO 1 caja para ese ojo
-  const handleAddToCart = (product: any, soloOjo?: 'OD' | 'OI') => {
+  const handleAddToCart = (product: any, soloOjo?: 'OD' | 'OI', productResult?: ConvertedRx) => {
     if (!result) return
-    const isSimple = result.tipo === 'esferico' && !casoMixto
+    const activeResult = productResult ?? result
+    const isSimple = activeResult.tipo === 'esferico' && !casoMixto
     // Modo mixto o tipos complejos → ir al PDP con la receta correcta
     if (!isSimple) {
-      saveRxToSession(soloOjo)
+      saveRxToSession(soloOjo, activeResult)
       router.push(`/producto/${product.slug}${soloOjo ? `?ojo=${soloOjo}` : ''}`)
       return
     }
@@ -266,11 +267,12 @@ export default function RecetaPage() {
     toast.success(`¡${product.nombre} agregado con tu receta!`, { duration: 3000 })
   }
 
-  const saveRxToSession = (soloOjo?: 'OD' | 'OI') => {
-    if (!result) return
+  const saveRxToSession = (soloOjo?: 'OD' | 'OI', rxResult?: ConvertedRx) => {
+    const activeResult = rxResult ?? result
+    if (!activeResult) return
     try {
       sessionStorage.setItem('cg_rx_pending', JSON.stringify({
-        od: result.od, oi: result.oi, tipo: result.tipo,
+        od: activeResult.od, oi: activeResult.oi, tipo: activeResult.tipo,
         soloOjo: soloOjo ?? null, // el PDP puede pre-seleccionar solo ese ojo
         timestamp: Date.now()
       }))
@@ -458,7 +460,7 @@ export default function RecetaPage() {
                           <div className="grid grid-cols-1 gap-2">
                             {productsOd.slice(0, 3).map((p, i) => (
                               <ProductCard key={`od-${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'}
-                                onAction={(prod) => handleAddToCart(prod, 'OD')} cartAdded={cartAdded} soloOjo="OD" compact/>
+                                onAction={(prod, rxResult) => handleAddToCart(prod, 'OD', rxResult)} cartAdded={cartAdded} soloOjo="OD" compact/>
                             ))}
                           </div>
                         )}
@@ -479,7 +481,7 @@ export default function RecetaPage() {
                           <div className="grid grid-cols-1 gap-2">
                             {productsOi.slice(0, 3).map((p, i) => (
                               <ProductCard key={`oi-${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'}
-                                onAction={(prod) => handleAddToCart(prod, 'OI')} cartAdded={cartAdded} soloOjo="OI" compact/>
+                                onAction={(prod, rxResult) => handleAddToCart(prod, 'OI', rxResult)} cartAdded={cartAdded} soloOjo="OI" compact/>
                             ))}
                           </div>
                         )}
@@ -654,9 +656,12 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
 // ── ProductCard ───────────────────────────────────────────────────────────────
 function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, compact }: {
   product: any; result: ConvertedRx; tier: 'eco'|'rec'|'prem';
-  onAction: (p: any) => void; cartAdded: string|null;
+  onAction: (p: any, result?: ConvertedRx) => void; cartAdded: string|null;
   soloOjo?: 'OD' | 'OI'; compact?: boolean
 }) {
+  const productResult: ConvertedRx = p.receta_ajustada
+    ? { ...result, od: { ...result.od, ...p.receta_ajustada.od }, oi: { ...result.oi, ...p.receta_ajustada.oi } }
+    : result
   const precio = Number(p.precio)
   const precioAnt = Number(p.precio_anterior ?? 0)
   const off = precioAnt > precio ? Math.round((1 - precio/precioAnt)*100) : 0
@@ -678,10 +683,11 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
         </div>
 
         {/* Receta que le corresponde a ESTE producto (estilo OptiExpert de CooperVision) */}
-        <RecetaMini result={result} soloOjo={soloOjo} />
+        <RecetaMini result={productResult} soloOjo={soloOjo} />
+        {p.ejes_ajustados && <p className="mt-2 text-[10px] leading-4 text-teal-800 bg-teal-50 rounded-lg px-2 py-1.5">Eje ajustado al valor disponible de este fabricante.</p>}
       </div>
       <div className="px-3 pb-3 space-y-1.5">
-        <button onClick={() => onAction(p)}
+        <button onClick={() => onAction(p, productResult)}
           className={`w-full py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${wasAdded ? 'bg-green-500 text-white' : featured ? 'bg-teal-500 text-white hover:bg-teal-600' : 'bg-gray-800 text-white hover:bg-gray-700'}`}>
           {wasAdded ? (<><CheckCircle className="w-3.5 h-3.5"/> ¡En tu carrito!</>)
            : soloOjo ? (<><ArrowRight className="w-3.5 h-3.5"/> Elegir para {soloOjo}</>)
@@ -692,7 +698,7 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
           onClick={() => {
             try {
               sessionStorage.setItem('cg_rx_pending', JSON.stringify({
-                od: result.od, oi: result.oi, tipo: result.tipo,
+                od: productResult.od, oi: productResult.oi, tipo: productResult.tipo,
                 soloOjo: soloOjo ?? null, timestamp: Date.now()
               }))
             } catch {}
