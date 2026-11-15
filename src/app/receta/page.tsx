@@ -352,9 +352,9 @@ export default function RecetaPage() {
 
           {/* Tipo de receta */}
           <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_2px_12px_rgba(15,35,65,.04)] md:p-5">
-            <div className="mb-3">
+            <div className="mb-2">
               <h2 className="text-sm font-semibold text-slate-900">¿Qué tipo de receta tienes?</h2>
-              <p className="mt-1 text-xs text-slate-500">Selecciona el documento del que provienen los valores.</p>
+              <p className="mt-0.5 text-[11px] text-slate-500">Selecciona el origen de los valores.</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <button type="button" onClick={() => setRxSource('contacto')}
@@ -364,7 +364,7 @@ export default function RecetaPage() {
                 <Eye className={`h-5 w-5 ${rxSource === 'contacto' ? 'text-primary-700' : 'text-slate-400'}`} />
                 <span>
                   <span className="block text-xs font-semibold text-slate-900 md:text-sm">Lentes de contacto</span>
-                  <span className="mt-1 block text-[11px] leading-4 text-slate-500">Ya tengo una receta para lentes de contacto.</span>
+                  <span className="mt-0.5 hidden text-[11px] leading-4 text-slate-500 sm:block">Tengo una receta de contacto.</span>
                 </span>
               </button>
               <button type="button" onClick={() => setRxSource('gafas')}
@@ -374,7 +374,7 @@ export default function RecetaPage() {
                 <Glasses className={`h-5 w-5 ${rxSource === 'gafas' ? 'text-primary-700' : 'text-slate-400'}`} />
                 <span>
                   <span className="block text-xs font-semibold text-slate-900 md:text-sm">Gafas / espejuelos</span>
-                  <span className="mt-1 block text-[11px] leading-4 text-slate-500">Solo tengo una receta de gafas.</span>
+                  <span className="mt-0.5 hidden text-[11px] leading-4 text-slate-500 sm:block">Tengo una receta de gafas.</span>
                 </span>
               </button>
             </div>
