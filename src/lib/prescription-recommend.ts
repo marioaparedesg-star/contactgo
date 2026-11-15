@@ -60,10 +60,11 @@ function productoApto(p: ProductoFabricacion, tipo: TipoLente): boolean {
 function ojoCompatible(p: ProductoFabricacion, ojo: Ojo, tipo: TipoLente): boolean {
   if (!enLista(p.sph_disponibles, ojo.sph, TOL_SPH)) return false
   if (tipo === 'torico' || tipo === 'multifocal_torico') {
-    if (Math.abs(ojo.cyl) > TOL_CYL) {
-      if (!enLista(p.cyl_disponibles, ojo.cyl, TOL_CYL)) return false
-      if (ojo.axis == null || !enLista(p.axis_disponibles, ojo.axis, TOL_AXIS)) return false
-    }
+    // Un lente tórico requiere cilindro y eje fabricables EN CADA ojo.
+    // No se debe sugerir un tórico para un ojo plano ni asumir que se puede pedir CYL 0.
+    if (Math.abs(ojo.cyl) <= TOL_CYL) return false
+    if (!enLista(p.cyl_disponibles, ojo.cyl, TOL_CYL)) return false
+    if (ojo.axis == null || !enLista(p.axis_disponibles, ojo.axis, TOL_AXIS)) return false
   }
   if (tipo === 'multifocal' || tipo === 'multifocal_torico') {
     if (ojo.add == null || ojo.add <= 0 || !addCompatible(p.add_disponibles, ojo.add)) return false
