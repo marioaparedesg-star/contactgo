@@ -12,7 +12,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [authorized, setAuthorized] = useState(false)
 
   useEffect(() => {
-    if (pathname === '/admin/login') {
+    if (pathname === '/M1Alexander/login') {
       setChecking(false)
       return
     }
@@ -33,14 +33,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const timeoutRespaldo = setTimeout(() => {
       if (!resuelto) {
         console.error('[admin/layout] Verificación de sesión tardó demasiado — mandando a login')
-        router.replace('/admin/login')
+        router.replace('/M1Alexander/login')
       }
     }, 10000)
 
     sb.auth.getUser()
       .then(async ({ data: { user }, error: userError }) => {
         if (userError || !user) {
-          router.replace('/admin/login')
+          router.replace('/M1Alexander/login')
           return
         }
         const { data: profile, error: profileError } = await sb
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           .eq('id', user.id)
           .single()
         if (profileError || !profile || profile.role !== 'admin') {
-          router.replace('/admin/login')
+          router.replace('/M1Alexander/login')
           return
         }
         setAuthorized(true)
@@ -57,7 +57,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       })
       .catch((err) => {
         console.error('[admin/layout] Error verificando sesión:', err)
-        router.replace('/admin/login')
+        router.replace('/M1Alexander/login')
       })
       .finally(() => {
         resuelto = true
@@ -67,7 +67,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return () => clearTimeout(timeoutRespaldo)
   }, [pathname, router])
 
-  if (pathname === '/admin/login') return <>{children}</>
+  if (pathname === '/M1Alexander/login') return <>{children}</>
 
   if (checking) return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
