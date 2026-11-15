@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
     const firstName = (event.recipient_email.split('@')[0] || 'Cliente').split(/[._-]/)[0]
     let sent: Awaited<ReturnType<typeof resend.emails.send>>
     try {
-      const sent = await resend.emails.send({
+      sent = await resend.emails.send({
         from: 'ContactGo <info@contactgo.net>',
         to: event.recipient_email,
         replyTo: 'info@contactgo.net',
