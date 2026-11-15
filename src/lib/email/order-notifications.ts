@@ -58,7 +58,7 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       return { email_cliente: 'error', error: 'No se puede notificar un pago que no está aprobado' }
     }
     const { data: itemsData, error: itemsError } = await sb.from('order_items')
-      .select('*, products(tipo)').eq('order_id', orderId)
+      .select('*, products(tipo, imagen_url)').eq('order_id', orderId)
     if (itemsError) console.error('[order-notifications] no se pudieron leer artículos:', itemsError.message)
     const items = itemsData ?? []
 
