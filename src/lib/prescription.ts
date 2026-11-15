@@ -27,6 +27,7 @@ export interface ConvertedRx {
   condiciones: string[]
   descripcion: string
   vertexDistanceMm: number | null
+  requiresClinicalReview: boolean
 }
 
 // ─── Rangos de parámetros por producto ────────────────────────────────────────
@@ -178,7 +179,7 @@ export function convertGlassesToContacts(rx: GlassesRx, source: 'contacto' | 'ga
       : 'Lentes esféricos estándar.'
   }
 
-  return { od, oi, needsVertex: vertexAplicado, tipo, condiciones, descripcion, vertexDistanceMm: esGafas ? vertexDistanceMm : null }
+  return { od, oi, needsVertex: vertexAplicado, tipo, condiciones, descripcion, vertexDistanceMm: esGafas ? vertexDistanceMm : null, requiresClinicalReview: esGafas && (!!rx.od.add || !!rx.oi.add) }
 }
 
 // ─── Buscar productos compatibles con la receta ──────────────────────────────
