@@ -1,103 +1,23 @@
 'use client'
 export const dynamic = 'force-dynamic'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import { Copy, Check, Share2, Users, DollarSign, Gift } from 'lucide-react'
+import { Copy, Check, Share2, Users, Gift, Ticket } from 'lucide-react'
 import toast from 'react-hot-toast'
-
 export default function ReferidosPage() {
-  const [user, setUser] = useState<any>(null)
-  const [copiado, setCopiado] = useState(false)
-
-  useEffect(() => {
-    const sb = createClient()
-    sb.auth.getUser().then(({ data }) => setUser(data.user))
-  }, [])
-
-  const refCode = user?.id?.slice(0, 8).toUpperCase() ?? 'XXXXXXXX'
-  const refLink = `https://www.contactgo.net/?ref=${refCode}`
-
-  const copiar = () => {
-    navigator.clipboard.writeText(refLink)
-    setCopiado(true)
-    toast.success('¡Enlace copiado!')
-    setTimeout(() => setCopiado(false), 2000)
-  }
-
-  const compartir = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'ContactGo — Lentes de contacto en RD',
-        text: '¡Compra tus lentes de contacto en ContactGo! Usa mi enlace y obtienes RD$300 de descuento en tu primera compra.',
-        url: refLink
-      })
-    } else copiar()
-  }
-
-  return (
-    <>
-      <Navbar />
-      <main id="main-content" className="max-w-2xl mx-auto px-4 py-10 pb-24">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Gift className="w-8 h-8 text-primary-600" />
-          </div>
-          <h1 className="font-display text-2xl font-bold text-gray-900 mb-2">Programa de Referidos</h1>
-          <p className="text-gray-500 text-sm">Comparte ContactGo y gana RD$300 por cada amigo que compre</p>
-        </div>
-
-        {/* Cómo funciona */}
-        <div className="grid grid-cols-3 gap-3 mb-8">
-          {[
-            { icon: Share2, n: '1', title: 'Comparte tu link', desc: 'Envía tu enlace único a amigos y familia' },
-            { icon: Users, n: '2', title: 'Tu amigo compra', desc: 'Hace su primera compra en ContactGo' },
-            { icon: DollarSign, n: '3', title: 'Ganan los dos', desc: 'Tú RD$300, tu amigo RD$150 de descuento' },
-          ].map(s => (
-            <div key={s.n} className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
-              <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black mx-auto mb-2">{s.n}</div>
-              <p className="text-xs font-bold text-gray-900 mb-1">{s.title}</p>
-              <p className="text-[10px] text-gray-500 leading-snug">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Link de referido */}
-        {user ? (
-          <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm mb-6">
-            <p className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Tu enlace único</p>
-            <div className="flex gap-2">
-              <div className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-xs text-gray-700 font-mono truncate">
-                {refLink}
-              </div>
-              <button onClick={copiar} className="shrink-0 w-10 h-10 bg-teal-500 text-white rounded-xl flex items-center justify-center hover:bg-teal-600 transition-colors">
-                {copiado ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              </button>
-            </div>
-            <button onClick={compartir} className="w-full mt-3 btn-primary py-3 flex items-center justify-center gap-2">
-              <Share2 className="w-4 h-4" /> Compartir por WhatsApp
-            </button>
-          </div>
-        ) : (
-          <div className="bg-teal-50 border border-primary-100 rounded-2xl p-5 text-center mb-6">
-            <p className="text-sm text-primary-800 font-semibold mb-3">Inicia sesión para ver tu enlace de referido</p>
-            <a href="/cuenta" className="btn-primary px-6 py-2.5 text-sm">Iniciar sesión</a>
-          </div>
-        )}
-
-        {/* Términos */}
-        <div className="bg-gray-50 rounded-2xl p-4 text-xs text-gray-500 leading-relaxed">
-          <p className="font-semibold text-gray-700 mb-1">Condiciones del programa:</p>
-          <ul className="space-y-1 list-disc list-inside">
-            <li>El descuento RD$300 aplica en tu próxima compra cuando tu referido complete su primera orden</li>
-            <li>Tu amigo recibe RD$150 de descuento en su primera compra</li>
-            <li>El referido debe ser una persona nueva en ContactGo</li>
-            <li>No aplica acumulación con otros descuentos</li>
-          </ul>
-        </div>
-      </main>
-      <Footer />
-    </>
-  )
+ const [user,setUser]=useState<any>(null), [data,setData]=useState<any>(null), [loading,setLoading]=useState(true), [copied,setCopied]=useState(false)
+ useEffect(()=>{ let alive=true; (async()=>{const sb=createClient(); const a=await sb.auth.getUser(); if(!alive)return; setUser(a.data.user); if(!a.data.user){setLoading(false);return} const s=await sb.auth.getSession(); const r=await fetch('/api/referrals',{headers:{Authorization:'Bearer '+(s.data.session?.access_token||'')},cache:'no-store'}); const j=await r.json(); if(!r.ok)throw new Error(j.error||'No se pudo cargar'); if(alive)setData(j); setLoading(false)})().catch(e=>{toast.error(e.message);setLoading(false)}); return()=>{alive=false}},[])
+ const link=data?.referral_code?'https://www.contactgo.net/?ref='+data.referral_code:''
+ const copy=async()=>{if(!link)return; await navigator.clipboard.writeText(link);setCopied(true);toast.success('Enlace copiado');window.setTimeout(()=>setCopied(false),2000)}
+ const share=async()=>{if(!link)return;const msg='Usa mi enlace de ContactGo y recibe RD$150 de descuento en tu primera compra. Yo recibo RD$300 cuando completes tu compra.';if(navigator.share)await navigator.share({title:'ContactGo — Referidos',text:msg,url:link});else await copy()}
+ return <><Navbar/><main id='main-content' className='max-w-2xl mx-auto px-4 py-10 pb-24'><div className='text-center mb-8'><div className='w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center mx-auto mb-4'><Gift className='w-8 h-8 text-primary-600'/></div><h1 className='font-display text-2xl font-bold text-gray-900 mb-2'>Programa de Referidos</h1><p className='text-gray-500 text-sm'>Tu amigo recibe RD$150 y tú ganas RD$300 cuando su primera compra sea pagada.</p></div>
+ <div className='grid grid-cols-3 gap-3 mb-8'>{[{n:'1',t:'Comparte tu enlace',d:'Invita a amigos y familiares'},{n:'2',t:'Tu amigo compra',d:'RD$150 de descuento'},{n:'3',t:'Ganan los dos',d:'RD$300 para ti al pagar'}].map(x=><div key={x.n} className='bg-gray-50 rounded-2xl p-4 text-center border'><div className='w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center mx-auto mb-2'>{x.n}</div><p className='text-xs font-bold'>{x.t}</p><p className='text-[10px] text-gray-500'>{x.d}</p></div>)}</div>
+ {!user?<div className='bg-teal-50 rounded-2xl p-5 text-center'><p className='mb-3'>Inicia sesión para ver tu enlace y tus recompensas.</p><a href='/cuenta?next=/referidos' className='btn-primary px-6 py-2.5'>Iniciar sesión</a></div>:loading?<p className='text-center py-10'>Cargando...</p>:data?<><div className='bg-white border rounded-2xl p-5 mb-6'><p className='text-xs font-bold uppercase mb-2'>Tu enlace único</p><div className='flex gap-2'><div className='flex-1 bg-gray-50 border rounded-xl p-3 text-xs font-mono truncate'>{link}</div><button onClick={copy} className='w-12 bg-teal-500 text-white rounded-xl'>{copied?<Check/>:<Copy/>}</button></div><button onClick={share} className='w-full mt-3 btn-primary py-3 flex justify-center gap-2'><Share2 className='w-4 h-4'/>Compartir enlace</button></div>
+ <div className='grid grid-cols-3 gap-3 mb-6'>{[['Invitados',data.referred_count,Users],['Pendientes',data.pending_count,Ticket],['Completados',data.rewarded_count,Gift]].map(([t,n,I]:any)=><div key={t} className='border rounded-2xl p-3 text-center'><I className='mx-auto mb-2'/><b className='text-2xl'>{n}</b><p className='text-xs text-gray-500'>{t}</p></div>)}</div>
+ {data.friend_coupon_code&&<div className='bg-teal-50 border rounded-2xl p-4 mb-5'><b>Tu descuento de referido</b><p className='font-mono text-lg'>{data.friend_coupon_code}</p><p className='text-xs'>RD$150, aplicado automáticamente al checkout.</p></div>}
+ {data.reward_coupons?.length>0&&<div className='border rounded-2xl p-4 mb-5'><b>Tus cupones de RD$300</b>{data.reward_coupons.map((c:any)=><p key={c.codigo} className='border-t py-2 font-mono'>{c.codigo}</p>)}</div>}
+ <div className='border rounded-2xl p-4'><b>Actividad de referidos</b>{data.rewards?.length?data.rewards.map((r:any)=><p key={r.id} className='border-t py-2 text-sm'>{new Date(r.created_at).toLocaleDateString('es-DO')} — {r.status==='rewarded'?'Compra pagada · recompensa generada':'Pendiente de compra'}</p>):<p className='text-sm text-gray-500 mt-2'>Aún no tienes referidos.</p>}</div></>:null}
+ <div className='bg-gray-50 rounded-2xl p-4 mt-6 text-xs text-gray-500'><b>Condiciones:</b><ul className='list-disc list-inside mt-2 space-y-1'><li>RD$150 para el referido en su primera compra.</li><li>RD$300 para ti cuando el pedido quede pagado.</li><li>Un solo invitador por cliente; no se permiten autorreferidos.</li><li>Cupones personales, de un solo uso y no transferibles.</li></ul></div></main><Footer/></>
 }
