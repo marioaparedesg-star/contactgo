@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { buildCustomerOrderEmail, buildAdminOrderEmail } from '@/lib/email/order-templates'
+import { BIENVENIDA, buildEducationalEmail } from '@/lib/email/educational-templates'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,6 +42,11 @@ export async function GET(req: NextRequest) {
       nombre: `Cliente · ${titulo}`,
       subject: `PRUEBA · ${titulo} (datos ficticios)`,
       html: buildCustomerOrderEmail(order as any, items, evento, estado),
+    })),
+    ...BIENVENIDA.map(e => ({
+      nombre: `Educativo · ${e.id}`,
+      subject: `PRUEBA · ${e.subject}`,
+      html: buildEducationalEmail(e),
     })),
     {
       nombre: 'Administración · Nuevo pedido',
