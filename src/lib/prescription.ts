@@ -26,6 +26,7 @@ export interface ConvertedRx {
   tipo: 'esferico' | 'torico' | 'multifocal' | 'multifocal_torico' | 'color'
   condiciones: string[]
   descripcion: string
+  vertexDistanceMm: number | null
 }
 
 // ─── Rangos de parámetros por producto ────────────────────────────────────────
@@ -85,9 +86,9 @@ export const PRODUCT_RANGES: ProductRange[] = [
 
 const VERTEX_MM = 12
 
-function vertexCorrect(D: number): number {
+function vertexCorrect(D: number, vertexDistanceMm: number): number {
   if (Math.abs(D) < 4.0) return D
-  const d = VERTEX_MM / 1000
+  const d = vertexDistanceMm / 1000
   return D / (1 - d * D)
 }
 
@@ -98,13 +99,13 @@ function roundStep(val: number): number {
   return Math.round(val / step) * step
 }
 
-function convertEyeFromGlasses(eye: EyeRx): ContactRx {
+function convertEyeFromGlasses(eye: EyeRx, vertexDistanceMm: number): ContactRx {
   const sph = eye.sph ?? 0
   const cyl = eye.cyl ?? 0
   if (sph === 0 && cyl === 0) return { sph: 0, cyl: null, axis: eye.axis, add: eye.add }
-  if (cyl === 0) return { sph: roundStep(vertexCorrect(sph)), cyl: null, axis: null, add: eye.add }
+  if (cyl === 0) return { sph: roundStep(vertexCorrect(sph, vertexDistanceMm)), cyl: null, axis: null, add: eye.add }
   const F1c = roundStep(vertexCorrect(sph))
-  const F2c = roundStep(vertexCorrect(sph + cyl))
+  const F2c = roundStep(vertexCorrect(sph + cyl, vertexDistanceMm))
   const newCyl = parseFloat((F2c - F1c).toFixed(2))
   return {
     sph: F1c,
@@ -121,16 +122,17 @@ function convertEyeFromGlasses(eye: EyeRx): ContactRx {
  * @param rx - Receta ingresada
  * @param source - 'contacto' = tomar como está, 'gafas' = convertir con vertex
  */
-export function convertGlassesToContacts(rx: GlassesRx, source: 'contacto' | 'gafas' = 'contacto'): ConvertedRx {
+export function convertGlassesToContacts(rx: GlassesRx, source: 'contacto' | 'gafas' = 'contacto', vertexDistanceMm = VERTEX_MM): ConvertedRx {
+  if (!Number.isFinite(vertexDistanceMm) || vertexDistanceMm < 8 || vertexDistanceMm > 20) throw new Error('La distancia al vértice debe estar entre 8 y 20 mm.')
   const esGafas = source === 'gafas'
 
   // 1) Receta que se va a usar para lentes de contacto (ya convertida si son gafas)
-  const od: ContactRx = esGafas ? convertEyeFromGlasses(rx.od) : {
+  const od: ContactRx = esGafas ? convertEyeFromGlasses(rx.od, vertexDistanceMm) : {
     sph: rx.od.sph ?? 0,
     cyl: (rx.od.cyl && rx.od.cyl !== 0) ? rx.od.cyl : null,
     axis: rx.od.axis, add: rx.od.add,
   }
-  const oi: ContactRx = esGafas ? convertEyeFromGlasses(rx.oi) : {
+  const oi: ContactRx = esGafas ? convertEyeFromGlasses(rx.oi, vertexDistanceMm) : {
     sph: rx.oi.sph ?? 0,
     cyl: (rx.oi.cyl && rx.oi.cyl !== 0) ? rx.oi.cyl : null,
     axis: rx.oi.axis, add: rx.oi.add,
@@ -176,7 +178,7 @@ export function convertGlassesToContacts(rx: GlassesRx, source: 'contacto' | 'ga
       : 'Lentes esféricos estándar.'
   }
 
-  return { od, oi, needsVertex: vertexAplicado, tipo, condiciones, descripcion }
+  return { od, oi, needsVertex: vertexAplicado, tipo, condiciones, descripcion, vertexDistanceMm: esGafas ? vertexDistanceMm : null }
 }
 
 // ─── Buscar productos compatibles con la receta ──────────────────────────────
