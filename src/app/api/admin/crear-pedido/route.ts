@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   const auth = await requireAdmin()
   if (auth.ok === false) return auth.response
   const sb = sbAdmin()
-  const q = (req.nextUrl.searchParams.get('q') ?? '').trim()
+  const q = (req.nextUrl.searchParams.get('q') ?? '').replace(/[,%()]/g, ' ').replace(/\s+/g, ' ').trim()
   const [{ data: customers, error: ce }, { data: products, error: pe }] = await Promise.all([
     sb.from('profiles').select('id,nombre,email,telefono,direccion,ciudad,direccion_completa,activo')
       .eq('role','customer').eq('activo',true)
