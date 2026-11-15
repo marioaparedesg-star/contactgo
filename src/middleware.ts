@@ -114,7 +114,7 @@ export async function middleware(req: NextRequest) {
       })
     }
 
-    const internalPath = pathname.replace(/^\\/M1Alexander(?=\\/|$)/, '/admin')
+    const internalPath = '/admin' + pathname.slice('/M1Alexander'.length)
     const res = NextResponse.rewrite(new URL(internalPath, req.url), { request: req })
     supabaseResponse.cookies.getAll().forEach(cookie => res.cookies.set(cookie))
     res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
