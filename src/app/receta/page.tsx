@@ -14,7 +14,7 @@ import {
   detectarCasoMixto, type CasoMixto, type TipoLenteOjo,
 } from '@/lib/prescription'
 import type { Product } from '@/types'
-import { Eye, RotateCcw, Sparkles, Info, AlertTriangle, ChevronRight, Mail, CheckCircle, ShoppingCart, ArrowRight } from 'lucide-react'
+import { Eye, Glasses, RotateCcw, Sparkles, Info, AlertTriangle, ChevronRight, Mail, CheckCircle, ShoppingCart, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -146,7 +146,7 @@ export default function RecetaPage() {
 
   // ── Calcular ───────────────────────────────────────────────────────────────
   const calcular = async () => {
-    if (!parseN(od.sph) && !parseN(oi.sph)) { toast.error('Ingresa al menos la Esfera (SPH)'); return }
+    const odSph = parseN(od.sph), oiSph = parseN(oi.sph)\n    if (odSph === null || oiSph === null) { toast.error('Completa la Esfera (SPH) de ambos ojos'); return }
     if (!rxSource) { toast.error('Selecciona si tu receta es de gafas o lentes de contacto'); return }
     const rx: GlassesRx = {
       od: { sph: parseN(od.sph) ?? 0, cyl: parseN(od.cyl), axis: parseN(od.axis), add: parseN(od.add) },
@@ -288,37 +288,28 @@ export default function RecetaPage() {
       <Navbar />
       <main className="min-h-screen bg-gray-50 pb-16">
 
-        {/* Hero calculadora — identidad visual propia */}
-        <div className="relative overflow-hidden text-white px-4 py-8 text-center"
-          style={{ background: 'linear-gradient(135deg, #030712 0%, #0f172a 40%, #1e1b4b 100%)' }}>
-          {/* Decoración de fondo */}
-          <div className="absolute inset-0 opacity-10" style={{
-            backgroundImage: 'radial-gradient(circle at 20% 50%, #4f46e5 0%, transparent 50%), radial-gradient(circle at 80% 20%, #16a34a 0%, transparent 40%)'
-          }}/>
-          {/* Badge médico */}
-          <div className="relative inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-[11px] font-bold px-3 py-1.5 rounded-full mb-3">
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"/>
-            Ingresa tu receta y encuentra tu lente perfecto
+        {/* Encabezado de calculadora — identidad clínica y premium */}
+        <section className="border-b border-gray-100 bg-white px-5 py-9 text-center md:py-12">
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
+              Asistente de receta ContactGo
+            </p>
+            <h1 className="font-display text-[30px] font-bold leading-tight tracking-tight text-slate-900 md:text-4xl">
+              Encuentra lentes compatibles
+              <span className="block text-primary-600">con tu graduación.</span>
+            </h1>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500 md:text-base">
+              Introduce los valores de tu receta y consulta las opciones del catálogo que coinciden con sus parámetros.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-slate-500">
+              <span>Sin costo</span><span className="hidden text-slate-300 sm:inline">·</span>
+              <span>Resultado inmediato</span><span className="hidden text-slate-300 sm:inline">·</span>
+              <span>Consulta de catálogo</span><span className="hidden text-slate-300 sm:inline">·</span>
+              <span>No requiere registro</span>
+            </div>
           </div>
-          <h1 className="relative font-display font-black text-2xl md:text-3xl mb-2 tracking-tight">
-            Convierte tu receta<br/>
-            <span style={{ color: '#4ade80' }}>en tus lentes perfectos.</span>
-          </h1>
-          <p className="relative text-white/60 text-sm mb-4">Ingresa tu receta y encuentra tu lente perfecto en segundos</p>
-          <div className="relative flex items-center justify-center flex-wrap gap-3">
-            {[
-              { icon: '✅', text: 'Gratis' },
-              { icon: '⚡', text: '60 segundos' },
-              { icon: '⚡', text: 'Resultado inmediato' },
-              { icon: '📦', text: 'Stock real' },
-              { icon: '🔒', text: 'Sin registro' },
-            ].map(t => (
-              <span key={t.text} className="text-[11px] text-white/50 font-medium flex items-center gap-1">
-                <span>{t.icon}</span>{t.text}
-              </span>
-            ))}
-          </div>
-        </div>
+        </section>
 
         {/* Pop-up de captura — aparece INMEDIATAMENTE al dar clic en "Calcular", cerrable con X */}
         {showLead && !leadCaptured && (
@@ -356,47 +347,44 @@ export default function RecetaPage() {
 
 
 
-          {/* Tipo de receta — pregunta clave */}
-          <div className="bg-white rounded-2xl border-2 border-primary-100 shadow-sm p-4">
-            <p className="font-bold text-gray-900 text-sm mb-3">¿Qué tipo de receta tienes?</p>
+          {/* Tipo de receta */}
+          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
+            <div className="mb-3">
+              <h2 className="text-sm font-semibold text-slate-900">¿Qué tipo de receta tienes?</h2>
+              <p className="mt-1 text-xs text-slate-500">Selecciona el documento del que provienen los valores.</p>
+            </div>
             <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => setRxSource('contacto')}
-                className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
-                  rxSource === 'contacto' 
-                    ? 'border-primary-500 bg-teal-50 shadow-sm' 
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <span className="text-2xl">👁️</span>
-                <span className={`text-xs font-bold ${rxSource === 'contacto' ? 'text-primary-700' : 'text-gray-600'}`}>Lentes de contacto</span>
-                <span className="text-[10px] text-gray-400 leading-tight text-center">Ya uso lentes de contacto y tengo mi receta</span>
+              <button type="button" onClick={() => setRxSource('contacto')}
+                className={`flex min-h-[116px] flex-col items-start justify-between rounded-xl border p-3 text-left transition-colors md:p-4 ${
+                  rxSource === 'contacto' ? 'border-primary-500 bg-teal-50/50 ring-1 ring-primary-500' : 'border-slate-200 hover:border-slate-300'
+                }`}>
+                <Eye className={`h-5 w-5 ${rxSource === 'contacto' ? 'text-primary-700' : 'text-slate-400'}`} />
+                <span>
+                  <span className="block text-xs font-semibold text-slate-900 md:text-sm">Lentes de contacto</span>
+                  <span className="mt-1 block text-[11px] leading-4 text-slate-500">Ya tengo una receta para lentes de contacto.</span>
+                </span>
               </button>
-              <button
-                onClick={() => setRxSource('gafas')}
-                className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
-                  rxSource === 'gafas' 
-                    ? 'border-amber-500 bg-amber-50 shadow-sm' 
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <span className="text-2xl">👓</span>
-                <span className={`text-xs font-bold ${rxSource === 'gafas' ? 'text-amber-700' : 'text-gray-600'}`}>Gafas / Espejuelos</span>
-                <span className="text-[10px] text-gray-400 leading-tight text-center">Solo tengo receta de gafas y quiero probar lentes</span>
+              <button type="button" onClick={() => setRxSource('gafas')}
+                className={`flex min-h-[116px] flex-col items-start justify-between rounded-xl border p-3 text-left transition-colors md:p-4 ${
+                  rxSource === 'gafas' ? 'border-primary-500 bg-teal-50/50 ring-1 ring-primary-500' : 'border-slate-200 hover:border-slate-300'
+                }`}>
+                <Glasses className={`h-5 w-5 ${rxSource === 'gafas' ? 'text-primary-700' : 'text-slate-400'}`} />
+                <span>
+                  <span className="block text-xs font-semibold text-slate-900 md:text-sm">Gafas / espejuelos</span>
+                  <span className="mt-1 block text-[11px] leading-4 text-slate-500">Solo tengo una receta de gafas.</span>
+                </span>
               </button>
             </div>
             {rxSource === 'gafas' && (
-              <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 space-y-2">
-                <div>
-                  <label className="block text-[11px] font-bold text-amber-900 mb-1">Distancia al vértice (mm)</label>
-                  <select value={vertexDistanceMm} onChange={e => setVertexDistanceMm(e.target.value)} className="w-full rounded-lg border border-amber-200 bg-white px-3 py-2 text-sm text-gray-800">
-                    {[8,9,10,11,12,13,14,15,16,17,18,19,20].map(v => <option key={v} value={String(v)}>{v} mm{v===12?' · valor estándar si no aparece en tu receta':''}</option>)}
-                  </select>
-                </div>
-                <p className="text-[10px] leading-relaxed text-amber-800">Usa el valor medido por tu óptica o el indicado en tu evaluación. Si no lo conoces, 12 mm es solo una referencia habitual, no una medición personal. La corrección se aplica a los meridianos de la receta cuando la potencia alcanza ±4.00 D.</p>
+              <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <label className="mb-1.5 block text-xs font-semibold text-slate-700">Distancia al vértice</label>
+                <select value={vertexDistanceMm} onChange={e => setVertexDistanceMm(e.target.value)} className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800">
+                  {[8,9,10,11,12,13,14,15,16,17,18,19,20].map(v => <option key={v} value={String(v)}>{v} mm{v===12?' · referencia habitual':''}</option>)}
+                </select>
+                <p className="mt-2 text-[11px] leading-5 text-slate-500">Utiliza la distancia medida por tu óptica. Si no la conoces, 12 mm es una referencia general, no una medición personal. La conversión es orientativa.</p>
               </div>
             )}
-          </div>
+          </section>
 
           {/* Formulario OD | OI */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -611,37 +599,50 @@ function EyePanel({ label, eye, onChange, color, disabled }: { label: string; ey
 // ── Diagnóstico ───────────────────────────────────────────────────────────────
 function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
   const comp = getComplejidad(r)
-  const compC = {verde:{bg:'bg-green-50',border:'border-green-200',dot:'bg-green-500',text:'text-green-700'},amarillo:{bg:'bg-amber-50',border:'border-amber-200',dot:'bg-amber-500',text:'text-amber-700'},rojo:{bg:'bg-red-50',border:'border-red-200',dot:'bg-red-500',text:'text-red-700'}}[comp.nivel]
-  const tipC = (r.tipo==='torico'||r.tipo==='multifocal_torico') ? {icon:r.tipo==='multifocal_torico'?'🎯🔭':'🎯',border:'border-purple-200',bg:'bg-purple-50'} : r.tipo==='multifocal'?{icon:'🔭',border:'border-amber-200',bg:'bg-amber-50'} : {icon:'👁️',border:'border-blue-200',bg:'bg-blue-50'}
-  const tipoNombre = r.tipo==='torico'?'Lentes Tóricos':r.tipo==='multifocal_torico'?'Multifocal Tórico (Presbicia + Astigmatismo)':r.tipo==='multifocal'?'Lentes Multifocales':'Lentes Esféricos'
+  const compC = {
+    verde: { label: 'Rango estándar', dot: 'bg-emerald-500', text: 'text-emerald-700' },
+    amarillo: { label: 'Revisión recomendada', dot: 'bg-amber-500', text: 'text-amber-700' },
+    rojo: { label: 'Requiere asesoría', dot: 'bg-rose-500', text: 'text-rose-700' },
+  }[comp.nivel]
+  const tipoNombre = r.tipo==='torico' ? 'Lentes tóricos' : r.tipo==='multifocal_torico' ? 'Multifocal tórico' : r.tipo==='multifocal' ? 'Lentes multifocales' : 'Lentes esféricos'
   return (
-    <div className={`rounded-2xl border-2 p-4 ${tipC.bg} ${tipC.border}`}>
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-2xl">{tipC.icon}</span>
-        <div>
-          <p className="font-black text-gray-900 text-base">{tipoNombre}</p>
-          <div className="flex flex-wrap gap-1 mt-0.5">{r.condiciones.map(c=><span key={c} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/60 text-gray-600">{c}</span>)}</div>
+    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="border-b border-slate-100 px-4 py-4 md:px-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Resultado de tu receta</p>
+            <h2 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">{tipoNombre}</h2>
+            <div className="mt-2 flex flex-wrap gap-1.5">{r.condiciones.map(c=><span key={c} className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium text-slate-600">{c}</span>)}</div>
+          </div>
+          <span className={`inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1.5 text-[10px] font-semibold ${compC.text}`}>
+            <span className={`h-1.5 w-1.5 rounded-full ${compC.dot}`} />{compC.label}
+          </span>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-2 mb-3">
-        {([['OD',r.od,'text-blue-600'],['OI',r.oi,'text-green-600']] as const).map(([lbl,eye,cls]:any)=>(
-          <div key={lbl} className="bg-white/70 rounded-xl p-2.5 space-y-1 text-xs">
-            <p className={`font-black text-[11px] ${cls}`}>{lbl}</p>
-            <div className="flex justify-between"><span className="text-gray-500">SPH</span><span className="font-mono font-bold">{fmtV(eye.sph)}</span></div>
-            {eye.cyl!=null&&eye.cyl!==0&&<><div className="flex justify-between"><span className="text-gray-500">CYL</span><span className="font-mono font-bold">{fmtCyl(eye.cyl)}</span></div>{eye.axis!=null&&<div className="flex justify-between"><span className="text-gray-500">EJE</span><span className="font-mono font-bold">{fmtAxis(eye.axis)}</span></div>}</>}
-            {eye.add!=null&&eye.add!==0&&<div className="flex justify-between"><span className="text-gray-500">ADD</span><span className="font-mono font-bold">+{eye.add.toFixed(2)}</span></div>}
+      <div className="grid grid-cols-2 gap-3 p-4 md:p-5">
+        {([['OD',r.od],['OI',r.oi]] as const).map(([lbl,eye])=>(
+          <div key={lbl} className="rounded-xl border border-slate-100 bg-slate-50/70 p-3">
+            <p className={`mb-3 text-xs font-bold ${lbl==='OD'?'text-blue-700':'text-emerald-700'}`}>{lbl}</p>
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between gap-2"><span className="text-slate-500">SPH</span><span className="font-mono font-semibold text-slate-900">{fmtV(eye.sph)}</span></div>
+              {eye.cyl!=null&&eye.cyl!==0&&<div className="flex justify-between gap-2"><span className="text-slate-500">CYL</span><span className="font-mono font-semibold text-slate-900">{fmtCyl(eye.cyl)}</span></div>}
+              {eye.axis!=null&&<div className="flex justify-between gap-2"><span className="text-slate-500">EJE</span><span className="font-mono font-semibold text-slate-900">{fmtAxis(eye.axis)}</span></div>}
+              {eye.add!=null&&eye.add!==0&&<div className="flex justify-between gap-2"><span className="text-slate-500">ADD</span><span className="font-mono font-semibold text-slate-900">+{eye.add.toFixed(2)}</span></div>}
+            </div>
           </div>
         ))}
       </div>
-      {r.needsVertex&&<p className="text-[10px] text-amber-800 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">Conversión óptica estimada desde gafas usando {r.vertexDistanceMm} mm de distancia al vértice. Los valores se ajustan a pasos de potencia y luego se contrastan con los parámetros de fabricación del producto. No constituye una adaptación ni una prescripción final.</p>}
-      {r.requiresClinicalReview&&<p className="text-[10px] text-amber-900 bg-amber-100 rounded-lg px-2.5 py-2 mb-3">Tu receta de gafas incluye ADD. La adición de gafas no se convierte directamente a una clase multifocal de lente de contacto. Por seguridad, no mostraremos un producto como compatible automáticamente; se requiere adaptación y selección profesional.</p>}
-      {!r.needsVertex && r.condiciones.includes('Alta graduación') && <p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">⚡ Graduación alta — tenemos lentes de rango extendido (XR) especiales para tu receta</p>}
-      {!r.needsVertex && !r.condiciones.includes('Alta graduación') && <p className="text-[10px] text-green-700 bg-green-50 rounded-lg px-2.5 py-1.5 mb-3">✅ Tu receta exacta para lentes de contacto — productos compatibles abajo</p>}
-      <div className={`flex items-start gap-2 rounded-xl px-3 py-2 border ${compC.bg} ${compC.border}`}>
-        <div className={`w-2 h-2 rounded-full shrink-0 mt-1 ${compC.dot}`}/>
-        <div><p className={`text-xs font-black ${compC.text}`}>{comp.titulo}</p><p className={`text-[10px] mt-0.5 ${compC.text} opacity-80`}>{comp.desc}</p></div>
+      <div className="space-y-2 px-4 pb-4 md:px-5 md:pb-5">
+        {r.needsVertex&&<p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[11px] leading-5 text-slate-600">Conversión óptica estimada desde gafas con una distancia al vértice de {r.vertexDistanceMm} mm. Los valores pueden variar y deben ser confirmados durante una adaptación profesional.</p>}
+        {r.requiresClinicalReview&&<p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-[11px] leading-5 text-amber-900">Tu receta de gafas incluye ADD. Ese valor no se traduce directamente a una graduación multifocal de contacto. Se requiere evaluación y selección profesional; por eso no mostramos una compatibilidad automática.</p>}
+        {!r.needsVertex && r.condiciones.includes('Alta graduación')&&<p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[11px] leading-5 text-slate-600">La graduación está en un rango elevado. La disponibilidad depende de los parámetros de fabricación específicos de cada lente.</p>}
+        <div className="flex items-start gap-2 border-t border-slate-100 pt-3">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-slate-400"/>
+          <div><p className="text-xs font-semibold text-slate-700">{comp.titulo}</p><p className="mt-0.5 text-[11px] leading-5 text-slate-500">{comp.desc}</p></div>
+        </div>
+        <p className="text-[10px] leading-4 text-slate-400">Resultado orientativo. No sustituye una prescripción ni una adaptación realizada por un profesional de la salud visual.</p>
       </div>
-    </div>
+    </section>
   )
 }
 
