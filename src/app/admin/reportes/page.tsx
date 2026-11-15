@@ -121,7 +121,7 @@ export default function ReportesPage() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold text-sm text-gray-700">Últimos pedidos</h2>
-            <a href="/admin/pedidos" className="text-xs text-primary-600 font-semibold hover:underline">Ver todos →</a>
+            <a href="/M1Alexander/pedidos" className="text-xs text-primary-600 font-semibold hover:underline">Ver todos →</a>
           </div>
           {recent.length===0 ? <p className="text-xs text-gray-400 text-center py-6">Sin pedidos</p> : (
             <div className="space-y-2">
