@@ -30,7 +30,11 @@ export async function requireAdmin(): Promise<AdminGuardResult> {
       .eq('id', user.id)
       .single()
 
-    if (profileErr || !profile || profile.role !== 'admin') {
+    // An admin role alone is not sufficient for the private ContactGo panel.
+    // All server-side endpoints using requireAdmin must belong to the
+    // explicitly designated primary account as well.
+    const primaryAdminId = process.env.CONTACTGO_PRIMARY_ADMIN_ID ?? '0ae25176-4cb9-45da-bd19-5b1b5806c4ef'
+    if (profileErr || !profile || profile.role !== 'admin' || user.id !== primaryAdminId) {
       return {
         ok: false,
         response: NextResponse.json({ error: 'Acceso denegado' }, { status: 403 }),
