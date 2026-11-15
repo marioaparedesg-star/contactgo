@@ -34,9 +34,9 @@ export async function GET(req: NextRequest) {
     ])
     if (profilesRes.error || ordersRes.error || couponsRes.error) throw profilesRes.error || ordersRes.error || couponsRes.error
 
-    const profiles = new Map((profilesRes.data ?? []).map((p: any) => [p.id, p]))
-    const orders = new Map((ordersRes.data ?? []).map((o: any) => [o.id, o]))
-    const coupons = new Map((couponsRes.data ?? []).map((c: any) => [c.codigo, c]))
+    const profiles = new Map<string, any>((profilesRes.data ?? []).map((p: any) => [p.id, p] as [string, any]))
+    const orders = new Map<string, any>((ordersRes.data ?? []).map((o: any) => [o.id, o] as [string, any]))
+    const coupons = new Map<string, any>((couponsRes.data ?? []).map((c: any) => [c.codigo, c] as [string, any]))
     const enriched = rows.map((r: any) => ({
       ...r,
       inviter: profiles.get(r.referrer_user_id) ?? null,
