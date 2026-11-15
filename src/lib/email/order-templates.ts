@@ -90,9 +90,9 @@ export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event:
   <body style="margin:0;padding:0;background:#f3f6fa;font-family:Arial,Helvetica,sans-serif;color:#172b4d">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f6fa;padding:28px 12px"><tr><td align="center">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#fff;border-radius:16px;overflow:hidden">
-        <tr><td style="padding:25px 32px;background:${BRAND}">
-          <div style="font-size:25px;line-height:1;font-weight:800;letter-spacing:-.7px;color:#fff">Contact<span style="color:${ACCENT}">Go</span></div>
-          <div style="margin-top:7px;font-size:11px;letter-spacing:1.5px;color:#d6e4f3">LENTES DE CONTACTO · REPÚBLICA DOMINICANA</div>
+        <tr><td style="padding:22px 32px;background:#fff;border-bottom:1px solid #edf1f5">
+          <img src="${SITE}/contactgo-logo.svg" alt="ContactGo" width="210" style="display:block;width:210px;max-width:100%;height:auto;border:0">
+          <div style="margin-top:9px;font-size:10px;letter-spacing:1.2px;color:${BRAND}">LENTES DE CONTACTO · REPÚBLICA DOMINICANA</div>
         </td></tr>
         <tr><td style="padding:30px 32px 10px">
           <div style="display:inline-block;padding:6px 10px;border-radius:20px;background:#e8f8f8;color:#007f84;font-size:10px;font-weight:800;letter-spacing:.8px">${esc(event === 'pago_aprobado' || (event === 'nuevo_pedido' && isPaid) ? 'PAGO APROBADO' : event === 'nuevo_pedido' ? 'PEDIDO RECIBIDO' : meta.tag)}</div>
@@ -129,7 +129,7 @@ export function buildAdminOrderEmail(order: Order, items: OrderItem[], event: st
   const meta = event === 'pago_aprobado' ? STATUS.pago_aprobado : STATUS[state] ?? STATUS.recibido
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"></head><body style="margin:0;padding:24px;background:#f3f6fa;font-family:Arial,Helvetica,sans-serif;color:#172b4d">
     <div style="max-width:580px;margin:auto;background:#fff;border-radius:14px;overflow:hidden">
-      <div style="padding:22px 26px;background:${BRAND};color:#fff"><div style="font-size:22px;font-weight:800">Contact<span style="color:${ACCENT}">Go</span></div><div style="margin-top:5px;font-size:10px;letter-spacing:1px;color:#d6e4f3">AVISO OPERATIVO</div></div>
+      <div style="padding:18px 26px;background:#fff;border-bottom:1px solid #edf1f5"><img src="${SITE}/contactgo-logo.svg" alt="ContactGo" width="190" style="display:block;width:190px;max-width:100%;height:auto;border:0"><div style="margin-top:8px;font-size:10px;letter-spacing:1px;color:${BRAND}">AVISO OPERATIVO</div></div>
       <div style="padding:25px 26px"><div style="font-size:10px;font-weight:800;letter-spacing:1px;color:#00858a">${esc(event === 'pago_aprobado' ? 'PAGO APROBADO' : meta.tag)}</div>
         <h2 style="margin:9px 0;font-size:21px;color:${BRAND}">${esc(event === 'nuevo_pedido' && order.pago_estado === 'pagado' ? 'Nuevo pedido · pago aprobado' : event === 'nuevo_pedido' ? 'Nuevo pedido recibido' : event === 'pago_aprobado' ? 'Pago confirmado' : meta.title)}</h2>
         <p style="font-size:13px;color:#64748b">Pedido #${id} · ${money(order.total)}</p>
