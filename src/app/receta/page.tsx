@@ -204,7 +204,7 @@ export default function RecetaPage() {
     const lista = await ejecutarCalculo(pendingRx)
     // WhatsApp inmediato con LOS MISMOS productos y precios de la pantalla
     if (saveOk && lista.length) {
-      const convFinal = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto')
+      const convFinal = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto', Number(vertexDistanceMm))
       fetch('/api/calculator-leads/notify', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
