@@ -30,7 +30,7 @@ function getComplejidad(rx: ConvertedRx) {
   const aMax = Math.max(Math.abs(rx.od.add ?? 0), Math.abs(rx.oi.add ?? 0))
   if (sMax > 10 || cMax > 4.75) return { nivel: 'rojo' as const, titulo: 'Receta compleja — recomendamos asesoría', desc: 'Graduación alta. Un especialista puede orientarte para la mejor adaptación.' }
   if (sMax > 6 || cMax > 2.75 || aMax > 2.5) return { nivel: 'amarillo' as const, titulo: 'Receta moderada — compatible online', desc: 'Puedes ordenar online. Recomendamos confirmar con tu optometrista.' }
-  return { nivel: 'verde' as const, titulo: '✅ Compatible — puedes comprar directamente', desc: 'Tu receta está en rango estándar. Pedido inmediato disponible.' }
+  return { nivel: 'verde' as const, titulo: 'Compatible — puedes consultar opciones', desc: 'Tu receta está en un rango estándar. La compatibilidad final depende de los parámetros del producto.' }
 }
 
 function getSid() {
@@ -146,11 +146,12 @@ export default function RecetaPage() {
 
   // ── Calcular ───────────────────────────────────────────────────────────────
   const calcular = async () => {
-    const odSph = parseN(od.sph), oiSph = parseN(oi.sph)\n    if (odSph === null || oiSph === null) { toast.error('Completa la Esfera (SPH) de ambos ojos'); return }
+    const odSph = parseN(od.sph), oiSph = parseN(oi.sph)
+    if (odSph === null || oiSph === null) { toast.error('Completa la Esfera (SPH) de ambos ojos'); return }
     if (!rxSource) { toast.error('Selecciona si tu receta es de gafas o lentes de contacto'); return }
     const rx: GlassesRx = {
-      od: { sph: parseN(od.sph) ?? 0, cyl: parseN(od.cyl), axis: parseN(od.axis), add: parseN(od.add) },
-      oi: { sph: parseN(oi.sph) ?? 0, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
+      od: { sph: odSph, cyl: parseN(od.cyl), axis: parseN(od.axis), add: parseN(od.add) },
+      oi: { sph: oiSph, cyl: parseN(oi.cyl), axis: parseN(oi.axis), add: parseN(oi.add) },
     }
     setPendingRx(rx)
     // El cálculo es libre y no exige registro ni datos personales.
@@ -280,7 +281,7 @@ export default function RecetaPage() {
     return encodeURIComponent(`Hola ContactGo, necesito ayuda con mi receta:\n\n${fmtEye('OD', r.od)}\n${fmtEye('OI', r.oi)}\n\nTipo: ${r.tipo === 'multifocal_torico' ? 'MULTIFOCAL TÓRICO' : r.tipo.toUpperCase()}`)
   }
 
-  const tipoLabel = (t: string) => t === 'torico' ? '🎯 Tóricos' : t === 'multifocal_torico' ? '🎯🔭 Multifocal Tórico' : t === 'multifocal' ? '🔭 Multifocales' : t === 'color' ? '🌈 Color' : '👁️ Esféricos'
+  const tipoLabel = (t: string) => t === 'torico' ? 'Tóricos' : t === 'multifocal_torico' ? 'Multifocal tórico' : t === 'multifocal' ? 'Multifocales' : t === 'color' ? 'Lentes de color' : 'Esféricos'
   const tipoSlug  = (t: string) => t === 'torico' ? 'toricos' : t.startsWith('multifocal') ? 'multifocales' : t === 'color' ? 'catalogo?tipo=color' : 'esfericos'
 
   return (
