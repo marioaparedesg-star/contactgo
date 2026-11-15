@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { enqueueWelcomeSequence } from '@/lib/email/educational-automation'
 
 export async function POST(req: NextRequest) {
   const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
@@ -39,5 +40,10 @@ export async function POST(req: NextRequest) {
     ? await admin.from('email_marketing_preferences').update(values).eq('id', current.id)
     : await admin.from('email_marketing_preferences').insert({ ...values, created_at: now })
   if (result.error) return NextResponse.json({ error: 'No se pudo guardar el consentimiento' }, { status: 500 })
-  return NextResponse.json({ ok: true, marketing_consent: consent })
+  let sequence = { enrolled: false, queued: 0 }
+  if (consent) {
+    try { sequence = await enqueueWelcomeSequence(email, user.id) }
+    catch (error) { console.error('[email/consent] no se pudo encolar bienvenida educativa:', error) }
+  }
+  return NextResponse.json({ ok: true, marketing_consent: consent, sequence })
 }
