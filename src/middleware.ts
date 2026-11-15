@@ -35,12 +35,16 @@ export async function middleware(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
   const origin = req.headers.get('origin') ?? ''
 
-  // La ruta antigua queda cerrada incluso para usuarios autenticados.
+  // Compatibilidad: conserva los enlaces /admin existentes, pero los redirige
+  // a la ruta privada. La autenticación y validación de administrador siguen
+  // ejecutándose en /M1Alexander; no se habilita el panel público antiguo.
   if (pathname === '/admin' || pathname.startsWith('/admin/')) {
-    return new NextResponse('Not Found', {
-      status: 404,
-      headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' },
-    })
+    const privateUrl = req.nextUrl.clone()
+    privateUrl.pathname = '/M1Alexander' + pathname.slice('/admin'.length)
+    const redirect = NextResponse.redirect(privateUrl, 307)
+    redirect.headers.set('Cache-Control', 'no-store')
+    redirect.headers.set('X-Robots-Tag', 'noindex, nofollow')
+    return redirect
   }
 
   // El formulario de acceso se sirve internamente desde /admin/login.
