@@ -20,6 +20,13 @@ function money(value: unknown): string {
 function orderNumber(order: Order): string {
   return String(order.numero_orden ?? order.id?.slice(-8)?.toUpperCase() ?? '')
 }
+function productImageUrl(item: OrderItem): string {
+  const raw = String(item.products?.imagen_url ?? item.imagen_url ?? '').trim()
+  if (!raw) return ''
+  if (/^https?:\/\//i.test(raw)) return raw
+  if (raw.startsWith('/')) return `${SITE}${raw}`
+  return ''
+}
 function deliveryText(items: OrderItem[]): string {
   const estimates = items.map((item) => {
     const tipo = item.products?.tipo ?? item.tipo
@@ -59,7 +66,9 @@ function itemRows(items: OrderItem[]): string {
       item.add_od || item.add_oi ? `ADD OD ${esc(item.add_od ?? '—')} · OI ${esc(item.add_oi ?? '—')}` : item.add_power ? `ADD ${esc(item.add_power)}` : '',
       item.ojo_mode || item.ojo ? `Ojo: ${esc(item.ojo_mode ?? item.ojo)}` : '',
     ].filter(Boolean).join(' · ')
-    return `<tr>
+    const img = productImageUrl(item)
+     const imgCell = img ? `<td width="72" valign="top" style="padding:14px 14px 14px 0;border-bottom:1px solid #e8edf3"><img src="${esc(img)}" alt="${name}" width="64" height="64" style="display:block;width:64px;height:64px;object-fit:contain;border-radius:10px;background:#f3f6fa;border:0"></td>` : ''
+     return `<tr>${imgCell}
       <td style="padding:14px 0;border-bottom:1px solid #e8edf3">
         <div style="font-size:14px;font-weight:700;color:#172b4d">${name}</div>
         ${details ? `<div style="margin-top:5px;font-size:12px;line-height:1.5;color:#64748b">${details}</div>` : ''}
@@ -90,10 +99,7 @@ export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event:
   <body style="margin:0;padding:0;background:#f3f6fa;font-family:Arial,Helvetica,sans-serif;color:#172b4d">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f6fa;padding:28px 12px"><tr><td align="center">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#fff;border-radius:16px;overflow:hidden">
-        <tr><td style="padding:25px 32px;background:${BRAND}">
-          <div style="font-size:25px;line-height:1;font-weight:800;letter-spacing:-.7px;color:#fff">Contact<span style="color:${ACCENT}">Go</span></div>
-          <div style="margin-top:7px;font-size:11px;letter-spacing:1.5px;color:#d6e4f3">LENTES DE CONTACTO · REPÚBLICA DOMINICANA</div>
-        </td></tr>
+        <tr><td align="center" style="padding:24px 32px 20px;background:#ffffff;border-bottom:3px solid ${ACCENT}"><img src="${SITE}/logo.png" alt="ContactGo" width="200" height="33" style="display:block;margin:0 auto;width:200px;height:auto;border:0;outline:none;text-decoration:none"></td></tr>
         <tr><td style="padding:30px 32px 10px">
           <div style="display:inline-block;padding:6px 10px;border-radius:20px;background:#e8f8f8;color:#007f84;font-size:10px;font-weight:800;letter-spacing:.8px">${esc(event === 'pago_aprobado' || (event === 'nuevo_pedido' && isPaid) ? 'PAGO APROBADO' : event === 'nuevo_pedido' ? 'PEDIDO RECIBIDO' : meta.tag)}</div>
           <h1 style="margin:16px 0 8px;font-size:25px;line-height:1.25;letter-spacing:-.5px;color:${BRAND}">${eventTitle}</h1>
@@ -129,7 +135,7 @@ export function buildAdminOrderEmail(order: Order, items: OrderItem[], event: st
   const meta = event === 'pago_aprobado' ? STATUS.pago_aprobado : STATUS[state] ?? STATUS.recibido
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"></head><body style="margin:0;padding:24px;background:#f3f6fa;font-family:Arial,Helvetica,sans-serif;color:#172b4d">
     <div style="max-width:580px;margin:auto;background:#fff;border-radius:14px;overflow:hidden">
-      <div style="padding:22px 26px;background:${BRAND};color:#fff"><div style="font-size:22px;font-weight:800">Contact<span style="color:${ACCENT}">Go</span></div><div style="margin-top:5px;font-size:10px;letter-spacing:1px;color:#d6e4f3">AVISO OPERATIVO</div></div>
+      <div style="padding:20px 26px;background:#ffffff;border-bottom:3px solid ${ACCENT};text-align:center"><img src="${SITE}/logo.png" alt="ContactGo" width="200" height="33" style="display:block;margin:0 auto;width:200px;height:auto;border:0;outline:none;text-decoration:none"><div style="margin-top:10px;font-size:10px;letter-spacing:1px;color:#64748b">AVISO OPERATIVO</div></div>
       <div style="padding:25px 26px"><div style="font-size:10px;font-weight:800;letter-spacing:1px;color:#00858a">${esc(event === 'pago_aprobado' ? 'PAGO APROBADO' : meta.tag)}</div>
         <h2 style="margin:9px 0;font-size:21px;color:${BRAND}">${esc(event === 'nuevo_pedido' && order.pago_estado === 'pagado' ? 'Nuevo pedido · pago aprobado' : event === 'nuevo_pedido' ? 'Nuevo pedido recibido' : event === 'pago_aprobado' ? 'Pago confirmado' : meta.title)}</h2>
         <p style="font-size:13px;color:#64748b">Pedido #${id} · ${money(order.total)}</p>

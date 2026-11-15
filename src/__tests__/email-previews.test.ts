@@ -10,7 +10,7 @@ const order = {
   pago_estado: 'pagado', direccion_texto: 'Calle de Prueba 123, Santo Domingo',
   created_at: '2026-11-15T14:00:00Z', fecha: '2026-11-15T14:00:00Z', tracking: 'PRUEBA-TRK-0001',
 }
-const items = [{ nombre: 'PRUEBA · Lente diario ficticio', cantidad: 1, precio: 3400, sph_od: -2.0, sph_oi: -2.0, product_id: 'x' }]
+const items = [{ nombre: 'PRUEBA · Lente diario ficticio', cantidad: 1, precio: 3400, sph_od: -2.0, sph_oi: -2.0, product_id: 'x', products: { tipo: 'esferico', imagen_url: '/products/dailies-aquacomfort-plus.jpg' } }]
 const estados = ['recibido', 'confirmado', 'pago_aprobado', 'preparando', 'fabricante', 'enviado', 'transito', 'entregado', 'cancelado']
 const generados: string[] = []
 
@@ -19,6 +19,8 @@ it('renderiza plantillas de cliente y administración con datos ficticios', () =
     const html = buildCustomerOrderEmail(order, items, estado === 'pago_aprobado' ? 'pago_aprobado' : 'estado_cambio', estado)
     expect(html.length).toBeGreaterThan(500)
     expect(html).not.toMatch(/\{\{|undefined|null/)
+    expect(html).toContain('/logo.png')
+    expect(html).toContain('dailies-aquacomfort-plus.jpg')
     writeFileSync(`/tmp/email-previews/cliente-${estado}.html`, '<!-- PRUEBA: datos ficticios -->\n' + html)
     generados.push(`cliente-${estado}`)
   }
