@@ -15,14 +15,9 @@
 // abandoned_carts tenía 0 filas siempre. Ya corregido (constraint
 // agregada 2026-08-08).
 //
-// Este archivo reemplaza a ambos: WhatsApp real primero (plantilla
-// aprobada 'carrito_abandonado'), con email como respaldo si no hay
-// teléfono. recover-carts (Edge Function) queda huérfana y debe borrarse
-// de Supabase manualmente — no se puede eliminar desde este repo.
-//
-// INTERRUPTOR DE SEGURIDAD: apagado por defecto (Mario pidió explícitamente
-// "no envíe nada a nadie"). Se activa con
-// CARRITO_ABANDONADO_ACTIVO=true en Vercel — sin necesidad de otro deploy.
+// Este flujo ahora es exclusivamente por correo. WhatsApp queda pausado y
+// la Edge Function antigua recover-carts responde 202 sin procesar carritos.
+// Solo se envía a clientes con consentimiento comercial vigente.
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
@@ -34,7 +29,7 @@ const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 const FROM = process.env.RESEND_FROM ?? 'ContactGo <info@contactgo.net>'
 function getResend() { return new Resend(process.env.RESEND_API_KEY) }
 
-const ACTIVO = process.env.CARRITO_ABANDONADO_ACTIVO === 'true'
+const ACTIVO = true // Activo por solicitud del administrador; solo envía a clientes con consentimiento comercial.
 
 async function enviarEmailRespaldo(cart: any) {
   const nombre = cart.cliente_nombre?.split(' ')[0] ?? 'Cliente'
@@ -136,7 +131,7 @@ export async function GET(req: NextRequest) {
     .gte('updated_at', hace26h)
     .lte('updated_at', hace2h)
     .eq('recuperado', false)
-    .or('whatsapp_enviado.eq.false,email_sent.eq.false')
+    .eq('email_sent', false)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   if (!carritos?.length) return NextResponse.json({ activo: ACTIVO, candidatos: 0, enviados: 0 })
@@ -149,7 +144,7 @@ export async function GET(req: NextRequest) {
       candidatos: carritos.map(c => ({
         id: c.id, nombre: c.cliente_nombre, email: c.cliente_email,
         telefono: c.cliente_telefono, total: c.total,
-        canal_que_usaria: c.cliente_telefono ? 'whatsapp' : 'email',
+        canal_que_usaria: 'email',
       })),
     })
   }
@@ -158,9 +153,6 @@ export async function GET(req: NextRequest) {
   for (const cart of carritos) {
     try {
       if (!cart.cliente_email || !(await hasMarketingConsent(cart.cliente_email))) continue
-      const productos = (Array.isArray(cart.items) ? cart.items : [])
-        .slice(0, 2).map((p: any) => p.nombre ?? p.product?.nombre).filter(Boolean).join(', ')
-
       // El consentimiento comercial capturado en el registro cubre email, no WhatsApp.
       // No enviar promociones por WhatsApp hasta contar con una autorización separada.
       if (cart.cliente_email) {

@@ -5,10 +5,6 @@
       "schedule": "0 13 * * *"
     },
     {
-      "path": "/api/cron/pedidos-sin-entregar",
-      "schedule": "30 12 * * *"
-    },
-    {
       "path": "/api/cancelar-pendientes",
       "schedule": "30 13 * * *"
     },
@@ -29,12 +25,12 @@
       "schedule": "0 15 * * *"
     },
     {
-      "path": "/api/cron/whatsapp-diferidos",
+      "path": "/api/cron/alertas-admin",
       "schedule": "0 13 * * *"
     },
     {
-      "path": "/api/cron/alertas-admin",
-      "schedule": "0 13 * * *"
+      "path": "/api/cron/email-educativo",
+      "schedule": "0 17 * * *"
     }
   ]
 }

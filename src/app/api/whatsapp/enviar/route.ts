@@ -3,7 +3,7 @@
 // Enviar mensajes desde el admin + guardar en Supabase
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
-import { sendText, sendShippingNotification, sendRenewalReminder, normalizePhone } from '@/lib/whatsapp'
+import { enviarWAManual, normalizePhone } from '@/lib/whatsapp'
 import { createClient } from '@supabase/supabase-js'
 import { requireAdmin } from '@/lib/admin-guard'
 
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
     const sb = getSb()
     let result: any
     let sentBody = ''
+    let payload: Record<string, any> | null = null
 
     if (tipo === 'envio' && order_id) {
       const { data: order } = await sb
@@ -41,26 +42,30 @@ export async function POST(req: NextRequest) {
         .single()
 
       if (order) {
-        result = await sendShippingNotification({
-          cliente_telefono: order.cliente_telefono,
-          cliente_nombre:   order.cliente_nombre,
-          numero_orden:     order.numero_orden,
-        })
-        sentBody = `🚚 Notificación de envío - Pedido #${order.numero_orden}`
+        payload = { type: 'template', template: { name: 'pedido_enviado', language: { code: 'es' }, components: [{ type: 'body', parameters: [
+          { type: 'text', text: order.cliente_nombre?.split(' ')[0] ?? 'Cliente' },
+          { type: 'text', text: order.numero_orden },
+          { type: 'text', text: 'hoy o mañana' },
+          { type: 'text', text: order.numero_orden },
+        ] }] } }
+        sentBody = `Notificación manual de envío - Pedido #${order.numero_orden}`
       }
     } else if (tipo === 'renovacion') {
-      result = await sendRenewalReminder({
-        telefono,
-        nombre:   body.nombre ?? '',
-        producto: body.producto ?? 'lentes de contacto',
-      })
-      sentBody = `🔄 Recordatorio de renovación`
+      const nombre = String(body.nombre ?? 'Cliente').split(' ')[0]
+      payload = { type: 'template', template: { name: 'renovacion_lentes', language: { code: 'es' }, components: [{ type: 'body', parameters: [
+        { type: 'text', text: nombre },
+        { type: 'text', text: body.producto ?? 'tus lentes de contacto' },
+      ] }] } }
+      sentBody = 'Recordatorio manual de renovación'
     } else if (mensaje) {
-      result = await sendText(telefono, mensaje)
-      sentBody = mensaje
+      payload = { type: 'text', text: { body: String(mensaje) } }
+      sentBody = String(mensaje)
     } else {
       return NextResponse.json({ error: 'mensaje o tipo requerido' }, { status: 400 })
     }
+
+    if (!payload) return NextResponse.json({ error: 'No se encontró el pedido o el tipo de envío no es válido' }, { status: 404 })
+    result = await enviarWAManual(telefono, payload)
 
     // Save outbound message to DB
     const waMessageId = result?.messages?.[0]?.id ?? null

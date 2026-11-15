@@ -1,4 +1,4 @@
-// GET /api/solicitar-resena — Cron: envía solicitud de reseña (WhatsApp + email)
+// GET /api/solicitar-resena — Cron: envía solicitud de reseña por email
 // a los pedidos que cumplieron 14 días desde su entrega, una vez al día.
 //
 // Usa entregado_at (timestamp exacto capturado en /api/admin/pedidos al marcar
@@ -8,14 +8,9 @@
 // también se incluyen (red de seguridad: si el cron estuvo caído un día, se
 // recuperan en la siguiente corrida en vez de perderse para siempre).
 //
-// WhatsApp usa la plantilla 'solicitar_resena_v2' (APROBADA en Meta, confirmado
-// 2026-09-03 directo contra la API). Ambos canales corren siempre — 'resena_solicitada'
-// se marca true si AL MENOS UNO tuvo éxito, para no reintentar (y duplicar) el canal
-// que sí funcionó solo porque el otro falló.
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
-import { sendReviewRequest } from '@/lib/whatsapp'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,34 +37,12 @@ export async function GET(req: NextRequest) {
     .lt('entregado_at', new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString())
     .limit(100)
 
-  if (!ordenes?.length) return NextResponse.json({ sent: 0, sentWhatsapp: 0 })
+  if (!ordenes?.length) return NextResponse.json({ sent: 0 })
 
   let sent = 0
-  let sentWhatsapp = 0
   for (const o of ordenes) {
     const nombre = (o.cliente_nombre ?? 'Cliente').split(' ')[0]
-    let whatsappOk = false
     let emailOk = false
-
-    // WhatsApp (plantilla 'solicitar_resena_v2', APROBADA en Meta — verificado
-    // 2026-09-03 directo contra la API, ya trae el link de reseña de Google).
-    // FIX (2026-09-16): el error se atrapaba en silencio — no había forma de
-    // saber si WhatsApp realmente falló para un pedido específico o si
-    // simplemente no tenía teléfono. Ahora se guarda el motivo exacto en
-    // notas_admin para poder auditar sin tener que adivinar.
-    if (o.cliente_telefono) {
-      try {
-        await sendReviewRequest({ telefono: o.cliente_telefono, nombre: o.cliente_nombre })
-        whatsappOk = true
-        sentWhatsapp++
-      } catch (err: any) {
-        console.error(`[solicitar-resena] WhatsApp falló para ${o.numero_orden}:`, err.message)
-        const notaError = `[Reseña WA falló ${new Date().toISOString().slice(0,10)}: ${String(err.message).slice(0, 150)}]`
-        await sb.from('orders').update({
-          notas_admin: o.notas_admin ? `${o.notas_admin}\n${notaError}` : notaError,
-        }).eq('id', o.id)
-      }
-    }
 
     if (o.cliente_email) {
       try {
@@ -107,15 +80,14 @@ export async function GET(req: NextRequest) {
         })
         emailOk = true
         sent++
-      } catch { /* email falló, si WhatsApp funcionó igual marcamos resena_solicitada abajo */ }
+      } catch { /* el correo no se aceptó; el próximo cron podrá reintentar */ }
     }
 
-    // Se marca 'resena_solicitada' si AL MENOS UN canal tuvo éxito — evita
-    // reintentar (y duplicar) el canal que sí funcionó solo porque el otro falló.
-    if (whatsappOk || emailOk) {
+    // Solo se marca cuando el correo fue aceptado por Resend.
+    if (emailOk) {
       await sb.from('orders').update({ resena_solicitada: true }).eq('id', o.id)
     }
   }
 
-  return NextResponse.json({ sent, sentWhatsapp, total: ordenes.length })
+  return NextResponse.json({ sent, total: ordenes.length })
 }

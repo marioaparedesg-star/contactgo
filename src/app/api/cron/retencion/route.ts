@@ -18,7 +18,7 @@ export const dynamic = 'force-dynamic'
 const getSb = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 const FROM = 'ContactGo <info@contactgo.net>'
 
-function wrap(tituloBadge: string, contenidoHtml: string, ctaTexto: string, ctaHref: string): string {
+function wrap(tituloBadge: string, contenidoHtml: string, ctaTexto: string, ctaHref: string, unsubscribeEmail?: string): string {
   return `
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:520px;margin:0 auto;padding:20px">
   <div style="background:#002455;padding:24px;border-radius:16px 16px 0 0;text-align:center">
@@ -33,6 +33,7 @@ function wrap(tituloBadge: string, contenidoHtml: string, ctaTexto: string, ctaH
       </td></tr>
     </table>
     <p style="color:#9ca3af;font-size:11px;text-align:center;margin-top:16px">¿Dudas? Escríbenos por WhatsApp: +1 809 694-2268</p>
+    ${unsubscribeEmail ? `<p style="color:#9ca3af;font-size:11px;text-align:center"><a href="${marketingUnsubscribeUrl(unsubscribeEmail)}" style="color:#64748b">Cancelar suscripción</a></p>` : ""}
   </div>
 </div>`
 }
@@ -101,7 +102,7 @@ export async function GET(req: NextRequest) {
                 
               </div>
               <p style="font-size:11px;color:#94a3b8;text-align:center;margin-top:18px">Si no deseas recibir comunicaciones comerciales, <a href="${marketingUnsubscribeUrl(email)}" style="color:#64748b">puedes darte de baja aquí</a>.</p>`,
-              'Ver catálogo →', 'https://www.contactgo.net/catalogo'),
+              'Ver catálogo →', 'https://www.contactgo.net/catalogo', email),
           })
           await sb.from('profiles').upsert({ email, email_inactivo_enviado_at: new Date().toISOString() }, { onConflict: 'email' })
           results.inactivos++
@@ -141,7 +142,7 @@ export async function GET(req: NextRequest) {
           <h2 style="color:#111827;font-size:18px;margin:0 0 12px">¡Hola, ${nombre}! 👋</h2>
           <p style="color:#4b5563;font-size:14px;line-height:1.6">${mensaje}</p>
           <p style="color:#4b5563;font-size:14px;line-height:1.6">Pide ahora y evita quedarte sin ellos justo cuando más los necesitas.</p>`,
-          'Reponer mis lentes →', 'https://www.contactgo.net/cuenta'),
+          'Reponer mis lentes →', 'https://www.contactgo.net/cuenta', sub.cliente_email),
       })
       return true
     }
@@ -210,6 +211,10 @@ export async function GET(req: NextRequest) {
 
     for (const o of candidatosDudas ?? []) {
       try {
+        if (!(await hasMarketingConsent(o.cliente_email))) {
+          await sb.from('orders').update({ email_dudas_enviado: true }).eq('id', o.id)
+          continue
+        }
         // Verificar que sea su ÚNICA compra (si ya repitió, este correo no aplica)
         const { count } = await sb.from('orders').select('id', { count: 'exact', head: true })
           .eq('cliente_email', o.cliente_email).eq('pago_estado', 'pagado').eq('es_prueba', false)
@@ -231,7 +236,7 @@ export async function GET(req: NextRequest) {
               <li>¿Tienes alguna molestia que no sabes si es normal?</li>
             </ul>
             <p style="color:#4b5563;font-size:14px;line-height:1.6">Escríbenos — respondemos rápido y sin compromiso.</p>`,
-            'Escribir por WhatsApp →', 'https://wa.me/18096942268'),
+            'Escribir por WhatsApp →', 'https://wa.me/18096942268', o.cliente_email),
         })
         await sb.from('orders').update({ email_dudas_enviado: true }).eq('id', o.id)
         results.dudas++

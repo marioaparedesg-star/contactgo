@@ -1,9 +1,12 @@
 // Secuencia educativa de bienvenida (7 correos). SIN emojis. Contenido informativo.
 // No sustituye las instrucciones del fabricante ni la orientación profesional.
+import { marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
+
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 const BRAND = '#002455'
 const ACCENT = '#01B2B7'
 const NOTA = 'Este contenido es informativo y no sustituye las instrucciones del fabricante ni la orientación de un profesional de la salud visual.'
+const esc = (value: string) => value.replace(/[&<>\"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;' } as Record<string, string>)[c])
 
 export type EducationalEmail = { id: string; subject: string; titulo: string; parrafos: string[]; cta: { texto: string; url: string } }
 
@@ -31,15 +34,17 @@ export const BIENVENIDA: EducationalEmail[] = [
     cta: { texto: 'Visitar ContactGo', url: SITE } },
 ]
 
-export function buildEducationalEmail(e: EducationalEmail): string {
+export function buildEducationalEmail(e: EducationalEmail, firstName = 'Cliente', recipientEmail?: string): string {
+  const safeName = esc(firstName)
+  const unsubscribeUrl = recipientEmail ? marketingUnsubscribeUrl(recipientEmail) : `${SITE}/cuenta`
   const p = e.parrafos.map(t => `<p style="margin:0 0 14px;font-size:15px;line-height:1.7;color:#334155">${t}</p>`).join('')
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>${e.titulo} · ContactGo</title></head>
 <body style="margin:0;padding:0;background:#F5F7FA;font-family:Arial,Helvetica,sans-serif;color:#172033">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F5F7FA;padding:28px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#fff;border-radius:16px;overflow:hidden">
 <tr><td align="center" style="padding:24px 32px;border-bottom:3px solid ${ACCENT}"><img src="${SITE}/logo.png" alt="ContactGo" width="200" height="33" style="display:block;margin:0 auto;width:200px;height:auto;border:0"></td></tr>
-<tr><td style="padding:30px 32px 8px"><h1 style="margin:0 0 14px;font-size:24px;line-height:1.25;color:${BRAND}">${e.titulo}</h1>${p}</td></tr>
+<tr><td style="padding:30px 32px 8px"><h1 style="margin:0 0 14px;font-size:24px;line-height:1.25;color:${BRAND}">${e.titulo}</h1><p style="margin:0 0 16px;font-size:15px;color:#334155">Hola ${safeName},</p>${p}</td></tr>
 <tr><td align="center" style="padding:8px 32px 28px"><a href="${e.cta.url}" style="display:inline-block;padding:13px 24px;background:${ACCENT};border-radius:8px;color:#fff;text-decoration:none;font-size:14px;font-weight:700">${e.cta.texto}</a></td></tr>
-<tr><td style="padding:18px 32px 26px;border-top:1px solid #E5EAF0;font-size:12px;line-height:1.6;color:#64748B;text-align:center"><p style="margin:0 0 10px;font-style:italic">${NOTA}</p><strong style="color:${BRAND}">ContactGo</strong> · contactgo.net · info@contactgo.net<br><a href="${SITE}/cuenta" style="color:#64748B">Preferencias de comunicación</a></td></tr>
+<tr><td style="padding:18px 32px 26px;border-top:1px solid #E5EAF0;font-size:12px;line-height:1.6;color:#64748B;text-align:center"><p style="margin:0 0 10px;font-style:italic">${NOTA}</p><strong style="color:${BRAND}">ContactGo</strong> · contactgo.net · info@contactgo.net<br><a href="${unsubscribeUrl}" style="color:#64748B">Cancelar suscripción</a></td></tr>
 </table></td></tr></table></body></html>`
 }

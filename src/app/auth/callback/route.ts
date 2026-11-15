@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { createClient } from '@supabase/supabase-js'
+import { enqueueWelcomeSequence } from '@/lib/email/educational-automation'
 
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url)
@@ -62,7 +63,7 @@ export async function GET(req: NextRequest) {
         marketing_consent: consent,
         consented_at: consent ? (typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : new Date().toISOString()) : null,
         consent_source: consent ? 'registro_web' : null,
-        consent_version: consent && typeof meta.marketing_consent_version === 'string' ? meta.marketing_consent_version : null,
+        consent_version: consent ? (typeof meta.marketing_consent_version === 'string' ? meta.marketing_consent_version : '2026-11-14-v1') : null,
         terms_accepted_at: typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : new Date().toISOString(),
         terms_version: typeof meta.terminos_version === 'string' ? meta.terminos_version : '2026-11-14-v1',
         privacy_accepted_at: typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : new Date().toISOString(),
@@ -74,6 +75,10 @@ export async function GET(req: NextRequest) {
       const { data: current } = await admin.from('email_marketing_preferences').select('id').eq('email', email).maybeSingle()
       if (current?.id) await admin.from('email_marketing_preferences').update(preference).eq('id', current.id)
       else await admin.from('email_marketing_preferences').insert({ ...preference, created_at: new Date().toISOString() })
+      if (consent) {
+        try { await enqueueWelcomeSequence(email, user.id) }
+        catch (error) { console.error('[auth/callback] no se pudo encolar bienvenida educativa:', error) }
+      }
     }
   }
 

@@ -1,13 +1,13 @@
 // ============================================================
 // ContactGo — CRON diario 9am (DR)
-// Envía: notificación de envío, solicitud de reseña, renovación
+// Automatizaciones por correo postventa. Los envíos automáticos de WhatsApp están pausados.
 // GET /api/cron/wa-daily  (Vercel Cron)
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { sendText, normalizePhone } from '@/lib/whatsapp'
+import { sendText, normalizePhone, WHATSAPP_AUTOMATIONS_ENABLED } from '@/lib/whatsapp'
 import { notificarRenovacion, notificarRecompraPrevio } from '@/lib/wa-notifications'
-import { hasMarketingConsent } from '@/lib/email/marketing-consent'
+import { hasMarketingConsent, marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
 
 // ═══ INTERRUPTOR DE SEGURIDAD ═══
 // Apagado por defecto a propósito (Mario: "no envíe nada a nadie" hasta
@@ -102,7 +102,7 @@ export async function GET(req: NextRequest) {
   // products). Confirmado con Mario y recalculadas TODAS las suscripciones
   // existentes antes de reactivar este bloque.
   // ─────────────────────────────────────────────────────
-  try {
+  if (WHATSAPP_AUTOMATIONS_ENABLED) try {
     const hoy = new Date().toISOString().split('T')[0]
     const { data: subsVencidas } = await sb
       .from('subscriptions')
@@ -313,7 +313,8 @@ export async function GET(req: NextRequest) {
       🎁 10% OFF con el código COMPLETO10
     </a>
     <p style="color:#9ca3af;font-size:12px;text-align:center">
-      ¿Alguna pregunta? Escríbenos por WhatsApp: +1 809 694-2268
+      ¿Alguna pregunta? Escríbenos por WhatsApp: +1 809 694-2268<br>
+      <a href="${marketingUnsubscribeUrl(o.cliente_email)}" style="color:#64748b">Cancelar suscripción</a>
     </p>
   </div>
 </div>`,
@@ -333,7 +334,7 @@ export async function GET(req: NextRequest) {
   // Backoff exponencial: 5min → 30min → 2h → giveup
   // ─────────────────────────────────────────────────────
   const resultsRetry = { reintentos: 0, resueltos: 0, descartados: 0 }
-  try {
+  if (WHATSAPP_AUTOMATIONS_ENABLED) try {
     const { data: retries } = await sb
       .from('wa_retry_queue')
       .select('*')
@@ -401,7 +402,7 @@ export async function GET(req: NextRequest) {
   // necesitar una tabla de eventos nueva. No se bloquea por incidencia
   // abierta (es contenido de ayuda, no comercial).
   // ─────────────────────────────────────────────────────
-  const resultsEducativo = { dia3: 0, dia7: 0, dia14: 0, sin_lentes_omitidos: 0 }
+  const resultsEducativo = { dia3: 0, dia7: 0, dia14: 0, dia25: 0, sin_lentes_omitidos: 0 }
   try {
     const { Resend } = await import('resend')
     const resend = new Resend(process.env.RESEND_API_KEY)
