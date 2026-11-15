@@ -1,11 +1,12 @@
 // Secuencia educativa de bienvenida (7 correos). SIN emojis. Contenido informativo.
 // No sustituye las instrucciones del fabricante ni la orientación profesional.
+import { marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
+
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 const BRAND = '#002455'
 const ACCENT = '#01B2B7'
 const NOTA = 'Este contenido es informativo y no sustituye las instrucciones del fabricante ni la orientación de un profesional de la salud visual.'
-import { marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
-const esc = (value: string) => value.replace(/[&<>\"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;' }[c] as string))
+const esc = (value: string) => value.replace(/[&<>\"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;' } as Record<string, string>)[c])
 
 export type EducationalEmail = { id: string; subject: string; titulo: string; parrafos: string[]; cta: { texto: string; url: string } }
 
