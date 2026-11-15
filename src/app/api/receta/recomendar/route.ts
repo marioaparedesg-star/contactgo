@@ -14,6 +14,18 @@ function nearestAxis(values: unknown, target: number): number | null {
   return axes.sort((a, b) => circularDistance(a, target) - circularDistance(b, target) || a - b)[0]
 }
 
+function nearestCylinder(values: unknown, target: number): number | null {
+  if (!Array.isArray(values)) return null
+  const cylinders = [...new Set(values.map(Number).filter(v => Number.isFinite(v) && v < 0))]
+  if (!cylinders.length) return null
+  // Solo se considera una alternativa de fabricación cercana (máximo 0.50 D).
+  // Se prioriza el valor de mayor magnitud cuando existe empate.
+  const nearest = cylinders.sort((a, b) =>
+    Math.abs(a - target) - Math.abs(b - target) || Math.abs(b) - Math.abs(a)
+  )[0]
+  return Math.abs(nearest - target) <= 0.5 ? nearest : null
+}
+
 // Solo filtra por parámetros de fabricación publicados. No sustituye la adaptación clínica.
 export async function POST(req: NextRequest) {
   try {
@@ -51,11 +63,13 @@ export async function POST(req: NextRequest) {
       ? catalogo.flatMap((producto: any) => {
           const odAxis = receta.od.axis == null ? null : nearestAxis(producto.axis_disponibles, receta.od.axis)
           const oiAxis = receta.oi.axis == null ? null : nearestAxis(producto.axis_disponibles, receta.oi.axis)
-          if (odAxis == null || oiAxis == null) return []
+          const odCyl = nearestCylinder(producto.cyl_disponibles, receta.od.cyl)
+          const oiCyl = nearestCylinder(producto.cyl_disponibles, receta.oi.cyl)
+          if (odAxis == null || oiAxis == null || odCyl == null || oiCyl == null) return []
           const recetaFabricable = {
             ...receta,
-            od: { ...receta.od, axis: odAxis },
-            oi: { ...receta.oi, axis: oiAxis },
+            od: { ...receta.od, cyl: odCyl, axis: odAxis },
+            oi: { ...receta.oi, cyl: oiCyl, axis: oiAxis },
           }
           const evaluacion = evaluarReceta(recetaFabricable, [producto])
           if (evaluacion.ok === false || evaluacion.productos.length === 0) return []
@@ -66,6 +80,8 @@ export async function POST(req: NextRequest) {
               oi: { ...recetaFabricable.oi },
             },
             ejes_ajustados: odAxis !== receta.od.axis || oiAxis !== receta.oi.axis,
+            cilindros_ajustados: odCyl !== receta.od.cyl || oiCyl !== receta.oi.cyl,
+            requiere_revision: odCyl !== receta.od.cyl || oiCyl !== receta.oi.cyl || odAxis !== receta.od.axis || oiAxis !== receta.oi.axis,
           }]
         }).sort((a: any, b: any) => Number(a.precio) - Number(b.precio))
       : (() => {
@@ -80,8 +96,8 @@ export async function POST(req: NextRequest) {
       productos: seleccion,
       total: evaluados.length,
       sin_parametros: catalogo.filter(p => !Array.isArray(p.sph_disponibles) || p.sph_disponibles.length === 0).length,
-      nota: seleccion.some((p: any) => p.ejes_ajustados)
-        ? 'El eje se ajustó al valor más cercano disponible en la fabricación del producto. SPH y CYL coinciden con los parámetros publicados.'
+      nota: seleccion.some((p: any) => p.requiere_revision)
+        ? 'Encontramos modelos con parámetros de fabricación cercanos. Los ajustes de cilindro o eje requieren confirmación de un especialista antes de comprar.'
         : undefined,
     })
   } catch (error) {
