@@ -172,7 +172,7 @@ const nextConfig = {
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
       },
       {
-        source: '/admin/login',
+        source: '/M1Alexander/login',
         headers: [
           { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate' },
         ],
