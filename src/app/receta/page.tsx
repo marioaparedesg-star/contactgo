@@ -60,6 +60,7 @@ export default function RecetaPage() {
   }, [])
   const [misma, setMisma] = useState(false)
   const [rxSource, setRxSource] = useState<'contacto' | 'gafas' | null>(null)
+  const [vertexDistanceMm, setVertexDistanceMm] = useState('12')
   const [result, setResult] = useState<ConvertedRx | null>(null)
   const [products, setProducts] = useState<any[]>([])
   // Caso mixto: cada ojo requiere un tipo distinto de lente
@@ -157,7 +158,7 @@ export default function RecetaPage() {
   }
 
   const ejecutarCalculo = async (rx: GlassesRx): Promise<any[]> => {
-    const conv = convertGlassesToContacts(rx, rxSource ?? 'contacto'); setResult(conv); setCartAdded(null)
+    const conv = convertGlassesToContacts(rx, rxSource ?? 'contacto', Number(vertexDistanceMm)); setResult(conv); setCartAdded(null)
     const lista = await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
@@ -174,7 +175,7 @@ export default function RecetaPage() {
     const nombreCompleto = `${leadNombre.trim()} ${leadApellido.trim()}`
     if (!tieneNombreYApellido(nombreCompleto)) { toast.error(ERROR_NOMBRE_INCOMPLETO); return }
     if (telClean.length < 10) { toast.error('Ingresa tu número de WhatsApp (10 dígitos)'); return }
-    const conv = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto')
+    const conv = convertGlassesToContacts(pendingRx, rxSource ?? 'contacto', Number(vertexDistanceMm))
     let saveOk = false
     try {
       const res = await fetch('/api/calculator-leads/save', {
@@ -220,7 +221,7 @@ export default function RecetaPage() {
   const resetear = () => {
     setOd(EMPTY); setOi(EMPTY); setMisma(false); setResult(null)
     setProducts([]); setProductsOd([]); setProductsOi([]); setCasoMixto(null)
-    setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null)
+    setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null); setVertexDistanceMm('12')
   }
 
   // ── Agregar al carrito DIRECTO (esférico y color) o via PDP ────────────────
@@ -378,9 +379,15 @@ export default function RecetaPage() {
               </button>
             </div>
             {rxSource === 'gafas' && (
-              <p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-3 py-2 mt-3">
-                👓→👁️ Ajustaremos tu graduación automáticamente para lentes de contacto. Es normal que los valores cambien ligeramente.
-              </p>
+              <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 space-y-2">
+                <div>
+                  <label className="block text-[11px] font-bold text-amber-900 mb-1">Distancia al vértice (mm)</label>
+                  <select value={vertexDistanceMm} onChange={e => setVertexDistanceMm(e.target.value)} className="w-full rounded-lg border border-amber-200 bg-white px-3 py-2 text-sm text-gray-800">
+                    {[8,9,10,11,12,13,14,15,16,17,18,19,20].map(v => <option key={v} value={String(v)}>{v} mm{v===12?' · valor estándar si no aparece en tu receta':''}</option>)}
+                  </select>
+                </div>
+                <p className="text-[10px] leading-relaxed text-amber-800">Usa el valor medido por tu óptica o el indicado en tu evaluación. Si no lo conoces, 12 mm es solo una referencia habitual, no una medición personal. La corrección se aplica a los meridianos de la receta cuando la potencia alcanza ±4.00 D.</p>
+              </div>
             )}
           </div>
 
@@ -619,7 +626,7 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
           </div>
         ))}
       </div>
-      {r.needsVertex&&<p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">👓→👁️ Graduación ajustada de gafas a lentes de contacto. Los valores pueden diferir de tu receta original — esto es normal y correcto para lentes de contacto.</p>}
+      {r.needsVertex&&<p className="text-[10px] text-amber-800 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">Conversión óptica estimada desde gafas usando {r.vertexDistanceMm} mm de distancia al vértice. Los valores se ajustan a pasos de potencia y luego se contrastan con los parámetros de fabricación del producto. No constituye una adaptación ni una prescripción final.</p>}
       {!r.needsVertex && r.condiciones.includes('Alta graduación') && <p className="text-[10px] text-amber-700 bg-amber-100 rounded-lg px-2.5 py-1.5 mb-3">⚡ Graduación alta — tenemos lentes de rango extendido (XR) especiales para tu receta</p>}
       {!r.needsVertex && !r.condiciones.includes('Alta graduación') && <p className="text-[10px] text-green-700 bg-green-50 rounded-lg px-2.5 py-1.5 mb-3">✅ Tu receta exacta para lentes de contacto — productos compatibles abajo</p>}
       <div className={`flex items-start gap-2 rounded-xl px-3 py-2 border ${compC.bg} ${compC.border}`}>
