@@ -22,6 +22,10 @@ export async function POST(req: NextRequest) {
     consented_at: consent ? (typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : now) : null,
     consent_source: consent ? 'registro_web' : null,
     consent_version: consent && typeof meta.marketing_consent_version === 'string' ? meta.marketing_consent_version : null,
+    terms_accepted_at: typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : now,
+    terms_version: typeof meta.terminos_version === 'string' ? meta.terminos_version : '2026-11-14-v1',
+    privacy_accepted_at: typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : now,
+    privacy_policy_version: typeof meta.privacidad_version === 'string' ? meta.privacidad_version : '2026-11-14-v1',
     updated_at: now,
   }
   if (consent) {
