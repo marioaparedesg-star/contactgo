@@ -36,7 +36,7 @@ export function ArticleSchema({ meta }: { meta: BlogMeta }) {
       author: {
         '@type': 'Organization',
         name: 'ContactGo',
-        url: BASE,
+        url: `${BASE}/autor/equipo-contactgo`,
       },
       publisher: {
         '@type': 'Organization',
