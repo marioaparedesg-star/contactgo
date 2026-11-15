@@ -25,7 +25,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
-import { fetchWA } from '@/lib/whatsapp'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -278,49 +277,7 @@ export async function GET(req: Request) {
       html,
     })
 
-    // ── Resumen también por WhatsApp al número de servicio ────────────────
-    // Mario pidió recibirlo también ahí. Este número (809-694-2268) NUNCA
-    // procesa mensajes entrantes de forma automática (protección aparte en
-    // el webhook) — esto es distinto: es SOLO un mensaje saliente de
-    // administración hacia Mario, mismo patrón ya usado para
-    // aviso_nuevo_mensaje_admin. No toca nada del trato con clientes.
-    //
-    // FIX (2026-09-05): antes esto fallaba en silencio — fetch() no lanza
-    // excepción por un error HTTP de Meta (ej. plantilla rechazada, límite
-    // de mensajería, token vencido), solo por fallo de red. Un 4xx/5xx de
-    // Meta pasaba desapercibido, sin ningún registro. Ahora se revisa la
-    // respuesta real y se loguea el detalle si Meta la rechaza.
-    try {
-      const WA_API = 'https://graph.facebook.com/v20.0'
-      const waRes = await fetchWA('18096942268', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messaging_product: 'whatsapp',
-          to: '18096942268',
-          type: 'template',
-          template: {
-            name: 'reporte_diario_ventas',
-            language: { code: 'es' },
-            components: [{
-              type: 'body',
-              parameters: [
-                { type: 'text', text: fmt(ventasHoy) },
-                { type: 'text', text: asuntoTendencia || 'sin datos de ayer' },
-                { type: 'text', text: String(pedidosHoyCount) },
-                { type: 'text', text: fmt(totalPorCobrar) },
-              ],
-            }],
-          },
-        }),
-      })
-      const waBody = await waRes.json().catch(() => ({}))
-      if (!waRes.ok) {
-        console.error('[reporte-diario] Meta RECHAZÓ el WhatsApp (el email ya se mandó):', waRes.status, JSON.stringify(waBody))
-      }
-    } catch (e) {
-      console.error('[reporte-diario] WhatsApp falló por error de red (el email ya se mandó):', e)
-    }
+    // El reporte se entrega únicamente por correo mientras WhatsApp esté en pausa.
 
     return NextResponse.json({
       ok: true, fecha: hoyDR,
