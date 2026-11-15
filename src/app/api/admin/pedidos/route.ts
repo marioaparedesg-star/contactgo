@@ -81,13 +81,13 @@ export async function POST(req: NextRequest) {
       }
 
       const { data: estadoActual, error: readError } = await sb
-        .from('orders').select('estado').eq('id', order_id).single()
+        .from('orders').select('estado, entregado_at').eq('id', order_id).single()
       if (readError || !estadoActual) {
         return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
       }
 
       const updateData: Record<string, any> = { estado: nuevo_estado }
-      if (nuevo_estado === 'entregado') updateData.entregado_at = new Date().toISOString()
+      if (nuevo_estado === 'entregado' && estadoActual.estado !== 'entregado' && !estadoActual.entregado_at) updateData.entregado_at = new Date().toISOString()
       const { error } = await sb.from('orders').update(updateData).eq('id', order_id)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 

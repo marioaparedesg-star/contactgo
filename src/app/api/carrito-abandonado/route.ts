@@ -27,7 +27,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
-import { notificarCarritoAbandonado } from '@/lib/wa-notifications'
+import { hasMarketingConsent, marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
@@ -88,6 +88,7 @@ async function enviarEmailRespaldo(cart: any) {
       Completar mi pedido →
     </a>
   </td></tr>
+  <tr><td style="padding:0 28px 16px;text-align:center;font-size:11px;color:#64748b">Si no deseas recibir comunicaciones comerciales, <a href="${marketingUnsubscribeUrl(cart.cliente_email)}" style="color:#64748b">puedes darte de baja aquí</a>.</td></tr>
   <tr><td style="background:#f9fafb;padding:12px 28px;border-top:1px solid #f3f4f6;text-align:center;">
     <p style="margin:0;font-size:11px;color:#9ca3af;">ContactGo · contactgo.net · Santo Domingo, RD</p>
     <p style="margin:4px 0 0;font-size:10px;color:#d1d5db;">Directo del fabricante · Entrega en 24-48h · Pago Seguro</p>
@@ -156,15 +157,13 @@ export async function GET(req: NextRequest) {
   let enviadosWA = 0, enviadosEmail = 0, errores = 0
   for (const cart of carritos) {
     try {
+      if (!cart.cliente_email || !(await hasMarketingConsent(cart.cliente_email))) continue
       const productos = (Array.isArray(cart.items) ? cart.items : [])
         .slice(0, 2).map((p: any) => p.nombre ?? p.product?.nombre).filter(Boolean).join(', ')
 
-      if (cart.cliente_telefono) {
-        const res = await notificarCarritoAbandonado({
-          telefono: cart.cliente_telefono, nombre: cart.cliente_nombre, productos,
-        })
-        if (res.ok) { await getSb().from('abandoned_carts').update({ whatsapp_enviado: true }).eq('id', cart.id); enviadosWA++ }
-      } else if (cart.cliente_email) {
+      // El consentimiento comercial capturado en el registro cubre email, no WhatsApp.
+      // No enviar promociones por WhatsApp hasta contar con una autorización separada.
+      if (cart.cliente_email) {
         await enviarEmailRespaldo(cart)
         await getSb().from('abandoned_carts').update({ email_sent: true }).eq('id', cart.id)
         enviadosEmail++

@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendText, normalizePhone } from '@/lib/whatsapp'
 import { notificarRenovacion, notificarRecompraPrevio } from '@/lib/wa-notifications'
+import { hasMarketingConsent } from '@/lib/email/marketing-consent'
 
 // ═══ INTERRUPTOR DE SEGURIDAD ═══
 // Apagado por defecto a propósito (Mario: "no envíe nada a nadie" hasta
@@ -39,6 +40,17 @@ async function logAutomation(sb: any, order_id: string | null, telefono: string,
   } catch {}
 }
 
+function emailEducativoHtml(contenido: string): string {
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>' +
+    '<body style="margin:0;padding:24px 12px;background:#f3f6fa;font-family:Arial,Helvetica,sans-serif;color:#172b4d">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:16px;overflow:hidden">' +
+    '<tr><td style="padding:25px 30px;background:#002455"><div style="font-size:25px;font-weight:800;color:#fff">Contact<span style="color:#01B2B7">Go</span></div><div style="margin-top:7px;font-size:11px;letter-spacing:1.3px;color:#d6e4f3">GUÍA DE CUIDADO · LENTES DE CONTACTO</div></td></tr>' +
+    '<tr><td style="padding:30px;font-size:14px;line-height:1.8;color:#40536a">' + contenido +
+    '<div style="margin-top:24px;padding:15px 17px;background:#f2f8fa;border-left:3px solid #01B2B7;border-radius:6px;font-size:12px;line-height:1.7;color:#536579">Esta información es educativa y no sustituye las instrucciones del fabricante ni la orientación de tu profesional de salud visual. Si presentas dolor, enrojecimiento, sensibilidad a la luz, secreción o visión borrosa repentina, retira los lentes y busca atención profesional.</div>' +
+    '<p style="margin:22px 0 0;text-align:center;font-size:12px;color:#718096">¿Tienes dudas? <a href="https://wa.me/18096942268" style="color:#007f84;font-weight:700;text-decoration:none">Escríbenos por WhatsApp</a></p></td></tr>' +
+    '<tr><td style="padding:18px 30px;background:#f7f9fc;text-align:center;font-size:11px;color:#8291a2">ContactGo · contactgo.net · República Dominicana</td></tr></table></td></tr></table></body></html>'
+}
 export async function GET(req: NextRequest) {
   // Seguridad: solo Vercel Cron o llamadas con secret
   const auth = req.headers.get('authorization')
@@ -202,33 +214,10 @@ export async function GET(req: NextRequest) {
       .not('telefono', 'is', null)
       .limit(50)
 
-    for (const c of carritos ?? []) {
-      try {
-        const nombre = c.nombre?.split(' ')[0] ?? ''
-        const items = Array.isArray(c.items) ? c.items : []
-        const productos = items.slice(0, 3)
-          .map((i: any) => `• ${i.nombre ?? 'Producto'}${i.cantidad > 1 ? ` x${i.cantidad}` : ''}`)
-          .join('\n')
+    // Se pausa el mensaje promocional por WhatsApp: el consentimiento de email
+    // no autoriza campañas por WhatsApp. Reactivar solo cuando exista opt-in separado.
+    resultsCarritos.carritos = 0
 
-        const mensaje = `👋 Hola${nombre ? ` *${nombre}*` : ''}, dejaste algo esperando en tu carrito 🛒\n\n` +
-          `${productos}\n\n` +
-          `¿Tuviste algún problema al comprar? Te ayudamos ahora mismo.\n\n` +
-          `🎁 *5% de descuento* para que completes hoy:\n*VUELVE5*\n\n` +
-          `👉 Continúa aquí: www.contactgo.net/cart\n\n` +
-          `O responde este mensaje y te asistimos personalmente. 💚`
-
-        const res = await sendText(c.telefono, mensaje)
-        await sb.from('carritos_abandonados').update({
-          wa_enviado: true,
-          wa_enviado_at: new Date().toISOString(),
-        }).eq('id', c.id)
-        await logAutomation(sb, null, c.telefono, 'carrito', true, res?.messages?.[0]?.id)
-        resultsCarritos.carritos++
-      } catch (e: any) {
-        await logAutomation(sb, null, c.telefono, 'carrito', false, undefined, e.message)
-        results.errores++
-      }
-    }
   } catch (e) { console.error('[cron/wa-daily] carritos:', e) }
 
   // ─────────────────────────────────────────────────────
@@ -266,6 +255,7 @@ export async function GET(req: NextRequest) {
       .limit(30)
 
     for (const o of ventasLentes ?? []) {
+      if (!o.cliente_email || !(await hasMarketingConsent(o.cliente_email))) continue
       // Verificar si ya se envió cross-sell a este pedido
       const { count: yaEnviado } = await sb
         .from('wa_automation_log')
@@ -486,8 +476,8 @@ export async function GET(req: NextRequest) {
         asunto: '¿Cómo va tu adaptación? 👁️',
         contenido: (nombre: string, tipo: TipoPrincipal) => `
           <h2 style="color:#111;font-size:18px">${nombre}, ya llevas un tiempo con tus lentes 👁️</h2>
-          <p style="color:#374151;font-size:14px">A estas alturas, ya deberías sentirlos completamente cómodos, casi como si no los tuvieras puestos.</p>
-          <p style="color:#374151;font-size:14px">Si todavía sientes molestia frecuente, o la visión no es tan nítida como esperabas, no es algo que debas simplemente aguantar — escríbenos y te ayudamos a revisar qué puede estar pasando.</p>
+          <p style="color:#374151;font-size:14px">La comodidad y la calidad visual deben mantenerse dentro de lo esperado para tu adaptación. No ignores molestias persistentes ni intentes acostumbrarte al dolor.</p>
+          <p style="color:#374151;font-size:14px">Si notas molestias persistentes, enrojecimiento o cambios en la visión, retira los lentes y consulta con tu profesional de salud visual. ContactGo puede ayudarte con dudas sobre tu pedido, pero no sustituye una evaluación clínica.</p>
           <p style="color:#374151;font-size:14px">Si todo va bien, ¡nos alegra mucho! Solo queríamos saber cómo te ha ido. 😊</p>`,
       },
     ]
@@ -503,8 +493,8 @@ export async function GET(req: NextRequest) {
         .eq('es_prueba', false)
         .eq(etapa.campo, false)
         .not('cliente_email', 'is', null)
-        .gte('updated_at', desde)
-        .lte('updated_at', hasta)
+        .gte('entregado_at', desde)
+        .lte('entregado_at', hasta)
         .limit(30)
 
       for (const o of ordenes ?? []) {
@@ -535,19 +525,7 @@ export async function GET(req: NextRequest) {
             from: 'ContactGo <info@contactgo.net>',
             to: o.cliente_email,
             subject: asunto,
-            html: `
-<div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
-  <div style="background:#0f766e;padding:20px;border-radius:12px 12px 0 0;text-align:center">
-    <p style="color:white;font-weight:900;font-size:20px;margin:0">ContactGo</p>
-    <p style="color:#99f6e4;font-size:11px;margin:2px 0 0">Cuidado de tus lentes</p>
-  </div>
-  <div style="background:#f9fafb;padding:24px;border-radius:0 0 12px 12px">
-    ${contenidoHtml}
-    <p style="color:#9ca3af;font-size:12px;text-align:center;margin-top:20px">
-      ¿Dudas? Escríbenos por WhatsApp: +1 809 694-2268
-    </p>
-  </div>
-</div>`,
+            html: emailEducativoHtml(contenidoHtml),
           })
           await sb.from('orders').update({ [etapa.campo]: true }).eq('id', o.id)
           if (etapa.dias === 3) resultsEducativo.dia3++

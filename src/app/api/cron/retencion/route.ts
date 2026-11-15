@@ -11,6 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
+import { hasMarketingConsent, marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
 
 export const dynamic = 'force-dynamic'
 
@@ -81,6 +82,7 @@ export async function GET(req: NextRequest) {
       const perfilPorEmail = new Map((perfiles ?? []).map((p: any) => [p.email?.toLowerCase(), p]))
 
       for (const [email, info] of candidatos) {
+        if (!(await hasMarketingConsent(email))) continue
         const perfil = perfilPorEmail.get(email)
         // Ya se le mandó este correo en los últimos 90 días -> no repetir
         if (perfil?.email_inactivo_enviado_at && perfil.email_inactivo_enviado_at > hace90dias) continue
@@ -97,7 +99,8 @@ export async function GET(req: NextRequest) {
               <div style="background:#f0fdfa;border:2px dashed #01B2B7;border-radius:12px;padding:16px;text-align:center;margin:16px 0">
                 <p style="color:#018E92;font-size:22px;font-weight:900;margin:0;letter-spacing:1px">VUELVE10</p>
                 
-              </div>`,
+              </div>
+              <p style="font-size:11px;color:#94a3b8;text-align:center;margin-top:18px">Si no deseas recibir comunicaciones comerciales, <a href="${marketingUnsubscribeUrl(email)}" style="color:#64748b">puedes darte de baja aquí</a>.</p>`,
               'Ver catálogo →', 'https://www.contactgo.net/catalogo'),
           })
           await sb.from('profiles').upsert({ email, email_inactivo_enviado_at: new Date().toISOString() }, { onConflict: 'email' })
@@ -125,7 +128,7 @@ export async function GET(req: NextRequest) {
     const fecha3 = en3dias.toISOString().split('T')[0]
 
     async function enviarRecompraEmail(sub: any, dias: number | 'hoy') {
-      if (!sub.cliente_email) return false
+      if (!sub.cliente_email || !(await hasMarketingConsent(sub.cliente_email))) return false
       const nombre = (sub.cliente_nombre ?? 'Cliente').split(' ')[0]
       const producto = (Array.isArray(sub.items) ? sub.items[0]?.nombre : null) ?? sub.producto_nombre ?? 'tus lentes de contacto'
       const mensaje = dias === 'hoy'

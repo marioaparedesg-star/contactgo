@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { createClient } from '@supabase/supabase-js'
 
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url)
@@ -37,16 +38,43 @@ export async function GET(req: NextRequest) {
     const { data: { user } } = await sb.auth.getUser()
     if (!user) return
     const { data: existing } = await sb.from('profiles').select('id').eq('id', user.id).maybeSingle()
-    if (existing) return
     const meta = user.user_metadata ?? {}
-    await sb.from('profiles').insert({
-      id: user.id,
-      email: user.email,
-      nombre: typeof meta.nombre === 'string' ? meta.nombre : null,
-      telefono: typeof meta.telefono === 'string' ? meta.telefono : (typeof meta.phone === 'string' ? meta.phone : null),
-      fecha_nacimiento: typeof meta.fecha_nacimiento === 'string' ? meta.fecha_nacimiento : null,
-      role: 'customer',
-    })
+    if (!existing) {
+      await sb.from('profiles').insert({
+        id: user.id,
+        email: user.email,
+        nombre: typeof meta.nombre === 'string' ? meta.nombre : null,
+        telefono: typeof meta.telefono === 'string' ? meta.telefono : (typeof meta.phone === 'string' ? meta.phone : null),
+        fecha_nacimiento: typeof meta.fecha_nacimiento === 'string' ? meta.fecha_nacimiento : null,
+        role: 'customer',
+      })
+    }
+
+    // Persistir el consentimiento comercial capturado en el formulario de registro.
+    // El opt-in solo se activa cuando el usuario marcó expresamente la casilla.
+    if (user.email && meta.acepta_privacidad === true) {
+      const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+      const email = user.email.trim().toLowerCase()
+      const consent = meta.marketing_consent === true
+      const preference = {
+        user_id: user.id,
+        email,
+        marketing_consent: consent,
+        consented_at: consent ? (typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : new Date().toISOString()) : null,
+        consent_source: consent ? 'registro_web' : null,
+        consent_version: consent && typeof meta.marketing_consent_version === 'string' ? meta.marketing_consent_version : null,
+        terms_accepted_at: typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : new Date().toISOString(),
+        terms_version: typeof meta.terminos_version === 'string' ? meta.terminos_version : '2026-11-14-v1',
+        privacy_accepted_at: typeof meta.privacidad_aceptada_at === 'string' ? meta.privacidad_aceptada_at : new Date().toISOString(),
+        privacy_policy_version: typeof meta.privacidad_version === 'string' ? meta.privacidad_version : '2026-11-14-v1',
+        unsubscribed_at: consent ? null : undefined,
+        suppression_reason: consent ? null : undefined,
+        updated_at: new Date().toISOString(),
+      }
+      const { data: current } = await admin.from('email_marketing_preferences').select('id').eq('email', email).maybeSingle()
+      if (current?.id) await admin.from('email_marketing_preferences').update(preference).eq('id', current.id)
+      else await admin.from('email_marketing_preferences').insert({ ...preference, created_at: new Date().toISOString() })
+    }
   }
 
   // CASO 1: token_hash (nuestros emails bonitos via admin.generateLink)

@@ -1,6 +1,5 @@
 // GET /api/solicitar-resena — Cron: envía solicitud de reseña (WhatsApp + email)
-// a TODOS los pedidos marcados 'entregado' el día calendario ANTERIOR (hora RD),
-// una vez al día a una sola hora fija.
+// a los pedidos que cumplieron 14 días desde su entrega, una vez al día.
 //
 // Usa entregado_at (timestamp exacto capturado en /api/admin/pedidos al marcar
 // el pedido como entregado) en vez de updated_at — cualquier edición posterior
@@ -22,15 +21,6 @@ export const dynamic = 'force-dynamic'
 
 const getSb = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-// República Dominicana es UTC-4 fijo (sin horario de verano).
-const RD_OFFSET_MS = 4 * 3600000
-
-function inicioDeHoyRD(): Date {
-  const nowRD = new Date(Date.now() - RD_OFFSET_MS)
-  const inicioRD = Date.UTC(nowRD.getUTCFullYear(), nowRD.getUTCMonth(), nowRD.getUTCDate())
-  return new Date(inicioRD + RD_OFFSET_MS)
-}
-
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET ?? 'contactgo_cron_2026'
@@ -41,16 +31,15 @@ export async function GET(req: NextRequest) {
   const sb = getSb()
   const resend = new Resend(process.env.RESEND_API_KEY)
 
-  // Todo lo entregado ANTES de hoy (00:00 RD) y aún sin reseña solicitada.
-  // En la práctica esto es "lo de ayer" en la corrida normal, más cualquier
-  // rezagado de días previos si el cron falló.
+  // Solo pedidos con al menos 14 días desde entregado_at y aún sin reseña.
+  // La consulta también recupera rezagados si el cron estuvo caído.
   const { data: ordenes } = await sb
     .from('orders')
     .select('id, cliente_email, cliente_nombre, numero_orden, cliente_telefono, notas_admin')
     .eq('estado', 'entregado')
     .eq('resena_solicitada', false)
     .not('entregado_at', 'is', null)
-    .lt('entregado_at', inicioDeHoyRD().toISOString())
+    .lt('entregado_at', new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString())
     .limit(100)
 
   if (!ordenes?.length) return NextResponse.json({ sent: 0, sentWhatsapp: 0 })

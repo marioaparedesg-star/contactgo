@@ -113,16 +113,14 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       if (adminPrior) {
         result.email_admin = 'sent'
       } else {
-        let adminError: string | undefined
-        let adminResendId: string | undefined
-        try {
-          const { data, error } = await resend.emails.send({
-            from: FROM_EMAIL, to: [ADMIN_EMAIL], subject: adminSubject,
-            html: buildAdminOrderEmail(order, items, evento, state),
-          })
-          adminResendId = data?.id
-          if (error) adminError = error.message
-        } catch (error: any) { adminError = error?.message ?? 'Error desconocido' }
+        // Los avisos internos usan la misma política de reintentos que los correos
+        // al cliente. Un fallo transitorio de Resend no debe dejar sin alerta al equipo.
+        const adminSent = await enviarEmailConReintentos(resend, {
+          from: FROM_EMAIL, to: ADMIN_EMAIL, subject: adminSubject,
+          html: buildAdminOrderEmail(order, items, evento, state),
+        })
+        const adminError = adminSent.error
+        const adminResendId = adminSent.resendId
         result.email_admin = adminError ? 'error' : 'sent'
         const { error: logError } = await sb.from('email_log').insert({
           order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
