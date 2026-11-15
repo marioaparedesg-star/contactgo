@@ -69,16 +69,29 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       : evento === 'nuevo_pedido'
         ? `Pedido #${order.numero_orden ?? order.id.slice(-8).toUpperCase()} recibido — ContactGo`
         : `ContactGo · ${EVENT_STATUS[state] ?? stateLabel}`
-    const template = isPaidEvent ? 'pago_aprobado' : evento === 'nuevo_pedido' ? 'confirmacion_orden' : `actualizacion_estado_${state}`
+    // The orders UPDATE trigger writes one immutable row per real state transition.
+    // Use that row's ID as the idempotency key: returning to the same state is
+    // a new event, while retrying the same transition must not send twice.
+    let transitionId: string | null = null
+    if (evento === 'estado_cambio') {
+      const { data: history, error: historyError } = await sb.from('order_status_history')
+        .select('id, estado').eq('order_id', orderId)
+        .order('created_at', { ascending: false }).limit(1).maybeSingle()
+      if (historyError || !history || history.estado !== state) {
+        console.error('[order-notifications] no se pudo identificar transición:', historyError?.message ?? 'historial no coincide')
+        return { email_cliente: 'error', error: 'No se pudo identificar el cambio de estado para notificar' }
+      }
+      transitionId = history.id
+    }
+    const template = isPaidEvent ? 'pago_aprobado' : evento === 'nuevo_pedido' ? 'confirmacion_orden'
+      : `actualizacion_estado_${state}__${transitionId}`
     const result: { email_cliente: EmailStatus; email_error?: string; email_admin?: EmailStatus } = { email_cliente: 'skipped' }
     if (order.cliente_email) {
       const { data: prior, error: priorError } = await sb.from('email_log').select('id')
         .eq('order_id', orderId).eq('template', template).eq('status', 'sent').maybeSingle()
       if (priorError) console.error('[order-notifications] duplicado: consulta de email_log falló:', priorError.message)
-      // A status can legitimately be reached again after another transition.
-      // The API calls this service only when the persisted state actually changes,
-      // so deduplication must not suppress a new status-transition notification.
-      if (evento !== 'estado_cambio' && prior) {
+      // Deduplicate the same transition, not every occurrence of this state.
+      if (prior) {
         result.email_cliente = 'sent'
       } else {
         const sent = await enviarEmailConReintentos(resend, {
@@ -109,7 +122,8 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       result.email_error = 'La orden no tiene correo electrónico de cliente'
     }
 
-    const adminTemplate = isPaidEvent ? 'admin_pago_aprobado' : evento === 'nuevo_pedido' ? 'admin_nuevo_pedido' : `admin_estado_${state}`
+    const adminTemplate = isPaidEvent ? 'admin_pago_aprobado' : evento === 'nuevo_pedido' ? 'admin_nuevo_pedido'
+      : `admin_estado_${state}__${transitionId}`
     const adminSubject = isPaidEvent
       ? `Pago aprobado #${order.numero_orden ?? order.id.slice(-8).toUpperCase()} — RD$${Number(order.total ?? 0).toLocaleString('es-DO')}`
       : evento === 'nuevo_pedido'
@@ -124,8 +138,8 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       const { data: adminPrior, error: adminPriorError } = await sb.from('email_log').select('id')
         .eq('order_id', orderId).eq('template', adminTemplate).eq('status', 'sent').maybeSingle()
       if (adminPriorError) console.error('[order-notifications] dedup admin lookup failed:', adminPriorError.message)
-      // As above, each real state transition deserves a fresh customer/admin notice.
-      if (evento !== 'estado_cambio' && adminPrior) {
+      // Same event key also protects the administrative notification.
+      if (adminPrior) {
         result.email_admin = 'sent'
       } else {
         // Los avisos internos usan la misma política de reintentos que los correos
