@@ -3,7 +3,7 @@ import { Resend } from 'resend'
 import { guardRequest } from '@/lib/api-guard'
 
 function getResend() { return new Resend(process.env.RESEND_API_KEY ?? 're_placeholder') }
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'info@contactgo.net'
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'maparedes0113@gmail.com'
 
 // FIX AUDITORÍA (2026-08-23): nombre y mensaje se insertaban directo en el
 // HTML del correo sin escapar — alguien podía meter etiquetas <a>, <img> u
