@@ -136,6 +136,7 @@ export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event:
 export function buildAdminOrderEmail(order: Order, items: OrderItem[], event: string, state: string): string {
   const id = esc(orderNumber(order))
   const meta = event === 'pago_aprobado' ? STATUS.pago_aprobado : STATUS[state] ?? STATUS.recibido
+  const shipping = Number(order.envio ?? 0)
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"></head><body style="margin:0;padding:24px;background:#f3f6fa;font-family:Arial,Helvetica,sans-serif;color:#172b4d">
     <div style="max-width:580px;margin:auto;background:#fff;border-radius:14px;overflow:hidden">
       <div style="padding:18px 26px;background:#fff;border-bottom:1px solid #edf1f5"><img src="${SITE}/logo.png" alt="ContactGo" width="200" height="33" style="display:block;margin:0 auto;width:200px;height:auto;border:0;outline:none;text-decoration:none;block;width:190px;max-width:100%;height:auto;border:0"><div style="margin-top:8px;font-size:10px;letter-spacing:1px;color:${BRAND}">AVISO OPERATIVO</div></div>
@@ -150,6 +151,10 @@ export function buildAdminOrderEmail(order: Order, items: OrderItem[], event: st
           <tr><td style="padding:7px 0;color:#64748b">Estado</td><td align="right">${esc(state)}</td></tr>
         </table>
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e8edf3;font-size:13px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tbody>${itemRows(items)}</tbody></table></div>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px;background:#f7f9fc;border-radius:10px">
+          <tr><td style="padding:10px 14px;font-size:12px;color:#64748b">Envío</td><td align="right" style="padding:10px 14px;font-size:12px;color:#334155">${shipping > 0 ? money(shipping) : 'Gratis'}</td></tr>
+          <tr><td style="padding:12px 14px;border-top:1px solid #e5eaf0;font-size:14px;font-weight:800;color:${BRAND}">Total del pedido</td><td align="right" style="padding:12px 14px;border-top:1px solid #e5eaf0;font-size:17px;font-weight:800;color:${BRAND}">${money(order.total)}</td></tr>
+        </table>
         <p style="margin:20px 0 0;text-align:center"><a href="${SITE}/admin/pedidos" style="display:inline-block;padding:12px 20px;border-radius:8px;background:${ACCENT};color:#002b35;text-decoration:none;font-size:13px;font-weight:800">Abrir pedidos en administración</a></p>
       </div>
     </div></body></html>`
