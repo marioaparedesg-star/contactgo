@@ -293,25 +293,23 @@ export default function RecetaPage() {
       <Navbar />
       <main className="min-h-screen bg-gray-50 pb-16">
 
-        {/* Encabezado de calculadora — identidad clínica y premium */}
-        <section className="border-b border-gray-100 bg-white px-5 py-6 text-center md:py-9">
-          <div className="mx-auto max-w-3xl">
-            <p className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary-700">
-              <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
-              Asistente de receta ContactGo
-            </p>
-            <h1 className="font-display text-[27px] font-bold leading-[1.12] tracking-tight text-slate-900 md:text-4xl">
-              Encuentra lentes compatibles
-              <span className="block text-primary-600">con tu graduación.</span>
-            </h1>
-            <p className="mx-auto mt-2 max-w-xl text-sm leading-5 text-slate-500 md:text-base">
-              Introduce los valores de tu receta y consulta las opciones del catálogo que coinciden con sus parámetros.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-slate-500">
-              <span>Sin costo</span><span className="hidden text-slate-300 sm:inline">·</span>
-              <span>Resultado inmediato</span><span className="hidden text-slate-300 sm:inline">·</span>
-              <span>Consulta de catálogo</span><span className="hidden text-slate-300 sm:inline">·</span>
-              <span>No requiere registro</span>
+        {/* Encabezado compacto: prioriza el formulario en móvil */}
+        <section className="border-b border-slate-100 bg-white px-4 py-3 text-left md:px-5 md:py-5">
+          <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="mb-1 flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-primary-700 md:text-[10px]">
+                <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
+                Asistente de receta
+              </p>
+              <h1 className="font-display text-xl font-bold leading-tight tracking-tight text-slate-900 md:text-2xl">
+                Encuentra lentes para tu graduación
+              </h1>
+              <p className="mt-1 hidden text-sm text-slate-500 sm:block">
+                Introduce los valores de tu receta y consulta las opciones compatibles del catálogo.
+              </p>
+            </div>
+            <div className="hidden shrink-0 rounded-xl bg-teal-50 px-3 py-2 text-[10px] font-semibold text-primary-700 sm:block">
+              Sin costo · Sin registro
             </div>
           </div>
         </section>
@@ -346,21 +344,21 @@ export default function RecetaPage() {
           </div>
         )}
 
-        <div className="max-w-3xl mx-auto px-4 py-4 space-y-3">
+        <div className="max-w-3xl mx-auto px-3 py-3 space-y-2.5 md:px-4 md:py-5 md:space-y-3">
 
 
 
 
 
           {/* Tipo de receta */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_2px_12px_rgba(15,35,65,.04)] md:p-5">
+          <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_2px_12px_rgba(15,35,65,.04)] md:p-5">
             <div className="mb-3">
               <h2 className="text-sm font-semibold text-slate-900">¿Qué tipo de receta tienes?</h2>
               <p className="mt-1 text-xs text-slate-500">Selecciona el documento del que provienen los valores.</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <button type="button" onClick={() => setRxSource('contacto')}
-                className={`flex min-h-[96px] flex-col items-start justify-between rounded-xl border p-3 text-left transition-colors md:p-4 ${
+                className={`flex min-h-[68px] flex-row items-center gap-2.5 rounded-xl border p-2.5 text-left transition-colors md:min-h-[82px] md:gap-3 md:p-4 ${
                   rxSource === 'contacto' ? 'border-primary-500 bg-teal-50/50 ring-1 ring-primary-500' : 'border-slate-200 hover:border-slate-300'
                 }`}>
                 <Eye className={`h-5 w-5 ${rxSource === 'contacto' ? 'text-primary-700' : 'text-slate-400'}`} />
@@ -370,7 +368,7 @@ export default function RecetaPage() {
                 </span>
               </button>
               <button type="button" onClick={() => setRxSource('gafas')}
-                className={`flex min-h-[116px] flex-col items-start justify-between rounded-xl border p-3 text-left transition-colors md:p-4 ${
+                className={`flex min-h-[68px] flex-row items-center gap-2.5 rounded-xl border p-2.5 text-left transition-colors md:min-h-[82px] md:gap-3 md:p-4 ${
                   rxSource === 'gafas' ? 'border-primary-500 bg-teal-50/50 ring-1 ring-primary-500' : 'border-slate-200 hover:border-slate-300'
                 }`}>
                 <Glasses className={`h-5 w-5 ${rxSource === 'gafas' ? 'text-primary-700' : 'text-slate-400'}`} />
