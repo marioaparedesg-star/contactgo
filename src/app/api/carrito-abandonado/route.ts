@@ -27,7 +27,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
-import { notificarCarritoAbandonado } from '@/lib/wa-notifications'
 import { hasMarketingConsent, marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
 
 function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
@@ -162,12 +161,9 @@ export async function GET(req: NextRequest) {
       const productos = (Array.isArray(cart.items) ? cart.items : [])
         .slice(0, 2).map((p: any) => p.nombre ?? p.product?.nombre).filter(Boolean).join(', ')
 
-      if (cart.cliente_telefono) {
-        const res = await notificarCarritoAbandonado({
-          telefono: cart.cliente_telefono, nombre: cart.cliente_nombre, productos,
-        })
-        if (res.ok) { await getSb().from('abandoned_carts').update({ whatsapp_enviado: true }).eq('id', cart.id); enviadosWA++ }
-      } else if (cart.cliente_email) {
+      // El consentimiento comercial capturado en el registro cubre email, no WhatsApp.
+      // No enviar promociones por WhatsApp hasta contar con una autorización separada.
+      if (cart.cliente_email) {
         await enviarEmailRespaldo(cart)
         await getSb().from('abandoned_carts').update({ email_sent: true }).eq('id', cart.id)
         enviadosEmail++
