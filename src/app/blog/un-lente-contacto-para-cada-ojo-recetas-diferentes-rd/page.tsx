@@ -1,5 +1,6 @@
 export const revalidate = 86400
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import BlogArticle, { type BlogMeta } from '@/components/blog/BlogArticle'
 const meta: BlogMeta = {
   "slug": "un-lente-contacto-para-cada-ojo-recetas-diferentes-rd",
