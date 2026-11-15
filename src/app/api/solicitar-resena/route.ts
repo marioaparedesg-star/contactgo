@@ -8,10 +8,6 @@
 // también se incluyen (red de seguridad: si el cron estuvo caído un día, se
 // recuperan en la siguiente corrida en vez de perderse para siempre).
 //
-// WhatsApp usa la plantilla 'solicitar_resena_v2' (APROBADA en Meta, confirmado
-// 2026-09-03 directo contra la API). Ambos canales corren siempre — 'resena_solicitada'
-// se marca true si AL MENOS UNO tuvo éxito, para no reintentar (y duplicar) el canal
-// que sí funcionó solo porque el otro falló.
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
@@ -84,7 +80,7 @@ export async function GET(req: NextRequest) {
         })
         emailOk = true
         sent++
-      } catch { /* email falló, si WhatsApp funcionó igual marcamos resena_solicitada abajo */ }
+      } catch { /* el correo no se aceptó; el próximo cron podrá reintentar */ }
     }
 
     // Solo se marca cuando el correo fue aceptado por Resend.
