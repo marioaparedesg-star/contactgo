@@ -22,9 +22,12 @@ describe('plantillas de correo de pedido', () => {
       expect(html).not.toMatch(/\{\{|undefined|null/)
     })
   }
-  it('administrativa: logo oficial y sin variables sin resolver', () => {
+  it('administrativa: muestra el costo de envío y el total del pedido', () => {
     const html = buildAdminOrderEmail(order, items, 'nuevo_pedido', 'recibido')
     expect(html).toContain('/logo.png')
+    expect(html).toContain('Envío')
+    expect(html).toContain('RD$250')
+    expect(html).toContain('RD$3,650')
     expect(html).not.toContain('contactgo-logo.svg')
     expect(html).not.toMatch(/\{\{|undefined|null/)
   })
