@@ -77,7 +77,7 @@ test.describe('SEO', () => {
 
 // ── Seguridad básica ──────────────────────────────────────────────────────
 test.describe('Seguridad', () => {
-  test('/admin redirige a login sin sesión', async ({ page }) => {
+  test('/M1Alexander redirige a login sin sesión', async ({ page }) => {
     await page.goto('/M1Alexander')
     // Debe terminar en /M1Alexander/login o mostrar login
     await expect(page).toHaveURL(/\/admin\/login/, { timeout: 8_000 })
