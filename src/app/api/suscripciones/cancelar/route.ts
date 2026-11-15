@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
     if (!user) return NextResponse.json({ error: 'Sesión requerida' }, { status: 401 })
 
     // Verificar rol
-    const { data: profile } = await sbServer.from('profiles').select('role').eq('id', user.id).single()
-    const isAdmin = profile?.role === 'admin'
+    const { data: profile } = await sbServer.from('profiles').select('role, activo').eq('id', user.id).single()
+    const isAdmin = profile?.role === 'admin' && profile?.activo === true
 
     // Buscar suscripción
     const { data: sub } = await getSb().from('subscriptions').select('*').eq('id', subscription_id).single()
