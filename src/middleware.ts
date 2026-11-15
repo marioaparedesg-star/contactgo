@@ -1,5 +1,11 @@
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+
+// Solo la cuenta principal de Mario puede abrir el panel.
+// Este UUID identifica la cuenta; no es una contraseña ni una clave de acceso.
+const PRIMARY_ADMIN_USER_ID =
+  process.env.CONTACTGO_PRIMARY_ADMIN_ID ?? '0ae25176-4cb9-45da-bd19-5b1b5806c4ef'
 
 // ⚠️ CRÍTICO-4: Este rate limiting in-memory NO funciona en serverless
 // Cada invocación de Vercel es una instancia aislada — rateMap se resetea en cada cold start
@@ -24,17 +30,20 @@ function rateLimit(key: string, limit: number, windowMs = 60_000): boolean {
 
 const ALLOWED_ORIGINS = ['https://www.contactgo.net', 'https://www.contactgo.net']
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
   const origin = req.headers.get('origin') ?? ''
 
-  // Ruta privada: el navegador usa /M1Alexander, la app conserva internamente /admin.
-  // La ruta antigua /admin queda cerrada con 404, incluso si existe una sesión.
+  // La ruta antigua queda cerrada incluso para usuarios autenticados.
   if (pathname === '/admin' || pathname.startsWith('/admin/')) {
-    return new NextResponse('Not Found', { status: 404, headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' } })
+    return new NextResponse('Not Found', {
+      status: 404,
+      headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' },
+    })
   }
 
+  // El formulario de acceso se sirve internamente desde /admin/login.
   if (pathname === '/M1Alexander/login' || pathname === '/M1Alexander/login/') {
     const res = NextResponse.rewrite(new URL('/admin/login', req.url))
     res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
@@ -42,30 +51,79 @@ export function middleware(req: NextRequest) {
     return res
   }
 
+  // Verificación de servidor: token válido + rol admin + cuenta principal.
+  // No basta con que exista una cookie: Supabase valida la sesión y el usuario.
   if (pathname === '/M1Alexander' || pathname.startsWith('/M1Alexander/')) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
-    const projectRef = supabaseUrl.replace('https://', '').split('.')[0]
-    const cookieBase = `sb-${projectRef}-auth-token`
-    const authCookie = req.cookies.get(cookieBase)
-      ?? req.cookies.get(`${cookieBase}.0`)
-      ?? req.cookies.get('sb-access-token')
-      ?? req.cookies.get('supabase-auth-token')
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-    if (!authCookie?.value) {
+    // Si falta configuración crítica, cerrar el acceso en lugar de dejarlo abierto.
+    if (!supabaseUrl || !supabaseKey || !PRIMARY_ADMIN_USER_ID) {
+      return new NextResponse('Not Found', {
+        status: 404,
+        headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' },
+      })
+    }
+
+    let supabaseResponse = NextResponse.next({ request: req })
+    const supabase = createServerClient(supabaseUrl, supabaseKey, {
+      cookies: {
+        getAll() {
+          return req.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value))
+          supabaseResponse = NextResponse.next({ request: req })
+          cookiesToSet.forEach(({ name, value, options }) => {
+            supabaseResponse.cookies.set(name, value, options)
+          })
+        },
+      },
+    })
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
       const loginUrl = new URL('/M1Alexander/login', req.url)
       loginUrl.searchParams.set('next', pathname)
-      return NextResponse.redirect(loginUrl)
+      const redirect = NextResponse.redirect(loginUrl)
+      supabaseResponse.cookies.getAll().forEach(cookie => redirect.cookies.set(cookie))
+      redirect.headers.set('Cache-Control', 'no-store')
+      redirect.headers.set('X-Robots-Tag', 'noindex, nofollow')
+      return redirect
+    }
+
+    // Exclusividad: bloquea las otras cuentas que también tengan role=admin.
+    if (user.id !== PRIMARY_ADMIN_USER_ID) {
+      return new NextResponse('Not Found', {
+        status: 404,
+        headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' },
+      })
+    }
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    if (profileError || profile?.role !== 'admin') {
+      return new NextResponse('Not Found', {
+        status: 404,
+        headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' },
+      })
     }
 
     const internalPath = pathname.replace(/^\\/M1Alexander(?=\\/|$)/, '/admin')
-    const res = NextResponse.rewrite(new URL(internalPath, req.url))
+    const res = NextResponse.rewrite(new URL(internalPath, req.url), { request: req })
+    supabaseResponse.cookies.getAll().forEach(cookie => res.cookies.set(cookie))
     res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
     res.headers.set('X-Robots-Tag', 'noindex, nofollow')
     return res
   }
 
   // ══════════════════════════════════════════════════════════
-  // 3. APIs de AZUL — origin check
+  // APIs de AZUL — se conserva la protección existente sin cambios.
   // ══════════════════════════════════════════════════════════
   if (pathname.startsWith('/api/azul')) {
     if (origin && !ALLOWED_ORIGINS.includes(origin)) {
@@ -77,7 +135,7 @@ export function middleware(req: NextRequest) {
   }
 
   // ══════════════════════════════════════════════════════════
-  // 4. Rate limiting en endpoints sensibles
+  // Rate limiting en endpoints sensibles — sin cambios.
   // ══════════════════════════════════════════════════════════
   const rateLimits: Record<string, number> = {
     '/api/orders': 20,
@@ -100,9 +158,6 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // ══════════════════════════════════════════════════════════
-  // 5. noindex headers en rutas privadas
-  // ══════════════════════════════════════════════════════════
   const res = NextResponse.next()
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/')) {
     res.headers.set('X-Robots-Tag', 'noindex, nofollow')
@@ -112,7 +167,6 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    // Protege /admin exacto Y /admin/* excluyendo /admin/login
     '/admin',
     '/admin/:path*',
     '/M1Alexander',
