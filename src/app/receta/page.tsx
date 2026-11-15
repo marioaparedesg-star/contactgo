@@ -778,12 +778,13 @@ function FallbackProductos({ result, buildWA }: { result: ConvertedRx; buildWA: 
 function AlternativasRevisionCard({ alternatives, result }: { alternatives: any[]; result: ConvertedRx }) {
   const message = (p: any) => {
     const fmt = (v: number | null) => v == null ? '—' : Number(v).toFixed(2)
+    const fmtAxis = (v: number | null) => v == null ? '—' : String(v).padStart(3, '0') + '°'
     const a = p.parametros_revision
     return [
       'Hola ContactGo. Mi calculadora encontró un modelo para revisión profesional, no una coincidencia exacta.',
       p.nombre,
-      `OD: SPH ${fmt(a.od.sph)}, CYL disponible ${fmt(a.od.cyl_disponible)}, eje disponible ${fmt(a.od.axis_disponible)}°`,
-      `OI: SPH ${fmt(a.oi.sph)}, CYL disponible ${fmt(a.oi.cyl_disponible)}, eje disponible ${fmt(a.oi.axis_disponible)}°`,
+      `OD: SPH ${fmt(a.od.sph)}, CYL disponible ${fmt(a.od.cyl_disponible)}, eje disponible ${fmtAxis(a.od.axis_disponible)}`,
+      `OI: SPH ${fmt(a.oi.sph)}, CYL disponible ${fmt(a.oi.cyl_disponible)}, eje disponible ${fmtAxis(a.oi.axis_disponible)}`,
       `Receta calculada: OD ${fmt(result.od.sph)} / ${fmt(result.od.cyl)} × ${fmt(result.od.axis)}; OI ${fmt(result.oi.sph)} / ${fmt(result.oi.cyl)} × ${fmt(result.oi.axis)}.`,
       'Por favor, confirmen si existe una alternativa adecuada antes de realizar el pedido.'
     ].join('\\n')
