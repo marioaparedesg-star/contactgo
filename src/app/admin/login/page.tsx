@@ -27,7 +27,7 @@ export default function AdminLogin() {
       }
       // Hard navigation: fuerza recarga completa para que el middleware
       // lea la cookie recién seteada (sb-{ref}-auth-token o .0 chunked)
-      window.location.href = '/admin'
+      window.location.href = '/M1Alexander'
     } catch (err: any) {
       setMsg('Error inesperado. Intenta de nuevo.')
       setLoading(false)
@@ -37,7 +37,7 @@ export default function AdminLogin() {
   const sendMagicLink = async () => {
     setLoading(true)
     const sb = createClient()
-    const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin + '/admin' } })
+    const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin + '/M1Alexander' } })
     if (error) { setMsg('Error: ' + error.message); setLoading(false); return }
     setMagicSent(true)
     setMsg('Revisa tu email y haz clic en el link')
