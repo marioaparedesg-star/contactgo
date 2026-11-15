@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendText, normalizePhone } from '@/lib/whatsapp'
 import { notificarRenovacion, notificarRecompraPrevio } from '@/lib/wa-notifications'
+import { hasMarketingConsent } from '@/lib/email/marketing-consent'
 
 // ═══ INTERRUPTOR DE SEGURIDAD ═══
 // Apagado por defecto a propósito (Mario: "no envíe nada a nadie" hasta
@@ -213,33 +214,10 @@ export async function GET(req: NextRequest) {
       .not('telefono', 'is', null)
       .limit(50)
 
-    for (const c of carritos ?? []) {
-      try {
-        const nombre = c.nombre?.split(' ')[0] ?? ''
-        const items = Array.isArray(c.items) ? c.items : []
-        const productos = items.slice(0, 3)
-          .map((i: any) => `• ${i.nombre ?? 'Producto'}${i.cantidad > 1 ? ` x${i.cantidad}` : ''}`)
-          .join('\n')
+    // Se pausa el mensaje promocional por WhatsApp: el consentimiento de email
+    // no autoriza campañas por WhatsApp. Reactivar solo cuando exista opt-in separado.
+    resultsCarritos.carritos = 0
 
-        const mensaje = `👋 Hola${nombre ? ` *${nombre}*` : ''}, dejaste algo esperando en tu carrito 🛒\n\n` +
-          `${productos}\n\n` +
-          `¿Tuviste algún problema al comprar? Te ayudamos ahora mismo.\n\n` +
-          `🎁 *5% de descuento* para que completes hoy:\n*VUELVE5*\n\n` +
-          `👉 Continúa aquí: www.contactgo.net/cart\n\n` +
-          `O responde este mensaje y te asistimos personalmente. 💚`
-
-        const res = await sendText(c.telefono, mensaje)
-        await sb.from('carritos_abandonados').update({
-          wa_enviado: true,
-          wa_enviado_at: new Date().toISOString(),
-        }).eq('id', c.id)
-        await logAutomation(sb, null, c.telefono, 'carrito', true, res?.messages?.[0]?.id)
-        resultsCarritos.carritos++
-      } catch (e: any) {
-        await logAutomation(sb, null, c.telefono, 'carrito', false, undefined, e.message)
-        results.errores++
-      }
-    }
   } catch (e) { console.error('[cron/wa-daily] carritos:', e) }
 
   // ─────────────────────────────────────────────────────
@@ -277,6 +255,7 @@ export async function GET(req: NextRequest) {
       .limit(30)
 
     for (const o of ventasLentes ?? []) {
+      if (!o.cliente_email || !(await hasMarketingConsent(o.cliente_email))) continue
       // Verificar si ya se envió cross-sell a este pedido
       const { count: yaEnviado } = await sb
         .from('wa_automation_log')
