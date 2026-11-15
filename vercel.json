@@ -27,10 +27,6 @@
     {
       "path": "/api/cron/alertas-admin",
       "schedule": "0 13 * * *"
-    },
-    {
-      "path": "/api/admin/enviar-prueba-correos",
-      "schedule": "0 19 * * *"
     }
   ]
 }
