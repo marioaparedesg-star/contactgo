@@ -91,8 +91,16 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
           order_id: orderId, template, to_email: order.cliente_email, subject,
           resend_id: sent.resendId ?? null, status: sent.error ? 'error' : 'sent',
         })
-        if (logError?.code === '23505') console.warn('[order-notifications] Resend aceptó el correo; email_log ya tenía esa plantilla para este pedido.')
-        else if (logError) console.error('[order-notifications] no se pudo guardar email_log cliente:', logError.message)
+        if (logError?.code === '23505') {
+          // email_log_dedup_idx is unique only for sent rows. A repeated status
+          // transition may legitimately send again; keep an audit row without
+          // violating the one-sent-row dedup index.
+          const { error: auditError } = await sb.from('email_log').insert({
+            order_id: orderId, template, to_email: order.cliente_email, subject,
+            resend_id: sent.resendId ?? null, status: 'duplicate',
+          })
+          if (auditError) console.error('[order-notifications] no se pudo guardar auditoría cliente:', auditError.message)
+        } else if (logError) console.error('[order-notifications] no se pudo guardar email_log cliente:', logError.message)
       }
     } else {
       result.email_cliente = 'skipped'
@@ -131,8 +139,13 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
           order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
           resend_id: adminResendId ?? null, status: adminError ? 'error' : 'sent',
         })
-        if (logError?.code === '23505') console.warn('[order-notifications] Resend aceptó el aviso interno; email_log ya tenía esa plantilla para este pedido.')
-        else if (logError) console.error('[order-notifications] no se pudo guardar email_log admin:', logError.message)
+        if (logError?.code === '23505') {
+          const { error: auditError } = await sb.from('email_log').insert({
+            order_id: orderId, template: adminTemplate, to_email: ADMIN_EMAIL, subject: adminSubject,
+            resend_id: adminResendId ?? null, status: 'duplicate',
+          })
+          if (auditError) console.error('[order-notifications] no se pudo guardar auditoría admin:', auditError.message)
+        } else if (logError) console.error('[order-notifications] no se pudo guardar email_log admin:', logError.message)
       }
     }
     return result
