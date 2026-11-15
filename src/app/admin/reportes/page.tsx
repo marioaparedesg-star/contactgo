@@ -148,9 +148,9 @@ export default function ReportesPage() {
         <h2 className="font-bold text-sm text-gray-700 mb-4">Resumen general</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            {label:'Entregados', val:kpis?.delivered_total??0, color:'text-green-600'},
+            {label:'Entregados (30 días)', val:kpis?.delivered_30d??0, color:'text-green-600'},
             {label:'Cancelados', val:kpis?.cancelled_total??0, color:'text-red-500'},
-            {label:'Tasa entrega', val:`${kpis?.delivered_total&&kpis?.orders_30d?Math.round((kpis.delivered_total/Math.max(kpis.orders_30d,1))*100):0}%`, color:'text-blue-600'},
+            {label:'Tasa entrega', val:`${kpis?.delivered_30d&&kpis?.orders_30d?Math.round((kpis.delivered_30d/Math.max(kpis.orders_30d,1))*100):0}%`, color:'text-blue-600'},
             {label:'Suscripciones', val:'—', color:'text-purple-600'},
           ].map(({label,val,color})=>(
             <div key={label} className="text-center">
