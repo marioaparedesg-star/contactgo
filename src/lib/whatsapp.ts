@@ -118,6 +118,11 @@ export async function fetchWA(phone: string, init: { body: string; [k: string]: 
 export async function enviarWAManual(to: string, body: Record<string, any>) {
   if (!TOKEN) throw new Error('WHATSAPP_TOKEN no configurado')
   const phone = normalizePhone(to)
+  // La pausa del panel también bloquea mensajes manuales a clientes.
+  // El número interno de administración permanece exento para alertas propias.
+  if (phone !== NUMERO_ADMIN && await clientesPausados()) {
+    throw new Error('WHATSAPP_CLIENTES_PAUSADO: los mensajes a clientes están pausados por el administrador.')
+  }
   const payload = { messaging_product: 'whatsapp', ...body, to: phone }
   const response = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
     method: 'POST',
