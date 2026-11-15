@@ -53,6 +53,10 @@ async function clientesPausados(): Promise<boolean> {
   }
 }
 
+export async function isWhatsAppClientPaused(): Promise<boolean> {
+  return clientesPausados()
+}
+
 const NUMERO_ADMIN = '18096942268' // admin exento: nunca se bloquea ni se encola
 
 // ─── PUNTO ÚNICO DE SALIDA AUTOMÁTICA A WHATSAPP ───
