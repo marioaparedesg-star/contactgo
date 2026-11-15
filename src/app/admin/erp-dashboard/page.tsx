@@ -36,7 +36,6 @@ export default function ERPDashboard() {
     const desde = `${y}-${String(m).padStart(2,'0')}-01`
     const siguienteMes = new Date(y, m, 1)
     const hastaExclusivo = `${siguienteMes.getFullYear()}-${String(siguienteMes.getMonth()+1).padStart(2,'0')}-01`
-    const hasta = new Date(y, m, 0).toISOString().slice(0,10)
 
     const [
       {data:g}, {data:v}, {data:c}, {data:cost}
