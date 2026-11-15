@@ -1,6 +1,6 @@
 import { guardRequest, getIP } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
-import { fetchWA } from '@/lib/whatsapp'
+import { fetchWA, WHATSAPP_AUTOMATIONS_ENABLED, isWhatsAppClientPaused } from '@/lib/whatsapp'
 
 const WA_TOKEN    = process.env.WHATSAPP_TOKEN
 const WA_PHONE_ID = process.env.WHATSAPP_PHONE_ID
@@ -24,8 +24,9 @@ export async function POST(req: NextRequest) {
     const totalFmt  = `RD$${Number(total ?? 0).toLocaleString()}`
     const metodo    = '💳 Tarjeta AZUL'
 
-    // OPCIÓN A: WhatsApp Business API oficial (si tienes token de Meta)
-    if (WA_TOKEN && WA_PHONE_ID) {
+    // OPCIÓN A: WhatsApp Business API oficial (solo si los mensajes a clientes están habilitados)
+    const whatsappPaused = !WHATSAPP_AUTOMATIONS_ENABLED || await isWhatsAppClientPaused()
+    if (!whatsappPaused && WA_TOKEN && WA_PHONE_ID) {
       const raw = (cliente_telefono ?? '').replace(/\D/g, '')
       const telefono = raw.length === 10 ? `1${raw}` : raw
 
