@@ -457,7 +457,7 @@ export default function AdminDashboard() {
     icon: AlertTriangle, color:'text-red-600', bg:'bg-red-50',
     texto: `${stock.length} producto${stock.length===1?'':'s'} bajo mínimo de stock`,
     sub: stock.slice(0,2).map((p:any)=>p.nombre).join(', ') + (stock.length>2?'…':''),
-    accion: () => router.push('/admin/inventario'),
+    accion: () => router.push('/M1Alexander/inventario'),
   })
 
   return (
@@ -486,13 +486,13 @@ export default function AdminDashboard() {
         {/* Nav — desktop en línea, mobile desplegable */}
         <div className={`${navMovilAbierto?'flex':'hidden'} md:flex flex-col md:flex-row gap-1 md:gap-4 mt-4 pt-3 border-t border-gray-100 text-xs font-semibold`}>
           {[
-            {label:'Dashboard', path:'/admin', activo:true},
-            {label:'Pedidos', path:'/admin/pedidos'},
-            {label:'Clientes', path:'/admin/registrados'},
-            {label:'Productos', path:'/admin/inventario'},
-            {label:'Finanzas', path:'/admin/reportes'},
-            {label:'Marketing', path:'/admin/calculadora'},
-            {label:'Correos', path:'/admin/correos'},
+            {label:'Dashboard', path:'/M1Alexander', activo:true},
+            {label:'Pedidos', path:'/M1Alexander/pedidos'},
+            {label:'Clientes', path:'/M1Alexander/registrados'},
+            {label:'Productos', path:'/M1Alexander/inventario'},
+            {label:'Finanzas', path:'/M1Alexander/reportes'},
+            {label:'Marketing', path:'/M1Alexander/calculadora'},
+            {label:'Correos', path:'/M1Alexander/correos'},
           ].map(n=>(
             <button key={n.path} onClick={()=>router.push(n.path)}
               className={`text-left md:text-center px-2 py-1.5 md:py-0 rounded-lg md:rounded-none ${n.activo?'text-primary-600':'text-gray-500 hover:text-gray-800'}`}>
@@ -540,12 +540,12 @@ export default function AdminDashboard() {
           Costo/Ganancia van sobre lo VENDIDO, no solo lo cobrado. ═══ */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {[
-          { key:null, label:'Vendido', val:fmt(data?.ventasTotalPeriodo??0), sub:`${data?.pedidosPeriodo??0} pedidos — se haya cobrado o no`, color:'text-gray-900', accion:()=>router.push('/admin/pedidos') },
+          { key:null, label:'Vendido', val:fmt(data?.ventasTotalPeriodo??0), sub:`${data?.pedidosPeriodo??0} pedidos — se haya cobrado o no`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:'periodo', label:'Cobrado', val:fmt(data?.ventasPeriodo??0), sub:'dinero que ya entró', color:'text-blue-600', accion:()=>setDetalleAbierto(detalleAbierto==='periodo'?null:'periodo') },
           { key:'porCobrar', label:'Por cobrar', val:fmt(porCobrarTotal), sub:`${data?.pedidosPorCobrar??0} pedidos`, color:'text-amber-600', accion:()=>setDetalleAbierto(detalleAbierto==='porCobrar'?null:'porCobrar') },
           { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según products.costo', color:'text-red-500', accion:undefined },
           { key:'ganancia', label:'Ganancia de lo vendido', val:fmt(data?.gananciaPeriodo??0), sub:`${margenPct}% margen`, color:'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
-          { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/admin/pedidos') },
+          { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:null, label:'Ticket promedio', val:fmt(data?.ticketProm??0), sub:'por pedido vendido', color:'text-gray-900', accion:undefined },
           { key:'etapa', label:'Pedidos activos', val:String(pedidosActivosTotal), sub:'en proceso', color:'text-indigo-600', accion:()=>document.getElementById('pedidos-por-etapa')?.scrollIntoView({behavior:'smooth'}) },
         ].map(({key,label,val,sub,color,accion})=>{
@@ -576,7 +576,7 @@ export default function AdminDashboard() {
           {(data?.detallePeriodoArr??[]).length===0 ? <p className="text-xs text-gray-400 text-center py-6">Sin cobros en este rango.</p> : (
             <div className="space-y-2">
               {data.detallePeriodoArr.map((o:any) => (
-                <a key={o.id} href="/admin/pedidos" className="flex items-center justify-between gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                <a key={o.id} href="/M1Alexander/pedidos" className="flex items-center justify-between gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
                   <div className="min-w-0">
                     <p className="text-xs font-bold text-gray-800 truncate">{o.cliente_nombre}</p>
                     <p className="text-[11px] text-gray-400">#{o.numero_orden} · {new Date(o.created_at ?? o.fecha).toLocaleString('es-DO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</p>
@@ -675,8 +675,8 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={()=>router.push('/admin/pedidos')} className="flex-1 text-[10px] font-bold py-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-100">Ver pedido</button>
-                    <button onClick={()=>router.push('/admin/pedidos')} className="flex-1 text-[10px] font-bold py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700">Registrar pago</button>
+                    <button onClick={()=>router.push('/M1Alexander/pedidos')} className="flex-1 text-[10px] font-bold py-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-100">Ver pedido</button>
+                    <button onClick={()=>router.push('/M1Alexander/pedidos')} className="flex-1 text-[10px] font-bold py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700">Registrar pago</button>
                     {o.cliente_telefono && (
                       <button onClick={()=>window.open(`https://wa.me/${String(o.cliente_telefono).replace(/\D/g,'')}`,'_blank')}
                         className="w-8 shrink-0 text-[10px] font-bold py-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100">💬</button>
@@ -745,7 +745,7 @@ export default function AdminDashboard() {
                 {pedidosEtapa.map((p:any)=>{
                   const dias = Math.floor((Date.now()-new Date(p.created_at).getTime())/86400000)
                   return (
-                    <a key={p.id} href="/admin/pedidos" className="flex items-center justify-between gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100">
+                    <a key={p.id} href="/M1Alexander/pedidos" className="flex items-center justify-between gap-2 p-3 rounded-xl bg-gray-50 hover:bg-gray-100">
                       <div className="min-w-0">
                         <p className="text-xs font-bold text-gray-800 truncate">{p.cliente_nombre}</p>
                         <p className="text-[11px] text-gray-400">#{p.numero_orden} · {new Date(p.created_at).toLocaleDateString('es-DO')}</p>
@@ -767,7 +767,7 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-bold text-gray-900 text-sm">Pedidos recientes</h2>
-          <button onClick={()=>router.push('/admin/pedidos')}
+          <button onClick={()=>router.push('/M1Alexander/pedidos')}
             className="text-xs text-primary-600 font-semibold flex items-center gap-1 hover:underline">
             Ver todos <ArrowRight className="w-3 h-3"/>
           </button>
@@ -777,7 +777,7 @@ export default function AdminDashboard() {
         ) : (
           <div className="space-y-1">
             {recent.slice(0,5).map(p=>(
-              <a key={p.id} href="/admin/pedidos" className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0 hover:bg-gray-50 -mx-2 px-2 rounded-lg">
+              <a key={p.id} href="/M1Alexander/pedidos" className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0 hover:bg-gray-50 -mx-2 px-2 rounded-lg">
                 <div className="w-8 h-8 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
                   {p.metodo_pago==='tarjeta' ? <CreditCard className="w-4 h-4 text-gray-500"/> : <Truck className="w-4 h-4 text-gray-500"/>}
                 </div>
@@ -824,7 +824,7 @@ export default function AdminDashboard() {
             <p className="text-[9px] text-gray-500">Compraron</p>
           </div>
         </div>
-        <button onClick={()=>router.push('/admin/calculadora')} className="w-full mt-3 text-xs font-semibold text-primary-600 hover:underline">Ver leads →</button>
+        <button onClick={()=>router.push('/M1Alexander/calculadora')} className="w-full mt-3 text-xs font-semibold text-primary-600 hover:underline">Ver leads →</button>
       </div>
 
       {/* ═══ PRODUCTOS ═══ */}
@@ -860,12 +860,12 @@ export default function AdminDashboard() {
         <h2 className="font-bold text-gray-900 text-sm mb-3">Acciones rápidas</h2>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
           {[
-            {label:'Pedidos', path:'/admin/pedidos'},
-            {label:'Registrar pago', path:'/admin/pedidos'},
-            {label:'Clientes', path:'/admin/registrados'},
-            {label:'Productos', path:'/admin/inventario'},
-            {label:'Leads', path:'/admin/calculadora'},
-            {label:'Reportes', path:'/admin/reportes'},
+            {label:'Pedidos', path:'/M1Alexander/pedidos'},
+            {label:'Registrar pago', path:'/M1Alexander/pedidos'},
+            {label:'Clientes', path:'/M1Alexander/registrados'},
+            {label:'Productos', path:'/M1Alexander/inventario'},
+            {label:'Leads', path:'/M1Alexander/calculadora'},
+            {label:'Reportes', path:'/M1Alexander/reportes'},
           ].map(a=>(
             <button key={a.label} onClick={()=>router.push(a.path)}
               className="text-[11px] font-semibold text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl py-2.5 px-2 text-center transition-colors">
