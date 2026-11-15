@@ -15,48 +15,48 @@ const NAV_SECTIONS = [
   {
     label: 'Principal',
     items: [
-      { href: '/admin',               icon: LayoutDashboard, label: 'Dashboard',      badge: null },
-      { href: '/admin/pedidos',       icon: ShoppingBag,     label: 'Pedidos',        badge: 'pendientes' },
-      { href: '/admin/venta-whatsapp', icon: WhatsAppIcon,   label: '💰 Venta WhatsApp', badge: null },
-      { href: '/admin/suscripciones', icon: Repeat,          label: 'Suscripciones',  badge: null },
+      { href: '/M1Alexander',               icon: LayoutDashboard, label: 'Dashboard',      badge: null },
+      { href: '/M1Alexander/pedidos',       icon: ShoppingBag,     label: 'Pedidos',        badge: 'pendientes' },
+      { href: '/M1Alexander/venta-whatsapp', icon: WhatsAppIcon,   label: '💰 Venta WhatsApp', badge: null },
+      { href: '/M1Alexander/suscripciones', icon: Repeat,          label: 'Suscripciones',  badge: null },
     ]
   },
   {
     label: 'Catálogo',
     items: [
-      { href: '/admin/productos',     icon: Package,         label: 'Productos',      badge: null },
-      { href: '/admin/inventario',    icon: BarChart2,       label: 'Inventario',     badge: 'stock' },
-      { href: '/admin/inventario/escaner', icon: Scan,         label: '⚡ Escáner',      badge: null },
-      { href: '/admin/cupones',       icon: Tag,             label: 'Cupones',        badge: null },
-      { href: '/admin/reabastecimiento', icon: AlertTriangle, label: '⚠️ Reabasto',     badge: null },
-      { href: '/admin/auditoria',      icon: CheckCircle,    label: '🔍 Auditoría',    badge: null },
+      { href: '/M1Alexander/productos',     icon: Package,         label: 'Productos',      badge: null },
+      { href: '/M1Alexander/inventario',    icon: BarChart2,       label: 'Inventario',     badge: 'stock' },
+      { href: '/M1Alexander/inventario/escaner', icon: Scan,         label: '⚡ Escáner',      badge: null },
+      { href: '/M1Alexander/cupones',       icon: Tag,             label: 'Cupones',        badge: null },
+      { href: '/M1Alexander/reabastecimiento', icon: AlertTriangle, label: '⚠️ Reabasto',     badge: null },
+      { href: '/M1Alexander/auditoria',      icon: CheckCircle,    label: '🔍 Auditoría',    badge: null },
     ]
   },
   {
     label: 'Clientes',
     items: [
-      { href: '/admin/clientes',      icon: Users,           label: 'Clientes',       badge: null },
-      { href: '/admin/referidos',     icon: Gift,            label: 'Referidos',      badge: null },
-      { href: '/admin/leads',         icon: TrendingUp,      label: '🎯 Leads Calculadora', badge: null },
-      { href: '/admin/registrados',   icon: Users,           label: '👥 Registrados',  badge: null },
-      { href: '/admin/abandonados',   icon: ShoppingCart,    label: 'Abandonados',    badge: null },
-      { href: '/admin/whatsapp',      icon: WhatsAppIcon,    label: '💬 WhatsApp',     badge: 'whatsapp' },
-      { href: '/admin/whatsapp-automation', icon: Repeat,    label: '⚡ Automatización', badge: null },
+      { href: '/M1Alexander/clientes',      icon: Users,           label: 'Clientes',       badge: null },
+      { href: '/M1Alexander/referidos',     icon: Gift,            label: 'Referidos',      badge: null },
+      { href: '/M1Alexander/leads',         icon: TrendingUp,      label: '🎯 Leads Calculadora', badge: null },
+      { href: '/M1Alexander/registrados',   icon: Users,           label: '👥 Registrados',  badge: null },
+      { href: '/M1Alexander/abandonados',   icon: ShoppingCart,    label: 'Abandonados',    badge: null },
+      { href: '/M1Alexander/whatsapp',      icon: WhatsAppIcon,    label: '💬 WhatsApp',     badge: 'whatsapp' },
+      { href: '/M1Alexander/whatsapp-automation', icon: Repeat,    label: '⚡ Automatización', badge: null },
     ]
   },
   {
     label: 'Análisis',
     items: [
-      { href: '/admin/erp-dashboard',  icon: TrendingUp,  label: '📊 ERP Dashboard',  badge: null },
-      { href: '/admin/compras',        icon: ShoppingBag, label: '🛒 Compras',         badge: null },
-      { href: '/admin/caja',           icon: DollarSign,  label: '💵 Caja',            badge: null },
-      { href: '/admin/dgii',          icon: FileText,        label: 'DGII / 607',     badge: null },
+      { href: '/M1Alexander/erp-dashboard',  icon: TrendingUp,  label: '📊 ERP Dashboard',  badge: null },
+      { href: '/M1Alexander/compras',        icon: ShoppingBag, label: '🛒 Compras',         badge: null },
+      { href: '/M1Alexander/caja',           icon: DollarSign,  label: '💵 Caja',            badge: null },
+      { href: '/M1Alexander/dgii',          icon: FileText,        label: 'DGII / 607',     badge: null },
     ]
   },
   {
     label: 'Sistema',
     items: [
-      { href: '/admin/configuracion', icon: Settings,        label: 'Configuración',  badge: null },
+      { href: '/M1Alexander/configuracion', icon: Settings,        label: 'Configuración',  badge: null },
     ]
   },
 ]
@@ -76,7 +76,7 @@ export default function AdminNav() {
 
   useEffect(() => {
     // Si estamos en /admin/pedidos, marcar como vistos y no mostrar badge
-    const enPedidos = pathname === '/admin/pedidos'
+    const enPedidos = pathname === '/M1Alexander/pedidos' || pathname === '/admin/pedidos'
     if (enPedidos) {
       // Guardar timestamp de última visita para calcular nuevos desde entonces
       localStorage.setItem('admin_pedidos_last_seen', new Date().toISOString())
@@ -108,7 +108,7 @@ export default function AdminNav() {
 
   const logout = async () => {
     await sb.auth.signOut()
-    router.push('/admin/login')
+    router.push('/M1Alexander/login')
   }
 
   const NavContent = ({ mobile = false }: { mobile?: boolean }) => (
@@ -144,7 +144,7 @@ export default function AdminNav() {
               </p>
             )}
             {section.items.map(({ href, icon: Icon, label, badge }) => {
-              const active = pathname === href || (href !== '/admin' && pathname.startsWith(href))
+              const active = pathname === href || (href !== '/M1Alexander' && pathname.startsWith(href))
               const badgeCount = getBadge(badge)
               return (
                 <Link key={href} href={href}
