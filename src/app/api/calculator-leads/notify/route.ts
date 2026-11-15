@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { guardRequest } from '@/lib/api-guard'
-import { fetchWA } from '@/lib/whatsapp'
+import { fetchWA, WHATSAPP_AUTOMATIONS_ENABLED, isWhatsAppClientPaused } from '@/lib/whatsapp'
 
 // Envía el WhatsApp de resultado de la calculadora con LOS MISMOS productos
 // y precios que la persona vio en pantalla.
@@ -47,6 +47,9 @@ export async function POST(req: NextRequest) {
   const guardErr = guardRequest(req, { limitPerMin: 10, requireOrigin: false })
   if (guardErr) return guardErr
   try {
+    if (!WHATSAPP_AUTOMATIONS_ENABLED || await isWhatsAppClientPaused()) {
+      return NextResponse.json({ ok: false, reason: 'whatsapp_paused' }, { status: 200 })
+    }
     const token = process.env.WHATSAPP_TOKEN
     if (!token) return NextResponse.json({ ok: false, reason: 'no_token' }, { status: 500 })
 
