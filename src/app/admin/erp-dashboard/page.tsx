@@ -32,14 +32,15 @@ export default function ERPDashboard() {
   })
 
   const cargar = async () => {
-    const [y,m] = mes.split('-')
-    const desde = `${y}-${m}-01`
-    const hasta = `${y}-${m}-31`
+    const [y,m] = mes.split('-').map(Number)
+    const desde = `${y}-${String(m).padStart(2,'0')}-01`
+    const siguienteMes = new Date(y, m, 1)
+    const hastaExclusivo = `${siguienteMes.getFullYear()}-${String(siguienteMes.getMonth()+1).padStart(2,'0')}-01`
 
     const [
       {data:g}, {data:v}, {data:c}, {data:cost}
     ] = await Promise.all([
-      sb.from('expenses').select('*').gte('fecha',desde).lte('fecha',hasta).order('fecha',{ascending:false}),
+      sb.from('expenses').select('*').gte('fecha',desde).lt('fecha',hastaExclusivo).order('fecha',{ascending:false}),
       // FIX (2026-09-04): antes sumaba orders.total de pedidos 100% pagados
       // — un pedido con abono parcial (pago_estado='pendiente' todavía)
       // nunca contaba, aunque ya se hubiera cobrado parte real del dinero.
@@ -47,8 +48,8 @@ export default function ERPDashboard() {
       // es la fuente confiable: registra cada abono individual al momento
       // de cobrarse (ver /api/admin/pedidos, acción registrar_pago) más los
       // pagos automáticos de AZUL. Evita repetir la misma lógica una tercera vez.
-      sb.from('cash_movements').select('monto,fecha').eq('categoria','venta').eq('tipo','ingreso').gte('fecha',desde).lte('fecha',hasta),
-      sb.from('purchase_orders').select('total').eq('estado','recibida').gte('created_at',`${desde}T00:00:00`).lte('created_at',`${hasta}T23:59:59`),
+      sb.from('cash_movements').select('monto,fecha').eq('categoria','venta').eq('tipo','ingreso').gte('fecha',desde).lt('fecha',hastaExclusivo),
+      sb.from('purchase_orders').select('total') .eq('estado','recibida').gte('fecha_llegada',desde).lt('fecha_llegada',hastaExclusivo),
       sb.from('product_costs').select('*,products(nombre,precio,sku,stock)'),
     ])
 

@@ -179,12 +179,14 @@ export default function AdminDashboard() {
     // Por cobrar: esto SÍ sigue basado en pedidos (no en cash_movements) —
     // es sobre saldo pendiente de ÓRDENES activas, no sobre cuándo entró
     // el dinero. Necesita su propio cálculo de abonos por pedido.
-    const { data: abonosData } = await sb.from('order_payments').select('order_id,monto')
-    const abonosPorOrden: Record<string, number> = {}
-    ;(abonosData ?? []).forEach((a: any) => {
-      abonosPorOrden[a.order_id] = (abonosPorOrden[a.order_id] ?? 0) + Number(a.monto ?? 0)
+    const { data: movimientosCobro } = await sb.from('cash_movements').select('order_id,monto').eq('categoria','venta').eq('tipo','ingreso').not('order_id','is',null)
+    const cobradoPorOrden: Record<string, number> = {}
+    ;(movimientosCobro ?? []).forEach((m: any) => {
+      cobradoPorOrden[m.order_id] = (cobradoPorOrden[m.order_id] ?? 0) + Number(m.monto ?? 0)
     })
-    const cobradoDeOrden = (o: any) => o.pago_estado === 'pagado' ? Number(o.total ?? 0) : (abonosPorOrden[o.id] ?? 0)
+    // Caja es la fuente de cobros efectivamente recibidos. Los pedidos marcados pagados
+    // conservan saldo cero; los demás descuentan los movimientos conciliados por order_id.
+    const cobradoDeOrden = (o: any) => o.pago_estado === 'pagado' ? Number(o.total ?? 0) : (cobradoPorOrden[o.id] ?? 0)
 
     const hace30d = new Date(Date.now() - 30*86400000)
     let porCobrarActivo = 0, porCobrarViejo = 0, pedidosPorCobrar = 0
@@ -422,8 +424,7 @@ export default function AdminDashboard() {
     </div>
   )
 
-  const pedidosActivosTotal = ['recibido','pago_aprobado','preparando','fabricante','transito']
-    .reduce((s,k)=>s+(data?.porEtapa?.[k]??0),0)
+  const pedidosActivosTotal = Object.values(data?.porEtapa??{}).reduce((s:any,n:any)=>s+Number(n??0),0)
   const porCobrarTotal = (data?.porCobrarActivo??0)+(data?.porCobrarViejo??0)
   const margenPct = (data?.ventasTotalPeriodo??0) > 0 ? Math.round(((data?.gananciaPeriodo??0)/(data?.ventasTotalPeriodo??0))*100) : 0
   const primerNombre = 'Mario'
