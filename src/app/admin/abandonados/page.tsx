@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { createClient } from '@/lib/supabase'
 import { RefreshCw, Search, MessageSquareOff } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -10,7 +10,7 @@ type CartRow = {
 }
 
 export default function AdminAbandonados() {
-  const sb = createClient()
+  const sb = useMemo(() => createClient(), [])
   const [emailCarts, setEmailCarts] = useState<CartRow[]>([])
   const [trackingCarts, setTrackingCarts] = useState<CartRow[]>([])
   const [source, setSource] = useState<'email' | 'tracking'>('email')
@@ -69,16 +69,16 @@ export default function AdminAbandonados() {
     </div>
     <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 mb-5 flex items-start gap-2"><MessageSquareOff className="w-4 h-4 text-amber-700 mt-0.5 shrink-0" /><p className="text-xs text-amber-900">Los mensajes automáticos de WhatsApp están pausados. Esta pantalla solo consulta y actualiza estados; no envía mensajes.</p></div>
     <div className="flex gap-2 mb-4 flex-wrap">
-      <button onClick={() => setSource('email')} className={\`px-4 py-2 rounded-xl text-sm font-semibold \${source === 'email' ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600'}\`}>Checkout / correo ({emailCarts.length})</button>
-      <button onClick={() => setSource('tracking')} className={\`px-4 py-2 rounded-xl text-sm font-semibold \${source === 'tracking' ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600'}\`}>Seguimiento ({trackingCarts.length})</button>
+      <button onClick={() => setSource('email')} className={`px-4 py-2 rounded-xl text-sm font-semibold ${source === 'email' ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600'}`}>Checkout / correo ({emailCarts.length})</button>
+      <button onClick={() => setSource('tracking')} className={`px-4 py-2 rounded-xl text-sm font-semibold ${source === 'tracking' ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600'}`}>Seguimiento ({trackingCarts.length})</button>
     </div>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
       {[
         { label: 'Pendientes', value: stats.pendientes, color: 'text-amber-700', bg: 'bg-amber-50' },
         { label: 'Contactados', value: stats.contactados, color: 'text-blue-700', bg: 'bg-blue-50' },
         { label: 'Recuperados', value: stats.recuperados, color: 'text-green-700', bg: 'bg-green-50' },
-        { label: 'Valor no recuperado', value: \`RD$\${stats.valor.toLocaleString('es-DO')}\`, color: 'text-red-700', bg: 'bg-red-50' },
-      ].map(s => <div key={s.label} className={\`\${s.bg} rounded-2xl p-4\`}><p className={\`text-2xl font-black \${s.color}\`}>{s.value}</p><p className="text-xs text-gray-500 mt-0.5">{s.label}</p></div>)}
+        { label: 'Valor no recuperado', value: `RD$${stats.valor.toLocaleString('es-DO')}`, color: 'text-red-700', bg: 'bg-red-50' },
+      ].map(s => <div key={s.label} className={`${s.bg} rounded-2xl p-4`}><p className={`text-2xl font-black ${s.color}`}>{s.value}</p><p className="text-xs text-gray-500 mt-0.5">{s.label}</p></div>)}
     </div>
     <div className="relative mb-4"><Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar por nombre, teléfono o email..." className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-400" /></div>
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"><div className="overflow-x-auto"><table className="w-full text-sm">
@@ -88,11 +88,11 @@ export default function AdminAbandonados() {
           filtered.length === 0 ? <tr><td colSpan={7} className="text-center py-12 text-gray-400">No hay registros en esta sección.</td></tr> :
           filtered.map(c => {
             const mins = Math.max(0, Math.round((Date.now() - new Date(c.created_at).getTime()) / 60000))
-            return <tr key={\`\${c.source}-\${c.id}\`} className="hover:bg-gray-50/80">
+            return <tr key={`${c.source}-${c.id}`} className="hover:bg-gray-50/80">
               <td className="px-4 py-3 font-semibold text-gray-900">{c.nombre ?? '—'}</td><td className="px-4 py-3 text-gray-600 text-xs font-mono">{c.telefono ?? '—'}</td>
-              <td className="px-4 py-3"><p className="text-xs text-gray-600 truncate max-w-[180px]">{formatItems(c.items)}</p></td><td className="px-4 py-3 font-bold text-gray-900">RD$\{c.total.toLocaleString('es-DO')}</td>
+              <td className="px-4 py-3"><p className="text-xs text-gray-600 truncate max-w-[180px]">{formatItems(c.items)}</p></td><td className="px-4 py-3 font-bold text-gray-900">RD${c.total.toLocaleString('es-DO')}</td>
               <td className="px-4 py-3">{c.recuperado ? <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-1 rounded-lg">Recuperado</span> : c.contactado ? <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded-lg">Contactado</span> : <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded-lg">Pendiente</span>}</td>
-              <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{mins < 60 ? \`hace \${mins} min\` : \`hace \${Math.round(mins / 60)} h\`}</td>
+              <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{mins < 60 ? `hace ${mins} min` : `hace ${Math.round(mins / 60)} h`}</td>
               <td className="px-4 py-3">{!c.recuperado && <button onClick={() => marcarRecuperado(c)} className="px-2 py-1 text-xs font-semibold bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100">Marcar recuperado</button>}</td>
             </tr>
           })
