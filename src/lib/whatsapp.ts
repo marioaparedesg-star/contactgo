@@ -9,6 +9,10 @@ const WA_API_URL = 'https://graph.facebook.com/v20.0'
 const PHONE_ID   = process.env.WHATSAPP_PHONE_ID ?? '1237770472751989'
 const TOKEN      = process.env.WHATSAPP_TOKEN    ?? ''
 
+// Pausa global de automatizaciones salientes solicitada por Mario.
+// La conexión/webhook y el envío manual autenticado siguen disponibles.
+export const WHATSAPP_AUTOMATIONS_ENABLED = false
+
 // Normaliza número dominicano a formato internacional
 export function normalizePhone(phone: string): string {
   const digits = phone.replace(/\D/g, '')
@@ -61,6 +65,9 @@ const NUMERO_ADMIN = '18096942268' // admin exento: nunca se bloquea ni se encol
 export type ResultadoEnvio = { estado: 'enviado' | 'diferido'; data?: any }
 
 export async function enviarWA(to: string, body: Record<string, any>): Promise<ResultadoEnvio> {
+  if (!WHATSAPP_AUTOMATIONS_ENABLED) {
+    throw new Error('WHATSAPP_AUTOMATIONS_DISABLED: los envíos automatizados están pausados por el administrador.')
+  }
   const phone = normalizePhone(to)
   const payload = { messaging_product: 'whatsapp', ...body, to: phone }
   if (phone !== NUMERO_ADMIN) {
@@ -107,6 +114,22 @@ export async function fetchWA(phone: string, init: { body: string; [k: string]: 
     return new Response(JSON.stringify({ deferred: true }), { status: 202, headers: { 'Content-Type': 'application/json' } })
   }
   return new Response(JSON.stringify(r.data), { status: 200, headers: { 'Content-Type': 'application/json' } })
+}
+
+// Envío exclusivamente manual desde el panel protegido por requireAdmin().
+// No se utiliza en crons, webhooks ni automatizaciones.
+export async function enviarWAManual(to: string, body: Record<string, any>) {
+  if (!TOKEN) throw new Error('WHATSAPP_TOKEN no configurado')
+  const phone = normalizePhone(to)
+  const payload = { messaging_product: 'whatsapp', ...body, to: phone }
+  const response = await fetch(`${WA_API_URL}/${PHONE_ID}/messages`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  const data = await response.json()
+  if (!response.ok || data?.error) throw new Error(JSON.stringify(data?.error ?? data))
+  return data
 }
 
 export async function sendText(to: string, text: string) {
