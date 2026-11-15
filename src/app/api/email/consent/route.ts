@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 export async function POST(req: NextRequest) {
-  const token = req.headers.get('authorization')?.replace(/^Bearer\\s+/i, '')
+  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
   if (!token) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const authClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
