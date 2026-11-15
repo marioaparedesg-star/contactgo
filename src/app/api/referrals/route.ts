@@ -4,7 +4,7 @@ import { createHash } from 'crypto'
 const admin = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { autoRefreshToken: false, persistSession: false } })
 export async function GET(req: NextRequest) {
  try {
-  const token=req.headers.get('authorization')?.replace(/^Bearer\\s+/i,'')
+  const token=req.headers.get('authorization')?.replace(/^Bearer\s+/i,'')
   if(!token)return NextResponse.json({error:'Sesión requerida'},{status:401})
   const db=admin(); const auth=await db.auth.getUser(token); const user=auth.data.user
   if(auth.error||!user)return NextResponse.json({error:'Sesión inválida'},{status:401})
