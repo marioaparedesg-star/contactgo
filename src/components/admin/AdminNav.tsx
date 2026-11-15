@@ -63,7 +63,7 @@ const NAV_SECTIONS = [
 
 export default function AdminNav() {
   const pathname  = usePathname()
-  const activePath = pathname.startsWith('/admin') ? pathname.replace(/^\\/admin/, '/M1Alexander') : pathname
+  const activePath = pathname.startsWith('/admin') ? pathname.replace('/admin', '/M1Alexander') : pathname
   const router    = useRouter()
   const sb        = createClient()
   // En tablet (md: pero no lg:) el sidebar arranca colapsado para maximizar espacio
