@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendText, normalizePhone, WHATSAPP_AUTOMATIONS_ENABLED } from '@/lib/whatsapp'
 import { notificarRenovacion, notificarRecompraPrevio } from '@/lib/wa-notifications'
-import { hasMarketingConsent } from '@/lib/email/marketing-consent'
+import { hasMarketingConsent, marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
 
 // ═══ INTERRUPTOR DE SEGURIDAD ═══
 // Apagado por defecto a propósito (Mario: "no envíe nada a nadie" hasta
@@ -313,7 +313,8 @@ export async function GET(req: NextRequest) {
       🎁 10% OFF con el código COMPLETO10
     </a>
     <p style="color:#9ca3af;font-size:12px;text-align:center">
-      ¿Alguna pregunta? Escríbenos por WhatsApp: +1 809 694-2268
+      ¿Alguna pregunta? Escríbenos por WhatsApp: +1 809 694-2268<br>
+      <a href="${marketingUnsubscribeUrl(o.cliente_email)}" style="color:#64748b">Cancelar suscripción</a>
     </p>
   </div>
 </div>`,
