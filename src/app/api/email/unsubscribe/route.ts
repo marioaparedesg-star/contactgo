@@ -4,18 +4,35 @@ import { verifyMarketingUnsubscribeToken } from '@/lib/email/marketing-consent'
 
 export const dynamic = 'force-dynamic'
 
+function confirmationPage(token: string) {
+  return new NextResponse(
+    '<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Preferencias de correo</title><body style="font-family:Arial,sans-serif;background:#f4f7fb;padding:40px 16px;color:#002455"><main style="max-width:520px;margin:auto;background:white;padding:32px;border-radius:16px"><h1>Preferencias de correo</h1><p>¿Deseas dejar de recibir comunicaciones comerciales de ContactGo? Los avisos necesarios sobre tus pedidos seguirán llegando.</p><form method="post"><input type="hidden" name="token" value="' + token.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"><button type="submit" style="background:#002455;color:white;border:0;border-radius:8px;padding:12px 18px;font-weight:bold">Confirmar baja</button></form></main></body></html>',
+    { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+  )
+}
+
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get('token') ?? ''
+  if (!verifyMarketingUnsubscribeToken(token)) return new NextResponse('Enlace de baja no válido o vencido.', { status: 400 })
+  // Los escáneres de seguridad de correo suelen abrir enlaces GET automáticamente.
+  // La baja solo se registra cuando la persona confirma mediante POST.
+  return confirmationPage(token)
+}
+
+export async function POST(req: NextRequest) {
+  const form = await req.formData()
+  const token = String(form.get('token') ?? '')
   const email = verifyMarketingUnsubscribeToken(token)
   if (!email) return new NextResponse('Enlace de baja no válido o vencido.', { status: 400 })
 
   const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+  const now = new Date().toISOString()
   const { error } = await sb.from('email_marketing_preferences').upsert({
     email,
     marketing_consent: false,
-    unsubscribed_at: new Date().toISOString(),
+    unsubscribed_at: now,
     suppression_reason: 'user_unsubscribe',
-    updated_at: new Date().toISOString(),
+    updated_at: now,
   }, { onConflict: 'email' })
 
   if (error) {
