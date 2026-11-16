@@ -302,9 +302,10 @@ export default function EyeFlowSelector({
           options={cylOpts} placeholder="Selecciona el cilindro" />
       )}
       {needsCyl && s.cyl && (
-        <SelectField label="Eje (AXIS)" value={s.axis}
+        <SelectField label="Eje (AXIS) — obligatorio" value={s.axis}
           onChange={v => set({ axis: v })}
-          options={axisOpts} placeholder="Selecciona el eje" />
+          options={axisOpts} placeholder="Selecciona el eje de tu receta"
+          hint="Indica la orientación del astigmatismo (1°–180° según las opciones disponibles para este modelo)." />
       )}
       {needsAdd && (
         <SelectField label="Adición (ADD)" value={s.add}
@@ -332,9 +333,10 @@ export default function EyeFlowSelector({
             options={cylOpts} placeholder="CYL ojo derecho" />
         )}
         {needsCyl && s.cyl_od && (
-          <SelectField label="Eje (AXIS)" value={s.axis_od}
+          <SelectField label="Eje (AXIS) — Ojo derecho (OD) · obligatorio" value={s.axis_od}
             onChange={v => set({ axis_od: v })}
-            options={axisOpts} placeholder="AXIS ojo derecho" />
+            options={axisOpts} placeholder="Selecciona el eje OD"
+            hint="Orientación del astigmatismo para el ojo derecho." />
         )}
       </div>
       {/* Ojo Izquierdo */}
@@ -350,9 +352,10 @@ export default function EyeFlowSelector({
             options={cylOpts} placeholder="CYL ojo izquierdo" />
         )}
         {needsCyl && s.cyl_oi && (
-          <SelectField label="Eje (AXIS)" value={s.axis_oi}
+          <SelectField label="Eje (AXIS) — Ojo izquierdo (OI) · obligatorio" value={s.axis_oi}
             onChange={v => set({ axis_oi: v })}
-            options={axisOpts} placeholder="AXIS ojo izquierdo" />
+            options={axisOpts} placeholder="Selecciona el eje OI"
+            hint="Orientación del astigmatismo para el ojo izquierdo." />
         )}
       </div>
       {needsAdd && (
