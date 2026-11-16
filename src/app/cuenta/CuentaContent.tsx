@@ -1582,57 +1582,91 @@ export default function CuentaPage() {
                 </div>
               </div>
             </div>
-            {/* Historial de estados */}
+            {/* Seguimiento visual del pedido */}
             {historialPedido.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-sm">🕐</span>
-                  <p className="font-bold text-gray-900 text-sm">Historial de estados</p>
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <div className="mb-5">
+                  <p className="font-bold text-gray-900 text-base">Seguimiento de tu pedido</p>
+                  <p className="text-sm text-gray-500 mt-1">Te mostramos cada etapa de tu pedido y su progreso.</p>
                 </div>
-                <div className="relative">
-                  <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gray-100" />
-                  <div className="space-y-3">
-                    {(() => {
-                      // Mostrar una sola vez cada etapa y únicamente en avance.
-                      // Los eventos originales permanecen intactos en Supabase.
-                      const ordenEtapas: Record<string, number> = {
-                        recibido: 0, confirmado: 0, pendiente: 0,
-                        pago_aprobado: 1, preparando: 2, fabricante: 3,
-                        enviado: 4, transito: 4, entregado: 5,
-                      }
-                      const visibles: any[] = []
-                      let ultimaEtapa = -1
-                      for (const evento of historialPedido) {
-                        if (evento.estado === 'cancelado') {
-                          if (!visibles.some(x => x.estado === 'cancelado')) visibles.push(evento)
-                          break
-                        }
-                        const etapa = ordenEtapas[evento.estado]
-                        if (etapa === undefined || etapa <= ultimaEtapa) continue
-                        visibles.push(evento)
-                        ultimaEtapa = etapa
-                      }
-                      const ESTADO_ICON: Record<string,string> = { recibido:'📋', pago_aprobado:'💳', pendiente:'📋', confirmado:'✅', preparando:'📦', fabricante:'🏭', enviado:'🚚', transito:'🚚', entregado:'🎉', cancelado:'❌' }
-                      const ESTADO_LABEL: Record<string,string> = { recibido:'Pedido recibido', pago_aprobado:'Pago aprobado', pendiente:'Pendiente', confirmado:'Confirmado', preparando:'Preparando pedido', fabricante:'En proceso especial', enviado:'Enviado', transito:'En tránsito', entregado:'Entregado', cancelado:'Cancelado' }
-                      return visibles.map((h: any, i: number) => {
-                        const isLast = i === visibles.length - 1
-                        return (
-                          <div key={h.id ?? i} className="flex items-start gap-3 pl-1">
-                            <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 ${isLast ? 'bg-teal-50 border-2 border-primary-500' : 'bg-gray-100'}`}>
-                              {ESTADO_ICON[h.estado] ?? '•'}
-                            </div>
-                            <div>
-                              <p className={`text-sm font-semibold capitalize ${isLast ? 'text-primary-600' : 'text-gray-600'}`}>{ESTADO_LABEL[h.estado] ?? h.estado}</p>
-                              <p className="text-xs text-gray-400">
-                                {new Date(h.created_at).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {new Date(h.created_at).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'})}
-                              </p>
-                            </div>
+                {(() => {
+                  const etapas = [
+                    { estado: 'confirmado', label: 'Pedido confirmado', detail: 'Recibimos tu pedido' },
+                    { estado: 'pago_aprobado', label: 'Pago aprobado', detail: 'Tu pago fue validado' },
+                    { estado: 'preparando', label: 'Preparando pedido', detail: 'Estamos preparando tus productos' },
+                    { estado: 'fabricante', label: 'En proceso especial', detail: 'Tu producto está en preparación especial' },
+                    { estado: 'transito', label: 'En tránsito', detail: 'Tu pedido va camino a su destino' },
+                    { estado: 'entregado', label: 'Entregado', detail: 'Tu pedido llegó a su destino' },
+                  ]
+                  const rank: Record<string, number> = {
+                    recibido: 0, confirmado: 0, pendiente: 0,
+                    pago_aprobado: 1, preparando: 2, fabricante: 3,
+                    enviado: 4, transito: 4, entregado: 5,
+                  }
+                  const eventos: Record<string, any> = {}
+                  let maxRank = -1
+                  let cancelado: any = null
+                  for (const evento of historialPedido) {
+                    if (evento.estado === 'cancelado') { cancelado = evento; break }
+                    const value = rank[evento.estado]
+                    if (value === undefined || value <= maxRank) continue
+                    maxRank = value
+                    const key = value === 0 ? 'confirmado' : value === 4 ? 'transito' : evento.estado
+                    eventos[key] = evento
+                  }
+                  if (maxRank < 0 && selectedPedido.estado) maxRank = rank[selectedPedido.estado] ?? -1
+                  const fecha = (evento: any) => evento?.created_at
+                    ? new Date(evento.created_at).toLocaleDateString('es-DO', { day:'numeric', month:'short', year:'numeric' }) + ' · ' +
+                      new Date(evento.created_at).toLocaleTimeString('es-DO', { hour:'2-digit', minute:'2-digit' })
+                    : ''
+                  if (cancelado) return (
+                    <div className="rounded-xl border border-red-100 bg-red-50 p-4 flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0"><X className="w-5 h-5" /></div>
+                      <div>
+                        <p className="font-bold text-red-700">Pedido cancelado</p>
+                        <p className="text-sm text-red-600 mt-0.5">{fecha(cancelado)}</p>
+                      </div>
+                    </div>
+                  )
+                  return (
+                    <>
+                      <div className="relative">
+                        <div className="absolute left-[15px] top-4 bottom-5 w-0.5 bg-gray-200" />
+                        <div className="space-y-5">
+                          {etapas.map((etapa, index) => {
+                            const done = index <= maxRank
+                            const current = index === maxRank && maxRank < 5
+                            const evento = eventos[etapa.estado] || (etapa.estado === 'transito' ? eventos.enviado : null)
+                            return (
+                              <div key={etapa.estado} className="relative flex items-start gap-4">
+                                <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 ${done ? 'bg-green-600 border-green-600 text-white' : current ? 'bg-teal-50 border-teal-500 text-teal-700' : 'bg-white border-gray-200 text-gray-300'}`}>
+                                  {done ? <Check className="w-4 h-4 stroke-[3]" /> : <span className="w-2 h-2 rounded-full bg-current" />}
+                                </div>
+                                <div className="min-w-0 flex-1 pb-0.5">
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <p className={`text-sm font-bold ${done ? 'text-gray-900' : 'text-gray-400'}`}>{etapa.label}</p>
+                                    {current && <span className="rounded-full bg-teal-50 text-teal-700 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">En curso</span>}
+                                  </div>
+                                  <p className={`text-xs mt-0.5 ${done ? 'text-gray-500' : 'text-gray-400'}`}>{etapa.detail}</p>
+                                  {evento && <p className="text-xs text-gray-400 mt-1">{fecha(evento)}</p>}
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                      {maxRank === 5 && (
+                        <div className="mt-6 rounded-2xl bg-green-50 border border-green-100 px-4 py-4 flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-green-100 text-green-700 flex items-center justify-center shrink-0"><Package className="w-5 h-5" /></div>
+                          <div>
+                            <p className="font-bold text-green-700 text-sm">Tu pedido ha sido entregado</p>
+                            <p className="text-xs text-green-700/80 mt-0.5">Gracias por confiar en ContactGo.</p>
                           </div>
-                        )
-                      })
-                    })()}
-                  </div>
-                </div>
+                        </div>
+                      )}
+                    </>
+                  )
+                })()}
               </div>
             )}
             <a href={"https://wa.me/18096942268?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mi%20pedido%20%23"+selectedPedido.id.slice(-6).toUpperCase()}
