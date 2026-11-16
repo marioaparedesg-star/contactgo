@@ -120,34 +120,32 @@ export default function CartPage() {
   if (items.length === 0) return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gray-50">
-        <div className="max-w-md mx-auto px-4 py-16 text-center">
-          {/* Ícono animado */}
-          <div className="relative w-28 h-28 mx-auto mb-6">
-            <div className="absolute inset-0 bg-teal-50 rounded-3xl animate-pulse" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <ShoppingBag className="w-14 h-14 text-primary-400" />
-            </div>
+      <main className="min-h-[calc(100svh-5rem)] bg-gray-50 px-4">
+        <div className="mx-auto flex min-h-[calc(100svh-9rem)] max-w-md flex-col items-center justify-center py-12 text-center">
+          <div className="relative mb-6 flex h-24 w-24 items-center justify-center rounded-[1.75rem] bg-teal-50 ring-1 ring-teal-100">
+            <ShoppingBag className="h-12 w-12 text-[#008F98]" strokeWidth={1.7} />
           </div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">Tu carrito está vacío</h2>
-          <p className="text-gray-500 mb-6 text-sm">Encuentra los lentes perfectos para ti con entrega a domicilio.</p>
-          {/* CTAs claros */}
-          <div className="space-y-3">
-            <Link href="/catalogo" className="w-full flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-black py-4 rounded-2xl text-sm transition-colors shadow-md shadow-teal-100/50">
-              Ver catálogo de lentes →
+          <h1 className="mb-2 text-2xl font-black tracking-tight text-[#002455]">Tu próxima compra comienza aquí</h1>
+          <p className="mb-7 max-w-sm text-sm leading-relaxed text-slate-500">
+            Encuentra tus lentes de contacto ideales y recíbelos directamente en tu domicilio.
+          </p>
+          <div className="w-full space-y-3">
+            <Link href="/catalogo" className="flex min-h-13 w-full items-center justify-center gap-2 rounded-2xl bg-[#01B2B7] px-5 py-4 text-sm font-bold text-white shadow-sm shadow-teal-100 transition-colors hover:bg-[#009DA3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2">
+              Ver catálogo de lentes
+              <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link href="/esfericos" className="w-full flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-primary-300 text-gray-700 font-bold py-3.5 rounded-2xl text-sm transition-colors">
-              👁️ Lentes para mi receta
+            <Link href="/esfericos" className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-semibold text-[#002455] transition-colors hover:border-teal-300 hover:bg-teal-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#01B2B7]">
+              <Eye className="h-4 w-4 text-[#008F98]" />
+              Lentes para mi receta
             </Link>
-            <Link href="/color" className="w-full flex items-center justify-center gap-2 bg-white border-2 border-gray-200 hover:border-primary-300 text-gray-700 font-bold py-3.5 rounded-2xl text-sm transition-colors">
-              🎨 Lentes de color
+            <Link href="/color" className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-semibold text-[#002455] transition-colors hover:border-teal-300 hover:bg-teal-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#01B2B7]">
+              <span className="flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#01B2B7]"><span className="h-1.5 w-1.5 rounded-full bg-[#01B2B7]" /></span>
+              Lentes de color
             </Link>
           </div>
-          {/* Trust signals */}
-          <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
-            {['✅ Certificados', '🚚 24h SD', '🔒 Pago AZUL', '↩️ 7 días'].map(t => (
-              <span key={t} className="text-[11px] text-gray-400 font-medium">{t}</span>
-            ))}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-slate-200 pt-5 text-[11px] font-medium text-slate-500">
+            <span className="inline-flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-[#008F98]" />Pago seguro AZUL</span>
+            <span className="inline-flex items-center gap-1.5"><Truck className="h-3.5 w-3.5 text-[#008F98]" />Entrega en Santo Domingo desde 24 h</span>
           </div>
         </div>
       </main>
