@@ -1592,28 +1592,45 @@ export default function CuentaPage() {
                 <div className="relative">
                   <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gray-100" />
                   <div className="space-y-3">
-                    {historialPedido
-                      // Ocultar repeticiones consecutivas del mismo estado en la cronología.
-                      // Se conserva el historial original en Supabase y cualquier transición real.
-                      .filter((h: any, i: number, arr: any[]) => i === 0 || h.estado !== arr[i - 1].estado)
-                      .map((h: any, i: number, arr: any[]) => {
+                    {(() => {
+                      // Mostrar una sola vez cada etapa y únicamente en avance.
+                      // Los eventos originales permanecen intactos en Supabase.
+                      const ordenEtapas: Record<string, number> = {
+                        recibido: 0, confirmado: 0, pendiente: 0,
+                        pago_aprobado: 1, preparando: 2, fabricante: 3,
+                        enviado: 4, transito: 4, entregado: 5,
+                      }
+                      const visibles: any[] = []
+                      let ultimaEtapa = -1
+                      for (const evento of historialPedido) {
+                        if (evento.estado === 'cancelado') {
+                          if (!visibles.some(x => x.estado === 'cancelado')) visibles.push(evento)
+                          break
+                        }
+                        const etapa = ordenEtapas[evento.estado]
+                        if (etapa === undefined || etapa <= ultimaEtapa) continue
+                        visibles.push(evento)
+                        ultimaEtapa = etapa
+                      }
                       const ESTADO_ICON: Record<string,string> = { recibido:'📋', pago_aprobado:'💳', pendiente:'📋', confirmado:'✅', preparando:'📦', fabricante:'🏭', enviado:'🚚', transito:'🚚', entregado:'🎉', cancelado:'❌' }
                       const ESTADO_LABEL: Record<string,string> = { recibido:'Pedido recibido', pago_aprobado:'Pago aprobado', pendiente:'Pendiente', confirmado:'Confirmado', preparando:'Preparando pedido', fabricante:'En proceso especial', enviado:'Enviado', transito:'En tránsito', entregado:'Entregado', cancelado:'Cancelado' }
-                      const isLast = i === historialPedido.length - 1
-                      return (
-                        <div key={h.id ?? i} className="flex items-start gap-3 pl-1">
-                          <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 ${isLast ? 'bg-teal-50 border-2 border-primary-500' : 'bg-gray-100'}`}>
-                            {ESTADO_ICON[h.estado] ?? '•'}
+                      return visibles.map((h: any, i: number) => {
+                        const isLast = i === visibles.length - 1
+                        return (
+                          <div key={h.id ?? i} className="flex items-start gap-3 pl-1">
+                            <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 ${isLast ? 'bg-teal-50 border-2 border-primary-500' : 'bg-gray-100'}`}>
+                              {ESTADO_ICON[h.estado] ?? '•'}
+                            </div>
+                            <div>
+                              <p className={`text-sm font-semibold capitalize ${isLast ? 'text-primary-600' : 'text-gray-600'}`}>{ESTADO_LABEL[h.estado] ?? h.estado}</p>
+                              <p className="text-xs text-gray-400">
+                                {new Date(h.created_at).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {new Date(h.created_at).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'})}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className={`text-sm font-semibold capitalize ${isLast ? 'text-primary-600' : 'text-gray-600'}`}>{ESTADO_LABEL[h.estado] ?? h.estado}</p>
-                            <p className="text-xs text-gray-400">
-                              {new Date(h.created_at).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {new Date(h.created_at).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'})}
-                            </p>
-                          </div>
-                        </div>
-                      )
-                    })}
+                        )
+                      })
+                    })()}
                   </div>
                 </div>
               </div>
