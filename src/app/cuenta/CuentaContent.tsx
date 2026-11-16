@@ -419,10 +419,24 @@ export default function CuentaPage() {
         event: 'UPDATE', schema: 'public', table: 'orders',
         filter: 'id=eq.' + p.id
       }, ({ new: updated }) => {
-        setSelectedPedido((prev: any) => ({ ...prev, ...updated }))
+        // orders recibe UPDATE también por cambios de pago u otros campos.
+        // Solo refrescar el historial cuando el estado realmente cambió.
+        setSelectedPedido((prev: any) => {
+          const estadoCambio = prev?.estado !== updated.estado
+          if (estadoCambio) {
+            // El trigger de Supabase es la fuente única del historial.
+            // Volver a leerlo evita duplicar eventos localmente por cada UPDATE.
+            sb.from('order_status_history')
+              .select('*')
+              .eq('order_id', p.id)
+              .order('created_at', { ascending: true })
+              .then(({ data, error }) => {
+                if (!error && data) setHistorialPedido(data)
+              })
+          }
+          return { ...prev, ...updated }
+        })
         setPedidos(ps => ps.map(x => x.id === p.id ? { ...x, estado: updated.estado } : x))
-        // Actualizar historial en tiempo real
-        setHistorialPedido(h => [...h, { estado: updated.estado, created_at: new Date().toISOString() }])
       })
       .subscribe()
 
