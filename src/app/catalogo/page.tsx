@@ -37,7 +37,7 @@ const ORDENES = [
 ]
 
 // Campos mínimos para cards — excluye arrays grandes (cyl, axis, add) y campos admin
-const CARD_FIELDS = 'id, nombre, slug, precio, precio_anterior, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado, dias_uso'
+const CARD_FIELDS = 'id, nombre, slug, precio, precio_anterior, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado, dias_uso, created_at'
 
 async function getAllProducts(): Promise<Product[]> {
   const sb = await createServerSupabaseClient()
@@ -79,7 +79,8 @@ export default async function CatalogoPage() {
         </nav>
 
         <div className="mb-4">
-          <h1 className="font-display text-2xl font-bold text-gray-900">Catálogo</h1>
+          <h1 className="font-display text-2xl font-bold tracking-tight text-[#002455]">Encuentra tus lentes</h1>
+          <p className="mt-1 text-sm text-slate-500">Explora nuestra selección de lentes de contacto y cuidado visual.</p>
         </div>
 
         {/* CatalogoFiltros: navega via URL. CatalogoGrid: filtra client-side con useSearchParams */}
