@@ -1542,7 +1542,9 @@ export default function CuentaPage() {
               </div>
             </div>
             {(() => {
-              const fechaPedido = selectedPedido.created_at || selectedPedido.fecha
+              // Para pedidos pagados, el plazo comercial empieza en la fecha real del pago.
+              // Si aún no está pagado, conservar la fecha de creación como referencia.
+              const fechaPedido = selectedPedido.pagado_en || selectedPedido.created_at || selectedPedido.fecha
               const items = itemsPedido || []
               const tipos = items.map((item: any) => {
                 const nombre = String(item.nombre || '').toLowerCase()
@@ -1590,7 +1592,11 @@ export default function CuentaPage() {
                 <div className="relative">
                   <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gray-100" />
                   <div className="space-y-3">
-                    {historialPedido.map((h: any, i: number) => {
+                    {historialPedido
+                      // Ocultar repeticiones consecutivas del mismo estado en la cronología.
+                      // Se conserva el historial original en Supabase y cualquier transición real.
+                      .filter((h: any, i: number, arr: any[]) => i === 0 || h.estado !== arr[i - 1].estado)
+                      .map((h: any, i: number, arr: any[]) => {
                       const ESTADO_ICON: Record<string,string> = { recibido:'📋', pago_aprobado:'💳', pendiente:'📋', confirmado:'✅', preparando:'📦', fabricante:'🏭', enviado:'🚚', transito:'🚚', entregado:'🎉', cancelado:'❌' }
                       const ESTADO_LABEL: Record<string,string> = { recibido:'Pedido recibido', pago_aprobado:'Pago aprobado', pendiente:'Pendiente', confirmado:'Confirmado', preparando:'Preparando pedido', fabricante:'En proceso especial', enviado:'Enviado', transito:'En tránsito', entregado:'Entregado', cancelado:'Cancelado' }
                       const isLast = i === historialPedido.length - 1
