@@ -4,6 +4,7 @@ import { getEntrega } from '@/lib/delivery-times'
 import ProductoClient from './ProductoClient'
 import { createClient } from '@supabase/supabase-js'
 export const revalidate = 300
+// Regeneración de la ficha: se vuelve a construir al desplegar para tomar la imagen actual del producto.
 
 // ═══════════════════════════════════════════════════════════════════
 // ARQUITECTURA: Separación definitiva de responsabilidades
