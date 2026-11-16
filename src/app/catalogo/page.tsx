@@ -68,7 +68,7 @@ export default async function CatalogoPage() {
   ])
 
   // Solo mostrar categorías que realmente tienen productos activos.
-  const tiposDisponibles = Array.from(new Set(products.map(p => p.tipo).filter(Boolean))) as string[])
+  const tiposDisponibles = (Array.from(new Set(products.map(p => p.tipo).filter(Boolean))) as string[])
     .filter(tipo => Boolean(ETIQUETAS_TIPO[tipo]))
     .sort((a, b) => (ETIQUETAS_TIPO[a] || a).localeCompare(ETIQUETAS_TIPO[b] || b))
     .map(tipo => ({ value: tipo, label: ETIQUETAS_TIPO[tipo] }))
