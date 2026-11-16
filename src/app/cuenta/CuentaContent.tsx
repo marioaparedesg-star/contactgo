@@ -1442,8 +1442,8 @@ export default function CuentaPage() {
 
       {/* Modal detalle pedido */}
       {selectedPedido && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-gray-50">
-          <div className="bg-white border-b border-gray-100 px-4 py-4 flex items-center gap-3 sticky top-0">
+        <div className="fixed inset-0 z-[100] flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden overscroll-none bg-gray-50 [isolation:isolate]">
+          <div className="relative z-10 flex shrink-0 items-center gap-3 border-b border-gray-100 bg-white px-4 py-4 pt-[max(1rem,env(safe-area-inset-top))]">
             <button onClick={() => setSelectedPedido(null)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
               <X className="w-5 h-5 text-gray-600" />
             </button>
@@ -1455,7 +1455,7 @@ export default function CuentaPage() {
               {selectedPedido.estado}
             </span>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+          <div className="min-h-0 flex-1 touch-pan-y space-y-4 overflow-y-auto overscroll-contain p-4 pb-[calc(6rem+env(safe-area-inset-bottom))]">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="px-4 py-3 border-b border-gray-50 flex items-center gap-2">
                 <Package className="w-4 h-4 text-primary-600" />
