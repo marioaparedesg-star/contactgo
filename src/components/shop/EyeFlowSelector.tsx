@@ -17,7 +17,7 @@ export type OjoMode = 'AMBOS' | 'OD' | 'OI'
 
 export interface EyeFlowState {
   ojoMode:      OjoMode | null
-  mismaReceta:  boolean
+  mismaReceta:  boolean | null
   // Receta única (un ojo o ambos con misma receta)
   sph:    string
   cyl:    string
@@ -33,7 +33,7 @@ export interface EyeFlowState {
 }
 
 export const initialEyeFlow: EyeFlowState = {
-  ojoMode: 'AMBOS', mismaReceta: true,  // Pre-seleccionado — menos fricción
+  ojoMode: 'AMBOS', mismaReceta: null,  // El cliente debe indicar si las graduaciones son iguales
   sph:'', cyl:'', axis:'', add:'',
   sph_od:'', sph_oi:'', cyl_od:'', cyl_oi:'', axis_od:'', axis_oi:'',
   color:'', noEstaSeguro: false,
@@ -499,7 +499,7 @@ export default function EyeFlowSelector({
     if (s.color) doneSteps++
   } else {
     if (s.ojoMode) doneSteps++
-    if (s.mismaReceta !== undefined) doneSteps++
+    if (s.ojoMode !== 'AMBOS' || s.mismaReceta !== null) doneSteps++
     if (!needsColor && s.sph) doneSteps++
     if (needsColor && s.color) doneSteps++
     if (needsCyl && s.cyl && s.axis) doneSteps++
