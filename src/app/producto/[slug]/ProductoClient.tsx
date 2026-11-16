@@ -738,7 +738,7 @@ export default function ProductoClient({ product, variants }: Props) {
       if (isMulti && !add)  { toast.error('Selecciona la adición (ADD) — el último número de tu receta multifocal'); return false }
     }
 
-    if (isAmbosDifer) {
+    if (isAmbosDifer && !isColor) {
       // Si el cliente selecciona ambos ojos con recetas distintas, cada ojo
       // debe llevar su propia esfera. No permitir una caja doble con un ojo vacío.
       if (!sph_od) {
