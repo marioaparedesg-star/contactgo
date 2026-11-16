@@ -185,13 +185,31 @@ export default function CuentaPage() {
           sb.from('addresses').select('*').eq('user_id', user.id).order('created_at'),
           sb.from('saved_prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
-        ]).then(([rPerfil, rOrdenes, rDirs, rRecetas, rSubs]) => {
+        ]).then(async ([rPerfil, rOrdenes, rDirs, rRecetas, rSubs]) => {
           if (rPerfil.status === 'fulfilled' && rPerfil.value.data) {
             const d = rPerfil.value.data
             setPerfil(d)
             setForm({ nombre: d.nombre || '', telefono: d.telefono || '' })
           }
-          if (rOrdenes.status === 'fulfilled')  setPedidos(rOrdenes.value.data || [])
+          if (rOrdenes.status === 'fulfilled') {
+            const ordenes = rOrdenes.value.data || []
+            const ids = ordenes.map((pedido: any) => pedido.id).filter(Boolean)
+            if (ids.length) {
+              // Conteo independiente: el embed anidado puede venir vacío por la relación,
+              // aunque los productos sí estén disponibles al abrir el detalle.
+              const { data: lineas } = await sb.from('order_items').select('order_id').in('order_id', ids)
+              const conteos = (lineas || []).reduce((acc: Record<string, number>, linea: any) => {
+                acc[linea.order_id] = (acc[linea.order_id] || 0) + 1
+                return acc
+              }, {})
+              setPedidos(ordenes.map((pedido: any) => ({
+                ...pedido,
+                item_count: conteos[pedido.id] ?? pedido.order_items?.length ?? 0,
+              })))
+            } else {
+              setPedidos([])
+            }
+          }
           if (rDirs.status === 'fulfilled')     setDirecciones(rDirs.value.data || [])
           if (rRecetas.status === 'fulfilled')  setRecetas(rRecetas.value.data || [])
           if (rSubs.status === 'fulfilled')     setSuscripciones(rSubs.value.data || [])
@@ -407,7 +425,7 @@ export default function CuentaPage() {
     if (pedidoFresh) {
       setSelectedPedido(pedidoFresh)
       // Actualiza también en la lista de pedidos
-      setPedidos(ps => ps.map(x => x.id === p.id ? pedidoFresh : x))
+      setPedidos(ps => ps.map(x => x.id === p.id ? { ...pedidoFresh, item_count: x.item_count ?? x.order_items?.length ?? 0 } : x))
     }
     setItemsPedido(items || [])
     setHistorialPedido(historial || [])
@@ -764,7 +782,7 @@ export default function CuentaPage() {
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50">{p.order_items?.[0]?.product?.imagen_url ? <img src={p.order_items[0].product.imagen_url} alt={p.order_items[0].nombre || 'Producto'} className="h-full w-full object-contain p-1"/> : <Package className="h-5 w-5 text-slate-300"/>}</div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-bold text-slate-900">Pedido #{String(p.numero_orden || p.id).slice(-6).toUpperCase()}</p>
-                        <p className="mt-0.5 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {p.order_items?.length || 0} {(p.order_items?.length || 0) === 1 ? 'producto' : 'productos'}</p>
+                        <p className="mt-0.5 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {p.item_count ?? p.order_items?.length ?? 0} {(p.item_count ?? p.order_items?.length ?? 0) === 1 ? 'producto' : 'productos'}</p>
                       </div>
                       <div className="shrink-0 text-right">
                         <p className="text-sm font-bold text-slate-900">RD${Number(p.total || 0).toLocaleString('es-DO')}</p>
@@ -841,7 +859,7 @@ export default function CuentaPage() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-bold text-slate-900">Pedido #{String(p.numero_orden || p.id).slice(-6).toUpperCase()}</p>
-                      <p className="mt-1 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {p.order_items?.length || 0} {(p.order_items?.length || 0) === 1 ? 'producto' : 'productos'}</p>
+                      <p className="mt-1 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {p.item_count ?? p.order_items?.length ?? 0} {(p.item_count ?? p.order_items?.length ?? 0) === 1 ? 'producto' : 'productos'}</p>
                       <span className={`mt-1.5 inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${statusClass}`}>{estadoLabel[estado] || p.estado || 'Pendiente'}</span>
                     </div>
                     <div className="shrink-0 text-right">
@@ -1455,7 +1473,7 @@ export default function CuentaPage() {
               {selectedPedido.estado}
             </span>
           </div>
-          <div className="min-h-0 flex-1 touch-pan-y space-y-4 overflow-y-auto overscroll-contain p-4 pb-[calc(6rem+env(safe-area-inset-bottom))]">
+          <div className="min-h-0 flex-1 touch-pan-y space-y-4 overflow-y-auto overscroll-contain p-4 pb-[calc(2rem+env(safe-area-inset-bottom))]">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="px-4 py-3 border-b border-gray-50 flex items-center gap-2">
                 <Package className="w-4 h-4 text-primary-600" />
