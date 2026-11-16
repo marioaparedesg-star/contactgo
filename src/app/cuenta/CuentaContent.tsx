@@ -729,12 +729,12 @@ export default function CuentaPage() {
         {/* Dashboard ContactGo — responsive desktop/mobile */}
         {tab === '' ? (
           <div className="space-y-5 pb-4">
-            <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#002455] to-[#01B2B7] px-4 py-4 text-white shadow-lg shadow-blue-950/10">
+            <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#002455] to-[#01B2B7] px-4 py-3.5 text-white shadow-md shadow-blue-950/10">
               <div className="relative z-10 max-w-xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Tu espacio ContactGo</p>
                 <h1 className="mt-1 text-xl font-black tracking-tight">Hola, {(perfil?.nombre || user.email?.split('@')[0] || 'bienvenido').split(' ')[0]}</h1>
-                <p className="mt-1 max-w-md text-xs leading-relaxed text-white/85">Revisa tus compras y administra tus datos y direcciones de entrega.</p>
-                <button onClick={() => setTab('pedidos')} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#002455] shadow-sm transition hover:bg-slate-100">
+                <p className="mt-1 max-w-md text-xs leading-relaxed text-white/85">Gestiona tus pedidos, recetas y datos de entrega desde un solo lugar.</p>
+                <button onClick={() => setTab('pedidos')} className="mt-2.5 inline-flex min-h-10 items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-bold text-[#002455] shadow-sm transition hover:bg-slate-100">
                   Ver mis pedidos <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
@@ -743,7 +743,7 @@ export default function CuentaPage() {
             </section>
 
             <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
-              <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-3.5 py-3">
+              <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
                 <div>
                   <h2 className="font-bold text-slate-900">Pedidos recientes</h2>
                   <p className="mt-0.5 text-xs text-slate-500">Consulta el estado de tus compras</p>
@@ -760,11 +760,11 @@ export default function CuentaPage() {
               ) : (
                 <div className="divide-y divide-slate-100">
                   {pedidos.slice(0, 3).map(p => (
-                    <button key={p.id} onClick={() => verPedido(p)} className="flex w-full items-center gap-3 px-3.5 py-3 text-left transition hover:bg-slate-50">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50">{p.order_items?.[0]?.product?.imagen_url ? <img src={p.order_items[0].product.imagen_url} alt={p.order_items[0].nombre || 'Producto'} className="h-full w-full object-contain p-1"/> : <Package className="h-5 w-5 text-slate-300"/>}</div>
+                    <button key={p.id} onClick={() => verPedido(p)} className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#01B2B7]">
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50">{p.order_items?.[0]?.product?.imagen_url ? <img src={p.order_items[0].product.imagen_url} alt={p.order_items[0].nombre || 'Producto'} className="h-full w-full object-contain p-1"/> : <Package className="h-5 w-5 text-slate-300"/>}</div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-bold text-slate-900">Pedido #{String(p.numero_orden || p.id).slice(-6).toUpperCase()}</p>
-                        <p className="mt-0.5 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})}</p>
+                        <p className="mt-0.5 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {p.order_items?.length || 0} {(p.order_items?.length || 0) === 1 ? 'producto' : 'productos'}</p>
                       </div>
                       <div className="shrink-0 text-right">
                         <p className="text-sm font-bold text-slate-900">RD${Number(p.total || 0).toLocaleString('es-DO')}</p>
@@ -792,7 +792,7 @@ export default function CuentaPage() {
 
                   {id:'seguridad', label:'Seguridad', desc:'Contraseña y acceso biométrico', icon:ShieldCheck, tint:'bg-slate-100 text-slate-700'},
                 ].map(item => (
-                  <button key={item.id} onClick={() => setTab(item.id)} className="flex min-h-[72px] w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-slate-50 sm:px-5">
+                  <button key={item.id} onClick={() => setTab(item.id)} className="flex min-h-[66px] w-full items-center gap-3 px-4 py-2.5 text-left transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#01B2B7] sm:px-5">
                     <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.tint}`}><item.icon className="h-5 w-5" /></span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm font-bold text-slate-900">{item.label}</span>
@@ -813,84 +813,49 @@ export default function CuentaPage() {
         {/* TAB: PEDIDOS */}
         {tab==='pedidos' && (
           <div data-account-section="active" className="scroll-mt-20 space-y-3">
-            {pedidos.length===0 ? (
-              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center">
-                <Package className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-                <p className="text-gray-500 font-medium">No tienes pedidos aún</p>
-                <Link href="/catalogo" className="mt-4 inline-block bg-teal-500 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-teal-600 transition-colors">Ver catálogo</Link>
+            <div className="flex items-end justify-between gap-3 px-1 pb-1">
+              <div>
+                <h1 className="text-xl font-black tracking-tight text-[#002455]">Mis pedidos</h1>
+                <p className="mt-1 text-xs text-slate-500">Consulta tus compras y sigue cada entrega.</p>
               </div>
-            ) : pedidos.map(p => (
-              <button key={p.id} onClick={() => verPedido(p)}
-                className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-left hover:border-primary-200 hover:shadow-md transition-all">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <p className="font-bold text-gray-900">Pedido #{String(p.numero_orden || p.id).slice(-6).toUpperCase()}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}</p>
-                  </div>
-                  <span className={"px-3 py-1 rounded-full text-xs font-bold " + (ESTADO[p.estado]||'bg-gray-50 text-gray-600')}>{p.estado}</span>
-                </div>
-
-                {/* Timeline visual de progreso — F5 UX FIX */}
-                {p.pago_estado === 'pagado' && (() => {
-                  const PASOS = [
-                    { id: 'confirmado', label: 'Confirmado', icon: '✓' },
-                    { id: 'preparando', label: 'Preparando', icon: '📦' },
-                    { id: 'enviado',    label: 'En camino',  icon: '🚀' },
-                    { id: 'entregado',  label: 'Entregado',  icon: '🏠' },
-                  ]
-                  const estadoIdx = PASOS.findIndex(paso =>
-                    paso.id === p.estado ||
-                    (p.estado === 'pendiente' && paso.id === 'confirmado')
-                  )
-                  const activeIdx = Math.max(0, estadoIdx)
-                  return (
-                    <div className="flex items-center gap-0 mb-3">
-                      {PASOS.map((paso, i) => (
-                        <div key={paso.id} className="flex items-center flex-1">
-                          <div className="flex flex-col items-center flex-1">
-                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all ${
-                              i <= activeIdx
-                                ? 'bg-teal-500 text-white'
-                                : 'bg-gray-100 text-gray-300'
-                            }`}>
-                              {i <= activeIdx ? paso.icon : i + 1}
-                            </div>
-                            <p className={`text-[9px] mt-1 font-medium ${i <= activeIdx ? 'text-primary-600' : 'text-gray-300'}`}>
-                              {paso.label}
-                            </p>
-                          </div>
-                          {i < PASOS.length - 1 && (
-                            <div className={`h-0.5 flex-1 mb-3 ${i < activeIdx ? 'bg-teal-300' : 'bg-gray-100'}`} />
-                          )}
-                        </div>
-                      ))}
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">{pedidos.length} {pedidos.length === 1 ? 'pedido' : 'pedidos'}</span>
+            </div>
+            {pedidos.length===0 ? (
+              <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center shadow-sm">
+                <Package className="mx-auto mb-3 h-12 w-12 text-slate-200" />
+                <p className="font-semibold text-slate-700">Todavía no tienes pedidos</p>
+                <p className="mt-1 text-sm text-slate-500">Cuando realices una compra, podrás consultar su progreso aquí.</p>
+                <Link href="/catalogo" className="mt-4 inline-flex min-h-10 items-center rounded-xl bg-[#002455] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#00366B]">Explorar catálogo</Link>
+              </div>
+            ) : pedidos.map(p => {
+              const estadoLabel: Record<string,string> = { recibido:'Recibido', confirmado:'Confirmado', pago_aprobado:'Pago aprobado', preparando:'Preparando pedido', fabricante:'En proceso especial', enviado:'Enviado', transito:'En tránsito', entregado:'Entregado', cancelado:'Cancelado', pendiente:'Pendiente' }
+              const estado = String(p.estado || 'pendiente').toLowerCase()
+              const firstItem = p.order_items?.[0]
+              const statusClass = ESTADO[estado] || 'bg-slate-100 text-slate-600'
+              return (
+                <button key={p.id} onClick={() => verPedido(p)}
+                  className="w-full rounded-2xl border border-slate-100 bg-white p-3.5 text-left shadow-sm transition hover:border-slate-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#01B2B7]">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
+                      {firstItem?.product?.imagen_url ? <img src={firstItem.product.imagen_url} alt={firstItem.nombre || firstItem.product?.nombre || 'Producto'} className="h-full w-full object-contain p-1" /> : <Package className="h-6 w-6 text-slate-300" />}
                     </div>
-                  )
-                })()}
-
-                <div className="flex items-center justify-between pt-3 border-t border-gray-50">
-                  <span className="text-primary-600 font-bold text-lg">RD${(p.total||0).toLocaleString()}</span>
-                  <div className="flex items-center gap-2">
-                    <a
-                      href={`/pedido/${p.numero_orden}`}
-                      onClick={e => e.stopPropagation()}
-                      className="text-xs border border-primary-200 text-primary-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-teal-50 transition-colors">
-                      {p.pago_estado === 'pagado' ? '📦 Ver detalles' : '👁️ Ver pedido'}
-                    </a>
-                    {p.pago_estado === 'pagado' && (
-                      <button
-                        onClick={e => reorderPedido(e, p.id)}
-                        disabled={reordering === p.id}
-                        className="text-xs bg-teal-500 text-white px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 hover:bg-teal-600 disabled:opacity-50 transition-colors shadow-sm">
-                        <RefreshCw className={`w-3 h-3 ${reordering===p.id?'animate-spin':''}`} />
-                        {reordering === p.id ? 'Añadiendo...' : 'Repetir pedido'}
-                      </button>
-                    )}
-                    <ChevronRight className="w-4 h-4 text-gray-300" />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-bold text-slate-900">Pedido #{String(p.numero_orden || p.id).slice(-6).toUpperCase()}</p>
+                      <p className="mt-1 text-xs text-slate-500">{new Date(p.created_at || p.fecha).toLocaleDateString('es-DO',{day:'numeric',month:'short',year:'numeric'})} · {p.order_items?.length || 0} {(p.order_items?.length || 0) === 1 ? 'producto' : 'productos'}</p>
+                      <span className={`mt-1.5 inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${statusClass}`}>{estadoLabel[estado] || p.estado || 'Pendiente'}</span>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <p className="text-sm font-black text-[#002455]">RD${Number(p.total || 0).toLocaleString('es-DO')}</p>
+                      <ChevronRight className="ml-auto mt-2 h-4 w-4 text-slate-300" />
+                    </div>
                   </div>
-                </div>
-              </button>
-            ))}
+                  <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-xs">
+                    <span className="font-medium text-slate-500">Ver detalles y seguimiento</span>
+                    <span className="font-semibold text-[#008F98]">Consultar pedido</span>
+                  </div>
+                </button>
+              )
+            })}
           </div>
         )}
 
