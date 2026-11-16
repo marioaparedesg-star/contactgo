@@ -19,15 +19,14 @@ export const metadata: Metadata = {
 
 export const revalidate = 60  // ISR: revalida cada 60s
 
-const TIPOS = [
-  { value: '', label: 'Todos' },
-  { value: 'esferico', label: 'Esféricos' },
-  { value: 'torico', label: 'Tóricos' },
-  { value: 'multifocal', label: 'Multifocales' },
-  { value: 'color', label: 'Color' },
-  { value: 'solucion', label: 'Soluciones' },
-  { value: 'gota', label: 'Gotas' },
-]
+const ETIQUETAS_TIPO: Record<string, string> = {
+  esferico: 'Esféricos',
+  torico: 'Tóricos',
+  multifocal: 'Multifocales',
+  color: 'Color',
+  solucion: 'Soluciones',
+  gota: 'Gotas',
+}
 
 const ORDENES = [
   { value: 'nombre',     label: 'Nombre A-Z' },
@@ -54,6 +53,7 @@ async function getMarcas(): Promise<string[]> {
   const { data } = await sb.from('products')
     .select('marca')
     .eq('activo', true)
+    .or('archivado.is.null,archivado.eq.false')
     .not('marca', 'is', null)
   const all: string[] = (data ?? []).map((d: any) => d.marca).filter(Boolean)
   const unique: string[] = []
@@ -66,6 +66,23 @@ export default async function CatalogoPage() {
     getAllProducts(),
     getMarcas(),
   ])
+
+  // Solo mostrar categorías que realmente tienen productos activos.
+  const tiposDisponibles = Array.from(new Set(products.map(p => p.tipo).filter(Boolean)))
+    .filter(tipo => Boolean(ETIQUETAS_TIPO[tipo]))
+    .sort((a, b) => (ETIQUETAS_TIPO[a] || a).localeCompare(ETIQUETAS_TIPO[b] || b))
+    .map(tipo => ({ value: tipo, label: ETIQUETAS_TIPO[tipo] }))
+
+  // La duración describe el reemplazo de lentes; no aplicar a soluciones/gotas.
+  const duracionesDisponibles = Array.from(new Set(
+    products
+      .filter(p => ['esferico', 'torico', 'multifocal', 'color'].includes(p.tipo))
+      .map(p => Number((p as any).dias_uso))
+      .filter(dias => Number.isFinite(dias) && dias > 0)
+  )).sort((a, b) => a - b).map(dias => ({
+    value: String(dias),
+    label: dias === 1 ? 'Diarios' : dias === 14 ? 'Quincenales' : dias === 30 ? 'Mensuales' : `${dias} días`,
+  }))
 
   return (
     <>
@@ -95,7 +112,8 @@ export default async function CatalogoPage() {
           </div>
         }>
           <CatalogoFiltros
-            tipos={TIPOS}
+            tipos={[{ value: '', label: 'Todos' }, ...tiposDisponibles]}
+            duraciones={duracionesDisponibles}
             marcas={marcas}
             tipoActivo={''}
             marcaActiva={''}
