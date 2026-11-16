@@ -727,9 +727,14 @@ export default function ProductoClient({ product, variants }: Props) {
     }
 
     // ── Validaciones por flujo ────────────────────────────────────────
-    const isAmbosIgual = ojoMode === 'AMBOS' && mismaReceta !== false
+    const isAmbosIgual = ojoMode === 'AMBOS' && mismaReceta === true
     const isAmbosDifer = ojoMode === 'AMBOS' && mismaReceta === false
     const isUnSoloOjo  = ojoMode === 'OD' || ojoMode === 'OI'
+
+    if (ojoMode === 'AMBOS' && mismaReceta == null) {
+      toast.error('Indica si ambos ojos usan la misma graduación o graduaciones diferentes')
+      return false
+    }
 
     if (isAmbosIgual || isUnSoloOjo) {
       if (!sph)  { toast.error('Selecciona tu poder esférico — el primer número de tu receta'); return false }
