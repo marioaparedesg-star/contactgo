@@ -84,7 +84,7 @@ export default function CatalogoFiltros({
   useEffect(() => { setSearchText(q) }, [q])
 
   return (
-    <div className="mb-4 space-y-3">
+    <div className="mb-3 space-y-2">
       <form
         role="search"
         aria-label="Buscar productos del catálogo"
@@ -115,7 +115,7 @@ export default function CatalogoFiltros({
       </form>
 
       {/* Fila: chips activos + botón filtrar + ordenar */}
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex min-h-10 items-center gap-2">
 
         {/* Chips activos */}
         {tipoActivo && (
@@ -147,10 +147,10 @@ export default function CatalogoFiltros({
         {/* Botón Filtrar */}
         <div className="relative" ref={ref}>
           <button onClick={() => setOpen(o => !o)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 text-sm font-bold transition-all ${
+            className={`ml-auto flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-bold transition-all ${
               open || activeCount > 0
-                ? 'bg-teal-500 text-white border-primary-600'
-                : 'bg-white text-gray-700 border-gray-200 hover:border-primary-400'
+                ? 'bg-[#002455] text-white border-[#002455]'
+                : 'bg-white text-[#002455] border-slate-200 hover:border-[#01B2B7]'
             }`}>
             <SlidersHorizontal className="w-4 h-4"/>
             Filtrar
@@ -253,37 +253,10 @@ export default function CatalogoFiltros({
           )}
         </div>
 
-        {/* Ordenar rápido desktop */}
-        {!open && (
-          <div className="hidden sm:flex items-center gap-1">
-            {ordenes.slice(0,2).map(o => (
-              <a key={o.value} href={buildUrl({ orden: o.value }, base)}
-                className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
-                  ordenActivo === o.value
-                    ? 'bg-gray-900 text-white border-gray-900'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
-                }`}>
-                {o.label}
-              </a>
-            ))}
-          </div>
-        )}
+
       </div>
 
-      {/* Tabs tipo — scroll horizontal */}
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
-        {tipos.map(t => (
-          <a key={t.value}
-            href={buildUrl({ tipo: t.value || undefined }, base)}
-            className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-              tipoActivo === t.value
-                ? 'bg-teal-500 text-white shadow-sm shadow-teal-100'
-                : 'bg-white border border-gray-200 text-gray-600 hover:border-primary-300'
-            }`}>
-            {t.label}
-          </a>
-        ))}
-      </div>
+
 
     </div>
   )
