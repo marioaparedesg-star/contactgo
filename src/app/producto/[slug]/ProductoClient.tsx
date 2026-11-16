@@ -739,15 +739,21 @@ export default function ProductoClient({ product, variants }: Props) {
     }
 
     if (isAmbosDifer) {
-      if (!sph_od && !sph_oi) {
-        toast.error('Ingresa la graduación de al menos un ojo')
+      // Si el cliente selecciona ambos ojos con recetas distintas, cada ojo
+      // debe llevar su propia esfera. No permitir una caja doble con un ojo vacío.
+      if (!sph_od) {
+        toast.error('Selecciona la graduación del ojo derecho (OD)')
+        return false
+      }
+      if (!sph_oi) {
+        toast.error('Selecciona la graduación del ojo izquierdo (OI)')
         return false
       }
       if (needsToric) {
-        if (sph_od && !cyl_od) { toast.error('Falta el cilindro del ojo derecho (CYL)'); return false }
-        if (sph_oi && !cyl_oi) { toast.error('Falta el cilindro del ojo izquierdo (CYL)'); return false }
-        if (cyl_od && !axis_od) { toast.error('Falta el eje del ojo derecho (AXIS)'); return false }
-        if (cyl_oi && !axis_oi) { toast.error('Falta el eje del ojo izquierdo (AXIS)'); return false }
+        if (!cyl_od) { toast.error('Falta el cilindro del ojo derecho (CYL)'); return false }
+        if (!axis_od) { toast.error('Falta el eje del ojo derecho (AXIS)'); return false }
+        if (!cyl_oi) { toast.error('Falta el cilindro del ojo izquierdo (CYL)'); return false }
+        if (!axis_oi) { toast.error('Falta el eje del ojo izquierdo (AXIS)'); return false }
       }
     }
 
