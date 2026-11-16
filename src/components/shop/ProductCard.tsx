@@ -106,9 +106,13 @@ export default function ProductCard({ product, isBestseller }: Props) {
           </div>
           <Link href={href} aria-disabled={product.stock === 0}
             onClick={e => { if (product.stock === 0) e.preventDefault() }}
-            className={`mt-3 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-colors ${product.stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]'}`}>
+            className={`mt-3 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ${product.stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]'}`}>
             <ShoppingCart className="h-4 w-4" aria-hidden="true" />
-            {product.stock === 0 ? 'Agotado' : product.tipo === 'color' ? 'Elegir color' : needsRx ? 'Ver opciones' : 'Ver producto'}
+            {product.stock === 0 ? 'Agotado'
+              : product.tipo === 'color' ? 'Elegir color'
+              : product.tipo === 'torico' || product.tipo === 'multifocal' ? 'Configurar receta'
+              : product.tipo === 'esferico' ? 'Elegir graduación'
+              : 'Ver producto'}
           </Link>
         </div>
       </div>
