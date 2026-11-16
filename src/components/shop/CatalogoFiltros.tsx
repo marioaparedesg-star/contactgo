@@ -18,13 +18,6 @@ interface Props {
   q:               string
 }
 
-const DURACIONES = [
-  { v: '',   l: 'Todas' },
-  { v: '1',  l: 'Diarios' },
-  { v: '14', l: 'Quincenales' },
-  { v: '30', l: 'Mensuales' },
-]
-
 function buildUrl(overrides: Record<string, string | undefined>, base: Record<string, string>) {
   const params = { ...base, ...overrides }
   const qs = Object.entries(params)
