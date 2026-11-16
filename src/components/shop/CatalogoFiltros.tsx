@@ -9,6 +9,7 @@ interface Orden { value: string; label: string }
 interface Props {
   tipos:           Tipo[]
   marcas:          string[]
+  duraciones:      { value: string; label: string }[]
   tipoActivo:      string
   marcaActiva:     string
   duracionActiva:  string
@@ -34,7 +35,7 @@ function buildUrl(overrides: Record<string, string | undefined>, base: Record<st
 }
 
 export default function CatalogoFiltros({
-  tipos, marcas, tipoActivo: tipoActivoProp, marcaActiva: marcaActivaProp, duracionActiva: duracionActivaProp,
+  tipos, marcas, duraciones, tipoActivo: tipoActivoProp, marcaActiva: marcaActivaProp, duracionActiva: duracionActivaProp,
   ordenActivo: ordenActivoProp, ordenes, q: qProp
 }: Props) {
   const [open, setOpen] = useState(false)
@@ -76,7 +77,7 @@ export default function CatalogoFiltros({
 
   const activeCount = [tipoActivo, marcaActiva, duracionActiva].filter(Boolean).length
   const tipoLabel     = tipos.find(t => t.value === tipoActivo)?.label
-  const duracionLabel = DURACIONES.find(d => d.v === duracionActiva)?.l
+  const duracionLabel = duraciones.find(d => d.value === duracionActiva)?.label
   const ordenLabel    = ordenes.find(o => o.value === ordenActivo)?.label
 
   const [searchText, setSearchText] = useState(q)
@@ -214,13 +215,13 @@ export default function CatalogoFiltros({
               <div>
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider mb-2">Duración</p>
                 <div className="flex gap-1.5">
-                  {DURACIONES.map(d => (
-                    <a key={d.v} href={buildUrl({ duracion: d.v || undefined }, base)}
+                  {[{ value: '', label: 'Todas' }, ...duraciones].map(d => (
+                    <a key={d.value} href={buildUrl({ duracion: d.value || undefined }, base)}
                       onClick={() => setOpen(false)}
                       className={`flex-1 text-center px-2 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
-                        duracionActiva === d.v ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300'
+                        duracionActiva === d.value ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300'
                       }`}>
-                      {d.l}
+                      {d.label}
                     </a>
                   ))}
                 </div>
