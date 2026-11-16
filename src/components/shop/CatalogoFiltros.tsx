@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { SlidersHorizontal, X, ChevronDown, Check } from 'lucide-react'
+import { SlidersHorizontal, X, ChevronDown, Check, Search } from 'lucide-react'
 
 interface Tipo  { value: string; label: string }
 interface Orden { value: string; label: string }
@@ -79,8 +79,40 @@ export default function CatalogoFiltros({
   const duracionLabel = DURACIONES.find(d => d.v === duracionActiva)?.l
   const ordenLabel    = ordenes.find(o => o.value === ordenActivo)?.label
 
+  const [searchText, setSearchText] = useState(q)
+
+  useEffect(() => { setSearchText(q) }, [q])
+
   return (
-    <div className="mb-4 space-y-2">
+    <div className="mb-4 space-y-3">
+      <form
+        role="search"
+        aria-label="Buscar productos del catálogo"
+        onSubmit={(e) => {
+          e.preventDefault()
+          window.location.href = buildUrl({ q: searchText.trim() || undefined }, base)
+        }}
+        className="flex w-full items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus-within:border-[#01B2B7] focus-within:ring-2 focus-within:ring-[#01B2B7]/10"
+      >
+        <Search className="h-4 w-4 shrink-0 text-slate-400" />
+        <input
+          type="search"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          placeholder="Buscar por producto o marca..."
+          aria-label="Buscar por producto o marca"
+          className="min-w-0 flex-1 bg-transparent py-1 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+        />
+        {searchText && (
+          <button type="button" onClick={() => { setSearchText(''); window.location.href = buildUrl({ q: undefined }, base) }}
+            className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Limpiar búsqueda">
+            <X className="h-4 w-4" />
+          </button>
+        )}
+        <button type="submit" className="rounded-xl bg-[#002455] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#00366B]">
+          Buscar
+        </button>
+      </form>
 
       {/* Fila: chips activos + botón filtrar + ordenar */}
       <div className="flex items-center gap-2 flex-wrap">
@@ -132,7 +164,7 @@ export default function CatalogoFiltros({
 
           {/* Panel */}
           {open && (
-            <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl border border-gray-200 shadow-xl z-50 p-4 space-y-5">
+            <div className="absolute right-0 top-full mt-2 w-[min(20rem,calc(100vw-2rem))] max-h-[75vh] overflow-y-auto bg-white rounded-2xl border border-gray-200 shadow-xl z-50 p-4 space-y-5">
 
               {/* Tipo */}
               <div>
