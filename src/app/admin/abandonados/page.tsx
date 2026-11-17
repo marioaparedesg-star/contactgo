@@ -13,7 +13,7 @@ export default function AdminAbandonados() {
   const sb = useMemo(() => createClient(), [])
   const [emailCarts, setEmailCarts] = useState<CartRow[]>([])
   const [trackingCarts, setTrackingCarts] = useState<CartRow[]>([])
-  const [source, setSource] = useState<'email' | 'tracking'>('email')
+  const [source, setSource] = useState<'all' | 'email' | 'tracking'>('all')
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
 
@@ -40,7 +40,8 @@ export default function AdminAbandonados() {
 
   useEffect(() => { load() }, [load])
 
-  const carts = source === 'email' ? emailCarts : trackingCarts
+  const allCarts = [...emailCarts, ...trackingCarts].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+  const carts = source === 'all' ? allCarts : source === 'email' ? emailCarts : trackingCarts
   const filtered = carts.filter(c => !search ||
     (c.nombre ?? '').toLowerCase().includes(search.toLowerCase()) ||
     (c.telefono ?? '').includes(search) || (c.email ?? '').toLowerCase().includes(search.toLowerCase()))
@@ -64,11 +65,12 @@ export default function AdminAbandonados() {
 
   return <div className="max-w-7xl mx-auto">
     <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-      <div><h1 className="text-2xl font-bold text-gray-900">Carritos abandonados</h1><p className="text-sm text-gray-500">{emailCarts.length + trackingCarts.length} registros entre ambos seguimientos</p></div>
+      <div><h1 className="text-2xl font-bold text-gray-900">Carritos abandonados</h1><p className="text-sm text-gray-500">{allCarts.length} registros consolidados</p></div>
       <button onClick={load} className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50"><RefreshCw className="w-4 h-4" /> Actualizar</button>
     </div>
     <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 mb-5 flex items-start gap-2"><MessageSquareOff className="w-4 h-4 text-amber-700 mt-0.5 shrink-0" /><p className="text-xs text-amber-900">Los mensajes automáticos de WhatsApp están pausados. Esta pantalla solo consulta y actualiza estados; no envía mensajes.</p></div>
     <div className="flex gap-2 mb-4 flex-wrap">
+      <button onClick={() => setSource('all')} className={`px-4 py-2 rounded-xl text-sm font-semibold ${source === 'all' ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600'}`}>Todos ({allCarts.length})</button>
       <button onClick={() => setSource('email')} className={`px-4 py-2 rounded-xl text-sm font-semibold ${source === 'email' ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600'}`}>Checkout / correo ({emailCarts.length})</button>
       <button onClick={() => setSource('tracking')} className={`px-4 py-2 rounded-xl text-sm font-semibold ${source === 'tracking' ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600'}`}>Seguimiento ({trackingCarts.length})</button>
     </div>
