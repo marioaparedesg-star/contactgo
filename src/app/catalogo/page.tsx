@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/catalogo' },
 }
 
-export const revalidate = 60  // ISR: revalida cada 60s
+// Reduce regeneraciones del catálogo; inventario/precio se validan nuevamente al comprar.
+export const revalidate = 600  // ISR: revalida cada 10 min
 
 const ETIQUETAS_TIPO: Record<string, string> = {
   esferico: 'Esféricos',
