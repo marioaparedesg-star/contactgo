@@ -186,17 +186,17 @@ const nextConfig = {
           { key: 'CDN-Cache-Control', value: 'public, s-maxage=300, stale-while-revalidate=600' },
         ],
       },
-      // Catálogo e home: ISR 60s → CDN cachea 60s
+      // Catálogo e home: ISR 10 min → CDN cachea 10 min
       {
         source: '/',
         headers: [
-          { key: 'CDN-Cache-Control', value: 'public, s-maxage=60, stale-while-revalidate=120' },
+          { key: 'CDN-Cache-Control', value: 'public, s-maxage=600, stale-while-revalidate=1200' },
         ],
       },
       {
         source: '/catalogo',
         headers: [
-          { key: 'CDN-Cache-Control', value: 'public, s-maxage=60, stale-while-revalidate=120' },
+          { key: 'CDN-Cache-Control', value: 'public, s-maxage=600, stale-while-revalidate=1200' },
         ],
       },
       // Blog: estático → cachea 24h
