@@ -242,13 +242,13 @@ export async function POST(
     try {
       const ADMIN_PHONE = process.env.WHATSAPP_ADMIN_PHONE
       if (!ADMIN_PHONE) throw new Error('WHATSAPP_ADMIN_PHONE no configurado')
-      const { sendText } = await import('@/lib/whatsapp')
+      const { enviarWAManual } = await import('@/lib/whatsapp')
       const resumen = (link.items ?? [])
         .map((i: any) => `• ${i.cantidad}x ${i.nombre}`)
         .join('\n')
-      await sendText(
+      await enviarWAManual(
         ADMIN_PHONE,
-        `🛒 *Venta WhatsApp completada*\n\nPedido: *${orderNum}*\nCliente: ${nombre}\nTel: ${tel}\n\n${resumen}\n\nTotal: *RD$${Number(link.total).toLocaleString('es-DO')}*\n\n🔗 Ya puedes enviarle el link de pago AZUL.`
+        { type: 'text', text: { body: `🛒 *Venta WhatsApp completada*\n\nPedido: *${orderNum}*\nCliente: ${nombre}\nTel: ${tel}\n\n${resumen}\n\nTotal: *RD${Number(link.total).toLocaleString('es-DO')}*\n\n🔗 Ya puedes enviarle el link de pago AZUL.` } }
       )
     } catch (waErr: any) {
       console.error('[venta-wa] WA admin notify error:', waErr?.message)
