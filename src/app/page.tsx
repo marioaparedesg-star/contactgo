@@ -17,7 +17,8 @@ import ProductCard from '@/components/shop/ProductCard'
 import PersonalizedSection from '@/components/shop/PersonalizedSection'
 import type { Product } from '@/types'
 
-export const revalidate = 60
+// Menos regeneraciones en Vercel Hobby: datos públicos pueden tardar hasta 10 min en refrescar.
+export const revalidate = 600
 
 async function getFeaturedProducts(): Promise<{ products: Product[], reseñasCount: number, reseñasAvg: number, precioOasys: number, preciosHero: Record<string, number> }> {
   const sb = await createServerSupabaseClient()
