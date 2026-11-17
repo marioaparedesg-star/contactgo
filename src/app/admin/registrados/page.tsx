@@ -16,8 +16,15 @@ export default function RegistradosPage() {
   useEffect(() => {
     sb.from('profiles')
       .select('id,nombre,email,telefono,created_at,role,activo')
+      .eq('role', 'customer')
       .order('created_at', { ascending: false })
-      .then(async ({ data: profiles }) => {
+      .then(async ({ data: profiles, error }) => {
+        if (error) {
+          console.error('[admin/registrados] Error cargando perfiles:', error.message)
+          setUsers([])
+          setLoading(false)
+          return
+        }
         const ps = profiles ?? []
         const ids = ps.map((p: any) => p.id)
         const [{ data: ords }, { data: abonos }] = ids.length > 0
