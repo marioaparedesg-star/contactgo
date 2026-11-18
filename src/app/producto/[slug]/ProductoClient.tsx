@@ -1001,7 +1001,7 @@ export default function ProductoClient({ product, variants }: Props) {
             </div>
 
             {/* BLOQUE 4: PERSONALIZACIÓN — se conserva intacto el selector de colores */}
-            <section className="mx-4 mt-3 mb-2 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+            <section className="mx-4 mt-3 mb-2 rounded-2xl border border-gray-200 bg-white shadow-sm">
               <div className="px-4 pt-4 pb-2">
                 <p className="text-sm font-black text-gray-900">Personaliza tu producto</p>
                 <p className="text-xs text-gray-500 mt-1">Completa las opciones necesarias antes de agregarlo al carrito.</p>
