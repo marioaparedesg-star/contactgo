@@ -182,10 +182,12 @@ export default function CartPage() {
                   className="group bg-white rounded-2xl border border-slate-200/80 shadow-[0_2px_12px_rgba(15,35,65,0.04)] p-3 sm:p-4 flex gap-3 sm:gap-4 transition-shadow hover:shadow-md">
                   {/* Imagen */}
                   <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#f7f9fc] rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-slate-100">
-                    {item.product.imagen_url
-                      ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={96} height={96} className="object-contain p-1" unoptimized />
-                      : <Eye className="w-8 h-8 text-gray-200" />
-                    }
+                    <Link href={`/producto/${item.product.slug}?editarCarrito=${idx}`} aria-label={`Editar ${item.product.nombre} y conservar su receta`} className="w-full h-full flex items-center justify-center rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#01B2B7]">
+                      {item.product.imagen_url
+                        ? <Image src={item.product.imagen_url} alt={item.product.nombre} width={96} height={96} className="object-contain p-1" unoptimized />
+                        : <Eye className="w-8 h-8 text-gray-200" />
+                      }
+                    </Link>
                   </div>
 
                   {/* Detalle */}
@@ -195,7 +197,7 @@ export default function CartPage() {
                         {(item.product as any).marca && (
                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">{(item.product as any).marca}</p>
                         )}
-                        <p className="font-bold text-gray-900 text-sm leading-snug">{item.product.nombre}</p>
+                        <Link href={`/producto/${item.product.slug}?editarCarrito=${idx}`} className="font-bold text-gray-900 text-sm leading-snug hover:text-teal-700 focus-visible:outline-none focus-visible:underline">{item.product.nombre}</Link>
                         {(item as any).color && <span className="inline-flex mt-1 items-center rounded-full bg-teal-50 border border-teal-100 px-2.5 py-1 text-[10px] font-bold text-teal-800">Color: {(item as any).color}</span>}
                         <div className="mt-1">
                           <EntregaBadge tipo={(item.product as any).tipo ?? 'esferico'} nombre={item.product.nombre} sph={item.sph} variant="cart" />
