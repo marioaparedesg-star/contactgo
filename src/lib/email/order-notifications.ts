@@ -39,7 +39,7 @@ function supabaseAdmin() {
   return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 }
 
-export async function enviarNotificacionPedido(orderId: string, evento: EmailEvent, nuevoEstado?: string) {
+export async function enviarNotificacionPedido(orderId: string, evento: EmailEvent, nuevoEstado?: string, accountSetupUrl?: string | null) {
   if (!orderId) return { email_cliente: 'error', error: 'order_id requerido' }
   if (!process.env.RESEND_API_KEY) return { email_cliente: 'error', error: 'RESEND_API_KEY no configurado' }
   try {
@@ -83,7 +83,7 @@ export async function enviarNotificacionPedido(orderId: string, evento: EmailEve
       } else {
         const sent = await enviarEmailConReintentos(resend, {
           from: FROM_EMAIL, to: order.cliente_email, subject,
-          html: buildCustomerOrderEmail(order, items, evento, state),
+          html: buildCustomerOrderEmail(order, items, evento, state, accountSetupUrl),
         })
         result.email_cliente = sent.error ? 'error' : 'sent'
         if (sent.error) result.email_error = sent.error
