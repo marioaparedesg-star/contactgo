@@ -411,6 +411,7 @@ interface Props {
 export default function ProductoClient({ product, variants }: Props) {
   const router  = useRouter()
   const addItem = useCartStore(s => s.addItem)
+  const [editingCartIndex, setEditingCartIndex] = useState<number | null>(null)
 
   // ── Nuevo flujo óptico unificado ──────────────────────────────────────
   const [eyeFlow, setEyeFlow] = useState<EyeFlowState>(initialEyeFlow)
@@ -537,6 +538,45 @@ export default function ProductoClient({ product, variants }: Props) {
   const sinVariante = faltaModalidad || faltaColor || isLente && !isToric && !isMulti && sph !== '' && (
     isColor ? !varianteSeleccionadaTieneStock() : !varianteSeleccionadaTieneStock()
   )
+
+  // Restaurar la configuración exacta del item al volver desde el carrito.
+  useEffect(() => {
+    const rawIndex = new URLSearchParams(window.location.search).get('editarCarrito')
+    if (rawIndex == null) return
+    const index = Number(rawIndex)
+    if (!Number.isInteger(index) || index < 0) return
+    const item = useCartStore.getState().items[index] as any
+    if (!item || item.product?.id !== product.id) return
+    setEditingCartIndex(index)
+    setQty(item.cantidad ?? 1)
+    setSize(item.size ?? '')
+    setSuscripcion(item.suscripcion ?? null)
+    setModalidad(item.color ? (item.sph === 0 ? 'plano' : 'graduado') : null)
+    setEyeFlow({
+      ojoMode: item.ojo_mode ?? 'AMBOS',
+      mismaReceta: item.misma_receta ?? true,
+      sph: item.sph != null ? String(item.sph) : '',
+      cyl: item.cyl != null ? String(item.cyl) : '',
+      axis: item.axis != null ? String(item.axis) : '',
+      add: item.add_power ?? '',
+      sph_od: item.sph_od != null ? String(item.sph_od) : '',
+      sph_oi: item.sph_oi != null ? String(item.sph_oi) : '',
+      cyl_od: item.cyl_od != null ? String(item.cyl_od) : '',
+      cyl_oi: item.cyl_oi != null ? String(item.cyl_oi) : '',
+      axis_od: item.axis_od != null ? String(item.axis_od) : '',
+      axis_oi: item.axis_oi != null ? String(item.axis_oi) : '',
+      color: item.color ?? '',
+      noEstaSeguro: false,
+    } as any)
+  }, [product.id])
+
+  const addConfiguredItem = (opts: any) => {
+    if (editingCartIndex !== null) {
+      useCartStore.getState().removeByIndex(editingCartIndex)
+      setEditingCartIndex(null)
+    }
+    addItem(product, opts)
+  }
 
   // ── Scroll al top al montar el PDP — evita que Next.js conserve posición de scroll anterior ──
   useEffect(() => {
@@ -693,7 +733,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
     // ── Soluciones y gotas: flujo simple ──────────────────────────────
     if (!isLente) {
-      addItem(product, {
+      addConfiguredItem({
         cantidad: qty, size: size || undefined,
         precio_override: price, precio_original: precioBase,
         suscripcion: suscripcion ?? undefined,
@@ -706,7 +746,7 @@ export default function ProductoClient({ product, variants }: Props) {
     // ── SIN GRADUACIÓN (plano): compra directa, solo necesita color ───
     // Un lente plano es idéntico en ambos ojos: no se pide ojo ni receta.
     if (isColor && modalidad === 'plano') {
-      addItem(product, {
+      addConfiguredItem({
         cantidad:        qty,
         ojo_mode:        'AMBOS',
         misma_receta:    true,
@@ -781,7 +821,7 @@ export default function ProductoClient({ product, variants }: Props) {
     }
 
     if (isAmbosIgual || isUnSoloOjo) {
-      addItem(product, {
+      addConfiguredItem({
         ...baseOpts,
         sph:  parseFloat(sph),
         cyl:  cyl  ? parseFloat(cyl)  : undefined,
@@ -789,7 +829,7 @@ export default function ProductoClient({ product, variants }: Props) {
       })
     } else {
       // AMBOS con receta diferente — UN SOLO item con campos _od/_oi
-      addItem(product, {
+      addConfiguredItem({
         ...baseOpts,
         sph_od:  sph_od  ? parseFloat(sph_od)  : undefined,
         sph_oi:  sph_oi  ? parseFloat(sph_oi)  : undefined,
