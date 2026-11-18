@@ -1000,8 +1000,13 @@ export default function ProductoClient({ product, variants }: Props) {
               <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">💬 WA 24/7</span>
             </div>
 
-            {/* BLOQUE 4: CONFIGURADOR DE RECETA */}
-            <div className="px-4 pt-3 pb-2">
+            {/* BLOQUE 4: PERSONALIZACIÓN — se conserva intacto el selector de colores */}
+            <section className="mx-4 mt-3 mb-2 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+              <div className="px-4 pt-4 pb-2">
+                <p className="text-sm font-black text-gray-900">Personaliza tu producto</p>
+                <p className="text-xs text-gray-500 mt-1">Completa las opciones necesarias antes de agregarlo al carrito.</p>
+              </div>
+              <div className="px-4 pb-4 space-y-3">
               {isColor && precioPlano != null && (
                 <ModalidadSelector
                   modalidad={modalidad}
@@ -1037,7 +1042,8 @@ export default function ProductoClient({ product, variants }: Props) {
               )}
 
               {isToric && <ToricWizard productName={product.nombre} />}
-            </div>
+              </div>
+            </section>
 
             {/* BLOQUE 5: CTA MOBILE (inline, arriba de la sticky bar) */}
             <div className="px-4 pb-4 space-y-2">
