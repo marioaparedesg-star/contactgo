@@ -9,6 +9,7 @@ import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import { fmtSph } from '@/lib/sph-utils'
 import { trackEcommerce, sendCAPI } from '@/lib/analytics'
 import GoogleCustomerReviewsOptIn from '@/components/trust/GoogleCustomerReviews'
+import { useCartStore } from '@/lib/cart-store'
 
 const PASOS = [
   { key: 'pendiente',  label: 'Recibido',   icon: '📋' },
@@ -70,9 +71,11 @@ function ConfirmacionContent() {
   // Limpiar carrito
   useEffect(() => {
     if (origen === 'azul' && resultado === 'aprobado') {
+      // Vaciar el store persistido real (contactgo-cart-v2) tras cualquier pago aprobado.
+      // No depende del nombre de la clave antigua ni modifica el flujo del gateway.
       try {
-        const s = JSON.parse(localStorage.getItem('contactgo-cart') || '{}')
-        if (s.state) { s.state.items = []; localStorage.setItem('contactgo-cart', JSON.stringify(s)) }
+        useCartStore.getState().clearCart()
+        localStorage.removeItem('contactgo-cart')
       } catch {}
       if (orderId) {
         // Guardar receta automáticamente (lentes con graduación)
