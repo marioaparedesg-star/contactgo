@@ -108,67 +108,50 @@ export async function POST(
     // (aunque alguien llame la API directo) y siempre queda en 'tarjeta'.
     const metodoPago: 'tarjeta' = 'tarjeta'
 
-    // ── Registrar al cliente como cuenta real (o reutilizar si ya existe) ──
-    // Antes, los pedidos de venta por WhatsApp quedaban con user_id: null —
-    // el cliente nunca aparecía en /admin/clientes aunque hubiera comprado y
-    // dado todos sus datos. Ahora cada persona que completa este formulario
-    // se convierte en un cliente registrado real de la web, igual que si se
-    // hubiera registrado desde /cuenta.
+    // Crear o reutilizar la cuenta SOLO después de que el cliente completa el formulario.
+    // Si el email ya existe, se vincula sin cambiar su contraseña.
     let userId: string | null = null
-    try {
-      // 1. ¿Ya existe un perfil de cliente con este email? (compra repetida
-      //    por WhatsApp, o ya tiene cuenta creada desde la web)
-      const { data: perfilExistente } = await sb
-        .from('profiles')
-        .select('id')
-        .eq('email', email)
-        .eq('role', 'customer')
-        .maybeSingle()
+    let accountSetupUrl: string | null = null
+    const { data: perfilExistente, error: perfilError } = await sb
+      .from('profiles').select('id').eq('email', email).eq('role', 'customer').maybeSingle()
+    if (perfilError) throw new Error('No se pudo verificar la cuenta del cliente')
 
-      if (perfilExistente) {
-        userId = perfilExistente.id
-        // Mantener sus datos actualizados con lo último que escribió
-        await sb.from('profiles').update({
-          nombre, telefono: tel, direccion: dir, ciudad,
-          fecha_nacimiento: fnac, updated_at: new Date().toISOString(),
-        }).eq('id', userId)
+    if (perfilExistente?.id) {
+      userId = perfilExistente.id
+      const { error: profileUpdateError } = await sb.from('profiles').update({
+        nombre, telefono: tel, direccion: dir, ciudad, fecha_nacimiento: fnac,
+        updated_at: new Date().toISOString(),
+      }).eq('id', userId)
+      if (profileUpdateError) throw new Error('No se pudo actualizar el perfil del cliente')
+    } else {
+      // Buscar también en Auth por si existe una cuenta sin perfil.
+      const { data: usersData, error: usersError } = await sb.auth.admin.listUsers({ page: 1, perPage: 1000 })
+      if (usersError) throw new Error('No se pudo verificar la cuenta de acceso')
+      const authExisting = usersData.users.find((u: any) => u.email?.toLowerCase() === email)
+      if (authExisting) {
+        userId = authExisting.id
+        const { error: upsertError } = await sb.from('profiles').upsert({
+          id: userId, nombre, email, telefono: tel, direccion: dir, ciudad,
+          fecha_nacimiento: fnac, role: 'customer', activo: true,
+        })
+        if (upsertError) throw new Error('No se pudo vincular el perfil existente')
       } else {
-        // 2. Crear cuenta nueva de Auth con contraseña aleatoria — el cliente
-        //    no la necesita para comprar por WhatsApp, pero si más adelante
-        //    quiere entrar a "Mi cuenta" en la web, usa "Olvidé mi contraseña"
-        //    con este mismo email para ponerle una.
         const passwordTemporal = crypto.randomUUID()
         const { data: authUser, error: authErr } = await sb.auth.admin.createUser({
-          email,
-          password: passwordTemporal,
-          email_confirm: true,
-          user_metadata: { nombre, origen: 'venta_whatsapp' },
+          email, password: passwordTemporal, email_confirm: true,
+          user_metadata: { nombre, origen: 'venta_whatsapp', requiere_configurar_password: true },
         })
-
-        if (authErr) {
-          // Caso raro: el email ya existe en Auth pero no tiene perfil de
-          // cliente (por ejemplo, quedó a medias en otro flujo). Buscarlo
-          // y reutilizar su id en vez de fallar el pedido completo.
-          const { data: lista } = await sb.auth.admin.listUsers()
-          const existente = lista?.users?.find((u: any) => u.email?.toLowerCase() === email)
-          if (existente) userId = existente.id
-        } else {
-          userId = authUser.user.id
-        }
-
-        if (userId) {
-          await sb.from('profiles').upsert({
-            id: userId, nombre, email, telefono: tel,
-            direccion: dir, ciudad, fecha_nacimiento: fnac,
-            role: 'customer', activo: true,
-          })
-        }
+        if (authErr || !authUser.user) throw new Error('No se pudo crear la cuenta del cliente')
+        userId = authUser.user.id
+        const { error: profileInsertError } = await sb.from('profiles').upsert({
+          id: userId, nombre, email, telefono: tel, direccion: dir, ciudad,
+          fecha_nacimiento: fnac, role: 'customer', activo: true,
+        })
+        if (profileInsertError) throw new Error('La cuenta se creó, pero no se pudo completar el perfil')
       }
-    } catch (e) {
-      // Si algo falla registrando al cliente, NO bloqueamos la venta —
-      // el pedido se crea igual, solo queda sin cuenta asociada.
-      console.error('[venta-wa] Error registrando cliente:', e)
     }
+
+    if (!userId) throw new Error('No se pudo asociar el pedido a una cuenta')
 
     // Crear orden — misma estructura que el checkout web
     const orderNum = `CG-${Date.now().toString().slice(-8)}`
@@ -229,14 +212,39 @@ export async function POST(
     const { error: itemsErr } = await sb.from('order_items').insert(itemsRows)
     if (itemsErr) console.error('[venta-wa] order_items error:', itemsErr.message)
 
+    // Para cuentas nuevas, generar un enlace de un solo uso para establecer contraseña.
+    // Si el enlace falla, el pedido queda registrado y el correo se reintenta desde soporte;
+    // no se modifica ninguna contraseña existente.
+    const { data: createdUserData } = await sb.auth.admin.getUserById(userId)
+    if (createdUserData?.user?.user_metadata?.requiere_configurar_password === true) {
+      const { data: recovery, error: recoveryError } = await sb.auth.admin.generateLink({
+        type: 'recovery', email,
+        options: { redirectTo: `${BASE}/auth/callback?next=/cuenta/reset-password` },
+      })
+      if (!recoveryError && recovery?.properties?.hashed_token) {
+        accountSetupUrl = `${BASE}/auth/callback?token_hash=${encodeURIComponent(recovery.properties.hashed_token)}&type=recovery&next=/cuenta/reset-password`
+      } else {
+        console.error('[venta-wa] No se pudo generar enlace para configurar contraseña:', recoveryError?.message)
+      }
+    }
+
     // Marcar link como completado
     await sb
       .from('venta_whatsapp_links')
       .update({ estado: 'completado', order_id: order.id, completado_at: new Date().toISOString() })
       .eq('id', link.id)
 
-    // NOTA: En ventas por WhatsApp el cliente ya está siendo atendido manualmente,
-    // así que NO se le envía ningún email ni WhatsApp automático. Solo se notifica al admin.
+    // Enviar confirmación por email. El enlace de contraseña solo se incluye
+    // cuando se trata de una cuenta nueva creada desde esta venta.
+    try {
+      const { enviarNotificacionPedido } = await import('@/lib/email/order-notifications')
+      const emailResult = await enviarNotificacionPedido(order.id, 'nuevo_pedido', undefined, accountSetupUrl)
+      if (emailResult.email_cliente !== 'sent') {
+        console.error('[venta-wa] correo de pedido recibido no enviado:', emailResult)
+      }
+    } catch (emailErr: any) {
+      console.error('[venta-wa] error enviando confirmación:', emailErr?.message)
+    }
 
     // Notificar al admin por WhatsApp (mejor esfuerzo, no bloquea)
     try {
