@@ -102,6 +102,7 @@ export default function CuentaPage() {
   const [authChecked, setAuthChecked] = useState(false)
   const [perfil, setPerfil]   = useState<any>(null)
   const [pedidos, setPedidos] = useState<any[]>([])
+  const [pedidosLoading, setPedidosLoading] = useState(true)
   const [selectedPedido, setSelectedPedido] = useState<any>(null)
   const [suscripciones, setSuscripciones]   = useState<any[]>([])
   const [itemsPedido, setItemsPedido]   = useState<any[]>([])
@@ -768,7 +769,12 @@ export default function CuentaPage() {
                 </div>
                 <button onClick={() => setTab('pedidos')} className="shrink-0 text-sm font-bold text-[#008F98] hover:text-[#002455]">Ver todos <ChevronRight className="inline h-4 w-4" /></button>
               </div>
-              {pedidos.length === 0 ? (
+              {pedidosLoading ? (
+                <div className="px-5 py-8 text-center text-sm text-slate-400" aria-live="polite">
+                  <span className="mx-auto mb-2 block h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-[#01B2B7]" />
+                  Cargando tus pedidos...
+                </div>
+              ) : pedidos.length === 0 ? (
                 <div className="px-5 py-8 text-center">
                   <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-400"><Package className="h-6 w-6" /></div>
                   <p className="text-sm font-semibold text-slate-700">Todavía no tienes pedidos</p>
@@ -838,7 +844,12 @@ export default function CuentaPage() {
               </div>
               <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">{pedidos.length} {pedidos.length === 1 ? 'pedido' : 'pedidos'}</span>
             </div>
-            {pedidos.length===0 ? (
+            {pedidosLoading ? (
+              <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-sm text-slate-400 shadow-sm" aria-live="polite">
+                <span className="mx-auto mb-3 block h-7 w-7 animate-spin rounded-full border-2 border-slate-200 border-t-[#01B2B7]" />
+                Cargando tus pedidos...
+              </div>
+            ) : pedidos.length===0 ? (
               <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center shadow-sm">
                 <Package className="mx-auto mb-3 h-12 w-12 text-slate-200" />
                 <p className="font-semibold text-slate-700">Todavía no tienes pedidos</p>
