@@ -214,7 +214,12 @@ export default function CuentaPage() {
           if (rDirs.status === 'fulfilled')     setDirecciones(rDirs.value.data || [])
           if (rRecetas.status === 'fulfilled')  setRecetas(rRecetas.value.data || [])
           if (rSubs.status === 'fulfilled')     setSuscripciones(rSubs.value.data || [])
-        }).catch(err => console.error('[cuenta] load error:', err))
+        }).catch(err => {
+          console.error('[cuenta] load error:', err)
+        }).finally(() => {
+          // La lista vacía solo se muestra cuando la carga terminó, incluso si falla.
+          setPedidosLoading(false)
+        })
       })
       .catch(err => { console.error('[cuenta] getUser error:', err); setAuthChecked(true) })
   }, [])
