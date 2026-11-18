@@ -698,7 +698,7 @@ export default function ProductoClient({ product, variants }: Props) {
         precio_override: price, precio_original: precioBase,
         suscripcion: suscripcion ?? undefined,
       })
-      toast.success('¡Perfecto! Lente agregado al carrito 🎉')
+      toast.success(isSolucion ? 'Solución agregada al carrito' : 'Gotas agregadas al carrito')
       if (redirectToCart) router.push('/cart')
       return true
     }
@@ -1005,7 +1005,7 @@ export default function ProductoClient({ product, variants }: Props) {
               <button onClick={() => handleAdd()} disabled={product.stock===0||sinVariante}
                 className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-teal-100/50 transition-all">
                 <ShoppingCart className="w-5 h-5" />
-                {faltaColor ? 'Selecciona un color primero' : sinVariante ? 'Completa la selección primero' : 'Agregar al carrito'}
+                {sinVariante && !isColor ? 'Completa la selección primero' : 'Agregar al carrito'}
               </button>
               <button onClick={handleBuyNow} disabled={product.stock===0||sinVariante}
                 className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-30 text-white font-bold py-3.5 rounded-2xl text-base transition-all">
@@ -1265,7 +1265,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     <button onClick={() => handleAdd()} disabled={product.stock===0||sinVariante}
                       className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 transition-all text-sm shadow-md shadow-teal-100/50">
                       <ShoppingCart className="w-4 h-4" />
-                      {product.stock===0?'Sin stock':faltaColor?'Selecciona un color primero':sinVariante?'Consultar':'Agregar al carrito'}
+                      {product.stock===0?'Sin stock':sinVariante && !isColor?'Consultar':'Agregar al carrito'}
                     </button>
                     <button onClick={handleBuyNow} disabled={product.stock===0||sinVariante}
                       className="w-full mt-1.5 bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-40 text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all text-sm">
