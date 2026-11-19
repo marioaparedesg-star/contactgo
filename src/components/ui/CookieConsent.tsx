@@ -8,12 +8,12 @@ type Consent = { level: 'all' | 'essential'; ts: number }
 function updateGoogleConsent(level: Consent['level']) {
   if (typeof window === 'undefined') return
   const granted = level === 'all' ? 'granted' : 'denied'
-  const dataLayer = ((window as any).dataLayer = (window as any).dataLayer || [])
-  dataLayer.push(['consent', 'update', {
+  const gtag = (window as any).gtag
+  if (typeof gtag === 'function') gtag('consent', 'update', {
     analytics_storage: granted, ad_storage: granted, ad_user_data: granted,
     ad_personalization: granted, functionality_storage: 'granted',
     personalization_storage: granted, security_storage: 'granted',
-  }])
+  })
 }
 
 function loadOptionalVendors() {
