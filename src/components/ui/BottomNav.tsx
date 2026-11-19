@@ -21,7 +21,7 @@ export default function BottomNav() {
   ]
 
   return (
-    <nav aria-label="Navegación" className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 z-40 safe-area-bottom shadow-lg shadow-black/5">
+    <nav aria-label="Navegación" className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 z-40 bottom-nav-safe shadow-lg shadow-black/5">
       <div className="flex items-center justify-around h-16 px-1">
         {tabs.map(tab => {
           const Icon = tab.icon
