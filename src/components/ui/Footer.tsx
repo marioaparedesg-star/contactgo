@@ -63,6 +63,7 @@ export default function Footer() {
               ].map(([l, h]) => (
                 <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
               ))}
+              <li><button type="button" onClick={() => window.dispatchEvent(new Event('cg-open-cookie-preferences'))} className="text-xs text-gray-400 hover:text-white transition-colors">Preferencias de cookies</button></li>
             </ul>
           </div>
 
