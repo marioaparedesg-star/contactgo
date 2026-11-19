@@ -81,11 +81,15 @@ export default function CookieConsent() {
   }, [])
 
   const accept = (level: Consent['level']) => {
+    let withdrawing = false
     try {
+      const previous = JSON.parse(localStorage.getItem('cg-cookie-consent') || 'null')
+      withdrawing = previous?.level === 'all' && level === 'essential'
       localStorage.setItem('cg-cookie-consent', JSON.stringify({ level, ts: Date.now() }))
       if (level === 'all') loadOptionalVendors()
     } catch {}
     window.dispatchEvent(new Event('cg-consent-change'))
+    if (withdrawing) { window.location.reload(); return }
     setShow(false)
   }
 
