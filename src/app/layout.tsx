@@ -75,7 +75,7 @@ export const viewport = {
 
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": ["Organization", "LocalBusiness", "Optician"],
+  "@type": "Organization",
   "@id": "https://www.contactgo.net/#organization",
   "name": "ContactGo",
   "url": "https://www.contactgo.net",
@@ -91,18 +91,6 @@ const organizationSchema = {
     "areaServed": "DO",
     "availableLanguage": ["es", "en"],
     "url": "https://wa.me/18096942268"
-  },
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Av. Winston Churchill No. 95, Torre Empresarial Blue Mall, Piso 23",
-    "addressLocality": "Santo Domingo",
-    "addressRegion": "Distrito Nacional",
-    "addressCountry": "DO"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 18.4726717,
-    "longitude": -69.9409414
   },
   "areaServed": {
     "@type": "Country",
