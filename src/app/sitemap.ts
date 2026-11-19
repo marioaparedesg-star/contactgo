@@ -47,6 +47,7 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/seguridad',                                   priority: 0.55, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/terminos',                                    priority: 0.40, changeFrequency: 'yearly'  },
     { url: 'https://www.contactgo.net/privacidad',                                  priority: 0.40, changeFrequency: 'yearly'  },
+    { url: 'https://www.contactgo.net/aviso-legal',                                  priority: 0.40, changeFrequency: 'yearly'  },
   ].map(p => ({
     url: p.url,
     lastModified: new Date('2026-05-28'),
