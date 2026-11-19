@@ -5,30 +5,43 @@ import { usePathname } from 'next/navigation'
 
 type Consent = { level: 'all' | 'essential'; ts: number }
 
-function updateGoogleConsent(level: Consent['level']) {
-  if (typeof window === 'undefined') return
-  const granted = level === 'all' ? 'granted' : 'denied'
-  const gtag = (window as any).gtag
-  if (typeof gtag === 'function') gtag('consent', 'update', {
-    analytics_storage: granted, ad_storage: granted, ad_user_data: granted,
-    ad_personalization: granted, functionality_storage: 'granted',
-    personalization_storage: granted, security_storage: 'granted',
-  })
-}
-
 function loadOptionalVendors() {
   if (typeof window === 'undefined') return
   const w = window as any
   if (w.__cgOptionalVendorsLoaded) return
   w.__cgOptionalVendorsLoaded = true
+
+  w.dataLayer = w.dataLayer || []
+  w.gtag = w.gtag || function() { w.dataLayer.push(arguments) }
+  w.gtag('consent', 'default', {
+    analytics_storage: 'granted', ad_storage: 'granted',
+    ad_user_data: 'granted', ad_personalization: 'granted',
+    functionality_storage: 'granted', personalization_storage: 'granted',
+    security_storage: 'granted',
+  })
+  w.gtag('js', new Date())
+  w.gtag('config', 'AW-830060688')
+  w.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' })
+
+  const googleAds = document.createElement('script')
+  googleAds.async = true
+  googleAds.src = 'https://www.googletagmanager.com/gtag/js?id=AW-830060688'
+  document.head.appendChild(googleAds)
+
+  const gtm = document.createElement('script')
+  gtm.async = true
+  gtm.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-M9GZGJJQ'
+  document.head.appendChild(gtm)
+
   const clarity = document.createElement('script')
   clarity.async = true
   clarity.src = 'https://www.clarity.ms/tag/wslp0l9vex'
   document.head.appendChild(clarity)
+
+  const n: any = w.fbq || function(this: any) {
+    n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+  }
   if (!w.fbq) {
-    const n: any = function(this: any) {
-      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-    }
     if (!w._fbq) w._fbq = n
     n.push = n
     n.loaded = true
@@ -43,7 +56,6 @@ function loadOptionalVendors() {
   w.fbq('init', '1516674003159165')
   w.fbq('track', 'PageView')
 }
-
 export default function CookieConsent() {
   const pathname = usePathname()
   const [show, setShow] = useState(false)
@@ -65,7 +77,6 @@ export default function CookieConsent() {
   const accept = (level: Consent['level']) => {
     try {
       localStorage.setItem('cg-cookie-consent', JSON.stringify({ level, ts: Date.now() }))
-      updateGoogleConsent(level)
       if (level === 'all') loadOptionalVendors()
     } catch {}
     window.dispatchEvent(new Event('cg-consent-change'))
