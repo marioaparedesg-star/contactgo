@@ -407,3 +407,9 @@ nav a:hover, .nav-link:hover {
 html {
   touch-action: manipulation;
 }
+
+
+/* Fixed mobile navigation: reserve the iOS home-indicator safe area. */
+.bottom-nav-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
