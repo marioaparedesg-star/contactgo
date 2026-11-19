@@ -7,10 +7,14 @@
   "background_color": "#ffffff",
   "theme_color": "#002455",
   "orientation": "portrait",
-  "icons": [\n    {\n      "src": "/favicon.svg",\n      "sizes": "any",\n      "type": "image/svg+xml",\n      "purpose": "any"\n    }\n  ],
-  "categories": [
-    "shopping",
-    "health"
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
   ],
+  "categories": ["shopping", "health"],
   "lang": "es"
 }
