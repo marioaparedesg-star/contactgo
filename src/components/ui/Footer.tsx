@@ -118,6 +118,7 @@ export default function Footer() {
                 ['Seguridad', '/seguridad'],
                 ['Privacidad', '/privacidad'],
                 ['Términos', '/terminos'],
+                ['Aviso legal', '/aviso-legal'],
               ].map(([l, h]) => (
                 <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
               ))}
