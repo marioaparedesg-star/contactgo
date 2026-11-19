@@ -61,6 +61,12 @@ export default function CookieConsent() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
+    const reopen = () => setShow(true)
+    window.addEventListener('cg-open-cookie-preferences', reopen)
+    return () => window.removeEventListener('cg-open-cookie-preferences', reopen)
+  }, [])
+
+  useEffect(() => {
     try {
       const stored = localStorage.getItem('cg-cookie-consent')
       if (!stored) {
