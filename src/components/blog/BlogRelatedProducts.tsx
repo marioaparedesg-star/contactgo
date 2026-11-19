@@ -68,10 +68,11 @@ function chooseProducts(pathname: string, products: BlogProduct[]) {
       : /color|colores/.test(normalizedSlug) ? ['color']
       : /diario|diarios/.test(normalizedSlug) ? ['esferico']
       : ['esferico','multifocal','torico']
+    let fallbackCount = 0
     for (const type of preferredTypes) {
       const match = products.find((product) => product.tipo === type && !seen.has(product.id))
-      if (match) { selected.push(match); seen.add(match.id) }
-      if (selected.length === 3) break
+      if (match) { selected.push(match); seen.add(match.id); fallbackCount += 1 }
+      if (fallbackCount >= 3) break
     }
   }
   return selected
