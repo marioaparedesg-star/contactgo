@@ -68,6 +68,7 @@ export default function CookieConsent() {
       updateGoogleConsent(level)
       if (level === 'all') loadOptionalVendors()
     } catch {}
+    window.dispatchEvent(new Event('cg-consent-change'))
     setShow(false)
   }
 
