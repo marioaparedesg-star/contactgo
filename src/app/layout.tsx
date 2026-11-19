@@ -134,6 +134,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <head>
+        {/* Consent Mode v2: default consent runs before Google tags. */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+          (function(){
+            var saved = null;
+            try { saved = JSON.parse(localStorage.getItem('cg-cookie-consent') || 'null'); } catch(e) {}
+            var granted = saved && saved.level === 'all' ? 'granted' : 'denied';
+            window.gtag('consent', 'default', {
+              analytics_storage: granted, ad_storage: granted,
+              ad_user_data: granted, ad_personalization: granted,
+              functionality_storage: 'granted', personalization_storage: granted,
+              security_storage: 'granted', wait_for_update: 500
+            });
+            if (saved && saved.level === 'all') window.gtag('consent', 'update', {
+              analytics_storage:'granted', ad_storage:'granted',
+              ad_user_data:'granted', ad_personalization:'granted'
+            });
+          })();
+        ` }} />
         {/* ── Polyfill webkit.messageHandlers ────────────────────────────────────
             CRÍTICO: debe ser el primer script que corre.
             Facebook, Instagram, WeChat y cualquier WKWebView en iOS pueden
@@ -266,8 +286,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only">Ir al contenido principal</a>
-        {/* GTM noscript fallback */}
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9GZGJJQ" height="0" width="0" style={{display:'none',visibility:'hidden'}} /></noscript>
+
 
 
         {/* ── Google Ads — AW-830060688 ────────────────────────────────────── */}
@@ -313,28 +332,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}}
         />
 
-        {/* Meta Pixel — ID: 1516674003159165 */}
-        <Script
-          id="meta-pixel"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            if(s&&s.parentNode){s.parentNode.insertBefore(t,s);}else{(b.head||b.documentElement).appendChild(t);}}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1516674003159165');
-            fbq('track', 'PageView');
-          `}}
-        />
-        <noscript>
-          <img height="1" width="1" alt="" role="presentation" style={{display:'none'}}
-            src="https://www.facebook.com/tr?id=1516674003159165&ev=PageView&noscript=1"
-          />
-        </noscript>
         <ReferralTracker />
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
