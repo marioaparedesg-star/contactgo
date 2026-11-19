@@ -1,11 +1,10 @@
 import Script from 'next/script'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import './globals.css'
 import BottomNav from '@/components/ui/BottomNav'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import CookieConsent from '@/components/ui/CookieConsent'
+import ConsentMetrics from '@/components/ui/ConsentMetrics'
 import { Toaster } from 'react-hot-toast'
 import WelcomePopup from '@/components/ui/WelcomePopup'
 import ScrollToTop from '@/components/ui/ScrollToTop'
@@ -316,8 +315,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <BottomNav />
         <WhatsAppButton />
         <CookieConsent />
-      <Analytics />
-      <SpeedInsights />
+      <ConsentMetrics />
         {/* Skip link accesibilidad WCAG */}
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-teal-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-semibold">
         Saltar al contenido principal
