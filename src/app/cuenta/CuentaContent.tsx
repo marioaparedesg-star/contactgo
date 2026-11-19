@@ -182,7 +182,7 @@ export default function CuentaPage() {
         setUser(user)
         Promise.allSettled([
           sb.from('profiles').select('*').eq('id', user.id).single(),
-          sb.from('orders').select('*, order_items(*, product:products(nombre,tipo,imagen_url))').eq('user_id', user.id).order('created_at', { ascending: false }),
+          sb.from('orders').select('*, order_items(*, product:products(id,nombre,tipo,slug,imagen_url))').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('addresses').select('*').eq('user_id', user.id).order('created_at'),
           sb.from('saved_prescriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
           sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
@@ -425,7 +425,7 @@ export default function CuentaPage() {
     // Refresca el estado actual del pedido desde DB (no usar snapshot en memoria)
     const [{ data: pedidoFresh }, { data: items }, { data: historial }] = await Promise.all([
       sb.from('orders').select('*').eq('id', p.id).single(),
-      sb.from('order_items').select('*, product:products(nombre,tipo,imagen_url)').eq('order_id', p.id),
+      sb.from('order_items').select('*, product:products(id,nombre,tipo,slug,imagen_url)').eq('order_id', p.id),
       sb.from('order_status_history').select('*').eq('order_id', p.id).order('created_at', { ascending: true }),
     ])
     if (pedidoFresh) {
@@ -1513,10 +1513,10 @@ export default function CuentaPage() {
                   if (item.size)        specs.push({label:'Tamaño',val:item.size})
                   return (
                     <div key={item.id} className="flex items-start gap-3 rounded-xl border border-slate-100 bg-white p-3">
-                      <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-100 bg-slate-50">{item.product?.imagen_url ? <img src={item.product.imagen_url} alt={item.nombre || item.product?.nombre || 'Producto'} className="h-full w-full object-contain p-1"/> : <Package className="h-6 w-6 text-slate-300"/>}</div>
+                      {(() => { const productHref = item.product?.slug || item.product?.id || item.product_id ? `/producto/${item.product?.slug || item.product?.id || item.product_id}` : null; const image = <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-100 bg-slate-50">{item.product?.imagen_url ? <img src={item.product.imagen_url} alt={item.nombre || item.product?.nombre || 'Producto'} className="h-full w-full object-contain p-1"/> : <Package className="h-6 w-6 text-slate-300"/>}</div>; return productHref ? <Link href={productHref} aria-label={`Ver ${item.nombre || item.product?.nombre || 'producto'}`} className="shrink-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">{image}</Link> : image })()}
                       <div className="min-w-0 flex-1">
                       <div className="flex justify-between items-start gap-2 mb-2">
-                        <p className="font-semibold text-gray-900 text-sm">{item.nombre || item.product?.nombre || 'Producto'}</p>
+                        {(() => { const productHref = item.product?.slug || item.product?.id || item.product_id ? `/producto/${item.product?.slug || item.product?.id || item.product_id}` : null; const productName = item.nombre || item.product?.nombre || 'Producto'; return productHref ? <Link href={productHref} className="font-semibold text-gray-900 text-sm hover:text-primary-600 hover:underline">{productName}</Link> : <p className="font-semibold text-gray-900 text-sm">{productName}</p> })()}
                         <p className="font-bold text-gray-900 text-sm whitespace-nowrap">RD${(item.subtotal??item.precio*item.cantidad).toLocaleString()}</p>
                       </div>
                       {specs.length>0 && (
