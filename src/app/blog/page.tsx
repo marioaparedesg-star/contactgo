@@ -2,8 +2,8 @@ export const revalidate = 3600
 
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import Link from 'next/link'
 import type { Metadata } from 'next'
+import BlogJournal from '@/components/blog/BlogJournal'
 
 export const metadata: Metadata = {
   title: 'Blog de lentes de contacto en RD — ContactGo',
@@ -265,150 +265,11 @@ const POSTS = [
 
 type Post = typeof POSTS[number]
 
-const CATS = ['Todos', 'Precios', 'Compra', 'Comparativas', 'Astigmatismo', 'Presbicia', 'Color', 'Guías', 'Salud ocular', 'Cuidado', 'Soluciones', 'Educación', 'Entrega']
-
-export default function BlogPage({ searchParams }: { searchParams?: { categoria?: string } }) {
-  const catActiva = searchParams?.categoria ?? 'Todos'
-  const posts: readonly Post[] = catActiva === 'Todos' ? POSTS : POSTS.filter(p => p.cat === catActiva)
-  const destacados = POSTS.filter(p => (p as any).hot)
-  const articulosFeatured = POSTS.filter(p => p.cat !== 'Entrega' && (p as any).hot).slice(0, 3)
-  const porCiudad = POSTS.filter(p => p.cat === 'Entrega')
-
+export default function BlogPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 py-10 pb-24">
-
-        {/* ── HEADER PREMIUM ── */}
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-1.5 h-6 bg-teal-500 rounded-full inline-block" />
-            <span className="text-xs font-bold text-primary-600 uppercase tracking-widest">ContactGo Blog</span>
-          </div>
-          <h1 className="font-display text-4xl font-black text-gray-900 leading-tight mb-3">
-            Guías de lentes de<br className="hidden sm:block" /> contacto en República Dominicana
-          </h1>
-          <p className="text-gray-500 text-lg leading-relaxed">
-            {POSTS.filter(p => p.cat !== 'Entrega').length} artículos especializados · Precios actualizados agosto 2026 · Entrega en toda RD
-          </p>
-        </div>
-
-        {/* ── FEATURED — solo cuando catActiva=Todos ── */}
-        {catActiva === 'Todos' && (
-          <div className="mb-10">
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">Más buscados ahora</p>
-            <div className="grid sm:grid-cols-3 gap-3">
-              {articulosFeatured.map(post => (
-                <Link key={post.slug} href={`/blog/${post.slug}`}
-                  className="group relative bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-4 hover:from-teal-600 hover:to-teal-700 transition-all overflow-hidden">
-                  <div className="absolute top-0 right-0 text-6xl opacity-10 -mt-2 -mr-2">{post.emoji}</div>
-                  <span className="text-[10px] font-bold text-primary-200 uppercase tracking-wider">{post.cat}</span>
-                  <h2 className="text-white font-bold text-sm leading-tight mt-1 mb-2 line-clamp-2">{post.titulo}</h2>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-primary-200 text-[11px]">⏱ {post.mins} min</span>
-                    <span className="text-primary-300">·</span>
-                    <span className="text-primary-200 text-[11px] group-hover:text-white transition-colors">Leer →</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ── FILTROS DE CATEGORÍA ── */}
-        <div className="mb-6 overflow-x-auto -mx-4 px-4">
-          <div className="flex gap-2 pb-1" style={{minWidth: 'max-content'}}>
-            {CATS.map(cat => (
-              <Link key={cat} href={cat === 'Todos' ? '/blog' : `/blog?categoria=${encodeURIComponent(cat)}`}
-                className={`text-xs font-semibold px-3.5 py-1.5 rounded-full whitespace-nowrap transition-all ${
-                  catActiva === cat
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}>
-                {cat}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* ── ARTÍCULOS DE CONTENIDO (no ciudades) ── */}
-        {(catActiva === 'Todos' || catActiva !== 'Entrega') && (
-          <>
-            {catActiva === 'Todos' && (
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">
-                Todos los artículos ({posts.filter(p => p.cat !== 'Entrega').length})
-              </p>
-            )}
-            <div className="space-y-2 mb-8">
-              {posts.filter(p => p.cat !== 'Entrega').map(post => (
-                <Link key={post.slug} href={`/blog/${post.slug}`}
-                  className="group flex items-start gap-4 p-4 rounded-2xl hover:bg-gray-50 transition-all border border-transparent hover:border-gray-100">
-                  <div className="w-10 h-10 bg-gray-50 group-hover:bg-white rounded-xl flex items-center justify-center text-xl shrink-0 border border-gray-100 group-hover:border-gray-200 transition-all">
-                    {post.emoji}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{post.cat}</span>
-                      {'hot' in post && (post as any).hot && (
-                        <span className="text-[9px] font-black text-primary-600 bg-teal-50 px-1.5 py-0.5 rounded-full">★ TOP</span>
-                      )}
-                    </div>
-                    <h2 className="font-semibold text-gray-900 text-sm leading-snug mb-0.5 group-hover:text-primary-600 transition-colors line-clamp-1">
-                      {post.titulo}
-                    </h2>
-                    <p className="text-xs text-gray-400 line-clamp-1">{post.desc}</p>
-                  </div>
-                  <div className="shrink-0 flex flex-col items-end gap-1">
-                    <span className="text-[11px] text-gray-300">{post.mins}m</span>
-                    <svg className="w-4 h-4 text-gray-200 group-hover:text-primary-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* ── SECCIÓN CIUDADES ── */}
-        {(catActiva === 'Todos' || catActiva === 'Entrega') && (
-          <div className="mt-4">
-            <div className="border-t border-gray-100 pt-8 mb-5">
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Entrega en toda República Dominicana</p>
-              <p className="text-sm text-gray-500">Lentes de contacto certificados con entrega a domicilio en las 31 provincias</p>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {porCiudad.map(post => (
-                <Link key={post.slug} href={`/blog/${post.slug}`}
-                  className="flex items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-teal-50/30 transition-all group">
-                  <span className="text-base">{post.emoji}</span>
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold text-gray-700 group-hover:text-primary-600 transition-colors truncate">
-                      {post.titulo.replace('Lentes de contacto en ', '').replace(' — Entrega 24-48h', '').replace(' — Entrega a domicilio', '').replace(' — Entrega 24h', '').replace('Lentes de contacto con entrega en ', '')}
-                    </p>
-                    <p className="text-[10px] text-gray-400">Entrega 24-48h</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ── CTA FINAL ── */}
-        <div className="mt-12 bg-gray-900 rounded-2xl p-6 text-center">
-          <p className="text-white font-bold text-lg mb-1">¿Listo para comprar?</p>
-          <p className="text-gray-400 text-sm mb-4">30+ lentes certificados · Entrega 24-48h · Pago con AZUL</p>
-          <div className="flex flex-col sm:flex-row gap-2 justify-center">
-            <Link href="/catalogo" className="bg-white text-gray-900 font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-gray-100 transition-colors">
-              Ver catálogo →
-            </Link>
-            <Link href="/receta" className="bg-teal-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-teal-600 transition-colors">
-              Calcular mi receta gratis
-            </Link>
-          </div>
-        </div>
-
-      </main>
+      <BlogJournal posts={POSTS as unknown as Post[]} />
       <Footer />
     </>
   )
