@@ -13,7 +13,7 @@ export default function Footer() {
         {/* Fila superior: logo + redes sociales */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex flex-col gap-0.5">
-            <span className="text-white font-bold text-base tracking-tight">ContactGo<sup className="text-[9px] font-normal text-gray-400 ml-0.5">®</sup></span>
+            <img src="/logo.png" alt="ContactGo" width="160" height="29" className="h-6 w-auto object-contain object-left" />
             {/* MEJORA-7: Ubicación física visible */}
             <span className="text-gray-400 text-[10px]">La única tienda 100% especializada en lentes · RD</span>
             {/* WhatsApp clickeable */}

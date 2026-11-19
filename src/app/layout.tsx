@@ -20,15 +20,6 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     title: 'ContactGo',
   },
-  icons: {
-    icon: [
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon.ico' },
-    ],
-    apple: '/apple-touch-icon.png',
-    shortcut: '/favicon.ico',
-  },
   description: 'ContactGo — La forma más fácil de comprar lentes de contacto en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Directo del fabricante. Entrega en 24-48h a donde estés.',
   authors: [{ name: 'ContactGo', url: 'https://www.contactgo.net' }],
   creator: 'ContactGo',
@@ -53,7 +44,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport = {
-  themeColor: '#16a34a',
+  themeColor: '#002455',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -77,8 +68,8 @@ const organizationSchema = {
   "@id": "https://www.contactgo.net/#organization",
   "name": "ContactGo",
   "url": "https://www.contactgo.net",
-  "logo": "https://www.contactgo.net/og-1200x630.jpg",
-  "image": "https://www.contactgo.net/og-1200x630.jpg",
+  "logo": "https://www.contactgo.net/favicon.svg",
+  "image": "https://www.contactgo.net/logo.png",
   "description": "ContactGo es la forma más fácil de comprar lentes de contacto en República Dominicana. Directo del fabricante. Entrega en 24-48 horas a donde estés.",
   "telephone": "+18096942268",
   "email": "info@contactgo.net",
@@ -232,7 +223,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         
 
         <meta name="facebook-domain-verification" content="521fb5uvf0p1bbtgc59jz9j7fumekg" />
-        <meta name="theme-color" content="#16a34a" />
+        <meta name="theme-color" content="#002455" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="manifest" href="/manifest.json" />
         {/* Preload hero — mejora LCP (Largest Contentful Paint) */}
