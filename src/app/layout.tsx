@@ -1,4 +1,3 @@
-import Script from 'next/script'
 import type { Metadata } from 'next'
 import './globals.css'
 import BottomNav from '@/components/ui/BottomNav'
@@ -121,26 +120,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <head>
-        {/* Consent Mode v2: default consent runs before Google tags. */}
-        <script dangerouslySetInnerHTML={{ __html: `
-          window.dataLayer = window.dataLayer || [];
-          window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
-          (function(){
-            var saved = null;
-            try { saved = JSON.parse(localStorage.getItem('cg-cookie-consent') || 'null'); } catch(e) {}
-            var granted = saved && saved.level === 'all' ? 'granted' : 'denied';
-            window.gtag('consent', 'default', {
-              analytics_storage: granted, ad_storage: granted,
-              ad_user_data: granted, ad_personalization: granted,
-              functionality_storage: 'granted', personalization_storage: granted,
-              security_storage: 'granted', wait_for_update: 500
-            });
-            if (saved && saved.level === 'all') window.gtag('consent', 'update', {
-              analytics_storage:'granted', ad_storage:'granted',
-              ad_user_data:'granted', ad_personalization:'granted'
-            });
-          })();
-        ` }} />
         {/* ── Polyfill webkit.messageHandlers ────────────────────────────────────
             CRÍTICO: debe ser el primer script que corre.
             Facebook, Instagram, WeChat y cualquier WKWebView en iOS pueden
@@ -275,38 +254,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only">Ir al contenido principal</a>
 
 
-
-        {/* ── Google Ads — AW-830060688 ────────────────────────────────────── */}
-        <Script
-          id="google-ads"
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=AW-830060688"
-        />
-        {/* Google Tag Manager — GTM-M9GZGJJQ (maneja GA4 G-KGM473ZPDB) */}
-        <Script
-          id="gtm-loader"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-            (function(w,l){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});})(window,'dataLayer');
-          `}}
-        />
-        <Script
-          id="gtm-src"
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtm.js?id=GTM-M9GZGJJQ"
-        />
-        <Script
-          id="google-ads-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-830060688');
-          ` }}
-        />
-
-        
 
         <ReferralTracker />
         {children}
