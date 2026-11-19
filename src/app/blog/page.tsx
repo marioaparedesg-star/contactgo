@@ -4,6 +4,7 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
 import BlogJournal from '@/components/blog/BlogJournal'
+import { createClient } from '@supabase/supabase-js'
 
 export const metadata: Metadata = {
   title: 'Blog de lentes de contacto en RD — ContactGo',
@@ -309,11 +310,32 @@ const POSTS = [
 
 type Post = typeof POSTS[number]
 
-export default function BlogPage() {
+type BlogProduct = { id: string; nombre: string; slug: string; marca: string | null; precio: number | string; imagen_url: string | null; tipo: string | null }
+
+async function getBlogProducts(): Promise<BlogProduct[]> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!url || !key) return []
+  const supabase = createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } })
+  const { data, error } = await supabase.from('products')
+    .select('id,nombre,slug,marca,precio,imagen_url,tipo')
+    .eq('activo', true)
+    .or('archivado.is.null,archivado.eq.false')
+    .order('nombre', { ascending: true })
+    .limit(100)
+  if (error) {
+    console.error('[blog] No se pudieron cargar imágenes del catálogo:', error.message)
+    return []
+  }
+  return (data ?? []) as BlogProduct[]
+}
+
+export default async function BlogPage() {
+  const products = await getBlogProducts()
   return (
     <>
       <Navbar />
-      <BlogJournal posts={POSTS as unknown as Post[]} />
+      <BlogJournal posts={POSTS as unknown as Post[]} products={products} />
       <Footer />
     </>
   )
