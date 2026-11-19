@@ -102,9 +102,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="text-gray-400 leading-relaxed">
-                🏢 Oficina: Av. Winston Churchill No. 95<br />
-                Torre Empresarial Blue Mall, Piso 23<br />
-                Santo Domingo, RD
+                Atención y operación digital en República Dominicana
               </li>
             </ul>
           </div>
