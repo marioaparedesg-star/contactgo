@@ -44,7 +44,7 @@ const secciones = [
   },
   {
     title: '8. Cookies',
-    body: 'Usamos cookies esenciales (sesión, carrito), de análisis (Google Analytics, Microsoft Clarity) y de marketing (Meta Pixel). Puedes gestionar tus preferencias en el banner de cookies al ingresar al sitio, o desde la configuración de tu navegador. Las cookies esenciales no pueden desactivarse.'
+    body: 'Las tecnologías estrictamente necesarias permiten funciones básicas del sitio. Google Analytics/Tag Manager, Google Ads, Meta Pixel y Microsoft Clarity se utilizan para medición y publicidad únicamente después de que aceptes las cookies opcionales en el banner. Puedes elegir «Solo esenciales» o «Aceptar todas». Vercel Analytics y Speed Insights pueden recopilar métricas técnicas de rendimiento del sitio.'
   },
   {
     title: '9. Seguridad',
@@ -71,7 +71,7 @@ export default function PrivacidadPage() {
       <main id="main-content" className="max-w-2xl mx-auto px-4 py-12 pb-24">
         <div className="mb-4"><Link href="/" className="text-sm text-primary-600 font-semibold">← Inicio</Link></div>
         <h1 className="font-display text-3xl font-bold text-gray-900 mb-2">Política de Privacidad</h1>
-        <p className="text-gray-400 text-sm mb-8">Última actualización: mayo 2026 · Conforme a la Ley 172-13 de República Dominicana</p>
+        <p className="text-gray-400 text-sm mb-8">Última actualización: 19 de noviembre de 2026 · Conforme a la Ley 172-13 de República Dominicana</p>
 
         <div className="space-y-6">
           {secciones.map(s => (

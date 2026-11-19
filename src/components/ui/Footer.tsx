@@ -63,6 +63,7 @@ export default function Footer() {
               ].map(([l, h]) => (
                 <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
               ))}
+              <li><button type="button" onClick={() => window.dispatchEvent(new Event('cg-open-cookie-preferences'))} className="text-xs text-gray-400 hover:text-white transition-colors">Preferencias de cookies</button></li>
             </ul>
           </div>
 
@@ -102,9 +103,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="text-gray-400 leading-relaxed">
-                🏢 Oficina: Av. Winston Churchill No. 95<br />
-                Torre Empresarial Blue Mall, Piso 23<br />
-                Santo Domingo, RD
+                Atención y operación digital en República Dominicana
               </li>
             </ul>
           </div>
@@ -120,6 +119,7 @@ export default function Footer() {
                 ['Seguridad', '/seguridad'],
                 ['Privacidad', '/privacidad'],
                 ['Términos', '/terminos'],
+                ['Aviso legal', '/aviso-legal'],
               ].map(([l, h]) => (
                 <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
               ))}

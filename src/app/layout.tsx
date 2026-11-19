@@ -1,11 +1,9 @@
-import Script from 'next/script'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import './globals.css'
 import BottomNav from '@/components/ui/BottomNav'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import CookieConsent from '@/components/ui/CookieConsent'
+import ConsentMetrics from '@/components/ui/ConsentMetrics'
 import { Toaster } from 'react-hot-toast'
 import WelcomePopup from '@/components/ui/WelcomePopup'
 import ScrollToTop from '@/components/ui/ScrollToTop'
@@ -75,7 +73,7 @@ export const viewport = {
 
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": ["Organization", "LocalBusiness", "Optician"],
+  "@type": "Organization",
   "@id": "https://www.contactgo.net/#organization",
   "name": "ContactGo",
   "url": "https://www.contactgo.net",
@@ -91,18 +89,6 @@ const organizationSchema = {
     "areaServed": "DO",
     "availableLanguage": ["es", "en"],
     "url": "https://wa.me/18096942268"
-  },
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Av. Winston Churchill No. 95, Torre Empresarial Blue Mall, Piso 23",
-    "addressLocality": "Santo Domingo",
-    "addressRegion": "Distrito Nacional",
-    "addressCountry": "DO"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 18.4726717,
-    "longitude": -69.9409414
   },
   "areaServed": {
     "@type": "Country",
@@ -266,75 +252,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only">Ir al contenido principal</a>
-        {/* GTM noscript fallback */}
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9GZGJJQ" height="0" width="0" style={{display:'none',visibility:'hidden'}} /></noscript>
 
 
-        {/* ── Google Ads — AW-830060688 ────────────────────────────────────── */}
-        <Script
-          id="google-ads"
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=AW-830060688"
-        />
-        {/* Google Tag Manager — GTM-M9GZGJJQ (maneja GA4 G-KGM473ZPDB) */}
-        <Script
-          id="gtm-loader"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-            (function(w,l){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});})(window,'dataLayer');
-          `}}
-        />
-        <Script
-          id="gtm-src"
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtm.js?id=GTM-M9GZGJJQ"
-        />
-        <Script
-          id="google-ads-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-830060688');
-          ` }}
-        />
 
-        <Script
-          id="clarity-script"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-            (function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];
-              if(y&&y.parentNode){y.parentNode.insertBefore(t,y);}else{(l.head||l.documentElement).appendChild(t);}
-            })(window, document, "clarity", "script", "wslp0l9vex");
-          `}}
-        />
-
-        {/* Meta Pixel — ID: 1516674003159165 */}
-        <Script
-          id="meta-pixel"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            if(s&&s.parentNode){s.parentNode.insertBefore(t,s);}else{(b.head||b.documentElement).appendChild(t);}}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1516674003159165');
-            fbq('track', 'PageView');
-          `}}
-        />
-        <noscript>
-          <img height="1" width="1" alt="" role="presentation" style={{display:'none'}}
-            src="https://www.facebook.com/tr?id=1516674003159165&ev=PageView&noscript=1"
-          />
-        </noscript>
         <ReferralTracker />
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
@@ -342,8 +262,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <BottomNav />
         <WhatsAppButton />
         <CookieConsent />
-      <Analytics />
-      <SpeedInsights />
+      <ConsentMetrics />
         {/* Skip link accesibilidad WCAG */}
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-teal-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-semibold">
         Saltar al contenido principal
