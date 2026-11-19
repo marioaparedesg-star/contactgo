@@ -68,7 +68,7 @@ const organizationSchema = {
   "@id": "https://www.contactgo.net/#organization",
   "name": "ContactGo",
   "url": "https://www.contactgo.net",
-  "logo": "https://www.contactgo.net/logo.png",
+  "logo": "https://www.contactgo.net/favicon.svg",
   "image": "https://www.contactgo.net/logo.png",
   "description": "ContactGo es la forma más fácil de comprar lentes de contacto en República Dominicana. Directo del fabricante. Entrega en 24-48 horas a donde estés.",
   "telephone": "+18096942268",
