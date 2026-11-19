@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="bg-[#001F4A] text-gray-400 mt-16">
 
       {/* ── Móvil: acordeón compacto / Desktop: 4 columnas ── */}
-      <div className="max-w-6xl mx-auto px-4 pt-8 pb-6">
+      <div className="max-w-6xl mx-auto px-4 pt-8 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
 
         {/* Fila superior: logo + redes sociales */}
         <div className="flex items-center justify-between mb-6">
@@ -47,7 +47,7 @@ export default function Footer() {
         </div>
 
         {/* Links: 4 columnas en móvil compacto */}
-        <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 mb-6">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4 sm:gap-y-5 mb-8 sm:mb-6">
 
           {/* Productos */}
           <div>
