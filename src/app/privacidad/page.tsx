@@ -44,7 +44,7 @@ const secciones = [
   },
   {
     title: '8. Cookies',
-    body: 'Usamos cookies esenciales (sesión, carrito), de análisis (Google Analytics, Microsoft Clarity) y de marketing (Meta Pixel). Puedes gestionar tus preferencias en el banner de cookies al ingresar al sitio, o desde la configuración de tu navegador. Las cookies esenciales no pueden desactivarse.'
+    body: 'Las tecnologías estrictamente necesarias permiten funciones básicas del sitio. Google Analytics/Tag Manager, Google Ads, Meta Pixel y Microsoft Clarity se utilizan para medición y publicidad únicamente después de que aceptes las cookies opcionales en el banner. Puedes elegir «Solo esenciales» o «Aceptar todas». Vercel Analytics y Speed Insights pueden recopilar métricas técnicas de rendimiento del sitio.'
   },
   {
     title: '9. Seguridad',
