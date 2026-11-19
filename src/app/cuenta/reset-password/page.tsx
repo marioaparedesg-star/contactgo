@@ -87,7 +87,7 @@ function ResetContent() {
     if (pass !== pass2)  { setMsg({ type: 'err', text: 'Las contraseñas no coinciden.' }); return }
     setLoading(true); setMsg(null)
     const sb = createClient()
-    const { error } = await sb.auth.updateUser({ password: pass })
+    const { error } = await sb.auth.updateUser({ password: pass, data: { requiere_configurar_password: false } })
     if (error) {
       setMsg({ type: 'err', text: error.message })
     } else {

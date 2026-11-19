@@ -79,7 +79,7 @@ function itemRows(items: OrderItem[]): string {
   }).join('')
 }
 
-export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event: string, state: string): string {
+export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event: string, state: string, accountSetupUrl?: string | null): string {
   const meta = event === 'pago_aprobado'
     ? STATUS.pago_aprobado
     : STATUS[state] ?? STATUS.recibido
@@ -122,6 +122,7 @@ export function buildCustomerOrderEmail(order: Order, items: OrderItem[], event:
           </table>
         </td></tr>
         <tr><td align="center" style="padding:25px 32px 10px">
+          ${accountSetupUrl ? `<div style="margin:0 0 14px;padding:16px;border:1px solid #d9ecee;background:#f3fbfb;border-radius:10px;text-align:left"><div style="font-size:14px;font-weight:800;color:${BRAND}">Activa tu cuenta de ContactGo</div><p style="margin:7px 0 12px;font-size:12px;line-height:1.6;color:#52647a">Creamos tu cuenta con el correo de esta compra. Establece tu contraseña para consultar tus pedidos y el estado de tus pagos cuando quieras.</p><a href="${esc(accountSetupUrl)}" style="display:inline-block;padding:12px 18px;background:${BRAND};border-radius:8px;color:#fff;text-decoration:none;font-size:13px;font-weight:800">Establecer mi contraseña</a><p style="margin:9px 0 0;font-size:10px;color:#718096">Este enlace es personal y temporal.</p></div>` : ''}
           <a href="${esc(trackingUrl)}" style="display:inline-block;padding:13px 22px;background:${ACCENT};border-radius:8px;color:#002b35;text-decoration:none;font-size:13px;font-weight:800">Consultar mi pedido</a>
         </td></tr>
         <tr><td style="padding:20px 32px 26px">
