@@ -2,6 +2,9 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+
+type BlogProduct = { id: string; nombre: string; slug: string; marca: string | null; precio: number | string; imagen_url: string | null; tipo: string | null }
 
 type BlogPost = {
   slug: string
@@ -14,7 +17,7 @@ type BlogPost = {
   hot?: boolean
 }
 
-const PAGE_SIZE = 12
+const PAGE_SIZE = 24
 const CATEGORY_ORDER = [
   'Todos', 'Guías', 'Comparativas', 'Salud ocular', 'Precios', 'Educación',
   'Cuidado', 'Compra', 'Soluciones', 'Astigmatismo', 'Presbicia', 'Color',
@@ -43,28 +46,50 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat('es-DO', { day: 'numeric', month: 'short', year: 'numeric' }).format(date)
 }
 
-export default function BlogJournal({ posts }: { posts: BlogPost[] }) {
+function productForPost(post: BlogPost, products: BlogProduct[]) {
+  const text = (post.slug + ' ' + post.titulo + ' ' + post.cat).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  const scored = products.map((product) => {
+    const source = (product.nombre + ' ' + product.marca + ' ' + product.slug).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    const words = source.split(/[^a-z0-9]+/).filter((word) => word.length > 3)
+    let score = words.reduce((sum, word) => sum + (text.includes(word) ? (word.length > 5 ? 3 : 1) : 0), 0)
+    if (/astigmatismo|toric|torico/.test(text) && product.tipo === 'torico') score += 4
+    if (/multifocal|presbicia/.test(text) && product.tipo === 'multifocal') score += 4
+    if (/color|colores/.test(text) && product.tipo === 'color') score += 4
+    if (/solucion|gotas|peroxido/.test(text) && product.tipo === 'solucion') score += 4
+    if (/diario|diarios|1.day/.test(text) && /diari|1.day/.test(source)) score += 3
+    return { product, score }
+  }).filter((item) => item.product.imagen_url && item.score > 0).sort((a, b) => b.score - a.score)
+  if (scored[0]) return scored[0].product
+  const fallbackType = /astigmatismo|toric|torico/.test(text) ? 'torico'
+    : /multifocal|presbicia/.test(text) ? 'multifocal'
+    : /color|colores/.test(text) ? 'color'
+    : /solucion|gotas/.test(text) ? 'solucion' : 'esferico'
+  return products.find((product) => product.tipo === fallbackType && product.imagen_url) ?? products.find((product) => product.imagen_url) ?? null
+}
+
+export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[]; products?: BlogProduct[] }) {
+  const sortedPosts = useMemo(() => [...posts].sort((a, b) => b.fecha.localeCompare(a.fecha)), [posts])
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('Todos')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
 
   const categories = useMemo(() => {
-    const available = new Set(posts.map((post) => post.cat))
+    const available = new Set(sortedPosts.map((post) => post.cat))
     return CATEGORY_ORDER.filter((item) => item === 'Todos' || available.has(item))
       .concat([...available].filter((item) => !CATEGORY_ORDER.includes(item)).sort())
-  }, [posts])
+  }, [sortedPosts])
 
   const filtered = useMemo(() => {
     const term = query.trim().toLocaleLowerCase('es')
-    return posts.filter((post) => {
+    return sortedPosts.filter((post) => {
       const matchesCategory = category === 'Todos' || post.cat === category
       const searchable = [post.titulo, post.desc, post.cat, post.slug].join(' ').toLocaleLowerCase('es')
       return matchesCategory && (!term || searchable.includes(term))
     })
-  }, [posts, query, category])
+  }, [sortedPosts, query, category])
 
-  const featured = posts.find((post) => post.hot && post.cat !== 'Entrega') ?? posts[0]
-  const popular = posts.filter((post) => post.hot && post.slug !== featured?.slug && post.cat !== 'Entrega').slice(0, 3)
+  const featured = sortedPosts.find((post) => post.hot && post.cat !== 'Entrega') ?? sortedPosts[0]
+  const popular = sortedPosts.filter((post) => post.hot && post.slug !== featured?.slug && post.cat !== 'Entrega').slice(0, 3)
   const visible = filtered.slice(0, visibleCount)
   const hasFilters = query.trim().length > 0 || category !== 'Todos'
 
@@ -98,7 +123,7 @@ export default function BlogJournal({ posts }: { posts: BlogPost[] }) {
                 Guías, comparativas y consejos para conocer mejor tus lentes de contacto y cuidar tu salud visual.
               </p>
               <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium text-blue-100/75">
-                <span>{posts.filter((post) => post.cat !== 'Entrega').length} artículos especializados</span>
+                <span>{posts.length} artículos y guías</span>
                 <span>Información para República Dominicana</span>
                 <span>Contenido fácil de consultar</span>
               </div>
@@ -148,10 +173,11 @@ export default function BlogJournal({ posts }: { posts: BlogPost[] }) {
             <div className="relative flex min-h-56 items-center justify-center overflow-hidden bg-gradient-to-br from-[#e6f6f7] via-[#d8e9f4] to-[#eef3fa] p-10 md:min-h-[330px]">
               <div className="absolute -right-10 -top-16 h-64 w-64 rounded-full border-[34px] border-white/60" />
               <div className="absolute -bottom-24 -left-10 h-64 w-64 rounded-full bg-[#01b2b7]/10" />
-              <div className="relative flex h-48 w-48 items-center justify-center rounded-full border border-white/80 bg-white/40 shadow-[0_20px_70px_rgba(0,36,85,.12)] backdrop-blur">
-                <div className="h-28 w-28 rounded-full border-[17px] border-[#01a6ad] shadow-[inset_0_0_25px_rgba(0,36,85,.12),0_0_35px_rgba(1,178,183,.2)]" />
-                <div className="absolute h-4 w-4 rounded-full bg-white shadow-[0_0_20px_white]" />
-              </div>
+              {productForPost(featured, products)?.imagen_url ? (
+                <div className="relative h-56 w-full max-w-sm overflow-hidden rounded-2xl bg-white p-5 shadow-[0_20px_70px_rgba(0,36,85,.12)]">
+                  <Image src={productForPost(featured, products)!.imagen_url!} alt={productForPost(featured, products)!.nombre} fill unoptimized sizes="(max-width: 1024px) 90vw, 360px" className="object-contain p-5" />
+                </div>
+              ) : <div className="relative flex h-48 w-48 items-center justify-center rounded-full border border-white/80 bg-white/40"><div className="h-28 w-28 rounded-full border-[17px] border-[#01a6ad]" /></div>}
               <span className="absolute bottom-5 right-6 text-[10px] font-bold uppercase tracking-[.22em] text-[#477184]">CONTACTGO JOURNAL</span>
             </div>
           </section>
@@ -211,7 +237,11 @@ export default function BlogJournal({ posts }: { posts: BlogPost[] }) {
             <>
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {visible.map((post) => (
-                  <article key={post.slug} className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-5 transition duration-200 hover:-translate-y-1 hover:border-[#a8dddd] hover:shadow-[0_14px_38px_rgba(0,36,85,.08)]">
+                  <article key={post.slug} className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition duration-200 hover:-translate-y-1 hover:border-[#a8dddd] hover:shadow-[0_14px_38px_rgba(0,36,85,.08)]">
+                    {productForPost(post, products)?.imagen_url && <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-slate-50 to-[#e7f5f5]">
+                      <Image src={productForPost(post, products)!.imagen_url!} alt={productForPost(post, products)!.nombre} fill unoptimized sizes="(max-width: 768px) 90vw, 33vw" className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.04]" />
+                    </div>}
+                    <div className="flex flex-1 flex-col p-5">
                     <div className="flex items-center justify-between gap-3">
                       <span className={'rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ' + categoryClass(post.cat)}>{post.cat}</span>
                       <span className="text-[11px] text-slate-400">{post.mins} min</span>
@@ -223,6 +253,7 @@ export default function BlogJournal({ posts }: { posts: BlogPost[] }) {
                         <span className="text-[11px] text-slate-400">{formatDate(post.fecha)}</span>
                         <Link href={'/blog/' + post.slug} className="inline-flex items-center gap-1 text-xs font-bold text-[#008d95] hover:text-[#006d74]">Leer más <span aria-hidden="true">→</span></Link>
                       </div>
+                    </div>
                     </div>
                   </article>
                 ))}
