@@ -162,7 +162,7 @@ export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[
                 <span className="rounded-full bg-[#e5f8f7] px-3 py-1 text-[10px] font-bold uppercase tracking-[.16em] text-[#007f86]">Selección editorial</span>
                 <span className="text-xs text-slate-400">{featured.mins} min de lectura</span>
               </div>
-              <h2 className="mt-5 max-w-xl text-2xl font-semibold leading-tight tracking-tight text-[#002455] sm:text-3xl">{featured.titulo}</h2>
+              <h2 className="mt-5 max-w-xl text-2xl font-semibold leading-tight tracking-tight text-[#002455] sm:text-3xl"><Link href={'/blog/' + featured.slug} className="transition-colors hover:text-[#008d95] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#01b2b7]">{featured.titulo}</Link></h2>
               <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">{featured.desc}</p>
               <div className="mt-7">
                 <Link href={'/blog/' + featured.slug} className="inline-flex items-center gap-2 rounded-xl bg-[#002455] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#00366f]">
@@ -173,11 +173,13 @@ export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[
             <div className="relative flex min-h-56 items-center justify-center overflow-hidden bg-gradient-to-br from-[#e6f6f7] via-[#d8e9f4] to-[#eef3fa] p-10 md:min-h-[330px]">
               <div className="absolute -right-10 -top-16 h-64 w-64 rounded-full border-[34px] border-white/60" />
               <div className="absolute -bottom-24 -left-10 h-64 w-64 rounded-full bg-[#01b2b7]/10" />
-              {productForPost(featured, products)?.imagen_url ? (
-                <div className="relative h-56 w-full max-w-sm overflow-hidden rounded-2xl bg-white p-5 shadow-[0_20px_70px_rgba(0,36,85,.12)]">
-                  <Image src={productForPost(featured, products)!.imagen_url!} alt={productForPost(featured, products)!.nombre} fill unoptimized sizes="(max-width: 1024px) 90vw, 360px" className="object-contain p-5" />
-                </div>
-              ) : <div className="relative flex h-48 w-48 items-center justify-center rounded-full border border-white/80 bg-white/40"><div className="h-28 w-28 rounded-full border-[17px] border-[#01a6ad]" /></div>}
+              <Link href={'/blog/' + featured.slug} aria-label={'Leer artículo: ' + featured.titulo} className="relative z-10 flex w-full cursor-pointer items-center justify-center rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#01b2b7]">
+                {productForPost(featured, products)?.imagen_url ? (
+                  <div className="relative h-56 w-full max-w-sm overflow-hidden rounded-2xl bg-white p-5 shadow-[0_20px_70px_rgba(0,36,85,.12)] transition-transform hover:scale-[1.02]">
+                    <Image src={productForPost(featured, products)!.imagen_url!} alt={productForPost(featured, products)!.nombre} fill unoptimized sizes="(max-width: 1024px) 90vw, 360px" className="object-contain p-5" />
+                  </div>
+                ) : <div className="relative flex h-48 w-48 items-center justify-center rounded-full border border-white/80 bg-white/40"><div className="h-28 w-28 rounded-full border-[17px] border-[#01a6ad]" /></div>}
+              </Link>
               <span className="absolute bottom-5 right-6 text-[10px] font-bold uppercase tracking-[.22em] text-[#477184]">CONTACTGO JOURNAL</span>
             </div>
           </section>
@@ -238,16 +240,16 @@ export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {visible.map((post) => (
                   <article key={post.slug} className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition duration-200 hover:-translate-y-1 hover:border-[#a8dddd] hover:shadow-[0_14px_38px_rgba(0,36,85,.08)]">
-                    {productForPost(post, products)?.imagen_url && <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-slate-50 to-[#e7f5f5]">
-                      <Image src={productForPost(post, products)!.imagen_url!} alt={productForPost(post, products)!.nombre} fill unoptimized sizes="(max-width: 768px) 90vw, 33vw" className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.04]" />
-                    </div>}
+                    {productForPost(post, products)?.imagen_url && <Link href={'/blog/' + post.slug} aria-label={'Leer artículo: ' + post.titulo} className="relative block aspect-[16/9] overflow-hidden bg-gradient-to-br from-slate-50 to-[#e7f5f5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#01b2b7]">
+                      <Image src={productForPost(post, products)!.imagen_url!} alt={productForPost(post, products)!.nombre} fill unoptimized sizes="(max-width: 768px) 90vw, 33vw" className="object-contain p-4 transition-transform duration-300 hover:scale-[1.04]" />
+                    </Link>}
                     <div className="flex flex-1 flex-col p-5">
                     <div className="flex items-center justify-between gap-3">
                       <span className={'rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ' + categoryClass(post.cat)}>{post.cat}</span>
                       <span className="text-[11px] text-slate-400">{post.mins} min</span>
                     </div>
                     <div className="mt-5 flex flex-1 flex-col">
-                      <h3 className="line-clamp-3 text-base font-semibold leading-snug tracking-tight text-[#002455] group-hover:text-[#008d95]">{post.titulo}</h3>
+                      <h3 className="line-clamp-3 text-base font-semibold leading-snug tracking-tight text-[#002455] group-hover:text-[#008d95]"><Link href={'/blog/' + post.slug} className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#01b2b7]">{post.titulo}</Link></h3>
                       <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-500">{post.desc}</p>
                       <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
                         <span className="text-[11px] text-slate-400">{formatDate(post.fecha)}</span>
