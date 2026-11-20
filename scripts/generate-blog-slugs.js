@@ -17,7 +17,7 @@ const slugs = fs.readdirSync(blogDir, { withFileTypes: true })
 // Incluye también los artículos del clúster de salud, servido por la ruta dinámica.
 const healthFile = path.join(__dirname, '..', 'src', 'lib', 'blog-salud.ts')
 const healthSlugs = fs.existsSync(healthFile)
-  ? [...fs.readFileSync(healthFile, 'utf8').matchAll(/slug: "([^"]+)"/g)].map(match => match[1])
+  ? [...fs.readFileSync(healthFile, 'utf8').matchAll(/"slug":\s*"([^"]+)"/g)].map(match => match[1])
   : []
 
 const allSlugs = [...new Set([...slugs, ...healthSlugs])].sort()
