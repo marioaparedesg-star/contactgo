@@ -41,7 +41,7 @@ export function ArticleSchema({ meta }: { meta: BlogMeta }) {
       publisher: {
         '@type': 'Organization',
         name: 'ContactGo',
-        logo: { '@type': 'ImageObject', url: `${BASE}/logo.png` },
+        logo: { '@type': 'ImageObject', url: `${BASE}/contactgo-logo.svg`, width: 1327, height: 215 },
       },
       mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/blog/${meta.slug}` },
       inLanguage: 'es-DO',
