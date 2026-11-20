@@ -25,7 +25,7 @@ BOTÓN (Call to Action):
   Tipo:   Visitar sitio web (Website URL)
   Texto del botón:  ⭐ Dejar reseña
   Tipo de URL:       Estática (Static)
-  URL:               https://g.page/r/Cb-RwE6S9vzgEAE/review
+  URL:               https://g.page/r/Cb-RwE6S9vzgECE/review
 
 ──────────────────────────────────────────
 Notas:

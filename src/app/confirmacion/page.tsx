@@ -437,7 +437,7 @@ function ConfirmacionContent() {
           </a>
           {/* ⭐ Reseña Google — justo cuando el cliente está más feliz */}
           {order.pago_estado === 'pagado' && (
-            <a href="https://g.page/r/Cb-RwE6S9vzgEAE/review" target="_blank" rel="noopener noreferrer"
+            <a href="https://g.page/r/Cb-RwE6S9vzgECE/review" target="_blank" rel="noopener noreferrer"
               className="w-full bg-white border-2 border-yellow-300 hover:border-yellow-400 text-gray-800 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2.5 transition-all text-sm shadow-sm">
               <span className="text-xl">⭐</span>
               <span>¿Te gustó la experiencia? Déjanos una reseña</span>

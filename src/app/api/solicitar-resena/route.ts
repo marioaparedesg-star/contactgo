@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
       Tu opinión ayuda a otros clientes a elegir los lentes correctos.
       Solo toma 1 minuto dejar una reseña.
     </p>
-    <a href="https://g.page/r/Cb-RwE6S9vzgEAE/review"
+    <a href="https://g.page/r/Cb-RwE6S9vzgECE/review"
       style="display:block;background:#facc15;color:#111;font-weight:700;padding:14px 24px;border-radius:10px;text-align:center;text-decoration:none;font-size:15px;margin:20px 0">
       ⭐ Dejar reseña en Google
     </a>

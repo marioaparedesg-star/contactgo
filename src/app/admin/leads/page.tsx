@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase'
 import { Mail, Phone, Search, Star, TrendingUp, Users, Eye } from 'lucide-react'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 
-const GOOGLE_REVIEW = 'https://g.page/r/Cb-RwE6S9vzgEAE/review'
+const GOOGLE_REVIEW = 'https://g.page/r/Cb-RwE6S9vzgECE/review'
 
 export default function LeadsPage() {
   const sb = createClient()
