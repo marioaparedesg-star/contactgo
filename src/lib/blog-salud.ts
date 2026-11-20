@@ -1,6 +1,6 @@
 import type { BlogMeta } from '@/components/blog/BlogArticle'
 export type HealthArticle = BlogMeta & { keyword: string; intro: string; sections: { h: string; p1: string; p2: string }[]; sources: { url: string; label: string }[] }
-export const HEALTH_ARTICLES: HealthArticle[] = [
+const rawHealthArticles = [
   {
     "slug": "queratitis-infecciosa-lentes-contacto-sintomas-prevencion",
     "title": "Queratitis infecciosa por lentes de contacto: síntomas y prevención",
@@ -1602,4 +1602,5 @@ export const HEALTH_ARTICLES: HealthArticle[] = [
     ]
   }
 ]
+export const HEALTH_ARTICLES: HealthArticle[] = rawHealthArticles.map((item: any) => ({ ...item, h1: item.title, description: item.desc }))
 export function getHealthArticle(slug: string) { return HEALTH_ARTICLES.find(article => article.slug === slug) }
