@@ -226,8 +226,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#002455" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="manifest" href="/manifest.json" />
-        {/* Preload hero — mejora LCP (Largest Contentful Paint) */}
-        <link rel="preload" as="image" href="/hero-lens-1.png" />
+        {/* El hero inicial usa next/image con priority y fetchPriority="high"; Next genera el preload optimizado. */}
         {/* Preconnect para performance */}
         <link rel="preconnect" href="https://atendbjolicwcsqfyiyh.supabase.co" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
