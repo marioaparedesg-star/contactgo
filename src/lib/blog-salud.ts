@@ -1410,30 +1410,30 @@ export const HEALTH_ARTICLES: HealthArticle[] = [
     ]
   },
   {
-    "slug": "lentes-contacto-uso-prolongado-sobreuso-senales",
-    "title": "Uso excesivo de lentes de contacto: señales de que necesitas una pausa",
-    "desc": "Qué puede ocurrir cuando prolongas las horas de uso y cómo reconocer señales que requieren consulta.",
+    "slug": "lentes-contacto-despues-cirugia-ocular-cuando-retomar",
+    "title": "Lentes de contacto después de una cirugía ocular: cuándo retomarlos",
+    "desc": "Qué debes saber antes de volver a usar lentes después de una cirugía ocular.",
     "keyword": "lentes contacto uso prolongado sobreuso senales",
-    "intro": "Usar lentes durante más horas de las indicadas puede afectar la superficie ocular y aumentar el riesgo de complicaciones. La tolerancia personal no autoriza extender el horario.",
+    "intro": "Después de una cirugía ocular, el momento de volver a usar lentes depende del procedimiento, la cicatrización y el estado de la superficie ocular. No existe un plazo universal: incluso cuando la visión parece recuperada, la córnea puede necesitar seguimiento.",
     "sections": [
       {
         "h": "Qué debes saber",
-        "p1": "El sobreuso incluye llevar el lente más tiempo del recomendado, prolongar su calendario de reemplazo o dormir con él cuando no está indicado. Son prácticas diferentes que elevan riesgos.",
+        "p1": "Una cirugía de cataratas, un procedimiento corneal, una cirugía refractiva o una intervención en párpados afectan estructuras diferentes. Cada una tiene tiempos de recuperación y requisitos distintos para adaptar un lente.",
         "p2": "La evaluación profesional es importante porque distintas condiciones pueden producir síntomas parecidos. El diagnóstico depende del examen ocular y, en ciertos casos, de pruebas específicas."
       },
       {
         "h": "Síntomas y señales de alerta",
-        "p1": "Puedes notar sequedad, irritación o visión fluctuante; también pueden aparecer complicaciones sin síntomas iniciales claros. Dolor, fotofobia, secreción o enrojecimiento requieren evaluación.",
+        "p1": "Pregunta al cirujano cuándo puedes volver a manipular el ojo, si necesitas una nueva receta y si el procedimiento cambió la curvatura o la superficie ocular. Informa qué tipo de lente utilizabas antes.",
         "p2": "No es seguro autodiagnosticarse. Dolor, enrojecimiento inusual, secreción, sensibilidad a la luz o cambios en la visión justifican retirar los lentes y buscar valoración."
       },
       {
         "h": "Qué hacer y qué evitar",
-        "p1": "Retira el lente y alterna con gafas según las recomendaciones. No existe una cantidad universal de horas adecuada para todos: depende del producto, salud ocular y ajuste.",
+        "p1": "No coloques lentes antes de recibir autorización. Evita frotarte los ojos o aplicar gotas no indicadas. Si aparece dolor, enrojecimiento, secreción, fotofobia o visión borrosa, contacta al equipo médico.",
         "p2": "No uses medicamentos, gotas con esteroides, antibióticos, anestésicos ni remedios caseros sin indicación. No frotes el ojo ni vuelvas a colocar el lente para comprobar si la molestia desapareció."
       },
       {
         "h": "Prevención y seguimiento",
-        "p1": "Configura recordatorios para retirar o reemplazar lentes. Si necesitas jornadas extensas, habla con tu especialista en lugar de cambiar el régimen por decisión propia.",
+        "p1": "El especialista puede recomendar una nueva adaptación o un periodo adicional sin lentes. Retoma el uso solo cuando lo autorice y mantén gafas de respaldo.",
         "p2": "Mantén gafas de respaldo y cumple los controles recomendados. Si los síntomas reaparecen, informa al profesional sobre el lente, la solución, el estuche y tus hábitos de uso."
       }
     ],
@@ -1538,30 +1538,30 @@ export const HEALTH_ARTICLES: HealthArticle[] = [
     ]
   },
   {
-    "slug": "solucion-salina-vs-desinfectante-lentes-contacto",
-    "title": "Solución salina vs. desinfectante: no cumplen la misma función",
-    "desc": "Diferencias entre suero salino y solución multipropósito, y por qué uno no sustituye al otro.",
+    "slug": "compartir-lentes-contacto-riesgo-infecciones",
+    "title": "Compartir lentes de contacto: riesgos de infección y por qué evitarlo",
+    "desc": "Por qué los lentes son dispositivos personales, qué puede transmitirse al compartirlos y cómo proteger la salud ocular.",
     "keyword": "solucion salina vs desinfectante lentes contacto",
-    "intro": "Una confusión común es pensar que cualquier líquido estéril sirve para limpiar, enjuagar y guardar lentes. La solución salina y la solución desinfectante tienen funciones distintas.",
+    "intro": "Los lentes de contacto no deben compartirse, ni siquiera entre familiares o parejas. Cada lente se adapta a parámetros individuales y entra en contacto directo con la superficie ocular. Compartirlo puede transferir microorganismos y causar lesiones o infecciones.",
     "sections": [
       {
         "h": "Qué debes saber",
-        "p1": "La solución salina estéril puede utilizarse para enjuagar en determinados sistemas, según sus instrucciones. No desinfecta por sí sola ni sustituye la desinfección.",
+        "p1": "La forma de la córnea, la graduación, la curva base, el diámetro y las necesidades de cada ojo son diferentes. Un lente que se adapta a una persona puede quedar mal ajustado en otra.",
         "p2": "La evaluación profesional es importante porque distintas condiciones pueden producir síntomas parecidos. El diagnóstico depende del examen ocular y, en ciertos casos, de pruebas específicas."
       },
       {
         "h": "Síntomas y señales de alerta",
-        "p1": "Una solución multipropósito está diseñada para funciones específicas de limpieza, enjuague, desinfección y almacenamiento, según su etiqueta. No todas son compatibles con todos los lentes.",
+        "p1": "Al pasar de un ojo a otro pueden transferirse secreciones y microorganismos. La limpieza casera no convierte un lente usado por otra persona en un producto seguro para ti.",
         "p2": "No es seguro autodiagnosticarse. Dolor, enrojecimiento inusual, secreción, sensibilidad a la luz o cambios en la visión justifican retirar los lentes y buscar valoración."
       },
       {
         "h": "Qué hacer y qué evitar",
-        "p1": "No guardes lentes en solución salina si necesitan desinfección. No reutilices solución ni mezcles productos. Los sistemas de peróxido requieren neutralización y un estuche especial.",
+        "p1": "El uso de un lente ajeno puede provocar irritación, lesión de la córnea, conjuntivitis o queratitis. Los lentes de color también son dispositivos médicos y no deben prestarse ni intercambiarse.",
         "p2": "No uses medicamentos, gotas con esteroides, antibióticos, anestésicos ni remedios caseros sin indicación. No frotes el ojo ni vuelvas a colocar el lente para comprobar si la molestia desapareció."
       },
       {
         "h": "Prevención y seguimiento",
-        "p1": "Consulta al profesional qué solución corresponde. Si no tienes el producto adecuado, no improvises con agua o suero casero: usa gafas hasta conseguirlo.",
+        "p1": "No compartas ni vuelvas a utilizar un lente ajeno. Si ya lo hiciste y tienes síntomas, retíralo y solicita evaluación; no intentes resolverlo con gotas o desinfectantes improvisados.",
         "p2": "Mantén gafas de respaldo y cumple los controles recomendados. Si los síntomas reaparecen, informa al profesional sobre el lente, la solución, el estuche y tus hábitos de uso."
       }
     ],
