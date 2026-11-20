@@ -103,6 +103,10 @@ export default function Footer() {
                 </a>
               </li>
               <li className="text-gray-400 leading-relaxed">
+                <span className="block text-gray-300 font-semibold">Dirección comercial</span>
+                Av. Winston Churchill No. 95, Torre Empresarial Blue Mall, Piso 23, Ensanche Piantini, Santo Domingo, República Dominicana
+              </li>
+              <li className="text-gray-400 leading-relaxed">
                 Atención y operación digital en República Dominicana
               </li>
             </ul>
