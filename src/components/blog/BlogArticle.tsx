@@ -41,7 +41,7 @@ export function ArticleSchema({ meta }: { meta: BlogMeta }) {
       publisher: {
         '@type': 'Organization',
         name: 'ContactGo',
-        logo: { '@type': 'ImageObject', url: `${BASE}/logo.png` },
+        logo: { '@type': 'ImageObject', url: `${BASE}/contactgo-logo.svg`, width: 1327, height: 215 },
       },
       mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/blog/${meta.slug}` },
       inLanguage: 'es-DO',
@@ -81,7 +81,7 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
   return (
     <>
       <ArticleSchema meta={meta} />
-      <main className="max-w-3xl mx-auto px-4 py-8 pb-24">
+      <main className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:px-6 lg:py-12">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
           <Link href="/" className="hover:text-primary-600">Inicio</Link>
@@ -92,26 +92,26 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
         </nav>
 
         {/* Category badge */}
-        <div className="mb-3">
+        <div className="mb-4">
           <span className="inline-block text-[10px] font-bold text-primary-700 bg-teal-50 px-2.5 py-1 rounded-full uppercase tracking-wider">
             {meta.category}
           </span>
         </div>
 
         {/* H1 */}
-        <h1 className="font-display text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 mb-4 leading-tight">
+        <h1 className="max-w-3xl font-display text-3xl font-semibold tracking-tight text-[#002455] mb-5 leading-[1.12] md:text-4xl lg:text-[2.75rem]">
           {meta.h1}
         </h1>
 
         {/* Meta info */}
-        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 mb-6 pb-6 border-b border-gray-100">
+        <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 mb-7 pb-7 border-b border-slate-200">
           <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{new Date(meta.publishedAt).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
           <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{meta.readMinutes} min de lectura</span>
         </div>
 
         {/* Author card */}
-        <div className="flex items-center gap-3 mb-8 p-4 bg-blue-50/50 border border-blue-100 rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-3 mb-9 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_6px_24px_rgba(0,36,85,.04)]">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#002455]">
             <span className="text-white font-bold text-sm">CG</span>
           </div>
           <div>
@@ -121,7 +121,7 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
         </div>
 
         {/* Contenido del artículo */}
-        <article className="prose prose-sm md:prose-base max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-gray-900 prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-3 prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-2 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-strong:font-bold prose-ul:my-3 prose-li:my-1 prose-li:text-gray-700">
+        <article className="prose prose-sm max-w-none prose-headings:font-display prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-[#002455] prose-h2:mt-10 prose-h2:mb-4 prose-h2:text-2xl prose-h3:mt-7 prose-h3:mb-3 prose-h3:text-xl prose-p:text-slate-700 prose-p:leading-[1.85] prose-a:text-[#008d95] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-strong:font-semibold prose-ul:my-4 prose-li:my-2 prose-li:text-slate-700 md:prose-base">
           {children}
         </article>
 
