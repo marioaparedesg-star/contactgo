@@ -88,7 +88,7 @@ export async function GET(req: NextRequest) {
         .select('id')
         .ilike('cliente_email', cart.cliente_email)
         .eq('pago_estado', 'pagado')
-        .gte('created_at', cart.updated_at)
+        .gte('created_at', cart.created_at)
         .limit(1)
         .maybeSingle()
       if (orderError) throw new Error(`No se pudo verificar compra: ${orderError.message}`)
