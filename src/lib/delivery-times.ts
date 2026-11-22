@@ -70,13 +70,14 @@ const T_TORICO: EntregaInfo = {
 /**
  * Retorna la info de entrega según tipo de producto y graduación seleccionada.
  *
- * @param tipo    - Tipo de producto: esferico | torico | multifocal | color | solucion | gota
+ * @param tipo    - Tipo de producto: esferico | torico | multifocal | multifocal_torico | color | solucion | gota
  * @param nombre  - Nombre del producto (sin uso actualmente; se conserva por compatibilidad de firma)
  * @param sph     - Graduación seleccionada (se conserva por compatibilidad con los componentes existentes)
  */
 export function getEntrega(tipo: string, nombre = '', sph?: string | number | null): EntregaInfo {
 
   if (tipo === 'esferico')   return T_ESFERICO
+  if (tipo === 'multifocal_torico') return T_TORICO
   if (tipo === 'multifocal') return T_MULTIFOCAL
   if (tipo === 'torico')     return T_TORICO
 
