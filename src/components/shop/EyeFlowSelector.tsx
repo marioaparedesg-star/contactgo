@@ -222,7 +222,7 @@ export default function EyeFlowSelector({
   const step1 = (
     <div className="space-y-2.5">
       <StepLabel n={1} label="¿Para cuántos ojos necesitas lentes?" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
         <OptionCard
           selected={s.ojoMode === 'AMBOS'}
           onClick={() => { set({ ojoMode: 'AMBOS' }); trackEyeFlow('ambos_selected') }}
@@ -239,7 +239,7 @@ export default function EyeFlowSelector({
   const step1b = (s.ojoMode === 'OD' || s.ojoMode === 'OI') ? (
     <div className="space-y-2.5">
       <StepLabel n={2} label="¿Cuál ojo?" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
         <OptionCard
           selected={s.ojoMode === 'OD'}
           onClick={() => { set({ ojoMode: 'OD' }); trackEyeFlow('un_ojo_selected') }}
@@ -256,7 +256,7 @@ export default function EyeFlowSelector({
   const step2a = s.ojoMode === 'AMBOS' ? (
     <div className="space-y-2.5">
       <StepLabel n={2} label="¿Usas la misma graduación en ambos ojos?" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
         <OptionCard
           selected={s.mismaReceta === true}
           onClick={() => { set({ mismaReceta: true, noEstaSeguro: false }); trackEyeFlow('misma_receta') }}
