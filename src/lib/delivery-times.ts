@@ -78,6 +78,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
 
   if (tipo === 'esferico')   return T_ESFERICO
   if (tipo === 'multifocal_torico') return T_TORICO
+  if (tipo === 'multifocal' && /toric|tórico|torico/i.test(nombre)) return T_TORICO
   if (tipo === 'multifocal') return T_MULTIFOCAL
   if (tipo === 'torico')     return T_TORICO
 
