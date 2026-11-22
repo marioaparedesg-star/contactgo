@@ -76,9 +76,14 @@ const T_TORICO: EntregaInfo = {
  */
 export function getEntrega(tipo: string, nombre = '', sph?: string | number | null): EntregaInfo {
 
+  // Un multifocal también puede ser tórico (p. ej. Proclear Multifocal Toric).
+  // La condición tórica siempre prevalece porque requiere fabricación bajo pedido.
+  const nombreNormalizado = nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const esTorico = tipo === 'torico' || /toric|torico/i.test(nombreNormalizado)
+  if (esTorico) return T_TORICO
+
   if (tipo === 'esferico')   return T_ESFERICO
   if (tipo === 'multifocal') return T_MULTIFOCAL
-  if (tipo === 'torico')     return T_TORICO
 
   if (tipo === 'color') return T_COLOR_PLANO
 
@@ -173,9 +178,10 @@ export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | num
 export function getRangoEntregaDesdeFecha(
   fechaCreacion: string | Date,
   tipo: string,
-  sph?: string | number | null
+  sph?: string | number | null,
+  nombre = ''
 ): { texto: string; fechaMin: string; fechaMax: string } {
-  const info = getEntrega(tipo, '', sph)
+  const info = getEntrega(tipo, nombre, sph)
   const fecha = fechaCreacion instanceof Date ? fechaCreacion : new Date(fechaCreacion)
   if (Number.isNaN(fecha.getTime())) {
     return { texto: 'Fecha de entrega por confirmar', fechaMin: '', fechaMax: '' }
