@@ -1,28 +1,10 @@
 {
   "crons": [
-    {
-      "path": "/api/cron/wa-daily",
-      "schedule": "0 13 * * *"
-    },
-    {
-      "path": "/api/solicitar-resena",
-      "schedule": "30 14 * * *"
-    },
-    {
-      "path": "/api/carrito-abandonado",
-      "schedule": "0 16 * * *"
-    },
-    {
-      "path": "/api/cron/reporte-diario",
-      "schedule": "0 1 * * *"
-    },
-    {
-      "path": "/api/cron/retencion",
-      "schedule": "0 15 * * *"
-    },
-    {
-      "path": "/api/cron/alertas-admin",
-      "schedule": "0 13 * * *"
-    }
+    { "path": "/api/cron/wa-daily", "schedule": "0 13 * * *" },
+    { "path": "/api/solicitar-resena", "schedule": "30 14 * * *" },
+    { "path": "/api/carrito-abandonado", "schedule": "0 */2 * * *" },
+    { "path": "/api/cron/reporte-diario", "schedule": "0 1 * * *" },
+    { "path": "/api/cron/retencion", "schedule": "0 15 * * *" },
+    { "path": "/api/cron/alertas-admin", "schedule": "0 13 * * *" }
   ]
 }
