@@ -64,11 +64,11 @@ export default function InlineCrossSell({ tipo, currentId }: { tipo: string; cur
           <p className="text-xs font-semibold text-gray-800 truncate">{product.nombre}</p>
           <div className="flex items-center gap-1.5 mt-0.5">
             <p className="text-sm font-black text-gray-900">RD${Number(product.precio).toLocaleString()}</p>
-            <span className="text-[9px] text-green-600 font-bold bg-green-50 px-1 py-0.5 rounded">Envío gratis con tu pedido</span>
+            <span className="text-[9px] text-teal-800 font-bold bg-teal-50 px-1 py-0.5 rounded">Envío gratis con tu pedido</span>
           </div>
         </div>
         {added ? (
-          <span className="text-[11px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-xl border border-green-200 shrink-0 flex items-center gap-1">
+          <span className="text-[11px] font-bold text-teal-800 bg-teal-50 px-2 py-1 rounded-xl border border-teal-200 shrink-0 flex items-center gap-1">
             <Check className="w-3 h-3" /> Añadido
           </span>
         ) : (

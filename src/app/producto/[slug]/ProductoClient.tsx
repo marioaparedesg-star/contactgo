@@ -840,22 +840,22 @@ export default function ProductoClient({ product, variants }: Props) {
           <div className="lg:hidden">
 
             {/* BLOQUE 1: IMAGEN — completa, visible de inmediato */}
-            <div className="relative bg-gradient-to-b from-gray-50 to-white">
+            <div className="relative bg-white">
               <div className="relative w-full" style={{aspectRatio:'4/3', maxHeight:'320px'}}>
                 {imagenActual ? (
                   <Image src={imagenActual} alt={product.nombre} fill unoptimized priority
-                    className="object-contain p-4" />
+                    className="object-contain p-5 sm:p-7" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <Eye className="w-16 h-16 text-gray-200" />
                   </div>
                 )}
-                <span className="absolute top-2 left-2 text-[9px] font-bold text-green-700 bg-white border border-green-100 px-2 py-0.5 rounded-full shadow-sm">
-                  ✅ Directo del fabricante
+                <span className="absolute top-3 left-3 text-[10px] font-semibold text-slate-600 bg-white/95 border border-slate-200 px-3 py-1 rounded-full">
+                  Distribución oficial
                 </span>
                 {(product as any).proteccion_uv && (
-                  <span className="absolute top-2 right-2 text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
-                    ☀️ UV
+                  <span className="absolute top-3 right-3 text-[10px] font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full">
+                    Protección UV
                   </span>
                 )}
               </div>
@@ -865,8 +865,8 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BLOQUE 2: NOMBRE + PRECIO */}
             <div className="px-4 pt-3 pb-2">
-              <p className="text-[10px] font-black text-primary-600 uppercase tracking-widest">{product.marca}</p>
-              <h1 className="text-xl font-black text-gray-900 leading-tight mt-0.5">{product.nombre}</h1>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.16em]">{product.marca}</p>
+              <h1 className="text-[22px] sm:text-2xl font-bold text-slate-900 leading-[1.2] mt-1">{product.nombre}</h1>
 
               {/* Reviews */}
               {(product as any).avg_rating && (
@@ -883,7 +883,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
               {/* Precio */}
               <div className="mt-2 flex items-end gap-3 flex-wrap">
-                <p className="text-3xl font-black text-gray-900">RD${price.toLocaleString()}</p>
+                <p className="text-[32px] font-bold tracking-tight text-slate-950 tabular-nums">RD${price.toLocaleString()}</p>
                 {(()=>{
                   const precioOptica = Math.round(price * 1.12 / 100) * 100
                   const pct = Math.round(((precioOptica - price) / precioOptica) * 100)
@@ -931,21 +931,17 @@ export default function ProductoClient({ product, variants }: Props) {
             )}
 
             {/* BLOQUE 3: TRUST BAR — scroll horizontal */}
-            <div className="flex gap-2 px-4 py-2 overflow-x-auto scrollbar-hide border-y border-gray-100 items-center">
-              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">✅ Directo del fabricante</span>
-              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 pl-1 pr-2.5 py-0.5 rounded-full border border-gray-100 whitespace-nowrap inline-flex items-center gap-1">
-                <AzulLogo size="xs" /> Pago con AZUL
-              </span>
-              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">🚚 Envío RD</span>
-              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">↩️ 7 días dev.</span>
-              <span className="shrink-0 text-[10px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 whitespace-nowrap">💬 WA 24/7</span>
+            <div className="grid grid-cols-3 gap-2 px-4 py-3 border-y border-slate-100 bg-slate-50/70">
+              <div className="flex flex-col items-center gap-1 text-center"><span className="text-[11px] font-semibold text-slate-700">Distribución oficial</span><span className="text-[10px] text-slate-500">Producto de marca</span></div>
+              <div className="flex flex-col items-center gap-1 text-center"><AzulLogo size="xs" /><span className="text-[10px] text-slate-500">Pago seguro</span></div>
+              <div className="flex flex-col items-center gap-1 text-center"><span className="text-[11px] font-semibold text-slate-700">Envíos nacionales</span><span className="text-[10px] text-slate-500">A todo RD</span></div>
             </div>
 
             {/* BLOQUE 4: PERSONALIZACIÓN — se conserva intacto el selector de colores */}
-            <section className="mx-4 mt-3 mb-2 rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <section className="mx-4 mt-4 mb-3 rounded-2xl border border-slate-200 bg-white">
               <div className="px-4 pt-4 pb-2">
-                <p className="text-sm font-black text-gray-900">Personaliza tu producto</p>
-                <p className="text-xs text-gray-500 mt-1">Completa las opciones necesarias antes de agregarlo al carrito.</p>
+                <p className="text-sm font-bold text-slate-900">Configura tu producto</p>
+                <p className="text-xs text-slate-500 mt-1">Selecciona las opciones de tu receta para continuar.</p>
               </div>
               <div className="px-4 pb-4 space-y-3">
               {isColor && precioPlano != null && (
@@ -990,17 +986,17 @@ export default function ProductoClient({ product, variants }: Props) {
             <div className="px-4 pb-4 space-y-2">
               <EntregaHoy especial={getEntregaInfo.especial} />
               <button onClick={() => handleAdd()} disabled={product.stock===0||sinVariante}
-                className="w-full bg-teal-500 hover:bg-teal-600 active:scale-[0.98] disabled:opacity-40 text-white font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 shadow-lg shadow-teal-100/50 transition-all">
+                className="w-full bg-[#01B2B7] hover:bg-[#018E92] active:scale-[0.99] disabled:opacity-40 text-white font-semibold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition-colors">
                 <ShoppingCart className="w-5 h-5" />
                 {sinVariante && !isColor ? 'Completa la selección primero' : 'Agregar al carrito'}
               </button>
               <button onClick={handleBuyNow} disabled={product.stock===0||sinVariante}
-                className="w-full bg-gray-900 hover:bg-gray-800 active:scale-[0.98] disabled:opacity-30 text-white font-bold py-3.5 rounded-2xl text-base transition-all">
+                className="w-full bg-white hover:bg-slate-50 active:scale-[0.99] disabled:opacity-30 text-slate-800 border border-slate-300 font-semibold py-3 rounded-xl text-sm transition-colors">
                 {product.stock===0?'Sin stock':faltaColor?'Selecciona un color primero':sinVariante?'Completa la selección primero':'Comprar ahora ⚡'}
               </button>
               <a href={`https://wa.me/18096942268?text=${encodeURIComponent(`Hola, quiero info sobre ${product.nombre}`)}`}
                 target="_blank" rel="noopener"
-                className="w-full flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-semibold py-3 rounded-2xl text-sm hover:bg-gray-50 transition-colors">
+                className="w-full flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 font-medium py-2 text-xs transition-colors">
                 <svg className="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                 Consultar por WhatsApp
               </a>
@@ -1039,7 +1035,7 @@ export default function ProductoClient({ product, variants }: Props) {
           <div className="hidden lg:grid lg:grid-cols-[400px_1fr_300px] xl:grid-cols-[440px_1fr_320px] gap-6 xl:gap-8 px-6 xl:px-8 py-6 items-start">
 
             {/* COL 1: GALERÍA DESKTOP */}
-            <div className="sticky top-20 self-start">
+            <div className="sticky top-24 self-start">
               <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm aspect-square">
                 <span className="absolute top-3 left-3 z-10 text-[9px] font-bold text-green-700 bg-white border border-green-100 px-2 py-1 rounded-full">
                   ✅ Directo del fabricante
@@ -1185,9 +1181,9 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* COL 3: BUY BOX STICKY DESKTOP */}
             <div className="sticky top-20 self-start">
-              <div className="bg-white border-2 border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-[0_8px_30px_rgba(15,23,42,0.05)] overflow-hidden">
                 <div className="p-3 space-y-2.5">
-                  {!isLente && <div className="text-center py-2"><p className="text-2xl font-black text-gray-900">RD${price.toLocaleString()}</p>{product.contenido && <p className="text-xs text-gray-400 mt-0.5">{product.contenido}</p>}</div>}
+                  {!isLente && <div className="text-center py-2"><p className="text-2xl font-bold tracking-tight text-slate-950">RD${price.toLocaleString()}</p>{product.contenido && <p className="text-xs text-gray-400 mt-0.5">{product.contenido}</p>}</div>}
                   <div className="bg-gray-50 rounded-xl px-3 py-2 space-y-0.5">
                     {(()=>{const fi=getFechaEntrega(tipo,product.nombre);const ei=getEntrega(tipo,product.nombre);return(<>
                       <p className={`text-xs font-bold flex items-center gap-1.5 ${ei.especial?'text-amber-600':'text-green-600'}`}>{ei.icono} {fi.texto}</p>
