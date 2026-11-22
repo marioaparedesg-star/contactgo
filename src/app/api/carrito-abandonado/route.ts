@@ -1,170 +1,161 @@
-// ============================================================
-// SISTEMA ÚNICO DE CARRITO ABANDONADO — consolidado 2026-08-08
-//
-// Antes había 2 sistemas paralelos que nunca funcionaron:
-//   1. Este mismo archivo, por email — completo pero JAMÁS conectado a
-//      ningún cron ni llamado desde ningún lado.
-//   2. supabase/functions/recover-carts (Edge Function) — por WhatsApp,
-//      pero con un bug real: nunca llamaba a la API de WhatsApp, solo
-//      armaba un link wa.me y lo marcaba como "enviado" sin enviar nada.
-//      Tampoco estaba conectada a ningún cron.
-//
-// Además, la escritura desde checkout.tsx (upsert con onConflict:
-// 'cliente_email') fallaba en silencio desde el día 1 porque esa columna
-// nunca tuvo una restricción única en la base de datos — por eso
-// abandoned_carts tenía 0 filas siempre. Ya corregido (constraint
-// agregada 2026-08-08).
-//
-// Este flujo ahora es exclusivamente por correo. WhatsApp queda pausado y
-// la Edge Function antigua recover-carts responde 202 sin procesar carritos.
-// Solo se envía a clientes con consentimiento comercial vigente.
-// ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
 import { hasMarketingConsent, marketingUnsubscribeUrl } from '@/lib/email/marketing-consent'
 
-function getSb() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!) }
+export const dynamic = 'force-dynamic'
+export const maxDuration = 60
+
+function getSb() {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+}
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
 const FROM = process.env.RESEND_FROM ?? 'ContactGo <info@contactgo.net>'
-function getResend() { return new Resend(process.env.RESEND_API_KEY) }
+const FIRST_DELAY_MS = 2 * 60 * 60 * 1000
+const SECOND_DELAY_MS = 24 * 60 * 60 * 1000
+const LOCK_MS = 5 * 60 * 1000
+const MAX_ATTEMPTS = 5
 
-const ACTIVO = true // Activo por solicitud del administrador; solo envía a clientes con consentimiento comercial.
+function escapeHtml(value: unknown): string {
+  return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+}
+function money(value: unknown): string {
+  return Number(value ?? 0).toLocaleString('es-DO', { maximumFractionDigits: 0 })
+}
+function emailHtml(cart: any, step: 1 | 2) {
+  const firstName = escapeHtml(cart.cliente_nombre?.trim().split(/\s+/)[0] || 'Hola')
+  const rows = (Array.isArray(cart.items) ? cart.items : []).map((item: any) => {
+    const quantity = Math.max(1, Number(item.cantidad) || 1)
+    const price = Math.max(0, Number(item.precio) || 0)
+    return `<tr><td style="padding:12px 0;border-bottom:1px solid #edf1f5;color:#172033;font-size:14px">${escapeHtml(item.nombre || 'Producto')}<br><span style="color:#718096;font-size:12px">Cantidad: ${quantity}</span></td><td style="padding:12px 0;border-bottom:1px solid #edf1f5;text-align:right;font-weight:700;color:#172033">RD$${money(price * quantity)}</td></tr>`
+  }).join('')
+  const title = step === 1 ? `${firstName}, tu carrito sigue esperándote` : `${firstName}, ¿todavía necesitas tus lentes?`
+  const intro = step === 1
+    ? 'Guardamos los productos que estabas revisando. Puedes volver a tu carrito y continuar cuando estés listo.'
+    : 'Te dejamos un último recordatorio para que puedas retomar tu compra cuando te convenga.'
+  const unsubscribe = marketingUnsubscribeUrl(cart.cliente_email)
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"></head><body style="margin:0;background:#f4f7fb;font-family:Arial,Helvetica,sans-serif;color:#172033"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:28px 12px;background:#f4f7fb"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#fff;border-radius:16px;overflow:hidden"><tr><td style="background:#002455;padding:24px 28px"><div style="font-size:24px;font-weight:800;color:#fff">ContactGo</div><div style="font-size:12px;color:#c8d7e8;margin-top:4px">Lentes de contacto · República Dominicana</div></td></tr><tr><td style="padding:28px 28px 12px"><h1 style="font-size:21px;line-height:1.35;margin:0 0 10px;color:#002455">${title}</h1><p style="font-size:14px;line-height:1.65;color:#526174;margin:0">${intro}</p></td></tr><tr><td style="padding:8px 28px 0"><table role="presentation" width="100%" cellspacing="0" cellpadding="0">${rows}<tr><td style="padding:16px 0;font-weight:700;color:#172033">Total estimado</td><td style="padding:16px 0;text-align:right;font-size:17px;font-weight:800;color:#002455">RD$${money(cart.total)}</td></tr></table></td></tr><tr><td align="center" style="padding:18px 28px 28px"><a href="${BASE}/cart" style="display:inline-block;background:#01b2b7;color:#002455;text-decoration:none;font-size:14px;font-weight:800;padding:14px 28px;border-radius:9px">Volver a mi carrito</a></td></tr><tr><td style="background:#f8fafc;padding:18px 28px;text-align:center;font-size:11px;line-height:1.6;color:#718096">ContactGo · contactgo.net · Santo Domingo, República Dominicana<br>Recibes este correo porque aceptaste recibir comunicaciones comerciales.<br><a href="${escapeHtml(unsubscribe)}" style="color:#526174">Cancelar suscripción</a></td></tr></table></td></tr></table></body></html>`
+}
 
-async function enviarEmailRespaldo(cart: any) {
-  const nombre = cart.cliente_nombre?.split(' ')[0] ?? 'Cliente'
-  const productos = Array.isArray(cart.items) ? cart.items : []
-  const total = cart.total ?? 0
-  const cupon = 'VUELVE5'
-
-  const itemsHTML = productos.map((p: any) => `
-    <tr>
-      <td style="padding:8px 0;border-bottom:1px solid #f3f4f6;">
-        <strong style="color:#111;font-size:13px;">${p.nombre ?? p.product?.nombre ?? 'Producto'}</strong>
-        <br><span style="color:#9ca3af;font-size:11px;">x${p.cantidad ?? 1}</span>
-      </td>
-      <td style="padding:8px 0;border-bottom:1px solid #f3f4f6;text-align:right;font-weight:700;color:#111;">
-        RD$${((p.precio ?? 0) * (p.cantidad ?? 1)).toLocaleString()}
-      </td>
-    </tr>`).join('')
-
-  const html = `<!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px 16px;">
-<tr><td><table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-  <tr><td style="background:#16a34a;padding:20px 28px;">
-    <p style="margin:0;color:#fff;font-size:22px;font-weight:900;">ContactGo</p>
-    <p style="margin:2px 0 0;color:#bbf7d0;font-size:12px;">Lentes de Contacto · República Dominicana</p>
-  </td></tr>
-  <tr><td style="padding:24px 28px 0;">
-    <h2 style="margin:0;font-size:20px;color:#111;">👋 ${nombre}, dejaste tus lentes en el carrito</h2>
-    <p style="margin:8px 0 0;font-size:14px;color:#6b7280;">Tus lentes siguen disponibles. Completa tu pedido hoy y recibe un <strong style="color:#16a34a;">5% de descuento</strong> extra.</p>
-  </td></tr>
-  ${itemsHTML ? `
-  <tr><td style="padding:16px 28px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0">
-      ${itemsHTML}
-      <tr>
-        <td style="padding:12px 0 0;font-weight:700;color:#111;">Total</td>
-        <td style="padding:12px 0 0;text-align:right;font-weight:900;color:#16a34a;font-size:16px;">RD$${Number(total).toLocaleString()}</td>
-      </tr>
-    </table>
-  </td></tr>` : ''}
-  <tr><td style="padding:16px 28px 0;">
-    <div style="background:#f0fdf4;border:2px dashed #16a34a;border-radius:10px;padding:14px;text-align:center;">
-      <p style="margin:0;font-size:12px;color:#6b7280;">Cupón de descuento:</p>
-      <p style="margin:6px 0;font-size:24px;font-weight:900;color:#16a34a;letter-spacing:3px;">${cupon}</p>
-      <p style="margin:0;font-size:11px;color:#9ca3af;">5% de descuento · Válido 24 horas</p>
-    </div>
-  </td></tr>
-  <tr><td style="padding:20px 28px;text-align:center;">
-    <a href="${BASE}/cart" style="display:inline-block;background:#16a34a;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 36px;border-radius:10px;">
-      Completar mi pedido →
-    </a>
-  </td></tr>
-  <tr><td style="padding:0 28px 16px;text-align:center;font-size:11px;color:#64748b">Si no deseas recibir comunicaciones comerciales, <a href="${marketingUnsubscribeUrl(cart.cliente_email)}" style="color:#64748b">puedes darte de baja aquí</a>.</td></tr>
-  <tr><td style="background:#f9fafb;padding:12px 28px;border-top:1px solid #f3f4f6;text-align:center;">
-    <p style="margin:0;font-size:11px;color:#9ca3af;">ContactGo · contactgo.net · Santo Domingo, RD</p>
-    <p style="margin:4px 0 0;font-size:10px;color:#d1d5db;">Directo del fabricante · Entrega en 24-48h · Pago Seguro</p>
-  </td></tr>
-</table></td></tr></table>
-</body></html>`
-
-  await getResend().emails.send({
-    from: FROM, to: cart.cliente_email,
-    subject: `${nombre}, olvidaste tus lentes en el carrito 👀 — 5% OFF esperándote`,
-    html,
+async function sendReminder(cart: any, step: 1 | 2) {
+  if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY no está configurada')
+  const firstName = cart.cliente_nombre?.trim().split(/\s+/)[0] || 'Hola'
+  const subject = step === 1
+    ? `${firstName}, guardamos tu carrito en ContactGo`
+    : `${firstName}, este es tu último recordatorio de ContactGo`
+  const { data, error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
+    from: FROM,
+    to: cart.cliente_email,
+    subject,
+    html: emailHtml(cart, step),
   })
-
-  const { data: existing } = await getSb().from('coupons').select('id').eq('codigo', cupon).single()
-  if (!existing) {
-    await getSb().from('coupons').insert({
-      codigo: cupon, tipo: 'porcentaje', valor: 5,
-      uso_maximo: 9999, usos_actuales: 0, activo: true,
-      valido_hasta: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-    })
-  }
+  if (error) throw new Error(error.message)
+  if (!data?.id) throw new Error('Resend no devolvió un ID de mensaje')
+  return data.id
 }
 
 export async function GET(req: NextRequest) {
-  // Patrón de autenticación consistente con los demás crons (solicitar-resena,
-  // wa-daily): acepta la llamada real de Vercel Cron (header x-vercel-cron) o
-  // una llamada manual con el secret, para poder probarlo por curl.
-  const auth = req.headers.get('authorization')
-  const cronSecret = process.env.CRON_SECRET ?? 'contactgo_cron_2026'
-  if (auth !== `Bearer ${cronSecret}` && req.headers.get('x-vercel-cron') !== '1') {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-  }
+  const secret = process.env.CRON_SECRET
+  const authorized = (secret && req.headers.get('authorization') === `Bearer ${secret}`)
+    || req.headers.get('x-vercel-cron') === '1'
+  if (!authorized) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
-  // Con el plan Hobby de Vercel, este cron solo puede correr 1 vez al día
-  // (no cada 2h como sería ideal para "carrito abandonado"). Para no perder
-  // carritos entre corridas, la ventana cubre las últimas ~26 horas en vez
-  // de solo 2-6h. Si más adelante se sube a plan Pro, reducir esta ventana
-  // y volver a la frecuencia de cada 2h.
-  const hace2h = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-  const hace26h = new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString()
+  const sb = getSb()
+  const now = Date.now()
+  const nowIso = new Date(now).toISOString()
+  const firstDue = new Date(now - FIRST_DELAY_MS).toISOString()
+  const retentionStart = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString()
 
-  const { data: carritos, error } = await getSb()
-    .from('abandoned_carts')
+  const { data: carts, error } = await sb.from('abandoned_carts')
     .select('*')
-    .gte('updated_at', hace26h)
-    .lte('updated_at', hace2h)
     .eq('recuperado', false)
-    .eq('email_sent', false)
+    .gte('updated_at', retentionStart)
+    .lte('updated_at', firstDue)
+    .order('updated_at', { ascending: true })
+    .limit(100)
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  if (!carritos?.length) return NextResponse.json({ activo: ACTIVO, candidatos: 0, enviados: 0 })
-
-  // Modo simulación: reporta a quién le tocaría, sin enviar nada de verdad.
-  if (!ACTIVO) {
-    return NextResponse.json({
-      activo: false,
-      mensaje: 'Interruptor apagado (CARRITO_ABANDONADO_ACTIVO no está en true) — no se envió nada.',
-      candidatos: carritos.map(c => ({
-        id: c.id, nombre: c.cliente_nombre, email: c.cliente_email,
-        telefono: c.cliente_telefono, total: c.total,
-        canal_que_usaria: 'email',
-      })),
-    })
+  if (error) {
+    console.error('[carrito-abandonado] Error consultando candidatos:', error.message)
+    return NextResponse.json({ error: 'No se pudieron consultar los carritos' }, { status: 500 })
   }
 
-  let enviadosWA = 0, enviadosEmail = 0, errores = 0
-  for (const cart of carritos) {
+  let sentFirst = 0, sentSecond = 0, skippedConsent = 0, converted = 0, failed = 0, locked = 0
+  for (const cart of carts ?? []) {
     try {
-      if (!cart.cliente_email || !(await hasMarketingConsent(cart.cliente_email))) continue
-      // El consentimiento comercial capturado en el registro cubre email, no WhatsApp.
-      // No enviar promociones por WhatsApp hasta contar con una autorización separada.
-      if (cart.cliente_email) {
-        await enviarEmailRespaldo(cart)
-        await getSb().from('abandoned_carts').update({ email_sent: true }).eq('id', cart.id)
-        enviadosEmail++
+      // Una compra pagada prevalece sobre cualquier bandera antigua del carrito.
+      const { data: paidOrder, error: orderError } = await sb.from('orders')
+        .select('id')
+        .eq('cliente_email', cart.cliente_email)
+        .eq('pago_estado', 'pagado')
+        .gte('created_at', cart.updated_at)
+        .limit(1)
+        .maybeSingle()
+      if (orderError) throw new Error(`No se pudo verificar compra: ${orderError.message}`)
+      if (paidOrder) {
+        await sb.from('abandoned_carts').update({ recuperado: true, email_lock_until: null, email_lock_step: null }).eq('id', cart.id)
+        converted++
+        continue
       }
-    } catch (e) {
-      console.error(`[carrito-abandonado] Error con carrito ${cart.id}:`, e)
-      errores++
+
+      if (!cart.cliente_email || !(await hasMarketingConsent(cart.cliente_email))) {
+        skippedConsent++
+        continue
+      }
+      if ((Number(cart.email_attempts) || 0) >= MAX_ATTEMPTS) continue
+
+      const firstSentAt = cart.email_reminder_1_sent_at ? new Date(cart.email_reminder_1_sent_at).getTime() : null
+      const secondSentAt = cart.email_reminder_2_sent_at ? new Date(cart.email_reminder_2_sent_at).getTime() : null
+      let step: 1 | 2 | null = null
+      if (!firstSentAt && new Date(cart.updated_at).getTime() <= now - FIRST_DELAY_MS) step = 1
+      else if (firstSentAt && !secondSentAt && firstSentAt <= now - (SECOND_DELAY_MS - FIRST_DELAY_MS)) step = 2
+      if (!step) continue
+
+      const lockUntil = new Date(now + LOCK_MS).toISOString()
+      const { data: claim, error: lockError } = await sb.from('abandoned_carts')
+        .update({ email_lock_until: lockUntil, email_lock_step: String(step) })
+        .eq('id', cart.id)
+        .eq('recuperado', false)
+        .or(`email_lock_until.is.null,email_lock_until.lt.${nowIso}`)
+        .select('id')
+        .maybeSingle()
+      if (lockError) throw new Error(`No se pudo reservar el envío: ${lockError.message}`)
+      if (!claim) { locked++; continue }
+
+      try {
+        const resendId = await sendReminder(cart, step)
+        const sentAt = new Date().toISOString()
+        const update = step === 1
+          ? { email_reminder_1_sent_at: sentAt, email_sent: true }
+          : { email_reminder_2_sent_at: sentAt }
+        const { error: saveError } = await sb.from('abandoned_carts').update({
+          ...update, email_last_error: null, email_lock_until: null, email_lock_step: null,
+        }).eq('id', cart.id)
+        if (saveError) throw new Error(`Correo aceptado por Resend (${resendId}) pero no se pudo guardar el estado: ${saveError.message}`)
+        if (step === 1) sentFirst++
+        else sentSecond++
+      } catch (sendError: any) {
+        await sb.from('abandoned_carts').update({
+          email_attempts: (Number(cart.email_attempts) || 0) + 1,
+          email_last_error: String(sendError?.message ?? 'Error de envío').slice(0, 1000),
+          email_lock_until: null,
+          email_lock_step: null,
+        }).eq('id', cart.id)
+        throw sendError
+      }
+    } catch (err: any) {
+      failed++
+      console.error('[carrito-abandonado] Error carrito', cart.id, err?.message ?? err)
     }
   }
 
-  return NextResponse.json({ activo: true, enviadosWA, enviadosEmail, errores, total: carritos.length })
+  return NextResponse.json({
+    activo: true,
+    candidatos: carts?.length ?? 0,
+    enviados_primer_recordatorio: sentFirst,
+    enviados_segundo_recordatorio: sentSecond,
+    convertidos_detectados: converted,
+    sin_consentimiento: skippedConsent,
+    bloqueados_por_otro_proceso: locked,
+    errores: failed,
+  })
 }

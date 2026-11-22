@@ -1,8 +1,3 @@
-// ============================================================
-// ContactGo — POST /api/carrito/track
-// Guarda info del carrito cuando el usuario avanza en checkout
-// pero no completa el pago. Cron hourly recupera 2h después.
-// ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { normalizePhone } from '@/lib/whatsapp'
@@ -17,65 +12,68 @@ function getSb() {
   )
 }
 
+function validEmail(value: unknown): value is string {
+  return typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
+}
+
 export async function POST(req: NextRequest) {
-  const guardErr = guardRequest(req, { limitPerMin: 20, requireOrigin: false })
+  const guardErr = guardRequest(req, { limitPerMin: 20, requireOrigin: true })
   if (guardErr) return guardErr
+
   try {
     const body = await req.json()
-    const { telefono, nombre, email, items, total } = body
-    
-    if (!telefono || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json({ ok: true, skipped: 'no data' })
+    const telefono = typeof body.telefono === 'string' ? body.telefono : ''
+    const email = validEmail(body.email) ? body.email.trim().toLowerCase() : ''
+    const nombre = typeof body.nombre === 'string' ? body.nombre.trim().slice(0, 160) : null
+    const itemsInput = Array.isArray(body.items) ? body.items : []
+    const items = itemsInput.slice(0, 30).map((item: any) => ({
+      id: typeof item?.id === 'string' ? item.id.slice(0, 100) : null,
+      nombre: typeof item?.nombre === 'string' ? item.nombre.slice(0, 180) : 'Producto',
+      cantidad: Math.max(1, Math.min(99, Number(item?.cantidad) || 1)),
+      precio: Math.max(0, Number(item?.precio) || 0),
+    }))
+
+    if (!email || !items.length) {
+      return NextResponse.json({ ok: true, skipped: 'missing email or items' })
     }
 
-    const phone = normalizePhone(telefono)
-    if (phone.length < 10) return NextResponse.json({ ok: true, skipped: 'invalid phone' })
-
+    const phone = telefono ? normalizePhone(telefono) : ''
     const sb = getSb()
-
-    // Buscar si ya existe carrito activo con este teléfono (últimas 24h)
-    const hace24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-    const { data: existente } = await sb
-      .from('carritos_abandonados')
-      .select('id')
-      .eq('telefono', phone)
-      .eq('convertido', false)
-      .gt('created_at', hace24h)
-      .maybeSingle()
-
-    if (existente) {
-      // Actualizar en lugar de crear duplicado
-      await sb.from('carritos_abandonados').update({
-        nombre, email, items, total,
-        updated_at: new Date().toISOString(),
-      }).eq('id', existente.id)
-      return NextResponse.json({ ok: true, action: 'updated' })
+    const now = new Date().toISOString()
+    const payload = {
+      cliente_email: email,
+      cliente_nombre: nombre,
+      cliente_telefono: phone.length >= 10 ? phone : null,
+      items,
+      total: Math.max(0, Number(body.total) || 0),
+      recuperado: false,
+      email_sent: false,
+      email_reminder_1_sent_at: null,
+      email_reminder_2_sent_at: null,
+      email_attempts: 0,
+      email_last_error: null,
+      email_lock_until: null,
+      email_lock_step: null,
+      updated_at: now,
     }
 
-    // Crear nuevo
-    await sb.from('carritos_abandonados').insert({
-      telefono: phone, nombre, email, items, total,
-    })
-    return NextResponse.json({ ok: true, action: 'created' })
+    const { error } = await sb.from('abandoned_carts')
+      .upsert(payload, { onConflict: 'cliente_email' })
+
+    if (error) {
+      console.error('[carrito/track] No se pudo guardar el carrito:', error.message)
+      return NextResponse.json({ ok: false, error: 'No se pudo registrar el carrito' }, { status: 500 })
+    }
+
+    return NextResponse.json({ ok: true, action: 'saved' })
   } catch (err: any) {
-    console.error('[carrito/track]', err.message)
-    return NextResponse.json({ ok: true, error: err.message })
+    console.error('[carrito/track]', err?.message ?? err)
+    return NextResponse.json({ ok: false, error: 'Error al registrar el carrito' }, { status: 500 })
   }
 }
 
-// Marcar carrito como convertido cuando el pedido se completa
-export async function PATCH(req: NextRequest) {
-  try {
-    const { telefono } = await req.json()
-    if (!telefono) return NextResponse.json({ ok: true })
-    const phone = normalizePhone(telefono)
-    const sb = getSb()
-    await sb.from('carritos_abandonados')
-      .update({ convertido: true })
-      .eq('telefono', phone)
-      .eq('convertido', false)
-    return NextResponse.json({ ok: true })
-  } catch (err: any) {
-    return NextResponse.json({ ok: true, error: err.message })
-  }
+// No se marca un carrito como recuperado al crear una orden pendiente.
+// La conversión solo se confirma cuando existe un pedido con pago_estado='pagado'.
+export async function PATCH() {
+  return NextResponse.json({ ok: true, ignored: 'conversion requires confirmed payment' })
 }
