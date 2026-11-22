@@ -587,6 +587,7 @@ export default function CheckoutPage() {
               items: items.map(i => ({
                 id: i.product.id, nombre: i.product.nombre,
                 cantidad: i.cantidad,
+                precio: Number((i as any).precio_final ?? i.product.precio),
               })),
               total: totalFinal,
             }),
