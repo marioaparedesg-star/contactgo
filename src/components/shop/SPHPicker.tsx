@@ -78,7 +78,7 @@ export default function SPHPicker({
 }: Props) {
   const generated = buildSPHOptions(sphMin, sphMax, sphStep, sphPlano)
   const exactValues = availableValues.length
-    ? availableValues.map(v => Number(v)).filter(Number.isFinite).map(v => v > 0 ? `+${v.toFixed(2)}` : v === 0 ? '0.00' : v.toFixed(2))
+    ? availableValues.map(v => Number(v)).filter(v => Number.isFinite(v) && v >= sphMin && v <= sphMax).map(v => v > 0 ? `+${v.toFixed(2)}` : v === 0 ? '0.00' : v.toFixed(2))
     : [...generated.neg, ...generated.pos]
   const NEG = exactValues.filter(v => Number(v) < 0).sort((a,b) => Number(b)-Number(a))
   const POS = exactValues.filter(v => Number(v) >= 0).sort((a,b) => Number(a)-Number(b))
