@@ -175,9 +175,10 @@ export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | num
 export function getRangoEntregaDesdeFecha(
   fechaCreacion: string | Date,
   tipo: string,
-  sph?: string | number | null
+  sph?: string | number | null,
+  nombre = ''
 ): { texto: string; fechaMin: string; fechaMax: string } {
-  const info = getEntrega(tipo, '', sph)
+  const info = getEntrega(tipo, nombre, sph)
   const fecha = fechaCreacion instanceof Date ? fechaCreacion : new Date(fechaCreacion)
   if (Number.isNaN(fecha.getTime())) {
     return { texto: 'Fecha de entrega por confirmar', fechaMin: '', fechaMax: '' }
