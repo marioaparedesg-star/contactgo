@@ -187,8 +187,8 @@ img[loading="lazy"] {
 
 /* ── Selección de texto branded ──────────────────────────────────────────── */
 ::selection {
-  background: #bbf7d0;
-  color: #14532d;
+  background: #CCF7F8;
+  color: #002455;
 }
 
 /* ── Mejor rendering de fuentes en Windows ───────────────────────────────── */
