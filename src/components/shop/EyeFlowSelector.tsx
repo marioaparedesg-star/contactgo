@@ -294,7 +294,7 @@ export default function EyeFlowSelector({
       <SPHPicker label="Esfera (SPH)" value={s.sph}
         onChange={v => set({ sph: v })}
         placeholder="Selecciona tu graduación"
-        sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano}
+        sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano} availableValues={sphOpts}
         hint="Es el número principal de tu receta" />
       {needsCyl && (
         <SelectField label="Cilindro (CYL)" value={s.cyl}
@@ -326,7 +326,7 @@ export default function EyeFlowSelector({
         <SPHPicker label="Esfera (SPH) — Ojo Derecho" value={s.sph_od}
           onChange={v => set({ sph_od: v })}
           placeholder="Graduación ojo derecho"
-          sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano} />
+          sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano} availableValues={sphOpts} />
         {needsCyl && (
           <SelectField label="Cilindro (CYL)" value={s.cyl_od}
             onChange={v => set({ cyl_od: v })}
@@ -345,7 +345,7 @@ export default function EyeFlowSelector({
         <SPHPicker label="Esfera (SPH) — Ojo Izquierdo" value={s.sph_oi}
           onChange={v => set({ sph_oi: v })}
           placeholder="Graduación ojo izquierdo"
-          sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano} />
+          sphMin={sphMin} sphMax={sphMax} sphStep={sphStep} sphPlano={sphPlano} availableValues={sphOpts} />
         {needsCyl && (
           <SelectField label="Cilindro (CYL)" value={s.cyl_oi}
             onChange={v => set({ cyl_oi: v })}
