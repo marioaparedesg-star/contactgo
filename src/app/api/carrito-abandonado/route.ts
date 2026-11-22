@@ -17,9 +17,7 @@ const LOCK_MS = 5 * 60 * 1000
 const MAX_ATTEMPTS = 5
 
 function escapeHtml(value: unknown): string {
-  return String(value ?? '').replace(/[&<>"']/g, char => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-  })[char]!)
+  return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 }
 function money(value: unknown): string {
   return Number(value ?? 0).toLocaleString('es-DO', { maximumFractionDigits: 0 })
