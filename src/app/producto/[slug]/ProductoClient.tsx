@@ -424,8 +424,9 @@ export default function ProductoClient({ product, variants }: Props) {
       Number(product.sph_step ?? 0.25),
       Boolean(product.sph_plano),
     )
-    const sphOpts = [..._sphNeg, ..._sphPos]
-      .map(v => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
+    const sphOpts = (Array.isArray((product as any).sph_disponibles) && (product as any).sph_disponibles.length > 0)
+      ? (product as any).sph_disponibles.map((v: number) => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
+      : [..._sphNeg, ..._sphPos].map(v => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
     // Solo ofrecer parámetros definidos para este producto; nunca ampliar con listas genéricas.
     const cylOpts = [...(product.cyl_disponibles ?? [])]
       .sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
