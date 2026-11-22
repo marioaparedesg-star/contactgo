@@ -73,7 +73,7 @@ function StepLabel({ n, label }: { n: number; label: string }) {
       <span className="w-5 h-5 rounded-full bg-teal-500 text-white text-[10px] font-black flex items-center justify-center shrink-0">
         {n}
       </span>
-      <span className="text-xs font-bold text-gray-700">{label}</span>
+      <span className="min-w-0 text-xs font-bold leading-snug text-gray-700">{label}</span>
     </div>
   )
 }
@@ -86,7 +86,7 @@ function OptionCard({
 }) {
   return (
     <button type="button" onClick={onClick}
-      className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all duration-150 min-h-[48px] w-full text-left ${
+      className={`flex min-w-0 items-center gap-2 px-3 py-3 rounded-xl border-2 transition-all duration-150 min-h-[56px] w-full text-left ${
         selected
           ? 'border-primary-600 bg-teal-50 shadow-sm shadow-teal-50'
           : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
@@ -222,7 +222,7 @@ export default function EyeFlowSelector({
   const step1 = (
     <div className="space-y-2.5">
       <StepLabel n={1} label="¿Para cuántos ojos necesitas lentes?" />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <OptionCard
           selected={s.ojoMode === 'AMBOS'}
           onClick={() => { set({ ojoMode: 'AMBOS' }); trackEyeFlow('ambos_selected') }}
@@ -239,7 +239,7 @@ export default function EyeFlowSelector({
   const step1b = (s.ojoMode === 'OD' || s.ojoMode === 'OI') ? (
     <div className="space-y-2.5">
       <StepLabel n={2} label="¿Cuál ojo?" />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <OptionCard
           selected={s.ojoMode === 'OD'}
           onClick={() => { set({ ojoMode: 'OD' }); trackEyeFlow('un_ojo_selected') }}
@@ -256,7 +256,7 @@ export default function EyeFlowSelector({
   const step2a = s.ojoMode === 'AMBOS' ? (
     <div className="space-y-2.5">
       <StepLabel n={2} label="¿Usas la misma graduación en ambos ojos?" />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <OptionCard
           selected={s.mismaReceta === true}
           onClick={() => { set({ mismaReceta: true, noEstaSeguro: false }); trackEyeFlow('misma_receta') }}
