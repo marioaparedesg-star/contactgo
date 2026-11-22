@@ -63,6 +63,7 @@ interface Props {
   sphMax?:  number
   sphStep?: number
   sphPlano?: boolean
+  availableValues?: (number | string)[]
 }
 
 export default function SPHPicker({
@@ -73,8 +74,14 @@ export default function SPHPicker({
   sphMax  = 8.00,
   sphStep = 0.25,
   sphPlano = false,
+  availableValues = [],
 }: Props) {
-  const { neg: NEG, pos: POS } = buildSPHOptions(sphMin, sphMax, sphStep, sphPlano)
+  const generated = buildSPHOptions(sphMin, sphMax, sphStep, sphPlano)
+  const exactValues = availableValues.length
+    ? availableValues.map(v => Number(v)).filter(v => Number.isFinite(v) && v >= sphMin && v <= sphMax).map(v => v > 0 ? `+${v.toFixed(2)}` : v === 0 ? '0.00' : v.toFixed(2))
+    : [...generated.neg, ...generated.pos]
+  const NEG = exactValues.filter(v => Number(v) < 0).sort((a,b) => Number(b)-Number(a))
+  const POS = exactValues.filter(v => Number(v) >= 0).sort((a,b) => Number(a)-Number(b))
 
   const [open, setOpen]     = useState(false)
   const [search, setSearch] = useState('')
