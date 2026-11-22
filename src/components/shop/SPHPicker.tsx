@@ -21,7 +21,7 @@ export function buildSPHOptions(
 
   // Negativos (de 0 hacia abajo hasta sphMin)
   if (sphMin < 0) {
-    const BREAK = -6.00  // punto de cambio de paso
+    const BREAK = -6.50  // mantener pasos de 0.25 hasta ±6.50 inclusive; luego 0.50
     let v = -0.25
     while (v >= sphMin) {
       neg.push(fmt(round2(v)))
@@ -37,7 +37,7 @@ export function buildSPHOptions(
 
   // Positivos (de 0 hacia arriba hasta sphMax)
   if (sphMax > 0) {
-    const BREAK = 6.00
+    const BREAK = 6.50
     let v = 0.25
     while (v <= sphMax) {
       pos.push(fmt(round2(v)))
