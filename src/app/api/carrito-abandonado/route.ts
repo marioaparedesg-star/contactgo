@@ -56,9 +56,10 @@ async function sendReminder(cart: any, step: 1 | 2) {
 
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET
-  const authorized = (secret && req.headers.get('authorization') === `Bearer ${secret}`)
-    || req.headers.get('x-vercel-cron') === '1'
-  if (!authorized) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  if (!secret) return NextResponse.json({ error: 'CRON_SECRET no está configurado' }, { status: 500 })
+  if (req.headers.get('authorization') !== `Bearer ${secret}`) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
 
   const sb = getSb()
   const now = Date.now()
@@ -85,7 +86,7 @@ export async function GET(req: NextRequest) {
       // Una compra pagada prevalece sobre cualquier bandera antigua del carrito.
       const { data: paidOrder, error: orderError } = await sb.from('orders')
         .select('id')
-        .eq('cliente_email', cart.cliente_email)
+        .ilike('cliente_email', cart.cliente_email)
         .eq('pago_estado', 'pagado')
         .gte('created_at', cart.updated_at)
         .limit(1)
