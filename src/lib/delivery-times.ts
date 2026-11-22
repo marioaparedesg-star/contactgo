@@ -71,14 +71,14 @@ const T_TORICO: EntregaInfo = {
  * Retorna la info de entrega según tipo de producto y graduación seleccionada.
  *
  * @param tipo    - Tipo de producto: esferico | torico | multifocal | color | solucion | gota
- * @param nombre  - Nombre del producto (sin uso actualmente; se conserva por compatibilidad de firma)
+ * @param nombre  - Nombre del producto; permite detectar variantes tóricas multifocales
  * @param sph     - Graduación seleccionada (se conserva por compatibilidad con los componentes existentes)
  */
 export function getEntrega(tipo: string, nombre = '', sph?: string | number | null): EntregaInfo {
 
   // Un multifocal también puede ser tórico (p. ej. Proclear Multifocal Toric).
   // La condición tórica siempre prevalece porque requiere fabricación bajo pedido.
-  const nombreNormalizado = nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const nombreNormalizado = String(nombre ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   const esTorico = tipo === 'torico' || /toric|torico/i.test(nombreNormalizado)
   if (esTorico) return T_TORICO
 
