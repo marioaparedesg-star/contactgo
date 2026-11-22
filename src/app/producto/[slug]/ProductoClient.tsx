@@ -356,9 +356,13 @@ export default function ProductoClient({ product, variants }: Props) {
       Number(product.sph_step ?? 0.25),
       Boolean(product.sph_plano),
     )
-    const sphOpts = (Array.isArray((product as any).sph_disponibles) && (product as any).sph_disponibles.length > 0)
-      ? (product as any).sph_disponibles.filter((v: number) => Number(v) >= Number(product.sph_min ?? -20) && Number(v) <= Number(product.sph_max ?? 8)).map((v: number) => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
-      : [..._sphNeg, ..._sphPos].map(v => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
+    const generatedSph = [..._sphNeg, ..._sphPos].map(v => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
+    const storedSph = Array.isArray((product as any).sph_disponibles)
+      ? (product as any).sph_disponibles.map((v: number) => Number(v)>0 ? `+${Number(v).toFixed(2)}` : Number(v)===0 ? '0.00' : Number(v).toFixed(2))
+      : []
+    // Cruza los valores guardados con la escala de pasos del producto: evita
+    // ofrecer cuartos de dioptría donde el fabricante solo fabrica medios.
+    const sphOpts = storedSph.length ? generatedSph.filter(v => storedSph.includes(v)) : generatedSph
     // Solo ofrecer parámetros definidos para este producto; nunca ampliar con listas genéricas.
     const cylOpts = [...(product.cyl_disponibles ?? [])]
       .sort((a:any,b:any)=>Number(a)-Number(b)).map((v:any)=>Number(v).toFixed(2))
