@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
       email_last_error: null,
       email_lock_until: null,
       email_lock_step: null,
+      created_at: now,
       updated_at: now,
     }
 
