@@ -70,10 +70,10 @@ interface Props {
 function StepLabel({ n, label }: { n: number; label: string }) {
   return (
     <div className="flex items-center gap-1.5 mb-2">
-      <span className="w-5 h-5 rounded-full bg-teal-500 text-white text-[10px] font-black flex items-center justify-center shrink-0">
+      <span className="w-5 h-5 rounded-full bg-[#002455] text-white text-[10px] font-semibold flex items-center justify-center shrink-0">
         {n}
       </span>
-      <span className="min-w-0 text-xs font-bold leading-snug text-gray-700">{label}</span>
+      <span className="min-w-0 text-xs font-semibold leading-snug text-slate-800">{label}</span>
     </div>
   )
 }
@@ -86,23 +86,23 @@ function OptionCard({
 }) {
   return (
     <button type="button" onClick={onClick}
-      className={`flex min-w-0 items-center gap-2 px-3 py-3 rounded-xl border-2 transition-all duration-150 min-h-[56px] w-full text-left ${
+      className={`flex min-w-0 items-center gap-2.5 px-3.5 py-3 rounded-xl border transition-all duration-150 min-h-[56px] w-full text-left ${
         selected
-          ? 'border-primary-600 bg-teal-50 shadow-sm shadow-teal-50'
-          : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
-      } ${highlight && !selected ? 'border-amber-200 bg-amber-50' : ''}`}>
-      <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-        selected ? 'border-primary-600 bg-teal-500' : 'border-gray-300'
+          ? 'border-[#01B2B7] bg-[#F0FAFA]'
+           : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+      } ${highlight && !selected ? 'border-slate-200 bg-white' : ''}`}>
+      <span className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-all ${
+        selected ? 'border-[#01B2B7] bg-[#01B2B7]' : 'border-slate-300'
       }`}>
         {selected && <span className="w-2 h-2 rounded-full bg-white block" />}
       </span>
       <span className="text-base shrink-0">{icon}</span>
       <div className="min-w-0">
-        <p className={`text-sm font-bold leading-tight ${selected ? 'text-primary-700' : 'text-gray-800'}`}>
+        <p className={`text-sm font-semibold leading-tight ${selected ? 'text-[#002455]' : 'text-slate-800'}`}>
           {label}
         </p>
         {sublabel && (
-          <p className={`break-words text-[10px] leading-snug ${selected ? 'text-primary-500' : 'text-gray-400'}`}>
+          <p className={`break-words text-[10px] leading-snug ${selected ? 'text-slate-600' : 'text-slate-500'}`}>
             {sublabel}
           </p>
         )}
@@ -124,8 +124,8 @@ function SelectField({
       <label className="block text-xs font-bold text-gray-700">{label}</label>
       {hint && <p className="text-[10px] text-gray-400">{hint}</p>}
       <select value={value} onChange={e => onChange(e.target.value)}
-        className={`w-full border-2 rounded-xl px-3 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-teal-400 transition-colors appearance-none bg-white ${
-          value ? 'border-primary-300 text-gray-900' : 'border-gray-200 text-gray-400'
+        className={`w-full border rounded-xl px-3.5 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#01B2B7]/25 transition-colors appearance-none bg-white ${
+          value ? 'border-slate-300 text-slate-900' : 'border-slate-200 text-slate-400'
         }`}
         style={{ fontSize: '16px', minHeight: '48px' }}>
         <option value="">{placeholder}</option>
