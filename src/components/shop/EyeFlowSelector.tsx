@@ -102,7 +102,7 @@ function OptionCard({
           {label}
         </p>
         {sublabel && (
-          <p className={`text-[10px] leading-tight ${selected ? 'text-primary-500' : 'text-gray-400'}`}>
+          <p className={`break-words text-[10px] leading-snug ${selected ? 'text-primary-500' : 'text-gray-400'}`}>
             {sublabel}
           </p>
         )}
