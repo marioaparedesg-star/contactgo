@@ -423,7 +423,8 @@ export default function ProductoClient({ product, variants }: Props) {
       : null
   const [modalidad, setModalidad] = useState<'plano' | 'graduado' | null>(null)
 
-  const tipo       = product.tipo ?? ''
+  // Normalizamos el tipo como string: la BD mantiene multifocal_torico dentro de tipo multifocal.
+  const tipo: string = product.tipo ?? ''
   const getEntregaInfo = getEntrega(tipo, product.nombre, eyeFlow.sph)
   const sku        = product.sku ?? ''
   const colors     = (product as any).colores_disponibles ?? []
