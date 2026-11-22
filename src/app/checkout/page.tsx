@@ -389,20 +389,8 @@ export default function CheckoutPage() {
         if (data.email) localStorage.setItem('cg_last_email', data.email)
         if (data.telefono) localStorage.setItem('cg_last_phone', data.telefono)
       } catch { /* private browsing */ }
-      // Marcar carrito como recuperado (usuario completó el checkout)
-      try {
-        const email = data.email
-        const tel = data.telefono
-        if (email) createClient().from('abandoned_carts').update({ recuperado: true }).eq('cliente_email', email).then(() => {})
-        // También marcar en tabla nueva de WhatsApp
-        if (tel) {
-          fetch('/api/carrito/track', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ telefono: tel }),
-          }).catch(() => {})
-        }
-      } catch { /* silencioso */ }
+      // No marcar el carrito como recuperado aquí: esta orden aún está pendiente.
+      // El cron solo lo cierra cuando encuentra pago_estado='pagado'.
 
       // 2. Guardar items — crítico: verificar que se guardan
       const itemsRes = await fetch('/api/orders/items', { method:'POST', headers:{'Content-Type':'application/json'},
