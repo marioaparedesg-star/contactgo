@@ -2,9 +2,6 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-
-type BlogProduct = { id: string; nombre: string; slug: string; marca: string | null; precio: number | string; imagen_url: string | null; tipo: string | null }
 
 type BlogPost = {
   slug: string
@@ -46,28 +43,7 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat('es-DO', { day: 'numeric', month: 'short', year: 'numeric' }).format(date)
 }
 
-function productForPost(post: BlogPost, products: BlogProduct[]) {
-  const text = (post.slug + ' ' + post.titulo + ' ' + post.cat).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-  const scored = products.map((product) => {
-    const source = (product.nombre + ' ' + product.marca + ' ' + product.slug).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-    const words = source.split(/[^a-z0-9]+/).filter((word) => word.length > 3)
-    let score = words.reduce((sum, word) => sum + (text.includes(word) ? (word.length > 5 ? 3 : 1) : 0), 0)
-    if (/astigmatismo|toric|torico/.test(text) && product.tipo === 'torico') score += 4
-    if (/multifocal|presbicia/.test(text) && product.tipo === 'multifocal') score += 4
-    if (/color|colores/.test(text) && product.tipo === 'color') score += 4
-    if (/solucion|gotas|peroxido/.test(text) && product.tipo === 'solucion') score += 4
-    if (/diario|diarios|1.day/.test(text) && /diari|1.day/.test(source)) score += 3
-    return { product, score }
-  }).filter((item) => item.product.imagen_url && item.score > 0).sort((a, b) => b.score - a.score)
-  if (scored[0]) return scored[0].product
-  const fallbackType = /astigmatismo|toric|torico/.test(text) ? 'torico'
-    : /multifocal|presbicia/.test(text) ? 'multifocal'
-    : /color|colores/.test(text) ? 'color'
-    : /solucion|gotas/.test(text) ? 'solucion' : 'esferico'
-  return products.find((product) => product.tipo === fallbackType && product.imagen_url) ?? products.find((product) => product.imagen_url) ?? null
-}
-
-export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[]; products?: BlogProduct[] }) {
+export default function BlogJournal({ posts }: { posts: BlogPost[] }) {
   const sortedPosts = useMemo(() => [...posts].sort((a, b) => b.fecha.localeCompare(a.fecha)), [posts])
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('Todos')
@@ -156,7 +132,7 @@ export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         {!hasFilters && featured && (
-          <section className="relative -mt-6 grid overflow-hidden rounded-3xl bg-white shadow-[0_16px_50px_rgba(0,36,85,.10)] ring-1 ring-slate-200/70 md:grid-cols-[1.05fr_.95fr]">
+          <section className="relative -mt-6 overflow-hidden rounded-3xl bg-white shadow-[0_16px_50px_rgba(0,36,85,.08)] ring-1 ring-slate-200/70">
             <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-full bg-[#e5f8f7] px-3 py-1 text-[10px] font-bold uppercase tracking-[.16em] text-[#007f86]">Selección editorial</span>
@@ -170,17 +146,12 @@ export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[
                 </Link>
               </div>
             </div>
-            <div className="relative flex min-h-56 items-center justify-center overflow-hidden bg-gradient-to-br from-[#e6f6f7] via-[#d8e9f4] to-[#eef3fa] p-10 md:min-h-[330px]">
-              <div className="absolute -right-10 -top-16 h-64 w-64 rounded-full border-[34px] border-white/60" />
-              <div className="absolute -bottom-24 -left-10 h-64 w-64 rounded-full bg-[#01b2b7]/10" />
-              <Link href={'/blog/' + featured.slug} aria-label={'Leer artículo: ' + featured.titulo} className="relative z-10 flex w-full cursor-pointer items-center justify-center rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#01b2b7]">
-                {productForPost(featured, products)?.imagen_url ? (
-                  <div className="relative h-56 w-full max-w-sm overflow-hidden rounded-2xl bg-white p-5 shadow-[0_20px_70px_rgba(0,36,85,.12)] transition-transform hover:scale-[1.02]">
-                    <Image src={productForPost(featured, products)!.imagen_url!} alt={productForPost(featured, products)!.nombre} fill unoptimized sizes="(max-width: 1024px) 90vw, 360px" className="object-contain p-5" />
-                  </div>
-                ) : <div className="relative flex h-48 w-48 items-center justify-center rounded-full border border-white/80 bg-white/40"><div className="h-28 w-28 rounded-full border-[17px] border-[#01a6ad]" /></div>}
-              </Link>
-              <span className="absolute bottom-5 right-6 text-[10px] font-bold uppercase tracking-[.22em] text-[#477184]">CONTACTGO JOURNAL</span>
+            <div className="flex flex-wrap items-center gap-3 border-t border-slate-100 px-7 py-4 text-xs text-slate-500 sm:px-10">
+              <span className="font-semibold uppercase tracking-[.16em] text-[#008d95]">{featured.cat}</span>
+              <span className="h-1 w-1 rounded-full bg-slate-300" />
+              <span>{formatDate(featured.fecha)}</span>
+              <span className="h-1 w-1 rounded-full bg-slate-300" />
+              <span>{featured.mins} minutos de lectura</span>
             </div>
           </section>
         )}
@@ -240,9 +211,6 @@ export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {visible.map((post) => (
                   <article key={post.slug} className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition duration-200 hover:-translate-y-1 hover:border-[#a8dddd] hover:shadow-[0_14px_38px_rgba(0,36,85,.08)]">
-                    {productForPost(post, products)?.imagen_url && <Link href={'/blog/' + post.slug} aria-label={'Leer artículo: ' + post.titulo} className="relative block aspect-[16/9] overflow-hidden bg-gradient-to-br from-slate-50 to-[#e7f5f5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#01b2b7]">
-                      <Image src={productForPost(post, products)!.imagen_url!} alt={productForPost(post, products)!.nombre} fill unoptimized sizes="(max-width: 768px) 90vw, 33vw" className="object-contain p-4 transition-transform duration-300 hover:scale-[1.04]" />
-                    </Link>}
                     <div className="flex flex-1 flex-col p-5">
                     <div className="flex items-center justify-between gap-3">
                       <span className={'rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ' + categoryClass(post.cat)}>{post.cat}</span>

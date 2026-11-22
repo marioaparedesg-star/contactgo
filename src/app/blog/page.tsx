@@ -4,7 +4,6 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
 import BlogJournal from '@/components/blog/BlogJournal'
-import { createClient } from '@supabase/supabase-js'
 
 export const metadata: Metadata = {
   title: 'Blog de lentes de contacto en RD — ContactGo',
@@ -26,6 +25,32 @@ export const metadata: Metadata = {
 // Añadir cada artículo nuevo aquí → aparece automático
 // ═══════════════════════════════════════════════════════════
 const POSTS = [
+  // NUEVO CLÚSTER: 25 artículos de salud ocular, seguridad e higiene
+  { slug: 'queratitis-infecciosa-lentes-contacto-sintomas-prevencion', titulo: 'Queratitis infecciosa por lentes de contacto: síntomas y prevención', desc: 'Qué es la queratitis microbiana, cómo reconocer señales de alarma y qué hábitos reducen el riesgo.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'queratitis-bacteriana-lentes-contacto-senales-riesgo', titulo: 'Queratitis bacteriana y lentes de contacto: señales que no debes ignorar', desc: 'Cómo se presenta una infección bacteriana de la córnea, sus factores de riesgo y por qué necesita valoración rápida.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'acanthamoeba-queratitis-agua-lentes-contacto', titulo: 'Acanthamoeba y lentes de contacto: por qué el agua es peligrosa', desc: 'Qué es la queratitis por Acanthamoeba, cómo se relaciona con el agua y cómo proteger tus ojos.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'queratitis-hongos-lentes-contacto-infeccion-fungica', titulo: 'Queratitis por hongos: una infección corneal que requiere diagnóstico', desc: 'Qué es la queratitis fúngica, sus posibles factores de riesgo y por qué no debe tratarse como irritación común.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'queratitis-herpetica-herpes-simplex-lentes-contacto', titulo: 'Herpes ocular y lentes de contacto: cuidados y señales de alerta', desc: 'Qué relación existe entre el herpes simple y la córnea, cómo reconocer síntomas y cuándo suspender los lentes.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'ulcera-corneal-lentes-contacto-sintomas-urgencia', titulo: 'Úlcera corneal por lentes de contacto: síntomas y atención urgente', desc: 'Cómo se forma una úlcera en la córnea, qué señales pueden acompañarla y por qué no conviene esperar.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'abrasion-cornea-lentes-contacto-rayadura-ojo', titulo: 'Rasguño en la córnea por lentes de contacto: qué hacer', desc: 'Cómo reconocer una posible abrasión corneal y cuándo necesitas atención oftalmológica.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'clare-ojo-rojo-agudo-lentes-contacto', titulo: 'CLARE: ojo rojo agudo asociado al uso de lentes de contacto', desc: 'Qué significa CLARE, cómo puede manifestarse y por qué requiere evaluación profesional.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'conjuntivitis-papilar-gigante-lentes-contacto', titulo: 'Conjuntivitis papilar gigante: una reacción relacionada con lentes', desc: 'Síntomas, causas y manejo de la conjuntivitis papilar gigante en usuarios de lentes.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'infiltrados-corneales-lentes-contacto-que-son', titulo: 'Infiltrados corneales en usuarios de lentes: qué significan', desc: 'Qué son los infiltrados corneales, por qué pueden aparecer y cómo se diferencian de una infección.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'neovascularizacion-corneal-lentes-contacto-oxigeno', titulo: 'Vasos sanguíneos en la córnea por lentes: neovascularización', desc: 'Qué es la neovascularización corneal, cómo se relaciona con el oxígeno y por qué requiere controles.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'hipoxia-corneal-lentes-contacto-falta-oxigeno', titulo: 'Hipoxia corneal por lentes de contacto: qué ocurre cuando falta oxígeno', desc: 'Explicación de la hipoxia corneal, sus factores asociados y cómo el ajuste y el tiempo de uso influyen.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'edema-corneal-lentes-contacto-vision-borrosa', titulo: 'Edema corneal y lentes de contacto: por qué puede nublarse la visión', desc: 'Qué es la hinchazón de la córnea, cómo puede relacionarse con lentes y cuándo debes consultar.', emoji: '📘', cat: 'Salud ocular', mins: 7, fecha: '2026-11-20' },
+  { slug: 'toxicidad-solucion-lentes-contacto-irritacion', titulo: 'Irritación por solución de lentes de contacto: toxicidad y errores', desc: 'Cómo una solución inadecuada, vencida o mal utilizada puede irritar los ojos y qué pasos seguir.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'alergia-conservantes-solucion-lentes-contacto', titulo: '¿Alergia a la solución de lentes? Conservantes e irritación ocular', desc: 'Diferencias entre sensibilidad, alergia e infección cuando aparecen molestias al usar solución.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'biofilm-estuche-lentes-contacto-contaminacion', titulo: 'Biofilm en el estuche de lentes de contacto: contaminación invisible', desc: 'Qué es el biofilm, cómo puede acumularse en el estuche y qué hábitos reducen la contaminación.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'depositos-proteinas-lentes-contacto-irritacion', titulo: 'Depósitos de proteínas en lentes de contacto: causas y molestias', desc: 'Por qué se acumulan depósitos en los lentes, cómo afectan la comodidad y qué hacer para evitarlos.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'higiene-manos-manipular-lentes-contacto', titulo: 'Cómo lavarte las manos antes de manipular lentes de contacto', desc: 'Guía práctica de higiene de manos para reducir la transferencia de microorganismos al lente y al ojo.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'volver-usar-lentes-contacto-despues-infeccion-ocular', titulo: '¿Cuándo volver a usar lentes de contacto después de una infección?', desc: 'Qué debes confirmar antes de retomar los lentes tras conjuntivitis, queratitis u otra infección ocular.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'antibioticos-gotas-oftalmicas-lentes-contacto', titulo: 'Antibióticos en gotas y lentes de contacto: precauciones importantes', desc: 'Por qué debes consultar antes de combinar gotas oftálmicas con lentes y qué hacer durante una infección.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'esteroides-gotas-oftalmicas-lentes-contacto-riesgos', titulo: 'Gotas con esteroides y lentes de contacto: por qué no automedicarse', desc: 'Riesgos de usar gotas oftálmicas con corticoides sin evaluación y por qué el ojo rojo necesita diagnóstico.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'complicaciones-lentes-contacto-cuando-suspender-uso', titulo: 'Complicaciones de los lentes de contacto: cuándo suspender su uso', desc: 'Guía para reconocer molestias y señales de alarma que requieren retirar los lentes y consultar.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'lentes-contacto-despues-cirugia-ocular-cuando-retomar', titulo: 'Lentes de contacto después de una cirugía ocular: cuándo retomarlos', desc: 'Qué debes saber antes de volver a usar lentes después de una cirugía ocular.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'contaminacion-lentes-contacto-estuche-solucion-senales', titulo: 'Cómo detectar problemas de contaminación en lentes, estuche y solución', desc: 'Señales de alerta en el sistema de cuidado, errores de almacenamiento y pasos para reducir contaminación.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
+  { slug: 'compartir-lentes-contacto-riesgo-infecciones', titulo: 'Compartir lentes de contacto: riesgos de infección y por qué evitarlo', desc: 'Diferencias entre suero salino y solución multipropósito, y por qué uno no sustituye al otro.', emoji: '📘', cat: 'Cuidado', mins: 7, fecha: '2026-11-20' },
   { slug: 'guia-definitiva-lentes-contacto-republica-dominicana-2026', titulo: 'La Guía Definitiva de Lentes de Contacto en RD', desc: 'Todo sobre lentes de contacto en RD en un solo lugar: tipos, precios, marcas, cómo comprar y cuidado.', emoji: '📘', cat: 'Guías', mins: 12, fecha: '2026-08-27', hot: true },
   { slug: 'lentes-contacto-piantini-naco-bella-vista-santo-domingo', titulo: 'Lentes de Contacto en Piantini, Naco y Bella Vista', desc: 'Entrega 24h en Piantini, Naco, Bella Vista, Evaristo Morales y Los Cacicazgos.', emoji: '📍', cat: 'Entrega', mins: 5, fecha: '2026-08-27' },
   { slug: 'lentes-contacto-los-alcarrizos-villa-mella-santo-domingo-oeste', titulo: 'Lentes de Contacto en Los Alcarrizos y Villa Mella', desc: 'Entrega en Los Alcarrizos, Villa Mella, Herrera y todo Santo Domingo Oeste/Norte.', emoji: '📍', cat: 'Entrega', mins: 5, fecha: '2026-08-27' },
@@ -310,32 +335,11 @@ const POSTS = [
 
 type Post = typeof POSTS[number]
 
-type BlogProduct = { id: string; nombre: string; slug: string; marca: string | null; precio: number | string; imagen_url: string | null; tipo: string | null }
-
-async function getBlogProducts(): Promise<BlogProduct[]> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  if (!url || !key) return []
-  const supabase = createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } })
-  const { data, error } = await supabase.from('products')
-    .select('id,nombre,slug,marca,precio,imagen_url,tipo')
-    .eq('activo', true)
-    .or('archivado.is.null,archivado.eq.false')
-    .order('nombre', { ascending: true })
-    .limit(100)
-  if (error) {
-    console.error('[blog] No se pudieron cargar imágenes del catálogo:', error.message)
-    return []
-  }
-  return (data ?? []) as BlogProduct[]
-}
-
-export default async function BlogPage() {
-  const products = await getBlogProducts()
+export default function BlogPage() {
   return (
     <>
       <Navbar />
-      <BlogJournal posts={POSTS as unknown as Post[]} products={products} />
+      <BlogJournal posts={POSTS as unknown as Post[]} />
       <Footer />
     </>
   )
