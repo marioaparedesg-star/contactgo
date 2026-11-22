@@ -101,7 +101,7 @@ function ToricWizard({ productName }: { productName: string }) {
     return (
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-bold text-blue-700">🔵 Lente fabricado a medida · 25–30 días</p>
+          <p className="text-xs font-bold text-blue-700">🔵 Lente fabricado a medida · 25–45 días</p>
           <RecetaGuiaTorico />
         </div>
         <p className="text-[11px] text-blue-600">Necesitas: <strong>Esfera</strong>, <strong>Cilindro</strong> y <strong>Eje</strong> de tu receta. Llena los campos de abajo.</p>
@@ -434,7 +434,7 @@ export default function ProductoClient({ product, variants }: Props) {
     const colorOpts = (product as any).colores_disponibles ?? []
     return { sphOpts, cylOpts, axisOpts, addOpts, colorOpts }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product.id, product.cyl_disponibles, product.axis_disponibles, product.add_disponibles])
+  }, [product.id, product.sph_min, product.sph_max, product.sph_step, product.sph_plano, product.cyl_disponibles, product.axis_disponibles, product.add_disponibles])
 
   // ── Imagen dinámica por color ─────────────────────────────────────────
   const imagenesPorColor: Record<string, string> = (product as any).imagenes_por_color ?? {}
@@ -492,16 +492,15 @@ export default function ProductoClient({ product, variants }: Props) {
   const colors     = (product as any).colores_disponibles ?? []
   const sizes      = SOLUTION_SIZES[sku]  ?? []
 
-  const isLente    = ['esferico','torico','multifocal','color'].includes(tipo)
+  const isLente    = ['esferico','torico','multifocal','multifocal_torico','color'].includes(tipo)
   const isSolucion = tipo === 'solucion'
   const isGota     = tipo === 'gota'
   const isColor    = tipo === 'color'
-  const isToric    = tipo === 'torico'
-  const isMulti    = tipo === 'multifocal'
-  // Multifocal tórico: multifocal con CYL disponibles (ej. Proclear Multifocal Toric)
-  const isMultiToric = isMulti && (product.cyl_disponibles?.length ?? 0) > 0
-  // needsToric: cualquier producto que requiere CYL + AXIS
-  const needsToric   = isToric || isMultiToric
+  const isMulti    = tipo === 'multifocal' || tipo === 'multifocal_torico'
+  const isMultiToric = tipo === 'multifocal_torico' || (isMulti && (product.cyl_disponibles?.length ?? 0) > 0)
+  const isToric    = tipo === 'torico' || isMultiToric
+  // Los multifocales tóricos requieren SPH + CYL + AXIS + ADD.
+  const needsToric = isToric
 
   // Verificar si la combinación seleccionada tiene stock real en product_inventory
   // Evita que se vendan variantes (SPH+CYL+AXIS) que no existen en inventario
@@ -1041,7 +1040,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               )}
 
-              {isToric && <ToricWizard productName={product.nombre} />}
+              {needsToric && <ToricWizard productName={product.nombre} />}
               </div>
             </section>
 
@@ -1066,24 +1065,7 @@ export default function ProductoClient({ product, variants }: Props) {
             </div>
 
             {/* BELOW FOLD MOBILE */}
-            <div className="px-4 pb-8 space-y-6">
-              {/* Beneficios */}
-              {isLente && (
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    {icon:'👁️', label:'Comodidad todo el día'},
-                    {icon:'💧', label:'Hidratación avanzada'},
-                    {icon:'🎯', label:'Visión nítida'},
-                    {icon:'☀️', label:(product as any).proteccion_uv?'Protección UV':'Marca certificada'},
-                  ].map(b => (
-                    <div key={b.label} className="flex items-center gap-2 bg-gray-50 rounded-xl p-2.5 border border-gray-100">
-                      <span className="text-lg shrink-0">{b.icon}</span>
-                      <p className="text-[10px] font-semibold text-gray-600 leading-tight">{b.label}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
+            <div className="px-4 pb-8 space-y-4">
               {/* Bundle kit */}
               {isLente && (
                 <div className="bg-amber-50 border border-amber-100 rounded-2xl overflow-hidden">
@@ -1099,25 +1081,6 @@ export default function ProductoClient({ product, variants }: Props) {
 
               {/* Specs colapsable */}
               <SpecsAcordeon product={product} />
-
-              {/* Garantías */}
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  {icon:'🚚',t:'Envío nacional',s:'A todo RD'},
-                  {icon:'↩️',t:'7 días dev.',s:'Sin preguntas'},
-                  {icon:'✅',t:'Originales',s:'Dist. oficial'},
-                ].map(b => (
-                  <div key={b.t} className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-xl border border-gray-100">
-                    <span className="text-base shrink-0">{b.icon}</span>
-                    <div><p className="text-[10px] font-bold text-gray-800">{b.t}</p><p className="text-[9px] text-gray-400">{b.s}</p></div>
-                  </div>
-                ))}
-                {/* Badge AZUL con logo real */}
-                <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-xl border border-gray-100">
-                  <img src="/azul-badge.png" alt="AZUL" width="24" height="24" className="h-6 w-6 object-contain rounded shrink-0" />
-                  <div><p className="text-[10px] font-bold text-gray-800">Pago AZUL</p><p className="text-[9px] text-gray-400">100% seguro</p></div>
-                </div>
-              </div>
 
               {/* Reviews */}
               <Reviews productId={product.id} initialReviews={(product as any).reviews ?? []} />
@@ -1250,7 +1213,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   </div>
                 </div>
               )}
-              {isToric && <ToricWizard productName={product.nombre} />}
+              {needsToric && <ToricWizard productName={product.nombre} />}
               {isMulti && (
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
                   <p className="text-xs font-bold text-amber-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
