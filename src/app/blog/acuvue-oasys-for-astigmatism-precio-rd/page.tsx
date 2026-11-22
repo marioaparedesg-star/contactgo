@@ -90,7 +90,7 @@ export default function Page() {
               </div>
             </Link>
           ))}
-          <p className="text-xs text-gray-400 text-center">Entrega 24-48h en toda RD · directo del fabricante J&J · Actualizados junio 2026</p>
+          <p className="text-xs text-gray-400 text-center">Entrega estimada de 25-45 días · directo del fabricante J&J · Actualizados junio 2026</p>
         </div>
 
         <div className="flex gap-2 mb-6">
