@@ -24,7 +24,7 @@ const OPCIONES = [
     label: 'Mensual',
     sublabel: 'Cada 30 días',
     icon: '📦',
-    color: 'blue',
+    color: 'primary',
     beneficios: ['✓ Envío siempre gratis', '✓ Aviso 3 días antes por WA', '✓ Cancela cuando quieras'],
     popular: false,
   },
@@ -42,17 +42,17 @@ const OPCIONES = [
     label: 'Semestral',
     sublabel: 'Cada 6 meses',
     icon: '💎',
-    color: 'purple',
+    color: 'primary',
     beneficios: ['✓ Envío siempre gratis', '✓ Cliente VIP ContactGo', '✓ Regalo sorpresa cada 6 meses'],
     popular: false,
   },
 ]
 
 const COLORS = {
-  gray:    { border: 'border-gray-200',    bg: 'bg-white',         text: 'text-gray-900',  sub: 'text-gray-400',  badge: '' },
-  blue:    { border: 'border-blue-300',    bg: 'bg-blue-50',       text: 'text-blue-800',  sub: 'text-blue-400',  badge: 'bg-blue-600' },
-  primary: { border: 'border-primary-400', bg: 'bg-teal-50',    text: 'text-primary-800',sub:'text-primary-400',badge:'bg-teal-500'},
-  purple:  { border: 'border-purple-300',  bg: 'bg-purple-50',     text: 'text-purple-800',sub:'text-purple-400', badge:'bg-purple-600'},
+  gray:    { border: 'border-gray-200',    bg: 'bg-white',         text: 'text-gray-900',  sub: 'text-gray-500',  badge: '' },
+  blue:    { border: 'border-primary-300', bg: 'bg-[#EEF2F8]', text: 'text-primary-700', sub: 'text-primary-500', badge: 'bg-primary-600' },
+  primary: { border: 'border-teal-400', bg: 'bg-teal-50', text: 'text-teal-900', sub: 'text-teal-700', badge: 'bg-teal-600' },
+  purple:  { border: 'border-primary-300', bg: 'bg-[#EEF2F8]', text: 'text-primary-700', sub: 'text-primary-500', badge: 'bg-primary-600' },
 }
 
 export default function SuscripcionSelector({ value, onChange, precio, tipo }: Props) {
@@ -84,7 +84,7 @@ export default function SuscripcionSelector({ value, onChange, precio, tipo }: P
               }`}
             >
               {op.popular && (
-                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[8px] font-black bg-amber-400 text-white px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
+                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[8px] font-black bg-primary-600 text-white px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
                   ★ Más elegido
                 </span>
               )}
