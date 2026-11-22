@@ -318,11 +318,11 @@ export default function EyeFlowSelector({
 
   // ── FORMULARIO DE GRADUACIÓN — AMBOS+DIFERENTE ────────────────────────
   const dualRxForm = (
-    <div className="space-y-2.5">
+    <div className="space-y-2.5 w-full min-w-0">
       <StepLabel n={rxStepNum} label="Graduación por ojo" />
       {/* Ojo Derecho */}
-      <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 space-y-3">
-        <p className="text-xs font-black text-blue-700 uppercase tracking-wide">Ojo Derecho (OD)</p>
+      <div className="w-full min-w-0 bg-[#F4F8FA] border border-[#D5E4EA] rounded-2xl p-4 space-y-3">
+        <p className="text-xs font-black text-[#002455] uppercase tracking-wide">Ojo Derecho (OD)</p>
         <SPHPicker label="Esfera (SPH) — Ojo Derecho" value={s.sph_od}
           onChange={v => set({ sph_od: v })}
           placeholder="Graduación ojo derecho"
@@ -340,8 +340,8 @@ export default function EyeFlowSelector({
         )}
       </div>
       {/* Ojo Izquierdo */}
-      <div className="bg-green-50 border border-green-100 rounded-2xl p-4 space-y-3">
-        <p className="text-xs font-black text-green-700 uppercase tracking-wide">Ojo Izquierdo (OI)</p>
+      <div className="w-full min-w-0 bg-[#F4F8FA] border border-[#D5E4EA] rounded-2xl p-4 space-y-3">
+        <p className="text-xs font-black text-[#002455] uppercase tracking-wide">Ojo Izquierdo (OI)</p>
         <SPHPicker label="Esfera (SPH) — Ojo Izquierdo" value={s.sph_oi}
           onChange={v => set({ sph_oi: v })}
           placeholder="Graduación ojo izquierdo"
