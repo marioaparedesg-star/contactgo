@@ -101,7 +101,7 @@ function ToricWizard({ productName }: { productName: string }) {
     return (
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-bold text-blue-700">🔵 Lente fabricado a medida · 25–30 días</p>
+          <p className="text-xs font-bold text-blue-700">🔵 Lente fabricado a medida · 25–45 días</p>
           <RecetaGuiaTorico />
         </div>
         <p className="text-[11px] text-blue-600">Necesitas: <strong>Esfera</strong>, <strong>Cilindro</strong> y <strong>Eje</strong> de tu receta. Llena los campos de abajo.</p>

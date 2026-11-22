@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'article',
     title: 'Lentes de contacto para astigmatismo en RD 2026',
-    description: 'Guía completa de lentes tóricos para astigmatismo en República Dominicana. Precios, comparativas y entrega 24-48h.',
+    description: 'Guía completa de lentes tóricos para astigmatismo en República Dominicana. Precios, comparativas y entrega estimada de 25-45 días para los lentes tóricos.',
     url: 'https://www.contactgo.net/blog/lentes-contacto-para-astigmatismo',
     siteName: 'ContactGo',
     locale: 'es_DO',

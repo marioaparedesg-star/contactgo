@@ -177,7 +177,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Hay lentes diarios para astigmatismo en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El 1-DAY ACUVUE Moist for Astigmatism y el clariti 1 day toric son lentes diarios tóricos disponibles en ContactGo con entrega en 24-48h en toda República Dominicana.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El 1-DAY ACUVUE Moist for Astigmatism y el clariti 1 day toric son lentes diarios tóricos disponibles en ContactGo con entrega estimada de 25-45 días para lentes tóricos.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo usar lentes de color si tengo astigmatismo?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>

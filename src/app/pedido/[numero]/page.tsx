@@ -106,7 +106,7 @@ export default async function PedidoPage({ params }: { params: Promise<{ numero:
               {(order.order_items ?? []).map((item: any, idx: number) => {
                 const tipo  = item.product?.tipo ?? 'esferico'
                 const nomb  = item.nombre ?? item.product?.nombre ?? ''
-                const fecha = getRangoEntregaDesdeFecha(order.created_at, tipo, item.sph)
+                const fecha = getRangoEntregaDesdeFecha(order.created_at, tipo, item.sph, nomb)
                 const info  = getEntrega(tipo, nomb, item.sph)
                 return (
                   <div key={idx} className="flex gap-3 items-start pt-3 first:pt-0">

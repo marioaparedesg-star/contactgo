@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const VALORES = [
   { icon: '🏥', title: 'Especialización total', desc: 'Solo lentes de contacto. No somos una óptica genérica — somos expertos en una sola cosa y la hacemos muy bien.' },
   { icon: '✅', title: 'Certificados. Siempre.', desc: 'Cada caja llega sellada de fábrica. Nunca usados, nunca reempacados, nunca vencidos. Lo que ves es exactamente lo que recibes.' },
-  { icon: '🚀', title: 'Entrega según tu tipo de lente', desc: 'Lentes de color planos al día siguiente, esféricos en 24-48 horas, multifocales en 1-5 días y tóricos en 25-40 días .' },
+  { icon: '🚀', title: 'Entrega según tu tipo de lente', desc: 'Lentes de color planos al día siguiente, esféricos en 24-48 horas, multifocales en 1-5 días y tóricos en 25-45 días .' },
   { icon: '💬', title: 'Alguien que realmente sabe', desc: 'Cuando escribes a ContactGo, alguien que entiende de lentes te responde. No un bot, no un guión. Ayuda real para tu receta.' },
 ]
 

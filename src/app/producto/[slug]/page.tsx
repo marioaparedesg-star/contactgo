@@ -53,16 +53,19 @@ async function getProduct(slug: string) {
   // RPC get_stock_map: SELECT DISTINCT sph, cyl, axis, add_power, color
   //   WHERE product_id = X AND stock > 0
   // Sin limit implícito. Sin truncado. Sin order (no se necesita).
-  const { data: stockMap } = await sb.rpc('get_stock_map', {
-    p_product_id: data.id
-  })
+  // Los productos multifocales y tóricos se trabajan bajo pedido y el PDP
+  // no bloquea su compra por inventario de combinaciones. No descargar su mapa:
+  // puede contener cientos de miles de filas (Proclear Multifocal Toric llegó
+  // a 291,060), inflando el RSC payload y haciendo inestable la ficha móvil.
+  // Para las demás categorías se conserva la validación de stock por variante.
+  const requiereMapaStock = !['multifocal', 'torico'].includes(String(data.tipo ?? ''))
+  const { data: stockMap } = requiereMapaStock
+    ? await sb.rpc('get_stock_map', { p_product_id: data.id })
+    : { data: [] as any[] }
 
-  // tiene_variantes_reales: ¿hay al menos una combinación con stock?
-  // false → PDP muestra aviso "consultar por WhatsApp"
-  data.tiene_variantes_reales = !!(stockMap && stockMap.length > 0)
-
-  // stock_map: array de combos con stock para varianteSeleccionadaTieneStock()
-  // El Client Component lo usa SOLO para habilitar/deshabilitar el botón
+  data.tiene_variantes_reales = requiereMapaStock
+    ? !!(stockMap && stockMap.length > 0)
+    : true
   data.stock_map = stockMap ?? []
 
   // CRÍTICO: sph_disponibles, cyl_disponibles, axis_disponibles, add_disponibles
