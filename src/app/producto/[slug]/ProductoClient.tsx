@@ -715,7 +715,7 @@ export default function ProductoClient({ product, variants }: Props) {
       if (isMulti && !add)  { toast.error('Selecciona la adición (ADD) — el último número de tu receta multifocal'); return false }
     }
 
-    if (isAmbosDifer && !isColor) {
+    if (isAmbosDifer) {
       // Si el cliente selecciona ambos ojos con recetas distintas, cada ojo
       // debe llevar su propia esfera. No permitir una caja doble con un ojo vacío.
       if (!sph_od) {
@@ -724,6 +724,10 @@ export default function ProductoClient({ product, variants }: Props) {
       }
       if (!sph_oi) {
         toast.error('Selecciona la graduación del ojo izquierdo (OI)')
+        return false
+      }
+      if (isMulti && !add) {
+        toast.error('Selecciona la adición (ADD) del lente multifocal')
         return false
       }
       if (needsToric) {
