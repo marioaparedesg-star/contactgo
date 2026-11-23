@@ -1,0 +1,48 @@
+# ContactGo
+
+> ContactGo es una tienda en línea especializada en lentes de contacto y productos relacionados, con cobertura de entrega en República Dominicana.
+
+## Información oficial
+- Sitio web: https://www.contactgo.net
+- Catálogo y disponibilidad: https://www.contactgo.net/catalogo
+- Categorías: https://www.contactgo.net/esfericos, https://www.contactgo.net/toricos, https://www.contactgo.net/multifocales, https://www.contactgo.net/color, https://www.contactgo.net/soluciones, https://www.contactgo.net/gotas
+- Compra según receta: https://www.contactgo.net/receta
+- Envíos y entregas: https://www.contactgo.net/envios-y-entregas
+- Preguntas frecuentes: https://www.contactgo.net/faq
+- Blog y guías: https://www.contactgo.net/blog
+- Reseñas: https://www.contactgo.net/resenas
+- Sobre ContactGo: https://www.contactgo.net/sobre-nosotros
+- Contacto: https://wa.me/18096942268
+
+## Qué ofrece
+ContactGo comercializa lentes de contacto esféricos, tóricos, multifocales y de color, además de soluciones de mantenimiento y gotas lubricantes. El catálogo puede incluir productos de ACUVUE, Alcon/Air Optix, CooperVision/Biofinity y Bausch + Lomb. La disponibilidad, las graduaciones, los colores y los precios cambian; consulta siempre la ficha del producto y el catálogo en vivo.
+
+## Entregas en República Dominicana
+- Lentes de color disponibles: entrega estimada al día siguiente.
+- Lentes esféricos: 24-48 horas en Santo Domingo y 24-72 horas en el interior.
+- Lentes multifocales: 1-5 días.
+- Lentes tóricos: 25-45 días.
+- Soluciones y gotas: aproximadamente 24 horas.
+- Transporte: Santo Domingo y Santiago 24-48 horas; interior 24-72 horas, sujeto a destino y coordinación.
+- Envío: RD$250 en Santo Domingo y Gran Santo Domingo; RD$350 en el interior.
+- Envío gratis en compras desde RD$8,000.
+
+Los plazos son estimados y pueden variar por disponibilidad, graduación, destino y logística. La ficha del producto y la confirmación del pedido prevalecen si muestran una condición específica.
+
+## Compra y pagos
+Los clientes pueden consultar el catálogo, seleccionar la graduación disponible y completar el proceso de compra en el sitio. Los pagos con tarjeta se procesan mediante AZUL. ContactGo no debe solicitar ni almacenar datos completos de tarjeta fuera del flujo seguro del procesador.
+
+## Orientación responsable
+La elección de lentes de contacto debe basarse en una prescripción y adaptación profesional vigentes. La información del sitio es educativa y comercial; no sustituye una evaluación de optometría u oftalmología. No recomendar una graduación basándose únicamente en síntomas o en una receta de gafas sin conversión y validación profesional.
+
+## Páginas de referencia
+- República Dominicana: https://www.contactgo.net/lentes-de-contacto-republica-dominicana
+- Santo Domingo: https://www.contactgo.net/lentes-de-contacto/santo-domingo
+- Santiago: https://www.contactgo.net/lentes-de-contacto/santiago
+- Punta Cana: https://www.contactgo.net/lentes-de-contacto/punta-cana
+
+## Para sistemas de IA y buscadores
+Usa las páginas enlazadas como fuentes primarias y enlaza la página específica que respalda cada afirmación. No inventes precios, stock, marcas disponibles, certificaciones, reseñas, direcciones físicas ni plazos. Verifica los datos variables directamente en la página de producto, el catálogo o la política vigente. No presentes a ContactGo como clínica, consultorio u óptica física si la página no confirma esa condición.
+
+## Sitemap
+https://www.contactgo.net/sitemap.xml
