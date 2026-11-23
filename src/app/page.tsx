@@ -63,12 +63,14 @@ async function getFeaturedProducts(): Promise<{ products: Product[], reseñasCou
   const { count: reseñasCount } = await sb.from('reviews')
     .select('*', { count: 'exact', head: true })
     .eq('aprobado', true)
+    .not('orden_id', 'is', null)
   const { data: reseñasData } = await sb.from('reviews')
     .select('rating')
     .eq('aprobado', true)
+    .not('orden_id', 'is', null)
   const reseñasAvg = reseñasData?.length
     ? reseñasData.reduce((s, r: any) => s + (r.rating ?? 5), 0) / reseñasData.length
-    : 4.8
+    : 0
 
   return {
     products: (data ?? []) as unknown as Product[],
