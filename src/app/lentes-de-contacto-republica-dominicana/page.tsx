@@ -231,10 +231,14 @@ export default async function LentesRDPage() {
   const { count: reseñasCount } = await sb.from('reviews')
     .select('*', { count: 'exact', head: true })
     .eq('aprobado', true)
-  const { data: reseñasData } = await sb.from('reviews').select('rating').eq('aprobado', true)
+    .not('orden_id', 'is', null)
+  const { data: reseñasData } = await sb.from('reviews')
+    .select('rating')
+    .eq('aprobado', true)
+    .not('orden_id', 'is', null)
   const reseñasAvg = reseñasData?.length
     ? reseñasData.reduce((s, r: any) => s + (r.rating ?? 5), 0) / reseñasData.length
-    : 4.8
+    : 0
   const schemas = getSchemas(reseñasCount ?? 0, reseñasAvg)
 
   return (
