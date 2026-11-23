@@ -4,7 +4,6 @@
 // POST — recibir mensajes, auto-bienvenida, notificación admin
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
-import { createHmac, timingSafeEqual } from 'node:crypto'
 import { createClient } from '@supabase/supabase-js'
 import { fetchWA, WHATSAPP_AUTOMATIONS_ENABLED } from '@/lib/whatsapp'
 import { isValidMetaSignature } from '@/lib/whatsapp-webhook-security'
