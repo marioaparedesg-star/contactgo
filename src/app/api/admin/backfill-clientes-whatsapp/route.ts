@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'No se pudieron consultar los pedidos pendientes de vincular.' }, { status: 500 })
   }
 
-  const groups = new Map<string, typeof orders>()
+  const groups = new Map<string, NonNullable<typeof orders>>()
   for (const order of orders ?? []) {
     const email = String(order.cliente_email ?? '').trim().toLowerCase()
     if (!email) continue
