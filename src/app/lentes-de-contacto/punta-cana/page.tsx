@@ -68,7 +68,7 @@ export default async function Page() {
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Lentes de contacto con envío a Punta Cana</h2>
           <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Punta Cana</strong> y toda su región. No necesitas ir a una óptica — tus lentes llegan directamente donde estás en 48-72 horas.</p>
-          <p>Todos nuestros productos son directo del fabricante y certificados por las marcas fabricantes. El envío a Punta Cana tiene un costo de <strong>RD$350</strong>, gratis en pedidos superiores a RD$6,000.</p>
+          <p>Todos nuestros productos son directo del fabricante y certificados por las marcas fabricantes. El envío a Punta Cana tiene un costo de <strong>RD$350</strong>, gratis en compras desde RD$8,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto en minutos.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">Marcas más pedidas en Punta Cana</h3>
@@ -80,11 +80,6 @@ export default async function Page() {
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo recibir tus lentes en Punta Cana?</h3>
           <p>Entregamos directamente en tu domicilio, hotel o apartamento en Punta Cana. Nuestros mensajeros conocen todas las áreas turísticas incluyendo complejos hoteleros en Bávaro y Cap Cana. También puedes coordinar por WhatsApp para instrucciones específicas de entrega.</p>
           
-          <h3 className="font-bold text-gray-900 text-lg mt-6">Testimonio de cliente en Bávaro</h3>
-          <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
-            <p className="text-gray-700 text-sm italic">&quot;Vivo en Punta Cana y siempre era difícil conseguir mis Acuvue Oasys. ContactGo los envía sin problema. Recomendado 100%.&quot;</p>
-            <p className="text-xs text-gray-500 mt-2 font-semibold">— Roberto S., Bávaro ⭐⭐⭐⭐⭐</p>
-          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
             {[['🚚','Envío RD$350'],['📦','48-72 horas'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
