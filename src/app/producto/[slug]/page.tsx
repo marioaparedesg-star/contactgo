@@ -152,9 +152,16 @@ export default async function ProductoPage(
   const product = await getProduct(slug)
   if (!product) notFound()
 
+  // Reseñas con aprobación editorial y texto, asociadas al producto.
+  // La consulta trae solo las columnas reales de product_reviews; no contiene orden_id.
   const reviews = (product.reviews ?? []).filter((r: any) =>
-    r.orden_id != null    // SOLO reseñas vinculadas a un pedido real (verificables)
-    && (r.comment ?? '').trim() !== ''  // solo reviews con texto
+    r.approved === true
+    && r.verified === true
+    && typeof r.comment === 'string'
+    && r.comment.trim() !== ''
+    && Number.isInteger(Number(r.rating))
+    && Number(r.rating) >= 1
+    && Number(r.rating) <= 5
   )
   const avgRating = reviews.length
     ? reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length
@@ -219,36 +226,29 @@ export default async function ProductoPage(
     }
   }
 
-  // ── Agregar Reviews si existen ──────────────────────────────
+  // ── Agregar datos de reseñas reales ─────────────────────────
+  // reviewCount siempre corresponde al conjunto aprobado del que sale el promedio.
   if (reviews.length > 0) {
-    const reviewsConTexto = reviews.filter((r: any) => r.comment || r.texto || r.comentario)
-    const avgRatingReal = reviewsConTexto.length > 0
-      ? reviewsConTexto.reduce((s: number, r: any) => s + (r.rating ?? r.estrellas ?? 5), 0) / reviewsConTexto.length
-      : avgRating
+    const avgRatingReal = reviews.reduce((s: number, r: any) => s + Number(r.rating), 0) / reviews.length
     productSchema.aggregateRating = {
       "@type": "AggregateRating",
-      "ratingValue": String((avgRatingReal ?? 5).toFixed(1)), // siempre string
-      "reviewCount": String(reviews.length), // solo reviews aprobadas con texto                  // siempre string
-      "bestRating": "5",
-      "worstRating": "1"
+      "ratingValue": avgRatingReal.toFixed(1),
+      "reviewCount": reviews.length,
+      "bestRating": 5,
+      "worstRating": 1
     }
-    productSchema.review = reviews
-      .filter((r: any) => r.comment || r.texto || r.comentario) // solo reviews con texto
-      .slice(0, 5)
-      .map((r: any) => ({
-        "@type": "Review",
-        "author": { "@type": "Person", "name": r.user_name ?? r.nombre ?? "Cliente verificado" },
-        "datePublished": r.created_at?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": String(r.rating ?? r.estrellas ?? 5), // string, no number
-          "bestRating": "5",
-          "worstRating": "1"
-        },
-        "reviewBody": (r.comment ?? r.texto ?? r.comentario ?? "").trim()
-      }))
-    // Si después de filtrar no hay reviews con texto, eliminar el array
-    if (productSchema.review.length === 0) delete productSchema.review
+    productSchema.review = reviews.slice(0, 5).map((r: any) => ({
+      "@type": "Review",
+      "author": { "@type": "Person", "name": r.user_name ?? "Cliente verificado" },
+      "datePublished": r.created_at?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": Number(r.rating),
+        "bestRating": 5,
+        "worstRating": 1
+      },
+      "reviewBody": r.comment.trim()
+    }))
   }
 
   // ── Breadcrumb Schema ───────────────────────────────────────
