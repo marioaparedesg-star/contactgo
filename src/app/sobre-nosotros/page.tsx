@@ -31,7 +31,7 @@ const STATS = [
   { valor: '100%',   label: 'Especializados en lentes de contacto' },
   { valor: '30+',    label: 'Productos certificados' },
   { valor: '4',      label: 'Marcas de nivel mundial' },
-  { valor: '24-48h', label: 'Tiempo de entrega' },
+  { valor: 'Según producto', label: 'Plazo de entrega' },
 ]
 
 export default function SobreNosotrosPage() {
