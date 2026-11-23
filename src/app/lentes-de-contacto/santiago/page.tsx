@@ -44,7 +44,7 @@ export default async function Page() {
         </nav>
 
         <section className="bg-gradient-to-br from-teal-700 via-teal-500 to-blue-600 text-white py-14 px-4 text-center mt-2">
-          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$350 · 2-4 días</span>
+          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$350 · 24-72 horas</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Santiago</h1>
           <p className="text-white/90 text-lg max-w-xl mx-auto">Entrega a domicilio en Santiago y toda la región. ACUVUE, Biofinity, Air Optix directo del fabricante.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
@@ -67,14 +67,14 @@ export default async function Page() {
 
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Lentes de contacto con envío a Santiago</h2>
-          <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Santiago</strong> y toda su región. No necesitas ir a una óptica — tus lentes llegan directamente donde estás en 2-4 días.</p>
+          <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Santiago</strong> y toda su región. No necesitas ir a una óptica — tus lentes llegan directamente donde estás en 24-72 horas.</p>
           <p>Todos nuestros productos son directo del fabricante y certificados. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en compras desde RD$8,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto en minutos.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">Marcas más pedidas en Santiago</h3>
           <p>Los clientes de Santiago prefieren <strong>ACUVUE® OASYS®</strong> para uso diario intenso y <strong>Biofinity®</strong> para uso mensual. Los lentes de color <strong>FreshLook® Colorblends</strong> son muy populares entre jóvenes del Cibao.</p>
           
-          <h3 className="font-bold text-gray-900 text-lg mt-6">Sectores con entrega en 2-4 días</h3>
+          <h3 className="font-bold text-gray-900 text-lg mt-6">Sectores con cobertura de entrega</h3>
           <p>Cubrimos todos los sectores de Santiago: <strong>Centro de la Ciudad, Los Jardines, Pueblo Nuevo, Las Colinas, La Trinitaria, Bella Vista, Ensanche Bermúdez, Gurabo</strong> y todos los municipios del Gran Santiago incluyendo Licey al Medio, Tamboril, Villa González y Puñal.</p>
           
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo enviar tu receta desde Santiago?</h3>
@@ -86,7 +86,7 @@ export default async function Page() {
             <p className="text-xs text-gray-500 mt-2 font-semibold">— Carlos M., Santiago de los Caballeros ⭐⭐⭐⭐⭐</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[['🚚','Envío RD$350'],['📦','2-4 días'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
+            {[['🚚','Envío RD$350'],['📦','24-72 horas'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
                 <span className="text-xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>
