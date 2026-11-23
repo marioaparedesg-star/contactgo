@@ -84,14 +84,9 @@ async function authenticatePasskey(): Promise<boolean> {
 }
 
 async function passkeyAvailable(): Promise<boolean> {
-  try {
-    if (typeof window === 'undefined') return false
-    if (!window.PublicKeyCredential) return false
-    if (typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable !== 'function') return false
-    return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
-  } catch {
-    return false
-  }
+  // Disable the previous local-only demo: it never verified an assertion on the server
+  // and therefore must not be presented as a secure sign-in method.
+  return false
 }
 
 // ─── Componente principal ────────────────────────────────────────────────────
@@ -171,7 +166,7 @@ export default function CuentaPage() {
       .catch(() => setPasskeySupported(false))
 
     // 3. localStorage — con try-catch para Safari private mode
-    try { setPasskeyRegistered(!!localStorage.getItem(STORAGE_KEY)) } catch { setPasskeyRegistered(false) }
+    setPasskeyRegistered(false)
 
     // 4. Cargar datos del usuario
     const sb = createClient()
@@ -1439,7 +1434,7 @@ export default function CuentaPage() {
 
                   {!passkeySupported ? (
                     <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs text-gray-500">
-                      Tu dispositivo o navegador no soporta autenticación biométrica.
+                      El acceso biométrico está temporalmente deshabilitado hasta completar una autenticación segura en el servidor. Inicia sesión con tu correo y contraseña.
                     </div>
                   ) : passkeyRegistered ? (
                     <div className="space-y-2">
