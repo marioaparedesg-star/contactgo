@@ -100,16 +100,17 @@ return [
         { '@type': 'OfferCatalog', name: 'Gotas Lubricantes', url: 'https://www.contactgo.net/gotas' },
       ],
     },
-    // Antes hardcodeado a 4.7 / 94 sin relación con la tabla `reviews` real
-    // (y distinto del número que usaban page.tsx y resenas/page.tsx — la
-    // inconsistencia entre páginas que detectó Mario). Ahora viene de la
-    // misma fuente real en las 3 páginas: reviews.aprobado=true.
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: reseñasAvg.toFixed(1),
-      reviewCount: String(reseñasCount),
-      bestRating: '5',
-    },
+    // Solo se publica aggregateRating cuando hay reseñas reales verificadas.
+    // Sin reseñas aprobadas, no se envían ratings ni conteos inventados a Google.
+    ...(reseñasCount > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: reseñasAvg.toFixed(1),
+        reviewCount: reseñasCount,
+        bestRating: '5',
+        worstRating: '1',
+      },
+    } : {}),
     priceRange: 'RD$600 - RD$18,500',
     paymentAccepted: 'Credit Card, Debit Card',
     currenciesAccepted: 'DOP',
