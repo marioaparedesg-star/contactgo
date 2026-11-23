@@ -6,8 +6,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { fetchWA, WHATSAPP_AUTOMATIONS_ENABLED } from '@/lib/whatsapp'
+import { isValidMetaSignature } from '@/lib/whatsapp-webhook-security'
 
-const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN ?? 'contactgo_webhook_2026'
+export const runtime = 'nodejs'
+
+const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN ?? ''
 
 function getSb() {
   return createClient(
@@ -21,6 +24,7 @@ export async function GET(req: NextRequest) {
   const mode      = searchParams.get('hub.mode')
   const token     = searchParams.get('hub.verify_token')
   const challenge = searchParams.get('hub.challenge')
+  if (!VERIFY_TOKEN) return new NextResponse('Webhook verification is not configured', { status: 503 })
   if (mode === 'subscribe' && token === VERIFY_TOKEN) {
     return new NextResponse(challenge, { status: 200 })
   }
@@ -29,7 +33,18 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
+    const appSecret = process.env.WHATSAPP_APP_SECRET ?? process.env.META_APP_SECRET ?? ''
+    if (!appSecret) {
+      console.error('[WA/webhook] Falta WHATSAPP_APP_SECRET o META_APP_SECRET; se rechaza el evento.')
+      return NextResponse.json({ error: 'Webhook signature validation is not configured' }, { status: 503 })
+    }
+    const rawBody = await req.text()
+    const signature = req.headers.get('x-hub-signature-256')
+    if (!isValidMetaSignature(rawBody, signature, appSecret)) {
+      console.warn('[WA/webhook] Firma de Meta ausente o inválida.')
+      return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 401 })
+    }
+    const body = JSON.parse(rawBody)
     const entry = body?.entry?.[0]
     const changes = entry?.changes?.[0]?.value
     const sb = getSb()
@@ -376,6 +391,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true })
   } catch (err: any) {
     console.error('[WA/webhook]', err.message)
-    return NextResponse.json({ ok: true })
+    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 })
   }
 }

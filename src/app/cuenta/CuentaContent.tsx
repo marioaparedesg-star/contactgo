@@ -13,80 +13,12 @@ import {
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import { getRangoEntregaDesdeFecha } from '@/lib/delivery-times'
 import Link from 'next/link'
+import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 
-// ─── WebAuthn helpers ────────────────────────────────────────────────────────
-function bufferToBase64url(buf: ArrayBuffer): string {
-  return btoa(String.fromCharCode(...new Uint8Array(buf)))
-    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
-}
-function base64urlToBuffer(b64: string): ArrayBuffer {
-  const b = b64.replace(/-/g, '+').replace(/_/g, '/')
-  return Uint8Array.from(atob(b), c => c.charCodeAt(0)).buffer
-}
-
-const RP_ID   = 'contactgo.net'
-const RP_NAME = 'ContactGo'
-const STORAGE_KEY = 'cg_passkey_cred'
-
-async function registerPasskey(userId: string, userName: string): Promise<boolean> {
-  if (!window.PublicKeyCredential) return false
-  try {
-    const challenge = crypto.getRandomValues(new Uint8Array(32))
-    const cred = await navigator.credentials.create({
-      publicKey: {
-        challenge,
-        rp: { id: RP_ID, name: RP_NAME },
-        user: {
-          id: new TextEncoder().encode(userId),
-          name: userName,
-          displayName: userName,
-        },
-        pubKeyCredParams: [
-          { alg: -7,   type: 'public-key' },
-          { alg: -257, type: 'public-key' },
-        ],
-        authenticatorSelection: {
-          authenticatorAttachment: 'platform',
-          userVerification: 'required',
-          residentKey: 'preferred',
-        },
-        timeout: 60000,
-        attestation: 'none',
-      },
-    }) as PublicKeyCredential | null
-    if (!cred) return false
-    // Guardamos el credentialId en localStorage (en producción iría al backend)
-    try { localStorage.setItem(STORAGE_KEY, bufferToBase64url(cred.rawId)) } catch {}
-    return true
-  } catch { return false }
-}
-
-async function authenticatePasskey(): Promise<boolean> {
-  if (!window.PublicKeyCredential) return false
-  const storedId = (() => { try { return localStorage.getItem(STORAGE_KEY) } catch { return null } })()
-  if (!storedId) return false
-  try {
-    const challenge = crypto.getRandomValues(new Uint8Array(32))
-    const assertion = await navigator.credentials.get({
-      publicKey: {
-        challenge,
-        rpId: RP_ID,
-        allowCredentials: [{
-          id: base64urlToBuffer(storedId),
-          type: 'public-key',
-        }],
-        userVerification: 'required',
-        timeout: 60000,
-      },
-    }) as PublicKeyCredential | null
-    return !!assertion
-  } catch { return false }
-}
-
+// ─── Detección de autenticador biométrico del dispositivo ────────────────────
 async function passkeyAvailable(): Promise<boolean> {
   try {
-    if (typeof window === 'undefined') return false
-    if (!window.PublicKeyCredential) return false
+    if (typeof window === 'undefined' || !window.PublicKeyCredential) return false
     if (typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable !== 'function') return false
     return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
   } catch {
@@ -154,6 +86,16 @@ export default function CuentaPage() {
   const [passkeyRegistered, setPasskeyRegistered] = useState(false)
   const [passkeyMsg, setPasskeyMsg] = useState<{type:'ok'|'err', text:string}|null>(null)
   const [loadingPasskey, setLoadingPasskey] = useState(false)
+
+  useEffect(() => {
+    if (!user) { setPasskeyRegistered(false); return }
+    let active = true
+    fetch('/api/auth/passkey', { cache: 'no-store' })
+      .then(async (response) => response.ok ? response.json() : { passkeys: [] })
+      .then((data) => { if (active) setPasskeyRegistered(Array.isArray(data.passkeys) && data.passkeys.length > 0) })
+      .catch(() => { if (active) setPasskeyRegistered(false) })
+    return () => { active = false }
+  }, [user])
   const [reordering, setReordering] = useState<string|null>(null) // ← Movido aquí: ANTES de los early returns
 
   // ── useEffect principal — blindado contra crashes Safari iOS ────────────────
@@ -171,7 +113,7 @@ export default function CuentaPage() {
       .catch(() => setPasskeySupported(false))
 
     // 3. localStorage — con try-catch para Safari private mode
-    try { setPasskeyRegistered(!!localStorage.getItem(STORAGE_KEY)) } catch { setPasskeyRegistered(false) }
+    setPasskeyRegistered(false)
 
     // 4. Cargar datos del usuario
     const sb = createClient()
@@ -269,20 +211,36 @@ export default function CuentaPage() {
   const handleRegisterPasskey = async () => {
     setLoadingPasskey(true)
     setPasskeyMsg(null)
-    const ok = await registerPasskey(user.id, perfil?.nombre || user.email)
-    if (ok) {
+    try {
+      const optionsResponse = await fetch('/api/auth/passkey/register-options', { method: 'POST' })
+      const payload = await optionsResponse.json()
+      if (!optionsResponse.ok) throw new Error(payload.error || 'No se pudo iniciar el registro.')
+      const credential = await startRegistration({ optionsJSON: payload.options })
+      const verifyResponse = await fetch('/api/auth/passkey/register-verify', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ challengeId: payload.challengeId, response: credential }),
+      })
+      const result = await verifyResponse.json()
+      if (!verifyResponse.ok) throw new Error(result.error || 'No se pudo verificar el dispositivo.')
       setPasskeyRegistered(true)
-      setPasskeyMsg({ type:'ok', text:'Face ID / Huella registrado ✓' })
-    } else {
-      setPasskeyMsg({ type:'err', text:'No se pudo registrar. Asegúrate de que tu dispositivo soporte biometría.' })
-    }
-    setLoadingPasskey(false)
+      setPasskeyMsg({ type: 'ok', text: 'Face ID / huella registrado y verificado correctamente.' })
+    } catch (error: any) {
+      setPasskeyMsg({ type: 'err', text: error?.name === 'NotAllowedError' ? 'Registro cancelado en el dispositivo.' : (error?.message || 'No se pudo registrar el acceso biométrico.') })
+    } finally { setLoadingPasskey(false) }
   }
 
-  const handleRemovePasskey = () => {
-    try { localStorage.removeItem(STORAGE_KEY) } catch {}
-    setPasskeyRegistered(false)
-    setPasskeyMsg({ type:'ok', text:'Acceso biométrico eliminado.' })
+  const handleRemovePasskey = async () => {
+    setLoadingPasskey(true)
+    setPasskeyMsg(null)
+    try {
+      const response = await fetch('/api/auth/passkey', { method: 'DELETE' })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'No se pudo eliminar el acceso biométrico.')
+      setPasskeyRegistered(false)
+      setPasskeyMsg({ type: 'ok', text: 'Se eliminó el acceso biométrico de esta cuenta.' })
+    } catch (error: any) {
+      setPasskeyMsg({ type: 'err', text: error?.message || 'No se pudo eliminar el acceso biométrico.' })
+    } finally { setLoadingPasskey(false) }
   }
 
   const detectarDiagnostico = (f: typeof recetaForm) => {
@@ -479,16 +437,26 @@ export default function CuentaPage() {
 
   const loginConPasskey = async () => {
     setMsg('')
-    const ok = await authenticatePasskey()
-    if (ok) {
-      // Si pasa biometría, iniciamos sesión con el email guardado
-      const stored = (() => { try { return localStorage.getItem('cg_passkey_email') } catch { return null } })()
-      if (!stored) { setMsg('No hay sesión guardada para biometría. Inicia sesión normal primero.'); return }
-      // Usamos magic link silent o simplemente recargamos con la sesión activa
-      // En producción esto iría a un endpoint backend. Por ahora redirigimos.
-      window.location.href = '/cuenta'
-    } else {
-      setMsg('Autenticación biométrica fallida o cancelada.')
+    setLoading(true)
+    try {
+      const optionsResponse = await fetch('/api/auth/passkey/authentication-options', { method: 'POST' })
+      const optionsPayload = await optionsResponse.json()
+      if (!optionsResponse.ok) throw new Error(optionsPayload.error || 'No se pudo iniciar el acceso biométrico.')
+      const assertion = await startAuthentication({ optionsJSON: optionsPayload.options })
+      const verifyResponse = await fetch('/api/auth/passkey/authentication-verify', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ challengeId: optionsPayload.challengeId, response: assertion }),
+      })
+      const verifyPayload = await verifyResponse.json()
+      if (!verifyResponse.ok) throw new Error(verifyPayload.error || 'La autenticación biométrica no fue válida.')
+      const sb = createClient()
+      const { error } = await sb.auth.verifyOtp({ token_hash: verifyPayload.token_hash, type: 'magiclink' })
+      if (error) throw new Error('No se pudo crear la sesión. Intenta con tu contraseña.')
+      const next = new URLSearchParams(window.location.search).get('next')
+      window.location.href = next?.startsWith('/') && !next.startsWith('//') ? next : '/cuenta'
+    } catch (error: any) {
+      setMsg(error?.name === 'NotAllowedError' ? 'Acceso biométrico cancelado.' : (error?.message || 'No se pudo iniciar sesión con Face ID / huella.'))
+      setLoading(false)
     }
   }
 
@@ -663,7 +631,7 @@ export default function CuentaPage() {
           </form>
 
           {/* Face ID / Huella - solo en login */}
-          {modo === 'login' && passkeySupported && ((() => { try { return localStorage.getItem(STORAGE_KEY) } catch { return null } })()) && (
+          {modo === 'login' && passkeySupported && (
             <div className="mt-4">
               <div className="flex items-center gap-3 my-3">
                 <div className="flex-1 h-px bg-gray-200" />
@@ -1439,7 +1407,7 @@ export default function CuentaPage() {
 
                   {!passkeySupported ? (
                     <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs text-gray-500">
-                      Tu dispositivo o navegador no soporta autenticación biométrica.
+                      Este dispositivo no informa un autenticador biométrico compatible. Puedes iniciar sesión con tu correo y contraseña.
                     </div>
                   ) : passkeyRegistered ? (
                     <div className="space-y-2">
