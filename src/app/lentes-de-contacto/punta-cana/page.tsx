@@ -7,11 +7,11 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Punta Cana RD | Envío a Domicilio — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Punta Cana. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$350. Entrega en 48-72 horas.',
+  description: 'Compra lentes de contacto con entrega en Punta Cana. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$350. Transporte estimado de 24-72 horas; el plazo total depende del tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/punta-cana' },
   openGraph: {
     title: 'Lentes de Contacto en Punta Cana | ContactGo',
-    description: 'Entrega a domicilio en Punta Cana en 48-72 horas. Directo del fabricante.',
+    description: 'Transporte estimado de 24-72 horas; el plazo total depende del tipo de lente. Directo del fabricante.',
     url: 'https://www.contactgo.net/lentes-de-contacto/punta-cana',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-              { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'Entregamos en 48-72 horas hábiles en Punta Cana, Bávaro, Cap Cana y toda la provincia La Altagracia.' },
+              { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'El transporte hacia Punta Cana se estima en 24-72 horas. El plazo total depende del producto: color disponible al día siguiente, esféricos 24-72 horas en el interior, multifocales 1-5 días y tóricos 25-45 días.' },
               { q: '¿Cuánto cuesta el envío a Punta Cana?', a: 'El envío a Punta Cana tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en Bávaro y Cap Cana?', a: 'Sí. Cubrimos todo el corredor turístico: Punta Cana, Bávaro, Cap Cana, El Cortecito, Uvero Alto y zonas aledañas.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
@@ -75,7 +75,7 @@ export default async function Page() {
           <p>En la zona turística, los lentes de color son muy populares: <strong>AIR OPTIX® COLORS</strong> y <strong>FreshLook® Colorblends</strong>. Para lentes correctivos, <strong>ACUVUE® MOIST®</strong> diarios son los favoritos por su comodidad en climas cálidos y soleados.</p>
           
           <h3 className="font-bold text-gray-900 text-lg mt-6">Cobertura en la región Este</h3>
-          <p>Hacemos entregas en toda la región: <strong>Bávaro, Punta Cana, Cap Cana, El Cortecito, Cabeza de Toro, Uvero Alto, Higüey, La Romana, San Pedro de Macorís</strong> y zonas hoteleras. Pedidos realizados antes de las 3pm salen el mismo día.</p>
+          <p>Hacemos entregas en toda la región: <strong>Bávaro, Punta Cana, Cap Cana, El Cortecito, Cabeza de Toro, Uvero Alto, Higüey, La Romana, San Pedro de Macorís</strong> y zonas hoteleras. </p>
           
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo recibir tus lentes en Punta Cana?</h3>
           <p>Entregamos directamente en tu domicilio, hotel o apartamento en Punta Cana. Nuestros mensajeros conocen todas las áreas turísticas incluyendo complejos hoteleros en Bávaro y Cap Cana. También puedes coordinar por WhatsApp para instrucciones específicas de entrega.</p>
