@@ -13,6 +13,8 @@ export async function POST(req: NextRequest) {
     const admin = getPasskeyAdmin()
     const { data: stored, error: lookupError } = await admin.from('user_passkeys').select('id, user_id, credential_id, public_key, counter, transports').eq('credential_id', body.response.id).maybeSingle()
     if (lookupError || !stored) return NextResponse.json({ error: 'No encontramos una passkey asociada. Inicia sesión con tu contraseña y regístrala.' }, { status: 401 })
+    const expectedUserHandle = Buffer.from(stored.user_id, 'utf8').toString('base64url')
+    if (body.response.response?.userHandle !== expectedUserHandle) return NextResponse.json({ error: 'La passkey no corresponde a la cuenta registrada.' }, { status: 401 })
     const verification = await verifyAuthenticationResponse({
       response: body.response as AuthenticationResponseJSON, expectedChallenge, expectedOrigin: config.origins, expectedRPID: config.rpID,
       credential: { id: stored.credential_id, publicKey: Buffer.from(stored.public_key, 'base64url'), counter: Number(stored.counter), transports: stored.transports || [] },
@@ -27,6 +29,6 @@ export async function POST(req: NextRequest) {
     const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({ type: 'magiclink', email })
     const tokenHash = linkData?.properties?.hashed_token
     if (linkError || !tokenHash) throw new Error('Supabase no pudo emitir el token de sesión')
-    return NextResponse.json({ token_hash: tokenHash, type: 'magiclink' })
+    return NextResponse.json({ token_hash: tokenHash, type: 'magiclink' }, { headers: { 'Cache-Control': 'no-store, max-age=0' } })
   } catch (error) { console.error('[passkey/authentication-verify]', error); return NextResponse.json({ error: 'No se pudo completar el inicio de sesión biométrico.' }, { status: 500 }) }
 }
