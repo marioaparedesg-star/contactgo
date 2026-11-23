@@ -52,13 +52,6 @@ return [
     url: 'https://www.contactgo.net',
     logo: 'https://www.contactgo.net/logo.png',
     description: 'Tienda especializada exclusivamente en lentes de contacto en República Dominicana. Marcas originales con entrega a todo el país.',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Av. Winston Churchill No. 95, Torre Empresarial Blue Mall, Piso 23',
-      addressLocality: 'Santo Domingo',
-      addressRegion: 'Distrito Nacional',
-      addressCountry: 'DO',
-    },
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '+1-809-694-2268',
@@ -100,17 +93,6 @@ return [
         { '@type': 'OfferCatalog', name: 'Gotas Lubricantes', url: 'https://www.contactgo.net/gotas' },
       ],
     },
-    // Solo se publica aggregateRating cuando hay reseñas reales verificadas.
-    // Sin reseñas aprobadas, no se envían ratings ni conteos inventados a Google.
-    ...(reseñasCount > 0 ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: reseñasAvg.toFixed(1),
-        reviewCount: reseñasCount,
-        bestRating: '5',
-        worstRating: '1',
-      },
-    } : {}),
     priceRange: 'RD$600 - RD$18,500',
     paymentAccepted: 'Credit Card, Debit Card',
     currenciesAccepted: 'DOP',
@@ -228,18 +210,17 @@ const ciudadesData = [
 
 export default async function LentesRDPage() {
   const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
-  const { count: reseñasCount } = await sb.from('reviews')
-    .select('*', { count: 'exact', head: true })
-    .eq('aprobado', true)
-    .not('orden_id', 'is', null)
-  const { data: reseñasData } = await sb.from('reviews')
-    .select('rating')
-    .eq('aprobado', true)
-    .not('orden_id', 'is', null)
+  const { data: reseñasData, count: reseñasCount } = await sb.from('product_reviews')
+    .select('rating', { count: 'exact' })
+    .eq('approved', true)
+    .eq('verified', true)
+    .gte('rating', 1)
+    .lte('rating', 5)
+    .not('comment', 'is', null)
   const reseñasAvg = reseñasData?.length
-    ? reseñasData.reduce((s, r: any) => s + (r.rating ?? 5), 0) / reseñasData.length
+    ? reseñasData.reduce((s, r: any) => s + Number(r.rating), 0) / reseñasData.length
     : 0
-  const schemas = getSchemas(reseñasCount ?? 0, reseñasAvg)
+  const schemas = getSchemas()
 
   return (
     <>
