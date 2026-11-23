@@ -55,12 +55,7 @@ async function getFeaturedProducts(): Promise<{ products: Product[], reseñasCou
     preciosHero[p.slug] = Number(p.precio)
   }
 
-  // Reseñas reales — antes esto era un número fabricado con una fórmula
-  // (pedidos_falsos * 6 + 4200) que no tenía ninguna relación con la
-  // realidad. Ahora se cuenta directo de la tabla `reviews` (aprobadas).
-  // revalidate=60 en esta página evita el problema de rendering dinámico
-  // que la versión anterior intentaba resolver hardcodeando el número.
-  // Reseñas de productos: solo aprobadas y verificadas.
+  // Reseñas reales de productos: solo aprobadas y verificadas.
   const { data: reseñasData, count: reseñasCount } = await sb.from('product_reviews')
     .select('rating', { count: 'exact' })
     .eq('approved', true)
