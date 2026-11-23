@@ -7,11 +7,11 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santiago RD | Envío a Domicilio — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$350. Entrega en 2-4 días.',
+  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$350. Transporte estimado de 24-72 horas; el plazo total depende del tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santiago' },
   openGraph: {
     title: 'Lentes de Contacto en Santiago | ContactGo',
-    description: 'Entrega a domicilio en Santiago en 24-48 horas. Directo del fabricante.',
+    description: 'Transporte estimado de 24-72 horas; el plazo total depende del tipo de lente. Directo del fabricante.',
     url: 'https://www.contactgo.net/lentes-de-contacto/santiago',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-              { q: '¿Cuánto tarda el envío a Santiago?', a: 'Entregamos en 2-4 días hábiles en Santiago de los Caballeros. Pedidos realizados antes de las 3pm salen el mismo día.' },
+              { q: '¿Cuánto tarda el envío a Santiago?', a: 'El transporte hacia Santiago se estima en 24-72 horas. El plazo total depende del producto: esféricos 24-72 horas en el interior, multifocales 1-5 días y tóricos 25-45 días.' },
               { q: '¿Cuánto cuesta el envío a Santiago?', a: 'El envío a Santiago tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en toda la región del Cibao?', a: 'Sí, cubrimos Santiago, Villa González, Licey al Medio, Tamboril, Moca, La Vega y otros municipios del Cibao.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
