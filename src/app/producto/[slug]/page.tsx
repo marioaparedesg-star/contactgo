@@ -108,7 +108,7 @@ export async function generateMetadata(
   const url = `https://www.contactgo.net/producto/${slug}`
   const desc = data.descripcion
     ? data.descripcion.slice(0, 155)
-    : `${data.nombre} — Compra ${data.nombre} en ContactGo República Dominicana. Entrega en 24-48h. ${data.marca ? 'Marca: ' + data.marca + '.' : ''}`
+    : `${data.nombre} — Compra ${data.nombre} en ContactGo República Dominicana. Consulta el plazo de entrega según el tipo de lente. ${data.marca ? 'Marca: ' + data.marca + '.' : ''}`
 
   return {
     title: `${data.nombre} | ContactGo República Dominicana`,
