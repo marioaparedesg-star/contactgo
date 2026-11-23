@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santiago' },
   openGraph: {
     title: 'Lentes de Contacto en Santiago | ContactGo',
-    description: 'Transporte estimado de 24-72 horas; el plazo total depende del tipo de lente. Directo del fabricante.',
+    description: 'Transporte estimado de 24-48 horas; el plazo total depende del tipo de lente. Directo del fabricante.',
     url: 'https://www.contactgo.net/lentes-de-contacto/santiago',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -80,11 +80,6 @@ export default async function Page() {
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo enviar tu receta desde Santiago?</h3>
           <p>Tienes tres opciones desde Santiago: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta en línea</a> con los valores de tu prescripción. (2) Envíanos una foto clara de tu receta por WhatsApp al (809) 694-2268. (3) Indica los valores de Esfera, Cilindro y Eje al hacer tu pedido. Tu optómetra de confianza en Santiago puede darte estos datos.</p>
           
-          <h3 className="font-bold text-gray-900 text-lg mt-6">Lo que dicen nuestros clientes en Santiago</h3>
-          <div className="bg-gray-50 rounded-2xl p-4 border-l-4 border-primary-500">
-            <p className="text-gray-700 text-sm italic">&quot;Primera vez comprando lentes online y quedé impresionado. El proceso fue muy sencillo y el empaque llegó perfecto a mi casa en Santiago.&quot;</p>
-            <p className="text-xs text-gray-500 mt-2 font-semibold">— Carlos M., Santiago de los Caballeros ⭐⭐⭐⭐⭐</p>
-          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
             {[['🚚','Envío RD$350'],['📦','Transporte 24-48 h'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
