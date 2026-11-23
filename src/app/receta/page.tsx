@@ -164,12 +164,9 @@ export default function RecetaPage() {
     const conv = convertGlassesToContacts(rx, rxSource ?? 'contacto', Number(vertexDistanceMm)); setResult(conv); setCartAdded(null)
     // La ADD de gafas no se traduce directamente a la potencia/clase multifocal de un lente de contacto.
     // Se evita recomendar modelos multifocales automáticamente sin adaptación profesional.
-    let lista: any[] = []
-    if (conv.requiresClinicalReview) {
-      setProducts([]); setAlternativasRevision([]); setProductsOd([]); setProductsOi([]); setCasoMixto(null); setTotalDisp(0); setLoadingP(false)
-    } else {
-      lista = await cargarProductos(conv)
-    }
+    // La revisión clínica no debe bloquear la búsqueda: mostramos los modelos
+    // técnicamente cercanos y exigimos validación profesional antes de comprar.
+    const lista: any[] = await cargarProductos(conv)
     trackEvento('calcular', { tipo_receta: conv.tipo, complejidad: getComplejidad(conv).nivel })
     setTimeout(() => document.getElementById('resultado')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
     return lista
