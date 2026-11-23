@@ -6,12 +6,12 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
-  title: 'Lentes de Contacto en Santo Domingo RD | Envío 24-48h — ContactGo',
-  description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$250. Entrega en 24-48 horas.',
+  title: 'Lentes de Contacto en Santo Domingo RD — ContactGo',
+  description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity y Air Optix. Envío RD$250. Transporte estimado de 24-48 horas; el plazo total depende del tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo' },
   openGraph: {
     title: 'Lentes de Contacto en Santo Domingo | ContactGo',
-    description: 'Entrega a domicilio en Santo Domingo en 24-48h. Directo del fabricante.',
+    description: 'Transporte estimado de 24-48 horas en Santo Domingo. El plazo total depende del tipo de lente.',
     url: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -44,7 +44,7 @@ export default async function Page() {
         </nav>
 
         <section className="bg-gradient-to-br from-teal-600 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
-          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$250 · 24-48h</span>
+          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$250 · transporte 24-48h</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Santo Domingo</h1>
           <p className="text-primary-100 text-lg max-w-xl mx-auto">Entrega a domicilio en toda el área metropolitana. ACUVUE, Biofinity, Air Optix y más — directo del fabricante.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
@@ -85,7 +85,7 @@ export default async function Page() {
           <p>Tienes tres opciones: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta</a> con los valores de tu prescripción. (2) Envíanos foto de tu receta por WhatsApp al (809) 694-2268.</p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[['🚚','Envío RD$250'],['📦','Entrega 24-48h'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
+            {[['🚚','Envío RD$250'],['📦','Transporte 24-48h'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
                 <span className="text-xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>
