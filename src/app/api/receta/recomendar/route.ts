@@ -11,7 +11,17 @@ function nearestAxis(values: unknown, target: number): number | null {
     const d = Math.abs(a - b)
     return Math.min(d, 180 - d)
   }
-  return axes.sort((a, b) => circularDistance(a, target) - circularDistance(b, target) || a - b)[0]
+  const nearest = axes.sort((a, b) => circularDistance(a, target) - circularDistance(b, target) || a - b)[0]
+  // Un eje a más de 10° ya no se considera una aproximación útil.
+  return circularDistance(nearest, target) <= 10 ? nearest : null
+}
+
+function nearestSphere(values: unknown, target: number): number | null {
+  if (!Array.isArray(values)) return null
+  const powers = [...new Set(values.map(Number).filter(v => Number.isFinite(v)))]
+  if (!powers.length) return null
+  const nearest = powers.sort((a, b) => Math.abs(a - target) - Math.abs(b - target) || Math.abs(a) - Math.abs(b))[0]
+  return Math.abs(nearest - target) <= 0.5 ? nearest : null
 }
 
 function nearestCylinder(values: unknown, target: number): number | null {
@@ -59,20 +69,33 @@ export async function POST(req: NextRequest) {
     // Cada producto se evalúa con SUS ejes reales de fabricación. Se selecciona
     // el eje disponible más cercano (distancia circular 1°–180°); SPH y CYL
     // siguen siendo coincidencias exactas con los parámetros publicados.
+    const alternativasRevision: any[] = []
     const evaluados = tipo === 'torico' || tipo === 'multifocal_torico'
       ? catalogo.flatMap((producto: any) => {
+          const odSph = nearestSphere(producto.sph_disponibles, receta.od.sph)
+          const oiSph = nearestSphere(producto.sph_disponibles, receta.oi.sph)
           const odAxis = receta.od.axis == null ? null : nearestAxis(producto.axis_disponibles, receta.od.axis)
           const oiAxis = receta.oi.axis == null ? null : nearestAxis(producto.axis_disponibles, receta.oi.axis)
           const odCyl = nearestCylinder(producto.cyl_disponibles, receta.od.cyl)
           const oiCyl = nearestCylinder(producto.cyl_disponibles, receta.oi.cyl)
-          if (odAxis == null || oiAxis == null || odCyl == null || oiCyl == null) return []
+          if (odSph == null || oiSph == null || odAxis == null || oiAxis == null || odCyl == null || oiCyl == null) return []
           const recetaFabricable = {
             ...receta,
-            od: { ...receta.od, cyl: odCyl, axis: odAxis },
-            oi: { ...receta.oi, cyl: oiCyl, axis: oiAxis },
+            od: { ...receta.od, sph: odSph, cyl: odCyl, axis: odAxis },
+            oi: { ...receta.oi, sph: oiSph, cyl: oiCyl, axis: oiAxis },
           }
           const evaluacion = evaluarReceta(recetaFabricable, [producto])
-          if (evaluacion.ok === false || evaluacion.productos.length === 0) return []
+          if (evaluacion.ok === false || evaluacion.productos.length === 0) {
+            // Alternativa cercana: nunca se ofrece como compra directa.
+            alternativasRevision.push({
+              ...producto,
+              parametros_revision: {
+                od: { sph: odSph, cyl_disponible: odCyl, axis_disponible: odAxis },
+                oi: { sph: oiSph, cyl_disponible: oiCyl, axis_disponible: oiAxis },
+              },
+            })
+            return []
+          }
           return [{
             ...producto,
             receta_ajustada: {
@@ -81,7 +104,7 @@ export async function POST(req: NextRequest) {
             },
             ejes_ajustados: odAxis !== receta.od.axis || oiAxis !== receta.oi.axis,
             cilindros_ajustados: odCyl !== receta.od.cyl || oiCyl !== receta.oi.cyl,
-            requiere_revision: odCyl !== receta.od.cyl || oiCyl !== receta.oi.cyl || odAxis !== receta.od.axis || oiAxis !== receta.oi.axis,
+            requiere_revision: odSph !== receta.od.sph || oiSph !== receta.oi.sph || odCyl !== receta.od.cyl || oiCyl !== receta.oi.cyl || odAxis !== receta.od.axis || oiAxis !== receta.oi.axis,
           }]
         }).sort((a: any, b: any) => Number(a.precio) - Number(b.precio))
       : (() => {
@@ -94,6 +117,7 @@ export async function POST(req: NextRequest) {
       : evaluados
     return NextResponse.json({
       productos: seleccion,
+      alternativas_revision: alternativasRevision.sort((a: any, b: any) => Number(a.precio) - Number(b.precio)).slice(0, 3),
       total: evaluados.length,
       sin_parametros: catalogo.filter(p => !Array.isArray(p.sph_disponibles) || p.sph_disponibles.length === 0).length,
       nota: seleccion.some((p: any) => p.requiere_revision)
