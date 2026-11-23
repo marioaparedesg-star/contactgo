@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-  { q: '¿Cuánto tarda el envío en Santo Domingo?', a: 'Entregamos en 24-48 horas hábiles en toda el área metropolitana de Santo Domingo, incluyendo Santo Domingo Este, Norte y Oeste. Si ordenas antes de las 3pm de lunes a sábado, tu pedido sale el mismo día.' },
+  { q: '¿Cuánto tarda el envío en Santo Domingo?', a: 'El transporte hacia Santo Domingo se estima en 24-48 horas. El plazo total depende del producto: color disponible al día siguiente, esféricos 24-48 horas, multifocales 1-5 días y tóricos 25-45 días.' },
   { q: '¿Cuánto cuesta el envío a Santo Domingo?', a: 'El envío a Santo Domingo tiene un costo fijo de RD$250. Es gratuito en compras desde RD$8,000.' },
   { q: '¿Hacen entregas en todos los sectores de Santo Domingo?', a: 'Sí, cubrimos todos los sectores: Piantini, Naco, Evaristo Morales, Los Prados, Bella Vista, Gazcue, Los Cacicazgos, La Esperilla, El Millón, Los Alcarrizos, Herrera, Villa Mella y más.' },
   { q: '¿Qué métodos de pago aceptan en Santo Domingo?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
@@ -69,7 +69,7 @@ export default async function Page() {
         {/* Contenido SEO */}
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Compra lentes de contacto en Santo Domingo sin salir de casa</h2>
-          <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega a domicilio en toda el área metropolitana de <strong>Santo Domingo</strong>. Olvidarte de ir a la óptica — tus lentes llegan directamente donde estás en 24-48 horas.</p>
+          <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega a domicilio en toda el área metropolitana de <strong>Santo Domingo</strong>. El plazo estimado depende del producto; el transporte en la capital suele tomar 24-48 horas.</p>
           <p>Todos nuestros productos son directo del fabricante, con garantía de autenticidad. El envío a Santo Domingo tiene un costo fijo de <strong>RD$250</strong> y es gratuito en compras desde RD$8,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto según tu SPH, CYL y AXIS en minutos.</p>
 
