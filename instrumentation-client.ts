@@ -13,9 +13,9 @@ Sentry.init({
   integrations: [
     Sentry.replayIntegration({
       // Privacidad: ocultar datos sensibles del cliente
-      maskAllText: false,        // permitir texto general (mejora debugging)
+      maskAllText: true,         // ocultar nombres, correos, direcciones, recetas y demás texto personal
       maskAllInputs: true,       // ocultar TODOS los inputs (recetas, datos personales)
-      blockAllMedia: false,      // permitir imágenes de productos
+      blockAllMedia: true,       // evitar grabar fotos/documentos que pueda subir el cliente
       // Selectores adicionales para ocultar datos médicos/personales
       mask: [
         '.sph-value',
@@ -35,5 +35,6 @@ Sentry.init({
     'ResizeObserver loop limit exceeded',
     'ChunkLoadError',
     'Non-Error promise rejection captured',
+    'Blocked a frame with origin',
   ],
 })
