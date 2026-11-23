@@ -83,7 +83,7 @@ export default async function Page() {
           "name": "Lentes de contacto esfericos en República Dominicana",
           "description": "Lista de lentes de contacto esfericos disponibles en ContactGo RD",
           "url": "https://www.contactgo.net/esfericos",
-          "itemListElement": products.map((product, index) => ({
+          "itemListElement": (products ?? []).map((product, index) => ({
             "@type": "ListItem",
             "position": index + 1,
             "item": {
