@@ -67,7 +67,7 @@ export default async function Page() {
           "name": "Lentes de contacto multifocales en República Dominicana",
           "description": "Lista de lentes de contacto multifocales disponibles en ContactGo RD",
           "url": "https://www.contactgo.net/multifocales",
-          "itemListElement": products.map((product, index) => ({
+          "itemListElement": (products ?? []).map((product, index) => ({
             "@type": "ListItem",
             "position": index + 1,
             "item": {
