@@ -85,8 +85,9 @@ export async function POST(req: NextRequest) {
             oi: { ...receta.oi, sph: oiSph, cyl: oiCyl, axis: oiAxis },
           }
           const evaluacion = evaluarReceta(recetaFabricable, [producto])
-          if (evaluacion.ok === false || evaluacion.productos.length === 0) {
-            // Alternativa cercana: nunca se ofrece como compra directa.
+          if (evaluacion.ok === false || evaluacion.productos.length === 0 || odSph !== receta.od.sph || oiSph !== receta.oi.sph) {
+            // Cualquier cambio de esfera queda solo como alternativa para validación,
+            // nunca como producto de compra directa.
             alternativasRevision.push({
               ...producto,
               parametros_revision: {
