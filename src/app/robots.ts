@@ -2,12 +2,11 @@ import type { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
   const privatePaths = ['/admin', '/M1Alexander', '/checkout', '/cart', '/cuenta', '/confirmacion', '/recibo', '/azul-retorno', '/api/']
-
   return {
     rules: [
       { userAgent: '*', allow: '/', disallow: privatePaths },
       { userAgent: ['Googlebot', 'Googlebot-Image'], allow: ['/api/feed/google', '/'], disallow: privatePaths },
-      // Permitir rastreo de búsqueda y respuestas iniciadas por usuarios; no autorizar entrenamiento general.
+      // Crawlers de búsqueda y respuestas: permitir indexación; excluir crawlers de entrenamiento general.
       { userAgent: 'OAI-SearchBot', allow: '/', disallow: privatePaths },
       { userAgent: 'ChatGPT-User', allow: '/', disallow: privatePaths },
       { userAgent: 'GPTBot', disallow: '/' },
