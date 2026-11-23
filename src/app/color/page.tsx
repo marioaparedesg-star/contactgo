@@ -71,7 +71,7 @@ export default async function Page() {
           "name": "Lentes de contacto color en República Dominicana",
           "description": "Lista de lentes de contacto color disponibles en ContactGo RD",
           "url": "https://www.contactgo.net/color",
-          "itemListElement": products.map((product, index) => ({
+          "itemListElement": (products ?? []).map((product, index) => ({
             "@type": "ListItem",
             "position": index + 1,
             "item": {
