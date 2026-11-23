@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santiago RD | Envío a Domicilio — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$350. Transporte estimado de 24-72 horas; el plazo total depende del tipo de lente.',
+  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$350. Transporte estimado de 24-48 horas; el plazo total depende del tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santiago' },
   openGraph: {
     title: 'Lentes de Contacto en Santiago | ContactGo',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-              { q: '¿Cuánto tarda el envío a Santiago?', a: 'El transporte hacia Santiago se estima en 24-72 horas. El plazo total depende del producto: esféricos 24-72 horas en el interior, multifocales 1-5 días y tóricos 25-45 días.' },
+              { q: '¿Cuánto tarda el envío a Santiago?', a: 'El transporte hacia Santiago se estima en 24-48 horas. El plazo total depende del producto: esféricos 24-48 horas en Santo Domingo y 24-72 horas en el interior, multifocales 1-5 días y tóricos 25-45 días.' },
               { q: '¿Cuánto cuesta el envío a Santiago?', a: 'El envío a Santiago tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en toda la región del Cibao?', a: 'Sí, cubrimos Santiago, Villa González, Licey al Medio, Tamboril, Moca, La Vega y otros municipios del Cibao.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
@@ -44,7 +44,7 @@ export default async function Page() {
         </nav>
 
         <section className="bg-gradient-to-br from-teal-700 via-teal-500 to-blue-600 text-white py-14 px-4 text-center mt-2">
-          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$350 · 24-72 horas</span>
+          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$350 · transporte 24-48 horas</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Santiago</h1>
           <p className="text-white/90 text-lg max-w-xl mx-auto">Entrega a domicilio en Santiago y toda la región. ACUVUE, Biofinity, Air Optix directo del fabricante.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
@@ -67,7 +67,7 @@ export default async function Page() {
 
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Lentes de contacto con envío a Santiago</h2>
-          <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Santiago</strong> y toda su región. No necesitas ir a una óptica — tus lentes llegan directamente donde estás en 24-72 horas.</p>
+          <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Santiago</strong> y toda su región. No necesitas ir a una óptica — el transporte de tus lentes hasta Santiago suele tomar 24-48 horas; el plazo total depende del producto.</p>
           <p>Todos nuestros productos son directo del fabricante y certificados. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en compras desde RD$8,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto en minutos.</p>
 
@@ -86,7 +86,7 @@ export default async function Page() {
             <p className="text-xs text-gray-500 mt-2 font-semibold">— Carlos M., Santiago de los Caballeros ⭐⭐⭐⭐⭐</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[['🚚','Envío RD$350'],['📦','24-72 horas'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
+            {[['🚚','Envío RD$350'],['📦','Transporte 24-48 h'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
                 <span className="text-xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>
