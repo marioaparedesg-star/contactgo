@@ -54,18 +54,22 @@ export default async function ResenasPage() {
     ? resenas.reduce((s: number, r: any) => s + (r.rating ?? 5), 0) / resenas.length
     : 4.8
 
+  // No se añade AggregateRating cuando no existen reseñas reales aprobadas.
+  // Nunca utilizar reseñas de muestra ni un fallback como reviewCount.
   const ratingSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "ContactGo — Lentes de Contacto República Dominicana",
     "brand": { "@type": "Brand", "name": "ContactGo" },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": avgRating.toFixed(1),
-      "reviewCount": totalReal > 0 ? totalReal : displayResenas.length,
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    ...(totalReal > 0 ? {
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": avgRating.toFixed(1),
+        "reviewCount": totalReal,
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    } : {})
   }
 
   return (
