@@ -25,6 +25,7 @@ export default async function Page() {
   const { data: soluciones } = await sb.from('products').select('*').eq('activo', true).eq('tipo', 'solucion').order('nombre')
   const { data: gotas } = await sb.from('products').select('*').eq('activo', true).eq('tipo', 'gota').order('nombre')
   // Mantenemos listas separadas para mostrarlas en secciones distintas
+  const productosCuidado = [...(soluciones ?? []), ...(gotas ?? [])]
 
   return (
     <>
@@ -105,7 +106,7 @@ export default async function Page() {
           "name": "Lentes de contacto soluciones en República Dominicana",
           "description": "Lista de lentes de contacto soluciones disponibles en ContactGo RD",
           "url": "https://www.contactgo.net/soluciones",
-          "itemListElement": (products ?? []).map((product, index) => ({
+          "itemListElement": productosCuidado.map((product, index) => ({
             "@type": "ListItem",
             "position": index + 1,
             "item": {
