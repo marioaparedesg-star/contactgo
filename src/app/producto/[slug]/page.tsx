@@ -204,25 +204,7 @@ export default async function ProductoPage(
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       "seller": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net" },
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": { "@type": "MonetaryAmount", "value": "200", "currency": "DOP" },
-        "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "DO" },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": { "@type": "QuantitativeValue", "minValue": "0", "maxValue": "1", "unitCode": "DAY" },
-          "transitTime": { "@type": "QuantitativeValue", "minValue": String(entregaInfo.dias_min), "maxValue": String(entregaInfo.dias_max), "unitCode": "DAY" }
-        }
-      },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "DO",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": "2",
-        "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn",
-        "merchantReturnLink": "https://www.contactgo.net/devoluciones"
-      }
+
     }
   }
 

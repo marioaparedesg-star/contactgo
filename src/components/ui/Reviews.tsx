@@ -16,6 +16,7 @@ export default function Reviews({ productId, initialReviews }: {
   const [form, setForm]         = useState({ nombre: '', ciudad: '', rating: 5, texto: '' })
   const [enviado, setEnviado]   = useState(false)
   const [sending, setSending]   = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
   const sb = createClient()
 
   // Sin fallback a 'reviews'. Si initialReviews llegó vacío, mostramos estado vacío.
@@ -34,22 +35,29 @@ export default function Reviews({ productId, initialReviews }: {
   }))
 
   const enviar = async () => {
-    if (!form.nombre || !form.texto) return
+    if (!form.nombre.trim() || !form.texto.trim() || sending) return
     setSending(true)
-    // Escribe en product_reviews (fuente oficial)
-    const { data } = await sb.from('product_reviews').insert({
-      product_id: productId,
-      user_name:  form.nombre,
-      rating:     form.rating,
-      comment:    form.texto,
-      ciudad:     form.ciudad || null,
-      verified:   false,
-      approved:   true,
-    }).select().single()
-    setSending(false)
-    setEnviado(true)
-    setShowForm(false)
-    if (data) setReviews(r => [data, ...r])
+    setErrorMsg('')
+    try {
+      const { data: { user } } = await sb.auth.getUser()
+      const { error } = await sb.from('product_reviews').insert({
+        product_id: productId,
+        user_id: user?.id ?? null,
+        user_name: form.nombre.trim(),
+        rating: form.rating,
+        comment: form.texto.trim(),
+        ciudad: form.ciudad.trim() || null,
+        verified: false,
+        approved: false,
+      })
+      if (error) throw error
+      setEnviado(true)
+      setShowForm(false)
+    } catch {
+      setErrorMsg('No pudimos recibir tu reseña. Inténtalo nuevamente.')
+    } finally {
+      setSending(false)
+    }
   }
 
   const Stars = ({ n, size = 'sm' }: { n: number; size?: 'sm' | 'lg' }) => (
@@ -74,6 +82,7 @@ export default function Reviews({ productId, initialReviews }: {
   if (reviews.length === 0 && !showForm) return (
     <section className="max-w-screen-xl mx-auto px-4 pb-10">
       <div className="border-t border-gray-100 pt-10">
+        {enviado && <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-5 text-sm text-green-700 font-semibold">Gracias. Recibimos tu reseña y será revisada antes de publicarse.</div>}
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-bold text-gray-900 text-lg">Reseñas</h3>
           <button onClick={() => setShowForm(true)}
@@ -90,6 +99,7 @@ export default function Reviews({ productId, initialReviews }: {
           <div className="mt-5 bg-white border border-primary-200 rounded-2xl p-5 shadow-sm">
             <p className="font-bold text-gray-900 mb-4">Tu opinión</p>
             <div className="flex gap-1 mb-4">{[1,2,3,4,5].map(v => <InteractiveStar key={v} val={v} />)}</div>
+            {errorMsg && <p role="alert" className="text-sm text-red-600 mb-3">{errorMsg}</p>}
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <input value={form.nombre} onChange={e => setForm(f => ({...f, nombre: e.target.value}))}
@@ -187,7 +197,7 @@ export default function Reviews({ productId, initialReviews }: {
 
         {enviado && (
           <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-5 text-sm text-green-700 font-semibold">
-            ✓ ¡Gracias! Tu reseña fue publicada.
+            Gracias. Recibimos tu reseña y será revisada antes de publicarse.
           </div>
         )}
 

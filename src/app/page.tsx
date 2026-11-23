@@ -60,16 +60,16 @@ async function getFeaturedProducts(): Promise<{ products: Product[], reseñasCou
   // realidad. Ahora se cuenta directo de la tabla `reviews` (aprobadas).
   // revalidate=60 en esta página evita el problema de rendering dinámico
   // que la versión anterior intentaba resolver hardcodeando el número.
-  const { count: reseñasCount } = await sb.from('reviews')
-    .select('*', { count: 'exact', head: true })
-    .eq('aprobado', true)
-    .not('orden_id', 'is', null)
-  const { data: reseñasData } = await sb.from('reviews')
-    .select('rating')
-    .eq('aprobado', true)
-    .not('orden_id', 'is', null)
+  // Reseñas de productos: solo aprobadas y verificadas.
+  const { data: reseñasData, count: reseñasCount } = await sb.from('product_reviews')
+    .select('rating', { count: 'exact' })
+    .eq('approved', true)
+    .eq('verified', true)
+    .gte('rating', 1)
+    .lte('rating', 5)
+    .not('comment', 'is', null)
   const reseñasAvg = reseñasData?.length
-    ? reseñasData.reduce((s, r: any) => s + (r.rating ?? 5), 0) / reseñasData.length
+    ? reseñasData.reduce((s, r: any) => s + Number(r.rating), 0) / reseñasData.length
     : 0
 
   return {
@@ -85,10 +85,10 @@ const SCHEMA_ORG = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago, y 2-4 días en el resto del país del país." } },
-    { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todos los productos de ContactGo son directo del fabricante, directo del fabricante y con garantía de autenticidad. Nunca vendemos imitaciones." } },
+    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y 24-72 horas en el interior." } },
+    { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Trabajamos con productos de marcas reconocidas y distribuidores autorizados. Nunca vendemos imitaciones." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
-    { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
+    { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesadas por AZUL, plataforma de Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
   ]
 }
 
@@ -260,7 +260,7 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
-                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 2-4 días',    color: 'text-blue-600',   bg: 'bg-blue-50' },
+                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 24-72 horas',    color: 'text-blue-600',   bg: 'bg-blue-50' },
                 { icon: Package,  title: 'Marcas originales',   desc: 'Distribuidores autorizados de cada marca',        color: 'text-green-600',  bg: 'bg-green-50' },
                 { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-amber-500', bg: 'bg-amber-50' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-purple-600', bg: 'bg-purple-50' },
