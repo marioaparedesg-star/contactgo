@@ -4,7 +4,7 @@ import { BLOG_SLUGS } from '@/lib/blogSlugs.generated'
 export default async function sitemap() {
   const sb = await createServerSupabaseClient()
 
-  const { data: products } = await sb.from('products').select('slug, id, updated_at').eq('activo', true)
+  const { data: products } = await sb.from('products').select('slug, id, updated_at').eq('activo', true).or('archivado.is.null,archivado.eq.false')
 
   // Blog: los artículos son carpetas de rutas estáticas de Next.js (no hay
   // tabla blog_posts en la DB). BLOG_SLUGS se genera automáticamente antes
