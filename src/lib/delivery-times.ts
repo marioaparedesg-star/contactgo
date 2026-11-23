@@ -45,7 +45,7 @@ const T_24_72H: EntregaInfo = {
 
 const T_ESFERICO: EntregaInfo = {
   etiqueta: 'Entrega en 24-48 horas',
-  detalle:  'Tiempo estimado de preparación y disponibilidad para lentes esféricos: 24 a 48 horas. El transporte se calcula según el destino: Santo Domingo y Santiago 24-48 horas, resto del país, 2-4 días.',
+  detalle:  'Tiempo estimado de preparación y disponibilidad para lentes esféricos: 24 a 48 horas. El transporte se calcula según el destino: Santo Domingo y Santiago 24-48 horas, resto del país, 24-72 horas.',
   dias_min: 1, dias_max: 2,
   especial: false,
   icono:    '🚀',
