@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes Esféricos RD | Miopía e Hipermetropía — ContactGo',
-  description: 'Compra lentes de contacto esféricos en República Dominicana. ACUVUE Moist, Air Optix, Biofinity para miopía e hipermetropía. Envío 24-48h a todo el país.',
+  description: 'Compra lentes de contacto esféricos en República Dominicana. ACUVUE Moist, Air Optix, Biofinity para miopía e hipermetropía. Entrega estimada: 24-48h en Santo Domingo y 24-72h en el interior.',
   alternates: { canonical: 'https://www.contactgo.net/esfericos' },
   openGraph: { title: 'Lentes Esféricos RD | Miopía e Hipermetropía', description: 'Los mejores lentes esféricos con envío a domicilio en RD.', url: 'https://www.contactgo.net/esfericos', locale: 'es_DO', siteName: 'ContactGo', type: 'website' },
 }
@@ -37,7 +37,7 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-blue-700 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para miopía e hipermetropía</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto Esféricos en RD</h1>
-          <p className="text-blue-100 text-lg max-w-xl mx-auto">ACUVUE, Air Optix, Biofinity y más. directo del fabricante, entrega en 24-48h en toda República Dominicana.</p>
+          <p className="text-blue-100 text-lg max-w-xl mx-auto">ACUVUE, Air Optix, Biofinity y más. directo del fabricante. Entrega estimada: 24-48h en Santo Domingo y 24-72h en el interior.</p>
         </section>
 
         <section className="max-w-7xl mx-auto px-4 py-10">
@@ -83,7 +83,22 @@ export default async function Page() {
           "name": "Lentes de contacto esfericos en República Dominicana",
           "description": "Lista de lentes de contacto esfericos disponibles en ContactGo RD",
           "url": "https://www.contactgo.net/esfericos",
-          "itemListElement": []
+          "itemListElement": (products ?? []).map((product, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Product",
+              "name": product.nombre,
+              "url": `https://www.contactgo.net/producto/${product.slug || product.id}`,
+              ...(product.imagen_url ? { "image": product.imagen_url } : {}),
+              "offers": {
+                "@type": "Offer",
+                "priceCurrency": "DOP",
+                "price": String(product.precio ?? 0),
+                "availability": Number(product.stock ?? 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+              }
+            }
+          }))
         })}} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

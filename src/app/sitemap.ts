@@ -50,7 +50,6 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/aviso-legal',                                  priority: 0.40, changeFrequency: 'yearly'  },
   ].map(p => ({
     url: p.url,
-    lastModified: new Date('2026-05-28'),
     changeFrequency: p.changeFrequency as any,
     priority: p.priority,
   }))
@@ -64,7 +63,6 @@ export default async function sitemap() {
 
   const blogUrls = blogSlugs.map((slug) => ({
     url: `https://www.contactgo.net/blog/${slug}`,
-    lastModified: now,
     changeFrequency: 'monthly' as const,
     priority: 0.70,
   }))

@@ -464,7 +464,7 @@ export default function ProductoClient({ product, variants }: Props) {
       return sphMatch && cylMatch && axisMatch && addMatch && colorMatch && (v.stock ?? 1) > 0
     })
   }
-  // Tóricos (25-40 días) y multifocales (1-5 días) tienen plazos de entrega especiales
+  // Tóricos (25-45 días) y multifocales (1-5 días) tienen plazos de entrega especiales
   // → siempre mostramos "Agregar". El cliente gestiona el inventario desde el admin.
   // Esféricos y color: mantienen la validación de stock real.
   // Color: ahora también se valida el stock. Si color+SPH agotado → sinVariante=true → botón 'Agotado'
@@ -1270,7 +1270,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     <p className="text-[10px] text-gray-400 font-medium inline-flex items-center gap-1">
                       <AzulLogo size="xs" /> Pago seguro con AZUL
                     </p>
-                    <p className="text-[10px] text-gray-400 font-medium">🚚 Transporte: Santo Domingo 24-48h · Interior 2-4 días</p>
+                    <p className="text-[10px] text-gray-400 font-medium">🚚 Transporte: Santo Domingo y Santiago 24-48h · Interior 24-72h</p>
                   </div>
                 </div>
               </div>

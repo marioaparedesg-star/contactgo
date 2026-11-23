@@ -124,7 +124,7 @@ return [
         name: '¿Cuánto cuestan los lentes de contacto en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Los precios varían según la marca y tipo: lentes esféricos desde RD$3,200, tóricos desde RD$4,000, multifocales desde RD$5,400, lentes de color desde RD$2,500, soluciones desde RD$750 y gotas lubricantes desde RD$600. En ContactGo mantenemos precios competitivos como referencia del mercado dominicano.',
+          text: 'Los precios dependen de la marca, el tipo de lente, la graduación y la presentación. Consulta el catálogo de ContactGo para ver el precio vigente y la disponibilidad de cada producto.',
         },
       },
       {
@@ -432,7 +432,7 @@ export default async function LentesRDPage() {
                 },
                 {
                   q: '¿Cuánto cuestan los lentes de contacto en República Dominicana?',
-                  a: 'Los precios varían por marca y tipo: esféricos desde RD$3,200, tóricos desde RD$4,000, multifocales desde RD$5,400, de color desde RD$2,500. Soluciones multipropósito desde RD$750 y gotas lubricantes desde RD$600.',
+                  a: 'Los precios dependen de la marca, el tipo de lente, la graduación y la presentación. Consulta el catálogo para ver los precios y la disponibilidad vigentes.',
                 },
                 {
                   q: '¿Cuánto tarda la entrega en toda República Dominicana?',

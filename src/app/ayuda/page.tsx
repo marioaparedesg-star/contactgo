@@ -29,7 +29,7 @@ const SECCIONES = [
     color: 'bg-blue-50 border-blue-100', badge: 'bg-blue-100 text-blue-700',
     items: [
       { q: '¿Cuánto tarda en llegar mi pedido?', a: 'Entrega estimada: Santo Domingo, 24-48 horas; interior, 24-72 horas. Lentes de color, al día siguiente; esféricos, 24-48 horas en Santo Domingo y 24-72 horas en el interior; multifocales, 1-5 días; tóricos, 25-45 días; soluciones y gotas, 24 horas.' },
-      { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos (para astigmatismo) se elaboran según la graduación exacta de cada paciente. Su entrega estimada es de 25 a 40 días. Te notificaremos por WhatsApp sobre el estado de tu pedido.' },
+      { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos (para astigmatismo) se elaboran según la graduación exacta de cada paciente. Su entrega estimada es de 25 a 45 días. Te notificaremos por WhatsApp sobre el estado de tu pedido.' },
       { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Gran Santo Domingo: RD$250. Interior del país: RD$350. Pedidos desde RD$8,000: envío GRATIS.' },
       { q: '¿Cómo sé dónde está mi pedido?', a: 'Recibirás un mensaje de WhatsApp con tu número de seguimiento. También puedes ver el estado en Mi cuenta → Pedidos.' },
       { q: '¿Entregan en toda la República Dominicana?', a: 'Sí, hacemos envíos a todo el país. Zonas remotas pueden tomar 1-2 días adicionales.' },

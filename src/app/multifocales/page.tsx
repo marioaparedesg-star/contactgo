@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes Multifocales para Presbicia RD — ContactGo',
-  description: 'Lentes multifocales para presbicia y vista cansada en República Dominicana. ACUVUE Oasys Presbyopia, AIR OPTIX Multifocal, Proclear Multifocal. Envío 24-48h.',
+  description: 'Lentes multifocales para presbicia y vista cansada en República Dominicana. ACUVUE Oasys Presbyopia, AIR OPTIX Multifocal, Proclear Multifocal. Entrega estimada de 1 a 5 días.',
   alternates: { canonical: 'https://www.contactgo.net/multifocales' },
   openGraph: {
     title: 'Lentes Multifocales para Presbicia RD',
@@ -67,7 +67,22 @@ export default async function Page() {
           "name": "Lentes de contacto multifocales en República Dominicana",
           "description": "Lista de lentes de contacto multifocales disponibles en ContactGo RD",
           "url": "https://www.contactgo.net/multifocales",
-          "itemListElement": []
+          "itemListElement": (products ?? []).map((product, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Product",
+              "name": product.nombre,
+              "url": `https://www.contactgo.net/producto/${product.slug || product.id}`,
+              ...(product.imagen_url ? { "image": product.imagen_url } : {}),
+              "offers": {
+                "@type": "Offer",
+                "priceCurrency": "DOP",
+                "price": String(product.precio ?? 0),
+                "availability": Number(product.stock ?? 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+              }
+            }
+          }))
         })}} />
 
         {/* FAQPage Schema */}
