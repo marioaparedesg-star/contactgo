@@ -74,6 +74,7 @@ export async function POST(req: NextRequest) {
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY)
+  const authUsers: any[] = (authList as any)?.users ?? []
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
   const from = process.env.RESEND_FROM ?? 'ContactGo <notifications@contactgo.net>'
   let linkedOrders = 0
@@ -89,7 +90,7 @@ export async function POST(req: NextRequest) {
         .select('id, nombre, role').eq('email', email).eq('role', 'customer').maybeSingle()
       if (profileLookupError) throw new Error('No se pudo verificar el perfil')
 
-      let authUser = authList.users.find(u => u.email?.trim().toLowerCase() === email) ?? null
+      let authUser: any = authUsers.find(u => u.email?.trim().toLowerCase() === email) ?? null
       let userId = existingProfile?.id ?? authUser?.id ?? null
       let newlyCreated = false
 
