@@ -85,10 +85,10 @@ const SCHEMA_ORG = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y Santiago, y 2-4 días en el resto del país del país." } },
-    { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todos los productos de ContactGo son directo del fabricante, directo del fabricante y con garantía de autenticidad. Nunca vendemos imitaciones." } },
+    { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y 24-72 horas en el interior." } },
+    { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Trabajamos con productos de marcas reconocidas y distribuidores autorizados. Nunca vendemos imitaciones." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
-    { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
+    { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesadas por AZUL, plataforma de Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
   ]
 }
 
