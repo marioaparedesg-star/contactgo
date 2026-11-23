@@ -91,7 +91,24 @@ export async function middleware(req: NextRequest) {
       const loginUrl = new URL('/M1Alexander/login', req.url)
       loginUrl.searchParams.set('next', pathname)
       const redirect = NextResponse.redirect(loginUrl)
-      supabaseResponse.cookies.getAll().forEach(cookie => redirect.cookies.set(cookie))
+
+      // Un refresh token revocado/eliminado no se puede renovar. Limpiar
+      // únicamente las cookies de sesión Supabase para evitar bucles de 400
+      // y permitir que el administrador vuelva a iniciar sesión.
+      const invalidRefreshToken =
+        authError?.code === 'refresh_token_not_found' ||
+        authError?.message?.toLowerCase().includes('invalid refresh token')
+
+      if (invalidRefreshToken) {
+        for (const cookie of req.cookies.getAll()) {
+          if (cookie.name.startsWith('sb-') && cookie.name.includes('-auth-token')) {
+            redirect.cookies.delete(cookie.name)
+          }
+        }
+      } else {
+        supabaseResponse.cookies.getAll().forEach(cookie => redirect.cookies.set(cookie))
+      }
+
       redirect.headers.set('Cache-Control', 'no-store')
       redirect.headers.set('X-Robots-Tag', 'noindex, nofollow')
       return redirect
