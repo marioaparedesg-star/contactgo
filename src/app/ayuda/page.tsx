@@ -15,7 +15,7 @@ const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "¿Cuánto tarda en llegar mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Santo Domingo: 24-48 horas. Interior del país: 24-72 horas." } },
+    { "@type": "Question", "name": "¿Cuánto tarda en llegar mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "El transporte tarda 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el resto del país. El plazo total depende del tipo de lente y su disponibilidad." } },
     { "@type": "Question", "name": "¿Cuánto tiempo toma adaptarse a los lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "La mayoría de personas se adaptan en 1-2 semanas. Durante los primeros días es normal sentir algo de molestia leve. Si el malestar persiste más de 2 semanas, consulta a tu optometrista." } },
     { "@type": "Question", "name": "¿Qué hago si siento los lentes secos?", "acceptedAnswer": { "@type": "Answer", "text": "Usa gotas lubricantes compatibles con lentes de contacto (como Refresh, Systane o Blink). Asegúrate de no usar lentes más horas de lo recomendado y de hidratarte bien." } },
     { "@type": "Question", "name": "¿Cuándo debo dejar de usar lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "Deja de usarlos si tienes ojo rojo, dolor, visión borrosa repentina, secreción o infección. Consulta a tu médico antes de volver a usarlos." } },
