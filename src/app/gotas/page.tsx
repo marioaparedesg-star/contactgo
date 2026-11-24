@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: 'Gotas para Ojos en República Dominicana — ContactGo',
   description: 'Gotas lubricantes y artificiales para ojos en RD. Refresh, Systane, Manzanilla Sophia. Para ojos secos, lentes de contacto y alergia. Envío 24h.',
   alternates: { canonical: 'https://www.contactgo.net/gotas' },
+  robots: { index: false, follow: true },
   openGraph: {
     title: 'Gotas para Ojos en RD | Refresh, Systane — ContactGo',
     description: 'Gotas lubricantes y artificiales para ojos en República Dominicana. Refresh Tears, Manzanilla Sophia, Systane Ultra. Alivio inmediato para ojos secos.',
