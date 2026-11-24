@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 
 type Consent = { level: 'all' | 'essential'; ts: number }
 
@@ -82,7 +81,6 @@ function loadOptionalVendors() {
   w.fbq('track', 'PageView')
 }
 export default function CookieConsent() {
-  const pathname = usePathname()
   const [show, setShow] = useState(false)
 
   useEffect(() => {
