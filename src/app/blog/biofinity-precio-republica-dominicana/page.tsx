@@ -202,7 +202,7 @@ export default function Page() {
                     ['Dk/t (oxígeno)', '160 ⭐', '147'],
                     ['Agua', '48%', '38%'],
                     ['Precio en RD (6u)', 'RD$3,650', 'RD$3,500'],
-                    ['Precio por día', '~RD$52 ⭐', '~RD$92'],
+                    ['Precio por día', '~RD$41 ⭐', '~RD$83'],
                     ['Disponible tórico', '✅ Biofinity Toric', '✅ Oasys Astig'],
                     ['Disponible multifocal', '✅ Biofinity Multi', '✅ Oasys Multi'],
                   ].map(([c, bio, acu], i) => (
