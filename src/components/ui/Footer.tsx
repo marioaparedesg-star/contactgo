@@ -59,7 +59,6 @@ export default function Footer() {
                 ['Multifocales', '/multifocales'],
                 ['Color', '/color'],
                 ['Soluciones', '/soluciones'],
-                ['Gotas', '/catalogo?tipo=gota'],
               ].map(([l, h]) => (
                 <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
               ))}
