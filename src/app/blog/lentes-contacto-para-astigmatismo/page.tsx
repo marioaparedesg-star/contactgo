@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes de contacto para astigmatismo en RD — Precios 2026',
-  description: 'Los mejores lentes tóricos para astigmatismo en República Dominicana. Precios actualizados, guía de marcas y entrega en 24-48h. ACUVUE, Biofinity, Air Optix.',
+  description: 'Los mejores lentes tóricos para astigmatismo en República Dominicana. Precios actualizados, guía de marcas y entrega estimada de 25 a 45 días. ACUVUE, Biofinity, Air Optix.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-para-astigmatismo' },
   openGraph: {
     type: 'article',
@@ -54,9 +54,9 @@ export default function Page() {
             "@type": "FAQPage",
             "mainEntity": [
               { "@type": "Question", "name": "¿Qué son los lentes de contacto para astigmatismo?", "acceptedAnswer": { "@type": "Answer", "text": "Son lentes tóricos, un tipo especial de lentes de contacto diseñados para corregir el astigmatismo. Tienen una forma diferente a los lentes esféricos y un sistema de estabilización que los mantiene en la orientación correcta sobre el ojo." } },
-              { "@type": "Question", "name": "¿Cuánto cuestan los lentes para astigmatismo en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo los lentes tóricos van desde RD$4,000 (BL Ultra Astigmatismo) hasta RD$12,000 (Biofinity XR para alta graduación). Los más populares como ACUVUE Oasys for Astigmatism y Biofinity Toric están en RD$5,750-6,250." } },
+              { "@type": "Question", "name": "¿Cuánto cuestan los lentes para astigmatismo en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo los lentes tóricos van desde RD$4,500 (BL Ultra Astigmatismo) hasta RD$12,000 (Biofinity XR para alta graduación). Los más populares como ACUVUE Oasys for Astigmatism y Biofinity Toric están en RD$4,800-6,250." } },
               { "@type": "Question", "name": "¿Cómo sé si tengo astigmatismo en mi receta?", "acceptedAnswer": { "@type": "Answer", "text": "Mira tu receta: si tiene un valor CYL (cilindro) diferente de 0 y un valor AXIS (eje), tienes astigmatismo y necesitas lentes tóricos. Si solo tienes SPH, tus lentes son esféricos normales." } },
-              { "@type": "Question", "name": "¿Los lentes para astigmatismo son más caros?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, generalmente cuestan entre 20-40% más que los esféricos equivalentes, porque su diseño y fabricación es más compleja. Pero en ContactGo los precios son competitivos con entrega incluida en 24-48h." } }
+              { "@type": "Question", "name": "¿Los lentes para astigmatismo son más caros?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, generalmente cuestan entre 20-40% más que los esféricos equivalentes, porque su diseño y fabricación es más compleja. Pero en ContactGo los precios son competitivos con plazo estimado de 25 a 45 días; el envío se calcula por separado." } }
             ]
           },
           {
@@ -114,7 +114,7 @@ export default function Page() {
         {/* Quick answer */}
         <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-5 mb-8">
           <p className="text-xs font-bold text-purple-700 uppercase tracking-wide mb-2">Respuesta directa</p>
-          <p className="text-sm text-gray-700">Los lentes de contacto para astigmatismo en República Dominicana van desde <strong className="text-purple-700">RD$4,000 hasta RD$12,000</strong> según la marca y el tipo. Los más populares son ACUVUE Oasys for Astigmatism (RD$6,250), Biofinity Toric (RD$5,750) y BL Ultra Astigmatismo (RD$4,000). Todos disponibles con entrega en 24-48h.</p>
+          <p className="text-sm text-gray-700">Los lentes de contacto para astigmatismo en República Dominicana van desde <strong className="text-purple-700">RD$4,500 hasta RD$12,000</strong> según la marca y el tipo. Los más populares son ACUVUE Oasys for Astigmatism (RD$5,800), Biofinity Toric (RD$4,800) y BL Ultra Astigmatismo (RD$4,500). Todos disponibles con entrega estimada de 25 a 45 días.</p>
           <Link href="/toricos" className="mt-3 inline-flex items-center gap-2 bg-purple-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-purple-700 transition-colors text-sm">
             Ver todos los tóricos disponibles →
           </Link>
@@ -122,7 +122,7 @@ export default function Page() {
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
 
-          <p>Si en tu receta aparece un valor <strong>CYL (cilindro)</strong> y un valor <strong>AXIS (eje)</strong>, tienes astigmatismo y necesitas <strong>lentes de contacto tóricos</strong>. En República Dominicana, el astigmatismo es una de las condiciones visuales más comunes — y la buena noticia es que hoy existen excelentes opciones disponibles con entrega a domicilio en 24-48 horas.</p>
+          <p>Si en tu receta aparece un valor <strong>CYL (cilindro)</strong> y un valor <strong>AXIS (eje)</strong>, tienes astigmatismo y necesitas <strong>lentes de contacto tóricos</strong>. En República Dominicana, el astigmatismo es una de las condiciones visuales más comunes — y la buena noticia es que hoy existen excelentes opciones disponibles con entrega estimada de 25 a 45 días.</p>
 
           {/* Diagnóstico rápido */}
           <section>
@@ -192,7 +192,7 @@ export default function Page() {
                 {
                   perfil: 'Quiero el más cómodo (uso intensivo/pantallas)',
                   recomendacion: 'ACUVUE Oasys for Astigmatism',
-                  precio: 'RD$6,250',
+                  precio: 'RD$5,800',
                   razon: 'HYDRACLEAR Plus + estabilización BLINK STABILIZED. El más prescrito por especialistas.',
                   link: '/producto/acuvue-oasys-for-astigmatism-lentes-toricos-dominicana',
                   color: 'border-red-200 bg-red-50',
@@ -200,7 +200,7 @@ export default function Page() {
                 {
                   perfil: 'Quiero el mejor precio mensual',
                   recomendacion: 'BL ULTRA for Astigmatism',
-                  precio: 'RD$4,000',
+                  precio: 'RD$4,500',
                   razon: 'El más económico de la gama premium. Solo RD$44/día de uso.',
                   link: '/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana',
                   color: 'border-amber-200 bg-amber-50',
@@ -208,7 +208,7 @@ export default function Page() {
                 {
                   perfil: 'Prefiero lentes diarios (sin estuche ni solución)',
                   recomendacion: 'clariti 1 day toric o 1-DAY ACUVUE Moist Astig',
-                  precio: 'RD$5,750 – 6,250',
+                  precio: 'RD$4,800 – 6,250',
                   razon: 'Máxima higiene. Cada día estrenas lentes. Ideal para personas con alergias.',
                   link: '/toricos',
                   color: 'border-green-200 bg-green-50',
@@ -292,7 +292,7 @@ export default function Page() {
               {[
                 { q: '¿Los lentes tóricos se ponen diferente?', a: 'El proceso es el mismo que para cualquier lente blando. Sin embargo, los tóricos tienen marcadores de orientación que te ayudan a verificar que están en la posición correcta. Al principio pueden tardar un poco más en acomodarse, pero rápidamente lo dominarás.' },
                 { q: '¿Puedo usar lentes esféricos si tengo astigmatismo leve?', a: 'Si el astigmatismo es muy leve (CYL de -0.25 o -0.50), algunos especialistas permiten usar lentes esféricos. Sin embargo, para corregir correctamente el astigmatismo y evitar fatiga visual, siempre es mejor usar el lente tórico indicado en tu receta.' },
-                { q: '¿Los lentes tóricos son más caros?', a: 'Sí, generalmente cuestan entre 20-40% más que los esféricos equivalentes. En ContactGo los tóricos van desde RD$4,000 (BL Ultra Astig) hasta RD$12,000 (Biofinity XR para alta graduación).' },
+                { q: '¿Los lentes tóricos son más caros?', a: 'Sí, generalmente cuestan entre 20-40% más que los esféricos equivalentes. En ContactGo los tóricos van desde RD$4,500 (BL Ultra Astig) hasta RD$12,000 (Biofinity XR para alta graduación).' },
                 { q: '¿Se puede ver bien con lentes tóricos desde el primer día?', a: 'La mayoría de personas ve bien desde el primer momento. Algunos usuarios necesitan unos pocos días de adaptación para que la estabilización del lente funcione de manera óptima con sus movimientos oculares específicos.' },
                 { q: '¿Qué pasa si el lente tórico rota en mi ojo?', a: 'Los lentes tóricos modernos tienen sistemas de estabilización avanzados (prism ballast, doble fina zona, BLINK STABILIZED) que corrigen automáticamente la rotación al parpadear. Si notas visión inestable o fluctuante, consulta a tu especialista — puede que necesites ajustar los parámetros.' },
               ].map(({ q, a }, i) => (
@@ -340,9 +340,9 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes para astigmatismo — entrega en 24-48h</h3>
-          <p className="text-sm text-gray-600 mb-1">7 modelos tóricos disponibles. directo del fabricante. Toda la RD.</p>
-          <p className="text-xs text-gray-400 mb-4">Desde RD$4,000 · Pago seguro AZUL · Sin salir de casa</p>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes para astigmatismo — entrega estimada de 25 a 45 días</h3>
+          <p className="text-sm text-gray-600 mb-1">7 modelos tóricos disponibles según catálogo. Trabajamos con canales de distribución autorizados y enviamos a toda RD.</p>
+          <p className="text-xs text-gray-400 mb-4">Desde RD$4,500 · Pago seguro AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/toricos" className="inline-flex items-center justify-center gap-2 bg-purple-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors text-sm">
               Ver todos los tóricos →
@@ -357,8 +357,8 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda República Dominicana</h3>
-          <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes tóricos con entrega estimada de 25 a 45 días</h3>
+          <p className="text-sm text-gray-500 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
