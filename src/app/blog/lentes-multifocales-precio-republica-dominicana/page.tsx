@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes multifocales precio en RD 2026 — Guía completa',
-  description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$3,650. Entrega estimada de 1 a 5 días.',
+  description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega estimada de 1 a 5 días.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto multifocales — Precios en República Dominicana 2026',
-    description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$3,650. Entrega estimada de 1 a 5 días.',
+    description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega estimada de 1 a 5 días.',
     url: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Lentes de contacto multifocales — Precios en República Dominicana 2026' }],
@@ -25,7 +25,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Lentes de contacto multifocales — Precios en República Dominicana 2026",
-            "description": "Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$3,650. Entrega estimada de 1 a 5 días.",
+            "description": "Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega estimada de 1 a 5 días.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-11-24",
@@ -85,7 +85,7 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,450</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
             <Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="flex items-center justify-between p-4 border-2 border-teal-100 rounded-2xl hover:border-teal-300 hover:shadow-sm transition-all group bg-teal-50/20">
-              <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</p><p className="text-xs text-gray-500">Menor precio</p></div>
+              <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</p><p className="text-xs text-gray-500">Multifocal mensual</p></div>
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,750</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
             
@@ -118,10 +118,7 @@ export default function Page() {
                 <td className="py-3 pr-3"><Link href="/producto/air-optix-hydraglyde-multifocal-lentes-presbicia-dominicana" className="font-medium text-primary-600 hover:underline text-sm">AIR OPTIX® HydraGlyde® Multifocal 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Mensual Alcon</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$6,500</td>
               </tr>
-              <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">CooperVision</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$6,500</td>
-              </tr>
+              
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><Link href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="font-medium text-primary-600 hover:underline text-sm">clariti® 1 day multifocal 30u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Diario accesible</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,450</td>
@@ -130,10 +127,7 @@ export default function Page() {
                 <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Menor precio</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,750</td>
               </tr>
-              <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Alta graduación</span></td>
-                <td className="py-3 text-right font-black text-gray-900"></td>
-              </tr>
+              
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><Link href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Proclear® Multifocal Toric 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Multi + astigmatismo</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$12,000</td>
@@ -152,7 +146,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Recibe en 24-48h', desc: 'Entrega en Santo Domingo y Santiago en 24h. Resto del país en 24-72h.' },
+                { paso: '4', titulo: 'Entrega estimada de 1 a 5 días', desc: 'El plazo estimado para multifocales estándar es de 1 a 5 días; los multifocales tóricos pueden requerir de 25 a 45 días.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -205,8 +199,8 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
-          <p className="text-sm text-gray-600 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes multifocales: entrega estimada de 1 a 5 días</h3>
+          <p className="text-sm text-gray-600 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
