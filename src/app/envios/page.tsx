@@ -1,1 +1,3 @@
-export { default, metadata, revalidate } from '../ayuda/envios/page'
+export { default, metadata } from '../ayuda/envios/page'
+
+export const revalidate = 3600
