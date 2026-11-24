@@ -8,7 +8,7 @@ import type { Product } from '@/types'
 import { useCartStore } from '@/lib/cart-store'
 import { getEntrega } from '@/lib/delivery-times'
 
-interface Props { product: Product; isBestseller?: boolean }
+interface Props { product: Product }
 
 const TIPO_BADGE: Record<string, { label: string; color: string }> = {
   esferico: { label: 'Esférico', color: 'text-slate-600' },
@@ -19,7 +19,7 @@ const TIPO_BADGE: Record<string, { label: string; color: string }> = {
   gota: { label: 'Gotas', color: 'text-slate-600' },
 }
 
-export default function ProductCard({ product, isBestseller }: Props) {
+export default function ProductCard({ product }: Props {
   const addItem = useCartStore(s => s.addItem)
   const [isFav, setIsFav] = React.useState(false)
   const needsRx = ['esferico', 'torico', 'multifocal', 'color'].includes(product.tipo ?? '')
