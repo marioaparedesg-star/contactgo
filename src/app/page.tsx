@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   alternates: { canonical: 'https://www.contactgo.net' },
 }
-import { ChevronRight, Truck, Shield, Star, Clock, Zap, RefreshCw, Award, Users, CheckCircle, Package } from 'lucide-react'
+import { ChevronRight, Truck, Shield, Star, Clock, Zap, RefreshCw, Award, Users, CheckCircle, Package, FileSearch } from 'lucide-react'
 import Navbar from '@/components/ui/Navbar'
 import HeroSlider from '@/components/ui/HeroSlider'
 import Footer from '@/components/ui/Footer'
@@ -123,7 +123,7 @@ export default async function HomePage() {
               {
                 label: 'Esféricos', slug: 'esferico',
                 desc: 'Miopía e hipermetropía',
-                bg: 'bg-teal-50', fg: 'text-primary-600',
+                bg: 'bg-slate-50', fg: 'text-[#002455]',
                 // LENTE DE CONTACTO simple — disco con anillo interno y highlight de curvatura
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -136,7 +136,7 @@ export default async function HomePage() {
               {
                 label: 'Tóricos', slug: 'torico',
                 desc: 'Para astigmatismo',
-                bg: 'bg-violet-50', fg: 'text-violet-600',
+                bg: 'bg-slate-50', fg: 'text-[#002455]',
                 // LENTE DE CONTACTO tórico — con marca de eje inclinada + punto de orientación
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -151,7 +151,7 @@ export default async function HomePage() {
               {
                 label: 'Multifocales', slug: 'multifocal',
                 desc: 'Cerca y lejos a la vez',
-                bg: 'bg-teal-50', fg: 'text-teal-600',
+                bg: 'bg-slate-50', fg: 'text-[#002455]',
                 // LENTE DE CONTACTO multifocal — anillos concéntricos (zonas de graduación)
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -166,7 +166,7 @@ export default async function HomePage() {
               {
                 label: 'Color', slug: 'color',
                 desc: 'Cambia tu look, con o sin graduación',
-                bg: 'bg-rose-50', fg: 'text-rose-500',
+                bg: 'bg-slate-50', fg: 'text-[#002455]',
                 // LENTE DE CONTACTO cosmético — disco con iris coloreado y patrón radial
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -182,7 +182,7 @@ export default async function HomePage() {
               {
                 label: 'Soluciones', slug: 'solucion', href: '/soluciones',
                 desc: 'Limpieza y cuidado',
-                bg: 'bg-sky-50', fg: 'text-sky-600',
+                bg: 'bg-slate-50', fg: 'text-[#002455]',
                 // Frasco de solución para lentes de contacto
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -196,7 +196,7 @@ export default async function HomePage() {
               {
                 label: 'Gotas', slug: 'gota', href: '/gotas',
                 desc: 'Lubricación ocular',
-                bg: 'bg-cyan-50', fg: 'text-cyan-600',
+                bg: 'bg-slate-50', fg: 'text-[#002455]',
                 // Gotero oftálmico con gota cayendo
                 svg: (
                   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -209,41 +209,41 @@ export default async function HomePage() {
               },
             ].map(cat => (
               <Link key={cat.slug} href={cat.href ?? `/catalogo?tipo=${cat.slug}`}
-                className="card p-3 md:p-5 text-center hover:border-primary-200 hover:-translate-y-0.5 group transition-all">
-                <div className={`w-11 h-11 md:w-16 md:h-16 mx-auto mb-2 rounded-2xl ${cat.bg} ${cat.fg} flex items-center justify-center transition-transform group-hover:scale-105`}>
+                className="rounded-xl border border-slate-200 bg-white p-3 md:p-5 text-center hover:border-slate-400 group transition-colors">
+                <div className={`w-11 h-11 md:w-16 md:h-16 mx-auto mb-2 rounded-xl border border-slate-200 ${cat.bg} ${cat.fg} flex items-center justify-center`}>
                   <div className="w-7 h-7 md:w-9 md:h-9">{cat.svg}</div>
                 </div>
                 <p className="font-semibold text-gray-900 text-xs md:text-sm">{cat.label}</p>
-                <p className="text-[9.5px] leading-tight md:text-xs text-gray-400 mt-0.5">{cat.desc}</p>
+                <p className="text-[10px] leading-snug md:text-xs text-slate-500 mt-1">{cat.desc}</p>
               </Link>
             ))}
           </div>
         </section>
 
         {/* ── BANNER RECETA — reordenado: segundo ── */}
-        <section className="bg-gradient-to-r from-teal-500 to-teal-600 relative overflow-hidden mx-4 md:mx-8 rounded-3xl mb-8">
+        <section className="mx-4 md:mx-8 mb-8 rounded-2xl border border-slate-200 bg-slate-50 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-white/5" />
-            <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5" />
+            
+            
           </div>
           <div className="relative max-w-7xl mx-auto px-6 py-10 md:py-14 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">🧠</span>
-                <span className="bg-white/20 text-white text-xs font-bold px-2.5 py-1 rounded-full border border-white/30">Gratis · Sin registro</span>
+                <FileSearch className="h-5 w-5 text-[#002455]" aria-hidden="true" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Herramienta gratuita</span>
               </div>
-              <h2 className="font-display text-2xl md:text-3xl font-black text-white mb-2">
-                Encuentra tus lentes exactos
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-[#002455] mb-2">
+                Revisa tu receta y encuentra opciones
               </h2>
-              <p className="text-white/80 max-w-md text-sm md:text-base">
-                En menos de 2 minutos sabes exactamente qué lentes son para ti. Sin visitar ningún lugar.
+              <p className="text-slate-600 max-w-md text-sm md:text-base">
+                Introduce los datos de tu receta para revisar qué productos del catálogo pueden coincidir con sus parámetros.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-              <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-2xl hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2 justify-center">
-                <Zap className="w-4 h-4" /> Buscar con mi receta
+              <Link href="/receta" className="bg-[#002455] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#001F4A] transition-colors flex items-center gap-2 justify-center">
+                <FileSearch className="w-4 h-4" /> Revisar mi receta
               </Link>
-              <Link href="/catalogo" className="border-2 border-white/50 text-white font-semibold px-6 py-3 rounded-2xl hover:bg-white/10 transition-all flex items-center gap-2 justify-center">
+              <Link href="/catalogo" className="border border-slate-300 text-[#002455] font-semibold px-6 py-3 rounded-lg hover:bg-white transition-colors flex items-center gap-2 justify-center">
                 Ver catálogo <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
@@ -255,10 +255,10 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
-                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 24-72 horas',    color: 'text-blue-600',   bg: 'bg-blue-50' },
-                { icon: Package,  title: 'Marcas originales',   desc: 'Distribuidores autorizados de cada marca',        color: 'text-green-600',  bg: 'bg-green-50' },
-                { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-amber-500', bg: 'bg-amber-50' },
-                { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-purple-600', bg: 'bg-purple-50' },
+                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 24-72 horas',    color: 'text-[#002455]',   bg: 'bg-slate-100' },
+                { icon: Package,  title: 'Marcas originales',   desc: 'Distribuidores autorizados de cada marca',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
+                { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-[#002455]', bg: 'bg-slate-100' },
+                { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-[#002455]', bg: 'bg-slate-100' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
                 <div key={title} className="flex items-center gap-3">
                   <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center shrink-0`}>
@@ -278,8 +278,8 @@ export default async function HomePage() {
         <section className="max-w-7xl mx-auto px-4 py-6 md:py-10">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h2 className="font-display text-xl md:text-2xl font-bold text-gray-900">Más populares</h2>
-              <p className="text-gray-500 text-sm mt-0.5">Los favoritos de nuestros clientes</p>
+              <h2 className="font-display text-xl md:text-2xl font-bold text-gray-900">Productos destacados</h2>
+              <p className="text-gray-500 text-sm mt-0.5">Una selección del catálogo disponible</p>
             </div>
             <Link href="/catalogo" className="text-sm font-semibold text-primary-700 hover:text-primary-800 flex items-center gap-1">
               Ver todos <ChevronRight className="w-4 h-4" />
@@ -296,20 +296,20 @@ export default async function HomePage() {
 
         {/* ── SUSCRIPCIÓN ── */}
         <section className="max-w-7xl mx-auto px-4 pb-8 md:pb-12">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 justify-between">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 justify-between">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <RefreshCw className="w-5 h-5 text-green-400" />
-                <span className="text-green-400 font-bold text-sm">Nunca te quedes sin lentes</span>
+                <RefreshCw className="w-5 h-5 text-[#008F95]" />
+                <span className="text-[#008F95] font-semibold text-sm">Reposición de tus lentes</span>
               </div>
-              <h3 className="font-display text-2xl md:text-3xl font-black text-white mb-2">Recordatorio automático</h3>
-              <p className="text-gray-400 max-w-md text-sm md:text-base">
-                Guardamos tu receta. Te avisamos cuando es hora de reponer. Tú solo confirmas y te lo llevamos a tu puerta.
+              <h3 className="font-display text-2xl md:text-3xl font-bold text-[#002455] mb-2">Recuerda cuándo toca reponerlos</h3>
+              <p className="text-slate-600 max-w-md text-sm md:text-base">
+                Puedes escribirnos para consultar cómo programar un aviso según la frecuencia de reemplazo de tus lentes.
               </p>
             </div>
             <a href="https://wa.me/18096942268?text=Hola%20ContactGo%2C%20quiero%20activar%20recordatorio%20de%20recompra"
               target="_blank" rel="noopener noreferrer"
-              className="bg-[#002455] text-white font-bold px-6 py-3 rounded-2xl hover:bg-[#001F4A] transition-all shadow-lg flex items-center gap-2 shrink-0">
+              className="bg-[#002455] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#001F4A] transition-colors flex items-center gap-2 shrink-0">
               <svg viewBox="0 0 32 32" className="w-5 h-5 fill-white"><path d="M16.004 2.667C8.64 2.667 2.667 8.64 2.667 16c0 2.347.619 4.587 1.773 6.56L2.667 29.333l6.907-1.747A13.244 13.244 0 0016.004 29.333c7.363 0 13.333-5.973 13.333-13.333S23.367 2.667 16.004 2.667z"/></svg>
               Activar por WhatsApp
             </a>
