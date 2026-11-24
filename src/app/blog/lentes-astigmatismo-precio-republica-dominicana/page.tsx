@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes para astigmatismo precio en RD 2026 — Guía completa',
-  description: 'Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$3,900. Entrega 24-48h.',
+  description: 'Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega estimada de 25 a 45 días.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-astigmatismo-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto para astigmatismo — Precios en RD 2026',
-    description: 'Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$3,900. Entrega 24-48h.',
+    description: 'Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega estimada de 25 a 45 días.',
     url: 'https://www.contactgo.net/blog/lentes-astigmatismo-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-astigmatismo-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Lentes de contacto para astigmatismo — Precios en RD 2026' }],
@@ -25,7 +25,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Lentes de contacto para astigmatismo — Precios en RD 2026",
-            "description": "Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$3,900. Entrega 24-48h.",
+            "description": "Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega estimada de 25 a 45 días.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
@@ -51,7 +51,7 @@ export default function Page() {
 
         <div className="flex items-center gap-3 mb-5 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
           <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
-          <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Precios actualizados junio 2026 · Entrega en toda RD · ⏱ 6 min</p></div>
+          <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Precios consultados el 24 de noviembre de 2026 · Entrega en toda RD · ⏱ 6 min</p></div>
 
         <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
           <p className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">📋 En este artículo</p>
@@ -85,7 +85,7 @@ export default function Page() {
             </Link>
             <Link href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Avaira Vitality® Toric 6u</p><p className="text-xs text-gray-500">Mejor precio mensual</p></div>
-              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,900</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
+              <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,150</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
             <Link href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="flex items-center justify-between p-4 border-2 border-red-100 rounded-2xl hover:border-red-300 hover:shadow-sm transition-all group bg-red-50/20">
               <div><p className="font-bold text-gray-900 text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</p><p className="text-xs text-gray-500">Opción económica</p></div>
@@ -96,11 +96,11 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$9,400</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
 
-          <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
+          <p className="text-[11px] text-gray-400 text-center">*Canales de distribución autorizados · Entrega estimada de 25 a 45 días</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Si tu receta óptica tiene valores de <strong>CYL (cilindro) y AXIS (eje)</strong>, tienes astigmatismo y necesitas lentes de contacto <strong>tóricos</strong>. En República Dominicana, ContactGo es la tienda con mayor disponibilidad de lentes tóricos de todas las marcas principales — con entrega en 24-48 horas. Esta guía tiene todos los precios actualizados para junio 2026.</p>
+          <p>Si tu receta óptica tiene valores de <strong>CYL (cilindro) y AXIS (eje)</strong>, tienes astigmatismo y necesitas lentes de contacto <strong>tóricos</strong>. En República Dominicana, ContactGo es la tienda con mayor disponibilidad de lentes tóricos de todas las marcas principales — con plazo estimado de 25 a 45 días. Esta guía tiene todos los precios actualizados para junio 2026.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios completos — Tabla actualizada agosto 2026</h2>
@@ -126,7 +126,7 @@ export default function Page() {
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><Link href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Avaira Vitality® Toric 6u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Mejor precio mensual</span></td>
-                <td className="py-3 text-right font-black text-gray-900">RD$3,900</td>
+                <td className="py-3 text-right font-black text-gray-900">RD$4,150</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Astigmatism 6u</Link><span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full font-bold">Opción económica</span></td>
@@ -140,7 +140,7 @@ export default function Page() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-gray-400 mt-2">*Precios incluyen entrega a toda República Dominicana. Actualizados junio 2026.</p>
+            <p className="text-xs text-gray-400 mt-2">*Precios de productos; el envío se calcula aparte. Consultados el 24 de noviembre de 2026; confirma el precio vigente en cada ficha.</p>
           </section>
 
           <section>
@@ -150,7 +150,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Recibe en 24-48h', desc: 'Entrega en Santo Domingo y Santiago en 24h. Resto del país en 24-72h.' },
+                { paso: '4', titulo: 'Recibe en 25-45 días', desc: 'Entrega en Santo Domingo y Santiago en 24h. Resto del país en 24-72h.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -177,7 +177,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Hay lentes diarios para astigmatismo en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El 1-DAY ACUVUE Moist for Astigmatism y el clariti 1 day toric son lentes diarios tóricos disponibles en ContactGo con entrega en 24-48h en toda República Dominicana.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El 1-DAY ACUVUE Moist for Astigmatism y el clariti 1 day toric son lentes diarios tóricos disponibles en ContactGo con plazo estimado de 25 a 45 días.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo usar lentes de color si tengo astigmatismo?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
@@ -199,7 +199,7 @@ export default function Page() {
 
         <div className="border-l-4 border-blue-500 bg-blue-50 rounded-r-xl p-4 my-6">
           <p className="font-bold text-gray-900 text-sm mb-0.5">Información verificada</p>
-          <p className="text-gray-600 text-sm">Precios verificados por el Equipo ContactGo · Actualizado junio 2026</p>
+          <p className="text-gray-600 text-sm">Precios contrastados con el catálogo el 24 de noviembre de 2026</p>
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
