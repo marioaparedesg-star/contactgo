@@ -100,10 +100,10 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Si tu receta óptica tiene valores de <strong>CYL (cilindro) y AXIS (eje)</strong>, tienes astigmatismo y necesitas lentes de contacto <strong>tóricos</strong>. En República Dominicana, ContactGo es la tienda con mayor disponibilidad de lentes tóricos de todas las marcas principales — con plazo estimado de 25 a 45 días. Esta guía tiene todos los precios actualizados para junio 2026.</p>
+          <p>Si tu receta óptica tiene valores de <strong>CYL (cilindro) y AXIS (eje)</strong>, tienes astigmatismo y necesitas lentes de contacto <strong>tóricos</strong>. En República Dominicana, ContactGo es la tienda con mayor disponibilidad de lentes tóricos de todas las marcas principales — con plazo estimado de 25 a 45 días. Los precios de referencia se contrastaron con el catálogo el 24 de noviembre de 2026; confirma el precio vigente en cada ficha.</p>
 
           <section>
-            <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios completos — Tabla actualizada agosto 2026</h2>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios de referencia — consultados el 24 de noviembre de 2026</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
                 <thead><tr className="bg-gray-50"><th className="p-3 text-left border border-gray-100 font-bold">Producto</th><th className="p-3 text-right border border-gray-100 font-bold">Precio RD$</th></tr></thead>
@@ -150,7 +150,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Recibe en 25-45 días', desc: 'Entrega en Santo Domingo y Santiago en 24h. Resto del país en 24-72h.' },
+                { paso: '4', titulo: 'Recibe en 25-45 días', desc: 'El plazo de preparación de los lentes tóricos es de 25 a 45 días; el transporte se coordina según el destino.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -203,8 +203,8 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
-          <p className="text-sm text-gray-600 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes tóricos: entrega estimada de 25 a 45 días</h3>
+          <p className="text-sm text-gray-600 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
