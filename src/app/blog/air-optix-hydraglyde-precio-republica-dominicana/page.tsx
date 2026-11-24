@@ -6,12 +6,12 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Air Optix HydraGlyde precio en RD 2026 — ContactGo',
-  description: 'Precio de Air Optix Plus HydraGlyde en República Dominicana. Disponibles desde RD$3,700. Entrega 24-48h. Originales de Alcon con garantía de autenticidad.',
+  description: 'Precio de Air Optix Plus HydraGlyde en República Dominicana. Disponibles desde RD$3,700. Entrega según tipo de lente y destino. Originales de Alcon con garantía de autenticidad.',
   alternates: { canonical: 'https://www.contactgo.net/blog/air-optix-hydraglyde-precio-republica-dominicana' },
   openGraph: {
     type: 'article',
     title: 'Air Optix HydraGlyde precio en República Dominicana 2026',
-    description: 'Precio actual de Air Optix Plus HydraGlyde en RD. Entrega 24-48h. Originales de Alcon.',
+    description: 'Precio actual de Air Optix Plus HydraGlyde en RD. Entrega según tipo de lente y destino. Canales de distribución autorizados.',
     url: 'https://www.contactgo.net/blog/air-optix-hydraglyde-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/air-optix-hydraglyde-precio-rd.webp', width: 1200, height: 630, alt: 'Air Optix HydraGlyde precio República Dominicana' }],
@@ -26,8 +26,8 @@ export default function Page() {
   ]
 
   const FAQS = [
-    { q: '¿Cuánto cuestan los Air Optix HydraGlyde en República Dominicana?', a: 'En ContactGo los Air Optix Plus HydraGlyde esféricos cuestan RD$4,375 la caja de 6 lentes. La versión Multifocal está disponible desde RD$7,250.' },
-    { q: '¿Dónde comprar Air Optix HydraGlyde certificados en RD?', a: 'ContactGo los ofrece directo del fabricante de Alcon con entrega en 24-48 horas en toda República Dominicana. Pago seguro con AZUL/Banco Popular.' },
+    { q: '¿Cuánto cuestan los Air Optix HydraGlyde en República Dominicana?', a: 'En ContactGo los Air Optix Plus HydraGlyde esféricos cuestan RD$3,700 la caja de 6 lentes. La versión Multifocal está disponible desde RD$6,500.' },
+    { q: '¿Dónde comprar Air Optix HydraGlyde certificados en RD?', a: 'ContactGo los ofrece a través de canales de distribución autorizados. El transporte es de 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; el plazo total depende del tipo de lente. Pago seguro con AZUL/Banco Popular.' },
     { q: '¿Air Optix HydraGlyde es bueno para ojos secos?', a: 'Sí. La tecnología HydraGlyde® de Alcon incorpora una capa molecular de lubricante en la superficie del lente que mantiene la hidratación hasta 16 horas de uso continuo, ideal para personas con ojos secos moderados.' },
     { q: '¿Cuánto tiempo dura un lente Air Optix HydraGlyde?', a: 'Son lentes de reemplazo mensual — se usan máximo 30 días y luego se descartan. Con uso diario de 8 horas, una caja de 6 lentes dura aproximadamente 3 meses por ojo.' },
     { q: '¿Air Optix HydraGlyde sirve para astigmatismo?', a: 'La línea regular (esférico) no corrige astigmatismo. Para astigmatismo, Alcon ofrece Air Optix Astig, aunque en ContactGo disponemos de otras marcas tóricas como Biofinity Toric y ACUVUE Oasys Astig.' },
@@ -44,7 +44,7 @@ export default function Page() {
             "description": "Precio actual, disponibilidad y guía completa de Air Optix Plus HydraGlyde en RD.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo", "url": "https://www.contactgo.net" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
-            "datePublished": "2026-06-15", "dateModified": "2026-06-27",
+            "datePublished": "2026-06-15", "dateModified": "2026-11-24",
             "url": "https://www.contactgo.net/blog/air-optix-hydraglyde-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "Product",
             "name": "AIR OPTIX® plus HydraGlyde®",
@@ -80,7 +80,7 @@ export default function Page() {
           <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
           <div>
             <p className="text-sm font-bold text-gray-900">Equipo ContactGo</p>
-            <p className="text-xs text-gray-500">Precios actualizados junio 2026 · Entrega en toda RD</p>
+            <p className="text-xs text-gray-500">Precios consultados el 24 de noviembre de 2026 · Entrega según tipo de lente y destino</p>
           </div>
         </div>
 
@@ -88,7 +88,7 @@ export default function Page() {
         <div className="bg-gradient-to-br from-teal-50 to-blue-50 border-2 border-teal-200 rounded-2xl p-5 mb-6">
           <p className="text-xs font-bold text-teal-600 uppercase tracking-wide mb-1">Precio actual en ContactGo</p>
           <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-black text-gray-900">RD$4,375</span>
+            <span className="text-4xl font-black text-gray-900">RD$3,700</span>
             <span className="text-gray-500 text-sm">caja de 6 lentes</span>
           </div>
           <p className="text-xs text-gray-500 mt-1">≈ RD$729 por lente · Lente mensual por ojo</p>
@@ -116,7 +116,7 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Los <strong>Air Optix® plus HydraGlyde®</strong> de Alcon son uno de los lentes de contacto mensuales más recomendados a nivel mundial — y en República Dominicana cada vez más personas los eligen como su lente de uso diario. En este artículo encontrarás el precio actual en RD, todas las versiones disponibles y cómo recibirlos en tu puerta en 24-48 horas.</p>
+          <p>Los <strong>Air Optix® plus HydraGlyde®</strong> de Alcon son uno de los lentes de contacto mensuales más recomendados a nivel mundial — y en República Dominicana cada vez más personas los eligen como su lente de uso diario. En este artículo encontrarás precios de referencia, versiones disponibles y plazos estimados según tipo de lente y destino.</p>
 
           <section id="precios">
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios de Air Optix HydraGlyde en República Dominicana</h2>
@@ -142,11 +142,11 @@ export default function Page() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-gray-400 mt-2">*Precios en ContactGo, incluyen entrega a toda República Dominicana. Actualizados junio 2026.</p>
+            <p className="text-xs text-gray-400 mt-2">Los precios corresponden al producto; el envío se calcula aparte: RD$250 en Santo Domingo y RD$350 en el interior. Gratis desde RD$8,000.</p>
 
             <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4 text-sm">
-              <p className="font-bold text-green-800 mb-1">🚀 Entrega en 24-48 horas</p>
-              <p className="text-green-700">Entrega a <strong>toda la República Dominicana</strong>: Santo Domingo y Santiago en 24h, resto del país en 24-72h.</p>
+              <p className="font-bold text-green-800 mb-1">🚀 Entrega según tipo de lente y destino</p>
+              <p className="text-green-700">Transporte estimado: Santo Domingo y Santiago 24-48h; interior 24-72h. Los multifocales tienen plazo estimado de 1-5 días y los tóricos de 25-45 días.</p>
             </div>
           </section>
 
@@ -252,14 +252,14 @@ export default function Page() {
 
           <section id="como-comprar">
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Cómo comprar Air Optix HydraGlyde en República Dominicana</h2>
-            <p>En ContactGo los Air Optix HydraGlyde están disponibles para entrega en 24-48 horas en toda la República Dominicana. El proceso es simple:</p>
+            <p>En ContactGo los Air Optix HydraGlyde tienen plazos distintos según el tipo de lente y destino. El proceso es simple:</p>
             <div className="space-y-3 mt-4">
               {[
                 { paso: '1', titulo: 'Ten tu receta a mano', desc: 'Necesitas el valor de SPH (poder esférico). Los Air Optix HydraGlyde tienen radio de curvatura (BC) estándar de 8.6mm y diámetro 14.2mm.' },
                 { paso: '2', titulo: 'Selecciona tu producto', desc: 'Busca "Air Optix HydraGlyde" en nuestro catálogo o haz clic en el botón de arriba para ir directamente al producto.' },
                 { paso: '3', titulo: 'Elige tu graduación', desc: 'Ingresa el SPH de cada ojo según tu receta. Para dos ojos con diferente graduación, puedes seleccionarla individualmente.' },
                 { paso: '4', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta de crédito/débito a través de AZUL/Banco Popular. El proceso es 100% seguro.' },
-                { paso: '5', titulo: 'Recibe en 24-48h', desc: 'Te contactamos para coordinar la entrega. Santo Domingo y Santiago: entrega en 24h. Resto del país: 24-48h.' },
+                { paso: '5', titulo: 'Entrega según tipo de lente y destino', desc: 'Te contactamos para coordinar la entrega. Santo Domingo y Santiago: entrega en 24h. Resto del país: 24-72h.' },
               ].map(({ paso, titulo, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{paso}</div>
@@ -307,8 +307,8 @@ export default function Page() {
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
-            <p>Los Air Optix® plus HydraGlyde® son una excelente elección para usuarios de lentes de contacto mensuales en República Dominicana. A RD$4,375 la caja de 6 lentes, son una opción competitiva que ofrece tecnología de hidratación avanzada, alta transmisión de oxígeno y resistencia a depósitos — todo lo que necesitas para un uso diario cómodo.</p>
-            <p className="mt-3">En ContactGo los encuentras directo del fabricante de Alcon, con entrega en 24-48 horas en toda la República Dominicana. ¿Tienes dudas sobre si son el lente correcto para ti? Escríbenos por WhatsApp.</p>
+            <p>Los Air Optix® plus HydraGlyde® son una excelente elección para usuarios de lentes de contacto mensuales en República Dominicana. A RD$3,700 la caja de 6 lentes, son una opción competitiva que ofrece tecnología de hidratación avanzada, alta transmisión de oxígeno y resistencia a depósitos — todo lo que necesitas para un uso diario cómodo.</p>
+            <p className="mt-3">En ContactGo los encuentras a través de canales de distribución autorizados; el plazo total depende del tipo de lente y destino. ¿Tienes dudas sobre si son el lente correcto para ti? Escríbenos por WhatsApp.</p>
           </section>
         </div>
 
