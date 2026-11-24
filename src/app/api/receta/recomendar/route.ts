@@ -90,6 +90,10 @@ export async function POST(req: NextRequest) {
             // nunca como producto de compra directa.
             alternativasRevision.push({
               ...producto,
+              receta_ajustada: {
+                od: { sph: odSph, cyl: odCyl, axis: odAxis, add: receta.od.add },
+                oi: { sph: oiSph, cyl: oiCyl, axis: oiAxis, add: receta.oi.add },
+              },
               parametros_revision: {
                 od: { sph: odSph, cyl_disponible: odCyl, axis_disponible: odAxis },
                 oi: { sph: oiSph, cyl_disponible: oiCyl, axis_disponible: oiAxis },
