@@ -80,7 +80,7 @@ export default function Footer() {
                 ['FAQ', '/faq'],
                 ['Blog', '/blog'],
               ].map(([l, h]) => (
-                <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
+                <li key={h}>{h.startsWith("http") ? <a href={h} target="_blank" rel="noopener noreferrer" className="text-xs text-gray-400 hover:text-white transition-colors">{l}</a> : <Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link>}</li>
               ))}
             </ul>
           </div>
