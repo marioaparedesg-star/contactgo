@@ -6,12 +6,12 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'ACUVUE Oasys Astigmatism precio en RD 2026 — ContactGo',
-  description: 'Precio de ACUVUE Oasys for Astigmatism en República Dominicana: RD$6,250 la caja de 6. También 1-DAY ACUVUE Moist Astig. Entrega 24-48h. Originales J&J.',
+  description: 'Precio de ACUVUE Oasys for Astigmatism en República Dominicana: RD$5,800 la caja de 6. También 1-DAY ACUVUE Moist Astig. Entrega estimada de 25 a 45 días. Originales J&J.',
   alternates: { canonical: 'https://www.contactgo.net/blog/acuvue-oasys-for-astigmatism-precio-rd' },
   openGraph: {
     type: 'article',
     title: 'ACUVUE Oasys for Astigmatism precio República Dominicana',
-    description: 'Precio y disponibilidad de ACUVUE Oasys for Astigmatism en RD. Entrega 24-48h.',
+    description: 'Precio y disponibilidad de ACUVUE Oasys for Astigmatism en RD. Entrega estimada de 25 a 45 días.',
     url: 'https://www.contactgo.net/blog/acuvue-oasys-for-astigmatism-precio-rd',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/acuvue-oasys-astigmatism-precio-rd.webp', width: 1200, height: 630, alt: 'ACUVUE Oasys for Astigmatism precio República Dominicana' }],
@@ -25,12 +25,12 @@ export default function Page() {
   ]
 
   const FAQS = [
-    { q: '¿Cuánto cuestan los ACUVUE Oasys for Astigmatism en RD?', a: 'En ContactGo el ACUVUE Oasys for Astigmatism cuesta RD$6,250 la caja de 6 lentes (uso quincenal). El 1-DAY ACUVUE Moist for Astigmatism también está disponible a RD$6,250 la caja de 30 lentes.' },
+    { q: '¿Cuánto cuestan los ACUVUE Oasys for Astigmatism en RD?', a: 'En ContactGo el ACUVUE Oasys for Astigmatism cuesta RD$5,800 la caja de 6 lentes (uso quincenal). El 1-DAY ACUVUE Moist for Astigmatism también está disponible a RD$5,800 la caja de 30 lentes.' },
     { q: '¿Qué es el ACUVUE Oasys for Astigmatism?', a: 'Es un lente de contacto quincenal diseñado específicamente para personas con astigmatismo. Combina la tecnología HYDRACLEAR® Plus con el sistema BLINK STABILISED® que mantiene el lente orientado correctamente con cada parpadeo para una visión nítida constante.' },
     { q: '¿Sirve el ACUVUE Oasys normal para el astigmatismo?', a: 'No. El ACUVUE Oasys estándar es para miopía e hipermetropía sin astigmatismo. Para astigmatismo necesitas específicamente el ACUVUE Oasys for Astigmatism o el 1-DAY ACUVUE Moist for Astigmatism.' },
     { q: '¿Cuántos cilindros corrige el ACUVUE Oasys for Astigmatism?', a: 'El ACUVUE Oasys for Astigmatism está disponible en CYL de -0.75, -1.25, -1.75 y -2.25. Para cilindros mayores (-2.75 o más), otras opciones como Biofinity XR Toric pueden ser más adecuadas.' },
     { q: '¿Cómo sé si necesito lentes tóricos?', a: 'Si tu receta tiene valores de CYL (cilindro) y AXIS (eje), entonces tienes astigmatismo y necesitas lentes tóricos. Puedes verificarlo con nuestra calculadora de receta gratuita.' },
-    { q: '¿Dónde comprar ACUVUE Oasys for Astigmatism en República Dominicana?', a: 'ContactGo ofrece el ACUVUE Oasys for Astigmatism y el 1-DAY ACUVUE Moist for Astigmatism con entrega en 24-48 horas en toda la República Dominicana. Son directo del fabricante de Johnson & Johnson.' },
+    { q: '¿Dónde comprar ACUVUE Oasys for Astigmatism en República Dominicana?', a: 'ContactGo ofrece el ACUVUE Oasys for Astigmatism y el 1-DAY ACUVUE Moist for Astigmatism con entrega estimada de 25 a 45 días. Son a través de canales de distribución autorizados.' },
   ]
 
   return (
@@ -90,7 +90,7 @@ export default function Page() {
               </div>
             </Link>
           ))}
-          <p className="text-xs text-gray-400 text-center">Entrega 24-48h en toda RD · directo del fabricante J&J · Actualizados junio 2026</p>
+          <p className="text-xs text-gray-400 text-center">Entrega estimada de 25 a 45 días en toda RD · directo del fabricante J&J · Actualizados junio 2026</p>
         </div>
 
         <div className="flex gap-2 mb-6">
