@@ -95,8 +95,7 @@ export default function SeguridadPage() {
             <ul className="space-y-2 text-sm">
               {[
                 'Todas las transacciones se realizan bajo conexión HTTPS cifrada con SSL',
-                'Los datos de tu tarjeta son procesados directamente por AZUL (Servicios Digitales Popular, S.A.) — ContactGo nunca los almacena',
-                'Los datos de tarjeta son procesados por AZUL; ContactGo no los recibe ni almacena',
+                'Los datos de tu tarjeta se procesan directamente en AZUL (Servicios Digitales Popular, S.A.); ContactGo no los recibe ni almacena',
                 'Las transacciones están protegidas por autenticación 3D Secure (Verified by Visa / Mastercard ID Check)',
                 'Nunca compartiremos tu información de pago con terceros no autorizados',
               ].map((item, i) => (
