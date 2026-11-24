@@ -530,6 +530,7 @@ export default function ProductoClient({ product, variants }: Props) {
         od: { sph: number|null; cyl: number|null; axis: number|null }
         oi: { sph: number|null; cyl: number|null; axis: number|null }
         tipo: string
+        soloOjo?: 'OD' | 'OI' | null
         timestamp: number
       }
       // Solo válido 30 min
@@ -559,7 +560,7 @@ export default function ProductoClient({ product, variants }: Props) {
       // Pre-llenar según el modo de ojo del producto — nuevo flujo eyeFlow
       setEyeFlow(prev => ({
         ...prev,
-        ojoMode: 'AMBOS',
+        ojoMode: rx.soloOjo ?? 'AMBOS',
         sph_od: rx.od.sph != null ? String(rx.od.sph) : prev.sph_od,
         sph_oi: rx.oi.sph != null ? String(rx.oi.sph) : prev.sph_oi,
         cyl_od: (rx.od.cyl != null && rx.od.cyl !== 0) ? String(rx.od.cyl) : prev.cyl_od,
@@ -571,9 +572,9 @@ export default function ProductoClient({ product, variants }: Props) {
       }))
       // La selección llega desde la calculadora sin pasar por handleColorChange.
       // Sincronizar aquí también la cantidad: dos recetas distintas = dos cajas.
-      setQty(recetasIguales ? 1 : 2)
-      // También llenar el selector simple (modo un solo ojo)
-      const sphVal = rx.od.sph ?? rx.oi.sph
+      setQty(rx.soloOjo ? 1 : recetasIguales ? 1 : 2)
+      // También llenar el selector simple y el ojo elegido cuando aplica.
+      const sphVal = rx.soloOjo === 'OI' ? rx.oi.sph : rx.od.sph ?? rx.oi.sph
       if (sphVal != null) setEyeFlow(p => ({...p, sph: String(sphVal)}))
       // cyl/axis ya pre-llenados arriba en setEyeFlow
 
