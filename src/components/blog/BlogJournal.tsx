@@ -251,6 +251,7 @@ export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[
                     <div className="mt-5 flex flex-1 flex-col">
                       <h3 className="line-clamp-3 text-base font-semibold leading-snug tracking-tight text-[#002455] group-hover:text-[#008d95]"><Link href={'/blog/' + post.slug} className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#01b2b7]">{post.titulo}</Link></h3>
                       <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-500">{post.desc}</p>
+                      {(() => { const related = productForPost(post, products); return related ? <Link href={"/producto/" + related.slug} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#008d95] hover:underline">Ver {related.nombre} · RD${Number(related.precio).toLocaleString("es-DO")}</Link> : null })()}
                       <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
                         <span className="text-[11px] text-slate-400">{formatDate(post.fecha)}</span>
                         <Link href={'/blog/' + post.slug} className="inline-flex items-center gap-1 text-xs font-bold text-[#008d95] hover:text-[#006d74]">Leer más <span aria-hidden="true">→</span></Link>
