@@ -41,9 +41,6 @@ export default function Navbar() {
 
   return (
     <header className={`sticky top-0 z-50 bg-white border-b border-gray-100 transition-shadow duration-200 ${scrolled ? "shadow-md" : "shadow-sm"}`} role="banner">
-      {/* Skip to main — accesibilidad teclado */}
-      <a href="#main-content" className="skip-link">Ir al contenido principal</a>
-
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center relative" aria-label="ContactGo — Ir al inicio">
