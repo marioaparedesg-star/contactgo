@@ -546,14 +546,11 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
   const eyeText = (eye: any) => [fmtV(eye.sph), eye.cyl != null && eye.cyl !== 0 ? fmtCyl(eye.cyl) : null, eye.axis != null ? `×${fmtAxis(eye.axis)}` : null, eye.add != null && eye.add !== 0 ? `ADD +${eye.add.toFixed(2)}` : null].filter(Boolean).join(' / ')
   const tipoNombre = r.tipo==='torico' ? 'Lentes tóricos' : r.tipo==='multifocal_torico' ? 'Multifocal tórico' : r.tipo==='multifocal' ? 'Lentes multifocales' : 'Lentes esféricos'
   return (
-    <section className="rounded-2xl border border-[#dce6ed] bg-white p-4 shadow-[0_6px_20px_rgba(15,35,65,.04)] md:p-5">
-      <div className="flex items-center justify-between gap-3">
-        <div><p className="text-xs font-medium text-slate-500">Resultado calculado</p><h2 className="mt-0.5 text-base font-bold text-[#0758a6]">{tipoNombre}</h2></div>
-        <span className="rounded-full bg-[#e8f8f8] px-3 py-1.5 text-[10px] font-semibold text-[#007f86]">Receta procesada</span>
-      </div>
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <div className="rounded-xl bg-[#f4f8fb] p-3"><p className="text-[10px] font-bold uppercase tracking-wide text-[#1762b3]">OD · Ojo derecho</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.od)}</p></div>
-        <div className="rounded-xl bg-[#f1fbfa] p-3"><p className="text-[10px] font-bold uppercase tracking-wide text-[#009da2]">OI · Ojo izquierdo</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.oi)}</p></div>
+    <section className="rounded-xl border border-slate-200 bg-white p-4 md:p-5">
+      <div><h2 className="text-base font-semibold text-[#002455]">Tu graduación convertida</h2><p className="mt-0.5 text-xs text-slate-500">{tipoNombre}</p></div>
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <div className="border-l-2 border-[#1762b3] pl-3"><p className="text-[10px] font-semibold text-slate-500">OD · Ojo derecho</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.od)}</p></div>
+        <div className="border-l-2 border-[#01B2B7] pl-3"><p className="text-[10px] font-semibold text-slate-500">OI · Ojo izquierdo</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.oi)}</p></div>
       </div>
       {r.needsVertex && <p className="mt-3 rounded-xl bg-[#f4f8fb] px-3 py-2.5 text-[11px] leading-5 text-slate-600">Conversión orientativa desde gafas con distancia al vértice de {r.vertexDistanceMm} mm. Debe confirmarse con un profesional.</p>}
       {r.requiresClinicalReview && <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-[11px] leading-5 text-amber-900">La ADD de una receta de gafas no se convierte directamente a un multifocal. La selección requiere evaluación profesional.</p>}
@@ -582,13 +579,13 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
     <article className="flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="relative flex h-36 items-center justify-center bg-white p-4 md:h-44">
         {p.imagen_url ? <img src={p.imagen_url} alt={p.nombre} className="h-full w-full object-contain" loading="lazy"/> : <div className="text-xs text-slate-300">Imagen no disponible</div>}
-        {featured && <span className="absolute left-3 top-3 rounded-full bg-[#0758a6] px-2.5 py-1 text-[9px] font-bold text-white">Recomendado</span>}
-        {p.requiere_revision && <span className="absolute right-3 top-3 rounded-full bg-amber-50 px-2.5 py-1 text-[9px] font-bold text-amber-800">Revisar</span>}
+        
+        
       </div>
       <div className="flex flex-1 flex-col border-t border-slate-100 p-3">
-        <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">{p.marca}</p>
-        <h3 className="mt-1 min-h-[2.25rem] text-sm font-bold leading-5 text-slate-800">{p.nombre}</h3>
-        <div className="mt-2 flex items-baseline gap-2"><p className="text-base font-bold text-[#0758a6]">RD${precio.toLocaleString("es-DO")}</p>{off > 0 && <span className="text-[10px] font-semibold text-emerald-600">-{off}%</span>}</div>
+        <p className="text-[10px] font-medium text-slate-500">{p.marca}</p>
+        <h3 className="mt-1 min-h-[2.5rem] text-sm font-semibold leading-5 text-slate-900">{p.nombre}</h3>
+        <p className="mt-2 text-base font-semibold text-[#0758a6]">RD${precio.toLocaleString("es-DO")}</p>
         <div className="mt-2"><RecetaMini result={productResult} soloOjo={soloOjo}/></div>
         {p.requiere_revision && <p className="mt-2 rounded-lg bg-amber-50 px-2.5 py-2 text-[10px] leading-4 text-amber-900">Parámetros cercanos. Un especialista debe confirmar la alternativa antes de comprar.</p>}
       </div>
@@ -628,27 +625,26 @@ function RecetaMini({ result, soloOjo }: { result: ConvertedRx; soloOjo?: 'OD' |
   }
 
   return (
-    <div className="mt-2 pt-2 border-t border-dashed border-gray-200 bg-blue-50/40 -mx-3 px-3 pb-2 rounded-b-lg">
-      <p className="text-[8px] font-bold text-blue-700 uppercase tracking-wider mb-1">Tu receta para este lente</p>
+    <div className="mt-2 border-t border-slate-100 pt-2">
       {soloOjo ? (
         // Modo mixto: mostrar SOLO el ojo específico
         <p className="text-[11px] font-mono font-bold text-gray-900">
           <span className="text-gray-500 font-sans">{soloOjo}:</span>{' '}
-          <span className="text-primary-700">{fmtOjo(soloOjo === 'OD' ? od : oi)}</span>
+          <span className="font-medium text-slate-800">{fmtOjo(soloOjo === 'OD' ? od : oi)}</span>
         </p>
       ) : iguales ? (
         <p className="text-[11px] font-mono font-bold text-gray-900">
-          Ambos ojos: <span className="text-primary-700">{fmtOjo(od)}</span>
+          Ambos ojos: <span className="font-medium text-slate-800">{fmtOjo(od)}</span>
         </p>
       ) : (
         <div className="text-[10.5px] font-mono leading-snug">
           <p className="text-gray-900">
             <span className="text-gray-500 font-sans font-semibold">OD:</span>{' '}
-            <span className="font-bold text-primary-700">{fmtOjo(od)}</span>
+            <span className="font-medium text-slate-800">{fmtOjo(od)}</span>
           </p>
           <p className="text-gray-900">
             <span className="text-gray-500 font-sans font-semibold">OI:</span>{' '}
-            <span className="font-bold text-primary-700">{fmtOjo(oi)}</span>
+            <span className="font-medium text-slate-800">{fmtOjo(oi)}</span>
           </p>
         </div>
       )}
