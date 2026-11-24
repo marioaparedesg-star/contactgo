@@ -110,7 +110,33 @@ export async function POST(req: NextRequest) {
         }).sort((a: any, b: any) => Number(a.precio) - Number(b.precio))
       : (() => {
           const evaluacion = evaluarReceta(receta, catalogo)
-          return evaluacion.ok ? evaluacion.productos : []
+          if (evaluacion.ok && evaluacion.productos.length) return evaluacion.productos
+
+          // Si no hay coincidencia exacta de SPH, buscamos una alternativa de fabricación
+          // cercana (máximo 0.50 D) y la separamos de las recomendaciones confirmadas.
+          // Nunca se presenta como coincidencia exacta ni habilita compra directa.
+          for (const producto of catalogo) {
+            const odSphCercana = nearestSphere(producto.sph_disponibles, receta.od.sph)
+            const oiSphCercana = nearestSphere(producto.sph_disponibles, receta.oi.sph)
+            if (odSphCercana == null || oiSphCercana == null) continue
+            const recetaCercana = {
+              ...receta,
+              od: { ...receta.od, sph: odSphCercana },
+              oi: { ...receta.oi, sph: oiSphCercana },
+            }
+            const validacion = evaluarReceta(recetaCercana, [producto])
+            if (!validacion.ok || validacion.productos.length === 0) continue
+            alternativasRevision.push({
+              ...producto,
+              requiere_revision: true,
+              receta_ajustada: { od: recetaCercana.od, oi: recetaCercana.oi },
+              parametros_revision: {
+                od: { sph: odSphCercana, cyl_disponible: receta.od.cyl, axis_disponible: receta.od.axis },
+                oi: { sph: oiSphCercana, cyl_disponible: receta.oi.cyl, axis_disponible: receta.oi.axis },
+              },
+            })
+          }
+          return []
         })()
 
     const seleccion = evaluados.length > 3
