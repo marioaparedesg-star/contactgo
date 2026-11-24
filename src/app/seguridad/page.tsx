@@ -46,7 +46,7 @@ export default function SeguridadPage() {
               Tomamos todas las medidas y precauciones razonables para proteger tu información personal y seguimos las mejores prácticas de la industria para asegurar que tu información no sea utilizada de manera inapropiada, alterada o destruida.
             </p>
             <p className="text-sm leading-relaxed mb-3">
-              Ciframos la información de tu tarjeta de crédito utilizando la tecnología de capa de puertos seguros o <strong>Secure Sockets Layer (SSL)</strong>, y la almacenamos con el cifrado AES-256. Seguimos todos los requerimientos del estándar <strong>PCI-DSS</strong> para la seguridad de datos de tarjetas de pago.
+              El sitio utiliza HTTPS con cifrado TLS para proteger la transmisión de información. Los datos de la tarjeta se introducen y procesan directamente en la plataforma de pago de AZUL (Banco Popular); ContactGo no recibe ni almacena números de tarjeta ni códigos de seguridad. La validación de cumplimiento PCI-DSS corresponde al proveedor de pagos y al alcance aplicable a la integración.
             </p>
             <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm">
               <p className="font-semibold text-blue-900 mb-1">🔒 Importante</p>
@@ -96,7 +96,7 @@ export default function SeguridadPage() {
               {[
                 'Todas las transacciones se realizan bajo conexión HTTPS cifrada con SSL',
                 'Los datos de tu tarjeta son procesados directamente por AZUL (Servicios Digitales Popular, S.A.) — ContactGo nunca los almacena',
-                'Cumplimos con el estándar PCI-DSS para el manejo seguro de datos de tarjetas',
+                'Los datos de tarjeta son procesados por AZUL; ContactGo no los recibe ni almacena',
                 'Las transacciones están protegidas por autenticación 3D Secure (Verified by Visa / Mastercard ID Check)',
                 'Nunca compartiremos tu información de pago con terceros no autorizados',
               ].map((item, i) => (
