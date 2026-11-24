@@ -415,7 +415,7 @@ export default function RecetaPage() {
                           <span className="text-[9px] bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded-full">OD</span>
                         </div>
                         {productsOd.length === 0 ? (
-                          <p className="text-xs text-gray-400 text-center py-6">No encontramos una coincidencia confirmada para este ojo. Podemos revisar alternativas contigo.</p>
+                          <p className="text-xs text-gray-400 text-center py-6">No encontramos productos compatibles para este ojo.</p>
                         ) : (
                           <div className="grid grid-cols-1 gap-2">
                             {productsOd.slice(0, 3).map((p, i) => (
@@ -465,7 +465,7 @@ export default function RecetaPage() {
 
                     {products.length === 0 ? (
                       alternativasRevision.length > 0
-                        ? <AlternativasRevisionCard alternatives={alternativasRevision} result={result}/>
+                        ? <AlternativasRevisionCard alternatives={alternativasRevision} result={result} onAction={handleAddToCart}/>
                         : <FallbackProductos result={result}/>
                     ) : (
                       <>
@@ -668,54 +668,16 @@ function FallbackProductos({ result }: { result: ConvertedRx }) {
   )
 }
 
-function AlternativasRevisionCard({ alternatives, result }: { alternatives: any[]; result: ConvertedRx }) {
-  const message = (p: any) => {
-    const fmt = (v: number | null) => v == null ? '—' : Number(v).toFixed(2)
-    const fmtAxis = (v: number | null) => v == null ? '—' : String(v).padStart(3, '0') + '°'
-    const a = p.parametros_revision
-    return [
-      'Hola ContactGo. Mi calculadora encontró un modelo para revisión profesional, no una coincidencia exacta.',
-      p.nombre,
-      `OD: SPH ${fmt(a.od.sph)}, CYL disponible ${fmt(a.od.cyl_disponible)}, eje disponible ${fmtAxis(a.od.axis_disponible)}`,
-      `OI: SPH ${fmt(a.oi.sph)}, CYL disponible ${fmt(a.oi.cyl_disponible)}, eje disponible ${fmtAxis(a.oi.axis_disponible)}`,
-      `Receta calculada: OD ${fmt(result.od.sph)} / ${fmt(result.od.cyl)} × ${fmt(result.od.axis)}; OI ${fmt(result.oi.sph)} / ${fmt(result.oi.cyl)} × ${fmt(result.oi.axis)}.`,
-      'Por favor, confirmen si existe una alternativa adecuada antes de realizar el pedido.'
-    ].join('\\n')
-  }
+function AlternativasRevisionCard({ alternatives, result, onAction }: { alternatives: any[]; result: ConvertedRx; onAction: (p: any, rx?: ConvertedRx) => void }) {
   return (
-    <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-4 space-y-3">
-      <div>
-        <p className="text-sm font-bold text-gray-900">Modelos para revisar con un especialista</p>
-        <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-          No encontramos coincidencia exacta con todos los parámetros de fabricación. Estos modelos tienen valores cercanos disponibles, pero no constituyen una receta ni una recomendación para comprar sin validación profesional.
-        </p>
+    <div className="space-y-3">
+      <p className="text-sm text-slate-600">Estas opciones tienen parámetros de fabricación cercanos. Revisa la configuración en la ficha del producto antes de comprar.</p>
+      <div className="grid grid-cols-2 gap-3">
+        {alternatives.map((p: any, i: number) => (
+          <ProductCard key={p.id} product={{ ...p, requiere_revision: true }} result={result}
+            tier={i === 0 ? 'rec' : 'eco'} onAction={onAction} cartAdded={null}/>
+        ))}
       </div>
-      {alternatives.map((p: any) => (
-        <div key={p.id} className="bg-white rounded-xl border border-gray-200 p-3">
-          <div className="flex items-center gap-3">
-            {p.imagen_url && <img src={p.imagen_url} alt={p.nombre} className="w-16 h-16 object-contain rounded-lg bg-gray-50"/>}
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] uppercase tracking-wide text-gray-400 font-semibold">{p.marca}</p>
-              <p className="text-sm font-bold text-gray-900">{p.nombre}</p>
-              {p.precio != null && <p className="text-sm font-semibold text-primary-700">RD${Number(p.precio).toLocaleString('es-DO')}</p>}
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
-            {(['od','oi'] as const).map((eye) => (
-              <div key={eye} className="rounded-lg bg-gray-50 p-2">
-                <p className="font-bold text-gray-700 mb-1">{eye.toUpperCase()}</p>
-                <p>SPH: {p.parametros_revision[eye].sph?.toFixed(2) ?? 'No disponible'}</p>
-                <p>CYL cercano: {p.parametros_revision[eye].cyl_disponible?.toFixed(2) ?? '—'}</p>
-                <p>Eje cercano: {p.parametros_revision[eye].axis_disponible != null ? String(p.parametros_revision[eye].axis_disponible).padStart(3,'0') + '°' : '—'}</p>
-              </div>
-            ))}
-          </div>
-          <a href={`https://wa.me/18096942268?text=${encodeURIComponent(message(p))}`} target="_blank" rel="noopener noreferrer"
-            className="mt-3 w-full inline-flex justify-center rounded-lg bg-[#002455] px-4 py-2.5 text-xs font-bold text-white">
-            Solicitar validación del especialista
-          </a>
-        </div>
-      ))}
     </div>
   )
 }
