@@ -4,20 +4,21 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import Link from 'next/link'
 import MailLink from '@/components/ui/MailLink'
+import { Eye, PackageCheck, Truck, Headset } from 'lucide-react'
 import type { Metadata } from 'next'
 
 // canonical agregado
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/sobre-nosotros' },
   title: 'Sobre ContactGo — La tienda de lentes de contacto en RD',
-  description: 'ContactGo nació para hacer que comprar lentes de contacto en República Dominicana sea tan sencillo como pedir comida. Conoce nuestra historia y lo que nos mueve cada día.',
+  description: 'Conoce ContactGo, una tienda dominicana especializada en lentes de contacto, con catálogo en línea, orientación sobre recetas y envíos a todo el país.',
 }
 
 const VALORES = [
-  { icon: '🏥', title: 'Especialización total', desc: 'Solo lentes de contacto. No somos una óptica genérica — somos expertos en una sola cosa y la hacemos muy bien.' },
-  { icon: '✅', title: 'Certificados. Siempre.', desc: 'Cada caja llega sellada de fábrica. Nunca usados, nunca reempacados, nunca vencidos. Lo que ves es exactamente lo que recibes.' },
-  { icon: '🚀', title: 'Entrega según tu tipo de lente', desc: 'Lentes de color planos disponibles al día siguiente; esféricos en 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; multifocales en 1-5 días y tóricos en 25-45 días.' },
-  { icon: '💬', title: 'Alguien que realmente sabe', desc: 'Cuando escribes a ContactGo, alguien que entiende de lentes te responde. No un bot, no un guión. Ayuda real para tu receta.' },
+  { icon: Eye, title: 'Especialización', desc: 'Nuestro catálogo se concentra en lentes de contacto, soluciones y gotas. Esto nos permite organizar la información por marca, diseño y tipo de receta.' },
+  { icon: PackageCheck, title: 'Productos sellados', desc: 'Los productos se entregan en su empaque original y sellado. Trabajamos a través de canales de distribución autorizados.' },
+  { icon: Truck, title: 'Entrega según el producto', desc: 'El plazo depende del diseño y del destino. Los esféricos suelen tardar 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el interior; los multifocales, 1-5 días; y los tóricos, 25-45 días.' },
+  { icon: Headset, title: 'Atención directa', desc: 'Puedes comunicarte con nuestro equipo para consultar disponibilidad, compartir tu receta y aclarar dudas antes de realizar tu pedido.' },
 ]
 
 const MARCAS = [
@@ -70,14 +71,14 @@ export default function SobreNosotrosPage() {
       <main id="main-content" className="pb-20">
 
         {/* Hero */}
-        <section className="bg-gradient-to-br from-teal-600 via-teal-500 to-teal-600 text-white py-20 px-4 text-center">
+        <section className="bg-[#F3F6F8] border-b border-slate-200 text-[#002455] py-16 md:py-20 px-4 text-center">
           <div className="max-w-3xl mx-auto">
-            <span className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-widest uppercase">La única tienda especializada en RD</span>
+            <span className="inline-block bg-white text-[#002455] text-xs font-semibold border border-slate-200 px-3 py-1 rounded-full mb-4 tracking-widest uppercase">Especialistas en lentes de contacto</span>
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-5 leading-tight">
               Por qué existimos
             </h1>
-            <p className="text-primary-100 text-lg max-w-xl mx-auto leading-relaxed">
-              Nacimos para resolver un problema real: conseguir lentes de contacto certificados en República Dominicana era difícil, caro y lleno de incertidumbre. Lo cambiamos.
+            <p className="text-slate-600 text-lg max-w-xl mx-auto leading-relaxed">
+              En República Dominicana, encontrar el lente indicado no siempre es sencillo: hay que revisar la receta, confirmar el diseño y saber dónde está disponible. ContactGo reúne esa información y permite consultar y comprar desde una sola tienda en línea.
             </p>
           </div>
         </section>
@@ -99,24 +100,24 @@ export default function SobreNosotrosPage() {
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Nuestra historia</h2>
           <div className="space-y-4 text-gray-600 leading-relaxed">
             <p>
-              ContactGo nació de una pregunta simple: ¿por qué comprar lentes de contacto tiene que ser tan complicado? Visitas innecesarias, poca disponibilidad y ninguna garantía de autenticidad. Había una mejor forma de hacerlo — y decidimos crearla.
+              ContactGo es una tienda en línea dominicana enfocada en lentes de contacto. La idea es facilitar una parte concreta de la compra: consultar marcas y diseños, revisar la información de cada producto y gestionar el pedido sin tener que desplazarse para cada consulta.
             </p>
             <p>
-              Decidimos crear la única tienda dominicana especializada <strong>100% en lentes de contacto</strong>. Sin distracciones, sin productos genéricos. Solo lentes, soluciones y gotas de marcas reconocidas, adquiridos a través de canales de distribución autorizados.
+              Por eso organizamos el catálogo por tipo de lente y fabricante. Encontrarás opciones de ACUVUE, Alcon, CooperVision y Bausch+Lomb, además de soluciones y gotas para el cuidado de los lentes.
             </p>
             <p>
-              Hoy operamos con tecnología de primer nivel: receta inteligente que recomienda el lente exacto según tu graduación, recompra automática para que nunca te quedes sin lentes, y entrega según el tipo de lente en todo el país.
+              La plataforma permite consultar productos según los parámetros de una receta, guardar los datos de tu cuenta y dar seguimiento a tus pedidos. Si una receta requiere una revisión adicional, puedes contactar al equipo antes de comprar.
             </p>
           </div>
         </section>
 
         {/* Misión */}
-        <section className="bg-teal-50 border-y border-primary-100 py-14 px-4">
+        <section className="bg-white border-y border-slate-200 py-14 px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <span className="text-4xl mb-4 block">🎯</span>
+            <Eye className="h-7 w-7 text-[#008F95] mx-auto mb-4" aria-hidden="true" />
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Nuestra misión</h2>
             <p className="text-gray-600 leading-relaxed text-lg">
-              Hacer que cada dominicano pueda cuidar su salud visual sin complicaciones — con los mejores lentes del mundo, entregados en su puerta, de la manera más sencilla posible.
+              Facilitar el acceso a lentes de contacto de marcas reconocidas mediante información clara, atención al cliente y entrega coordinada según el producto y la ubicación.
             </p>
           </div>
         </section>
@@ -126,8 +127,8 @@ export default function SobreNosotrosPage() {
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-10 text-center">Por qué elegirnos</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {VALORES.map(v => (
-              <div key={v.title} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-                <span className="text-3xl mb-3 block">{v.icon}</span>
+              <div key={v.title} className="bg-white rounded-xl border border-slate-200 p-6">
+                <v.icon className="h-6 w-6 text-[#002455] mb-4" aria-hidden="true" />
                 <h3 className="font-bold text-gray-900 mb-2">{v.title}</h3>
                 <p className="text-gray-600 text-sm leading-relaxed">{v.desc}</p>
               </div>
@@ -138,12 +139,12 @@ export default function SobreNosotrosPage() {
         {/* Marcas autorizadas */}
         <section className="bg-gray-50 py-16 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Directo del fabricante</h2>
-            <p className="text-gray-500 text-sm text-center mb-10">Trabajamos directamente con las mejores marcas del mundo</p>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Marcas disponibles</h2>
+            <p className="text-gray-500 text-sm text-center mb-10">En el catálogo encontrarás productos de los siguientes fabricantes, a través de canales de distribución autorizados.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {MARCAS.map(m => (
-                <div key={m.nombre} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex gap-4 items-start">
-                  <span className="text-2xl">{m.pais}</span>
+                <div key={m.nombre} className="bg-white rounded-xl border border-slate-200 p-5 flex gap-4 items-start">
+                  <span className="text-xl">{m.pais}</span>
                   <div>
                     <p className="font-bold text-gray-900 text-sm">{m.nombre}</p>
                     <p className="text-xs text-primary-600 font-semibold mb-1">{m.fabricante} · Productos Originales</p>
@@ -157,11 +158,11 @@ export default function SobreNosotrosPage() {
 
         {/* CTA final */}
         <section className="max-w-2xl mx-auto px-4 py-16 text-center">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">¿Listo para empezar?</h2>
-          <p className="text-gray-600 mb-8">Encuentra tus lentes exactos en segundos con nuestra calculadora de receta inteligente.</p>
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Consulta el catálogo</h2>
+          <p className="text-gray-600 mb-8">Revisa las marcas y los diseños disponibles. Si necesitas ayuda para interpretar tu receta, nuestro equipo puede orientarte.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/receta" className="btn-primary px-8 py-3 text-base">
-              Usar mi receta
+              Revisar mi receta
             </Link>
             <Link href="/catalogo" className="btn-secondary px-8 py-3 text-base">
               Ver catálogo
