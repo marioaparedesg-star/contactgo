@@ -232,37 +232,12 @@ export default function RecetaPage() {
     setShowLead(false); setPendingRx(null); setCartAdded(null); setRxSource(null); setVertexDistanceMm('12')
   }
 
-  // ── Agregar al carrito DIRECTO (esférico y color) o via PDP ────────────────
-  // soloOjo: cuando viene de una card del modo mixto, agrega SOLO 1 caja para ese ojo
+  // Toda recomendación abre la ficha real del producto con la receta precargada.
   const handleAddToCart = (product: any, productResult?: ConvertedRx, soloOjo?: 'OD' | 'OI') => {
-    if (!result) return
+    if (!result || !product?.slug) return
     const activeResult = productResult ?? result
-    const isSimple = activeResult.tipo === 'esferico' && !casoMixto
-    // Modo mixto o tipos complejos → ir al PDP con la receta correcta
-    if (!isSimple) {
-      saveRxToSession(soloOjo, activeResult)
-      router.push(`/producto/${product.slug}${soloOjo ? `?ojo=${soloOjo}` : ''}`)
-      return
-    }
-    // Esférico puro: agregar directo al carrito con la receta calculada
-    const prod: Partial<Product> = {
-      id: product.id, nombre: product.nombre, marca: product.marca,
-      precio: Number(product.precio), tipo: product.tipo,
-      imagen_url: product.imagen_url, activo: true, slug: product.slug,
-      sph_disponibles: product.sph_disponibles ?? [], cyl_disponibles: [],
-      add_disponibles: [], colores_disponibles: [], stock: 99,
-      categoria_id: null, costo: 0, descripcion: product.descripcion ?? null,
-    }
-    const odSph = result.od.sph ?? 0; const oiSph = result.oi.sph ?? 0
-    if (Math.abs(odSph - oiSph) < 0.01) {
-      addItem(prod as Product, { sph: odSph, ojo_mode: 'AMBOS', misma_receta: true, cantidad: 2 })
-    } else {
-      addItem(prod as Product, { sph: odSph, ojo_mode: 'OD', cantidad: 1 })
-      addItem(prod as Product, { sph: oiSph, ojo_mode: 'OI', cantidad: 1 })
-    }
-    setCartAdded(product.id)
-    trackEvento('add_to_cart', { tipo_receta: result.tipo, producto_slug: product.slug })
-    toast.success(`¡${product.nombre} agregado con tu receta!`, { duration: 3000 })
+    saveRxToSession(soloOjo, activeResult)
+    router.push(`/producto/${product.slug}${soloOjo ? `?ojo=${soloOjo}` : ''}`)
   }
 
   const saveRxToSession = (soloOjo?: 'OD' | 'OI', rxResult?: ConvertedRx) => {
@@ -292,10 +267,10 @@ export default function RecetaPage() {
       <main className="min-h-screen bg-[#f4f8fb] pb-16">
 
         {/* Encabezado compacto: prioriza el formulario en móvil */}
-        <section className="relative overflow-hidden border-b border-[#dceaf4] bg-[#0758a6] px-4 py-6 text-left text-white md:px-5 md:py-8"><div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full border-[18px] border-white/5" /><div className="pointer-events-none absolute -right-2 -top-10 h-40 w-40 rounded-full border-[12px] border-[#01B2B7]/15" />
+        <section className="border-b border-[#e5edf2] bg-[#0758a6] px-4 py-6 text-left text-white md:px-5 md:py-7>
           <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white/80 md:text-xs"><span className="h-2 w-2 rounded-full bg-[#01B2B7]" />Calculadora de receta</p><h1 className="font-display text-2xl font-bold leading-tight tracking-tight text-white md:text-3xl">Encuentra tus lentes ideales</h1><p className="mt-2 max-w-xl text-sm leading-6 text-white/85">Introduce tu graduación y descubre las opciones que se ajustan a tus parámetros.</p>
+              <p className="mb-2 text-xs font-semibold text-white/85">CALCULADORA DE RECETA</p><h1 className="font-display text-2xl font-bold leading-tight text-white md:text-3xl">Encuentra tus lentes</h1><p className="mt-2 max-w-xl text-sm text-white/90">Introduce tu graduación para ver productos compatibles.</p>
             </div>
             <div className="hidden shrink-0 rounded-full border border-white/25 bg-white/10 px-3 py-2 text-[11px] font-semibold text-white sm:block">
               Sin costo · Sin registro
@@ -333,14 +308,14 @@ export default function RecetaPage() {
           </div>
         )}
 
-        <div className="relative z-10 mx-auto -mt-3 max-w-3xl space-y-3 px-3 pb-5 md:px-4 md:space-y-4">
+        <div className="mx-auto max-w-3xl space-y-3 px-3 py-4 md:px-4 md:py-5 md:space-y-4">
 
 
 
 
 
           {/* Tipo de receta */}
-          <section className="rounded-2xl border border-[#dce6ed] bg-white p-4 shadow-[0_8px_24px_rgba(15,35,65,.05)] md:p-5">
+          <section className="rounded-xl border border-slate-200 bg-white p-4 md:p-5">
             <div className="mb-2">
               <h2 className="text-base font-bold tracking-tight text-[#002455]">¿Qué tipo de receta tienes?</h2>
               <p className="mt-1 text-xs text-slate-500">Elige de dónde provienen los valores.</p>
@@ -461,7 +436,7 @@ export default function RecetaPage() {
                           <span className="text-[9px] bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded-full">OI</span>
                         </div>
                         {productsOi.length === 0 ? (
-                          <p className="text-xs text-gray-400 text-center py-6">Sin productos compatibles — contáctanos por WhatsApp</p>
+                          <p className="text-xs text-gray-400 text-center py-6">No encontramos productos compatibles para este ojo</p>
                         ) : (
                           <div className="grid grid-cols-1 gap-2">
                             {productsOi.slice(0, 3).map((p, i) => (
@@ -473,12 +448,7 @@ export default function RecetaPage() {
                       </div>
                     </div>
 
-                    <div className="mt-3 bg-green-50 border border-green-200 rounded-xl p-3">
-                      <p className="text-xs text-green-900 leading-relaxed">
-                        <strong>Importante:</strong> si prefieres que armemos tu pedido personalizado y te enviemos el link de pago,{' '}
-                        <a href={`https://wa.me/18096942268?text=${buildWA(result)}`} target="_blank" rel="noopener noreferrer" className="underline font-bold">contáctanos por WhatsApp</a>.
-                      </p>
-                    </div>
+
                   </>
                 ) : (
                   // ═══════════ CASO ESTANDAR — flujo original ═══════════
@@ -496,7 +466,7 @@ export default function RecetaPage() {
                     {products.length === 0 ? (
                       alternativasRevision.length > 0
                         ? <AlternativasRevisionCard alternatives={alternativasRevision} result={result}/>
-                        : <FallbackProductos result={result} buildWA={buildWA}/>
+                        : <FallbackProductos result={result}/>
                     ) : (
                       <>
                         {/* Mobile: cards apiladas — Desktop: 3 columnas */}
@@ -609,27 +579,23 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
   const tierLabel = {eco:'Opción',rec:'Recomendada',prem:'Alternativa'}[tier]
   const reviewText = encodeURIComponent(`Hola ContactGo. Quiero validar esta alternativa antes de comprar: ${p.nombre}. OD: SPH ${productResult.od.sph ?? '—'}, CYL ${productResult.od.cyl ?? '—'}, eje ${productResult.od.axis ?? '—'}. OI: SPH ${productResult.oi.sph ?? '—'}, CYL ${productResult.oi.cyl ?? '—'}, eje ${productResult.oi.axis ?? '—'}.`)
   return (
-    <article className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-[#e5ebef] bg-white shadow-[0_8px_24px_rgba(15,35,65,.055)]">
+    <article className="flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="relative flex h-36 items-center justify-center bg-white p-4 md:h-44">
         {p.imagen_url ? <img src={p.imagen_url} alt={p.nombre} className="h-full w-full object-contain" loading="lazy"/> : <div className="text-xs text-slate-300">Imagen no disponible</div>}
         {featured && <span className="absolute left-3 top-3 rounded-full bg-[#0758a6] px-2.5 py-1 text-[9px] font-bold text-white">Recomendado</span>}
         {p.requiere_revision && <span className="absolute right-3 top-3 rounded-full bg-amber-50 px-2.5 py-1 text-[9px] font-bold text-amber-800">Revisar</span>}
       </div>
-      <div className="flex flex-1 flex-col border-t border-slate-100 p-3.5">
+      <div className="flex flex-1 flex-col border-t border-slate-100 p-3">
         <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">{p.marca}</p>
         <h3 className="mt-1 min-h-[2.25rem] text-sm font-bold leading-5 text-slate-800">{p.nombre}</h3>
         <div className="mt-2 flex items-baseline gap-2"><p className="text-base font-bold text-[#0758a6]">RD${precio.toLocaleString("es-DO")}</p>{off > 0 && <span className="text-[10px] font-semibold text-emerald-600">-{off}%</span>}</div>
-        <div className="mt-3 border-t border-slate-100 pt-2"><p className="mb-1 text-[9px] font-bold uppercase tracking-wide text-slate-400">Graduación para este lente</p><RecetaMini result={productResult} soloOjo={soloOjo}/></div>
+        <div className="mt-2"><RecetaMini result={productResult} soloOjo={soloOjo}/></div>
         {p.requiere_revision && <p className="mt-2 rounded-lg bg-amber-50 px-2.5 py-2 text-[10px] leading-4 text-amber-900">Parámetros cercanos. Un especialista debe confirmar la alternativa antes de comprar.</p>}
       </div>
       <div className="space-y-2 px-3 pb-3">
-        {p.requiere_revision ? (
-          <a href={`https://wa.me/18096942268?text=${reviewText}`} target="_blank" rel="noopener noreferrer" className="flex w-full items-center justify-center rounded-xl bg-amber-600 py-2.5 text-xs font-bold text-white">Validar con especialista</a>
-        ) : (
-          <button onClick={() => onAction(p, productResult)} className={"flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-bold transition-colors " + (wasAdded ? "bg-emerald-600 text-white" : featured ? "bg-[#01B2B7] text-white hover:bg-[#009da2]" : "bg-[#0758a6] text-white hover:bg-[#064b8e]")}>
-            {wasAdded ? <><CheckCircle className="h-3.5 w-3.5"/>En tu carrito</> : soloOjo ? `Elegir para ${soloOjo}` : isSimple ? <><ShoppingCart className="h-3.5 w-3.5"/>Agregar al carrito</> : "Ver con mi receta"}
-          </button>
-        )}
+        <button onClick={() => onAction(p, productResult)} className="flex w-full items-center justify-center rounded-lg bg-[#0758a6] py-2.5 text-xs font-semibold text-white hover:bg-[#064b8e]">
+          Configurar este producto
+        </button>
         <Link href={`/producto/${p.slug}${soloOjo ? `?ojo=${soloOjo}` : ""}`} onClick={() => { try { sessionStorage.setItem("cg_rx_pending", JSON.stringify({ od: productResult.od, oi: productResult.oi, tipo: productResult.tipo, soloOjo: soloOjo ?? null, timestamp: Date.now() })) } catch {} }} className="block py-1 text-center text-[10px] font-semibold text-slate-500 hover:text-[#0758a6]">Ver detalles</Link>
       </div>
     </article>
@@ -691,20 +657,16 @@ function RecetaMini({ result, soloOjo }: { result: ConvertedRx; soloOjo?: 'OD' |
 }
 
 // ── Fallback sin productos ─────────────────────────────────────────────────────
-function FallbackProductos({ result, buildWA }: { result: ConvertedRx; buildWA: (r: ConvertedRx) => string }) {
+function FallbackProductos({ result }: { result: ConvertedRx }) {
+  const slug = result.tipo === 'torico' ? 'toricos' : result.tipo.startsWith('multifocal') ? 'multifocales' : result.tipo === 'color' ? 'catalogo?tipo=color' : 'esfericos'
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center shadow-sm">
-      
-      <p className="font-bold text-gray-900 text-sm mb-1">Consultamos disponibilidad para ti</p>
-      <p className="text-xs text-gray-500 mb-4">Un especialista te confirmará las opciones compatibles en minutos.</p>
-      <a href={`https://wa.me/18096942268?text=${buildWA(result)}`} target="_blank" rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 bg-[#002455] text-white font-bold text-sm px-5 py-3 rounded-xl shadow-md">
-        Consultar disponibilidad →
-      </a>
+    <div className="rounded-xl border border-slate-200 bg-white p-5 text-center">
+      <p className="text-sm font-semibold text-slate-800">No encontramos una coincidencia exacta</p>
+      <p className="mt-1 text-xs text-slate-500">Puedes revisar los productos de esta categoría y comprobar sus parámetros.</p>
+      <Link href={`/${slug}`} className="mt-4 inline-flex rounded-lg bg-[#0758a6] px-4 py-2.5 text-xs font-semibold text-white">Ver productos</Link>
     </div>
   )
 }
-
 
 function AlternativasRevisionCard({ alternatives, result }: { alternatives: any[]; result: ConvertedRx }) {
   const message = (p: any) => {
