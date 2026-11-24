@@ -34,7 +34,7 @@ export default function EnviosPage() {
               <div className="bg-green-50 border border-green-200 rounded-2xl p-5">
                 <p className="font-bold text-green-800 text-lg mb-1">🚀 24 a 48 / 24 a 72 h</p>
                 <p className="text-green-700 text-sm font-semibold mb-2">Lentes esféricos</p>
-                <p className="text-gray-600 text-sm">Santo Domingo: 24-48 horas. Interior del país: 24-72 horas.</p>
+                <p className="text-gray-600 text-sm">Santo Domingo y Santiago: 24-48 horas. Interior del país: 24-72 horas.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
                 <p className="font-bold text-amber-800 text-lg mb-1">📦 1 a 5 días</p>
