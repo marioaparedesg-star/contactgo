@@ -27,7 +27,6 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/multifocales',                                priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/color',                                       priority: 0.80, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/lentes-de-contacto-republica-dominicana',     priority: 0.95, changeFrequency: 'weekly'  },
-    { url: 'https://www.contactgo.net/gotas',                                      priority: 0.75, changeFrequency: 'weekly' as const },
     { url: 'https://www.contactgo.net/soluciones',                                  priority: 0.75, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/marca/acuvue',                                priority: 0.85, changeFrequency: 'weekly'  },
     { url: 'https://www.contactgo.net/marca/alcon',                                 priority: 0.85, changeFrequency: 'weekly'  },
@@ -45,8 +44,6 @@ export default async function sitemap() {
     { url: 'https://www.contactgo.net/envios-y-entregas',                           priority: 0.65, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/devoluciones',                                priority: 0.55, changeFrequency: 'monthly' },
     { url: 'https://www.contactgo.net/seguridad',                                   priority: 0.55, changeFrequency: 'monthly' },
-    { url: 'https://www.contactgo.net/terminos',                                    priority: 0.40, changeFrequency: 'yearly'  },
-    { url: 'https://www.contactgo.net/privacidad',                                  priority: 0.40, changeFrequency: 'yearly'  },
     { url: 'https://www.contactgo.net/aviso-legal',                                  priority: 0.40, changeFrequency: 'yearly'  },
   ].map(p => ({
     url: p.url,
