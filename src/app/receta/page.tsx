@@ -109,18 +109,19 @@ export default function RecetaPage() {
             })
             const json = await res.json()
             if (json.error) toast.error(json.error, { duration: 5000 })
-            return json.productos ?? []
+            return { productos: json.productos ?? [], total: Number(json.total ?? 0), alternativas: json.alternativas_revision ?? [] }
           } catch { return [] }
         }
         const [listaOd, listaOi] = await Promise.all([
           fetchOjo(mixto.od.tipo, mixto.od.rx),
           fetchOjo(mixto.oi.tipo, mixto.oi.rx),
         ])
-        setProductsOd(listaOd)
-        setProductsOi(listaOi)
+        setProductsOd(listaOd.productos)
+        setProductsOi(listaOi.productos)
+        setAlternativasRevision([...listaOd.alternativas, ...listaOi.alternativas])
         setProducts([]) // limpia el modo simple
-        setTotalDisp(listaOd.length + listaOi.length)
-        return [...listaOd, ...listaOi]
+        setTotalDisp(listaOd.total + listaOi.total)
+        return [...listaOd.productos, ...listaOi.productos]
       }
 
       // ── CASO ESTANDAR: 1 tipo de producto para ambos ojos ─────────────
@@ -484,8 +485,8 @@ export default function RecetaPage() {
                   <>
                     <div className="flex items-center justify-between mb-3">
                       <div>
-                        <p className="font-black text-gray-900 text-base">{tipoLabel(result.tipo)}</p>
-                        {totalDisp > 3 && <p className="text-xs text-gray-500">{totalDisp} disponibles · mejores 3</p>}
+                        <p className="text-lg font-bold tracking-tight text-[#0758a6]">{totalDisp} {totalDisp === 1 ? 'producto encontrado' : 'productos encontrados'}</p>
+                        <p className="mt-0.5 text-xs text-slate-500">{tipoLabel(result.tipo)} · opciones compatibles con tu receta</p>
                       </div>
                       {result.tipo === 'esferico' && (
                         <span className="text-[10px] bg-green-100 text-green-700 font-bold px-2 py-1 rounded-full">Agregar directo al carrito</span>
