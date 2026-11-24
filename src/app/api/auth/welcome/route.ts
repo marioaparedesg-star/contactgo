@@ -37,10 +37,10 @@ export async function POST(req: NextRequest) {
     <!-- Beneficios -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
       ${[
-        ['🚀','Entrega en 24 horas','Para productos en stock en Santo Domingo'],
+        ['🚚','Entrega según producto','Plazo estimado según tipo de lente y destino'],
         ['🔒','Pago 100% seguro','Con AZUL Banco Popular — sin riesgo'],
         ['✅','Productos auténticos','Marcas reconocidas y canales autorizados'],
-        ['↩️','7 días de devolución','Sin preguntas, sin complicaciones'],
+        ['↩️','7 días para devoluciones','Aplica a productos sellados, sin abrir y en su empaque original'],
       ].map(([icon, title, desc]) => `
         <tr><td style="padding:10px 0;border-bottom:1px solid #f3f4f6;">
           <table><tr>
