@@ -4,9 +4,9 @@ import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 export const metadata: Metadata = {
-  title: 'Contact Lenses Punta Cana | ContactGo Dominican Republic', description: 'Buy ACUVUE, Biofinity, Air Optix contact lenses in Punta Cana with delivery in 24-48h. Secure payment, direct from manufacturer.',
+  title: 'Contact Lenses Punta Cana | ContactGo Dominican Republic', description: 'Buy ACUVUE, Biofinity and Air Optix contact lenses in Punta Cana. Transport is estimated at 24-72 hours; total delivery depends on lens type. Secure payment and authorized distribution channels.',
   alternates: { canonical: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery' },
-  openGraph: { type: 'article', title: 'Contact Lenses Delivery to Punta Cana Hotels — Same Day', description: 'Buy ACUVUE, Biofinity, Air Optix contact lenses in Punta Cana with delivery in 24-48h. Secure payment, direct from manufacturer.', url: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery', siteName: 'ContactGo', locale: 'en-DO', images: [{ url: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery.webp', width: 1200, height: 630, alt: 'Contact Lenses Delivery to Punta Cana Hotels — Same Day' }] },
+  openGraph: { type: 'article', title: 'Contact Lenses Delivery to Punta Cana Hotels — Same Day', description: 'Buy ACUVUE, Biofinity and Air Optix contact lenses in Punta Cana. Transport is estimated at 24-72 hours; total delivery depends on lens type. Secure payment and authorized distribution channels.', url: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery', siteName: 'ContactGo', locale: 'en-DO', images: [{ url: 'https://www.contactgo.net/blog/contact-lenses-punta-cana-hotel-delivery.webp', width: 1200, height: 630, alt: 'Contact Lenses Delivery to Punta Cana Hotels — Same Day' }] },
 }
 export default function Page() {
   return (<><Navbar /><main className="max-w-2xl mx-auto px-4 py-12 pb-24">
@@ -23,14 +23,14 @@ export default function Page() {
       <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Contact lens specialists · 5 min · Julio 2026</p></div>
     </div>
     <div className="space-y-8 text-gray-700 leading-relaxed">
-      <p>ContactGo delivers original contact lenses directly to your hotel or home in Punta Cana within 24-48 hours. ACUVUE, Biofinity, Air Optix — all directo del fabricante, direct from manufacturer.</p>
+      <p>ContactGo delivers sealed, authentic contact lenses to your hotel or home in Punta Cana. Transport is estimated at 24-72 hours; total delivery depends on lens type. We work through authorized distribution channels.</p>
       <section id="entrega">
         <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Delivery zones</h2>
         <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
           <p className="font-bold text-gray-900 mb-2">Punta Cana</p>
           <p className="text-sm text-gray-600">Bavaro, Cap Cana, Arena Gorda, Uvero Alto</p>
           <div className="flex items-center gap-2 mt-3">
-            <span className="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">24-48h delivery</span>
+            <span className="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">24-72h transport</span>
             <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">direct from manufacturer</span>
           </div>
         </div>
@@ -61,7 +61,7 @@ export default function Page() {
         <Link href="/blog/contact-lenses-dominican-republic" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Contact Lenses in Dominican Republic</p><p className="text-xs text-gray-500 mt-0.5">Complete guide for tourists</p></Link>
         <Link href="/blog/forgot-contact-lenses-punta-cana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Forgot your contact lenses?</p><p className="text-xs text-gray-500 mt-0.5">Emergency delivery guide</p></Link>
       </div>
-      <section id="productos"><h2 className="font-display text-xl font-bold text-gray-900 mb-4">Available now — 24-48h</h2>
+      <section id="productos"><h2 className="font-display text-xl font-bold text-gray-900 mb-4">Available now — transport 24-72h</h2>
         <div className="space-y-2">
           <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">ACUVUE Oasys 6u</p><p className="text-xs text-gray-500">Most popular worldwide</p></div><span className="font-black text-gray-900 text-sm">RD$3,350</span></Link>
           <Link href="/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Biofinity 6u</p><p className="text-xs text-gray-500">Monthly · CooperVision</p></div><span className="font-black text-gray-900 text-sm">RD$3,650</span></Link>
@@ -71,7 +71,7 @@ export default function Page() {
       </section>
     </div>
     <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-      <h3 className="font-bold text-gray-900 text-lg mb-2">Receive in Punta Cana in 24-48h</h3>
+      <h3 className="font-bold text-gray-900 text-lg mb-2">Receive your order in Punta Cana; total delivery depends on lens type</h3>
       <p className="text-sm text-gray-500 mb-4">direct from manufacturer · Direct from manufacturer · Secure payment</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">View catalog →</Link>
