@@ -69,7 +69,7 @@ export default function ProductCard({ product }: Props) {
         {diasUso && ['esferico','torico','multifocal','color'].includes(product.tipo ?? '') && <span className="absolute bottom-3 left-3 rounded-sm bg-[#002455] px-2 py-1 text-[10px] font-semibold text-white">
           {diasUso === 1 ? 'Diario' : diasUso === 14 ? 'Quincenal' : 'Mensual'}
         </span>}
-        {(product.tipo === 'torico' || product.tipo === 'multifocal' || product.tipo === 'multifocal_torico') && (
+        {(product.tipo === 'torico' || product.tipo === 'multifocal') && (
           <span className="absolute bottom-3 right-3 rounded-sm border border-slate-200 bg-white px-2 py-1 text-[9px] font-semibold text-slate-600">
             {getEntrega(product.tipo).etiqueta.replace(/^.*·\s*/, '')}
           </span>
