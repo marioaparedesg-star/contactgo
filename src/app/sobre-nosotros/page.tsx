@@ -22,15 +22,15 @@ const VALORES = [
 ]
 
 const MARCAS = [
-  { nombre: 'ACUVUE®', fabricante: 'Johnson & Johnson Vision', pais: '🇺🇸', descripcion: 'La marca #1 de lentes de contacto en el mundo.' },
-  { nombre: 'AIR OPTIX®', fabricante: 'Alcon', pais: '🇨🇭', descripcion: 'Tecnología de silicona hidrogel con máxima transpirabilidad.' },
-  { nombre: 'Biofinity® / Proclear®', fabricante: 'CooperVision', pais: '🇬🇧', descripcion: 'Líderes en comodidad para usuarios exigentes.' },
-  { nombre: 'ULTRA® / ReNu®', fabricante: 'Bausch+Lomb', pais: '🇺🇸', descripcion: 'Innovación constante en salud ocular desde 1853.' },
+  { nombre: 'ACUVUE®', fabricante: 'Johnson & Johnson Vision', pais: 'AC', descripcion: 'Lentes de reemplazo diario, quincenal y multifocal.' },
+  { nombre: 'AIR OPTIX®', fabricante: 'Alcon', pais: 'AL', descripcion: 'Lentes esféricos, tóricos, multifocales y de color.' },
+  { nombre: 'Biofinity® / Proclear®', fabricante: 'CooperVision', pais: 'CV', descripcion: 'Opciones de reemplazo mensual y diseños especiales.' },
+  { nombre: 'ULTRA® / ReNu®', fabricante: 'Bausch+Lomb', pais: 'BL', descripcion: 'Lentes de contacto y productos para su cuidado.' },
 ]
 
 const STATS = [
   { valor: '100%',   label: 'Especializados en lentes de contacto' },
-  { valor: '30+',    label: 'Productos certificados' },
+  { valor: '6',      label: 'Categorías de productos' },
   { valor: '4',      label: 'Marcas de nivel mundial' },
   { valor: 'Según producto', label: 'Plazo de entrega' },
 ]
@@ -75,7 +75,7 @@ export default function SobreNosotrosPage() {
           <div className="max-w-3xl mx-auto">
             <span className="inline-block bg-white text-[#002455] text-xs font-semibold border border-slate-200 px-3 py-1 rounded-full mb-4 tracking-widest uppercase">Especialistas en lentes de contacto</span>
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-5 leading-tight">
-              Por qué existimos
+              Quiénes somos
             </h1>
             <p className="text-slate-600 text-lg max-w-xl mx-auto leading-relaxed">
               En República Dominicana, encontrar el lente indicado no siempre es sencillo: hay que revisar la receta, confirmar el diseño y saber dónde está disponible. ContactGo reúne esa información y permite consultar y comprar desde una sola tienda en línea.
@@ -88,7 +88,7 @@ export default function SobreNosotrosPage() {
           <div className="max-w-4xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {STATS.map(s => (
               <div key={s.label}>
-                <p className="text-3xl font-black text-primary-600">{s.valor}</p>
+                <p className="text-3xl font-bold text-[#002455]">{s.valor}</p>
                 <p className="text-sm text-gray-500 mt-1">{s.label}</p>
               </div>
             ))}
@@ -144,10 +144,10 @@ export default function SobreNosotrosPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {MARCAS.map(m => (
                 <div key={m.nombre} className="bg-white rounded-xl border border-slate-200 p-5 flex gap-4 items-start">
-                  <span className="text-xl">{m.pais}</span>
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-xs font-bold tracking-wide text-[#002455]">{m.pais}</span>
                   <div>
                     <p className="font-bold text-gray-900 text-sm">{m.nombre}</p>
-                    <p className="text-xs text-primary-600 font-semibold mb-1">{m.fabricante} · Productos Originales</p>
+                    <p className="text-xs text-[#008F95] font-semibold mb-1">{m.fabricante} · Productos Originales</p>
                     <p className="text-xs text-gray-500">{m.descripcion}</p>
                   </div>
                 </div>
