@@ -241,12 +241,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Microsoft Clarity — usando next/script para garantizar carga */}
       </head>
       <body>
-        <a href="#main-content" className="skip-link sr-only focus:not-sr-only">Ir al contenido principal</a>
+        <a href="#content-start" className="skip-link sr-only focus:not-sr-only">Ir al contenido principal</a>
 
 
 
         <ReferralTracker />
-        {children}
+        <div id="content-start" tabIndex={-1}>{children}</div>
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(websiteSchema)}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}} />
         <BottomNav />
