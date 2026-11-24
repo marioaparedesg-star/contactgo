@@ -499,12 +499,8 @@ export default function RecetaPage() {
                     ) : (
                       <>
                         {/* Mobile: cards apiladas — Desktop: 3 columnas */}
-                        <div className="flex flex-col gap-3 md:hidden">
-                          {products[1] && <ProductCard product={products[1]} result={result} tier="rec" onAction={handleAddToCart} cartAdded={cartAdded}/>}
-                          <div className="grid grid-cols-2 gap-2">
-                            {products[0] && <ProductCard product={products[0]} result={result} tier="eco" onAction={handleAddToCart} cartAdded={cartAdded}/>}
-                            {products[2] && <ProductCard product={products[2]} result={result} tier="prem" onAction={handleAddToCart} cartAdded={cartAdded}/>}
-                          </div>
+                        <div className="grid grid-cols-2 gap-2.5 md:hidden">
+                          {products.map((p, i) => <ProductCard key={`mobile-${p.id}-${i}`} product={p} result={result} tier={i===0?'eco':i===1?'rec':'prem'} onAction={handleAddToCart} cartAdded={cartAdded}/>)}
                         </div>
                         {/* Desktop: 3 columnas */}
                         <div className="hidden md:grid grid-cols-3 gap-3">
@@ -594,50 +590,22 @@ function EyePanel({ label, eye, onChange, color, disabled }: { label: string; ey
 }
 // ── Diagnóstico ───────────────────────────────────────────────────────────────
 function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
-  const comp = getComplejidad(r)
-  const compC = {
-    verde: { label: 'Rango estándar', dot: 'bg-emerald-500', text: 'text-emerald-700' },
-    amarillo: { label: 'Revisión recomendada', dot: 'bg-amber-500', text: 'text-amber-700' },
-    rojo: { label: 'Requiere asesoría', dot: 'bg-rose-500', text: 'text-rose-700' },
-  }[comp.nivel]
+  const eyeText = (eye: any) => [fmtV(eye.sph), eye.cyl != null && eye.cyl !== 0 ? fmtCyl(eye.cyl) : null, eye.axis != null ? `×${fmtAxis(eye.axis)}` : null, eye.add != null && eye.add !== 0 ? `ADD +${eye.add.toFixed(2)}` : null].filter(Boolean).join(' / ')
   const tipoNombre = r.tipo==='torico' ? 'Lentes tóricos' : r.tipo==='multifocal_torico' ? 'Multifocal tórico' : r.tipo==='multifocal' ? 'Lentes multifocales' : 'Lentes esféricos'
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="border-b border-slate-100 px-4 py-4 md:px-5">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Resultado de tu receta</p>
-            <h2 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">{tipoNombre}</h2>
-            <div className="mt-2 flex flex-wrap gap-1.5">{r.condiciones.map(c=><span key={c} className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium text-slate-600">{c}</span>)}</div>
-          </div>
-          <span className={`inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1.5 text-[10px] font-semibold ${compC.text}`}>
-            <span className={`h-1.5 w-1.5 rounded-full ${compC.dot}`} />{compC.label}
-          </span>
-        </div>
+    <section className="rounded-2xl border border-[#dce6ed] bg-white p-4 shadow-[0_6px_20px_rgba(15,35,65,.04)] md:p-5">
+      <div className="flex items-center justify-between gap-3">
+        <div><p className="text-xs font-medium text-slate-500">Resultado calculado</p><h2 className="mt-0.5 text-base font-bold text-[#0758a6]">{tipoNombre}</h2></div>
+        <span className="rounded-full bg-[#e8f8f8] px-3 py-1.5 text-[10px] font-semibold text-[#007f86]">Receta procesada</span>
       </div>
-      <div className="grid grid-cols-2 gap-3 p-4 md:p-5">
-        {([['OD',r.od],['OI',r.oi]] as const).map(([lbl,eye])=>(
-          <div key={lbl} className="rounded-xl border border-slate-100 bg-slate-50/70 p-3">
-            <p className={`mb-3 text-xs font-bold ${lbl==='OD'?'text-blue-700':'text-emerald-700'}`}>{lbl}</p>
-            <div className="space-y-2 text-xs">
-              <div className="flex justify-between gap-2"><span className="text-slate-500">SPH</span><span className="font-mono font-semibold text-slate-900">{fmtV(eye.sph)}</span></div>
-              {eye.cyl!=null&&eye.cyl!==0&&<div className="flex justify-between gap-2"><span className="text-slate-500">CYL</span><span className="font-mono font-semibold text-slate-900">{fmtCyl(eye.cyl)}</span></div>}
-              {eye.axis!=null&&<div className="flex justify-between gap-2"><span className="text-slate-500">EJE</span><span className="font-mono font-semibold text-slate-900">{fmtAxis(eye.axis)}</span></div>}
-              {eye.add!=null&&eye.add!==0&&<div className="flex justify-between gap-2"><span className="text-slate-500">ADD</span><span className="font-mono font-semibold text-slate-900">+{eye.add.toFixed(2)}</span></div>}
-            </div>
-          </div>
-        ))}
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <div className="rounded-xl bg-[#f4f8fb] p-3"><p className="text-[10px] font-bold uppercase tracking-wide text-[#1762b3]">OD · Ojo derecho</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.od)}</p></div>
+        <div className="rounded-xl bg-[#f1fbfa] p-3"><p className="text-[10px] font-bold uppercase tracking-wide text-[#009da2]">OI · Ojo izquierdo</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.oi)}</p></div>
       </div>
-      <div className="space-y-2 px-4 pb-4 md:px-5 md:pb-5">
-        {r.needsVertex&&<p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[11px] leading-5 text-slate-600">Conversión óptica estimada desde gafas con una distancia al vértice de {r.vertexDistanceMm} mm. Los valores pueden variar y deben ser confirmados durante una adaptación profesional.</p>}
-        {r.requiresClinicalReview&&<p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-[11px] leading-5 text-amber-900">Tu receta de gafas incluye ADD. Ese valor no se traduce directamente a una graduación multifocal de contacto. Se requiere evaluación y selección profesional; por eso no mostramos una compatibilidad automática.</p>}
-        {!r.needsVertex && r.condiciones.includes('Alta graduación')&&<p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[11px] leading-5 text-slate-600">La graduación está en un rango elevado. La disponibilidad depende de los parámetros de fabricación específicos de cada lente.</p>}
-        <div className="flex items-start gap-2 border-t border-slate-100 pt-3">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-slate-400"/>
-          <div><p className="text-xs font-semibold text-slate-700">{comp.titulo}</p><p className="mt-0.5 text-[11px] leading-5 text-slate-500">{comp.desc}</p></div>
-        </div>
-        <p className="text-[10px] leading-4 text-slate-400">Resultado orientativo. No sustituye una prescripción ni una adaptación realizada por un profesional de la salud visual.</p>
-      </div>
+      {r.needsVertex && <p className="mt-3 rounded-xl bg-[#f4f8fb] px-3 py-2.5 text-[11px] leading-5 text-slate-600">Conversión orientativa desde gafas con distancia al vértice de {r.vertexDistanceMm} mm. Debe confirmarse con un profesional.</p>}
+      {r.requiresClinicalReview && <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-[11px] leading-5 text-amber-900">La ADD de una receta de gafas no se convierte directamente a un multifocal. La selección requiere evaluación profesional.</p>}
+      {!r.needsVertex && r.condiciones.includes("Alta graduación") && <p className="mt-3 rounded-xl bg-[#f4f8fb] px-3 py-2.5 text-[11px] leading-5 text-slate-600">Graduación elevada: la disponibilidad depende de los parámetros de fabricación de cada lente.</p>}
+      <p className="mt-3 text-[10px] leading-4 text-slate-400">Resultado orientativo. No sustituye una prescripción ni una adaptación profesional.</p>
     </section>
   )
 }
@@ -648,55 +616,35 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
   onAction: (p: any, result?: ConvertedRx) => void; cartAdded: string|null;
   soloOjo?: 'OD' | 'OI'; compact?: boolean
 }) {
-  const productResult: ConvertedRx = p.receta_ajustada
-    ? { ...result, od: { ...result.od, ...p.receta_ajustada.od }, oi: { ...result.oi, ...p.receta_ajustada.oi } }
-    : result
+  const productResult: ConvertedRx = p.receta_ajustada ? { ...result, od: { ...result.od, ...p.receta_ajustada.od }, oi: { ...result.oi, ...p.receta_ajustada.oi } } : result
   const precio = Number(p.precio)
   const precioAnt = Number(p.precio_anterior ?? 0)
   const off = precioAnt > precio ? Math.round((1 - precio/precioAnt)*100) : 0
   const featured = tier === 'rec'
   const isSimple = result.tipo === 'esferico' && !soloOjo
   const wasAdded = cartAdded === p.id
-  const tierLabel = {eco:'ECONÓMICO',rec:'RECOMENDADO',prem:'PREMIUM'}[tier]
-  const tierColor = {eco:'bg-gray-100 text-gray-600',rec:'bg-teal-500 text-white',prem:'bg-gray-800 text-white'}[tier]
+  const tierLabel = {eco:'Opción',rec:'Recomendada',prem:'Alternativa'}[tier]
   return (
-    <div className={`flex flex-col bg-white rounded-2xl border overflow-hidden transition-all ${featured?'border-primary-400 shadow-md ring-2 ring-teal-50':'border-gray-100 shadow-sm'}`}>
-      <div className={`text-[10px] font-black text-center py-1.5 ${tierColor}`}>{tierLabel}</div>
-      <div className="p-3 flex-1 flex flex-col">
-        {p.imagen_url&&<img src={p.imagen_url} alt={p.nombre} className={`w-full ${compact?'h-12':'h-14'} object-contain mb-2 rounded-lg bg-gray-50`}/>}
-        <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wide">{p.marca}</p>
-        <p className="text-xs font-bold text-gray-900 leading-tight mt-0.5 flex-1 line-clamp-2">{p.nombre}</p>
-        <div className="mt-2 pt-2 border-t border-gray-100">
-          <p className={`font-black text-sm ${featured?'text-primary-600':'text-gray-900'}`}>RD${precio.toLocaleString()}</p>
-          {off > 0 && <p className="text-[9px] text-green-600 font-bold">-{off}% off</p>}
-        </div>
-
-        {/* Receta que le corresponde a ESTE producto (estilo OptiExpert de CooperVision) */}
-        <RecetaMini result={productResult} soloOjo={soloOjo} />
-        {p.requiere_revision && <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2 py-2 text-[10px] leading-4 text-amber-900">Parámetros cercanos de fabricación. El cilindro o eje difiere de tu cálculo; un especialista debe validar esta alternativa antes de comprar.</p>}
+    <article className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-[#e5ebef] bg-white shadow-[0_8px_24px_rgba(15,35,65,.055)]">
+      <div className="relative flex h-36 items-center justify-center bg-white p-4 md:h-44">
+        {p.imagen_url ? <img src={p.imagen_url} alt={p.nombre} className="h-full w-full object-contain" loading="lazy"/> : <div className="text-xs text-slate-300">Imagen no disponible</div>}
+        {featured && <span className="absolute left-3 top-3 rounded-full bg-[#0758a6] px-2.5 py-1 text-[9px] font-bold text-white">Recomendado</span>}
+        {p.requiere_revision && <span className="absolute right-3 top-3 rounded-full bg-amber-50 px-2.5 py-1 text-[9px] font-bold text-amber-800">Revisar</span>}
       </div>
-      <div className="px-3 pb-3 space-y-1.5">
-        <button onClick={() => onAction(p, productResult)}
-          className={`w-full py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${wasAdded ? 'bg-green-500 text-white' : featured ? 'bg-teal-500 text-white hover:bg-teal-600' : 'bg-gray-800 text-white hover:bg-gray-700'}`}>
-          {wasAdded ? (<><CheckCircle className="w-3.5 h-3.5"/> ¡En tu carrito!</>)
-           : soloOjo ? (<><ArrowRight className="w-3.5 h-3.5"/> Elegir para {soloOjo}</>)
-           : isSimple ? (<><ShoppingCart className="w-3.5 h-3.5"/> Agregar al carrito</>)
-           : (<><ArrowRight className="w-3.5 h-3.5"/> Ver con mi receta</>)}
+      <div className="flex flex-1 flex-col border-t border-slate-100 p-3.5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">{p.marca}</p>
+        <h3 className="mt-1 min-h-[2.25rem] text-sm font-bold leading-5 text-slate-800">{p.nombre}</h3>
+        <div className="mt-2 flex items-baseline gap-2"><p className="text-base font-bold text-[#0758a6]">RD${precio.toLocaleString("es-DO")}</p>{off > 0 && <span className="text-[10px] font-semibold text-emerald-600">-{off}%</span>}</div>
+        <div className="mt-3 border-t border-slate-100 pt-2"><p className="mb-1 text-[9px] font-bold uppercase tracking-wide text-slate-400">Graduación para este lente</p><RecetaMini result={productResult} soloOjo={soloOjo}/></div>
+        {p.requiere_revision && <p className="mt-2 rounded-lg bg-amber-50 px-2.5 py-2 text-[10px] leading-4 text-amber-900">Parámetros cercanos. Un especialista debe confirmar la alternativa antes de comprar.</p>}
+      </div>
+      <div className="space-y-2 px-3 pb-3">
+        <button onClick={() => onAction(p, productResult)} className={"flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-bold transition-colors " + (wasAdded ? "bg-emerald-600 text-white" : featured ? "bg-[#01B2B7] text-white hover:bg-[#009da2]" : "bg-[#0758a6] text-white hover:bg-[#064b8e]")}>
+          {wasAdded ? <><CheckCircle className="h-3.5 w-3.5"/>En tu carrito</> : soloOjo ? `Elegir para ${soloOjo}` : isSimple ? <><ShoppingCart className="h-3.5 w-3.5"/>Agregar al carrito</> : "Ver con mi receta"}
         </button>
-        <Link href={`/producto/${p.slug}${soloOjo ? `?ojo=${soloOjo}` : ''}`}
-          onClick={() => {
-            try {
-              sessionStorage.setItem('cg_rx_pending', JSON.stringify({
-                od: productResult.od, oi: productResult.oi, tipo: productResult.tipo,
-                soloOjo: soloOjo ?? null, timestamp: Date.now()
-              }))
-            } catch {}
-          }}
-          className="w-full py-1.5 rounded-xl text-[10px] font-semibold flex items-center justify-center gap-1 text-gray-500 hover:text-gray-700 transition-colors">
-          Ver detalles →
-        </Link>
+        <Link href={`/producto/${p.slug}${soloOjo ? `?ojo=${soloOjo}` : ""}`} onClick={() => { try { sessionStorage.setItem("cg_rx_pending", JSON.stringify({ od: productResult.od, oi: productResult.oi, tipo: productResult.tipo, soloOjo: soloOjo ?? null, timestamp: Date.now() })) } catch {} }} className="block py-1 text-center text-[10px] font-semibold text-slate-500 hover:text-[#0758a6]">Ver detalles</Link>
       </div>
-    </div>
+    </article>
   )
 }
 
