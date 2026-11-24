@@ -40,7 +40,7 @@ const SECCIONES = [
     id: 'devoluciones', emoji: '🔄', titulo: 'Devoluciones y Cambios',
     color: 'bg-amber-50 border-amber-100', badge: 'bg-amber-100 text-amber-700',
     items: [
-      { q: '¿Puedo devolver un producto?', a: 'Sí. Aceptamos devoluciones dentro de los 48 horas calendario desde la entrega, siempre que el producto esté en su empaque original, sin abrir y sin usar.' },
+      { q: '¿Puedo devolver un producto?', a: 'Aceptamos devoluciones dentro de los 7 días calendario posteriores a la entrega para productos sellados, sin abrir y en su empaque original. Los lentes tóricos solo pueden cancelarse durante las primeras 48 horas desde la confirmación; después no admiten cancelación ni devolución.' },
       { q: '¿Qué productos NO son devolvibles?', a: 'Por razones de higiene: lentes de contacto abiertos, soluciones y gotas ya usadas. Solo aplica a productos sin abrir.' },
       { q: '¿Cómo inicio una devolución?', a: 'Escríbenos por WhatsApp con tu número de pedido. El reembolso se procesa en 3-5 días hábiles.' },
       { q: '¿Me devuelven el dinero completo?', a: 'Sí. El costo de envío de la devolución corre por cuenta del cliente, excepto si el error fue nuestro.' },
@@ -106,7 +106,7 @@ const SECCIONES = [
     id: 'garantias', emoji: '✅', titulo: 'Garantías y Autenticidad',
     color: 'bg-green-50 border-green-100', badge: 'bg-green-100 text-green-700',
     items: [
-      { q: '¿Son certificados los productos?', a: 'Todos nuestros productos son directo del fabricante, con garantía de autenticidad directamente de las marcas fabricantes.' },
+      { q: '¿Son certificados los productos?', a: 'Trabajamos con marcas reconocidas y canales de distribución autorizados. Los productos se entregan sellados y en su empaque original, con garantía de autenticidad.' },
       { q: '¿Los lentes están dentro de su fecha de vencimiento?', a: 'Sí, todos los productos tienen al menos 18 meses de vida útil desde la fecha de compra.' },
       { q: '¿Qué garantía tienen los lentes de contacto?', a: 'Si detectas algún defecto de fabricación (rotura, deformación), lo reemplazamos sin costo.' },
     ],
@@ -193,7 +193,7 @@ export default function AyudaPage() {
         <div className="mt-10 bg-green-50 border border-green-100 rounded-2xl p-6 text-center">
           <p className="text-2xl mb-2">💬</p>
           <h3 className="font-black text-gray-900 text-lg mb-1">¿No encontraste tu respuesta?</h3>
-          <p className="text-gray-500 text-sm mb-4">Lunes a sábado · 9am – 7pm</p>
+          <p className="text-gray-500 text-sm mb-4">Lunes a viernes · 9:00 a. m. – 9:00 p. m. · Sábados · 9:00 a. m. – 6:00 p. m. · Domingos cerrado</p>
           <a href="https://wa.me/18096942268?text=Hola%20ContactGo%2C%20tengo%20una%20pregunta"
             target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-xl transition-colors">
