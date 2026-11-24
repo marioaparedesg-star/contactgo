@@ -88,7 +88,7 @@ export default function ProductCard({ product }: Props) {
         </Link>
         <div className="mt-2.5 flex items-center justify-between gap-2">
           <span className={`text-[10px] font-medium ${product.stock === 0 ? 'text-rose-700' : stockCritical ? 'text-slate-700' : 'text-slate-500'}`}>
-            {product.stock === 0 ? 'Sin stock' : stockCritical ? `Solo ${product.stock} disponibles` : 'Disponible'}
+            {product.stock === 0 ? 'Sin stock' : product.tipo === 'torico' ? 'Pedido especial' : stockCritical ? `Solo ${product.stock} disponibles` : 'Disponible'}
           </span>
           <span className="truncate text-[10px] text-slate-400">{contenidoLabel}</span>
         </div>
