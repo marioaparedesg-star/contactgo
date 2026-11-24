@@ -152,7 +152,7 @@ export default function Page() {
                     ['Reemplazo', 'Quincenal (14 días)', 'Diario (1 día)'],
                     ['Presentación', '6 lentes por caja', '30 lentes por caja'],
                     ['Precio en RD', 'RD$5,800', 'RD$5,800'],
-                    ['Precio por día', '~RD$148', '~RD$208'],
+                    ['Reemplazo', 'Quincenal', 'Diario'],
                     ['Requiere solución', 'Sí', 'No'],
                     ['Higiene', 'Buena', 'Máxima'],
                     ['Ideal para', 'Uso diario regular', 'Uso ocasional o alergias'],
