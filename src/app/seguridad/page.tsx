@@ -17,7 +17,7 @@ export default function SeguridadPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 py-10 pb-24">
+      <main id="main-content" className="max-w-3xl mx-auto px-4 py-10 pb-24">
         <h1 className="font-display text-3xl font-black text-gray-900 mb-2">Política de Seguridad</h1>
         <p className="text-gray-500 text-sm mb-8">Protección de datos de tarjetas y transmisión segura</p>
 
