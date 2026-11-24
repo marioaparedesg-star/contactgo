@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santiago RD | Envío a Domicilio — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity, Air Optix directo del fabricante. Envío RD$350. Transporte estimado de 24-48 horas; el plazo total depende del tipo de lente.',
+  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity y Air Optix de canales de distribución autorizados. Envío RD$350. Transporte estimado de 24-48 horas; el plazo total depende del tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santiago' },
   openGraph: {
     title: 'Lentes de Contacto en Santiago | ContactGo',
@@ -68,7 +68,7 @@ export default async function Page() {
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Lentes de contacto con envío a Santiago</h2>
           <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Santiago</strong> y toda su región. No necesitas ir a una óptica — el transporte de tus lentes hasta Santiago suele tomar 24-48 horas; el plazo total depende del producto.</p>
-          <p>Todos nuestros productos son directo del fabricante y certificados. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en compras desde RD$8,000.</p>
+          <p>Trabajamos con marcas reconocidas y canales de distribución autorizados; los productos se entregan sellados y en su empaque original. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en compras desde RD$8,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto en minutos.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">Marcas más pedidas en Santiago</h3>
@@ -81,7 +81,7 @@ export default async function Page() {
           <p>Tienes tres opciones desde Santiago: (1) Usa nuestra <a href="/receta" className="text-primary-600 font-semibold">calculadora de receta en línea</a> con los valores de tu prescripción. (2) Envíanos una foto clara de tu receta por WhatsApp al (809) 694-2268. (3) Indica los valores de Esfera, Cilindro y Eje al hacer tu pedido. Tu optómetra de confianza en Santiago puede darte estos datos.</p>
           
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[['🚚','Envío RD$350'],['📦','Transporte 24-48 h'],['✅','Directo del fabricante'],['↩️','Dev. 48 horas']].map(([i,t]) => (
+            {[['🚚','Envío RD$350'],['📦','Transporte 24-48 h'],['✅','Canales autorizados'],['↩️','Devolución 7 días']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
                 <span className="text-xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>
