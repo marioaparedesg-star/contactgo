@@ -43,7 +43,7 @@ export default function Page() {
             "description": "Precio y guía completa de ACUVUE Oasys for Astigmatism y 1-DAY ACUVUE Moist for Astigmatism en RD.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
-            "datePublished": "2026-06-15", "dateModified": "2026-06-27",
+            "datePublished": "2026-06-15", "dateModified": "2026-11-24",
             "url": "https://www.contactgo.net/blog/acuvue-oasys-for-astigmatism-precio-rd", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
             "mainEntity": FAQS.map(f => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } })) },
@@ -69,7 +69,7 @@ export default function Page() {
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
           <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
-          <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Especialistas en lentes tóricos · Actualizado junio 2026</p></div>
+          <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Especialistas en lentes tóricos · Actualizado el 24 de noviembre de 2026</p></div>
         </div>
 
         {/* Precios destacados */}
@@ -90,7 +90,7 @@ export default function Page() {
               </div>
             </Link>
           ))}
-          <p className="text-xs text-gray-400 text-center">Entrega estimada de 25 a 45 días en toda RD · directo del fabricante J&J · Actualizados junio 2026</p>
+          <p className="text-xs text-gray-400 text-center">Entrega estimada de 25 a 45 días en toda RD · canales de distribución autorizados · Precios contrastados el 24 de noviembre de 2026</p>
         </div>
 
         <div className="flex gap-2 mb-6">
@@ -214,12 +214,12 @@ export default function Page() {
                 </thead>
                 <tbody>
                   {[
-                    { nombre: 'ACUVUE Oasys for Astig.', precio: 'RD$3,350', tipo: 'Quincenal', cyl: '-2.25', slug: 'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana' },
-                    { nombre: '1-DAY ACUVUE Moist Astig.', precio: 'RD$3,350', tipo: 'Diario', cyl: '-1.75', slug: 'acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana' },
-                    { nombre: 'Biofinity® Toric', precio: 'RD$3,650', tipo: 'Mensual', cyl: '-2.25', slug: 'biofinity-toric-lentes-astigmatismo-coopervision-dominicana' },
+                    { nombre: 'ACUVUE Oasys for Astig.', precio: 'RD$5,800', tipo: 'Quincenal', cyl: '-2.25', slug: 'acuvue-oasys-for-astigmatism-lentes-toricos-dominicana' },
+                    { nombre: '1-DAY ACUVUE Moist Astig.', precio: 'RD$5,800', tipo: 'Diario', cyl: '-1.75', slug: 'acuvue-moist-for-astigmatism-lentes-toricos-diarios-dominicana' },
+                    { nombre: 'Biofinity® Toric', precio: 'RD$4,800', tipo: 'Mensual', cyl: '-2.25', slug: 'biofinity-toric-lentes-astigmatismo-coopervision-dominicana' },
                     { nombre: 'clariti® 1 day toric', precio: 'RD$4,250', tipo: 'Diario', cyl: '-1.75', slug: 'clariti-1-day-toric-lentes-contacto-diarios-astigmatismo-dominicana' },
-                    { nombre: 'Avaira Vitality® Toric', precio: 'RD$3,000', tipo: 'Mensual', cyl: '-2.25', slug: 'avaira-vitality-toric-lentes-astigmatismo-dominicana' },
-                    { nombre: 'Biofinity® XR Toric', precio: 'RD$3,650', tipo: 'Mensual', cyl: '-5.75', slug: 'biofinity-xr-toric-lentes-alta-graduacion-dominicana' },
+                    { nombre: 'Avaira Vitality® Toric', precio: 'RD$4,150', tipo: 'Mensual', cyl: '-2.25', slug: 'avaira-vitality-toric-lentes-astigmatismo-dominicana' },
+                    { nombre: 'Biofinity® XR Toric', precio: 'RD$4,800', tipo: 'Mensual', cyl: '-5.75', slug: 'biofinity-xr-toric-lentes-alta-graduacion-dominicana' },
                   ].map(({ nombre, precio, tipo, cyl, slug }, i) => (
                     <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                       <td className="p-3 border border-gray-100">
@@ -268,7 +268,7 @@ export default function Page() {
 
         <div className="border-l-4 border-blue-500 bg-blue-50 rounded-r-xl p-4 my-6">
           <p className="font-bold text-gray-900 text-sm mb-0.5">Información verificada</p>
-          <p className="text-gray-600 text-sm">Precios y especificaciones verificados por el Equipo ContactGo · Actualizado junio 2026</p>
+          <p className="text-gray-600 text-sm">Precios y especificaciones verificados por el Equipo ContactGo · Actualizado el 24 de noviembre de 2026</p>
         </div>
 
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-6 text-sm text-amber-900">
