@@ -32,7 +32,6 @@ const SEO_LINKS = [
   { href: '/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana', label: 'Biofinity precio RD' },
   { href: '/producto/acuvue-oasys-lentes-contacto-silicona-hidrogel-dominicana', label: 'Acuvue Oasys dominicana' },
   { href: '/catalogo?tipo=solucion', label: 'Solución para lentes de contacto RD' },
-  { href: '/catalogo?tipo=gota', label: 'Gotas para ojos secos República Dominicana' },
 ]
 
 export default async function LentesContactoPage() {
