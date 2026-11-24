@@ -208,7 +208,6 @@ export default async function ProductoPage(
       "url": `https://www.contactgo.net/producto/${product.slug}`,
       "priceCurrency": "DOP",
       "price": String(product.precio ?? 0),
-      "priceValidUntil": "2027-12-31",
       "validFrom": new Date().toISOString(),
       "itemCondition": "https://schema.org/NewCondition",
       "availability": product.stock > 0
@@ -231,19 +230,9 @@ export default async function ProductoPage(
           "@type": "DefinedRegion",
           "addressCountry": "DO"
         },
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "250",
-          "currency": "DOP"
-        },
+        "shippingSettingsLink": "https://www.contactgo.net/ayuda/envios",
         "deliveryTime": {
           "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 0,
-            "maxValue": 1,
-            "unitCode": "DAY"
-          },
           "transitTime": {
             "@type": "QuantitativeValue",
             "minValue": entregaInfo.dias_min,
