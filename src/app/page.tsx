@@ -165,7 +165,7 @@ export default async function HomePage() {
               },
               {
                 label: 'Color', slug: 'color',
-                desc: 'Cambia tu look, con o sin graduación',
+                desc: 'Con o sin graduación',
                 bg: 'bg-slate-50', fg: 'text-[#002455]',
                 // LENTE DE CONTACTO cosmético — disco con iris coloreado y patrón radial
                 svg: (
@@ -220,12 +220,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── BANNER RECETA — reordenado: segundo ── */}
+        {/* ── Herramienta para revisar la receta ── */}
         <section className="mx-4 md:mx-8 mb-8 rounded-2xl border border-slate-200 bg-slate-50 relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none">
-            
-            
-          </div>
           <div className="relative max-w-7xl mx-auto px-6 py-10 md:py-14 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -287,7 +283,7 @@ export default async function HomePage() {
           </div>
           {featured.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {featured.map((p, idx) => <ProductCard key={p.id} product={p} isBestseller={idx < 3} />)}
+              {featured.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
           ) : (
             <div className="text-center py-16 text-gray-400">Cargando productos...</div>
