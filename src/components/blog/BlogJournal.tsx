@@ -64,7 +64,7 @@ function productForPost(post: BlogPost, products: BlogProduct[]) {
     : /multifocal|presbicia/.test(text) ? 'multifocal'
     : /color|colores/.test(text) ? 'color'
     : /solucion|gotas/.test(text) ? 'solucion' : 'esferico'
-  return products.find((product) => product.tipo === fallbackType && product.imagen_url) ?? products.find((product) => product.imagen_url) ?? null
+  return products.find((product) => product.tipo === fallbackType && product.imagen_url) ?? null
 }
 
 export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[]; products?: BlogProduct[] }) {
