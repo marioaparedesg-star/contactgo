@@ -50,7 +50,7 @@ function productForPost(post: BlogPost, products: BlogProduct[]) {
   const text = (post.slug + ' ' + post.titulo + ' ' + post.cat).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   const scored = products.map((product) => {
     const source = (product.nombre + ' ' + product.marca + ' ' + product.slug).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-    const words = source.split(/[^a-z0-9]+/).filter((word) => word.length > 3)
+    const words = source.split(/[^a-z0-9]+/).filter((word) => word.length > 3 && !['lentes','lente','contacto','contact','republica','dominicana','precio','comparacion','guia','rd'].includes(word))
     let score = words.reduce((sum, word) => sum + (text.includes(word) ? (word.length > 5 ? 3 : 1) : 0), 0)
     if (/astigmatismo|toric|torico/.test(text) && product.tipo === 'torico') score += 4
     if (/multifocal|presbicia/.test(text) && product.tipo === 'multifocal') score += 4
