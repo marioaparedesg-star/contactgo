@@ -27,10 +27,10 @@ export default function ProductCard({ product }: Props) {
   const badge = product.tipo ? TIPO_BADGE[product.tipo] : null
   const stockCritical = product.stock > 0 && product.stock <= 4
   const diasUso = (product as any).dias_uso
-  const contenidoLabel = product.tipo === 'gota' || product.tipo === 'solucion' ? '1 frasco'
-    : diasUso === 1 ? 'Caja de 30 unidades'
-    : diasUso === 14 || diasUso === 30 ? 'Caja de 6 unidades'
-    : product.tipo === 'color' ? '2 lentes'
+  const contenidoLabel = product.tipo === 'gota' || product.tipo === 'solucion' ? ((product as any).contenido || 'Frasco')
+    : product.tipo === 'color' ? ((product as any).contenido || 'Caja con 2 lentes')
+    : diasUso === 1 ? ((product as any).contenido || 'Caja de 30 lentes')
+    : diasUso === 14 || diasUso === 30 ? ((product as any).contenido || 'Caja de 6 lentes')
     : (product as any).contenido ?? 'Por caja'
 
   const toggleFav = async (e: React.MouseEvent) => {
@@ -66,10 +66,10 @@ export default function ProductCard({ product }: Props) {
           
           {badge && <span className={`border border-slate-200 bg-white/95 px-2 py-1 text-[9px] font-semibold uppercase tracking-wide ${badge.color}`}>{badge.label}</span>}
         </div>
-        {diasUso && <span className="absolute bottom-3 left-3 rounded-sm bg-[#002455] px-2 py-1 text-[10px] font-semibold text-white">
+        {diasUso && ['esferico','torico','multifocal','color'].includes(product.tipo ?? '') && <span className="absolute bottom-3 left-3 rounded-sm bg-[#002455] px-2 py-1 text-[10px] font-semibold text-white">
           {diasUso === 1 ? 'Diario' : diasUso === 14 ? 'Quincenal' : 'Mensual'}
         </span>}
-        {(product.tipo === 'torico' || product.tipo === 'multifocal') && (
+        {(product.tipo === 'torico' || product.tipo === 'multifocal' || product.tipo === 'multifocal_torico') && (
           <span className="absolute bottom-3 right-3 rounded-sm border border-slate-200 bg-white px-2 py-1 text-[9px] font-semibold text-slate-600">
             {getEntrega(product.tipo).etiqueta.replace(/^.*·\s*/, '')}
           </span>
