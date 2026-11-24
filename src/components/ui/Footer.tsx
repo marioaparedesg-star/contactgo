@@ -61,7 +61,7 @@ export default function Footer() {
                 ['Soluciones', '/soluciones'],
                 ['Gotas', '/catalogo?tipo=gota'],
               ].map(([l, h]) => (
-                <li key={h}><Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link></li>
+                <li key={h}>{h.startsWith('http') ? <a href={h} target="_blank" rel="noopener noreferrer" className="text-xs text-gray-400 hover:text-white transition-colors">{l}</a> : <Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link>}</li>
               ))}
               <li><button type="button" onClick={() => window.dispatchEvent(new Event('cg-open-cookie-preferences'))} className="text-xs text-gray-400 hover:text-white transition-colors">Preferencias de cookies</button></li>
             </ul>
@@ -118,7 +118,7 @@ export default function Footer() {
             <ul className="space-y-1.5">
               {[
                 ['Nosotros', '/sobre-nosotros'],
-                ['Reseñas', '/resenas'],
+                ['Reseñas en Google', 'https://g.page/r/Cb-RwE6S9vzgECE/review'],
               ['Referidos 🎁', '/referidos'],
                 ['Seguridad', '/seguridad'],
                 ['Privacidad', '/privacidad'],
