@@ -1,69 +1,136 @@
-export const revalidate = 86400
+export const revalidate = 3600
+
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+
 export const metadata: Metadata = {
-  title: 'Proclear Multifocal precio en República Dominicana 2026 — ContactGo', description: 'Precio de Proclear Multifocal en RD: desde RD$5,400. También Proclear Multifocal XR y Toric disponibles. CooperVision certificados. Entrega 24-48h en toda República Dominicana.',
+  title: 'Proclear Multifocal en RD: disponibilidad y alternativas actuales — ContactGo',
+  description: 'Actualización de Proclear Multifocal en República Dominicana: las versiones estándar y XR no aparecen en el catálogo actual. Consulta alternativas multifocales y Proclear Multifocal Toric.',
   alternates: { canonical: 'https://www.contactgo.net/blog/proclear-multifocal-precio-republica-dominicana' },
-  openGraph: { type: 'article', title: 'Proclear® Multifocal precio en República Dominicana 2026', description: 'Precio de Proclear Multifocal en RD: desde RD$5,400. También Proclear Multifocal XR y Toric disponibles. CooperVision certificados. Entrega 24-48h en toda República Dominicana.', url: 'https://www.contactgo.net/blog/proclear-multifocal-precio-republica-dominicana', siteName: 'ContactGo', locale: 'es_DO', images: [{ url: 'https://www.contactgo.net/blog/proclear-multifocal-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Proclear® Multifocal precio en República Dominicana 2026' }] },
+  openGraph: {
+    type: 'article',
+    title: 'Proclear Multifocal: disponibilidad y alternativas en RD',
+    description: 'Estado de disponibilidad de Proclear Multifocal, alternativas multifocales actuales y ficha de Proclear Multifocal Toric.',
+    url: 'https://www.contactgo.net/blog/proclear-multifocal-precio-republica-dominicana',
+    siteName: 'ContactGo',
+    locale: 'es_DO',
+  },
 }
+
 export default function Page() {
-  return (<><Navbar /><main className="max-w-2xl mx-auto px-4 py-12 pb-24">
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
-      {"@context":"https://schema.org","@type":"Article","headline":"Proclear® Multifocal precio en República Dominicana 2026","description":"Precio de Proclear Multifocal en RD: desde RD$5,400. También Proclear Multifocal XR y Toric disponibles. CooperVision certificados. Entrega 24-48h en toda República Dominicana.","author":{"@type":"Organization","name":"Equipo ContactGo"},"publisher":{"@type":"Organization","name":"ContactGo","url":"https://www.contactgo.net","logo":{"@type":"ImageObject","url":"https://www.contactgo.net/logo.png"}},"datePublished":"2026-06-28","dateModified":"2026-06-28","url":"https://www.contactgo.net/blog/proclear-multifocal-precio-republica-dominicana","inLanguage":"es-DO"},
-      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":'¿Cuánto cuestan los Proclear Multifocal en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo: Proclear Multifocal RD$5,400 (6u mensual), Proclear Multifocal XR RD$12,550 (6u mensual alta graduación) y Proclear Multifocal Toric RD$14,000 (6u mensual presbicia + astigmatismo). Entrega en 24-48h en toda República Dominicana.'}},{"@type":"Question","name":'¿Proclear Multifocal o Biofinity Multifocal — cuál elegir?',"acceptedAnswer":{"@type":"Answer","text":'Biofinity Multifocal (RD$7,000) es el más vendido por su tecnología Aquaform y disponibilidad en ADD +1.00 a +4.00. Proclear Multifocal (RD$5,400) es más accesible y tiene PC Technology para hidratación. La ventaja de Proclear es la versión XR para muy alta graduación y la versión Toric para astigmatismo combinado.'}},{"@type":"Question","name":'¿Para qué es el Proclear Multifocal XR?',"acceptedAnswer":{"@type":"Answer","text":'El Proclear Multifocal XR está diseñado para personas con presbicia y graduación esférica muy alta — más allá del rango que el Proclear Multifocal estándar puede corregir. Es uno de los pocos lentes multifocales disponibles en rangos de graduación extendidos.'}},{"@type":"Question","name":'¿Qué es el Proclear Multifocal Toric?',"acceptedAnswer":{"@type":"Answer","text":'El Proclear Multifocal Toric combina la corrección de presbicia (ADD) con la corrección de astigmatismo (CYL + AXIS) en un solo lente. Es el lente para personas que tienen tanto presbicia como astigmatismo y necesitan ver bien a todas las distancias.'}}]},
-      {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.contactgo.net"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.contactgo.net/blog"},{"@type":"ListItem","position":3,"name":"Proclear® Multifocal precio en República Dominican","item":"https://www.contactgo.net/blog/proclear-multifocal-precio-republica-dominicana"}]}
-    ]) }} />
-    <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-4"><Link href="/" className="hover:text-primary-600">Inicio</Link><span>/</span><Link href="/blog" className="hover:text-primary-600">Blog</Link><span>/</span><span className="text-gray-600 truncate">Proclear® Multifocal precio en República</span></div>
-    <span className="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">💰 Precios · Presbicia</span>
-    <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Proclear® Multifocal precio en República Dominicana 2026</h1>
-    <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-      <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
-      <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Especialistas en salud visual · ⏱ 6 min · Junio 2026</p></div>
-    </div>
-    <div className="space-y-8 text-gray-700 leading-relaxed">
-      <p>Los <strong>Proclear® Multifocal</strong> de CooperVision son lentes de contacto mensuales para presbicia (vista cansada) disponibles en tres versiones en República Dominicana. Son especialmente populares entre usuarios que necesitan corrección multifocal para alta graduación o astigmatismo combinado.</p>
-        <section id="precios">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios de toda la línea Proclear Multifocal en RD</h2>
-          <div className="overflow-x-auto"><table className="w-full text-sm border-collapse">
-            <thead><tr className="bg-teal-50"><th className="p-3 text-left border border-gray-100 font-bold">Producto</th><th className="p-3 text-center border border-gray-100 font-bold">Indicación</th><th className="p-3 text-right border border-gray-100 font-bold">Precio RD$</th></tr></thead>
-            <tbody>
-              <tr className="bg-white"><td className="p-3 border border-gray-100"><Link href="/producto/proclear-multifocal-lentes-presbicia-mensual-dominicana" className="text-primary-600 font-medium hover:underline">Proclear® Multifocal 6u</Link></td><td className="p-3 border border-gray-100 text-center text-gray-500">Presbicia estándar</td><td className="p-3 border border-gray-100 text-right font-black">RD$5,400</td></tr>
-              <tr className="bg-gray-50"><td className="p-3 border border-gray-100"><Link href="/producto/proclear-multifocal-xr-lentes-presbicia-alta-graduacion-dominicana" className="text-primary-600 font-medium hover:underline">Proclear® Multifocal XR 6u</Link></td><td className="p-3 border border-gray-100 text-center text-gray-500">Presbicia alta graduación</td><td className="p-3 border border-gray-100 text-right font-black">RD$12,550</td></tr>
-              <tr className="bg-white"><td className="p-3 border border-gray-100"><Link href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="text-primary-600 font-medium hover:underline">Proclear® Multifocal Toric 6u</Link></td><td className="p-3 border border-gray-100 text-center text-gray-500">Presbicia + astigmatismo</td><td className="p-3 border border-gray-100 text-right font-black">RD$14,000</td></tr>
-            </tbody>
-          </table></div>
+  const schema = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: 'Proclear Multifocal: disponibilidad y alternativas en República Dominicana',
+      description: 'Actualización del catálogo ContactGo sobre Proclear Multifocal y alternativas multifocales.',
+      author: { '@type': 'Organization', name: 'Equipo ContactGo' },
+      publisher: { '@type': 'Organization', name: 'ContactGo', url: 'https://www.contactgo.net' },
+      datePublished: '2026-06-28',
+      dateModified: '2026-11-24',
+      url: 'https://www.contactgo.net/blog/proclear-multifocal-precio-republica-dominicana',
+      inLanguage: 'es-DO',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: '¿Está disponible Proclear Multifocal estándar en ContactGo?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Proclear Multifocal estándar y Proclear Multifocal XR no aparecen disponibles en el catálogo activo de ContactGo. No mostramos sus precios anteriores como si fueran vigentes.' },
+        },
+        {
+          '@type': 'Question',
+          name: '¿Proclear Multifocal Toric sigue disponible?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Proclear Multifocal Toric sí aparece en el catálogo actual. Su precio de referencia es RD$12,000 y, por ser tórico, el plazo estimado es de 25 a 45 días. Confirma precio y disponibilidad en su ficha antes de comprar.' },
+        },
+        {
+          '@type': 'Question',
+          name: '¿Qué alternativas multifocales hay actualmente?',
+          acceptedAnswer: { '@type': 'Answer', text: 'El catálogo actual incluye Biofinity Multifocal, ACUVUE OASYS Multifocal, AIR OPTIX HydraGlyde Multifocal, clariti 1 day multifocal y Bausch+Lomb ULTRA for Presbyopia. La elección depende de la receta y adaptación del usuario.' },
+        },
+      ],
+    },
+  ]
+
+  return (
+    <>
+      <Navbar />
+      <main className="max-w-3xl mx-auto px-4 py-10 pb-24">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-gray-400 mb-5">
+          <Link href="/" className="hover:text-primary-600">Inicio</Link>
+          <span>/</span>
+          <Link href="/blog" className="hover:text-primary-600">Blog</Link>
+          <span>/</span>
+          <span className="text-gray-600">Proclear Multifocal</span>
+        </nav>
+
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+
+        <span className="inline-flex text-xs font-semibold text-teal-700 bg-teal-50 px-3 py-1 rounded-full">Actualización de catálogo</span>
+        <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-4">Proclear Multifocal en República Dominicana: disponibilidad y alternativas</h1>
+        <p className="text-sm text-gray-500 mb-7">Actualizado el 24 de noviembre de 2026 · Equipo ContactGo</p>
+
+        <section className="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-8">
+          <h2 className="font-bold text-amber-900 text-lg mb-2">Estado actual del catálogo</h2>
+          <p className="text-sm text-amber-900 leading-relaxed">
+            Proclear Multifocal estándar y Proclear Multifocal XR no aparecen disponibles en el catálogo activo de ContactGo. Por eso retiramos sus precios anteriores: no deben interpretarse como precios ni disponibilidad vigentes.
+          </p>
         </section>
-        <section id="que-es">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">¿Qué son los Proclear Multifocal?</h2>
-          <p>Proclear Multifocal son lentes de contacto mensuales para personas con presbicia, fabricados por CooperVision con la tecnología <strong>PC Technology™</strong> que incorpora fosfatidilcolina en el material — el mismo fosfolípido que forma la membrana celular humana — para una hidratación excepcional y biocompatibilidad con el ojo.</p>
-          <p className="mt-3">La línea incluye tres versiones para cubrir diferentes necesidades: la estándar para presbicia normal, la XR (Extended Range) para graduaciones muy altas, y la Toric para quien tiene presbicia combinada con astigmatismo.</p>
-        </section>
-      <section id="productos"><h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Entrega 24-48h</h2>
-        <div className="space-y-2">            <Link href="/producto/proclear-multifocal-lentes-presbicia-mensual-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Proclear® Multifocal 6u</p><p className="text-xs text-gray-500">Presbicia estándar mensual</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$5,400</span></Link>
-            <Link href="/producto/proclear-multifocal-xr-lentes-presbicia-alta-graduacion-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Proclear® Multifocal XR 6u</p><p className="text-xs text-gray-500">Alta graduación + presbicia</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$12,550</span></Link>
-            <Link href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Proclear® Multifocal Toric 6u</p><p className="text-xs text-gray-500">Presbicia + astigmatismo</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$14,000</span></Link></div>
-        <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</Link>
-      </section>
-      <section id="faq"><h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2><div className="space-y-3">          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuestan los Proclear Multifocal en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: Proclear Multifocal RD$5,400 (6u mensual), Proclear Multifocal XR RD$12,550 (6u mensual alta graduación) y Proclear Multifocal Toric RD$14,000 (6u mensual presbicia + astigmatismo). Entrega en 24-48h en toda República Dominicana.</p></details>
-          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Proclear Multifocal o Biofinity Multifocal — cuál elegir?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Biofinity Multifocal (RD$7,000) es el más vendido por su tecnología Aquaform y disponibilidad en ADD +1.00 a +4.00. Proclear Multifocal (RD$5,400) es más accesible y tiene PC Technology para hidratación. La ventaja de Proclear es la versión XR para muy alta graduación y la versión Toric para astigmatismo combinado.</p></details>
-          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Para qué es el Proclear Multifocal XR?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">El Proclear Multifocal XR está diseñado para personas con presbicia y graduación esférica muy alta — más allá del rango que el Proclear Multifocal estándar puede corregir. Es uno de los pocos lentes multifocales disponibles en rangos de graduación extendidos.</p></details>
-          <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"><summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué es el Proclear Multifocal Toric?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg></summary><p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">El Proclear Multifocal Toric combina la corrección de presbicia (ADD) con la corrección de astigmatismo (CYL + AXIS) en un solo lente. Es el lente para personas que tienen tanto presbicia como astigmatismo y necesitan ver bien a todas las distancias.</p></details></div></section>
-      <div className="grid gap-2"><h3 className="font-bold text-gray-900 text-lg">Artículos relacionados</h3>            <Link href="/blog/lentes-multifocales-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Todos los lentes multifocales en RD</p><p className="text-xs text-gray-500 mt-0.5">Comparativa completa de precios</p></Link>
-            <Link href="/blog/biofinity-precio-republica-dominicana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Biofinity Multifocal precio RD</p><p className="text-xs text-gray-500 mt-0.5">La alternativa más vendida</p></Link>
-            <Link href="/blog/lentes-multifocales-presbicia-rd" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Guía de lentes multifocales</p><p className="text-xs text-gray-500 mt-0.5">Qué son y cómo funcionan</p></Link></div>
-    </div>
-    <div className="border-l-4 border-blue-500 bg-blue-50 rounded-r-xl p-4 my-6"><p className="font-bold text-gray-900 text-sm">Verificado · Equipo ContactGo · Junio 2026</p></div>
-    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-6 text-sm text-amber-900"><strong>⚠️ Aviso médico:</strong> Consulta a tu especialista ante cualquier duda sobre salud visual.</div>
-    <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-      <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en toda República Dominicana en 24-48h</h3>
-      <p className="text-sm text-gray-500 mb-4">directo del fabricante · Pago seguro con AZUL</p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</Link>
-        <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
-        <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#20ba58] transition-colors text-sm">Comprar por WhatsApp</a>
-      </div>
-    </div>
-  </main><Footer /></>)
+
+        <div className="space-y-7 text-gray-700 leading-relaxed">
+          <section>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">¿Qué opciones multifocales puedes consultar?</h2>
+            <p className="mb-4">Estas son las alternativas multifocales que sí figuran en el catálogo actual. Los precios se muestran en sus fichas y pueden cambiar; confirma el importe y la disponibilidad antes de completar el pedido.</p>
+            <div className="space-y-3">
+              <Link href="/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana" className="block border border-gray-200 rounded-xl p-4 hover:border-primary-300">
+                <strong>Biofinity Multifocal</strong>
+                <p className="text-sm text-gray-500">Multifocal mensual · precio de catálogo de referencia RD$5,900</p>
+              </Link>
+              <Link href="/producto/acuvue-oasys-multifocal-lentes-contacto-dominicana" className="block border border-gray-200 rounded-xl p-4 hover:border-primary-300">
+                <strong>ACUVUE OASYS Multifocal</strong>
+                <p className="text-sm text-gray-500">Multifocal quincenal · precio de catálogo de referencia RD$5,900</p>
+              </Link>
+              <Link href="/producto/air-optix-hydraglyde-multifocal-lentes-presbicia-dominicana" className="block border border-gray-200 rounded-xl p-4 hover:border-primary-300">
+                <strong>AIR OPTIX HydraGlyde Multifocal</strong>
+                <p className="text-sm text-gray-500">Multifocal mensual · precio de catálogo de referencia RD$6,500</p>
+              </Link>
+              <Link href="/producto/clariti-1-day-multifocal-lentes-presbicia-diarios-dominicana" className="block border border-gray-200 rounded-xl p-4 hover:border-primary-300">
+                <strong>clariti 1 day multifocal</strong>
+                <p className="text-sm text-gray-500">Multifocal diario · precio de catálogo de referencia RD$4,450</p>
+              </Link>
+              <Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="block border border-gray-200 rounded-xl p-4 hover:border-primary-300">
+                <strong>Bausch+Lomb ULTRA for Presbyopia</strong>
+                <p className="text-sm text-gray-500">Multifocal mensual · precio de catálogo de referencia RD$4,750</p>
+              </Link>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">¿Y Proclear Multifocal Toric?</h2>
+            <p className="mb-3">La versión Proclear Multifocal Toric sí aparece en el catálogo actual. Combina corrección multifocal y tórica para usuarios que necesitan corregir presbicia y astigmatismo. Su precio de referencia es RD$12,000 y el plazo estimado de entrega es de 25 a 45 días.</p>
+            <Link href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="inline-flex items-center justify-center bg-primary-700 text-white font-semibold rounded-xl px-5 py-3 text-sm">
+              Consultar Proclear Multifocal Toric
+            </Link>
+          </section>
+
+          <section>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">¿Cómo elegir una alternativa?</h2>
+            <p>La alternativa correcta depende de tu receta, graduación, adición (ADD), diseño multifocal y adaptación. No sustituyas un modelo por otro únicamente por el nombre o el precio. Si utilizabas Proclear Multifocal, comparte tu receta vigente para revisar opciones compatibles con un profesional de la salud visual.</p>
+          </section>
+
+          <p className="text-xs text-gray-500">Los precios indicados son referencias contrastadas con el catálogo de ContactGo el 24 de noviembre de 2026. El precio final y la disponibilidad vigentes son los que aparecen en la ficha del producto al momento de la compra.</p>
+        </div>
+
+        <div className="mt-10 flex flex-col sm:flex-row gap-3">
+          <Link href="/catalogo" className="bg-teal-600 text-white font-bold rounded-xl px-6 py-3 text-center">Ver catálogo actual</Link>
+          <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="border border-gray-300 text-gray-800 font-semibold rounded-xl px-6 py-3 text-center">Consultar por WhatsApp</a>
+        </div>
+      </main>
+      <Footer />
+    </>
+  )
 }
