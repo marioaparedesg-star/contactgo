@@ -1,8 +1,8 @@
 /**
  * FUENTE ÚNICA DE VERDAD — Tiempos de entrega por categoría
  *
- * REGLAS DE NEGOCIO (definidas por Mario, 2026-08-03 — aplican a TODO el país,
- * ya no varían por zona ni por signo de graduación):
+ * REGLAS DE NEGOCIO (definidas por Mario — aplican a todo el país;
+ * el plazo de los esféricos sí varía por destino):
  *  - Color → al día siguiente
  *  - Esférico → 24-48 horas en Santo Domingo y 24-72 horas en el interior
  *  - Multifocal → 1-5 días
@@ -44,9 +44,9 @@ const T_24_72H: EntregaInfo = {
 }
 
 const T_ESFERICO: EntregaInfo = {
-  etiqueta: 'Entrega en 24-48 horas',
-  detalle:  'Tiempo estimado de preparación y disponibilidad para lentes esféricos: 24 a 48 horas. El transporte se calcula según el destino: Santo Domingo y Santiago 24-48 horas, resto del país, 24-72 horas.',
-  dias_min: 1, dias_max: 2,
+  etiqueta: 'Santo Domingo: 24-48 h · Interior: 24-72 h',
+  detalle:  'Entrega estimada para lentes esféricos: 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el resto del país.',
+  dias_min: 1, dias_max: 3,
   especial: false,
   icono:    '🚀',
 }
