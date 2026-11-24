@@ -168,6 +168,7 @@ export default async function ProductoPage(
     : null
 
   const entregaInfo = getEntrega(product.tipo, product.nombre)
+  const esTorico = product.tipo === 'torico' || product.tipo === 'multifocal_torico' || /toric|tórico|torico/i.test(product.nombre)
 
   // ── Product Schema ──────────────────────────────────────────
   const productSchema: any = {
@@ -208,22 +209,23 @@ export default async function ProductoPage(
       "url": `https://www.contactgo.net/producto/${product.slug}`,
       "priceCurrency": "DOP",
       "price": String(product.precio ?? 0),
-      "validFrom": new Date().toISOString(),
       "itemCondition": "https://schema.org/NewCondition",
       "availability": product.stock > 0
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       "seller": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net" },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "DO",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": 7,
-        "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn",
-        "merchantReturnLink": "https://www.contactgo.net/ayuda/devoluciones",
-        "description": "Devolución dentro de 7 días de la entrega solo para cajas selladas, sin abrir y en empaque original. Aplican exclusiones y condiciones especiales para lentes tóricos según la política publicada."
-      },
+      ...(!esTorico ? {
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "DO",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 7,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn",
+          "merchantReturnLink": "https://www.contactgo.net/ayuda/devoluciones",
+          "description": "Devolución dentro de 7 días de la entrega solo para cajas selladas, sin abrir y en empaque original. No aplica a productos excluidos en la política publicada."
+        }
+      } : {}),
       "shippingDetails": [{
         "@type": "OfferShippingDetails",
         "shippingDestination": {
