@@ -19,7 +19,7 @@ const TIPO_BADGE: Record<string, { label: string; color: string }> = {
   gota: { label: 'Gotas', color: 'text-slate-600' },
 }
 
-export default function ProductCard({ product }: Props {
+export default function ProductCard({ product }: Props) {
   const addItem = useCartStore(s => s.addItem)
   const [isFav, setIsFav] = React.useState(false)
   const needsRx = ['esferico', 'torico', 'multifocal', 'color'].includes(product.tipo ?? '')
