@@ -132,7 +132,7 @@ return [
         name: '¿Cuánto tarda la entrega de lentes de contacto en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Los lentes de color planos se entregan al día siguiente; los esféricos en 24 a 48 horas; los multifocales en 1 a 5 días; y los tóricos en 25 a 45 días (entrega estimada de 25 a 45 días). El plazo de preparación depende del tipo de lente; el transporte tarda 24-48 horas en Santo Domingo y 24-72 horas en el interior.',
+          text: 'Los lentes de color planos se entregan al día siguiente; los esféricos en 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; los multifocales en 1 a 5 días; y los tóricos en 25 a 45 días (entrega estimada de 25 a 45 días). El plazo de preparación depende del tipo de lente; el transporte tarda 24-48 horas en Santo Domingo y 24-72 horas en el interior.',
         },
       },
       {
@@ -296,7 +296,7 @@ export default async function LentesRDPage() {
               <div className="p-5 rounded-2xl border border-gray-100">
                 <Truck className="w-6 h-6 text-primary-600 mb-3" />
                 <h3 className="font-bold text-gray-900 text-base mb-1">Entrega en toda República Dominicana</h3>
-                <p className="text-sm text-gray-500">Transporte: Santo Domingo y Santiago 24-48h, resto del país 24-72 horas. Entrega estimada: color plano al día siguiente, esféricos en 24-48 horas, multifocales de 1 a 5 días y tóricos de 25 a 45 días.</p>
+                <p className="text-sm text-gray-500">Transporte: Santo Domingo y Santiago 24-48h, resto del país 24-72 horas. Entrega estimada: color plano al día siguiente, esféricos en 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; multifocales de 1 a 5 días y tóricos de 25 a 45 días.</p>
               </div>
               <div className="p-5 rounded-2xl border border-gray-100">
                 <div className="mb-3"><AzulLogo size="lg" /></div>
@@ -317,9 +317,9 @@ export default async function LentesRDPage() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               {[
-                { titulo: 'Lentes esféricos', desc: 'Para miopía e hipermetropía — la categoría más pedida. Disponibles en versión diaria, quincenal y mensual.', desde: 3200, href: '/esfericos', ejemplos: '10+ modelos · Acuvue, Biofinity, Ultra' },
+                { titulo: 'Lentes esféricos', desc: 'Para miopía e hipermetropía — la categoría más pedida. Disponibles en versión diaria, quincenal y mensual.', desde: 3255, href: '/esfericos', ejemplos: '10+ modelos · Acuvue, Biofinity, Ultra' },
                 { titulo: 'Lentes tóricos', desc: 'Para astigmatismo. Corrigen esfera, cilindro y eje. Requieren graduación exacta del OD y OI.', desde: 4000, href: '/toricos', ejemplos: '7 modelos · Acuvue Oasys Astigmatism, Biofinity Toric, Ultra' },
-                { titulo: 'Lentes multifocales', desc: 'Para presbicia. Zonas de graduación cerca/media/lejos en un solo lente. Ideal para +40 años.', desde: 5400, href: '/multifocales', ejemplos: '8 modelos · Biofinity Multifocal, Air Optix Multifocal' },
+                { titulo: 'Lentes multifocales', desc: 'Para presbicia. Zonas de graduación cerca/media/lejos en un solo lente. Ideal para +40 años.', desde: 4450, href: '/multifocales', ejemplos: '8 modelos · Biofinity Multifocal, Air Optix Multifocal' },
                 { titulo: 'Lentes de color', desc: 'Cambia el color de ojos con o sin graduación. AIR OPTIX COLORS en 12 tonos.', desde: 2500, href: '/color', ejemplos: 'AIR OPTIX Colors · 12 colores' },
                 { titulo: 'Soluciones multipropósito', desc: 'Para limpieza, desinfección y almacenamiento de lentes quincenales y mensuales.', desde: 750, href: '/soluciones', ejemplos: 'Opti-Free, Renu, Biotrue · 90ml y 300ml' },
                 { titulo: 'Gotas lubricantes', desc: 'Para ojos secos y confort durante el uso de lentes de contacto.', desde: 600, href: '/gotas', ejemplos: 'Systane, Refresh, Sophia' },
@@ -405,7 +405,7 @@ export default async function LentesRDPage() {
                 { n: '1', t: 'Elige tu producto', d: 'Busca por marca o usa nuestra calculadora gratuita si tienes receta de gafas y no sabes qué lente comprar.' },
                 { n: '2', t: 'Configura tu receta', d: 'Ingresa la graduación exacta de tu receta óptica vigente para cada ojo (OD y OI).' },
                 { n: '3', t: 'Paga seguro', d: 'Con tarjeta Visa/Mastercard vía AZUL Banco Popular. El pago de los pedidos en línea se realiza con tarjeta Visa o Mastercard mediante AZUL Banco Popular.' },
-                { n: '4', t: 'Recibe en casa', d: 'Transporte: Santo Domingo y Santiago 24-48h, resto del país 24-72 horas. Entrega estimada: color plano al día siguiente, esféricos en 24-48 horas, multifocales de 1 a 5 días y tóricos de 25 a 45 días. Incluye tracking.' },
+                { n: '4', t: 'Recibe en casa', d: 'Transporte: Santo Domingo y Santiago 24-48h, resto del país 24-72 horas. Entrega estimada: color plano al día siguiente, esféricos en 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; multifocales de 1 a 5 días y tóricos de 25 a 45 días. Incluye tracking.' },
               ].map((p) => (
                 <div key={p.n} className="p-5 rounded-2xl border border-gray-100">
                   <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-sm mb-3">{p.n}</div>
