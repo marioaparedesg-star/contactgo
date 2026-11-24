@@ -11,12 +11,12 @@ import { getEntrega } from '@/lib/delivery-times'
 interface Props { product: Product; isBestseller?: boolean }
 
 const TIPO_BADGE: Record<string, { label: string; color: string }> = {
-  esferico: { label: 'Esférico', color: 'bg-blue-50 text-blue-700' },
-  torico: { label: 'Tórico', color: 'bg-violet-50 text-violet-700' },
-  multifocal: { label: 'Multifocal', color: 'bg-amber-50 text-amber-700' },
-  color: { label: 'Color', color: 'bg-pink-50 text-pink-700' },
-  solucion: { label: 'Solución', color: 'bg-teal-50 text-teal-700' },
-  gota: { label: 'Gotas', color: 'bg-cyan-50 text-cyan-700' },
+  esferico: { label: 'Esférico', color: 'text-slate-600' },
+  torico: { label: 'Tórico', color: 'text-slate-600' },
+  multifocal: { label: 'Multifocal', color: 'text-slate-600' },
+  color: { label: 'Color', color: 'text-slate-600' },
+  solucion: { label: 'Solución', color: 'text-slate-600' },
+  gota: { label: 'Gotas', color: 'text-slate-600' },
 }
 
 export default function ProductCard({ product, isBestseller }: Props) {
@@ -45,12 +45,12 @@ export default function ProductCard({ product, isBestseller }: Props) {
   }
 
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_2px_12px_rgba(0,36,85,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_14px_34px_rgba(0,36,85,0.10)]">
-      <div className="relative aspect-square w-full overflow-hidden bg-[#F7F9FC]">
+    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow duration-200 hover:border-slate-300 hover:shadow-md">
+      <div className="relative aspect-square w-full overflow-hidden bg-[#F4F6F8]">
         <Link href={href} aria-label={`Ver ${product.nombre}`} className="absolute inset-0">
           {product.imagen_url ? (
             <Image src={product.imagen_url} unoptimized alt={`${product.nombre}${product.marca ? ' — ' + product.marca : ''}`} fill
-              className="object-contain p-5 sm:p-6 transition-transform duration-500 group-hover:scale-[1.04]"
+              className="object-contain p-5 sm:p-6"
               sizes="(max-width: 400px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw" />
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-1 bg-slate-50 text-slate-300">
@@ -59,22 +59,22 @@ export default function ProductCard({ product, isBestseller }: Props) {
           )}
         </Link>
         <button type="button" onClick={toggleFav} aria-label={isFav ? `Quitar ${product.nombre} de favoritos` : `Agregar ${product.nombre} a favoritos`}
-          className={`absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-slate-100 shadow-sm transition-all hover:scale-105 ${isFav ? 'bg-rose-500 text-white' : 'bg-white/95 text-slate-500 hover:text-rose-500'}`}>
+          className={`absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 shadow-sm transition-colors ${isFav ? 'bg-rose-500 text-white' : 'bg-white text-slate-600 hover:text-rose-600'}`}>
           <Heart className={`h-4 w-4 ${isFav ? 'fill-current' : ''}`} aria-hidden="true" />
         </button>
-        <div className="pointer-events-none absolute left-3 top-3 z-[1] flex max-w-[75%] flex-wrap gap-1">
-          {isBestseller && <span className="rounded-full bg-[#002455] px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-wide text-white">Más vendido</span>}
-          {badge && <span className={`rounded-full px-2.5 py-1.5 text-[9px] font-semibold ${badge.color}`}>{badge.label}</span>}
+        <div className="pointer-events-none absolute left-3 top-3 z-[1] flex max-w-[75%] flex-wrap gap-1.5">
+          
+          {badge && <span className={`border border-slate-200 bg-white/95 px-2 py-1 text-[9px] font-semibold uppercase tracking-wide ${badge.color}`}>{badge.label}</span>}
         </div>
-        {diasUso && <span className="absolute bottom-3 left-3 rounded-md bg-[#002455]/90 px-2 py-1 text-[10px] font-semibold text-white">
+        {diasUso && <span className="absolute bottom-3 left-3 rounded-sm bg-[#002455] px-2 py-1 text-[10px] font-semibold text-white">
           {diasUso === 1 ? 'Diario' : diasUso === 14 ? 'Quincenal' : 'Mensual'}
         </span>}
         {(product.tipo === 'torico' || product.tipo === 'multifocal') && (
-          <span className="absolute bottom-3 right-3 rounded-md bg-amber-50 px-2 py-1 text-[9px] font-semibold text-amber-800">
+          <span className="absolute bottom-3 right-3 rounded-sm border border-slate-200 bg-white px-2 py-1 text-[9px] font-semibold text-slate-600">
             {getEntrega(product.tipo).etiqueta.replace(/^.*·\s*/, '')}
           </span>
         )}
-        {stockCritical && <span className="absolute right-3 top-14 rounded-full bg-rose-50 px-2 py-1 text-[10px] font-semibold text-rose-700">Últimas {product.stock}</span>}
+        {stockCritical && <span className="absolute right-3 top-14 rounded-sm border border-slate-200 bg-white px-2 py-1 text-[10px] font-semibold text-slate-700">Últimas {product.stock}</span>}
         {product.stock === 0 && <div className="absolute inset-0 flex items-center justify-center bg-white/70"><span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">Agotado</span></div>}
       </div>
 
@@ -87,7 +87,7 @@ export default function ProductCard({ product, isBestseller }: Props) {
           <h3 className="line-clamp-2">{product.nombre}</h3>
         </Link>
         <div className="mt-2.5 flex items-center justify-between gap-2">
-          <span className={`text-[10px] font-semibold ${product.stock === 0 ? 'text-rose-600' : stockCritical ? 'text-amber-700' : 'text-emerald-700'}`}>
+          <span className={`text-[10px] font-medium ${product.stock === 0 ? 'text-rose-700' : stockCritical ? 'text-slate-700' : 'text-slate-500'}`}>
             {product.stock === 0 ? 'Sin stock' : stockCritical ? `Solo ${product.stock} disponibles` : 'Disponible'}
           </span>
           <span className="truncate text-[10px] text-slate-400">{contenidoLabel}</span>
@@ -99,14 +99,14 @@ export default function ProductCard({ product, isBestseller }: Props) {
           <div className="flex items-center gap-2">
             <p className="text-xl font-extrabold tracking-tight text-[#002455]">RD${Number(product.precio).toLocaleString()}</p>
             {product.precio_anterior && product.precio_anterior > product.precio && (
-              <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+              <span className="rounded-sm border border-slate-200 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
                 -{Math.round((1 - product.precio / product.precio_anterior) * 100)}%
               </span>
             )}
           </div>
           <Link href={href} aria-disabled={product.stock === 0}
             onClick={e => { if (product.stock === 0) e.preventDefault() }}
-            className={`mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold transition-all hover:shadow-md active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ${product.stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]'}`}>
+            className={`mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ${product.stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]'}`}>
             <ShoppingCart className="h-4 w-4" aria-hidden="true" />
             {product.stock === 0 ? 'Agotado'
               : product.tipo === 'color' ? 'Elegir color'
