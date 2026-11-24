@@ -61,7 +61,7 @@ const T_MULTIFOCAL: EntregaInfo = {
 
 const T_TORICO: EntregaInfo = {
   etiqueta: 'Bajo pedido · 25–45 días',
-  detalle:  'Lente tórico bajo pedido. Entrega estimada de 25 a 45 días.'
+  detalle:  'Lente tórico bajo pedido. Entrega estimada de 25 a 45 días.',
   dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',
