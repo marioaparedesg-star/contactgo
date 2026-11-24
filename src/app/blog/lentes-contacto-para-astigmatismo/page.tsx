@@ -45,7 +45,7 @@ export default function Page() {
             "author": { "@type": "Organization", "name": "Equipo ContactGo", "url": "https://www.contactgo.net/autor/equipo-contactgo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-01",
-            "dateModified": "2026-06-27",
+            "dateModified": "2026-11-24",
             "url": "https://www.contactgo.net/blog/lentes-contacto-para-astigmatismo",
             "inLanguage": "es-DO"
           },
@@ -114,7 +114,7 @@ export default function Page() {
         {/* Quick answer */}
         <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-5 mb-8">
           <p className="text-xs font-bold text-purple-700 uppercase tracking-wide mb-2">Respuesta directa</p>
-          <p className="text-sm text-gray-700">Los lentes de contacto para astigmatismo en República Dominicana van desde <strong className="text-purple-700">RD$4,500 hasta RD$12,000</strong> según la marca y el tipo. Los más populares son ACUVUE Oasys for Astigmatism (RD$5,800), Biofinity Toric (RD$4,800) y BL Ultra Astigmatismo (RD$4,500). Todos disponibles con entrega estimada de 25 a 45 días.</p>
+          <p className="text-sm text-gray-700">Los lentes de contacto para astigmatismo en República Dominicana van desde <strong className="text-purple-700">RD$4,150 hasta RD$12,000</strong> según la marca y el tipo. Los más populares son ACUVUE Oasys for Astigmatism (RD$5,800), Biofinity Toric (RD$4,800) y BL Ultra Astigmatismo (RD$4,500). Todos disponibles con entrega estimada de 25 a 45 días.</p>
           <Link href="/toricos" className="mt-3 inline-flex items-center gap-2 bg-purple-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-purple-700 transition-colors text-sm">
             Ver todos los tóricos disponibles →
           </Link>
@@ -201,7 +201,7 @@ export default function Page() {
                   perfil: 'Quiero el mejor precio mensual',
                   recomendacion: 'BL ULTRA for Astigmatism',
                   precio: 'RD$4,500',
-                  razon: 'El más económico de la gama premium. Solo RD$44/día de uso.',
+                  razon: 'El más económico de la gama premium. Precio de caja RD$4,500.',
                   link: '/producto/bausch-lomb-ultra-astigmatism-lentes-toricos-dominicana',
                   color: 'border-amber-200 bg-amber-50',
                 },
@@ -342,7 +342,7 @@ export default function Page() {
         <div className="mt-10 bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes para astigmatismo — entrega estimada de 25 a 45 días</h3>
           <p className="text-sm text-gray-600 mb-1">7 modelos tóricos disponibles según catálogo. Trabajamos con canales de distribución autorizados y enviamos a toda RD.</p>
-          <p className="text-xs text-gray-400 mb-4">Desde RD$4,500 · Pago seguro AZUL · Sin salir de casa</p>
+          <p className="text-xs text-gray-400 mb-4">Desde RD$4,150 · Pago seguro AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/toricos" className="inline-flex items-center justify-center gap-2 bg-purple-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors text-sm">
               Ver todos los tóricos →
