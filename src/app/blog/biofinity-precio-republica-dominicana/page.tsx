@@ -46,7 +46,7 @@ export default function Page() {
             "description": "Precio actualizado de toda la línea Biofinity (Esférico, Toric, XR, Multifocal) en República Dominicana.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
-            "datePublished": "2026-06-15", "dateModified": "2026-06-27",
+            "datePublished": "2026-06-15", "dateModified": "2026-11-24",
             "url": "https://www.contactgo.net/blog/biofinity-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "ItemList",
             "name": "Precios Biofinity en República Dominicana",
@@ -294,7 +294,7 @@ export default function Page() {
 
         <div className="border-l-4 border-blue-500 bg-blue-50 rounded-r-xl p-4 my-6">
           <p className="font-bold text-gray-900 text-sm mb-0.5">Información verificada</p>
-          <p className="text-gray-600 text-sm">Precios y especificaciones verificados por el Equipo ContactGo · Actualizado junio 2026</p>
+          <p className="text-gray-600 text-sm">Precios contrastados con el catálogo el 24 de noviembre de 2026; confirma siempre el precio en la ficha.</p>
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 text-center">
