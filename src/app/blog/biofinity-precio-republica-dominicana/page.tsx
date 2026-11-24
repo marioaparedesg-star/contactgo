@@ -6,12 +6,12 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Biofinity precio en República Dominicana 2026 — ContactGo',
-  description: 'Precio de Biofinity en RD: desde RD$4,750 la caja de 6 lentes. Biofinity Toric, Multifocal y XR disponibles. Originales CooperVision. Entrega 24-48h.',
+  description: 'Precio de Biofinity en RD: desde RD$3,650 la caja de 6 lentes. Biofinity Toric, Multifocal y XR disponibles. Originales CooperVision. Entrega según el tipo de lente y el destino.',
   alternates: { canonical: 'https://www.contactgo.net/blog/biofinity-precio-republica-dominicana' },
   openGraph: {
     type: 'article',
     title: 'Biofinity precio en República Dominicana 2026',
-    description: 'Precio actual de todos los Biofinity en RD. Esférico, Toric, Multifocal y XR. Entrega 24-48h.',
+    description: 'Precio actual de todos los Biofinity en RD. Esférico, Toric, Multifocal y XR. Entrega según el tipo de lente y el destino.',
     url: 'https://www.contactgo.net/blog/biofinity-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/biofinity-precio-rd.webp', width: 1200, height: 630, alt: 'Biofinity precio República Dominicana 2026' }],
@@ -20,19 +20,19 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const LINEA = [
-    { nombre: 'Biofinity® 6u', tipo: 'Esférico mensual', precio: 4750, slug: 'biofinity-lentes-contacto-mensuales-coopervision-dominicana', tag: 'El más popular', color: 'bg-blue-600' },
-    { nombre: 'Biofinity® XR 6u', tipo: 'Esférico alta graduación', precio: 5500, slug: 'biofinity-xr-lentes-contacto-alta-graduacion-esferica-dominicana', tag: 'Graduaciones XR', color: 'bg-indigo-600' },
-    { nombre: 'Biofinity® Toric 6u', tipo: 'Tórico mensual', precio: 5750, slug: 'biofinity-toric-lentes-astigmatismo-coopervision-dominicana', tag: 'Astigmatismo', color: 'bg-purple-600' },
-    { nombre: 'Biofinity® XR Toric 6u', tipo: 'Tórico alta graduación', precio: 12000, slug: 'biofinity-xr-toric-lentes-alta-graduacion-dominicana', tag: 'Astig. severo', color: 'bg-pink-600' },
-    { nombre: 'Biofinity® Multifocal 6u', tipo: 'Multifocal mensual', precio: 9500, slug: 'biofinity-multifocal-lentes-presbicia-coopervision-dominicana', tag: 'Presbicia', color: 'bg-teal-600' },
+    { nombre: 'Biofinity® 6u', tipo: 'Esférico mensual', precio: 3650, slug: 'biofinity-lentes-contacto-mensuales-coopervision-dominicana', tag: 'El más popular', color: 'bg-blue-600' },
+    { nombre: 'Biofinity® XR 6u', tipo: 'Esférico alta graduación', precio: 4200, slug: 'biofinity-xr-lentes-contacto-alta-graduacion-esferica-dominicana', tag: 'Graduaciones XR', color: 'bg-indigo-600' },
+    { nombre: 'Biofinity® Toric 6u', tipo: 'Tórico mensual', precio: 4800, slug: 'biofinity-toric-lentes-astigmatismo-coopervision-dominicana', tag: 'Astigmatismo', color: 'bg-purple-600' },
+    { nombre: 'Biofinity® XR Toric 6u', tipo: 'Tórico alta graduación', precio: 9400, slug: 'biofinity-xr-toric-lentes-alta-graduacion-dominicana', tag: 'Astig. severo', color: 'bg-pink-600' },
+    { nombre: 'Biofinity® Multifocal 6u', tipo: 'Multifocal mensual', precio: 5900, slug: 'biofinity-multifocal-lentes-presbicia-coopervision-dominicana', tag: 'Presbicia', color: 'bg-teal-600' },
   ]
 
   const FAQS = [
-    { q: '¿Cuánto cuestan los Biofinity en República Dominicana?', a: 'En ContactGo los Biofinity esféricos cuestan RD$4,750 la caja de 6 lentes. La línea Biofinity incluye también Toric desde RD$5,750, XR desde RD$5,500, XR Toric desde RD$12,000 y Multifocal desde RD$9,500.' },
+    { q: '¿Cuánto cuestan los Biofinity en República Dominicana?', a: 'En ContactGo los Biofinity esféricos cuestan RD$3,650 la caja de 6 lentes. La línea Biofinity incluye también Toric desde RD$4,800, XR desde RD$4,200, XR Toric desde RD$9,400 y Multifocal desde RD$5,900.' },
     { q: '¿Son los Biofinity buenos lentes de contacto?', a: 'Sí, Biofinity es una de las marcas más reconocidas de CooperVision. Son lentes mensuales de silicona hidrogel con tecnología Aquaform® que proporciona un Dk/t de 160, uno de los más altos del mercado, lo que significa excelente transmisión de oxígeno.' },
     { q: '¿Cuánto duran los lentes Biofinity?', a: 'Los Biofinity son lentes de reemplazo mensual — se usan hasta 30 días consecutivos y luego se descartan. Una caja de 6 lentes es suficiente para 3 meses de uso por un ojo (6 meses si es para un solo ojo).' },
-    { q: '¿Biofinity sirve para astigmatismo?', a: 'No el Biofinity estándar, pero sí el Biofinity Toric, diseñado específicamente para corregir el astigmatismo. Disponible en ContactGo desde RD$5,750 la caja de 6 lentes, con entrega en 24-48h.' },
-    { q: '¿Dónde comprar Biofinity certificados en RD?', a: 'En ContactGo todos los Biofinity son directo del fabricante de CooperVision, directo del fabricante. Entregamos en 24-48 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.' },
+    { q: '¿Biofinity sirve para astigmatismo?', a: 'No el Biofinity estándar, pero sí el Biofinity Toric, diseñado específicamente para corregir el astigmatismo. Disponible en ContactGo desde RD$4,800 la caja de 6 lentes, con plazo de 25 a 45 días para la versión tórica.' },
+    { q: '¿Dónde comprar Biofinity certificados en RD?', a: 'En ContactGo trabajamos con canales de distribución autorizados y entregamos los productos sellados. El plazo estimado es de 25 a 45 días para Biofinity Toric y de 1 a 5 días para Biofinity Multifocal; los esféricos dependen del destino. Pago seguro mediante AZUL/Banco Popular.' },
     { q: '¿Biofinity o ACUVUE Oasys — cuál es mejor?', a: 'Depende del uso. Biofinity es mensual con mayor Dk/t (160 vs 147) y menor costo por día de uso. ACUVUE Oasys es quincenal, con tecnología HYDRACLEAR Plus ideal para pantallas. Para uso intensivo diario, Biofinity suele ser más económico. Para renovación frecuente, ACUVUE Oasys.' },
   ]
 
@@ -81,7 +81,7 @@ export default function Page() {
 
         <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 border border-blue-100 rounded-2xl">
           <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0"><span className="text-white font-bold text-sm">CG</span></div>
-          <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Precios actualizados junio 2026 · Toda la línea Biofinity</p></div>
+          <div><p className="text-sm font-bold text-gray-900">Equipo ContactGo</p><p className="text-xs text-gray-500">Precios consultados el 24 de noviembre de 2026 · Toda la línea Biofinity</p></div>
         </div>
 
         {/* Grid de precios de toda la línea */}
@@ -106,11 +106,11 @@ export default function Page() {
               </div>
             </Link>
           ))}
-          <p className="text-xs text-gray-400 text-center">*Precios incluyen entrega a toda RD · Actualizados junio 2026</p>
+          <p className="text-xs text-gray-400 text-center">Los precios son del producto; el envío se calcula aparte: RD$250 en Santo Domingo y RD$350 en el interior. Gratis desde RD$8,000.</p>
         </div>
 
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-4 mb-6">
-          <p className="text-sm font-bold text-blue-800 mb-2">🚀 Entrega Biofinity en 24-48 horas</p>
+          <p className="text-sm font-bold text-blue-800 mb-2">Entrega Biofinity según tipo de lente y destino</p>
           <p className="text-sm text-blue-700 mb-3">En Santo Domingo, Santiago y toda la República Dominicana. Pago seguro con AZUL/Banco Popular.</p>
           <div className="flex gap-2">
             <Link href="/marca/coopervision" className="flex-1 bg-blue-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-blue-700 transition-colors">Ver todos los Biofinity →</Link>
@@ -154,11 +154,11 @@ export default function Page() {
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">La línea Biofinity explicada — ¿Cuál necesito?</h2>
             <div className="space-y-4">
               {[
-                { nombre: 'Biofinity® Esférico', precio: 4750, para: 'Miopía e hipermetropía sin astigmatismo', rangos: 'SPH: +4.00 a -12.00', desc: 'El Biofinity estándar es para personas con miopía o hipermetropía que no tienen astigmatismo. Es el más popular y el más económico de la línea.', link: '/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana' },
-                { nombre: 'Biofinity® XR', precio: 5500, para: 'Miopía o hipermetropía alta (XR = Extended Range)', rangos: 'SPH: +8.50 a +15.00 / -12.50 a -20.00', desc: 'Para personas con graduaciones muy altas que los lentes estándar no cubren. Si tu SPH es mayor de -12 o mayor de +4, probablemente necesitas la versión XR.', link: '/producto/biofinity-xr-lentes-contacto-alta-graduacion-esferica-dominicana' },
-                { nombre: 'Biofinity® Toric', precio: 5750, para: 'Astigmatismo moderado', rangos: 'CYL: -0.75, -1.25, -1.75, -2.25', desc: 'Diseñado específicamente para el astigmatismo. El estabilizador de orientación Optimised Toric Lens Geometry (OTLG) de CooperVision mantiene el lente estable en el ojo para una visión nítida.', link: '/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana' },
-                { nombre: 'Biofinity® XR Toric', precio: 12000, para: 'Astigmatismo severo con alta graduación', rangos: 'CYL: -2.75 a -5.75', desc: 'Para personas con astigmatismo severo que el Biofinity Toric estándar no puede corregir. Es el lente más especializado de la línea.', link: '/producto/biofinity-xr-toric-lentes-alta-graduacion-dominicana' },
-                { nombre: 'Biofinity® Multifocal', precio: 9500, para: 'Presbicia (vista cansada)', rangos: 'ADD: +1.00 a +4.00 en adición', desc: 'Para personas mayores de 40 años con presbicia que necesitan ver bien tanto de cerca como de lejos. Disponible en tres variantes de ADD: D, N y EN según el patrón de dominancia ocular.', link: '/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana' },
+                { nombre: 'Biofinity® Esférico', precio: 3650, para: 'Miopía e hipermetropía sin astigmatismo', rangos: 'SPH: +4.00 a -12.00', desc: 'El Biofinity estándar es para personas con miopía o hipermetropía que no tienen astigmatismo. Es el más popular y el más económico de la línea.', link: '/producto/biofinity-lentes-contacto-mensuales-coopervision-dominicana' },
+                { nombre: 'Biofinity® XR', precio: 4200, para: 'Miopía o hipermetropía alta (XR = Extended Range)', rangos: 'SPH: +8.50 a +15.00 / -12.50 a -20.00', desc: 'Para personas con graduaciones muy altas que los lentes estándar no cubren. Si tu SPH es mayor de -12 o mayor de +4, probablemente necesitas la versión XR.', link: '/producto/biofinity-xr-lentes-contacto-alta-graduacion-esferica-dominicana' },
+                { nombre: 'Biofinity® Toric', precio: 4800, para: 'Astigmatismo moderado', rangos: 'CYL: -0.75, -1.25, -1.75, -2.25', desc: 'Diseñado específicamente para el astigmatismo. El estabilizador de orientación Optimised Toric Lens Geometry (OTLG) de CooperVision mantiene el lente estable en el ojo para una visión nítida.', link: '/producto/biofinity-toric-lentes-astigmatismo-coopervision-dominicana' },
+                { nombre: 'Biofinity® XR Toric', precio: 9400, para: 'Astigmatismo severo con alta graduación', rangos: 'CYL: -2.75 a -5.75', desc: 'Para personas con astigmatismo severo que el Biofinity Toric estándar no puede corregir. Es el lente más especializado de la línea.', link: '/producto/biofinity-xr-toric-lentes-alta-graduacion-dominicana' },
+                { nombre: 'Biofinity® Multifocal', precio: 5900, para: 'Presbicia (vista cansada)', rangos: 'ADD: +1.00 a +4.00 en adición', desc: 'Para personas mayores de 40 años con presbicia que necesitan ver bien tanto de cerca como de lejos. Disponible en tres variantes de ADD: D, N y EN según el patrón de dominancia ocular.', link: '/producto/biofinity-multifocal-lentes-presbicia-coopervision-dominicana' },
               ].map(({ nombre, precio, para, rangos, desc, link }) => (
                 <div key={nombre} className="border border-blue-100 rounded-2xl p-4">
                   <div className="flex items-start justify-between gap-3 mb-2">
@@ -201,7 +201,7 @@ export default function Page() {
                     ['Material', 'Comfilcon A', 'Senofilcon A'],
                     ['Dk/t (oxígeno)', '160 ⭐', '147'],
                     ['Agua', '48%', '38%'],
-                    ['Precio en RD (6u)', 'RD$3,650', 'RD$3,350'],
+                    ['Precio en RD (6u)', 'RD$3,650', 'RD$3,500'],
                     ['Precio por día', '~RD$52 ⭐', '~RD$92'],
                     ['Disponible tórico', '✅ Biofinity Toric', '✅ Oasys Astig'],
                     ['Disponible multifocal', '✅ Biofinity Multi', '✅ Oasys Multi'],
@@ -217,7 +217,7 @@ export default function Page() {
             </div>
             <div className="bg-gray-50 rounded-xl p-4 mt-4 text-sm">
               <p className="font-bold text-gray-900 mb-1">💡 Cuándo elegir Biofinity</p>
-              <p>Biofinity gana en <strong>mayor oxígeno (Dk/t 160)</strong> y <strong>menor costo por día (~RD$3,650)</strong>. Es la elección lógica si usas los lentes todo el día y quieres el máximo cuidado corneal al menor costo de uso.</p>
+              <p>Biofinity gana en <strong>mayor oxígeno (Dk/t 160)</strong> y <strong>menor precio por caja (RD$3,650)</strong>. Es la elección lógica si usas los lentes todo el día y quieres el máximo cuidado corneal al menor costo de uso.</p>
               <p className="mt-2">Elige ACUVUE Oasys si tu optometrista lo ha recomendado específicamente o prefieres el cambio quincenal por mayor higiene.</p>
             </div>
             <Link href="/blog/biofinity-vs-acuvue-comparacion" className="mt-3 inline-block text-xs text-primary-600 font-semibold hover:underline">→ Ver comparativa completa Biofinity vs ACUVUE</Link>
@@ -287,7 +287,7 @@ export default function Page() {
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
-            <p>Los Biofinity son una de las mejores opciones de lentes de contacto mensuales disponibles en República Dominicana — y en ContactGo los encuentras en toda su línea: esférico, XR, Toric, XR Toric y Multifocal, con precios desde RD$3,650 y entrega en 24-48 horas.</p>
+            <p>Los Biofinity son una de las mejores opciones de lentes de contacto mensuales disponibles en República Dominicana — y en ContactGo los encuentras en toda su línea: esférico, XR, Toric, XR Toric y Multifocal, con precios vigentes visibles en el catálogo y plazos de entrega según el tipo de lente y destino.</p>
             <p className="mt-3">Su Dk/t de 160 y la tecnología Aquaform® los posicionan como uno de los lentes con mejor relación calidad-precio por día de uso disponibles en el mercado dominicano.</p>
           </section>
         </div>
@@ -298,7 +298,7 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Biofinity certificados en tu puerta en 24-48h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Biofinity: precios y plazos de entrega por tipo</h3>
           <p className="text-sm text-gray-600 mb-4">Toda la línea Biofinity disponible · CooperVision certificados · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/marca/coopervision" className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors text-sm">Ver todos los Biofinity →</Link>
