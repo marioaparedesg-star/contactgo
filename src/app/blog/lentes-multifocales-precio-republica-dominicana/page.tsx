@@ -98,7 +98,7 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Los <strong>lentes de contacto multifocales</strong> son la solución para personas con <strong>presbicia</strong> (vista cansada), una condición natural que aparece generalmente a partir de los 40 años. En ContactGo ofrecemos la mayor selección de lentes multifocales disponibles en República Dominicana, con entrega estimada de 1 a 5 días.</p>
+          <p>Los <strong>lentes de contacto multifocales</strong> son la solución para personas con <strong>presbicia</strong> (vista cansada), una condición natural que aparece generalmente a partir de los 40 años. En ContactGo ofrecemos la mayor selección de lentes multifocales disponibles en República Dominicana, con entrega estimada de 1 a 5 días para multifocales estándar; los multifocales tóricos pueden requerir de 25 a 45 días.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios completos — Tabla de referencia consultada el 24 de noviembre de 2026</h2>
@@ -124,7 +124,7 @@ export default function Page() {
                 <td className="py-3 text-right font-black text-gray-900">RD$4,450</td>
               </tr>
               <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Menor precio</span></td>
+                <td className="py-3 pr-3"><Link href="/producto/bausch-lomb-ultra-presbyopia-lentes-multifocales-dominicana" className="font-medium text-primary-600 hover:underline text-sm">Bausch+Lomb ULTRA® for Presbyopia 6u</Link><span className="ml-2 text-[10px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-bold">Mensual</span></td>
                 <td className="py-3 text-right font-black text-gray-900">RD$4,750</td>
               </tr>
               
@@ -177,7 +177,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Hay lentes multifocales diarios en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El clariti 1 day multifocal está disponible en ContactGo a RD$4,450 la caja de 30 lentes, con entrega estimada de 1 a 5 días en toda República Dominicana.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El clariti 1 day multifocal está disponible en ContactGo a RD$4,450 la caja de 30 lentes, con entrega estimada de 1 a 5 días para multifocales estándar.</p>
           </details>
 
             </div>
