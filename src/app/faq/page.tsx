@@ -38,7 +38,7 @@ const FAQS = [
   {
     categoria: '👁️ Productos',
     preguntas: [
-      { q: '¿Los productos son certificados?', a: 'Sí, todos nuestros productos son directo del fabricante y certificados. Somos especialistas exclusivamente en lentes de contacto. Cada producto llega directo del fabricante, en su empaque original. Nunca abrimos cajas, nunca reempacamos — lo que pides es exactamente lo que recibes.' },
+      { q: '¿Los productos son certificados?', a: 'Trabajamos con marcas reconocidas y canales de distribución autorizados. Los productos se entregan sellados y en su empaque original; no abrimos ni reempacamos las cajas.' },
       { q: '¿Necesito receta para comprar lentes de contacto?', a: 'Recomendamos tener una receta actualizada de tu oftalmólogo antes de comprar. Contamos con un buscador por receta para ayudarte a elegir el tipo correcto.' },
       { q: '¿Qué pasa si mi graduación no está disponible?', a: 'Escríbenos por WhatsApp y buscamos la graduación específica para ti. Podemos hacer pedidos especiales.' },
       { q: '¿Los lentes de color necesitan graduación?', a: 'No. Tenemos lentes de color sin graduación (plano) y con graduación para miopía e hipermetropía.' },
@@ -47,7 +47,7 @@ const FAQS = [
   {
     categoria: '🔄 Devoluciones y Garantía',
     preguntas: [
-      { q: '¿Puedo devolver un producto?', a: 'Aceptamos devoluciones dentro de las 7 días posteriores a la entrega, siempre que el producto esté sellado y sin abrir.' },
+      { q: '¿Puedo devolver un producto?', a: 'Aceptamos devoluciones dentro de los 7 días calendario posteriores a la entrega para productos sellados, sin abrir y en su empaque original. Los lentes tóricos solo pueden cancelarse durante las primeras 48 horas desde la confirmación; después no admiten cancelación ni devolución.' },
       { q: '¿Qué hago si recibí un producto dañado o incorrecto?', a: 'Contáctanos inmediatamente por WhatsApp con una foto del producto. Lo reemplazamos sin costo adicional.' },
       { q: '¿Los productos tienen garantía?', a: 'Garantizamos la autenticidad de todos nuestros productos. Si detectas algún problema con la calidad, nos hacemos responsables.' },
     ]
@@ -56,9 +56,9 @@ const FAQS = [
     categoria: '📦 Cómo pedir',
     preguntas: [
       { q: '¿Cómo hago un pedido?', a: 'Selecciona tus productos, elige tu graduación, agrégalos al carrito y completa el checkout con tu dirección y método de pago. Es rápido y seguro.' },
-      { q: '¿Necesito crear una cuenta?', a: 'No es necesario. Puedes comprar como invitado. Sin embargo, crear una cuenta te permite ver el historial de pedidos y guardar tu dirección.' },
+      { q: '¿Necesito crear una cuenta?', a: 'Sí. Para comprar debes iniciar sesión o crear una cuenta antes de agregar productos al carrito. Desde tu cuenta puedes consultar el estado y el historial de tus pedidos.' },
       { q: '¿Puedo modificar o cancelar mi pedido?', a: 'Sí, mientras el pedido esté en estado "pendiente". Escríbenos por WhatsApp lo antes posible.' },
-      { q: '¿Tienen atención al cliente?', a: 'Sí, respondemos por WhatsApp de lunes a sábado de 9am a 7pm. También puedes escribirnos a info@contactgo.net.' },
+      { q: '¿Tienen atención al cliente?', a: 'Atendemos por WhatsApp de lunes a viernes de 9:00 a. m. a 9:00 p. m. y los sábados de 9:00 a. m. a 6:00 p. m. Los domingos no laboramos. También puedes escribirnos a info@contactgo.net.' },
     ]
   },
 ]
