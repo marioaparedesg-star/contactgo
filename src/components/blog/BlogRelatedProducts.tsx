@@ -93,7 +93,7 @@ export default function BlogRelatedProducts({ products }: { products: BlogProduc
       <div className="border-t border-slate-200 pt-8">
         <div className="mb-5">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Catálogo ContactGo</p>
-          <h2 id="blog-related-products-title" className="mt-1 text-xl sm:text-2xl font-bold tracking-tight text-[#002455]">Productos relacionados</h2>
+          <h2 id="blog-related-products-title" className="mt-1 text-xl sm:text-2xl font-bold tracking-tight text-[#002455]">Productos mencionados en esta guía</h2>
           <p className="mt-1 text-sm text-slate-500">Consulta las fichas de los productos que se relacionan con este tema.</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
