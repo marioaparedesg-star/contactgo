@@ -406,6 +406,7 @@ export default function ProductoClient({ product, variants }: Props) {
   const mismaSph   = eyeFlow.mismaReceta
   const [size,  setSize]  = useState('')
   const [qty,   setQty]   = useState(1)
+  const [toricPolicyAccepted, setToricPolicyAccepted] = useState(false)
   // Sin límite de cantidad — el cliente compra lo que necesite
   const handleSetQty = (n: number) => {
     if (n < 1) return
@@ -644,6 +645,10 @@ export default function ProductoClient({ product, variants }: Props) {
   }, [size, product.precio, sku, suscripcion, qty, isLente, isColor, modalidad, precioPlano])
 
   const handleAdd = async (redirectToCart = true): Promise<boolean> => {
+    if (needsToric && !toricPolicyAccepted) {
+      toast.error('Confirma que conoces el plazo y la política de cancelación de los lentes tóricos.')
+      return false
+    }
     // Exigir autenticación antes de añadir cualquier producto al carrito.
     try {
       const { data: { user } } = await createClient().auth.getUser()
@@ -985,6 +990,12 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BLOQUE 5: CTA MOBILE (inline, arriba de la sticky bar) */}
             <div className="px-4 pb-4 space-y-2">
+              {needsToric && (
+                <label className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-900">
+                  <input type="checkbox" checked={toricPolicyAccepted} onChange={e => setToricPolicyAccepted(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[#002455]" />
+                  <span>Entiendo que este lente tórico es bajo pedido, tarda de 25 a 45 días y puedo cancelar dentro de las primeras 48 horas desde la confirmación.</span>
+                </label>
+              )}
               <EntregaHoy especial={getEntregaInfo.especial} />
               <button onClick={() => handleAdd()} disabled={product.stock===0||sinVariante}
                 className="w-full bg-[#01B2B7] hover:bg-[#018E92] active:scale-[0.99] disabled:opacity-40 text-white font-semibold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition-colors">
