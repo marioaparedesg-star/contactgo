@@ -75,7 +75,7 @@ const SLIDES: Slide[] = [
     title:      'Tus lentes duran\nmás y se sienten mejor',
     subtitle:   'Soluciones y gotas de las mejores marcas: OPTI-FREE, Biotrue, renu, Boston y Clear Care. Limpieza y comodidad todos los días.',
     cta:        { label: 'Pedir soluciones', href: '/soluciones' },
-    cta2:       { label: 'Ver todas las gotas', href: '/gotas' },
+    cta2:       { label: 'Ver soluciones', href: '/soluciones' },
     glow:       'rgba(37,99,235,0.22)',
     accent:     '#01B2B7',
     image:      '/hero-soluciones-v4.jpg',
