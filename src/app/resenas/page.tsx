@@ -4,6 +4,8 @@ import type { Metadata } from 'next'
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { Star } from 'lucide-react'
+import Navbar from '@/components/ui/Navbar'
+import Footer from '@/components/ui/Footer'
 
 export const metadata: Metadata = {
   title: 'Reseñas de Clientes — ContactGo República Dominicana',
@@ -47,7 +49,9 @@ export default async function ResenasPage() {
   const { resenas, totalReal, avgRating } = await getResenas()
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-10 pb-32">
+    <>
+      <Navbar />
+      <main id="main-content" className="max-w-4xl mx-auto px-4 py-10 pb-32">
       <div className="text-center mb-8">
         <h1 className="font-display text-2xl md:text-3xl font-black text-gray-900 mb-2">
           Reseñas de clientes
@@ -115,6 +119,8 @@ export default async function ResenasPage() {
           </Link>
         </div>
       </div>
-    </main>
+      </main>
+      <Footer />
+    </>
   )
 }
