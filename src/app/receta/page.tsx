@@ -288,24 +288,15 @@ export default function RecetaPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gray-50 pb-16">
+      <main className="min-h-screen bg-[#f4f8fb] pb-16">
 
         {/* Encabezado compacto: prioriza el formulario en móvil */}
-        <section className="border-b border-slate-100 bg-white px-4 py-3 text-left md:px-5 md:py-5">
+        <section className="relative overflow-hidden border-b border-[#dceaf4] bg-[#0758a6] px-4 py-6 text-left text-white md:px-5 md:py-8"><div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full border-[18px] border-white/5" /><div className="pointer-events-none absolute -right-2 -top-10 h-40 w-40 rounded-full border-[12px] border-[#01B2B7]/15" />
           <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="mb-1 flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-primary-700 md:text-[10px]">
-                <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
-                Asistente de receta
-              </p>
-              <h1 className="font-display text-xl font-bold leading-tight tracking-tight text-slate-900 md:text-2xl">
-                Encuentra lentes para tu graduación
-              </h1>
-              <p className="mt-1 hidden text-sm text-slate-500 sm:block">
-                Introduce los valores de tu receta y consulta las opciones compatibles del catálogo.
-              </p>
+              <p className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white/80 md:text-xs"><span className="h-2 w-2 rounded-full bg-[#01B2B7]" />Calculadora de receta</p><h1 className="font-display text-2xl font-bold leading-tight tracking-tight text-white md:text-3xl">Encuentra tus lentes ideales</h1><p className="mt-2 max-w-xl text-sm leading-6 text-white/85">Introduce tu graduación y descubre las opciones que se ajustan a tus parámetros.</p>
             </div>
-            <div className="hidden shrink-0 rounded-xl bg-teal-50 px-3 py-2 text-[10px] font-semibold text-primary-700 sm:block">
+            <div className="hidden shrink-0 rounded-full border border-white/25 bg-white/10 px-3 py-2 text-[11px] font-semibold text-white sm:block">
               Sin costo · Sin registro
             </div>
           </div>
@@ -341,17 +332,17 @@ export default function RecetaPage() {
           </div>
         )}
 
-        <div className="max-w-3xl mx-auto px-3 py-3 space-y-2.5 md:px-4 md:py-5 md:space-y-3">
+        <div className="relative z-10 mx-auto -mt-3 max-w-3xl space-y-3 px-3 pb-5 md:px-4 md:space-y-4">
 
 
 
 
 
           {/* Tipo de receta */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_2px_12px_rgba(15,35,65,.04)] md:p-5">
+          <section className="rounded-2xl border border-[#dce6ed] bg-white p-4 shadow-[0_8px_24px_rgba(15,35,65,.05)] md:p-5">
             <div className="mb-2">
-              <h2 className="text-sm font-semibold text-slate-900">¿Qué tipo de receta tienes?</h2>
-              <p className="mt-0.5 text-[11px] text-slate-500">Selecciona el origen de los valores.</p>
+              <h2 className="text-base font-bold tracking-tight text-[#002455]">¿Qué tipo de receta tienes?</h2>
+              <p className="mt-1 text-xs text-slate-500">Elige de dónde provienen los valores.</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <button type="button" onClick={() => setRxSource('contacto')}
@@ -388,7 +379,7 @@ export default function RecetaPage() {
 
           {/* Formulario OD | OI */}
           <div className="space-y-3">
-            <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-3 text-xs font-medium text-slate-600">
+            <label className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-[#dce6ed] bg-white px-4 py-3.5 text-sm font-medium text-slate-700 shadow-[0_3px_12px_rgba(15,35,65,.03)]">
               <input type="checkbox" checked={misma} onChange={e => { setMisma(e.target.checked); if(e.target.checked) setOi({...od}) }} className="h-4 w-4 rounded accent-[#01B2B7]"/>
               Ambos ojos tienen la misma receta
             </label>
@@ -399,11 +390,11 @@ export default function RecetaPage() {
           </div>
 
           {/* CTAs calcular */}
-          <div className="flex gap-2">
-            <button onClick={resetear} className="shrink-0 w-11 h-11 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 shadow-sm transition-colors">
+          <div className="flex gap-2.5 pt-1">
+            <button onClick={resetear} aria-label="Limpiar receta" className="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl border border-[#dce6ed] bg-white text-slate-500 shadow-sm transition-colors hover:bg-slate-50">
               <RotateCcw className="w-4 h-4"/>
             </button>
-            <button onClick={calcular} className="flex-1 btn-primary py-3 font-black rounded-xl flex items-center justify-center gap-2 text-sm shadow-sm">
+            <button onClick={calcular} className="flex-1 rounded-xl bg-[#01B2B7] py-3.5 font-bold text-white shadow-sm transition-colors hover:bg-[#009da2] flex items-center justify-center gap-2 text-sm">
               <Sparkles className="w-4 h-4"/> Calcular y ver productos →
             </button>
           </div>
@@ -414,7 +405,7 @@ export default function RecetaPage() {
 
           {/* ── RESULTADO ──────────────────────────────────────────────────── */}
           {result && (
-            <div id="resultado" className="space-y-5 pt-2">
+            <div id="resultado" className="space-y-4 pt-3">
 
               {/* Diagnóstico + complejidad */}
               <DiagnosticoCard result={result}/>
@@ -565,34 +556,34 @@ export default function RecetaPage() {
 function EyePanel({ label, eye, onChange, color, disabled }: { label: string; eye: EyeInput; onChange: (e: EyeInput) => void; color: 'blue'|'green'; disabled?: boolean }) {
   const s = (k: keyof EyeInput) => (v: string) => onChange({ ...eye, [k]: v })
   const hasCyl = !!eye.cyl && parseFloat(eye.cyl) !== 0
-  const field = "w-full min-w-0 appearance-none rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-800 outline-none transition focus:border-[#01B2B7] focus:ring-2 focus:ring-[#01B2B7]/15 disabled:bg-slate-50 disabled:text-slate-300"
+  const field = "w-full min-w-0 appearance-none rounded-full border border-[#e4e9ed] bg-white px-4 py-3.5 text-[15px] font-medium text-slate-800 outline-none transition focus:border-[#01B2B7] focus:ring-2 focus:ring-[#01B2B7]/15 disabled:bg-slate-50 disabled:text-slate-300"
   return (
-    <section className={`rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_2px_12px_rgba(15,35,65,.04)] ${disabled ? 'opacity-50' : ''}`}>
-      <div className="mb-3 flex items-center gap-2">
-        <span className={`h-2.5 w-2.5 rounded-full ${color === 'blue' ? 'bg-blue-600' : 'bg-[#01B2B7]'}`}/>
-        <h3 className="text-sm font-semibold text-[#002455]">{label}</h3>
+    <section className={"rounded-2xl border border-[#e3e9ee] bg-white p-4 shadow-[0_8px_24px_rgba(15,35,65,.045)] md:p-5 " + (disabled ? "opacity-50" : "")}>
+      <div className="mb-4 flex items-center gap-2.5">
+        <span className={"h-2.5 w-2.5 rounded-full " + (color === "blue" ? "bg-[#1762b3]" : "bg-[#01B2B7]")}/>
+        <h3 className="text-base font-semibold tracking-tight text-[#002455]">{label}</h3>
       </div>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-3">
-        <label className="min-w-0 text-[11px] font-semibold text-slate-500">Esfera · SPH <span className="text-rose-500">*</span>
-          <select value={eye.sph} onChange={e=>s('sph')(e.target.value)} disabled={disabled} className={field}>
+      <div className="grid grid-cols-2 gap-x-3 gap-y-3.5">
+        <label className="min-w-0 text-xs font-medium text-slate-500">Esfera · SPH <span className="text-rose-500">*</span>
+          <select value={eye.sph} onChange={e=>s("sph")(e.target.value)} disabled={disabled} className={field}>
             <option value="">Seleccionar</option>
             {SPH_GLASSES.map(v=><option key={v} value={String(v)}>{v===0?'Plano':v>0?`+${v.toFixed(2)}`:v.toFixed(2)}</option>)}
           </select>
         </label>
-        <label className="min-w-0 text-[11px] font-semibold text-slate-500">Cilindro · CYL
-          <select value={eye.cyl} onChange={e=>{s('cyl')(e.target.value);if(!e.target.value)s('axis')('')}} disabled={disabled} className={field}>
+        <label className="min-w-0 text-xs font-medium text-slate-500">Cilindro · CYL
+          <select value={eye.cyl} onChange={e=>{s("cyl")(e.target.value);if(!e.target.value)s("axis")("")}} disabled={disabled} className={field}>
             <option value="">Sin cilindro</option>
             {CYL_GLASSES.filter(v=>v!==0).map(v=><option key={v} value={String(v)}>{v.toFixed(2)}</option>)}
           </select>
         </label>
-        <label className="min-w-0 text-[11px] font-semibold text-slate-500">Eje · AXIS {hasCyl&&<span className="text-rose-500">*</span>}
-          <select value={eye.axis} onChange={e=>s('axis')(e.target.value)} disabled={disabled||!hasCyl} className={field}>
+        <label className="min-w-0 text-xs font-medium text-slate-500">Eje · AXIS {hasCyl&&<span className="text-rose-500">*</span>}
+          <select value={eye.axis} onChange={e=>s("axis")(e.target.value)} disabled={disabled||!hasCyl} className={field}>
             <option value="">—</option>
             {AXIS_VALS.map(v=><option key={v} value={String(v)}>{String(v).padStart(3,'0')}°</option>)}
           </select>
         </label>
-        <label className="min-w-0 text-[11px] font-semibold text-slate-500">Adición · ADD
-          <select value={eye.add} onChange={e=>s('add')(e.target.value)} disabled={disabled} className={field}>
+        <label className="min-w-0 text-xs font-medium text-slate-500">Adición · ADD
+          <select value={eye.add} onChange={e=>s("add")(e.target.value)} disabled={disabled} className={field}>
             <option value="">Sin adición</option>
             {ADD_VALS.map(v=><option key={v} value={String(v)}>+{v.toFixed(2)}</option>)}
           </select>
@@ -601,7 +592,6 @@ function EyePanel({ label, eye, onChange, color, disabled }: { label: string; ey
     </section>
   )
 }
-
 // ── Diagnóstico ───────────────────────────────────────────────────────────────
 function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
   const comp = getComplejidad(r)
