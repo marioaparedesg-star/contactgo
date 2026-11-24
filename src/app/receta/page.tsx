@@ -267,7 +267,7 @@ export default function RecetaPage() {
       <main className="min-h-screen bg-[#f4f8fb] pb-16">
 
         {/* Encabezado compacto: prioriza el formulario en móvil */}
-        <section className="border-b border-[#e5edf2] bg-[#0758a6] px-4 py-6 text-left text-white md:px-5 md:py-7>
+        <section className="border-b border-[#e5edf2] bg-[#0758a6] px-4 py-6 text-left text-white md:px-5 md:py-7">
           <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="mb-2 text-xs font-semibold text-white/85">CALCULADORA DE RECETA</p><h1 className="font-display text-2xl font-bold leading-tight text-white md:text-3xl">Encuentra tus lentes</h1><p className="mt-2 max-w-xl text-sm text-white/90">Introduce tu graduación para ver productos compatibles.</p>
