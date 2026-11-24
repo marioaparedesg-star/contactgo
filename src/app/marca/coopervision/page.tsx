@@ -9,7 +9,7 @@ import type { Metadata } from 'next'
 
 export const metadata = {
   title: 'Lentes CooperVision en República Dominicana | ContactGo',
-  description: 'Biofinity®, clariti® y Proclear® de CooperVision en RD. directo del fabricante. Entrega 24-48h. Recibe en 24-48 h.',
+  description: 'Biofinity®, clariti® y Proclear® de CooperVision en RD. Canales de distribución autorizados. Entrega según tipo de lente y destino.',
   alternates: { canonical: 'https://www.contactgo.net/marca/coopervision' },
   openGraph: {
     title: 'Lentes CooperVision en RD | ContactGo',
