@@ -20,7 +20,7 @@ export default function DevolucionesPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 py-12 pb-24">
+      <main id="main-content" className="max-w-3xl mx-auto px-4 py-12 pb-24">
         <div className="mb-10">
           <h1 className="font-display text-3xl font-bold text-gray-900 mb-3">Devoluciones y Garantía</h1>
           <p className="text-gray-500">Conoce nuestra política de devoluciones y garantía de productos.</p>
