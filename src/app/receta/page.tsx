@@ -520,25 +520,7 @@ export default function RecetaPage() {
                 )}
               </div>
 
-              {/* Ahorro vs óptica */}
-              {products.length > 0 && <AhorroCard precio={Number(products[Math.min(1,products.length-1)]?.precio)}/>}
 
-              {/* Consumo */}
-              {products.length > 0 && <ConsumoCard precio={Number(products[Math.min(1,products.length-1)]?.precio)} frecuencia={frecuencia} onChange={setFrecuencia}/>}
-
-              {/* WhatsApp */}
-              <WhatsAppCard result={result} buildMsg={buildWA}/>
-
-              {/* Guardar receta — CTA opcional post-resultado */}
-              {!showLead && (
-                <button
-                  onClick={() => setShowLead(true)}
-                  className="w-full flex items-center justify-center gap-2 border border-dashed border-gray-200 rounded-2xl py-3 text-xs text-gray-400 hover:border-primary-300 hover:text-primary-600 transition-all"
-                >
-                  <Mail className="w-3.5 h-3.5" />
-                  Guardar mi receta por email para la próxima vez
-                </button>
-              )}
 
             </div>
           )}
@@ -625,6 +607,7 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
   const isSimple = result.tipo === 'esferico' && !soloOjo
   const wasAdded = cartAdded === p.id
   const tierLabel = {eco:'Opción',rec:'Recomendada',prem:'Alternativa'}[tier]
+  const reviewText = encodeURIComponent(`Hola ContactGo. Quiero validar esta alternativa antes de comprar: ${p.nombre}. OD: SPH ${productResult.od.sph ?? '—'}, CYL ${productResult.od.cyl ?? '—'}, eje ${productResult.od.axis ?? '—'}. OI: SPH ${productResult.oi.sph ?? '—'}, CYL ${productResult.oi.cyl ?? '—'}, eje ${productResult.oi.axis ?? '—'}.`)
   return (
     <article className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-[#e5ebef] bg-white shadow-[0_8px_24px_rgba(15,35,65,.055)]">
       <div className="relative flex h-36 items-center justify-center bg-white p-4 md:h-44">
@@ -640,9 +623,13 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
         {p.requiere_revision && <p className="mt-2 rounded-lg bg-amber-50 px-2.5 py-2 text-[10px] leading-4 text-amber-900">Parámetros cercanos. Un especialista debe confirmar la alternativa antes de comprar.</p>}
       </div>
       <div className="space-y-2 px-3 pb-3">
-        <button onClick={() => onAction(p, productResult)} className={"flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-bold transition-colors " + (wasAdded ? "bg-emerald-600 text-white" : featured ? "bg-[#01B2B7] text-white hover:bg-[#009da2]" : "bg-[#0758a6] text-white hover:bg-[#064b8e]")}>
-          {wasAdded ? <><CheckCircle className="h-3.5 w-3.5"/>En tu carrito</> : soloOjo ? `Elegir para ${soloOjo}` : isSimple ? <><ShoppingCart className="h-3.5 w-3.5"/>Agregar al carrito</> : "Ver con mi receta"}
-        </button>
+        {p.requiere_revision ? (
+          <a href={`https://wa.me/18096942268?text=${reviewText}`} target="_blank" rel="noopener noreferrer" className="flex w-full items-center justify-center rounded-xl bg-amber-600 py-2.5 text-xs font-bold text-white">Validar con especialista</a>
+        ) : (
+          <button onClick={() => onAction(p, productResult)} className={"flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-bold transition-colors " + (wasAdded ? "bg-emerald-600 text-white" : featured ? "bg-[#01B2B7] text-white hover:bg-[#009da2]" : "bg-[#0758a6] text-white hover:bg-[#064b8e]")}>
+            {wasAdded ? <><CheckCircle className="h-3.5 w-3.5"/>En tu carrito</> : soloOjo ? `Elegir para ${soloOjo}` : isSimple ? <><ShoppingCart className="h-3.5 w-3.5"/>Agregar al carrito</> : "Ver con mi receta"}
+          </button>
+        )}
         <Link href={`/producto/${p.slug}${soloOjo ? `?ojo=${soloOjo}` : ""}`} onClick={() => { try { sessionStorage.setItem("cg_rx_pending", JSON.stringify({ od: productResult.od, oi: productResult.oi, tipo: productResult.tipo, soloOjo: soloOjo ?? null, timestamp: Date.now() })) } catch {} }} className="block py-1 text-center text-[10px] font-semibold text-slate-500 hover:text-[#0758a6]">Ver detalles</Link>
       </div>
     </article>
