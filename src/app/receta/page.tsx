@@ -110,7 +110,7 @@ export default function RecetaPage() {
             const json = await res.json()
             if (json.error) toast.error(json.error, { duration: 5000 })
             return { productos: json.productos ?? [], total: Number(json.total ?? 0), alternativas: json.alternativas_revision ?? [] }
-          } catch { return [] }
+          } catch { return { productos: [], total: 0, alternativas: [] } }
         }
         const [listaOd, listaOi] = await Promise.all([
           fetchOjo(mixto.od.tipo, mixto.od.rx),
