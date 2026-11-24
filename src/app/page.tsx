@@ -193,20 +193,6 @@ export default async function HomePage() {
                   </svg>
                 ),
               },
-              {
-                label: 'Gotas', slug: 'gota', href: '/gotas',
-                desc: 'Lubricación ocular',
-                bg: 'bg-slate-50', fg: 'text-[#002455]',
-                // Gotero oftálmico con gota cayendo
-                svg: (
-                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M13 3 h6 v4 h-6 z"/>
-                    <path d="M14 7 h4 v8 h-4 z"/>
-                    <path d="M15 15 h2 l0.5 3 h-3 z"/>
-                    <path d="M16 21 c -1.5 2 -2.5 3.5 -2.5 5 a 2.5 2.5 0 0 0 5 0 c 0 -1.5 -1 -3 -2.5 -5 z" fill="currentColor" fillOpacity="0.2"/>
-                  </svg>
-                ),
-              },
             ].map(cat => (
               <Link key={cat.slug} href={cat.href ?? `/catalogo?tipo=${cat.slug}`}
                 className="rounded-xl border border-slate-200 bg-white p-3 md:p-5 text-center hover:border-slate-400 group transition-colors">
