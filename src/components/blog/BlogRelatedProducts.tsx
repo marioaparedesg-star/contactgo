@@ -62,19 +62,7 @@ function chooseProducts(pathname: string, products: BlogProduct[]) {
     if (selected.length === 4) break
   }
 
-  if (selected.length === 0) {
-    const preferredTypes = /astigmatismo|toric|torico/.test(normalizedSlug) ? ['torico']
-      : /multifocal|presbicia/.test(normalizedSlug) ? ['multifocal']
-      : /color|colores/.test(normalizedSlug) ? ['color']
-      : /diario|diarios/.test(normalizedSlug) ? ['esferico']
-      : ['esferico','multifocal','torico']
-    let fallbackCount = 0
-    for (const type of preferredTypes) {
-      const match = products.find((product) => product.tipo === type && !seen.has(product.id))
-      if (match) { selected.push(match); seen.add(match.id); fallbackCount += 1 }
-      if (fallbackCount >= 3) break
-    }
-  }
+
   return selected
 }
 
@@ -90,7 +78,7 @@ export default function BlogRelatedProducts({ products }: { products: BlogProduc
   const itemList = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Productos relacionados disponibles en ContactGo',
+    name: 'Productos mencionados en esta guía disponibles en ContactGo',
     itemListElement: related.map((product, index) => ({
       '@type': 'ListItem',
       position: index + 1,
@@ -106,7 +94,7 @@ export default function BlogRelatedProducts({ products }: { products: BlogProduc
         <div className="mb-5">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Catálogo ContactGo</p>
           <h2 id="blog-related-products-title" className="mt-1 text-xl sm:text-2xl font-bold tracking-tight text-[#002455]">Productos relacionados</h2>
-          <p className="mt-1 text-sm text-slate-500">Consulta detalles, disponibilidad y opciones de cada producto.</p>
+          <p className="mt-1 text-sm text-slate-500">Consulta las fichas de los productos que se relacionan con este tema.</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           {related.map((product) => (
