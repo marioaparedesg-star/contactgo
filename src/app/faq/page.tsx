@@ -64,10 +64,20 @@ const FAQS = [
 ]
 
 export default function FAQPage() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQS.flatMap(group => group.preguntas).map(item => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a },
+    })),
+  }
   return (
     <>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 py-12 pb-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <main id="main-content" className="max-w-3xl mx-auto px-4 py-12 pb-24">
         <div className="mb-10 text-center">
           <h1 className="font-display text-3xl font-bold text-gray-900 mb-3">Preguntas Frecuentes</h1>
           <p className="text-gray-500">Todo lo que necesitas saber sobre ContactGo</p>
