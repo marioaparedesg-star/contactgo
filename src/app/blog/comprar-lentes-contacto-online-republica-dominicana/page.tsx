@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Comprar lentes de contacto online en RD — Guía segura 2026',
-  description: 'Cómo comprar lentes de contacto online en República Dominicana de forma segura. ACUVUE, Biofinity, Air Optix certificados con entrega 24-48h. Guía completa 2026.',
+  description: 'Cómo comprar lentes de contacto online en República Dominicana de forma segura. Marcas reconocidas, pago con AZUL y entrega estimada según tipo de lente y destino. Guía 2026.',
   alternates: { canonical: 'https://www.contactgo.net/blog/comprar-lentes-contacto-online-republica-dominicana' },
   openGraph: {
     type: 'article',
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const FAQS = [
-    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo ofrece lentes directo del fabricante, directo del fabricante, con pago seguro mediante AZUL/Banco Popular y transporte de 24-48 horas en Santo Domingo y 24-72 horas en el interior.' },
+    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo trabaja con marcas reconocidas y canales de distribución autorizados, con pago mediante AZUL/Banco Popular y transporte estimado de 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior. El plazo total depende del tipo de lente.' },
     { q: '¿Necesito receta para comprar lentes de contacto online?', a: 'Para lentes graduados sí. Necesitas los valores de tu receta (SPH, CYL, AXIS, ADD según el tipo). Para lentes de color sin graduación, no es necesaria. Puedes usar nuestra calculadora de receta gratuita si no tienes la tuya a mano.' },
-    { q: '¿Cómo sé que los lentes son certificados?', a: 'Los lentes certificados vienen en empaque directo del fabricante con código de autenticidad verificable con el fabricante. En ContactGo todos los productos son directo del fabricante con garantía de autenticidad. Nunca vendemos imitaciones.' },
+    { q: '¿Cómo sé que los lentes son certificados?', a: 'Los lentes certificados vienen en empaque directo del fabricante con código de autenticidad verificable con el fabricante. En ContactGo trabajamos con canales de distribución autorizados y entregamos los productos sellados en su empaque original.' },
     { q: '¿Cuánto tarda la entrega de lentes de contacto en RD?', a: 'En ContactGo la entrega es en 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el resto del país.' },
     { q: '¿Puedo devolver los lentes si no son los correctos?', a: 'Sí. ContactGo acepta devoluciones de productos sellados no abiertos dentro de los 7 días de recibidos, siempre que no se haya roto el sello. Consulta nuestra política de devoluciones para más detalles.' },
     { q: '¿Cuál es la forma de pago para comprar lentes online en RD?', a: 'En ContactGo aceptamos tarjeta de crédito y débito (VISA y Mastercard) a través de AZUL/Banco Popular, el procesador de pagos más utilizado en República Dominicana.' },
@@ -69,7 +69,7 @@ export default function Page() {
 
         <div className="bg-teal-50 border-2 border-primary-200 rounded-2xl p-5 mb-6">
           <p className="text-sm font-bold text-primary-800 mb-1">⚡ Respuesta directa</p>
-          <p className="text-sm text-primary-700 mb-3">La forma más segura y rápida de comprar lentes de contacto online en RD es través de <strong>ContactGo</strong>: la única tienda dominicana especializada 100% en lentes de contacto. Originales, entrega 24-48h y pago con AZUL.</p>
+          <p className="text-sm text-primary-700 mb-3">Compra lentes de contacto online en RD en <strong>ContactGo</strong>, tienda especializada en lentes de contacto. Marcas reconocidas, transporte según destino y tipo de lente, y pago seguro con AZUL.</p>
           <div className="flex gap-2">
             <Link href="/catalogo" className="flex-1 bg-teal-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center hover:bg-teal-600 transition-colors">Ver catálogo completo →</Link>
             <a href="https://wa.me/18096942268" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white font-bold px-4 py-2.5 rounded-xl text-xs text-center">Comprar por WhatsApp</a>
@@ -132,7 +132,7 @@ export default function Page() {
             <p>El riesgo real al comprar lentes de contacto online no es el pago — es recibir un producto falsificado que puede dañar la salud ocular. Aquí están las señales que distinguen una tienda confiable:</p>
             <div className="space-y-3 mt-4">
               {[
-                { check: '✅', label: 'Producto directo del fabricante', desc: 'Cada caja debe venir con el sello original del fabricante intacto. Si el sellado está abierto o parece manipulado, es una señal de alarma.' },
+                { check: '✅', label: 'Producto sellado y auténtico', desc: 'Verifica que cada caja llegue sellada y en su empaque original. Si el sello está abierto o parece manipulado, contáctanos antes de usar el producto.' },
                 { check: '✅', label: 'Código de autenticidad', desc: 'Las marcas principales (ACUVUE, Biofinity, Air Optix) tienen códigos de verificación en el empaque que pueden comprobarse en el sitio oficial del fabricante.' },
                 { check: '✅', label: 'Información clara del producto', desc: 'La etiqueta debe mostrar: nombre del producto, material, Dk/t, radio de curvatura (BC), diámetro (DIA), fecha de caducidad y graduación seleccionada.' },
                 { check: '✅', label: 'Tienda especializada en lentes', desc: 'Una tienda que vende exclusivamente lentes de contacto tiene mayor control de autenticidad que una tienda general.' },
@@ -243,7 +243,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">La tienda de lentes de contacto online en RD</h3>
-          <p className="text-sm text-gray-600 mb-1">Originales · Entrega 24-48h · Pago seguro con AZUL</p>
+          <p className="text-sm text-gray-600 mb-1">Productos sellados · Transporte según destino · Pago seguro con AZUL</p>
           <p className="text-xs text-gray-400 mb-4">Más de 30 productos disponibles de ACUVUE, Biofinity, Air Optix y más</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
