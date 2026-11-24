@@ -180,11 +180,21 @@ export default async function ProductoPage(
     "brand": { "@type": "Brand", "name": product.marca ?? "ContactGo" },
     "sku": product.id,
     "mpn": product.sku ? String(product.sku) : `CG-${String(product.id).slice(0,8).toUpperCase()}`,
-    ...((product as any).gtin ? { "gtin": String((product as any).gtin) } : {}),
-    ...((product as any).ean  ? { "gtin13": String((product as any).ean) } : {}),
-    // ── Colores: requerido para Google Shopping y Rich Results ─────────────────
+    // Publicar GTIN solo cuando tiene formato global válido. Nunca inventar identificadores.
+    ...(() => {
+      const raw = String((product as any).gtin ?? (product as any).ean ?? '').replace(/[^0-9]/g, '')
+      if (![8, 12, 13, 14].includes(raw.length)) return {}
+      const digits = raw.split('').map(Number)
+      const check = digits.pop()!
+      const sum = digits.reverse().reduce((total, digit, index) => total + digit * (index % 2 === 0 ? 3 : 1), 0)
+      const expected = (10 - (sum % 10)) % 10
+      if (check !== expected) return {}
+      const key = raw.length === 8 ? 'gtin8' : raw.length === 12 ? 'gtin12' : raw.length === 13 ? 'gtin13' : 'gtin14'
+      return { [key]: raw }
+    })(),
+    // Google espera un valor de color corto por producto; no concatenar todo el catálogo de variantes.
     ...(product.colores_disponibles?.length
-      ? { "color": product.colores_disponibles.join(", ") }
+      ? { "color": String(product.colores_disponibles[0]).trim().slice(0, 100) }
       : {}),
     // ── Imagen con color: primera imagen disponible para el schema ─────────────
     ...(() => {
@@ -198,13 +208,51 @@ export default async function ProductoPage(
       "url": `https://www.contactgo.net/producto/${product.slug}`,
       "priceCurrency": "DOP",
       "price": String(product.precio ?? 0),
-      "priceValidUntil": "2026-12-31",
+      "priceValidUntil": "2027-12-31",
+      "validFrom": new Date().toISOString(),
       "itemCondition": "https://schema.org/NewCondition",
       "availability": product.stock > 0
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       "seller": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net" },
-
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "DO",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 7,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn",
+        "merchantReturnLink": "https://www.contactgo.net/ayuda/devoluciones",
+        "description": "Devolución dentro de 7 días de la entrega solo para cajas selladas, sin abrir y en empaque original. Aplican exclusiones y condiciones especiales para lentes tóricos según la política publicada."
+      },
+      "shippingDetails": [{
+        "@type": "OfferShippingDetails",
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "DO"
+        },
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "250",
+          "currency": "DOP"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 0,
+            "maxValue": 1,
+            "unitCode": "DAY"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": entregaInfo.dias_min,
+            "maxValue": entregaInfo.dias_max,
+            "unitCode": "DAY"
+          }
+        }
+      }],
+      "description": "Envío: RD$250 en Gran Santo Domingo y RD$350 en el interior. Gratis desde RD$8,000. Plazos según categoría: color al día siguiente; esféricos 24–48 h en Santo Domingo y Santiago, 24–72 h en el interior; multifocales 1–5 días; tóricos 25–45 días; soluciones y gotas 24 h. Consulta https://www.contactgo.net/ayuda/envios."
     }
   }
 
