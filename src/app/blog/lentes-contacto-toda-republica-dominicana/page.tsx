@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-toda-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto con entrega en toda República Dominicana — 2026',
-    description: 'Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h donde estés en República Dominicana.',
+    description: 'Compra lentes de contacto online en las 31 provincias de RD. ACUVUE, Biofinity y Air Optix. Transporte estimado según destino; plazo total según tipo de lente.',
     url: 'https://www.contactgo.net/blog/lentes-contacto-toda-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-contacto-entrega-rd.webp', width: 1200, height: 630, alt: 'Lentes de contacto con entrega en toda República Dominicana — 2026' }],
@@ -45,7 +45,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD, con transporte de 24-48 horas en Santo Domingo y 24-72 horas en el interior. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío a República Dominicana se calcula al momento del checkout. Los pedidos superiores a RD$8,000 tienen envío gratuito. Consulta el costo exacto al agregar tu dirección de entrega." } },
               { "@type": "Question", "name": "¿Cuánto tarda la entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en República Dominicana es en 24-72 horas en el interior y 24-48 horas en Santo Domingo para la mayoría de los pedidos. " } },
-              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 30 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y directo del fabricante." } }
+              { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 30 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, disponibles a través de canales de distribución autorizados." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
@@ -68,7 +68,7 @@ export default function Page() {
           <span className="text-2xl">🚀</span>
           <div>
             <p className="text-sm font-bold text-green-800">Transporte: Santo Domingo 24-48h · Interior 24-72h</p>
-            <p className="text-xs text-green-600">directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
+            <p className="text-xs text-green-600">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
           </div>
         </div>
 
@@ -111,7 +111,7 @@ export default function Page() {
               {[
                 { q: '¿Hacen entrega en República Dominicana?', a: 'Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD, con transporte de 24-48 horas en Santo Domingo y 24-72 horas en el interior hábiles.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
-                { q: '¿Cuánto tarda la entrega en República Dominicana?', a: 'Entre 24 y 48 horas hábiles para la mayoría de los pedidos. Pedidos antes de las 3pm suelen salir el mismo día.' },
+                { q: '¿Cuánto tarda la entrega en República Dominicana?', a: 'El transporte estimado es de 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el interior. El plazo total depende del tipo de lente, la disponibilidad y la preparación.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
               ].map((item, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
@@ -132,7 +132,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana</h3>
-          <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL · Sin salir de casa</p>
+          <p className="text-sm text-gray-500 mb-4">Canales de distribución autorizados · Pago seguro con AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</a>
