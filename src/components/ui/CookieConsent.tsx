@@ -5,11 +5,41 @@ import { usePathname } from 'next/navigation'
 
 type Consent = { level: 'all' | 'essential'; ts: number }
 
+function syncClarityConsent(granted: boolean) {
+  if (typeof window === 'undefined') return
+  const w = window as any
+  const consent = {
+    ad_Storage: granted ? 'granted' : 'denied',
+    analytics_Storage: granted ? 'granted' : 'denied',
+  }
+
+  // Queue consent before loading Clarity. Without consent, Clarity stays cookieless.
+  if (!w.clarity) {
+    const clarityFn: any = function (...args: any[]) {
+      ;(clarityFn.q = clarityFn.q || []).push(args)
+    }
+    w.clarity = clarityFn
+  }
+  w.clarity('consentv2', consent)
+
+  if (!document.getElementById('cg-clarity-script')) {
+    const script = document.createElement('script')
+    script.id = 'cg-clarity-script'
+    script.async = true
+    script.src = 'https://www.clarity.ms/tag/wslp0l9vex'
+    document.head.appendChild(script)
+  }
+}
+
 function loadOptionalVendors() {
   if (typeof window === 'undefined') return
   const w = window as any
-  if (w.__cgOptionalVendorsLoaded) return
+  if (w.__cgOptionalVendorsLoaded) {
+    syncClarityConsent(true)
+    return
+  }
   w.__cgOptionalVendorsLoaded = true
+  syncClarityConsent(true)
 
   w.dataLayer = w.dataLayer || []
   w.gtag = w.gtag || function() { w.dataLayer.push(arguments) }
@@ -32,11 +62,6 @@ function loadOptionalVendors() {
   gtm.async = true
   gtm.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-M9GZGJJQ'
   document.head.appendChild(gtm)
-
-  const clarity = document.createElement('script')
-  clarity.async = true
-  clarity.src = 'https://www.clarity.ms/tag/wslp0l9vex'
-  document.head.appendChild(clarity)
 
   const n: any = w.fbq || function(this: any) {
     n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
@@ -70,11 +95,13 @@ export default function CookieConsent() {
     try {
       const stored = localStorage.getItem('cg-cookie-consent')
       if (!stored) {
+        syncClarityConsent(false)
         const timer = window.setTimeout(() => setShow(true), 1500)
         return () => window.clearTimeout(timer)
       }
       const consent = JSON.parse(stored) as Consent
       if (consent.level === 'all') loadOptionalVendors()
+      else syncClarityConsent(false)
     } catch {
       setShow(true)
     }
@@ -87,13 +114,14 @@ export default function CookieConsent() {
       withdrawing = previous?.level === 'all' && level === 'essential'
       localStorage.setItem('cg-cookie-consent', JSON.stringify({ level, ts: Date.now() }))
       if (level === 'all') loadOptionalVendors()
+      else syncClarityConsent(false)
     } catch {}
     window.dispatchEvent(new Event('cg-consent-change'))
     if (withdrawing) { window.location.reload(); return }
     setShow(false)
   }
 
-  if (!show || pathname?.includes('/producto/')) return null
+  if (!show) return null
 
   return (
     <div role="dialog" aria-label="Preferencias de cookies" aria-live="polite" className="fixed bottom-20 md:bottom-0 left-0 right-0 z-[60] bg-white border-t border-gray-200 shadow-2xl">
