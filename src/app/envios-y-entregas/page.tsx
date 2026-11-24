@@ -62,7 +62,7 @@ export default function EnviosPage() {
           {/* Zonas */}
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">📍 Costo de envío por zona</h2>
-            <p className="text-gray-500 text-sm mb-4">El tiempo de entrega no varía por zona (ver tiempos por tipo de lente arriba) — esto es solo el costo del envío.</p>
+            <p className="text-gray-500 text-sm mb-4">El costo se calcula por zona. El transporte estimado es de 24-48 horas en Santo Domingo y Santiago, y de 24-72 horas en el resto del país. El plazo total también depende del tipo de lente y su disponibilidad.</p>
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               {[
                 { zona: 'Santo Domingo y Gran Santo Domingo', costo: 'RD$250' },
