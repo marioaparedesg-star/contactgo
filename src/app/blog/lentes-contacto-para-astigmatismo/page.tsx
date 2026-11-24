@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'article',
     title: 'Lentes de contacto para astigmatismo en RD 2026',
-    description: 'Guía completa de lentes tóricos para astigmatismo en República Dominicana. Precios, comparativas y entrega 24-48h.',
+    description: 'Guía completa de lentes tóricos para astigmatismo en República Dominicana. Precios de referencia y entrega estimada de 25 a 45 días.',
     url: 'https://www.contactgo.net/blog/lentes-contacto-para-astigmatismo',
     siteName: 'ContactGo',
     locale: 'es_DO',
@@ -54,7 +54,7 @@ export default function Page() {
             "@type": "FAQPage",
             "mainEntity": [
               { "@type": "Question", "name": "¿Qué son los lentes de contacto para astigmatismo?", "acceptedAnswer": { "@type": "Answer", "text": "Son lentes tóricos, un tipo especial de lentes de contacto diseñados para corregir el astigmatismo. Tienen una forma diferente a los lentes esféricos y un sistema de estabilización que los mantiene en la orientación correcta sobre el ojo." } },
-              { "@type": "Question", "name": "¿Cuánto cuestan los lentes para astigmatismo en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo los lentes tóricos van desde RD$4,500 (BL Ultra Astigmatismo) hasta RD$12,000 (Biofinity XR para alta graduación). Los más populares como ACUVUE Oasys for Astigmatism y Biofinity Toric están en RD$4,800-6,250." } },
+              { "@type": "Question", "name": "¿Cuánto cuestan los lentes para astigmatismo en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo los lentes tóricos van desde RD$4,500 (BL Ultra Astigmatismo) hasta RD$9,400 (Biofinity XR Toric para alta graduación). Los más populares como ACUVUE Oasys for Astigmatism y Biofinity Toric están en RD$4,800-5,800." } },
               { "@type": "Question", "name": "¿Cómo sé si tengo astigmatismo en mi receta?", "acceptedAnswer": { "@type": "Answer", "text": "Mira tu receta: si tiene un valor CYL (cilindro) diferente de 0 y un valor AXIS (eje), tienes astigmatismo y necesitas lentes tóricos. Si solo tienes SPH, tus lentes son esféricos normales." } },
               { "@type": "Question", "name": "¿Los lentes para astigmatismo son más caros?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, generalmente cuestan entre 20-40% más que los esféricos equivalentes, porque su diseño y fabricación es más compleja. Pero en ContactGo los precios son competitivos con plazo estimado de 25 a 45 días; el envío se calcula por separado." } }
             ]
@@ -90,12 +90,12 @@ export default function Page() {
           </div>
           <div>
             <p className="text-sm font-bold text-gray-900">Equipo ContactGo</p>
-            <p className="text-xs text-gray-500">Especialistas en salud visual · Precios actualizados junio 2026</p>
+            <p className="text-xs text-gray-500">Especialistas en salud visual · Precios consultados el 24 de noviembre de 2026</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 text-xs text-gray-400 mb-6">
-          <span>📅 Actualizado: junio 2026</span>
+          <span>📅 Actualizado: 24 de noviembre de 2026</span>
           <span>·</span>
           <span>⏱ 8 min lectura</span>
         </div>
@@ -154,7 +154,7 @@ export default function Page() {
 
           {/* Tabla de precios */}
           <section>
-            <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios de lentes para astigmatismo en RD — junio 2026</h2>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios de lentes para astigmatismo en RD — referencia del 24 de noviembre de 2026</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
                 <thead>
@@ -181,7 +181,7 @@ export default function Page() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-gray-400 mt-2">Precios en RD$ con envío incluido. Actualizados junio 2026.</p>
+            <p className="text-xs text-gray-400 mt-2">Precios de productos; el envío se calcula aparte: RD$250 en Santo Domingo y RD$350 en el interior. Gratis desde RD$8,000.</p>
           </section>
 
           {/* Guía por necesidad */}
@@ -208,7 +208,7 @@ export default function Page() {
                 {
                   perfil: 'Prefiero lentes diarios (sin estuche ni solución)',
                   recomendacion: 'clariti 1 day toric o 1-DAY ACUVUE Moist Astig',
-                  precio: 'RD$4,800 – 6,250',
+                  precio: 'RD$4,800 – 5,800',
                   razon: 'Máxima higiene. Cada día estrenas lentes. Ideal para personas con alergias.',
                   link: '/toricos',
                   color: 'border-green-200 bg-green-50',
@@ -292,7 +292,7 @@ export default function Page() {
               {[
                 { q: '¿Los lentes tóricos se ponen diferente?', a: 'El proceso es el mismo que para cualquier lente blando. Sin embargo, los tóricos tienen marcadores de orientación que te ayudan a verificar que están en la posición correcta. Al principio pueden tardar un poco más en acomodarse, pero rápidamente lo dominarás.' },
                 { q: '¿Puedo usar lentes esféricos si tengo astigmatismo leve?', a: 'Si el astigmatismo es muy leve (CYL de -0.25 o -0.50), algunos especialistas permiten usar lentes esféricos. Sin embargo, para corregir correctamente el astigmatismo y evitar fatiga visual, siempre es mejor usar el lente tórico indicado en tu receta.' },
-                { q: '¿Los lentes tóricos son más caros?', a: 'Sí, generalmente cuestan entre 20-40% más que los esféricos equivalentes. En ContactGo los tóricos van desde RD$4,500 (BL Ultra Astig) hasta RD$12,000 (Biofinity XR para alta graduación).' },
+                { q: '¿Los lentes tóricos son más caros?', a: 'Sí, generalmente cuestan entre 20-40% más que los esféricos equivalentes. En ContactGo los tóricos van desde RD$4,500 (BL Ultra Astig) hasta RD$9,400 (Biofinity XR Toric para alta graduación).' },
                 { q: '¿Se puede ver bien con lentes tóricos desde el primer día?', a: 'La mayoría de personas ve bien desde el primer momento. Algunos usuarios necesitan unos pocos días de adaptación para que la estabilización del lente funcione de manera óptima con sus movimientos oculares específicos.' },
                 { q: '¿Qué pasa si el lente tórico rota en mi ojo?', a: 'Los lentes tóricos modernos tienen sistemas de estabilización avanzados (prism ballast, doble fina zona, BLINK STABILIZED) que corrigen automáticamente la rotación al parpadear. Si notas visión inestable o fluctuante, consulta a tu especialista — puede que necesites ajustar los parámetros.' },
               ].map(({ q, a }, i) => (
@@ -334,7 +334,7 @@ export default function Page() {
             </div>
             <div className="text-sm">
               <p className="font-bold text-gray-900 mb-0.5">Información verificada</p>
-              <p className="text-gray-600">Escrito por el <strong>Equipo ContactGo</strong>, Especialistas en Salud Visual · Revisado junio 2026</p>
+              <p className="text-gray-600">Escrito por el <strong>Equipo ContactGo</strong>, Especialistas en Salud Visual · Revisado el 24 de noviembre de 2026</p>
             </div>
           </div>
         </div>
