@@ -1,5 +1,1 @@
-import { redirect } from 'next/navigation'
-
-export default function EnviosAliasPage() {
-  redirect('/ayuda/envios')
-}
+export { default, metadata, revalidate } from '../ayuda/envios/page'
