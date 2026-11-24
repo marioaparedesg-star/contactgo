@@ -58,13 +58,13 @@ export default function PersonalizedSection() {
       <div className="flex items-start justify-between mb-4 gap-2">
         <div className="min-w-0">
           <p className="text-sm text-primary-600 font-semibold mb-0.5 truncate">
-            {nombre ? `Hola ${nombre} 👋` : 'Para ti'}
+            {nombre ? `Hola ${nombre}` : 'Tu cuenta'}
           </p>
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">
-            Lentes para tu receta
+            Productos relacionados con tu receta
           </h2>
           <p className="text-gray-500 text-xs sm:text-sm mt-1">
-            Basado en tu diagnóstico:{' '}
+            Según el diagnóstico guardado:{' '}
             <span className="font-semibold text-gray-700">{diagnostico}</span>
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function PersonalizedSection() {
           href="/catalogo"
           className="text-xs sm:text-sm text-primary-600 font-semibold hover:text-primary-700 whitespace-nowrap shrink-0 mt-1"
         >
-          Ver todos →
+          Ver catálogo
         </Link>
       </div>
 
