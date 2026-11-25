@@ -99,6 +99,10 @@ export default function CuentaPage() {
 
   // ── useEffect principal — blindado contra crashes Safari iOS ────────────────
   useEffect(() => {
+    // Si el cliente llegó desde Agregar al carrito, abrir directamente el registro.
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('modo') === 'registro') setModo('registro')
+
     // 1. Leer hash de URL post-hydration (nunca durante SSR)
     try {
       const hash = window.location.hash.replace('#', '')
