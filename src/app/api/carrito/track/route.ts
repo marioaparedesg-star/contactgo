@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { normalizePhone } from '@/lib/whatsapp'
 import { guardRequest } from '@/lib/api-guard'
 
 export const dynamic = 'force-dynamic'
@@ -22,7 +21,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json()
-    const telefono = typeof body.telefono === 'string' ? body.telefono : ''
     const email = validEmail(body.email) ? body.email.trim().toLowerCase() : ''
     const nombre = typeof body.nombre === 'string' ? body.nombre.trim().slice(0, 160) : null
     const itemsInput = Array.isArray(body.items) ? body.items : []
@@ -37,33 +35,61 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, skipped: 'missing email or items' })
     }
 
-    const phone = telefono ? normalizePhone(telefono) : ''
     const sb = getSb()
     const now = new Date().toISOString()
-    const payload = {
-      cliente_email: email,
-      cliente_nombre: nombre,
-      cliente_telefono: phone.length >= 10 ? phone : null,
-      items,
-      total: Math.max(0, Number(body.total) || 0),
-      recuperado: false,
-      email_sent: false,
-      email_reminder_1_sent_at: null,
-      email_reminder_2_sent_at: null,
-      email_attempts: 0,
-      email_last_error: null,
-      email_lock_until: null,
-      email_lock_step: null,
-      created_at: now,
-      updated_at: now,
-    }
+    const total = Math.max(0, Number(body.total) || 0)
+    const { data: existing, error: lookupError } = await sb.from('abandoned_carts')
+      .select('id,items,total,recuperado,email_reminder_1_sent_at,email_reminder_2_sent_at')
+      .eq('cliente_email', email)
+      .maybeSingle()
 
-    const { error } = await sb.from('abandoned_carts')
-      .upsert(payload, { onConflict: 'cliente_email' })
+    if (lookupError) throw lookupError
 
-    if (error) {
-      console.error('[carrito/track] No se pudo guardar el carrito:', error.message)
-      return NextResponse.json({ ok: false, error: 'No se pudo registrar el carrito' }, { status: 500 })
+    if (existing) {
+      const changed = JSON.stringify(existing.items ?? []) !== JSON.stringify(items)
+        || Number(existing.total ?? 0) !== total
+        || existing.recuperado === true
+
+      const update: Record<string, any> = {
+        cliente_nombre: nombre,
+        items,
+        total,
+        recuperado: false,
+        updated_at: now,
+        email_lock_until: null,
+        email_lock_step: null,
+      }
+      // Reiniciar la secuencia solo si el cliente modificó el carrito
+      // o volvió después de haber completado una compra.
+      if (changed) {
+        update.email_sent = false
+        update.email_reminder_1_sent_at = null
+        update.email_reminder_2_sent_at = null
+        update.email_attempts = 0
+        update.email_last_error = null
+        update.created_at = now
+      }
+      const { error } = await sb.from('abandoned_carts').update(update).eq('id', existing.id)
+      if (error) throw error
+    } else {
+      const { error } = await sb.from('abandoned_carts').insert({
+        cliente_email: email,
+        cliente_nombre: nombre,
+        cliente_telefono: null,
+        items,
+        total,
+        recuperado: false,
+        email_sent: false,
+        email_reminder_1_sent_at: null,
+        email_reminder_2_sent_at: null,
+        email_attempts: 0,
+        email_last_error: null,
+        email_lock_until: null,
+        email_lock_step: null,
+        created_at: now,
+        updated_at: now,
+      })
+      if (error) throw error
     }
 
     return NextResponse.json({ ok: true, action: 'saved' })
