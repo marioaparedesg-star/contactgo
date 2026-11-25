@@ -54,6 +54,7 @@ export default function CuentaPage() {
   const [modo, setModo]       = useState('login')
   const [email, setEmail]     = useState('')
   const [pass, setPass]       = useState('')
+  const [showAuthPass, setShowAuthPass] = useState(false)
   const [nombre, setNombre]   = useState('')
   const [apellido, setApellido] = useState('')
   const [fechaNacimiento, setFechaNacimiento] = useState('')
@@ -480,9 +481,25 @@ export default function CuentaPage() {
     const nextPath = new URLSearchParams(window.location.search).get('next') || '/cuenta'
     const sb = createClient()
     const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: window.location.origin + '/auth/callback?next=' + encodeURIComponent(nextPath), data: { nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, referral_code: (() => { try { return localStorage.getItem('cg_referral_code') || '' } catch { return '' } })(), acepta_privacidad: true, terminos_version: '2026-11-14-v1', privacidad_version: '2026-11-14-v1', privacidad_aceptada_at: new Date().toISOString(), marketing_consent: aceptaPromociones, marketing_consent_version: '2026-11-14-v1', marketing_consent_source: 'registro_web' } } })
-    if (error) { setMsg(error.message); setLoading(false); return }
+    if (error) {
+      const raw = String(error.message || '').toLowerCase()
+      const friendly = raw.includes('password should contain') || raw.includes('password does not meet')
+        ? 'Tu contraseña necesita al menos una mayúscula, una minúscula, un número y un símbolo.'
+        : raw.includes('already registered') || raw.includes('already been registered')
+          ? 'Este correo ya tiene una cuenta. Inicia sesión o recupera tu contraseña.'
+          : raw.includes('password')
+            ? 'La contraseña no cumple los requisitos. Revisa los caracteres e inténtalo de nuevo.'
+            : 'No pudimos crear la cuenta. Verifica tus datos e inténtalo nuevamente.'
+      setMsg(friendly); setLoading(false); return
+    }
     if (data.user) {
-      await sb.from('profiles').upsert({ id: data.user.id, email, nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, role: 'customer' })
+      const { error: profileError } = await sb.from('profiles').upsert({ id: data.user.id, email, nombre: nombreCompleto, telefono, fecha_nacimiento: fechaNacimiento, role: 'customer' })
+      if (profileError) {
+        console.error('[cuenta] profile save error:', profileError)
+        setMsg('Tu cuenta se creó, pero no pudimos guardar todos tus datos. Inicia sesión y completa tu perfil desde Mi cuenta.')
+        setLoading(false)
+        return
+      }
       if (data.session) {
         const consentResponse = await fetch('/api/email/consent', {
           method: 'POST',
@@ -523,127 +540,150 @@ export default function CuentaPage() {
   )
 
   if (!user) return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-teal-50/50 flex items-center justify-center px-4 py-8 pb-24">
       <div className="w-full max-w-md">
-        {/* Link de vuelta a la tienda — siempre visible en el login */}
-        <div className="mb-6 flex items-center">
+        <div className="mb-5 flex items-center">
           <button type="button" onClick={() => {
             if (window.history.length > 1) router.back()
             else router.push('/catalogo')
           }}
-            className="flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors group">
-            <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white hover:text-primary-700">
+            <svg className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
             </svg>
-            Volver a la página anterior
+            Volver a la tienda
           </button>
         </div>
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 bg-teal-400 rounded-2xl flex items-center justify-center mb-4">
-            <User className="w-8 h-8 text-white" />
+
+        <div className="mb-5 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-400 to-primary-700 text-white shadow-lg shadow-teal-900/15">
+            <User className="h-8 w-8" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Mi cuenta</h1>
+          <p className="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-teal-700">CONTACTGO</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+            {modo === 'login' ? '¡Qué bueno verte!' : 'Crea tu cuenta'}
+          </h1>
+          <p className="mt-2 text-sm text-slate-500">
+            {modo === 'login' ? 'Inicia sesión para continuar con tus compras.' : 'Regístrate y guarda tus datos para comprar más fácil.'}
+          </p>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400 font-medium">Accede con tu correo</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-          <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
-            <button onClick={() => setModo('login')}
-              className={"flex-1 py-2 rounded-lg text-sm font-semibold transition-colors " + (modo==='login' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500')}>
+
+        <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-7">
+          <div className="mb-6 grid grid-cols-2 rounded-2xl bg-slate-100 p-1.5">
+            <button type="button" onClick={() => { setModo('login'); setMsg('') }}
+              className={"rounded-xl px-3 py-3 text-sm font-bold transition-all " + (modo==='login' ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/70' : 'text-slate-500 hover:text-slate-800')}>
               Iniciar sesión
             </button>
-            <button onClick={() => setModo('registro')}
-              className={"flex-1 py-2 rounded-lg text-sm font-semibold transition-colors " + (modo==='registro' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500')}>
+            <button type="button" onClick={() => { setModo('registro'); setMsg('') }}
+              className={"rounded-xl px-3 py-3 text-sm font-bold transition-all " + (modo==='registro' ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/70' : 'text-slate-500 hover:text-slate-800')}>
               Crear cuenta
             </button>
           </div>
 
-          {msg && <p className="text-sm text-center mb-4 p-3 rounded-lg bg-red-50 text-red-600">{msg}</p>}
+          {msg && (
+            <div role="alert" className="mb-5 flex items-start gap-2.5 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm leading-relaxed text-rose-700">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
+              <span>{msg}</span>
+            </div>
+          )}
 
           <form onSubmit={modo==='login' ? login : registro} className="space-y-4">
             {modo==='registro' && (<>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Nombre</label>
-                  <input type="text" autoComplete="given-name" value={nombre} onChange={e => setNombre(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Tu nombre" />
+                  <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-600">Nombre</label>
+                  <input type="text" autoComplete="given-name" value={nombre} onChange={e => setNombre(e.target.value)} required
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-[16px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
+                    placeholder="Tu nombre" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Apellido</label>
-                  <input type="text" autoComplete="family-name" value={apellido} onChange={e => setApellido(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Tu apellido" />
+                  <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-600">Apellido</label>
+                  <input type="text" autoComplete="family-name" value={apellido} onChange={e => setApellido(e.target.value)} required
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-[16px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
+                    placeholder="Tu apellido" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Fecha de nacimiento</label>
-                <input type="date" value={fechaNacimiento} onChange={e => setFechaNacimiento(e.target.value)} max={new Date(Date.now()-18*365.25*24*60*60*1000).toISOString().split('T')[0]} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400" />
-                <p className="text-[11px] text-gray-400 mt-1">Registro disponible para mayores de 18 años.</p>
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-600">Fecha de nacimiento</label>
+                <input type="date" value={fechaNacimiento} onChange={e => setFechaNacimiento(e.target.value)} max={new Date(Date.now()-18*365.25*24*60*60*1000).toISOString().split('T')[0]} required
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-[16px] text-slate-900 outline-none transition focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-500/10" />
+                <p className="mt-1.5 text-xs text-slate-400">Registro disponible para mayores de 18 años.</p>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Teléfono <span className="text-red-500">*</span></label>
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-600">Teléfono <span className="text-rose-500">*</span></label>
                 <input type="tel" autoComplete="tel" value={telefono} onChange={e => setTelefono(e.target.value)} required
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-[16px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
                   placeholder="809-000-0000" />
-                <p className="text-[11px] text-gray-400 mt-1">Lo usamos para avisarte del estado de tus pedidos</p>
+                <p className="mt-1.5 text-xs text-slate-400">Lo usamos para avisarte sobre tus pedidos.</p>
               </div>
             </>)}
+
             <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Email</label>
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-600">Correo electrónico</label>
               <input type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} required
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-[16px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
                 placeholder="tu@email.com" />
             </div>
+
             <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase">Contraseña</label>
-              <input type="password" autoComplete="current-password" value={pass} onChange={e => setPass(e.target.value)} required minLength={6}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-400"
-                placeholder="••••••••" />
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-600">Contraseña</label>
+              <div className="relative">
+                <input type={showAuthPass ? 'text' : 'password'} autoComplete={modo === 'login' ? 'current-password' : 'new-password'} value={pass} onChange={e => setPass(e.target.value)} required minLength={6}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 pr-12 text-[16px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
+                  placeholder="••••••••" />
+                <button type="button" onClick={() => setShowAuthPass(v => !v)} aria-label={showAuthPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-400 transition hover:text-primary-700">
+                  {showAuthPass ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+              {modo === 'registro' && (
+                <p className="mt-2 text-xs leading-relaxed text-slate-500">Incluye al menos una mayúscula, una minúscula, un número y un símbolo.</p>
+              )}
             </div>
 
             {modo === 'login' && (
               <p className="text-right">
-                <Link href="/cuenta/reset-password" className="text-xs text-primary-600 hover:underline font-medium">
+                <Link href="/cuenta/reset-password" className="text-sm font-semibold text-primary-700 hover:text-teal-700 hover:underline">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </p>
             )}
 
             {modo === 'registro' && (
-              <div className="space-y-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
-                <label className="flex items-start gap-2 text-xs leading-5 text-gray-600">
+              <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <label className="flex items-start gap-2.5 text-xs leading-5 text-slate-600">
                   <input type="checkbox" checked={aceptaPrivacidad} onChange={e => setAceptaPrivacidad(e.target.checked)} required className="mt-1 h-4 w-4 shrink-0 accent-teal-600" />
                   <span>Acepto las <Link href="/terminos" target="_blank" className="font-semibold text-primary-700 underline">Condiciones de uso</Link> y confirmo que he leído la <Link href="/privacidad" target="_blank" className="font-semibold text-primary-700 underline">Política de privacidad</Link>. Es obligatorio para crear mi cuenta.</span>
                 </label>
-                <label className="flex items-start gap-2 text-xs leading-5 text-gray-600">
+                <label className="flex items-start gap-2.5 text-xs leading-5 text-slate-600">
                   <input type="checkbox" checked={aceptaPromociones} onChange={e => setAceptaPromociones(e.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-teal-600" />
-                  <span>Quiero recibir por correo electrónico promociones, descuentos, novedades y recomendaciones de ContactGo. Puedo retirar mi autorización cuando quiera.</span>
+                  <span>Quiero recibir ofertas, descuentos, novedades y recomendaciones de ContactGo. Puedo retirar mi autorización cuando quiera.</span>
                 </label>
               </div>
             )}
 
             <button type="submit" disabled={loading}
-              className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
-              {loading ? 'Cargando...' : modo==='login' ? 'Iniciar sesión' : 'Crear cuenta'}
+              className="flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-primary-700 px-4 py-3.5 text-base font-bold text-white shadow-lg shadow-teal-900/15 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50">
+              {loading ? 'Procesando...' : modo==='login' ? 'Iniciar sesión' : 'Crear mi cuenta'}
             </button>
           </form>
 
-          {/* Face ID / Huella - solo en login */}
           {modo === 'login' && passkeySupported && (
-            <div className="mt-4">
-              <div className="flex items-center gap-3 my-3">
-                <div className="flex-1 h-px bg-gray-200" />
-                <span className="text-xs text-gray-400 font-medium">o</span>
-                <div className="flex-1 h-px bg-gray-200" />
+            <div className="mt-5">
+              <div className="mb-3 flex items-center gap-3">
+                <div className="h-px flex-1 bg-slate-200" />
+                <span className="text-xs font-medium text-slate-400">o continúa con</span>
+                <div className="h-px flex-1 bg-slate-200" />
               </div>
               <button onClick={loginConPasskey}
-                className="w-full flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-primary-400 bg-white text-gray-700 font-semibold py-3 rounded-xl transition-colors text-sm">
-                <Fingerprint className="w-5 h-5 text-primary-600" />
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-3 text-sm font-semibold text-slate-700 transition hover:border-teal-400 hover:bg-teal-50/40">
+                <Fingerprint className="h-5 w-5 text-primary-700" />
                 Entrar con Face ID / Huella digital
               </button>
             </div>
           )}
         </div>
+        <p className="mt-5 text-center text-xs text-slate-400">Tus datos están protegidos. Compra con confianza en ContactGo.</p>
       </div>
     </div>
   )
