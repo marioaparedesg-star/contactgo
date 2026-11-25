@@ -649,18 +649,21 @@ export default function ProductoClient({ product, variants }: Props) {
       toast.error('Confirma que conoces el plazo y la política de cancelación de los lentes tóricos.')
       return false
     }
-    // Exigir autenticación antes de añadir cualquier producto al carrito.
-    try {
-      const { data: { user } } = await createClient().auth.getUser()
-      if (!user) {
-        const currentPath = window.location.pathname + window.location.search
-        router.push(`/cuenta?next=${encodeURIComponent(currentPath)}`)
-        return false
+    // Primero se valida y persiste el producto con todas sus opciones en el carrito local.
+    // Si el cliente aún no tiene sesión, se le pide crear cuenta y luego vuelve al carrito.
+    const continuarAlCarrito = async () => {
+      if (!redirectToCart) return
+      try {
+        const { data: { user } } = await createClient().auth.getUser()
+        if (!user) {
+          router.push('/cuenta?modo=registro&next=%2Fcart')
+          return
+        }
+      } catch {
+        router.push('/cuenta?modo=registro&next=%2Fcart')
+        return
       }
-    } catch {
-      const currentPath = window.location.pathname + window.location.search
-      router.push(`/cuenta?next=${encodeURIComponent(currentPath)}`)
-      return false
+      router.push('/cart')
     }
 
     const { ojoMode, mismaReceta,
@@ -682,7 +685,7 @@ export default function ProductoClient({ product, variants }: Props) {
         suscripcion: suscripcion ?? undefined,
       })
       toast.success(isSolucion ? 'Solución agregada al carrito' : 'Gotas agregadas al carrito')
-      if (redirectToCart) router.push('/cart')
+      await continuarAlCarrito()
       return true
     }
 
@@ -699,7 +702,7 @@ export default function ProductoClient({ product, variants }: Props) {
         precio_original: precioBase,
       })
       toast.success('¡Listo! Agregado al carrito 🎉')
-      if (redirectToCart) router.push('/cart')
+      await continuarAlCarrito()
       return true
     }
 
@@ -810,7 +813,7 @@ export default function ProductoClient({ product, variants }: Props) {
         num_items: quantityFinal,
       }, email ? { email } : undefined, addToCartEventId)
     })()
-    if (redirectToCart) router.push('/cart')
+    await continuarAlCarrito()
     return true
   }
 
