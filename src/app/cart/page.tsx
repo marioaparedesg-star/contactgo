@@ -18,8 +18,55 @@ import { createClient } from '@/lib/supabase'
 export default function CartPage() {
   const { items, removeItem, updateQty, removeByIndex, updateItem, removeEye, addItem, subtotal, clearCart, setCupon, cuponCodigo, cuponDescuento } = useCartStore()
 
-  // Seguimiento abandonado: el checkout envía el evento al endpoint server-side.
-  // Este componente no escribe en abandoned_carts desde el cliente público.
+  // Registrar el carrito desde que el cliente autenticado lo visita,
+  // sin esperar a que complete los datos del checkout.
+  const lastTrackedCart = useRef('')
+  useEffect(() => {
+    if (!items.length) return
+    const signature = JSON.stringify(items.map((item: any) => ({
+      id: item.product?.id,
+      nombre: item.product?.nombre,
+      cantidad: item.cantidad,
+      precio: Number(item.precio_final ?? item.product?.precio ?? 0),
+      sph: item.sph, cyl: item.cyl, axis: item.axis, color: item.color,
+      ojo_mode: item.ojo_mode, sph_od: item.sph_od, sph_oi: item.sph_oi,
+    })))
+    if (signature === lastTrackedCart.current) return
+
+    let active = true
+    const track = async () => {
+      try {
+        const sb = createClient()
+        const { data: { user } } = await sb.auth.getUser()
+        if (!active || !user?.email) return
+        const response = await fetch('/api/carrito/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: user.email,
+            nombre: user.user_metadata?.nombre || user.user_metadata?.full_name || null,
+            items: items.map((item: any) => ({
+              id: item.product?.id,
+              nombre: item.product?.nombre,
+              cantidad: item.cantidad,
+              precio: Number(item.precio_final ?? item.product?.precio ?? 0),
+            })),
+            total: subtotal(),
+          }),
+        })
+        if (!response.ok) {
+          const detail = await response.text()
+          console.error('[cart] No se pudo registrar carrito abandonado:', detail)
+          return
+        }
+        if (active) lastTrackedCart.current = signature
+      } catch (error) {
+        console.error('[cart] Error registrando carrito abandonado:', error)
+      }
+    }
+    track()
+    return () => { active = false }
+  }, [items, subtotal])
 
   // ── Leer items de "Repetir pedido" al cargar ─────────────────────────────
   useEffect(() => {
