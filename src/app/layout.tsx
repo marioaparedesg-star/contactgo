@@ -3,6 +3,7 @@ import './globals.css'
 import BottomNav from '@/components/ui/BottomNav'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import CookieConsent from '@/components/ui/CookieConsent'
+import ClarityRouteTracker from '@/components/ui/ClarityRouteTracker'
 import ConsentMetrics from '@/components/ui/ConsentMetrics'
 import { Toaster } from 'react-hot-toast'
 import WelcomePopup from '@/components/ui/WelcomePopup'
@@ -252,6 +253,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <BottomNav />
         <WhatsAppButton />
         <CookieConsent />
+        <ClarityRouteTracker />
       <ConsentMetrics />
       <Toaster
           position="top-center"
