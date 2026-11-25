@@ -20,6 +20,8 @@ function syncClarityConsent(granted: boolean) {
     w.clarity = clarityFn
   }
   w.clarity('consentv2', consent)
+  w.__cgClarityConsentSynced = true
+  window.dispatchEvent(new Event('cg-clarity-consent-synced'))
 
   if (!document.getElementById('cg-clarity-script')) {
     const script = document.createElement('script')
