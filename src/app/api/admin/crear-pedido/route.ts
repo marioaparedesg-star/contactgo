@@ -21,9 +21,9 @@ export async function GET(req: NextRequest) {
   const q = (req.nextUrl.searchParams.get('q') ?? '').replace(/[,%()]/g, ' ').replace(/\s+/g, ' ').trim()
   const [{ data: customers, error: ce }, { data: products, error: pe }] = await Promise.all([
     sb.from('profiles').select('id,nombre,email,telefono,direccion,ciudad,direccion_completa,activo')
-      .eq('role','customer').eq('activo',true)
+      .eq('role','customer')
       .or(q ? `nombre.ilike.%${q}%,email.ilike.%${q}%,telefono.ilike.%${q}%` : 'id.eq.00000000-0000-0000-0000-000000000000')
-      .order('nombre').limit(30),
+      .order('nombre').limit(1000),
     sb.from('products').select('id,nombre,marca,tipo,precio,variantes,activo')
       .eq('activo',true).order('nombre').limit(500)
   ])
