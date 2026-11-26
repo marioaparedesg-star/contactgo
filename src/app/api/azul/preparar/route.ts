@@ -2,6 +2,7 @@ import { guardRequest } from '@/lib/api-guard'
 import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
 import { createClient } from '@supabase/supabase-js'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
 
 const BASE          = 'https://www.contactgo.net'
 const MERCHANT_ID   = process.env.AZUL_MERCHANT_ID    ?? '39038540035'
@@ -39,6 +40,14 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json()
     const { order_number, approved_url } = body
+    // El endpoint solo puede preparar el pago de una orden perteneciente
+    // al usuario autenticado. Conocer el número de orden no concede acceso.
+    const authClient = await createServerSupabaseClient()
+    const { data: { user }, error: authError } = await authClient.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Debes iniciar sesión para pagar esta orden' }, { status: 401 })
+    }
+
     // SEGURIDAD: NO confiar en el total del frontend — obtener de Supabase
 
     // Validar campo obligatorio
@@ -59,13 +68,28 @@ export async function POST(req: NextRequest) {
     const sb = getSb()
     const { data: order, error: orderErr } = await sb
       .from('orders')
-      .select('id, total, pago_estado, metodo_pago, estado')
+      .select('id, total, pago_estado, metodo_pago, estado, user_id, created_at')
       .eq('numero_orden', order_number)
       .single()
 
     if (orderErr || !order) {
       console.error('[AZUL/preparar] orden no encontrada:', order_number, orderErr?.message)
       return NextResponse.json({ error: 'Orden no encontrada' }, { status: 404 })
+    }
+
+    // Impedir IDOR: el usuario autenticado solo puede pagar sus propias órdenes.
+    if (!order.user_id || order.user_id !== user.id) {
+      return NextResponse.json({ error: 'No tienes permiso para pagar esta orden' }, { status: 403 })
+    }
+    if (new Date(order.created_at).getTime() < Date.now() - 60 * 60 * 1000) {
+      return NextResponse.json({ error: 'La orden ha expirado. Vuelve a realizar el pedido.' }, { status: 410 })
+    }
+    const { count: itemCount, error: itemsError } = await sb
+      .from('order_items')
+      .select('id', { count: 'exact', head: true })
+      .eq('order_id', order.id)
+    if (itemsError || !itemCount) {
+      return NextResponse.json({ error: 'La orden no contiene artículos válidos' }, { status: 409 })
     }
 
     // Validar que la orden esté en estado válido para pago
