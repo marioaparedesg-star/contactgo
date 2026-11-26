@@ -32,7 +32,7 @@ export default function CrearPedidoPage(){
  const add=(p:Product)=>{setLines(v=>[...v,{product_id:p.id,nombre:p.nombre,tipo:p.tipo||'',precio:Number(p.precio),cantidad:1,sph_od:'',sph_oi:'',cyl_od:'',cyl_oi:'',axis_od:'',axis_oi:'',add_od:'',add_oi:'',color:'',size:'',modalidad:'',ojo_mode:'AMBOS'}]);setProductSearch('')}
  const patch=(idx:number,k:string,v:any)=>setLines(a=>a.map((l,i)=>i===idx?{...l,[k]:v}:l))
  const submit=async(action:'quote'|'create')=>{
-  if(!customer)return toast.error('Selecciona un cliente registrado')
+  if(!customer)return toast.error('Selecciona un cliente')
   if(!lines.length)return toast.error('Agrega al menos un producto')
   if(!customer.email)return toast.error('El cliente no tiene correo registrado')
   setBusy(true)
