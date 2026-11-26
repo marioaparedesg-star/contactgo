@@ -33,9 +33,9 @@ export async function GET(req: NextRequest) {
   ])
   if (ce || pe || he) return NextResponse.json({error:'No se pudieron cargar clientes, historial o productos'},{status:500})
   const registered = (customers ?? []).map(c => ({...c,is_registered:true}))
-  const seen = new Set(registered.flatMap(c => [c.email ? `e:${c.email.toLowerCase()}` : '', c.telefono ? `t:${c.telefono.replace(/\\D/g,'')}` : ''].filter(Boolean)))
+  const seen = new Set(registered.flatMap(c => [c.email ? `e:${c.email.toLowerCase()}` : '', c.telefono ? `t:${c.telefono.replace(/\D/g,'')}` : ''].filter(Boolean)))
   const historical = (history ?? []).filter(o => {
-    const keys = [o.cliente_email ? `e:${o.cliente_email.toLowerCase()}` : '', o.cliente_telefono ? `t:${o.cliente_telefono.replace(/\\D/g,'')}` : ''].filter(Boolean)
+    const keys = [o.cliente_email ? `e:${o.cliente_email.toLowerCase()}` : '', o.cliente_telefono ? `t:${o.cliente_telefono.replace(/\D/g,'')}` : ''].filter(Boolean)
     if (keys.some(k => seen.has(k))) return false
     keys.forEach(k => seen.add(k))
     return true
