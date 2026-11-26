@@ -289,6 +289,15 @@ export default async function ProductoPage(
     ],
   }
 
+  // Escapar caracteres que podrían cerrar la etiqueta <script> en JSON-LD.
+  // React no escapa el contenido de dangerouslySetInnerHTML.
+  const safeJsonLd = (value: unknown) => JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\\u2028/g, '\\u2028')
+    .replace(/\\u2029/g, '\\u2029')
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -306,9 +315,9 @@ export default async function ProductoPage(
         // @ts-ignore — fetchpriority es atributo válido pero TS no lo reconoce aún
         <link rel="preload" as="image" href={product.imagen_url} fetchPriority="high" />
       )}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }} />
       <ProductoClient
         product={{
           ...product,
