@@ -113,6 +113,60 @@ export async function POST(req: NextRequest) {
     }
 
     if (action !== 'create') return NextResponse.json({error:'Acción no válida.'},{status:400})
+    let accountSetupUrl:string|null = null
+    // Los clientes históricos de WhatsApp sin cuenta reciben un usuario ContactGo
+    // y un enlace de un solo uso para establecer su contraseña. Nunca se altera
+    // una contraseña ni se duplica una cuenta existente.
+    if (!customer.id && sourceOrderId) {
+      const email = String(customer.email).trim().toLowerCase()
+      const {data:existingProfile,error:profileLookupError} = await sb.from('profiles')
+        .select('id,role').ilike('email',email).maybeSingle()
+      if (profileLookupError) throw new Error('No se pudo verificar el perfil del cliente.')
+      if (existingProfile && existingProfile.role !== 'customer') {
+        throw new Error('El correo pertenece a una cuenta que no es de cliente. No se modificó esa cuenta.')
+      }
+      if (existingProfile?.id) {
+        customer.id = existingProfile.id
+      } else {
+        const {data:userList,error:userListError} = await sb.auth.admin.listUsers({page:1,perPage:1000})
+        if (userListError) throw new Error('No se pudo verificar si el correo ya tiene una cuenta.')
+        const existingAuth = userList.users.find((u:any)=>u.email?.toLowerCase()===email)
+        if (existingAuth) {
+          customer.id = existingAuth.id
+          const {error:profileInsertError} = await sb.from('profiles').insert({
+            id:existingAuth.id,nombre:customer.nombre,email,telefono:customer.telefono,
+            direccion:customer.direccion,ciudad:customer.ciudad,role:'customer',activo:true
+          })
+          if (profileInsertError) throw new Error('La cuenta de acceso existe, pero no se pudo vincular su perfil de cliente.')
+        } else {
+          const {data:newAuth,error:newAuthError} = await sb.auth.admin.createUser({
+            email,password:crypto.randomUUID(),email_confirm:true,
+            user_metadata:{nombre:customer.nombre,telefono:customer.telefono,origen:'venta_whatsapp',requiere_configurar_password:true}
+          })
+          if (newAuthError || !newAuth.user) throw new Error(newAuthError?.message ?? 'No se pudo crear la cuenta del cliente.')
+          customer.id = newAuth.user.id
+          const {error:profileInsertError} = await sb.from('profiles').insert({
+            id:newAuth.user.id,nombre:customer.nombre,email,telefono:customer.telefono,
+            direccion:customer.direccion,ciudad:customer.ciudad,role:'customer',activo:true
+          })
+          if (profileInsertError) {
+            await sb.auth.admin.deleteUser(newAuth.user.id)
+            throw new Error('No se pudo completar el perfil; no se dejó una cuenta incompleta.')
+          }
+          const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.contactgo.net'
+          const {data:linkData,error:linkError} = await sb.auth.admin.generateLink({
+            type:'recovery',email,
+            options:{redirectTo:`${base}/auth/callback?next=/cuenta/reset-password`}
+          })
+          if (!linkError && linkData?.properties?.hashed_token) {
+            accountSetupUrl = `${base}/auth/callback?token_hash=${encodeURIComponent(linkData.properties.hashed_token)}&type=recovery&next=/cuenta/reset-password`
+          } else {
+            console.error('[admin/crear-pedido] no se pudo generar enlace para contraseña:',linkError?.message)
+          }
+        }
+      }
+    }
+
     const orderNum = `CG-${Date.now().toString().slice(-8)}`
     const address = String(body.direccion ?? customer.direccion_completa ?? customer.direccion ?? '').trim()
     const city = String(body.ciudad ?? customer.ciudad ?? '').trim()
@@ -135,8 +189,8 @@ export async function POST(req: NextRequest) {
       await sb.from('orders').delete().eq('id',order.id)
       throw itemErr
     }
-    const notification = await enviarNotificacionPedido(order.id,'nuevo_pedido')
-    return NextResponse.json({ok:true,order,notification})
+    const notification = await enviarNotificacionPedido(order.id,'nuevo_pedido',undefined,accountSetupUrl)
+    return NextResponse.json({ok:true,order,notification,account_created:!!accountSetupUrl})
   } catch (error:any) {
     console.error('[admin/crear-pedido]',error?.message)
     return NextResponse.json({error:error?.message ?? 'No se pudo procesar la solicitud.'},{status:500})
