@@ -368,6 +368,7 @@ export default function CheckoutPage() {
         cliente_nombre: nombreCompleto, cliente_email: data.email, cliente_telefono: data.telefono,
         direccion_texto: direccionPedido,
         estado: 'pendiente', subtotal: sub, envio, total: totalFinal,
+        ciudad: data.ciudad === 'Otra ciudad' ? data.ciudadPersonalizada : data.ciudad,
         descuento, metodo_pago: metodoPagoReal, pago_estado: 'pendiente',
         numero_orden: orderNum,
         cupon_aplicado: cuponAplicado && cupon.trim() ? cupon.trim().toUpperCase() : null,
