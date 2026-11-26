@@ -19,16 +19,32 @@ export async function GET(req: NextRequest) {
   if (auth.ok === false) return auth.response
   const sb = sbAdmin()
   const q = (req.nextUrl.searchParams.get('q') ?? '').replace(/[,%()]/g, ' ').replace(/\s+/g, ' ').trim()
-  const [{ data: customers, error: ce }, { data: products, error: pe }] = await Promise.all([
+  const [{ data: customers, error: ce }, { data: products, error: pe }, { data: history, error: he }] = await Promise.all([
     sb.from('profiles').select('id,nombre,email,telefono,direccion,ciudad,direccion_completa,activo')
       .eq('role','customer')
       .or(q ? `nombre.ilike.%${q}%,email.ilike.%${q}%,telefono.ilike.%${q}%` : 'id.eq.00000000-0000-0000-0000-000000000000')
       .order('nombre').limit(1000),
     sb.from('products').select('id,nombre,marca,tipo,precio,variantes,activo')
-      .eq('activo',true).order('nombre').limit(500)
+      .eq('activo',true).order('nombre').limit(500),
+    sb.from('orders').select('id,cliente_nombre,cliente_email,cliente_telefono,direccion_texto,ciudad,created_at')
+      .is('user_id',null)
+      .or(q ? `cliente_nombre.ilike.%${q}%,cliente_email.ilike.%${q}%,cliente_telefono.ilike.%${q}%` : 'id.eq.00000000-0000-0000-0000-000000000000')
+      .order('created_at',{ascending:false}).limit(100)
   ])
-  if (ce || pe) return NextResponse.json({error:'No se pudieron cargar clientes o productos'},{status:500})
-  return NextResponse.json({customers:customers ?? [], products:products ?? []},{headers:{'Cache-Control':'no-store'}})
+  if (ce || pe || he) return NextResponse.json({error:'No se pudieron cargar clientes, historial o productos'},{status:500})
+  const registered = (customers ?? []).map(c => ({...c,is_registered:true}))
+  const seen = new Set(registered.flatMap(c => [c.email ? `e:${c.email.toLowerCase()}` : '', c.telefono ? `t:${c.telefono.replace(/\\D/g,'')}` : ''].filter(Boolean)))
+  const historical = (history ?? []).filter(o => {
+    const keys = [o.cliente_email ? `e:${o.cliente_email.toLowerCase()}` : '', o.cliente_telefono ? `t:${o.cliente_telefono.replace(/\\D/g,'')}` : ''].filter(Boolean)
+    if (keys.some(k => seen.has(k))) return false
+    keys.forEach(k => seen.add(k))
+    return true
+  }).map(o => ({
+    id:`history:${o.id}`,source_order_id:o.id,is_registered:false,
+    nombre:o.cliente_nombre,email:o.cliente_email,telefono:o.cliente_telefono,
+    direccion:o.direccion_texto,direccion_completa:o.direccion_texto,ciudad:o.ciudad
+  }))
+  return NextResponse.json({customers:[...registered,...historical], products:products ?? []},{headers:{'Cache-Control':'no-store'}})
 }
 
 export async function POST(req: NextRequest) {
@@ -41,11 +57,22 @@ export async function POST(req: NextRequest) {
     const action = body.action
     const sb = sbAdmin()
     const customerId = String(body.customer_id ?? '')
+    const sourceOrderId = String(body.source_order_id ?? '')
     const items = Array.isArray(body.items) ? body.items : []
-    if (!customerId || !items.length) return NextResponse.json({error:'Selecciona un cliente y agrega al menos un producto.'},{status:400})
-    const {data:customer,error:customerErr} = await sb.from('profiles')
-      .select('id,nombre,email,telefono,direccion,ciudad,direccion_completa').eq('id',customerId).eq('role','customer').single()
-    if (customerErr || !customer) return NextResponse.json({error:'Cliente registrado no encontrado.'},{status:404})
+    if ((!customerId && !sourceOrderId) || !items.length) return NextResponse.json({error:'Selecciona un cliente y agrega al menos un producto.'},{status:400})
+    let customer:any = null
+    if (customerId) {
+      const {data,error} = await sb.from('profiles')
+        .select('id,nombre,email,telefono,direccion,ciudad,direccion_completa').eq('id',customerId).eq('role','customer').single()
+      if (error || !data) return NextResponse.json({error:'Cliente registrado no encontrado.'},{status:404})
+      customer = data
+    } else {
+      const {data,error} = await sb.from('orders')
+        .select('id,cliente_nombre,cliente_email,cliente_telefono,direccion_texto,ciudad')
+        .eq('id',sourceOrderId).is('user_id',null).single()
+      if (error || !data) return NextResponse.json({error:'Registro histórico del cliente no encontrado.'},{status:404})
+      customer = {id:null,nombre:data.cliente_nombre,email:data.cliente_email,telefono:data.cliente_telefono,direccion:data.direccion_texto,direccion_completa:data.direccion_texto,ciudad:data.ciudad}
+    }
     if (!customer.email) return NextResponse.json({error:'El cliente no tiene correo registrado.'},{status:400})
 
     const ids = [...new Set(items.map((i:any)=>String(i.product_id ?? '')))].filter(Boolean)
