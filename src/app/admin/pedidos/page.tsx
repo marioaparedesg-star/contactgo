@@ -172,7 +172,9 @@ export default function PedidosPage() {
     if (!upd.ok) { toast.error(updateResult.error ?? 'No se pudo actualizar el estado'); return }
 
     const emailResult = updateResult.notification ?? {}
-    if (emailResult.email_cliente === 'sent') {
+    if (updateResult.state_unchanged) {
+      toast('El pedido ya estaba en ese estado. No se envió una nueva notificación.', { duration: 4000, icon: 'ℹ️' })
+    } else if (emailResult.email_cliente === 'sent') {
       toast.success('Correo aceptado para envío al cliente', { duration: 3000, icon: '✉️' })
     } else if (emailResult.email_cliente === 'skipped') {
       toast('No se envió correo: verifica el email del cliente.', { duration: 4000, icon: '⚠️' })
