@@ -245,7 +245,7 @@ export default function AdminDashboard() {
     const idsVendidos = Array.from(new Set(ords.map((o:any) => o.id).filter(Boolean)))
     const { data: itemsData, error: itemsError } = idsVendidos.length > 0
       ? await sb.from('order_items')
-          .select('nombre,cantidad,precio,product_id,order_id')
+          .select('nombre,cantidad,precio,subtotal,product_id,order_id')
           .in('order_id', idsVendidos)
           .limit(1000)
       : { data: [] as any[] }
