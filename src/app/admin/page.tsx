@@ -108,7 +108,7 @@ export default function AdminDashboard() {
     const hastaISO = rango.hasta.toISOString()
     // "Hoy" siempre se muestra aparte, sin importar el rango elegido —
     // es información operativa del día, no del análisis histórico.
-    const hoy0ISO = new Date(new Date().setHours(0,0,0,0)).toISOString()
+    const hoy0ISO = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santo_Domingo' })).toISOString()
 
     // FIX DE FONDO (2026-09-04): antes "Cobrado" agrupaba el dinero por la
     // fecha de CREACIÓN del pedido — un pedido creado en agosto que recibe
@@ -126,7 +126,8 @@ export default function AdminDashboard() {
     // equivocado sin avisar. Ahora se calcula con un offset fijo de RD
     // (UTC-4, sin horario de verano) a partir del timestamp real, igual
     // que ya hace el reporte diario por email — no depende del dispositivo.
-    const fechaRD = (d: Date) => new Date(d.getTime() - 4 * 3600000).toISOString().slice(0, 10)
+    const fechaRD = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santo_Domingo', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d)
+    const fechaRDValor = (value: string | Date) => fechaRD(value instanceof Date ? value : new Date(value))
     const desdeStr = fechaRD(rango.desde)
     const hastaStr = fechaRD(rango.hasta)
     const hoyStr   = fechaRD(new Date())
@@ -138,7 +139,7 @@ export default function AdminDashboard() {
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
-      sb.from('products').select('nombre,stock,tipo').eq('activo',true).lte('stock',3).order('stock'),
+      sb.from('v_stock_disponible').select('nombre,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock').in('alerta_stock',['critico','bajo_minimo']).order('stock'),
       sb.from('cash_movements')
         .select('id,monto,fecha,created_at,order_id,referencia,descripcion,orders(numero_orden,cliente_nombre,cliente_telefono)')
         .eq('categoria','venta').eq('tipo','ingreso')
@@ -154,6 +155,12 @@ export default function AdminDashboard() {
         .not('estado','eq','cancelado').eq('es_prueba', false),
     ])
 
+    const queryErrors = [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar].filter((q:any) => q.error)
+    if (queryErrors.length) {
+      console.error('[admin/dashboard] Error cargando indicadores:', queryErrors.map((q:any) => q.error))
+      setLoading(false)
+      return
+    }
     const ords = periodo.data ?? []
     const cobros = cobrosPeriodo.data ?? []
     const cobrosHoy = cobros.filter((c:any) => c.fecha === hoyStr)
@@ -167,7 +174,7 @@ export default function AdminDashboard() {
     //     cobrado (antes un pedido pagado a medias no sumaba nada de costo,
     //     inflando la ganancia mostrada).
     const ventasTotalPeriodo = ords.reduce((s:number,o:any)=>s+Number(o.total??0),0)
-    const ventasTotalHoy = ords.filter((o:any)=>o.fecha===hoyStr || (o.created_at??'').slice(0,10)===hoyStr)
+    const ventasTotalHoy = ords.filter((o:any)=>fechaRDValor(o.fecha || o.created_at)===hoyStr)
       .reduce((s:number,o:any)=>s+Number(o.total??0),0)
 
     const ventasPeriodo  = cobros.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
@@ -179,7 +186,8 @@ export default function AdminDashboard() {
     // Por cobrar: esto SÍ sigue basado en pedidos (no en cash_movements) —
     // es sobre saldo pendiente de ÓRDENES activas, no sobre cuándo entró
     // el dinero. Necesita su propio cálculo de abonos por pedido.
-    const { data: movimientosCobro } = await sb.from('cash_movements').select('order_id,monto').eq('categoria','venta').eq('tipo','ingreso').not('order_id','is',null)
+    const { data: movimientosCobro, error: movimientosCobroError } = await sb.from('cash_movements').select('order_id,monto').eq('categoria','venta').eq('tipo','ingreso').not('order_id','is',null)
+    if (movimientosCobroError) { console.error('[admin/dashboard] Error consultando abonos:', movimientosCobroError); setLoading(false); return }
     const cobradoPorOrden: Record<string, number> = {}
     ;(movimientosCobro ?? []).forEach((m: any) => {
       cobradoPorOrden[m.order_id] = (cobradoPorOrden[m.order_id] ?? 0) + Number(m.monto ?? 0)
@@ -206,12 +214,13 @@ export default function AdminDashboard() {
     // TODO pedido real del período, se haya cobrado o no — "costo de lo
     // vendido" y "ganancia de lo vendido", que es lo que se pidió.
     const idsVendidos = Array.from(new Set(ords.map((o:any) => o.id).filter(Boolean)))
-    const { data: itemsData } = idsVendidos.length > 0
+    const { data: itemsData, error: itemsError } = idsVendidos.length > 0
       ? await sb.from('order_items')
           .select('nombre,cantidad,precio,product_id,order_id')
           .in('order_id', idsVendidos)
           .limit(1000)
       : { data: [] as any[] }
+    if (itemsError) { console.error('[admin/dashboard] Error consultando artículos:', itemsError); setLoading(false); return }
     const items = { data: itemsData }
 
     // Se cruza cada item vendido contra el costo REAL actual del producto
@@ -221,9 +230,10 @@ export default function AdminDashboard() {
     // la pena saberlo: una venta de hace 2 meses con un costo que ya
     // actualizamos, se recalcula con el costo de HOY, no el de ese momento.
     const productIds = Array.from(new Set((items.data ?? []).map((i:any) => i.product_id).filter(Boolean)))
-    const { data: costosProductos } = productIds.length > 0
+    const { data: costosProductos, error: costosError } = productIds.length > 0
       ? await sb.from('products').select('id,costo').in('id', productIds)
       : { data: [] as any[] }
+    if (costosError) { console.error('[admin/dashboard] Error consultando costos:', costosError); setLoading(false); return }
     const costoPorId: Record<string, number> = {}
     ;(costosProductos ?? []).forEach((p:any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
 
@@ -236,7 +246,7 @@ export default function AdminDashboard() {
 
     // Costo/ganancia de HOY: mismo cruce, pedidos VENDIDOS hoy (no solo
     // cobrados hoy).
-    const idsHoy = new Set(ords.filter((o:any)=>o.fecha===hoyStr || (o.created_at??'').slice(0,10)===hoyStr).map((o:any)=>o.id))
+    const idsHoy = new Set(ords.filter((o:any)=>fechaRDValor(o.fecha || o.created_at)===hoyStr).map((o:any)=>o.id))
     let costoHoy = 0
     ;(items.data ?? []).forEach((i:any) => {
       if (!idsHoy.has(i.order_id)) return
