@@ -67,26 +67,26 @@ export default function ProductCard({ product }: Props) {
 
       <div className="flex min-w-0 flex-col gap-1.5 p-2 sm:p-2.5">
         <div className="flex min-w-0 items-center justify-between gap-1">
-          <p className="min-w-0 truncate text-[10px] font-bold uppercase tracking-wide text-slate-500">{product.marca || 'ContactGo'}</p>
-          <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[10px] font-semibold text-slate-500 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
+          <p className="min-w-0 truncate text-[11px] font-bold uppercase tracking-wide text-slate-600">{product.marca || 'ContactGo'}</p>
+          <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[11px] font-semibold text-slate-600 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
         </div>
 
-        <Link href={href} className="block min-w-0 text-[12px] font-extrabold uppercase leading-[1.25] tracking-[0.01em] text-[#002455] transition-colors hover:text-[#009da2] sm:text-sm">
+        <Link href={href} className="block min-w-0 text-sm font-extrabold uppercase leading-snug tracking-[0.005em] text-[#002455] transition-colors hover:text-[#009da2] sm:text-sm">
           <h3 className="line-clamp-2 min-h-[30px] break-words">{formatProductName(product.nombre)}</h3>
         </Link>
 
-        <p className="truncate text-[11px] leading-4 text-slate-600">
+        <p className="truncate text-xs leading-5 text-slate-600">
           {details[0] || 'Presentación por caja'}
         </p>
 
         <div className="mt-0.5 border-t border-slate-100 pt-1.5">
           <div className="flex min-w-0 items-center justify-between gap-1.5 rounded-lg bg-[#effbfb] px-2 py-1.5">
             <p className="truncate text-lg font-black tracking-tight text-[#002455] sm:text-xl">{money(Number(product.precio))}</p>
-            <span className={'shrink-0 text-[9px] font-bold ' + (product.stock === 0 ? 'text-rose-700' : stockCritical ? 'text-amber-800' : 'text-emerald-800')}>
+            <span className={'shrink-0 text-[10px] font-bold ' + (product.stock === 0 ? 'text-rose-700' : stockCritical ? 'text-amber-800' : 'text-emerald-800')}>
               {product.stock === 0 ? 'Agotado' : stockCritical ? 'Pocas unidades' : 'Disponible'}
             </span>
           </div>
-          <Link href={href} aria-disabled={stock === 0} onClick={e => { if (stock === 0) e.preventDefault() }} className={'mt-1.5 flex min-h-8 w-full items-center justify-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ' + (stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-500' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]')}>
+          <Link href={href} aria-disabled={stock === 0} onClick={e => { if (stock === 0) e.preventDefault() }} className={'mt-1.5 flex min-h-8 w-full items-center justify-center gap-1 rounded-lg px-2 py-1.5 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ' + (stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-500' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]')}>
             <ShoppingCart className="h-3.5 w-3.5" aria-hidden="true" />{actionLabel}
           </Link>
         </div>
