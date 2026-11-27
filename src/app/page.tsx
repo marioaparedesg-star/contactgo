@@ -23,7 +23,7 @@ export const revalidate = 600
 async function getFeaturedProducts(): Promise<{ products: Product[], reseñasCount: number, reseñasAvg: number, precioOasys: number, preciosHero: Record<string, number> }> {
   const sb = await createServerSupabaseClient()
   const { data } = await sb.from('products')
-    .select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, precio_anterior')
+    .select('id, nombre, slug, precio, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, cyl_disponibles, axis_disponibles, add_disponibles, colores_disponibles, precio_anterior')
     .eq('activo', true)
     .or('archivado.is.null,archivado.eq.false')
     .gt('stock', 0)
