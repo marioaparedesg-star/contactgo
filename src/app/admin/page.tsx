@@ -130,7 +130,7 @@ export default function AdminDashboard() {
 
     const [periodo, ordRecent, stockLow, testProductItems, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
-        .not('estado','eq','cancelado').eq('es_prueba', false)
+        .not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
       // propia consulta, sin restricción de fecha — todo lo activo con
       // saldo pendiente, sin importar cuándo se creó.
       sb.from('orders').select('id,total,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
-        .not('estado','eq','cancelado').eq('es_prueba', false),
+        .not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado').eq('es_prueba', false),
       sb.from('cash_movements').select('id,monto,fecha').eq('tipo','egreso').gte('fecha',desdeStr).lte('fecha',hastaStr),
     ])
 
@@ -291,7 +291,7 @@ export default function AdminDashboard() {
     ;(items.data??[]).forEach((i:any)=>{
       if(!agg[i.nombre]) agg[i.nombre]={nombre:i.nombre,u:0,rev:0}
       agg[i.nombre].u   += Number(i.cantidad??1)
-      agg[i.nombre].rev += Number(i.precio??0)*Number(i.cantidad??1)
+      agg[i.nombre].rev += Number(i.subtotal ?? (Number(i.precio??0)*Number(i.cantidad??1)))
     })
     const topProds = Object.values(agg).sort((a,b)=>b.u-a.u).slice(0,10)
 
@@ -338,7 +338,7 @@ export default function AdminDashboard() {
     const telsLeads = new Set((leadsMesData ?? []).map((l:any) => String(l.telefono ?? '').replace(/\D/g,'').slice(-10)).filter(Boolean))
     let leadsConvertidos = 0
     if (telsLeads.size > 0) {
-      const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('id,cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false).not('estado','eq','cancelado')
+      const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('id,cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false).not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado')
       if (ordsDelMesError) { console.error('[admin/dashboard] Error cruzando leads y pedidos:', ordsDelMesError); setLoadError('No se pudo calcular la conversión de leads.'); setLoading(false); return }
       const telsConCompra = new Set((ordsDelMes ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id)).map((o:any) => String(o.cliente_telefono ?? '').replace(/\D/g,'').slice(-10)))
       telsLeads.forEach(t => { if (telsConCompra.has(t)) leadsConvertidos++ })
@@ -521,6 +521,12 @@ export default function AdminDashboard() {
     sub: 'Se excluyen de los indicadores comerciales; corrige la marca de prueba en el pedido',
     accion: () => router.push('/M1Alexander/pedidos'),
   })
+  if ((data?.itemsSinCosto??0) > 0) alertas.push({
+    icon: AlertTriangle, color:'text-amber-700', bg:'bg-amber-50',
+    texto: `${data.itemsSinCosto} línea(s) vendida(s) sin costo configurado`,
+    sub: `Ventas asociadas: ${fmt(data.ventaSinCosto??0)} · la ganancia estimada se oculta`,
+    accion: () => router.push('/M1Alexander/inventario'),
+  })
   if (stock.length > 0) alertas.push({
     icon: AlertTriangle, color:'text-red-600', bg:'bg-red-50',
     texto: `${stock.length} producto${stock.length===1?'':'s'} bajo mínimo de stock`,
@@ -619,6 +625,8 @@ export default function AdminDashboard() {
           { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según products.costo', color:'text-red-500', accion:undefined },
           { key:'ganancia', label:'Ganancia estimada', val:data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo), sub:data?.itemsSinCosto>0?`${data.itemsSinCosto} línea(s) sin costo`:`${margenPct ?? 0}% margen`, color:data?.gananciaPeriodo==null?'text-amber-600':'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
           { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
+          { key:null, label:'Pedidos +7 días', val:String(data?.pedidosAbiertos7Dias??0), sub:'abiertos desde hace más de una semana', color:(data?.pedidosAbiertos7Dias??0)>0?'text-rose-600':'text-emerald-600', accion:()=>router.push('/M1Alexander/pedidos') },
+          { key:null, label:'Productos bajo mínimo', val:String((data?.invCriticos??0)+(data?.invBajoMin??0)), sub:`${data?.invCriticos??0} críticos · ${data?.invBajoMin??0} bajos`, color:((data?.invCriticos??0)+(data?.invBajoMin??0))>0?'text-rose-600':'text-emerald-600', accion:()=>router.push('/M1Alexander/inventario') },
           { key:null, label:'Ticket promedio', val:fmt(data?.ticketProm??0), sub:'por pedido vendido', color:'text-gray-900', accion:undefined },
           { key:null, label:'Clientes nuevos', val:String(data?.clientesNuevosPeriodo??0), sub:`${data?.clientes??0} clientes registrados`, color:'text-cyan-700', accion:()=>router.push('/M1Alexander/registrados') },
           { key:'etapa', label:'Pedidos activos', val:String(pedidosActivosTotal), sub:'en proceso', color:'text-indigo-600', accion:()=>document.getElementById('pedidos-por-etapa')?.scrollIntoView({behavior:'smooth'}) },
@@ -636,7 +644,7 @@ export default function AdminDashboard() {
         })}
       </div>
       <p className="text-[11px] text-gray-400 -mt-2 px-1">
-        <b>Vendido</b> = valor de todos los pedidos, se hayan cobrado o no · <b>Cobrado</b> = dinero que ya entró de verdad · Vendido − Cobrado = Por cobrar
+        <b>Vendido</b> = pedidos del período, se hayan cobrado o no · <b>Cobrado</b> = dinero recibido durante el período · <b>Por cobrar</b> = cartera pendiente total, incluidos pedidos de otros períodos.
       </p>
 
       {/* Detalle desplegado — Ventas / Ganancia / Por cobrar */}
