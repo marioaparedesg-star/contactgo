@@ -80,8 +80,8 @@ export default function ProductCard({ product }: Props) {
         </p>
 
         <div className="mt-0.5 border-t border-slate-100 pt-1.5">
-          <div className="flex min-w-0 items-center justify-between gap-1.5">
-            <p className="truncate text-sm font-extrabold tracking-tight text-[#002455] sm:text-base">{money(Number(product.precio))}</p>
+          <div className="flex min-w-0 items-center justify-between gap-1.5 rounded-lg bg-[#effbfb] px-2 py-1.5">
+            <p className="truncate text-lg font-black tracking-tight text-[#002455] sm:text-xl">{money(Number(product.precio))}</p>
             <span className={'shrink-0 text-[9px] font-bold ' + (product.stock === 0 ? 'text-rose-700' : stockCritical ? 'text-amber-800' : 'text-emerald-800')}>
               {product.stock === 0 ? 'Agotado' : stockCritical ? 'Pocas unidades' : 'Disponible'}
             </span>
