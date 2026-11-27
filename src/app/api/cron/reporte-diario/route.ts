@@ -106,6 +106,7 @@ export async function GET(req: Request) {
       cashMonth, cashSevenDays, ordersMonth, deliveredMonthOrders, activeOrders, receivableOrders, activeProducts,
       abandonedCarts, activeSubscriptions, leadsMonth, customersMonth,
       emailErrors, allPayments, allSalesMovements, paymentsMonth, paidOrdersByPaidAtMonth, testProductItems,
+      paymentsSevenDaysRaw, paidOrdersByPaidAtSevenDays,
     ] = await Promise.all([
       fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,order_payment_id,metodo,categoria,tipo,descripcion,fecha,created_at')
         .gte('fecha', monthStart).lte('fecha', today)),
@@ -140,6 +141,11 @@ export async function GET(req: Request) {
         .eq('pago_estado', 'pagado').eq('es_prueba', false)
         .gte('pagado_en', startMonthISO).lt('pagado_en', startTomorrowISO)),
       fetchAll<Row>(() => sb.from('order_items').select('order_id').eq('nombre', 'Producto de prueba')),
+      fetchAll<Row>(() => sb.from('order_payments').select('order_id,monto,created_at,metodo')
+        .gte('created_at', startSevenDaysISO).lt('created_at', startTomorrowISO)),
+      fetchAll<Row>(() => sb.from('orders').select('id,total,pagado_en,metodo_pago')
+        .eq('pago_estado', 'pagado').eq('es_prueba', false)
+        .gte('pagado_en', startSevenDaysISO).lt('pagado_en', startTomorrowISO)),
     ])
 
     const cashOutToday = sum(cashMonth.filter(r => r.fecha === today && r.tipo === 'egreso'))
@@ -166,27 +172,33 @@ export async function GET(req: Request) {
     const paymentTotalsByOrder: Record<string, number> = {}
     allPayments.forEach((p: Row) => { if (p.order_id) paymentTotalsByOrder[p.order_id] = (paymentTotalsByOrder[p.order_id] || 0) + Number(p.monto || 0) })
     const paymentsMonthClean = paymentsMonth.filter((p: Row) => !testOrderIds.has(p.order_id))
-    const paymentsToday = paymentsMonthClean.filter((p: Row) => p.created_at >= startTodayISO && p.created_at < startTomorrowISO)
+    const paymentsSevenDays = paymentsSevenDaysRaw.filter((p: Row) => !testOrderIds.has(p.order_id))
+    const paymentsToday = paymentsSevenDays.filter((p: Row) => p.created_at >= startTodayISO && p.created_at < startTomorrowISO)
     const paidOrdersByPaidAtClean = paidOrdersByPaidAtMonth.filter((o: Row) => !testOrderIds.has(o.id))
     const gatewayRemaindersMonth = paidOrdersByPaidAtClean.map((o: Row) => ({
       order_id: o.id, monto: Math.max(0, Number(o.total || 0) - (paymentTotalsByOrder[o.id] || 0)),
       metodo: o.metodo_pago || 'Pasarela', created_at: o.pagado_en,
     })).filter((p: Row) => p.monto > 0)
-    const gatewayRemaindersToday = gatewayRemaindersMonth.filter((p: Row) => p.created_at >= startTodayISO && p.created_at < startTomorrowISO)
+    const paidOrdersByPaidAtSevenDaysClean = paidOrdersByPaidAtSevenDays.filter((o: Row) => !testOrderIds.has(o.id))
+    const gatewayRemaindersSevenDays = paidOrdersByPaidAtSevenDaysClean.map((o: Row) => ({
+      order_id: o.id, monto: Math.max(0, Number(o.total || 0) - (paymentTotalsByOrder[o.id] || 0)),
+      metodo: o.metodo_pago || 'Pasarela', created_at: o.pagado_en,
+    })).filter((p: Row) => p.monto > 0)
+    const gatewayRemaindersToday = gatewayRemaindersSevenDays.filter((p: Row) => p.created_at >= startTodayISO && p.created_at < startTomorrowISO)
     const standaloneSalesMonth = cashMonth.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso' && !r.order_id && !r.order_payment_id)
     const standaloneSalesToday = standaloneSalesMonth.filter(r => r.fecha === today)
     const receiptsToday = [...paymentsToday, ...gatewayRemaindersToday, ...standaloneSalesToday]
     const receiptsMonth = [...paymentsMonthClean, ...gatewayRemaindersMonth, ...standaloneSalesMonth]
     const salesToday = sum(receiptsToday)
     const cashInMonth = sum(receiptsMonth)
-    const paymentsYesterday = paymentsMonthClean.filter((p: Row) => p.created_at >= new Date(Date.parse(yesterday + 'T04:00:00.000Z')).toISOString() && p.created_at < startTodayISO)
-    const gatewayRemaindersYesterday = gatewayRemaindersMonth.filter((p: Row) => p.created_at >= new Date(Date.parse(yesterday + 'T04:00:00.000Z')).toISOString() && p.created_at < startTodayISO)
+    const paymentsYesterday = paymentsSevenDays.filter((p: Row) => p.created_at >= new Date(Date.parse(yesterday + 'T04:00:00.000Z')).toISOString() && p.created_at < startTodayISO)
+    const gatewayRemaindersYesterday = gatewayRemaindersSevenDays.filter((p: Row) => p.created_at >= new Date(Date.parse(yesterday + 'T04:00:00.000Z')).toISOString() && p.created_at < startTodayISO)
     const standaloneSalesYesterday = cashSevenDays.filter(r => r.fecha === yesterday && r.categoria === 'venta' && r.tipo === 'ingreso' && !r.order_id && !r.order_payment_id)
     const salesYesterday = sum([...paymentsYesterday, ...gatewayRemaindersYesterday, ...standaloneSalesYesterday])
-    const paymentsSevenDays = paymentsMonthClean.filter((p: Row) => p.created_at >= startSevenDaysISO && p.created_at < startTodayISO)
-    const gatewayRemaindersSevenDays = gatewayRemaindersMonth.filter((p: Row) => p.created_at >= startSevenDaysISO && p.created_at < startTodayISO)
+    const paymentsSevenDaysForTrend = paymentsSevenDays.filter((p: Row) => p.created_at >= startSevenDaysISO && p.created_at < startTodayISO)
+    const gatewayRemaindersSevenDaysForTrend = gatewayRemaindersSevenDays.filter((p: Row) => p.created_at >= startSevenDaysISO && p.created_at < startTodayISO)
     const standaloneSalesSevenDays = cashSevenDays.filter(r => r.fecha >= sevenDaysAgo && r.fecha < today && r.categoria === 'venta' && r.tipo === 'ingreso' && !r.order_id && !r.order_payment_id)
-    const salesSevenDays = sum([...paymentsSevenDays, ...gatewayRemaindersSevenDays, ...standaloneSalesSevenDays])
+    const salesSevenDays = sum([...paymentsSevenDaysForTrend, ...gatewayRemaindersSevenDaysForTrend, ...standaloneSalesSevenDays])
     const averageSevenDays = salesSevenDays / 7
     const orderIdsWithReceiptToday = new Set(receiptsToday.map((r: Row) => r.order_id).filter(Boolean))
     const receiptlessMovementsToday = standaloneSalesToday
