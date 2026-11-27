@@ -49,11 +49,11 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-white">
+      <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-white">
         <Link href={href} aria-label={'Ver ' + product.nombre} className="absolute inset-0">
           {product.imagen_url ? (
             <Image src={product.imagen_url} unoptimized alt={product.nombre + (product.marca ? ' — ' + product.marca : '')} fill
-              className="object-contain p-1 transition-transform duration-300 group-hover:scale-[1.02]"
+              className="object-contain p-0.5 transition-transform duration-300 group-hover:scale-[1.02]"
               sizes="(max-width: 400px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 33vw, 25vw" />
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-slate-300">
