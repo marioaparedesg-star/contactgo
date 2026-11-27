@@ -695,7 +695,7 @@ export default function ProductoClient({ product, variants }: Props) {
         precio_override: price,
         precio_original: precioBase,
       })
-      toast.success('¡Listo! Agregado al carrito 🎉')
+      toast.success('Listo. Agregado al carrito')
       await continuarAlCarrito()
       return true
     }
