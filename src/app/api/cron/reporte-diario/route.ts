@@ -153,9 +153,10 @@ export async function GET(req: Request) {
     const deliveredOrdersToday = deliveredMonthOrders.filter(o => o.entregado_at >= startTodayISO && o.entregado_at < startTomorrowISO)
     const deliveredValueToday = sum(deliveredOrdersToday, 'total')
     const deliveredValueMonth = sum(deliveredMonthOrders, 'total')
+    const validOrdersMonth = ordersMonth.filter(o => o.estado !== 'cancelado')
     const paidOrdersMonth = ordersMonth.filter(o => o.pago_estado === 'pagado' && o.estado !== 'cancelado')
     const orderValueToday = sum(validOrdersToday, 'total')
-    const orderValueMonth = sum(ordersMonth.filter(o => o.estado !== 'cancelado'), 'total')
+    const orderValueMonth = sum(validOrdersMonth, 'total')
     const paidOrderValueMonth = sum(paidOrdersMonth, 'total')
     const orderIdsWithReceiptToday = new Set(cashToday.map(r => r.order_id).filter(Boolean))
     const receiptlessMovementsToday = cashToday.filter(r => !r.order_id)
@@ -248,11 +249,13 @@ export async function GET(req: Request) {
       return Object.values(grouped).sort((a, b) => b.revenue - a.revenue)
     }
     const productsToday = itemTotals(validOrdersToday).slice(0, 8)
-    const productsMonth = itemTotals(paidOrdersMonth).slice(0, 10)
-    const costCoveredUnits = productsMonth.reduce((v, p) => v + p.costUnits, 0)
-    const totalMonthUnits = productsMonth.reduce((v, p) => v + p.units, 0)
-    const monthItemsRevenue = productsMonth.reduce((v, p) => v + p.revenue, 0)
-    const monthItemsCost = productsMonth.reduce((v, p) => v + p.cost, 0)
+    const allProductsMonth = itemTotals(paidOrdersMonth)
+    const productsMonth = allProductsMonth.slice(0, 10)
+    const costCoveredUnits = allProductsMonth.reduce((v, p) => v + p.costUnits, 0)
+    const totalMonthUnits = allProductsMonth.reduce((v, p) => v + p.units, 0)
+    const productsWithCost = allProductsMonth.filter(p => p.costUnits > 0)
+    const monthItemsRevenue = productsWithCost.reduce((v, p) => v + p.revenue, 0)
+    const monthItemsCost = productsWithCost.reduce((v, p) => v + p.cost, 0)
     const estimatedGrossProfit = monthItemsRevenue - monthItemsCost
 
     // Inventario: usa el punto de reposición configurado por producto.
@@ -305,11 +308,12 @@ export async function GET(req: Request) {
       metric('Cobros acumulados', fmt(cashInMonth), 'Dinero ingresado en caja') +
       metric('Egresos acumulados', fmt(cashOutMonth), 'Gastos y compras registrados', '#b91c1c') +
       metric('Flujo neto del mes', fmt(netMonth), 'Cobros menos egresos', netMonth >= 0 ? '#15803d' : '#b91c1c') +
-      metric('Pedidos creados', String(ordersMonth.length), 'Valor no cancelado: ' + fmt(orderValueMonth)) +
+      metric('Pedidos registrados', String(validOrdersMonth.length), 'Valor no cancelado: ' + fmt(orderValueMonth)) +
       metric('Pedidos pagados', String(paidOrdersMonth.length), 'Total de pedidos: ' + fmt(paidOrderValueMonth)) +
       metric('Promedio diario cobrado', fmt(cashInMonth / Math.max(dayOfMonth, 1)), 'Mes hasta el día ' + dayOfMonth) +
       metric('Entregados este mes', String(deliveredMonthOrders.length), 'Valor entregado: ' + fmt(deliveredValueMonth), '#15803d') +
       metric('Pedidos cancelados', String(cancelledOrdersMonth.length), 'Pedidos creados este mes', cancelledOrdersMonth.length ? '#b91c1c' : '#64748b') +
+      metric('Ganancia bruta estimada', fmt(estimatedGrossProfit), 'Sobre ' + fmt(monthItemsRevenue) + ' con costo registrado', '#15803d') +
       '</div><p style="font-size:10px;color:#94a3b8;margin:10px 0 0">No se muestra avance contra meta porque no hay una meta mensual configurada en el sistema.</p>'
 
     const productRows = productsMonth.map(p => [
@@ -317,7 +321,7 @@ export async function GET(req: Request) {
       fmt(p.revenue),
       p.costUnits > 0 ? fmt(p.revenue - p.cost) : badge('Costo sin dato', '#92400e', '#fef3c7'),
     ])
-    const productSection = table(['Producto · unidades', 'Venta de pedidos pagados', 'Margen bruto estimado'], productRows) +
+    const productSection = table(['Producto · unidades', 'Venta de pedidos pagados', 'Ganancia bruta estimada'], productRows) +
       '<p style="font-size:10px;color:#94a3b8;margin:9px 0 0">Productos de pedidos pagados creados este mes. El margen es una estimación con el costo promedio vigente del producto; no es utilidad neta ni costo histórico. Cobertura de costo: ' +
       costCoveredUnits + ' de ' + totalMonthUnits + ' unidades (' + (totalMonthUnits ? Math.round(costCoveredUnits / totalMonthUnits * 100) : 0) + '%).</p>'
 
