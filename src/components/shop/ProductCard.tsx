@@ -50,8 +50,8 @@ export default function ProductCard({ product }: Props) {
     : 'Ver detalles'
 
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_10px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg">
-      <div className="relative aspect-[5/4] w-full overflow-hidden bg-white">
+    <article className="group relative flex h-auto min-w-0 self-start flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_10px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg">
+      <div className="relative aspect-square w-full overflow-hidden bg-white">
         <Link href={href} aria-label={'Ver ' + product.nombre} className="absolute inset-0">
           {product.imagen_url ? (
             <Image src={product.imagen_url} unoptimized alt={product.nombre + (product.marca ? ' — ' + product.marca : '')} fill
@@ -74,7 +74,7 @@ export default function ProductCard({ product }: Props) {
         {stockCritical && <span className="absolute bottom-3 right-3 rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="flex flex-1 flex-col p-3 sm:p-3.5">
+      <div className="flex flex-col p-3 sm:p-3.5">
         <div className="mb-1.5 flex min-h-4 items-center justify-between gap-2">
           <p className="truncate text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#008F95]">{product.marca || 'ContactGo'}</p>
           <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[10px] font-semibold text-slate-400 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
@@ -83,7 +83,7 @@ export default function ProductCard({ product }: Props) {
           <h3 className="line-clamp-2">{product.nombre}</h3>
         </Link>
 
-        <div className="mt-2 space-y-1">
+        <div className="mt-1.5 space-y-1">
           {details.slice(0, 2).map((detail, index) => (
             <div key={index} className="flex items-center gap-1.5 text-[10px] leading-tight text-slate-600">
               <span className="shrink-0 text-[#008F95]">{detail.icon}</span>
@@ -99,7 +99,7 @@ export default function ProductCard({ product }: Props) {
           )}
         </div>
 
-        <div className="mt-auto border-t border-slate-100 pt-2.5">
+        <div className="mt-3 border-t border-slate-100 pt-2.5">
           <div className="flex items-end justify-between gap-2">
             <div>
               <p className="text-[9px] font-medium uppercase tracking-wide text-slate-400">Precio</p>
