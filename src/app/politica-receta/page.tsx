@@ -21,7 +21,7 @@ export default function PoliticaRecetaPage() {
             <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full mb-4">
               🏥 Marco Legal · DIGEMAPS · RD
             </div>
-            <h1 className="font-display text-3xl md:text-4xl font-black text-gray-900 mb-3">
+            <h1 className="cg-page-title mb-3">
               Política de Receta Médica
             </h1>
             <p className="text-gray-500 text-sm">Última actualización: junio 2025</p>
