@@ -107,9 +107,9 @@ export async function GET(req: Request) {
       abandonedCarts, activeSubscriptions, leadsMonth, customersMonth,
       emailErrors, allPayments, allSalesMovements, paymentsMonth, paidOrdersByPaidAtMonth, testProductItems,
     ] = await Promise.all([
-      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,metodo,categoria,tipo,descripcion,fecha,created_at')
+      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,order_payment_id,metodo,categoria,tipo,descripcion,fecha,created_at')
         .gte('fecha', monthStart).lte('fecha', today)),
-      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,metodo,categoria,tipo,fecha')
+      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,order_payment_id,metodo,categoria,tipo,fecha')
         .gte('fecha', sevenDaysAgo).lt('fecha', today)),
       fetchAll<Row>(() => sb.from('orders').select('id,numero_orden,cliente_nombre,total,subtotal,descuento,estado,pago_estado,canal,metodo_pago,created_at,updated_at,pagado_en,entregado_at')
         .eq('es_prueba', false).gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
@@ -171,7 +171,7 @@ export async function GET(req: Request) {
       metodo: o.metodo_pago || 'Pasarela', created_at: o.pagado_en,
     })).filter((p: Row) => p.monto > 0)
     const gatewayRemaindersToday = gatewayRemaindersMonth.filter((p: Row) => p.created_at >= startTodayISO && p.created_at < startTomorrowISO)
-    const standaloneSalesMonth = cashMonth.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso' && !r.order_id)
+    const standaloneSalesMonth = cashMonth.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso' && !r.order_id && !r.order_payment_id)
     const standaloneSalesToday = standaloneSalesMonth.filter(r => r.fecha === today)
     const receiptsToday = [...paymentsToday, ...gatewayRemaindersToday, ...standaloneSalesToday]
     const receiptsMonth = [...paymentsMonthClean, ...gatewayRemaindersMonth, ...standaloneSalesMonth]
