@@ -144,7 +144,7 @@ export default function AdminDashboard() {
         .eq('pago_estado','pagado').not('estado','eq','cancelado').eq('es_prueba',false)
         .gte('pagado_en',desdeISO).lte('pagado_en',hastaISO),
       sb.from('cash_movements').select('id,monto,fecha,created_at,referencia,descripcion')
-        .eq('categoria','venta').eq('tipo','ingreso').is('order_id',null)
+        .eq('categoria','venta').eq('tipo','ingreso').is('order_id',null).is('order_payment_id',null)
         .gte('fecha',desdeStr).lte('fecha',hastaStr),
       // FIX (2026-09-06): "Por cobrar" NO debe limitarse al período
       // seleccionado arriba — un pedido de agosto con saldo pendiente sigue
