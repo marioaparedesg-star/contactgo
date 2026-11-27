@@ -67,6 +67,19 @@ function rangoDePreset(preset: PresetKey, customDesde?: string, customHasta?: st
   }
 }
 
+async function fetchAllQuery<T = any>(makeQuery: () => any): Promise<{ data: T[] | null; error: any }> {
+  const rows: T[] = []
+  const pageSize = 1000
+  for (let offset = 0; offset < 100000; offset += pageSize) {
+    const { data, error } = await makeQuery().range(offset, offset + pageSize - 1)
+    if (error) return { data: null, error }
+    const page = (data ?? []) as T[]
+    rows.push(...page)
+    if (page.length < pageSize) return { data: rows, error: null }
+  }
+  return { data: null, error: new Error('La consulta superó el límite de paginación del dashboard.') }
+}
+
 export default function AdminDashboard() {
   const sb = createClient()
   const router = useRouter()
@@ -129,23 +142,23 @@ export default function AdminDashboard() {
     const hoyStr   = fechaRD(new Date())
 
     const [periodo, ordRecent, stockLow, testProductItems, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo] = await Promise.all([
-      sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
+      fetchAllQuery(() => sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado').eq('es_prueba', false)
-        .gte('fecha', desdeISO).lte('fecha', hastaISO),
+        .gte('fecha', desdeISO).lte('fecha', hastaISO)),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .or('pago_estado.is.null,pago_estado.neq.declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
-      sb.from('v_stock_disponible').select('id,nombre,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock').in('alerta_stock',['critico','bajo_minimo']).order('stock'),
-      sb.from('order_items').select('order_id').eq('nombre','Producto de prueba'),
-      sb.from('order_payments')
+      fetchAllQuery(() => sb.from('v_stock_disponible').select('id,nombre,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock').in('alerta_stock',['critico','bajo_minimo']).order('stock')),
+      fetchAllQuery(() => sb.from('order_items').select('order_id').eq('nombre','Producto de prueba')),
+      fetchAllQuery(() => sb.from('order_payments')
         .select('id,monto,created_at,order_id,metodo,orders(numero_orden,cliente_nombre,cliente_telefono)')
-        .gte('created_at', desdeISO).lte('created_at', hastaISO),
-      sb.from('orders').select('id,total,pagado_en,numero_orden,cliente_nombre,cliente_telefono')
+        .gte('created_at', desdeISO).lte('created_at', hastaISO)),
+      fetchAllQuery(() => sb.from('orders').select('id,total,pagado_en,numero_orden,cliente_nombre,cliente_telefono')
         .eq('pago_estado','pagado').not('estado','eq','cancelado').eq('es_prueba',false)
-        .gte('pagado_en',desdeISO).lte('pagado_en',hastaISO),
-      sb.from('cash_movements').select('id,monto,fecha,created_at,referencia,descripcion')
+        .gte('pagado_en',desdeISO).lte('pagado_en',hastaISO)),
+      fetchAllQuery(() => sb.from('cash_movements').select('id,monto,fecha,created_at,referencia,descripcion')
         .eq('categoria','venta').eq('tipo','ingreso').is('order_id',null).is('order_payment_id',null)
-        .gte('fecha',desdeStr).lte('fecha',hastaStr),
+        .gte('fecha',desdeStr).lte('fecha',hastaStr)),
       // FIX (2026-09-06): "Por cobrar" NO debe limitarse al período
       // seleccionado arriba — un pedido de agosto con saldo pendiente sigue
       // pendiente aunque estés viendo "Mes actual" en septiembre. Antes
@@ -153,9 +166,9 @@ export default function AdminDashboard() {
       // viejos desaparecían de la vista al cambiar de mes. Ahora es su
       // propia consulta, sin restricción de fecha — todo lo activo con
       // saldo pendiente, sin importar cuándo se creó.
-      sb.from('orders').select('id,total,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
-        .not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado').eq('es_prueba', false),
-      sb.from('cash_movements').select('id,monto,fecha').eq('tipo','egreso').gte('fecha',desdeStr).lte('fecha',hastaStr),
+      fetchAllQuery(() => sb.from('orders').select('id,total,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
+        .not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado').eq('es_prueba', false)),
+      fetchAllQuery(() => sb.from('cash_movements').select('id,monto,fecha').eq('tipo','egreso').gte('fecha',desdeStr).lte('fecha',hastaStr)),
     ])
 
     const queryErrors = [periodo, ordRecent, stockLow, testProductItems, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo].filter((q:any) => q.error)
@@ -173,7 +186,7 @@ export default function AdminDashboard() {
     const pagadosPeriodoData = (pagadosPeriodo.data ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id))
     const idsPagadosPeriodo = pagadosPeriodoData.map((o:any) => o.id).filter(Boolean)
     const pagosAcumuladosResult = idsPagadosPeriodo.length > 0
-      ? await sb.from('order_payments').select('order_id,monto').in('order_id', idsPagadosPeriodo)
+      ? await fetchAllQuery(() => sb.from('order_payments').select('order_id,monto').in('order_id', idsPagadosPeriodo))
       : { data: [] as any[], error: null }
     if (pagosAcumuladosResult.error) { console.error('[admin/dashboard] Error conciliando pagos por pedido:', pagosAcumuladosResult.error); setLoadError('No se pudieron conciliar los pagos confirmados de los pedidos.'); setLoading(false); return }
     const pagadoPorOrdenHistorico: Record<string, number> = {}
@@ -216,7 +229,7 @@ export default function AdminDashboard() {
     // Por cobrar: esto SÍ sigue basado en pedidos (no en cash_movements) —
     // es sobre saldo pendiente de ÓRDENES activas, no sobre cuándo entró
     // el dinero. Necesita su propio cálculo de abonos por pedido.
-    const { data: movimientosCobro, error: movimientosCobroError } = await sb.from('order_payments').select('order_id,monto').not('order_id','is',null)
+    const { data: movimientosCobro, error: movimientosCobroError } = await fetchAllQuery(() => sb.from('order_payments').select('order_id,monto').not('order_id','is',null))
     if (movimientosCobroError) { console.error('[admin/dashboard] Error consultando pagos:', movimientosCobroError); setLoadError('No se pudo validar la cartera contra los pagos registrados.'); setLoading(false); return }
     const cobradoPorOrden: Record<string, number> = {}
     ;(movimientosCobro ?? []).forEach((m: any) => {
@@ -244,10 +257,9 @@ export default function AdminDashboard() {
     // vendido" y "ganancia de lo vendido", que es lo que se pidió.
     const idsVendidos = Array.from(new Set(ords.map((o:any) => o.id).filter(Boolean)))
     const { data: itemsData, error: itemsError } = idsVendidos.length > 0
-      ? await sb.from('order_items')
+      ? await fetchAllQuery(() => sb.from('order_items')
           .select('nombre,cantidad,precio,subtotal,product_id,order_id')
-          .in('order_id', idsVendidos)
-          .limit(1000)
+          .in('order_id', idsVendidos))
       : { data: [] as any[] }
     if (itemsError) { console.error('[admin/dashboard] Error consultando artículos:', itemsError); setLoadError('No se pudieron cargar los artículos vendidos; la ganancia no puede calcularse.'); setLoading(false); return }
     const items = { data: itemsData }
@@ -264,8 +276,8 @@ export default function AdminDashboard() {
     const productIds = Array.from(new Set((items.data ?? []).map((i:any) => i.product_id).filter(Boolean)))
     const [{ data: costosPromedio, error: costosPromedioError }, { data: costosProductos, error: costosError }] = productIds.length > 0
       ? await Promise.all([
-          sb.from('product_costs').select('product_id,costo_promedio').in('product_id', productIds),
-          sb.from('products').select('id,costo').in('id', productIds),
+          fetchAllQuery(() => sb.from('product_costs').select('product_id,costo_promedio').in('product_id', productIds)),
+          fetchAllQuery(() => sb.from('products').select('id,costo').in('id', productIds)),
         ])
       : [{ data: [] as any[], error: null }, { data: [] as any[], error: null }]
     if (costosPromedioError || costosError) {
@@ -323,7 +335,7 @@ export default function AdminDashboard() {
     ])
     if (clientesError || clientesNuevosError) { console.error('[admin/dashboard] Error consultando clientes:', clientesError || clientesNuevosError); setLoadError('No se pudo validar la información de clientes.'); setLoading(false); return }
 
-    const { data: invStats, error: invStatsError } = await sb.from('v_stock_disponible').select('id,nombre,tipo,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock,precio')
+    const { data: invStats, error: invStatsError } = await fetchAllQuery(() => sb.from('v_stock_disponible').select('id,nombre,tipo,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock,precio'))
     if (invStatsError) { console.error('[admin/dashboard] Error consultando inventario:', invStatsError); setLoadError('No se pudo validar el inventario.'); setLoading(false); return }
     const invAll = invStats ?? []
     const invCriticos   = invAll.filter((p:any) => p.alerta_stock === 'critico').length
@@ -331,9 +343,9 @@ export default function AdminDashboard() {
 
     // ── OPERACIÓN: pedidos activos por etapa (todo lo que no es entregado
     // ni cancelado — el flujo real de "qué hay que atender hoy") ──────────
-    const { data: pedidosActivosData, error: pedidosActivosError } = await sb
+    const { data: pedidosActivosData, error: pedidosActivosError } = await fetchAllQuery(() => sb
       .from('orders').select('id,estado,created_at')
-      .not('estado','in','(entregado,cancelado)').eq('es_prueba', false)
+      .not('estado','in','(entregado,cancelado)').eq('es_prueba', false))
     if (pedidosActivosError) { console.error('[admin/dashboard] Error consultando etapas:', pedidosActivosError); setLoadError('No se pudo validar la distribución de pedidos por etapa.'); setLoading(false); return }
     const porEtapa: Record<string, number> = {}
     ;(pedidosActivosData ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id)).forEach((o:any) => { porEtapa[o.estado] = (porEtapa[o.estado] ?? 0) + 1 })
@@ -347,8 +359,8 @@ export default function AdminDashboard() {
     const hoyInicioISO = fechaEnRD(hoyPartes.year, hoyPartes.month, hoyPartes.day).toISOString()
     const mananaInicioISO = fechaEnRD(hoyPartes.year, hoyPartes.month, hoyPartes.day + 1).toISOString()
     const [{ data: leadsHoyData, error: leadsHoyError }, { data: leadsMesData, error: leadsMesError }] = await Promise.all([
-      sb.from('calculator_leads').select('id').gte('created_at', hoyInicioISO).lt('created_at', mananaInicioISO),
-      sb.from('calculator_leads').select('id, telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO),
+      fetchAllQuery(() => sb.from('calculator_leads').select('id').gte('created_at', hoyInicioISO).lt('created_at', mananaInicioISO)),
+      fetchAllQuery(() => sb.from('calculator_leads').select('id, telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO)),
     ])
     if (leadsHoyError || leadsMesError) { console.error('[admin/dashboard] Error consultando leads:', leadsHoyError || leadsMesError); setLoadError('No se pudieron cargar los leads de marketing.'); setLoading(false); return }
     const leadsHoy = leadsHoyData?.length ?? 0
@@ -360,7 +372,7 @@ export default function AdminDashboard() {
     const telsLeads = new Set((leadsMesData ?? []).map((l:any) => String(l.telefono ?? '').replace(/\D/g,'').slice(-10)).filter(Boolean))
     let leadsConvertidos = 0
     if (telsLeads.size > 0) {
-      const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('id,cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false).not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado')
+      const { data: ordsDelMes, error: ordsDelMesError } = await fetchAllQuery(() => sb.from('orders').select('id,cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false).not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado'))
       if (ordsDelMesError) { console.error('[admin/dashboard] Error cruzando leads y pedidos:', ordsDelMesError); setLoadError('No se pudo calcular la conversión de leads.'); setLoading(false); return }
       const telsConCompra = new Set((ordsDelMes ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id)).map((o:any) => String(o.cliente_telefono ?? '').replace(/\D/g,'').slice(-10)))
       telsLeads.forEach(t => { if (telsConCompra.has(t)) leadsConvertidos++ })
