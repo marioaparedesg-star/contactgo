@@ -62,7 +62,7 @@ export default function Page() {
         </div>
 
         <span className="text-xs font-semibold text-primary-600 bg-teal-50 px-2 py-0.5 rounded-full">📍 Entrega en Azua</span>
-        <h1 className="font-display text-3xl font-bold text-gray-900 mt-3 mb-2">Lentes de contacto en Azua — Entrega a tu puerta 2026</h1>
+        <h1 className="cg-page-title mt-3 mb-2">Lentes de contacto en Azua — Entrega a tu puerta 2026</h1>
 
         <div className="flex items-center gap-3 mb-5 p-4 bg-green-50 border border-green-100 rounded-2xl">
           <span className="text-2xl">🚀</span>

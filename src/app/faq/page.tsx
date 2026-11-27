@@ -38,7 +38,7 @@ const FAQS = [
   {
     categoria: '👁️ Productos',
     preguntas: [
-      { q: '¿Los productos son certificados?', a: 'Trabajamos con marcas reconocidas y canales de distribución autorizados. Los productos se entregan sellados y en su empaque original; no abrimos ni reempacamos las cajas.' },
+      { q: '¿Los productos son certificados?', a: 'Trabajamos con marcas reconocidas y proveedores de productos originales. Los productos se entregan sellados y en su empaque original; no abrimos ni reempacamos las cajas.' },
       { q: '¿Necesito receta para comprar lentes de contacto?', a: 'Recomendamos tener una receta actualizada de tu oftalmólogo antes de comprar. Contamos con un buscador por receta para ayudarte a elegir el tipo correcto.' },
       { q: '¿Qué pasa si mi graduación no está disponible?', a: 'Escríbenos por WhatsApp y buscamos la graduación específica para ti. Podemos hacer pedidos especiales.' },
       { q: '¿Los lentes de color necesitan graduación?', a: 'No. Tenemos lentes de color sin graduación (plano) y con graduación para miopía e hipermetropía.' },
@@ -79,14 +79,14 @@ export default function FAQPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main id="main-content" className="max-w-3xl mx-auto px-4 py-12 pb-24">
         <div className="mb-10 text-center">
-          <h1 className="font-display text-3xl font-bold text-gray-900 mb-3">Preguntas Frecuentes</h1>
+          <h1 className="cg-page-title mb-3">Preguntas Frecuentes</h1>
           <p className="text-gray-500">Todo lo que necesitas saber sobre ContactGo</p>
         </div>
 
         <div className="space-y-8">
           {FAQS.map(({ categoria, preguntas }) => (
             <div key={categoria}>
-              <h2 className="font-semibold text-lg text-gray-900 mb-4">{categoria}</h2>
+              <h2 className="cg-card-title mb-4">{categoria}</h2>
               <div className="space-y-3">
                 {preguntas.map(({ q, a }) => (
                   <div key={q} className="border border-gray-100 rounded-2xl p-5">

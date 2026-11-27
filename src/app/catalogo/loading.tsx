@@ -23,7 +23,12 @@ export default function Loading() {
               <div className="h-3 w-16 bg-gray-100 rounded animate-pulse" />
               <div className="h-4 w-full bg-gray-100 rounded animate-pulse" />
               <div className="h-4 w-3/4 bg-gray-100 rounded animate-pulse" />
-              <div className="h-8 w-full bg-gray-100 rounded-xl animate-pulse mt-2" />
+              {/* Price placeholder: keep the price area visually prominent while products load */}
+              <div className="mt-1 flex items-center justify-between gap-2 rounded-lg bg-[#effbfb] px-2 py-1.5">
+                <div className="h-6 w-28 rounded-md bg-teal-100 animate-pulse" />
+                <div className="h-3 w-14 rounded bg-gray-100 animate-pulse" />
+              </div>
+              <div className="h-8 w-full bg-gray-100 rounded-xl animate-pulse mt-1" />
             </div>
           </div>
         ))}

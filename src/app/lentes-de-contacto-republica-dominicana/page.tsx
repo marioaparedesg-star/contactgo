@@ -148,7 +148,7 @@ return [
         name: '¿Qué marcas de lentes de contacto se venden en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Las marcas líderes disponibles en RD son: Acuvue (Johnson & Johnson) con líneas Oasys, Moist y Oasys for Astigmatism; Biofinity (CooperVision) esférico, tórico y multifocal; Air Optix (Alcon) HydraGlyde, Colors, Multifocal; Bausch+Lomb Ultra; Precision1 y Dailies Total1. En ContactGo trabajamos directamente con los distribuidores autorizados de estas marcas.',
+          text: 'Las marcas líderes disponibles en RD son: Acuvue (Johnson & Johnson) con líneas Oasys, Moist y Oasys for Astigmatism; Biofinity (CooperVision) esférico, tórico y multifocal; Air Optix (Alcon) HydraGlyde, Colors, Multifocal; Bausch+Lomb Ultra; Precision1 y Dailies Total1. En ContactGo ofrecemos productos de estas marcas en su empaque original y sellado.',
         },
       },
       {
@@ -283,7 +283,7 @@ export default async function LentesRDPage() {
             <p className="text-gray-600 leading-relaxed max-w-3xl mb-6">
               A diferencia de las ópticas tradicionales que venden monturas, gafas de sol, consultas y accesorios,
               en ContactGo nos dedicamos exclusivamente a lentes de contacto. Esa especialización nos permite mantener
-              el catálogo más completo de marcas originales del país, con precios directos del distribuidor autorizado y
+              el catálogo más completo de marcas originales del país, con precios directos del proveedor de productos originales y
               entrega a domicilio sin que tengas que visitar una óptica física.
             </p>
 
@@ -291,7 +291,7 @@ export default async function LentesRDPage() {
               <div className="p-5 rounded-2xl border border-gray-100">
                 <Award className="w-6 h-6 text-primary-600 mb-3" />
                 <h3 className="font-bold text-gray-900 text-base mb-1">Marcas originales certificadas</h3>
-                <p className="text-sm text-gray-500">Acuvue, Biofinity, Air Optix, Ultra, Precision1, Dailies. Todos directos del distribuidor autorizado en RD.</p>
+                <p className="text-sm text-gray-500">Acuvue, Biofinity, Air Optix, Ultra, Precision1, Dailies. Todos directos del proveedor de productos originales en RD.</p>
               </div>
               <div className="p-5 rounded-2xl border border-gray-100">
                 <Truck className="w-6 h-6 text-primary-600 mb-3" />
@@ -344,7 +344,7 @@ export default async function LentesRDPage() {
             <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Marcas de lentes de contacto que trabajamos
             </h2>
-            <p className="text-gray-500 text-sm mb-8">Distribuidores autorizados en RD de las marcas líderes mundiales.</p>
+            <p className="text-gray-500 text-sm mb-8">Marcas reconocidas disponibles en República Dominicana mundiales.</p>
 
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
@@ -456,7 +456,7 @@ export default async function LentesRDPage() {
                 },
                 {
                   q: '¿Los lentes son originales del fabricante?',
-                  a: 'Sí. Trabajamos exclusivamente con distribuidores autorizados en República Dominicana. Cada producto viene con su empaque original sellado y garantía del fabricante.',
+                  a: 'Sí. Ofrecemos productos de marcas reconocidas en su empaque original y sellado. Cada caja incluye información de lote y vencimiento para verificarla.',
                 },
               ].map((f, i) => (
                 <details key={i} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden">

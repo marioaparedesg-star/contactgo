@@ -55,6 +55,13 @@
   }
 }
 
+/* Escala tipográfica común para que títulos, secciones y contenido mantengan jerarquía entre rutas. */
+.cg-page-title { font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.9rem, 3.2vw, 2.65rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 800; }
+.cg-section-title { font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.4rem, 2.2vw, 1.85rem); line-height: 1.18; letter-spacing: -0.03em; font-weight: 750; }
+.cg-card-title { font-size: 1rem; line-height: 1.35; font-weight: 700; }
+.cg-body { font-size: 0.9375rem; line-height: 1.65; }
+.cg-eyebrow { font-size: 0.75rem; line-height: 1.4; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
 /* Scrollbar minimal */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }

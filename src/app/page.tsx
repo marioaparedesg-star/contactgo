@@ -81,7 +81,7 @@ const SCHEMA_ORG = {
   "@type": "FAQPage",
   "mainEntity": [
     { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24-48 horas en Santo Domingo y 24-72 horas en el interior." } },
-    { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Trabajamos con productos de marcas reconocidas y distribuidores autorizados. Nunca vendemos imitaciones." } },
+    { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Ofrecemos productos de marcas reconocidas, en su empaque original y sellado. Nunca vendemos imitaciones." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
     { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesadas por AZUL, plataforma de Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
   ]
@@ -116,7 +116,7 @@ export default async function HomePage() {
 
         <section className="max-w-7xl mx-auto px-4 py-6 md:py-10">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-display text-xl md:text-2xl font-bold text-gray-900">Compra por tipo</h2>
+            <h2 className="cg-section-title">Compra por tipo</h2>
           </div>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
@@ -214,7 +214,7 @@ export default async function HomePage() {
                 <FileSearch className="h-5 w-5 text-[#002455]" aria-hidden="true" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Herramienta gratuita</span>
               </div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-[#002455] mb-2">
+              <h2 className="cg-section-title mb-3">
                 Revisa tu receta y encuentra opciones
               </h2>
               <p className="text-slate-600 max-w-md text-sm md:text-base">
@@ -233,22 +233,22 @@ export default async function HomePage() {
         </section>
 
         {/* ── TRUST BAR — reordenado: tercero ── */}
-        <section className="bg-white border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+        <section className="bg-slate-50 border-y border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 py-5 md:py-7">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {[
                 { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 24-72 horas',    color: 'text-[#002455]',   bg: 'bg-slate-100' },
-                { icon: Package,  title: 'Marcas originales',   desc: 'Distribuidores autorizados de cada marca',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
+                { icon: Package,  title: 'Productos originales', desc: 'Sellados en su empaque original',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
                 { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-[#002455]', bg: 'bg-slate-100' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-[#002455]', bg: 'bg-slate-100' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
-                <div key={title} className="flex items-center gap-3">
+                <div key={title} className="flex items-start gap-3 rounded-xl border border-slate-100 bg-white p-3 md:p-4 shadow-sm min-h-[88px]">
                   <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center shrink-0`}>
-                    <Icon className={`w-5 h-5 ${color}`} />
+                    <Icon className={`w-5 h-5 ${color}`} aria-hidden="true" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">{title}</p>
-                    <p className="text-gray-500 text-xs">{desc}</p>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-gray-900 text-sm leading-snug">{title}</p>
+                    <p className="text-gray-500 text-xs leading-relaxed mt-1">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -300,11 +300,11 @@ export default async function HomePage() {
 
         {/* ── FAQ ── */}
         <section className="max-w-3xl mx-auto px-4 py-10 md:py-14">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
+          <h2 className="cg-section-title mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-3">
             {[
               { q: '¿Cuánto tarda el envío?', a: 'El tiempo depende de tu ubicación y del tipo de lente. Los productos bajo pedido pueden requerir un plazo de preparación adicional.' },
-              { q: '¿Los productos son originales?', a: 'Trabajamos con distribuidores oficiales. Recibes los productos sellados y en su empaque original.' },
+              { q: '¿Los productos son originales?', a: 'Recibes productos de marcas reconocidas, sellados y en su empaque original. Puedes verificar el lote y la fecha de vencimiento en la caja.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados necesitas conocer los parámetros de tu receta. Si tienes dudas, podemos orientarte antes de comprar. Los lentes de color sin graduación no requieren graduación.' },
               { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },
@@ -324,7 +324,7 @@ export default async function HomePage() {
         {/* ── MARCAS ── */}
         <section className="bg-gray-50 border-y border-gray-100 py-8">
           <div className="max-w-7xl mx-auto px-4">
-            <p className="text-center text-xs font-bold text-gray-500 uppercase tracking-widest mb-5">Marcas originales y canales autorizados</p>
+            <p className="text-center text-xs font-bold text-gray-500 uppercase tracking-widest mb-5">Marcas líderes en nuestro catálogo</p>
             <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 mb-5">
               {['ACUVUE®', 'AIR OPTIX®', 'FreshLook®', 'Bausch+Lomb', 'CooperVision®', 'Biofinity®', 'Opti-Free®', 'Prolub®'].map(m => (
                 <span key={m} className="text-gray-700 font-bold text-sm">{m}</span>

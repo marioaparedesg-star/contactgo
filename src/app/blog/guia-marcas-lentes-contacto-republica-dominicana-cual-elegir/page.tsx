@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <BlogArticle meta={meta}>
-      <p>En ContactGo trabajamos con cuatro fabricantes globales de lentes de contacto: <strong>ACUVUE (Johnson &amp; Johnson Vision)</strong>, <strong>Air Optix (Alcon)</strong>, <strong>Bausch+Lomb</strong> y <strong>CooperVision</strong> (Biofinity, Avaira, Proclear, clariti). Todas certificadas, todas adquiridas directo del fabricante o su distribuidor autorizado en el país — nada de importaciones paralelas. Esta guía te explica qué distingue a cada una y a cuál de nuestras comparativas ir según lo que estés decidiendo.</p>
+      <p>En ContactGo trabajamos con cuatro fabricantes globales de lentes de contacto: <strong>ACUVUE (Johnson &amp; Johnson Vision)</strong>, <strong>Air Optix (Alcon)</strong>, <strong>Bausch+Lomb</strong> y <strong>CooperVision</strong> (Biofinity, Avaira, Proclear, clariti). Todas certificadas, todas adquiridas directo del fabricante o su proveedor de productos originales en el país — nada de importaciones paralelas. Esta guía te explica qué distingue a cada una y a cuál de nuestras comparativas ir según lo que estés decidiendo.</p>
 
       <h2>Las cuatro marcas, en una tabla</h2>
 

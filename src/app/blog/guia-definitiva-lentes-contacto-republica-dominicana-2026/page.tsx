@@ -17,7 +17,7 @@ const meta: BlogMeta = {
     { q: '¿Cuánto cuestan los lentes de contacto en RD en 2026?',
       a: 'Varía mucho según el tipo: esféricos simples desde RD$3,000, tóricos (astigmatismo) desde RD$3,900, multifocales (presbicia) desde RD$4,450, y de color desde RD$2,000. El precio depende de la marca, si es diario/quincenal/mensual, y si necesitas corrección especial.' },
     { q: '¿Es mejor comprar lentes de contacto en óptica física o en línea en RD?',
-      a: 'Ambas opciones son válidas. Una óptica física ofrece examen visual presencial; una tienda online especializada suele tener mejores precios (menos costos fijos de local) y comodidad de entrega a domicilio. Lo importante es que ambas trabajen con distribuidores autorizados de marcas originales.' },
+      a: 'Ambas opciones son válidas. Una óptica física ofrece examen visual presencial; una tienda online especializada suele tener mejores precios (menos costos fijos de local) y comodidad de entrega a domicilio. Lo importante es que ambas ofrezcan productos originales en su empaque sellado y permitan verificar el lote y la fecha de vencimiento.' },
   ],
   relatedSlugs: [
     'mejores-lentes-de-contacto-republica-dominicana-2026',

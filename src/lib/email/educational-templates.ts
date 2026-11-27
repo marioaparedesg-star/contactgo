@@ -12,7 +12,7 @@ export type EducationalEmail = { id: string; subject: string; titulo: string; pa
 
 export const BIENVENIDA: EducationalEmail[] = [
   { id: 'bienvenida-1', subject: 'Bienvenido a ContactGo | Tu cuidado visual comienza aquí', titulo: 'Bienvenido a ContactGo',
-    parrafos: ['Gracias por unirte a ContactGo. Somos una tienda dedicada exclusivamente a lentes de contacto originales, entregados en tu puerta en República Dominicana.', 'Trabajamos directamente con distribuidores autorizados de cada marca. Puedes explorar nuestro catálogo de lentes diarios, mensuales, tóricos, multifocales y de colores.'],
+    parrafos: ['Gracias por unirte a ContactGo. Somos una tienda dedicada exclusivamente a lentes de contacto originales, entregados en tu puerta en República Dominicana.', 'Trabajamos directamente con proveedores de productos originales de cada marca. Puedes explorar nuestro catálogo de lentes diarios, mensuales, tóricos, multifocales y de colores.'],
     cta: { texto: 'Explorar productos', url: `${SITE}/catalogo` } },
   { id: 'bienvenida-2', subject: '¿Qué debes saber antes de elegir tus lentes de contacto?', titulo: 'Antes de elegir tus lentes',
     parrafos: ['Los lentes de contacto son dispositivos médicos. Lo más importante es que uses una prescripción vigente y adecuada para ti.', 'Tu receta indica la esfera (SPH), el cilindro (CYL), el eje (AXIS) y la adición (ADD), según corresponda. Cada lente se fabrica para una graduación específica.'],

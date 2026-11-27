@@ -116,7 +116,7 @@ export default function BlogJournal({ posts, products = [] }: { posts: BlogPost[
           </div>
           <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_330px]">
             <div className="max-w-3xl">
-              <h1 className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.65rem]">
+              <h1 className="cg-page-title max-w-3xl text-white">
                 Mira el mundo con más claridad.
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-7 text-blue-100/80 sm:text-lg">

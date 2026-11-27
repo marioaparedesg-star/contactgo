@@ -303,7 +303,7 @@ export default function RecetaPage() {
               <button onClick={handleLeadSubmit} className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 font-black rounded-xl text-sm transition-colors mb-1">
                 Guardar mi receta →
               </button>
-              <p className="text-[10px] text-gray-400 text-center">Tus datos están protegidos y solo se utilizarán para gestionar tu receta.</p>
+              <p className="text-xs text-gray-500 text-center">Tus datos están protegidos y solo se utilizarán para gestionar tu receta.</p>
             </div>
           </div>
         )}
@@ -328,7 +328,7 @@ export default function RecetaPage() {
                 <Eye className={`h-5 w-5 ${rxSource === 'contacto' ? 'text-primary-700' : 'text-slate-400'}`} />
                 <span>
                   <span className="block text-xs font-semibold text-slate-900 md:text-sm">Lentes de contacto</span>
-                  <span className="mt-0.5 hidden text-[11px] leading-4 text-slate-500 sm:block">Tengo una receta de contacto.</span>
+                  <span className="mt-0.5 hidden text-xs leading-5 text-slate-600 sm:block">Tengo una receta de contacto.</span>
                 </span>
               </button>
               <button type="button" onClick={() => setRxSource('gafas')}
@@ -348,7 +348,7 @@ export default function RecetaPage() {
                 <select value={vertexDistanceMm} onChange={e => setVertexDistanceMm(e.target.value)} className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800">
                   {[8,9,10,11,12,13,14,15,16,17,18,19,20].map(v => <option key={v} value={String(v)}>{v} mm{v===12?' · referencia habitual':''}</option>)}
                 </select>
-                <p className="mt-2 text-[11px] leading-5 text-slate-500">Utiliza la distancia medida por tu óptica. Si no la conoces, 12 mm es una referencia general, no una medición personal. La conversión es orientativa.</p>
+                <p className="mt-2 text-xs leading-5 text-slate-600">Utiliza la distancia medida por tu óptica. Si no la conoces, 12 mm es una referencia general, no una medición personal. La conversión es orientativa.</p>
               </div>
             )}
           </section>
@@ -549,13 +549,13 @@ function DiagnosticoCard({ result: r }: { result: ConvertedRx }) {
     <section className="rounded-xl border border-slate-200 bg-white p-4 md:p-5">
       <div><h2 className="text-base font-semibold text-[#002455]">Tu graduación convertida</h2><p className="mt-0.5 text-xs text-slate-500">{tipoNombre}</p></div>
       <div className="mt-3 grid grid-cols-2 gap-3">
-        <div className="border-l-2 border-[#1762b3] pl-3"><p className="text-[10px] font-semibold text-slate-500">OD · Ojo derecho</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.od)}</p></div>
+        <div className="border-l-2 border-[#1762b3] pl-3"><p className="text-xs font-semibold text-slate-600">OD · Ojo derecho</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.od)}</p></div>
         <div className="border-l-2 border-[#01B2B7] pl-3"><p className="text-[10px] font-semibold text-slate-500">OI · Ojo izquierdo</p><p className="mt-1 text-sm font-semibold text-slate-800">{eyeText(r.oi)}</p></div>
       </div>
       {r.needsVertex && <p className="mt-3 rounded-xl bg-[#f4f8fb] px-3 py-2.5 text-[11px] leading-5 text-slate-600">Conversión orientativa desde gafas con distancia al vértice de {r.vertexDistanceMm} mm. Debe confirmarse con un profesional.</p>}
       {r.requiresClinicalReview && <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-[11px] leading-5 text-amber-900">La ADD de una receta de gafas no se convierte directamente a un multifocal. La selección requiere evaluación profesional.</p>}
       {!r.needsVertex && r.condiciones.includes("Alta graduación") && <p className="mt-3 rounded-xl bg-[#f4f8fb] px-3 py-2.5 text-[11px] leading-5 text-slate-600">Graduación elevada: la disponibilidad depende de los parámetros de fabricación de cada lente.</p>}
-      <p className="mt-3 text-[10px] leading-4 text-slate-400">Resultado orientativo. No sustituye una prescripción ni una adaptación profesional.</p>
+      <p className="mt-3 text-[11px] leading-5 text-slate-500">Resultado orientativo. No sustituye una prescripción ni una adaptación profesional.</p>
     </section>
   )
 }
@@ -583,7 +583,7 @@ function ProductCard({ product: p, result, tier, onAction, cartAdded, soloOjo, c
         
       </div>
       <div className="flex flex-1 flex-col border-t border-slate-100 p-3">
-        <p className="text-[10px] font-medium text-slate-500">{p.marca}</p>
+        <p className="text-xs font-medium text-slate-600">{p.marca}</p>
         <h3 className="mt-1 min-h-[2.5rem] text-sm font-semibold leading-5 text-slate-900">{p.nombre}</h3>
         <p className="mt-2 text-base font-semibold text-[#0758a6]">RD${precio.toLocaleString("es-DO")}</p>
         <div className="mt-2"><RecetaMini result={productResult} soloOjo={soloOjo}/></div>

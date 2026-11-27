@@ -70,7 +70,7 @@ export default function PrivacidadPage() {
       <Navbar />
       <main id="main-content" className="max-w-2xl mx-auto px-4 py-12 pb-24">
         <div className="mb-4"><Link href="/" className="text-sm text-primary-600 font-semibold">← Inicio</Link></div>
-        <h1 className="font-display text-3xl font-bold text-gray-900 mb-2">Política de Privacidad</h1>
+        <h1 className="cg-page-title text-gray-900 mb-2">Política de Privacidad</h1>
         <p className="text-gray-400 text-sm mb-8">Última actualización: 19 de noviembre de 2026 · Conforme a la Ley 172-13 de República Dominicana</p>
 
         <div className="space-y-6">

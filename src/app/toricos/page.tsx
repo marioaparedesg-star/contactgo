@@ -41,7 +41,7 @@ export default async function Page() {
         </nav>
         <section className="bg-gradient-to-br from-purple-700 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para astigmatismo</span>
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes Tóricos para Astigmatismo en RD</h1>
+          <h1 className="cg-page-title mb-4">Lentes Tóricos para Astigmatismo en RD</h1>
           <p className="text-purple-100 text-lg max-w-xl mx-auto">Para tu graduación SPH, CYL y AXIS. Entrega estimada de 25 a 45 días en República Dominicana.</p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-400/20 border border-amber-300/30 text-amber-100 text-xs px-4 py-2 rounded-full">
             ⏱ Entrega estimada: de 25 a 45 días
@@ -50,7 +50,7 @@ export default async function Page() {
 
         <section className="max-w-7xl mx-auto px-4 py-10">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-display text-xl font-bold text-gray-900">{products?.length ?? 0} productos disponibles</h2>
+            <h2 className="cg-section-title">{products?.length ?? 0} productos disponibles</h2>
             <Link href="/catalogo?tipo=torico" className="text-sm text-primary-600 font-semibold hover:underline">Ver con filtros →</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
@@ -59,7 +59,7 @@ export default async function Page() {
         </section>
 
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
-          <h2 className="font-display text-2xl font-bold text-gray-900">Lentes tóricos en República Dominicana</h2>
+          <h2 className="cg-section-title">Lentes tóricos en República Dominicana</h2>
           <p>El astigmatismo es uno de los problemas de visión más comunes en RD y el mundo. Se produce cuando la córnea tiene una forma ligeramente ovalada en lugar de perfectamente esférica, causando visión borrosa a cualquier distancia. Los <strong>lentes tóricos</strong> son la solución específica para corregirlo.</p>
           <p>En ContactGo tenemos los mejores lentes tóricos disponibles: <strong>ACUVUE® Oasys for Astigmatism</strong> (los más vendidos del mundo para astigmatismo), <strong>Biofinity® Toric</strong> y <strong>AIR OPTIX® for Astigmatism</strong>. Todos son de silicona hidrogel premium con tecnología estabilizadora que mantiene el lente orientado correctamente.</p>
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Qué necesito para pedir lentes tóricos?</h3>

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 const VALORES = [
   { icon: Eye, title: 'Especialización', desc: 'Nuestro catálogo se concentra en lentes de contacto, soluciones y gotas. Esto nos permite organizar la información por marca, diseño y tipo de receta.' },
-  { icon: PackageCheck, title: 'Productos sellados', desc: 'Los productos se entregan en su empaque original y sellado. Trabajamos a través de canales de distribución autorizados.' },
+  { icon: PackageCheck, title: 'Productos sellados', desc: 'Los productos se entregan en su empaque original y sellado. Trabajamos a través de proveedores de productos originales.' },
   { icon: Truck, title: 'Entrega según el producto', desc: 'El plazo depende del diseño y del destino. Los esféricos suelen tardar 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el interior; los multifocales, 1-5 días; y los tóricos, 25-45 días.' },
   { icon: Headset, title: 'Atención directa', desc: 'Puedes comunicarte con nuestro equipo para consultar disponibilidad, compartir tu receta y aclarar dudas antes de realizar tu pedido.' },
 ]
@@ -74,7 +74,7 @@ export default function SobreNosotrosPage() {
         <section className="bg-[#F3F6F8] border-b border-slate-200 text-[#002455] py-16 md:py-20 px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <span className="inline-block bg-white text-[#002455] text-xs font-semibold border border-slate-200 px-3 py-1 rounded-full mb-4 tracking-widest uppercase">Especialistas en lentes de contacto</span>
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-5 leading-tight">
+            <h1 className="cg-page-title mb-5 leading-tight">
               Quiénes somos
             </h1>
             <p className="text-slate-600 text-lg max-w-xl mx-auto leading-relaxed">
@@ -97,7 +97,7 @@ export default function SobreNosotrosPage() {
 
         {/* Historia */}
         <section className="max-w-3xl mx-auto px-4 py-16">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Nuestra historia</h2>
+          <h2 className="cg-section-title mb-6">Nuestra historia</h2>
           <div className="space-y-4 text-gray-600 leading-relaxed">
             <p>
               ContactGo es una tienda en línea dominicana enfocada en lentes de contacto. La idea es facilitar una parte concreta de la compra: consultar marcas y diseños, revisar la información de cada producto y gestionar el pedido sin tener que desplazarse para cada consulta.
@@ -140,7 +140,7 @@ export default function SobreNosotrosPage() {
         <section className="bg-gray-50 py-16 px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-3 text-center">Marcas disponibles</h2>
-            <p className="text-gray-500 text-sm text-center mb-10">En el catálogo encontrarás productos de los siguientes fabricantes, a través de canales de distribución autorizados.</p>
+            <p className="text-gray-500 text-sm text-center mb-10">En el catálogo encontrarás productos de los siguientes fabricantes, a través de proveedores de productos originales.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {MARCAS.map(m => (
                 <div key={m.nombre} className="bg-white rounded-xl border border-slate-200 p-5 flex gap-4 items-start">

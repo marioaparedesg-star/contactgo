@@ -9,7 +9,7 @@ import type { Metadata } from 'next'
 
 export const metadata = {
   title: 'Lentes ACUVUE en República Dominicana | ContactGo',
-  description: 'Lentes ACUVUE® en República Dominicana. OASYS, 1-DAY MOIST y Multifocal. Entrega según tipo de lente y destino, a través de canales de distribución autorizados.',
+  description: 'Lentes ACUVUE® en República Dominicana. OASYS, 1-DAY MOIST y Multifocal. Entrega según tipo de lente y destino, a través de proveedores de productos originales.',
   alternates: { canonical: 'https://www.contactgo.net/marca/acuvue' },
   openGraph: {
     title: 'Lentes ACUVUE en RD | ContactGo',
@@ -31,11 +31,11 @@ export default async function AcuvuePage() {
       <main className="pb-20">
         <section className="bg-gradient-to-br from-teal-600 to-teal-600 text-white py-14 px-4 text-center">
           <p className="text-primary-200 text-sm font-semibold uppercase tracking-wide mb-2">Marca oficial</p>
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">Lentes Acuvue en RD</h1>
+          <h1 className="cg-page-title mb-3">Lentes Acuvue en RD</h1>
           <p className="text-primary-100 max-w-xl mx-auto">La marca #1 de lentes de contacto del mundo. Tecnología HYDRACLEAR y BLINK STABILIZED para máxima comodidad.</p>
         </section>
         <section className="max-w-6xl mx-auto px-4 py-12">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Productos Acuvue disponibles</h2>
+          <h2 className="cg-section-title mb-6">Productos Acuvue disponibles</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {(productos??[]).map((p:any) => (
               <Link key={p.id} href={`/producto/${(p as any).slug || p.id}`} className="bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-shadow">

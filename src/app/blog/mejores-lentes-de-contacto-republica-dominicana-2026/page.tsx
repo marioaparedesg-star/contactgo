@@ -103,7 +103,7 @@ export default function Page() {
         <li>Falta de trazabilidad — no puedes reclamar si algo sale mal</li>
       </ul>
 
-      <p>Las marcas legítimas (ACUVUE, Biofinity, Air Optix, Bausch+Lomb, Precision1) tienen distribuidores autorizados en RD y sus productos cuestan lo que cuestan por una razón. En ContactGo trabajamos exclusivamente con estos distribuidores.</p>
+      <p>Las marcas reconocidas (ACUVUE, Biofinity, Air Optix, Bausch+Lomb y Precision1) cuentan con información oficial para identificar sus productos. En ContactGo priorizamos el empaque original sellado y la información de lote y vencimiento visible en cada caja.</p>
 
       <h2>Comparativa rápida de precios (2026)</h2>
       <p>Precios de referencia en pesos dominicanos por caja de 6 lentes (mensuales) o 30 lentes (diarios):</p>

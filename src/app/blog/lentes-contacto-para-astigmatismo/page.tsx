@@ -341,7 +341,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes para astigmatismo — entrega estimada de 25 a 45 días</h3>
-          <p className="text-sm text-gray-600 mb-1">7 modelos tóricos disponibles según catálogo. Trabajamos con canales de distribución autorizados y enviamos a toda RD.</p>
+          <p className="text-sm text-gray-600 mb-1">7 modelos tóricos disponibles según catálogo. Trabajamos con proveedores de productos originales y enviamos a toda RD.</p>
           <p className="text-xs text-gray-400 mb-4">Desde RD$4,150 · Pago seguro AZUL · Sin salir de casa</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/toricos" className="inline-flex items-center justify-center gap-2 bg-purple-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors text-sm">
@@ -358,7 +358,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes tóricos con entrega estimada de 25 a 45 días</h3>
-          <p className="text-sm text-gray-500 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
+          <p className="text-sm text-gray-500 mb-4">Productos originales de marcas reconocidas · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>

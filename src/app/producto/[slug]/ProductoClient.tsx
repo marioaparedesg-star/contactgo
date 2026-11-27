@@ -854,7 +854,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   </div>
                 )}
                 <span className="absolute top-3 left-3 text-[10px] font-semibold text-slate-600 bg-white/95 border border-slate-200 px-3 py-1 rounded-full">
-                  Distribución oficial
+                  Empaque original
                 </span>
                 {(product as any).proteccion_uv && (
                   <span className="absolute top-3 right-3 text-[10px] font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full">
@@ -868,8 +868,8 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BLOQUE 2: NOMBRE + PRECIO */}
             <div className="px-4 pt-3 pb-2">
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.16em]">{product.marca}</p>
-              <h1 className="text-[22px] sm:text-2xl font-bold text-slate-900 leading-[1.2] mt-1">{product.nombre}</h1>
+              <p className="text-xs font-bold text-slate-600 uppercase tracking-[0.12em]">{product.marca}</p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mt-1">{product.nombre}</h1>
 
               {/* Reviews */}
               {(product as any).avg_rating && (
@@ -892,7 +892,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 hover:text-primary-700 mt-2">
                 <Scale className="w-3.5 h-3.5" /> Comparar con otros lentes
               </Link>
-              {product.contenido && <p className="text-[11px] text-gray-400 mt-0.5">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>}
+              {product.contenido && <p className="text-xs text-gray-500 mt-1">{product.contenido}{product.reemplazo ? ` · ${product.reemplazo}` : ''}</p>}
 
               {/* Disponibilidad + entrega */}
               <div className="flex items-center gap-3 mt-2 flex-wrap">
@@ -924,9 +924,9 @@ export default function ProductoClient({ product, variants }: Props) {
 
             {/* BLOQUE 3: TRUST BAR — scroll horizontal */}
             <div className="grid grid-cols-3 gap-2 px-4 py-3 border-y border-slate-100 bg-slate-50/70">
-              <div className="flex flex-col items-center gap-1 text-center"><span className="text-[11px] font-semibold text-slate-700">Distribución oficial</span><span className="text-[10px] text-slate-500">Producto de marca</span></div>
-              <div className="flex flex-col items-center gap-1 text-center"><AzulLogo size="xs" /><span className="text-[10px] text-slate-500">Pago seguro</span></div>
-              <div className="flex flex-col items-center gap-1 text-center"><span className="text-[11px] font-semibold text-slate-700">Envíos nacionales</span><span className="text-[10px] text-slate-500">A todo RD</span></div>
+              <div className="flex flex-col items-center gap-1 text-center"><span className="text-[11px] font-semibold text-slate-700">Distribución oficial</span><span className="text-xs text-slate-600">Sellado de fábrica</span></div>
+              <div className="flex flex-col items-center gap-1 text-center"><AzulLogo size="xs" /><span className="text-xs text-slate-600">Pago seguro</span></div>
+              <div className="flex flex-col items-center gap-1 text-center"><span className="text-[11px] font-semibold text-slate-700">Envíos nacionales</span><span className="text-xs text-slate-600">A todo RD</span></div>
             </div>
 
             {/* BLOQUE 4: PERSONALIZACIÓN — se conserva intacto el selector de colores */}
@@ -982,7 +982,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   <span>Entiendo que este lente tórico es bajo pedido, tarda de 25 a 45 días y puedo cancelar dentro de las primeras 48 horas desde la confirmación.</span>
                 </label>
               )}
-              <EntregaHoy especial={getEntregaInfo.especial} />
+              <EntregaHoy especial={getEntregaInfo.especial} tipo={tipo} />
               <button onClick={() => handleAdd()} disabled={product.stock===0||sinVariante}
                 className="w-full bg-[#01B2B7] hover:bg-[#018E92] active:scale-[0.99] disabled:opacity-40 text-white font-semibold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition-colors">
                 <ShoppingCart className="w-5 h-5" />
@@ -1065,19 +1065,19 @@ export default function ProductoClient({ product, variants }: Props) {
               <div className="grid grid-cols-2 gap-2 mt-3">
                 <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-lg px-2.5 py-2">
                   
-                  <span className="text-[10px] text-gray-600 font-medium leading-tight">Directo del fabricante</span>
+                  <span className="text-xs text-gray-700 font-semibold leading-snug">Producto original</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
                   
-                  <span className="text-[10px] text-gray-600 font-medium leading-tight">Entrega rápida</span>
+                  <span className="text-xs text-gray-700 font-semibold leading-snug">Entrega a domicilio</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
                   <AzulLogo size="xs" />
-                  <span className="text-[10px] text-gray-600 font-medium leading-tight">Pago AZUL</span>
+                  <span className="text-xs text-gray-700 font-semibold leading-snug">Pago AZUL</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
                   
-                  <span className="text-[10px] text-gray-600 font-medium leading-tight">7 días dev.</span>
+                  <span className="text-xs text-gray-700 font-semibold leading-snug">Política de devolución</span>
                 </div>
               </div>
             </div>
@@ -1117,7 +1117,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   {[{l:'Comodidad durante el uso'},{l:'Hidratación'},{l:'Visión nítida y estable'},{l:(product as any).proteccion_uv?'Protección UV':'Calidad de fabricante'}].map(b => (
                     <div key={b.l} className="flex flex-col items-center gap-1 bg-slate-50 rounded-lg p-2 border border-slate-100 text-center">
                       
-                      <p className="text-[9px] font-semibold text-gray-600 leading-tight">{b.l}</p>
+                      <p className="text-[11px] font-semibold text-gray-700 leading-snug">{b.l}</p>
                     </div>
                   ))}
                 </div>
@@ -1252,7 +1252,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   })()}
 
                   <div className="border-t border-gray-100 pt-2 mt-1 space-y-1">
-                    <p className="text-[10px] text-gray-500 font-medium">Producto de distribución oficial</p>
+                    <p className="text-[10px] text-gray-500 font-medium">Authorized Seller</p>
                     <p className="text-[10px] text-gray-400 font-medium inline-flex items-center gap-1">
                       <AzulLogo size="xs" /> Pago seguro con AZUL
                     </p>
@@ -1280,7 +1280,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 {icon:'',t:'Envío gratis',d:'Desde RD$2,500', azul:false},
                 {icon:null,t:'Pago AZUL',d:'100% protegido', azul:true},
                 {icon:'↩️',t:'7 días dev.',d:'Sin preguntas', azul:false},
-                {icon:'✅',t:'Originales',d:'Dist. oficial', azul:false},
+                {icon:'✅',t:'Originales',d:'Authorized seller', azul:false},
               ] as any[]).map(b => (
                 <div key={b.t} className="flex items-center gap-2.5">
                   {b.azul ? <AzulLogo size="md" /> : <span className="text-2xl shrink-0">{b.icon}</span>}

@@ -20,7 +20,7 @@ export default function EnviosPage() {
       <Navbar />
       <main className="pb-20">
         <section className="bg-gradient-to-br from-teal-600 to-teal-600 text-white py-14 px-4 text-center">
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">Envíos y Entregas</h1>
+          <h1 className="cg-page-title mb-3">Envíos y Entregas</h1>
           <p className="text-primary-100 max-w-xl mx-auto">Entregamos tus lentes de contacto en toda la República Dominicana de forma rápida y segura.</p>
         </section>
 

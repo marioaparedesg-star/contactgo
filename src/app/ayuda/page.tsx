@@ -106,7 +106,7 @@ const SECCIONES = [
     id: 'garantias', emoji: '✅', titulo: 'Garantías y Autenticidad',
     color: 'bg-green-50 border-green-100', badge: 'bg-green-100 text-green-700',
     items: [
-      { q: '¿Son certificados los productos?', a: 'Trabajamos con marcas reconocidas y canales de distribución autorizados. Los productos se entregan sellados y en su empaque original, con garantía de autenticidad.' },
+      { q: '¿Son certificados los productos?', a: 'Trabajamos con marcas reconocidas y proveedores de productos originales. Los productos se entregan sellados y en su empaque original, con garantía de autenticidad.' },
       { q: '¿Los lentes están dentro de su fecha de vencimiento?', a: 'Sí, todos los productos tienen al menos 18 meses de vida útil desde la fecha de compra.' },
       { q: '¿Qué garantía tienen los lentes de contacto?', a: 'Si detectas algún defecto de fabricación (rotura, deformación), lo reemplazamos sin costo.' },
     ],
@@ -142,7 +142,7 @@ export default function AyudaPage() {
       <main className="max-w-3xl mx-auto px-4 py-8 pb-24">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-black text-gray-900 mb-2">Centro de Ayuda</h1>
+          <h1 className="cg-page-title mb-2">Centro de Ayuda</h1>
           <p className="text-gray-500">Todo sobre envíos, uso correcto, cuidado ocular y compras en ContactGo.</p>
         </div>
 
@@ -164,7 +164,7 @@ export default function AyudaPage() {
               <div className={`border rounded-2xl overflow-hidden ${s.color}`}>
                 <div className="px-5 py-4 flex items-center gap-3">
                   <span className="text-2xl">{s.emoji}</span>
-                  <h2 className="font-black text-gray-900 text-xl">{s.titulo}</h2>
+                  <h2 className="cg-section-title">{s.titulo}</h2>
                   <span className={`ml-auto text-xs font-semibold px-2.5 py-1 rounded-full ${s.badge}`}>
                     {s.items.length} preguntas
                   </span>
@@ -192,7 +192,7 @@ export default function AyudaPage() {
         {/* CTA WhatsApp */}
         <div className="mt-10 bg-green-50 border border-green-100 rounded-2xl p-6 text-center">
           <p className="text-2xl mb-2">💬</p>
-          <h3 className="font-black text-gray-900 text-lg mb-1">¿No encontraste tu respuesta?</h3>
+          <h3 className="cg-card-title mb-1">¿No encontraste tu respuesta?</h3>
           <p className="text-gray-500 text-sm mb-4">Lunes a viernes · 9:00 a. m. – 9:00 p. m. · Sábados · 9:00 a. m. – 6:00 p. m. · Domingos cerrado</p>
           <a href="https://wa.me/18096942268?text=Hola%20ContactGo%2C%20tengo%20una%20pregunta"
             target="_blank" rel="noopener noreferrer"

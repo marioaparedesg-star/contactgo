@@ -17,7 +17,7 @@ const meta: BlogMeta = {
     { q: '¿Es peligroso usar lentes de contacto falsificados?',
       a: 'Sí, muy peligroso. Los lentes falsos pueden tener materiales no aprobados, curvatura incorrecta, contaminación bacteriana y falta de esterilización adecuada. Pueden causar desde irritación leve hasta infecciones graves como queratitis o úlceras corneales que amenazan la visión.' },
     { q: '¿Dónde puedo verificar si una tienda vende lentes de contacto originales en RD?',
-      a: 'Las marcas líderes (Acuvue, Biofinity, Air Optix, Bausch+Lomb) tienen distribuidores autorizados específicos en República Dominicana. Pregunta directamente a la tienda quién es su distribuidor y verifica que trabajen con las casas matrices oficiales, no con importadores no autorizados.' },
+      a: 'Las marcas líderes (Acuvue, Biofinity, Air Optix, Bausch+Lomb) publican información oficial sobre sus productos. Revisa el empaque, el número de lote y la fecha de vencimiento; ante dudas, consulta directamente al fabricante.' },
   ],
   relatedSlugs: ['lentes-contacto-originales-vs-falsificados-rd', 'mejores-lentes-de-contacto-republica-dominicana-2026', 'cuanto-cuestan-lentes-contacto-rd'],
 }
@@ -40,7 +40,7 @@ export default function Page() {
       <h2>5 señales de que un lente de contacto puede ser falso</h2>
 
       <h3>1. Precio drásticamente por debajo del mercado</h3>
-      <p>Si una caja de ACUVUE Oasys que normalmente cuesta RD$4,000-4,500 aparece por RD$1,500, algo no cuadra. Los distribuidores autorizados tienen costos fijos por su cadena de suministro oficial — no pueden vender tan barato y seguir siendo legítimos.</p>
+      <p>Si una caja de ACUVUE Oasys que normalmente cuesta RD$4,000-4,500 aparece por RD$1,500, algo no cuadra. Un precio muy por debajo del habitual no demuestra por sí solo que un producto sea falso, pero sí es una señal para revisar cuidadosamente el origen, el empaque y la trazabilidad.</p>
 
       <h3>2. Empaque sin sellos de fábrica intactos</h3>
       <p>Cada lente original viene en un blister individual sellado herméticamente por el fabricante. Si el sello está roto, pegado de forma irregular, o el blister se ve &quot;reempacado&quot;, es señal de alarma.</p>
@@ -49,7 +49,7 @@ export default function Page() {
       <p>Todo producto original trae impreso: número de lote, fecha de fabricación, fecha de vencimiento y datos del fabricante. Si esta información está borrosa, ausente, o parece agregada después (sticker mal pegado), desconfía.</p>
 
       <h3>4. Vendedor sin trazabilidad clara</h3>
-      <p>Pregúntale al vendedor: &quot;¿quién es su distribuidor autorizado en RD?&quot;. Un negocio legítimo responde sin titubear. Si evade la pregunta o no tiene respuesta clara, es señal de que el producto no viene de la cadena oficial.</p>
+      <p>Pregúntale al vendedor: &quot;¿quién es su proveedor de productos originales en RD?&quot;. Un negocio legítimo responde sin titubear. Si evade la pregunta o no tiene respuesta clara, es señal de que el producto no viene de la cadena oficial.</p>
 
       <h3>5. Diseño de caja o tipografía &quot;ligeramente diferente&quot;</h3>
       <p>Las falsificaciones a veces replican el diseño casi perfecto pero con pequeñas diferencias: tipografía distinta, colores ligeramente apagados, calidad de impresión inferior. Compara con fotos oficiales del fabricante si tienes dudas.</p>
@@ -66,7 +66,7 @@ export default function Page() {
 
       <h2>Cómo comprar con confianza en RD</h2>
       <ol>
-        <li><strong>Verifica que el vendedor tenga distribución autorizada.</strong> Las marcas líderes (ACUVUE de Johnson & Johnson, Biofinity de CooperVision, Air Optix de Alcon, Bausch+Lomb) tienen distribuidores oficiales específicos en el país.</li>
+        <li><strong>Verifica que el vendedor tenga distribución autorizada.</strong> ACUVUE (Johnson & Johnson), Biofinity (CooperVision), Air Optix (Alcon) y Bausch+Lomb son marcas reconocidas con información oficial para identificar sus productos.</li>
         <li><strong>Desconfía de descuentos extremos</strong> (más de 40-50% bajo el precio de mercado promedio).</li>
         <li><strong>Pide ver el empaque antes de comprar</strong> si es posible, o fotos claras del blister sellado si es compra online.</li>
         <li><strong>Compra en tiendas con reputación verificable</strong> — reseñas reales en Google, tiempo operando, presencia establecida.</li>
@@ -74,7 +74,7 @@ export default function Page() {
       </ol>
 
       <h2>Cómo trabajamos en ContactGo</h2>
-      <p>En ContactGo trabajamos exclusivamente con distribuidores autorizados en República Dominicana de las marcas líderes mundiales. Cada producto llega con su empaque original sellado de fábrica, información completa de lote y vencimiento, y garantía del fabricante. No manejamos importaciones paralelas ni productos de origen incierto.</p>
+      <p>En ContactGo ofrecemos productos de marcas reconocidas en su empaque original sellado, con la información de lote y vencimiento impresa en cada caja. fabricante. No manejamos importaciones paralelas ni productos de origen incierto.</p>
 
       <p>Si tienes dudas sobre la autenticidad de un producto que compraste en otro lugar, o quieres verificar antes de comprar con nosotros, escríbenos por WhatsApp al <strong>(809) 694-2268</strong>. Puedes revisar nuestro <Link href="/catalogo">catálogo completo</Link> con marcas 100% originales.</p>
     </BlogArticle>

@@ -15,7 +15,7 @@ export default function AvisoLegalPage() {
       <Navbar />
       <main id="main-content" className="max-w-2xl mx-auto px-4 py-12 pb-24">
         <div className="mb-4"><Link href="/" className="text-sm text-primary-600 font-semibold">← Inicio</Link></div>
-        <h1 className="font-display text-3xl font-bold text-gray-900 mb-2">Aviso Legal</h1>
+        <h1 className="cg-page-title text-gray-900 mb-2">Aviso Legal</h1>
         <p className="text-gray-400 text-sm mb-8">Última actualización: 19 de noviembre de 2026</p>
 
         <div className="space-y-6 text-sm leading-relaxed text-gray-600">

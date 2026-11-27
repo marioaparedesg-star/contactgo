@@ -34,7 +34,7 @@ export default async function Page() {
         </nav>
         <section className="bg-gradient-to-br from-pink-600 via-purple-600 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Con y sin graduación</span>
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto de Color en RD</h1>
+          <h1 className="cg-page-title mb-4">Lentes de Contacto de Color en RD</h1>
           <p className="text-pink-100 text-lg max-w-xl mx-auto">FreshLook Colorblends, Air Optix Colors y más. Cambia tu mirada con colores naturales y vibrantes. Los lentes de color planos se entregan al día siguiente.</p>
         </section>
         <section className="max-w-7xl mx-auto px-4 py-10">
@@ -43,13 +43,13 @@ export default async function Page() {
           </div>
         </section>
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
-          <h2 className="font-display text-2xl font-bold text-gray-900">Lentes de color en República Dominicana</h2>
+          <h2 className="cg-section-title">Lentes de color en República Dominicana</h2>
           <p>Los lentes de contacto de color son una forma segura y cómoda de cambiar o realzar el color de tus ojos. En ContactGo manejamos las marcas más populares: <strong>FreshLook® Colorblends</strong> de Alcon (con 12 colores disponibles) y <strong>AIR OPTIX® Colors</strong>, perfectos para ojos oscuros dominicanos.</p>
           <p>Disponibles con y sin graduación. Si tienes miopía, astigmatismo o hipermetropía, puedes usar lentes de color con tu prescripción. Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta</Link> para encontrar el tuyo.</p>
         </section>
 
         <section className="max-w-3xl mx-auto px-4 py-10 border-t border-gray-100">
-          <h2 className="font-display text-xl font-bold text-gray-900 mb-6">Preguntas frecuentes</h2>
+          <h2 className="cg-section-title mb-6">Preguntas frecuentes</h2>
           <div className="space-y-4">
             {[
               { q: '¿Los lentes de color son seguros?', a: 'Sí, siempre que sean lentes certificados de marcas reconocidas como FreshLook (Alcon) o Air Optix Colors. Nunca compres lentes de color sin certificación médica o de vendedores no autorizados.' },
