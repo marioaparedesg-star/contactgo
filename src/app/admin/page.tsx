@@ -101,6 +101,7 @@ export default function AdminDashboard() {
   const [cargandoEtapa, setCargandoEtapa] = useState(false)
   const [navMovilAbierto, setNavMovilAbierto] = useState(false)
   const [ordenProductos, setOrdenProductos] = useState<'unidades'|'facturacion'>('unidades')
+  const [mostrarIndicadores, setMostrarIndicadores] = useState(false)
 
   // ── Estado del selector de fechas ──
   const [preset, setPreset] = useState<PresetKey>('mes_actual')
@@ -683,20 +684,26 @@ export default function AdminDashboard() {
           { key:null, label:'Ticket promedio', val:fmt(data?.ticketProm??0), sub:'por pedido vendido', color:'text-gray-900', accion:undefined },
           { key:null, label:'Clientes nuevos', val:String(data?.clientesNuevosPeriodo??0), sub:`${data?.clientes??0} clientes registrados`, color:'text-cyan-700', accion:()=>router.push('/M1Alexander/registrados') },
           { key:'etapa', label:'Pedidos activos', val:String(pedidosActivosTotal), sub:'en proceso', color:'text-indigo-600', accion:()=>document.getElementById('pedidos-por-etapa')?.scrollIntoView({behavior:'smooth'}) },
-        ].map(({key,label,val,sub,color,accion})=>{
+        ].filter((_, index) => mostrarIndicadores || index < 7).map(({key,label,val,sub,color,accion})=>{
           const abierta = key && detalleAbierto===key
           const Tag = accion ? 'button' : 'div'
           return (
             <Tag key={label} onClick={accion}
               className={`text-left bg-white rounded-2xl border shadow-sm p-5 transition-all min-h-[116px] ${abierta?'border-primary-400 ring-2 ring-primary-100':'border-slate-100'} ${accion?'hover:-translate-y-0.5 hover:shadow-md active:scale-[0.99]':''}`}>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.12em]">{label}</p>
+              <p className="text-xs font-bold text-slate-600 uppercase tracking-wide">{label}</p>
               <p className={`text-xl sm:text-2xl font-black tracking-tight mt-2 ${color}`}>{val}</p>
-              <p className="text-[10px] text-gray-400 mt-0.5">{sub}</p>
+              <p className="text-xs text-gray-600 mt-1 leading-snug">{sub}</p>
             </Tag>
           )
         })}
       </div>
-      <p className="text-[11px] text-gray-400 -mt-2 px-1">
+      <div className="flex justify-center -mt-1">
+        <button type="button" onClick={() => setMostrarIndicadores(value => !value)} aria-expanded={mostrarIndicadores} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#002455] hover:bg-slate-50 transition-colors">
+          {mostrarIndicadores ? "Mostrar resumen principal" : "Ver todos los indicadores"}
+          <ChevronDown className={`w-4 h-4 transition-transform ${mostrarIndicadores ? "rotate-180" : ""}`} />
+        </button>
+      </div>
+      <p className="text-xs text-gray-500 -mt-2 px-1">
         <b>Vendido</b> = pedidos del período, se hayan cobrado o no · <b>Cobrado</b> = dinero recibido durante el período · <b>Por cobrar</b> = cartera pendiente total, incluidos pedidos de otros períodos.
       </p>
 
