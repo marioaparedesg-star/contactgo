@@ -97,8 +97,8 @@ export default async function CatalogoPage() {
         </nav>
 
         <div className="mb-4">
-          <h1 className="font-display text-2xl font-bold tracking-tight text-[#002455]">Encuentra tus lentes</h1>
-          <p className="mt-1 text-sm text-slate-500">Explora nuestra selección de lentes de contacto y cuidado visual.</p>
+          <h1 className="cg-page-title">Encuentra tus lentes</h1>
+          <p className="mt-2 cg-body">Explora nuestra selección de lentes de contacto y cuidado visual.</p>
         </div>
 
         {/* CatalogoFiltros: navega via URL. CatalogoGrid: filtra client-side con useSearchParams */}
