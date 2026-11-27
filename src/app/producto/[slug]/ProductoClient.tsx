@@ -23,7 +23,7 @@ import { getEntrega, getFechaEntrega } from '@/lib/delivery-times'
 import EntregaHoy from '@/components/shop/EntregaHoy'
 import { buildSPHOptions } from '@/components/shop/SPHPicker'
 import EyeFlowSelector, { type EyeFlowState, initialEyeFlow } from '@/components/shop/EyeFlowSelector'
-import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES, FRECUENCIAS, mejorFrecuencia } from '@/lib/subscription-utils'
+import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES, FRECUENCIAS } from '@/lib/subscription-utils'
 
 const TIPO_LABELS: Record<string, string> = {
   esferico: 'Esférico', torico: 'Tórico', multifocal: 'Multifocal',
@@ -902,14 +902,14 @@ export default function ProductoClient({ product, variants }: Props) {
 
               {/* Disponibilidad + entrega */}
               <div className="flex items-center gap-3 mt-2 flex-wrap">
-                <span className="text-xs font-bold text-green-600 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-xs font-bold text-slate-600 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#01B2B7]" />
                   Disponible
                 </span>
                 {(()=>{
                   const fi = getFechaEntrega(tipo, product.nombre, eyeFlow.sph)
                   const ei = getEntrega(tipo, product.nombre, eyeFlow.sph)
-                  return <span className={`text-xs font-semibold ${ei.especial ? 'text-amber-600' : 'text-green-600'}`}>{fi.texto}</span>
+                  return <span className={`text-xs font-semibold ${ei.especial ? 'text-slate-600' : 'text-slate-600'}`}>{fi.texto}</span>
                 })()}
               </div>
             </div>
@@ -1041,7 +1041,7 @@ export default function ProductoClient({ product, variants }: Props) {
             {/* COL 1: GALERÍA DESKTOP */}
             <div className="sticky top-24 self-start">
               <div className="group relative rounded-2xl overflow-hidden bg-white border border-gray-200 aspect-square">
-                <span className="absolute top-3 left-3 z-10 text-[9px] font-bold text-green-700 bg-white border border-green-100 px-2 py-1 rounded-full">
+                <span className="absolute top-3 left-3 z-10 text-[9px] font-bold text-slate-600 bg-white border border-slate-200 px-2 py-1 rounded-full">
                   Distribución oficial
                 </span>
                 {imagenActual ? (
@@ -1109,12 +1109,12 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
                 {product.contenido && <p className="text-xs text-gray-400 mt-1">{product.contenido}{product.reemplazo?` · ${product.reemplazo}`:''}</p>}
                 <div className="flex items-center gap-3 mt-2 flex-wrap">
-                  <span className="text-sm font-bold text-green-600 flex items-center gap-1.5">
+                  <span className="text-sm font-bold text-slate-600 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-green-500" />Disponible
                   </span>
                   {(()=>{
                     const fi=getFechaEntrega(tipo,product.nombre); const ei=getEntrega(tipo,product.nombre)
-                    return <span className={`text-xs font-semibold ${ei.especial?'text-amber-600':'text-green-600'}`}>{ei.icono} {fi.texto}</span>
+                    return <span className={`text-xs font-semibold ${'text-slate-700'}`}>{ei.icono} {fi.texto}</span>
                   })()}
                 </div>
               </div>
@@ -1181,7 +1181,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   {!isLente && <div className="text-center py-2"><p className="text-2xl font-bold tracking-tight text-slate-950">RD${price.toLocaleString()}</p>{product.contenido && <p className="text-xs text-gray-400 mt-0.5">{product.contenido}</p>}</div>}
                   <div className="bg-slate-50 rounded-lg px-3 py-2 space-y-1 border border-slate-100">
                     {(()=>{const fi=getFechaEntrega(tipo,product.nombre);const ei=getEntrega(tipo,product.nombre);return(<>
-                      <p className={`text-xs font-semibold flex items-center gap-1.5 ${ei.especial?'text-amber-600':'text-green-600'}`}>{fi.texto}</p>
+                      <p className={`text-xs font-semibold flex items-center gap-1.5 ${ei.especial?'text-slate-600':'text-green-600'}`}>{fi.texto}</p>
                       <p className="text-[10px] text-slate-600 font-medium">{suscripcion?'Recordatorio por WhatsApp':'Envío a todo RD'}</p>
                     </>)})()}
                   </div>
@@ -1224,8 +1224,7 @@ export default function ProductoClient({ product, variants }: Props) {
 
                   {/* ── Reposición — compacta, 4 cuadritos, calculada según ESTE producto ── */}
                   {isLente && (() => {
-                    const recomendada = mejorFrecuencia((product as any).dias_uso)
-                    const opciones: Array<{val:string|null; label:string}> = [
+                                        const opciones: Array<{val:string|null; label:string}> = [
                       {val:null, label:'Única'},
                       {val:'mensual', label:FRECUENCIAS.mensual.label.replace('Cada ','')},
                       {val:'trimestral', label:FRECUENCIAS.trimestral.label.replace('Cada ','')},
