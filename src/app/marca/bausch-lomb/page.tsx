@@ -31,11 +31,11 @@ export default async function BauschLombPage() {
       <main className="pb-20">
         <section className="bg-gradient-to-br from-red-700 to-orange-600 text-white py-14 px-4 text-center">
           <p className="text-red-200 text-sm font-semibold uppercase tracking-wide mb-2">Marca oficial</p>
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">Lentes Bausch+Lomb en RD</h1>
+          <h1 className="cg-page-title mb-3">Lentes Bausch+Lomb en RD</h1>
           <p className="text-red-100 max-w-xl mx-auto">170 años de innovación en salud visual. Bausch+Lomb Ultra y ReNu Advanced disponibles en República Dominicana.</p>
         </section>
         <section className="max-w-6xl mx-auto px-4 py-12">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Productos Bausch+Lomb disponibles</h2>
+          <h2 className="cg-section-title mb-6">Productos Bausch+Lomb disponibles</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {(productos??[]).map((p:any) => (
               <Link key={p.id} href={`/producto/${(p as any).slug || p.id}`} className="bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-shadow">
