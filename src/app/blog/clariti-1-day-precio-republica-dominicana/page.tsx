@@ -80,7 +80,7 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$4,450</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
 
-          <p className="text-[11px] text-gray-400 text-center">*Canales de distribución autorizados · Entrega según tipo de lente y destino</p>
+          <p className="text-[11px] text-gray-400 text-center">*Productos originales de marcas reconocidas · Entrega según tipo de lente y destino</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -168,7 +168,7 @@ export default function Page() {
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Entrega de clariti 1 day según tipo de lente y destino</h3>
-          <p className="text-sm text-gray-600 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
+          <p className="text-sm text-gray-600 mb-4">Productos originales de marcas reconocidas · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
             <Link href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta</Link>
