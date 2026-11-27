@@ -1,27 +1,3 @@
-// ============================================================
-// ContactGo — GET /api/cron/reporte-diario
-// Envía por email a info@contactgo.net el reporte de ventas del día,
-// todos los días a las 9:00pm hora de República Dominicana — incluso
-// si no hubo ventas (se envía en cero, nunca se omite).
-//
-// REDISEÑO (2026-08-13): Mario reportó que el reporte se veía "raro"
-// y difícil de entender. El problema real: mezclaba 2 historias
-// distintas como si fueran una — "dinero cobrado hoy" (cash_movements,
-// puede incluir pagos de pedidos viejos) y "pedidos generados hoy"
-// (orders, puede incluir pedidos aún sin pagar) — números que casi
-// nunca coinciden exactamente, sin explicar por qué. Un gerente de
-// ventas quiere UNA cifra clara arriba de todo con contexto (¿subió o
-// bajó vs ayer?), no dos narrativas peleando por atención.
-//
-// Estructura nueva: Ventas del día (pedidos pagados hoy, una sola
-// fuente de verdad) con tendencia vs ayer y vs promedio de 7 días →
-// KPIs secundarios en una fila → avance del mes → top productos →
-// pedidos del día → por cobrar (con los más viejos resaltados).
-//
-// Zona horaria: RD es UTC-4 todo el año (sin horario de verano).
-// El cron corre a la 01:00 UTC, que equivale a las 21:00 (9pm) hora RD
-// del mismo día calendario dominicano.
-// ============================================================
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
@@ -29,263 +5,441 @@ import { Resend } from 'resend'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-function getSb() {
-  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+type Row = Record<string, any>
+
+const TZ = 'America/Santo_Domingo'
+const PAGE_SIZE = 1000
+const fmt = (value: number) => 'RD$' + Math.round(Number(value || 0)).toLocaleString('es-DO')
+const fmtShort = (value: number) => {
+  const n = Number(value || 0)
+  if (Math.abs(n) >= 1000000) return 'RD$' + (n / 1000000).toFixed(2) + ' MM'
+  if (Math.abs(n) >= 1000) return 'RD$' + (n / 1000).toFixed(1) + ' mil'
+  return fmt(n)
+}
+const esc = (value: unknown) => String(value ?? '').replace(/[&<>"']/g, (c) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+}[c] as string))
+const sum = (rows: Row[], field = 'monto') => rows.reduce((total, row) => total + Number(row[field] || 0), 0)
+const pct = (current: number, previous: number) => previous > 0 ? Math.round(((current - previous) / previous) * 100) : null
+
+async function fetchAll<T>(makeQuery: () => any): Promise<T[]> {
+  const result: T[] = []
+  for (let offset = 0; offset < 100000; offset += PAGE_SIZE) {
+    const { data, error } = await makeQuery().range(offset, offset + PAGE_SIZE - 1)
+    if (error) throw new Error(error.message)
+    const page = (data ?? []) as T[]
+    result.push(...page)
+    if (page.length < PAGE_SIZE) return result
+  }
+  throw new Error('La consulta superó el límite de paginación del reporte.')
 }
 
-const fmt = (n: number) => `RD$${Math.round(n).toLocaleString('es-DO')}`
-const fmtCorto = (n: number) => n >= 1000 ? `RD$${(n/1000).toFixed(1)}K` : fmt(n)
+function dateLabel(value: string | Date, options: Intl.DateTimeFormatOptions = {}) {
+  return new Date(value).toLocaleString('es-DO', { timeZone: TZ, ...options })
+}
+function daysAgo(value: string | null | undefined) {
+  if (!value) return 0
+  return Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 86400000))
+}
+function section(title: string, body: string) {
+  return '<section style="background:#fff;border:1px solid #e7edf3;border-radius:14px;padding:19px 20px;margin:0 0 14px">' +
+    '<h2 style="font-size:13px;line-height:1.3;letter-spacing:.45px;text-transform:uppercase;color:#002455;margin:0 0 13px;font-weight:800">' + title + '</h2>' +
+    body + '</section>'
+}
+function metric(label: string, value: string, note = '', color = '#002455') {
+  return '<div style="background:#f7f9fc;border:1px solid #edf1f5;border-radius:11px;padding:13px 12px;min-width:0">' +
+    '<div style="font-size:20px;line-height:1.2;font-weight:850;color:' + color + '">' + value + '</div>' +
+    '<div style="font-size:10px;letter-spacing:.35px;text-transform:uppercase;font-weight:750;color:#64748b;margin-top:5px">' + label + '</div>' +
+    (note ? '<div style="font-size:11px;color:#94a3b8;margin-top:4px">' + note + '</div>' : '') + '</div>'
+}
+function table(headers: string[], rows: string[][]) {
+  const head = '<tr>' + headers.map(h => '<th style="text-align:left;padding:8px 7px;background:#f7f9fc;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #e8edf3">' + h + '</th>').join('') + '</tr>'
+  const body = rows.length
+    ? rows.map(row => '<tr>' + row.map((cell, i) => '<td style="padding:8px 7px;border-bottom:1px solid #f0f3f7;font-size:12px;color:#334155;vertical-align:top;' + (i === row.length - 1 ? 'text-align:right;font-weight:700;white-space:nowrap' : '') + '">' + cell + '</td>').join('') + '</tr>').join('')
+    : '<tr><td colspan="' + headers.length + '" style="padding:13px 7px;color:#94a3b8;font-size:12px;text-align:center">Sin registros en este período.</td></tr>'
+  return '<div style="overflow-x:auto"><table role="presentation" style="width:100%;border-collapse:collapse">' + head + body + '</table></div>'
+}
+function badge(text: string, color = '#475569', bg = '#f1f5f9') {
+  return '<span style="display:inline-block;border-radius:20px;padding:3px 8px;font-size:10px;font-weight:750;color:' + color + ';background:' + bg + '">' + text + '</span>'
+}
 
 export async function GET(req: Request) {
-  const authHeader = req.headers.get('authorization')
-  if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  const secret = process.env.CRON_SECRET
+  if (!secret || req.headers.get('authorization') !== 'Bearer ' + secret) {
+    return NextResponse.json({ error: 'No autorizado o CRON_SECRET no configurado' }, { status: 401 })
+  }
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.RESEND_API_KEY) {
+    return NextResponse.json({ error: 'Falta configuración de Supabase o Resend para el cierre diario.' }, { status: 500 })
   }
 
-  const sb = getSb()
-
-  // ── Fechas clave en calendario dominicano (UTC-4, sin DST) ──────────────
-  const drNow = new Date(Date.now() - 4 * 60 * 60 * 1000)
-  const hoyDR = drNow.toISOString().slice(0, 10)
-  const inicioHoyUTC = `${hoyDR}T04:00:00.000Z`
-  const finHoyUTC = new Date(new Date(inicioHoyUTC).getTime() + 24 * 60 * 60 * 1000).toISOString()
-  const inicioAyerUTC = new Date(new Date(inicioHoyUTC).getTime() - 24 * 60 * 60 * 1000).toISOString()
-  const inicio7diasUTC = new Date(new Date(inicioHoyUTC).getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
-  const inicioMesUTC = `${hoyDR.slice(0, 7)}-01T04:00:00.000Z`
-  const diaDelMes = new Date(inicioHoyUTC).getUTCDate()
-
-  const fechaBonita = new Date(inicioHoyUTC).toLocaleDateString('es-DO', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Santo_Domingo',
+  const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
   })
 
+  // República Dominicana: UTC-4 todo el año. Vercel ejecuta 01:00 UTC = 21:00 RD.
+  const rdNow = new Date(Date.now() - 4 * 3600000)
+  const today = rdNow.toISOString().slice(0, 10)
+  const yesterday = new Date(Date.parse(today + 'T04:00:00.000Z') - 86400000).toISOString().slice(0, 10)
+  const sevenDaysAgo = new Date(Date.parse(today + 'T04:00:00.000Z') - 7 * 86400000).toISOString().slice(0, 10)
+  const dueLimit = new Date(Date.parse(today + 'T04:00:00.000Z') + 7 * 86400000).toISOString().slice(0, 10)
+  const monthStart = today.slice(0, 7) + '-01'
+  const startToday = new Date(today + 'T04:00:00.000Z')
+  const startTomorrow = new Date(startToday.getTime() + 86400000)
+  const startMonthISO = new Date(monthStart + 'T04:00:00.000Z').toISOString()
+  const startTodayISO = startToday.toISOString()
+  const startTomorrowISO = startTomorrow.toISOString()
+  const startSevenDaysISO = new Date(startToday.getTime() - 7 * 86400000).toISOString()
+  const dayOfMonth = Number(today.slice(8, 10))
+  const dateTitle = dateLabel(startToday, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+
   try {
-    // ═══ 1. VENTAS DEL DÍA — única fuente de verdad: cash_movements ═══════
-    // FIX (2026-09-05): antes se basaba en pedidos con pago_estado='pagado'
-    // y pagado_en dentro del rango — eso deja fuera cualquier abono parcial
-    // (un pedido con abono sigue en pago_estado='pendiente' aunque ya se
-    // haya cobrado parte real). Ahora se lee de cash_movements (categoría
-    // 'venta'), la misma fuente que ya usa Caja, el dashboard y el ERP
-    // Dashboard — para que este reporte por fin cuadre con esas pantallas.
-    const hoyStr   = hoyDR
-    const ayerStr  = new Date(new Date(inicioHoyUTC).getTime() - 24*3600000).toISOString().slice(0,10)
-    const hace7Str = new Date(new Date(inicioHoyUTC).getTime() - 7*24*3600000).toISOString().slice(0,10)
-    const mesStr   = `${hoyDR.slice(0,7)}-01`
-
-    const { data: cobrosHoy } = await sb
-      .from('cash_movements').select('monto, order_id')
-      .eq('categoria','venta').eq('tipo','ingreso').eq('fecha', hoyStr)
-    const ventasHoy = (cobrosHoy ?? []).reduce((s, c) => s + Number(c.monto), 0)
-    const pedidosHoyIds = Array.from(new Set((cobrosHoy ?? []).map((c:any) => c.order_id).filter(Boolean)))
-    const pedidosHoyCount = pedidosHoyIds.length
-    const ticketPromedioHoy = pedidosHoyCount > 0 ? ventasHoy / pedidosHoyCount : 0
-
-    // ── Comparativo: ayer y promedio de los últimos 7 días ──
-    const { data: cobrosAyer } = await sb
-      .from('cash_movements').select('monto')
-      .eq('categoria','venta').eq('tipo','ingreso').eq('fecha', ayerStr)
-    const ventasAyer = (cobrosAyer ?? []).reduce((s, c) => s + Number(c.monto), 0)
-
-    const { data: cobros7dias } = await sb
-      .from('cash_movements').select('monto')
-      .eq('categoria','venta').eq('tipo','ingreso').gte('fecha', hace7Str).lt('fecha', hoyStr)
-    const promedio7dias = (cobros7dias ?? []).reduce((s, c) => s + Number(c.monto), 0) / 7
-
-    const cambioVsAyer = ventasAyer > 0 ? Math.round(((ventasHoy - ventasAyer) / ventasAyer) * 100) : null
-    const cambioVsPromedio = promedio7dias > 0 ? Math.round(((ventasHoy - promedio7dias) / promedio7dias) * 100) : null
-
-    // ═══ 2. AVANCE DEL MES ══════════════════════════════════════════════════
-    const { data: cobrosMes } = await sb
-      .from('cash_movements').select('monto, order_id')
-      .eq('categoria','venta').eq('tipo','ingreso').gte('fecha', mesStr).lte('fecha', hoyStr)
-    const ventasMes = (cobrosMes ?? []).reduce((s, c) => s + Number(c.monto), 0)
-    const pedidosMesCount = new Set((cobrosMes ?? []).map((c:any) => c.order_id).filter(Boolean)).size
-    const promedioDiarioMes = diaDelMes > 0 ? ventasMes / diaDelMes : 0
-
-    // ═══ 3. PRODUCTOS VENDIDOS HOY (+ costo y ganancia real del día) ═══════
-    let productosVendidos: { nombre: string; cantidad: number; ingreso: number }[] = []
-    let costoHoyReporte = 0
-    if (pedidosHoyIds.length > 0) {
-      const { data: items } = await sb.from('order_items').select('nombre, cantidad, precio, product_id').in('order_id', pedidosHoyIds)
-      const mapa: Record<string, { cantidad: number; ingreso: number }> = {}
-      const idsProductos = Array.from(new Set((items ?? []).map((i: any) => i.product_id).filter(Boolean)))
-      const { data: costosProd } = idsProductos.length > 0
-        ? await sb.from('products').select('id,costo').in('id', idsProductos)
-        : { data: [] as any[] }
-      const costoPorId: Record<string, number> = {}
-      ;(costosProd ?? []).forEach((p: any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
-      for (const it of items ?? []) {
-        if (!mapa[it.nombre]) mapa[it.nombre] = { cantidad: 0, ingreso: 0 }
-        mapa[it.nombre].cantidad += Number(it.cantidad ?? 1)
-        mapa[it.nombre].ingreso += Number(it.precio ?? 0) * Number(it.cantidad ?? 1)
-        const costoUnit = it.product_id ? (costoPorId[it.product_id] ?? 0) : 0
-        costoHoyReporte += costoUnit * Number(it.cantidad ?? 1)
-      }
-      productosVendidos = Object.entries(mapa).map(([nombre, v]) => ({ nombre, ...v })).sort((a, b) => b.ingreso - a.ingreso)
-    }
-    const gananciaHoyReporte = ventasHoy - costoHoyReporte
-
-    // ═══ 4. PEDIDOS NUEVOS DE HOY (generados, pagados o no — para contexto operativo) ═══
-    const { data: pedidosNuevosHoy } = await sb
-      .from('orders').select('numero_orden, cliente_nombre, total, pago_estado, canal, created_at')
-      .gte('created_at', inicioHoyUTC).lt('created_at', finHoyUTC).eq('es_prueba', false)
-      .order('created_at', { ascending: true })
-
-    // ═══ 5. PENDIENTE POR COBRAR (acumulado) ═══════════════════════════════
-    const { data: pendientesTotal } = await sb
-      .from('orders').select('id, numero_orden, cliente_nombre, total, created_at')
-      .eq('pago_estado', 'pendiente').eq('es_prueba', false)
-      .order('created_at', { ascending: true })
-
-    const detallePendientes: { numero_orden: string; cliente: string; saldo: number; dias: number }[] = []
-    for (const o of pendientesTotal ?? []) {
-      const { data: pagos } = await sb.from('order_payments').select('monto').eq('order_id', o.id)
-      const abonado = (pagos ?? []).reduce((s, p) => s + Number(p.monto), 0)
-      const saldo = Number(o.total) - abonado
-      const dias = Math.floor((Date.now() - new Date(o.created_at).getTime()) / 86400000)
-      if (saldo > 0.5) detallePendientes.push({ numero_orden: o.numero_orden, cliente: o.cliente_nombre, saldo, dias })
-    }
-    const totalPorCobrar = detallePendientes.reduce((s, p) => s + p.saldo, 0)
-    const pendientesUrgentes = detallePendientes.filter(p => p.dias > 3)
-
-    // ═══ CONSTRUIR EMAIL ═══════════════════════════════════════════════════
-    const tendenciaBadge = (pct: number | null, label: string) => {
-      if (pct === null) return ''
-      const positivo = pct >= 0
-      const color = positivo ? '#15803D' : '#B91C1C'
-      const bg = positivo ? '#DCFCE7' : '#FEE2E2'
-      const flecha = positivo ? '▲' : '▼'
-      return `<span style="display:inline-block;font-size:12px;font-weight:800;color:${color};background:${bg};padding:3px 10px;border-radius:20px;margin-right:6px">${flecha} ${Math.abs(pct)}% ${label}</span>`
+    // Idempotencia: evita duplicar el cierre si Vercel vuelve a invocar el cron.
+    const { data: alreadySent, error: duplicateError } = await sb.from('email_log')
+      .select('id').eq('template', 'reporte_diario').eq('status', 'sent')
+      .gte('created_at', startTodayISO).lt('created_at', startTomorrowISO).limit(1).maybeSingle()
+    if (duplicateError) throw new Error('No se pudo verificar si el cierre ya fue enviado: ' + duplicateError.message)
+    if (alreadySent) {
+      return NextResponse.json({ ok: true, skipped: true, reason: 'reporte_diario_ya_enviado', fecha: today })
     }
 
-    const html = `
-<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:640px;margin:0 auto;background:#F3F4F6">
-  <div style="background:linear-gradient(135deg,#002455,#01B2B7);padding:28px 24px;text-align:center">
-    <p style="color:white;font-weight:900;font-size:20px;margin:0;letter-spacing:1px">CONTACTGO</p>
-    <p style="color:#9CC5E8;font-size:13px;margin:6px 0 0;text-transform:capitalize">Reporte de ventas · ${fechaBonita}</p>
-  </div>
+    const [
+      cashMonth, cashSevenDays, ordersMonth, activeOrders, activeProducts,
+      abandonedCarts, subscriptionsDue, leadsMonth, customersMonth,
+      emailErrors, allPayments, allSalesMovements,
+    ] = await Promise.all([
+      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,metodo,categoria,tipo,descripcion,fecha,created_at')
+        .gte('fecha', monthStart).lte('fecha', today)),
+      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,metodo,categoria,tipo,fecha')
+        .gte('fecha', sevenDaysAgo).lt('fecha', today)),
+      fetchAll<Row>(() => sb.from('orders').select('id,numero_orden,cliente_nombre,total,subtotal,descuento,estado,pago_estado,canal,metodo_pago,created_at,updated_at,pagado_en,entregado_at')
+        .eq('es_prueba', false).gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
+      fetchAll<Row>(() => sb.from('orders').select('id,numero_orden,cliente_nombre,cliente_telefono,total,estado,pago_estado,canal,metodo_pago,created_at,updated_at,pagado_en')
+        .eq('es_prueba', false).neq('estado', 'entregado').neq('estado', 'cancelado')),
+      fetchAll<Row>(() => sb.from('products').select('id,nombre,stock,stock_minimo,stock_critico,stock_reorden,costo,activo,archivado')
+        .eq('activo', true)),
+      fetchAll<Row>(() => sb.from('abandoned_carts').select('id,total,created_at,recuperado')
+        .eq('recuperado', false).gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString())),
+      fetchAll<Row>(() => sb.from('subscriptions').select('id,cliente_nombre,producto_nombre,proximo_envio,frecuencia')
+        .eq('activa', true).eq('cancelada', false).not('proximo_envio', 'is', null).lte('proximo_envio', dueLimit)),
+      fetchAll<Row>(() => sb.from('calculator_leads').select('id,convertido,created_at')
+        .gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
+      fetchAll<Row>(() => sb.from('profiles').select('id,created_at')
+        .eq('role', 'customer').gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
+      fetchAll<Row>(() => sb.from('email_log').select('id,template,status,created_at')
+        .gte('created_at', startSevenDaysISO).in('status', ['error', 'failed', 'bounced', 'rejected'])),
+      fetchAll<Row>(() => sb.from('order_payments').select('monto')),
+      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id')
+        .eq('categoria', 'venta').eq('tipo', 'ingreso')),
+    ])
 
-  <div style="padding:20px">
+    const cashToday = cashMonth.filter(r => r.fecha === today && r.categoria === 'venta' && r.tipo === 'ingreso')
+    const cashYesterday = cashSevenDays.filter(r => r.fecha === yesterday && r.categoria === 'venta' && r.tipo === 'ingreso')
+    const salesToday = sum(cashToday)
+    const salesYesterday = sum(cashYesterday)
+    const salesSevenDays = sum(cashSevenDays.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso'))
+    const averageSevenDays = salesSevenDays / 7
+    const cashOutToday = sum(cashMonth.filter(r => r.fecha === today && r.tipo === 'egreso'))
+    const cashOutMonth = sum(cashMonth.filter(r => r.tipo === 'egreso'))
+    const cashInMonth = sum(cashMonth.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso'))
+    const netToday = salesToday - cashOutToday
+    const netMonth = cashInMonth - cashOutMonth
 
-    <!-- ═══ HERO: VENTAS DEL DÍA — la única cifra que importa arriba de todo ═══ -->
-    <div style="background:white;border-radius:16px;padding:26px 24px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);text-align:center">
-      <p style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.6px;margin:0 0 8px">Ventas de hoy</p>
-      <p style="font-size:44px;font-weight:900;color:${ventasHoy > 0 ? '#002455' : '#9CA3AF'};margin:0;line-height:1">${fmt(ventasHoy)}</p>
-      <p style="font-size:13px;color:#6B7280;margin:8px 0 14px">${pedidosHoyCount} pedido${pedidosHoyCount === 1 ? '' : 's'} pagado${pedidosHoyCount === 1 ? '' : 's'} · ticket promedio ${fmt(ticketPromedioHoy)}</p>
-      <div>${tendenciaBadge(cambioVsAyer, 'vs. ayer')}${tendenciaBadge(cambioVsPromedio, 'vs. promedio 7 días')}</div>
-    </div>
+    const ordersToday = ordersMonth.filter(o => o.created_at >= startTodayISO && o.created_at < startTomorrowISO)
+    const paidOrdersMonth = ordersMonth.filter(o => o.pago_estado === 'pagado' && o.estado !== 'cancelado')
+    const orderValueToday = sum(ordersToday, 'total')
+    const orderValueMonth = sum(ordersMonth.filter(o => o.estado !== 'cancelado'), 'total')
+    const paidOrderValueMonth = sum(paidOrdersMonth, 'total')
+    const orderIdsWithReceiptToday = new Set(cashToday.map(r => r.order_id).filter(Boolean))
+    const receiptlessMovementsToday = cashToday.filter(r => !r.order_id)
+    const unassignedMethodsToday = cashToday.filter(r => !r.metodo)
+    const avgReceiptPerOrder = orderIdsWithReceiptToday.size ? salesToday / orderIdsWithReceiptToday.size : 0
+    const trendYesterday = pct(salesToday, salesYesterday)
+    const trendSevenDays = pct(salesToday, averageSevenDays)
 
-    <!-- ═══ KPIs secundarios en fila ═══ -->
-    <div style="display:flex;gap:10px;margin-bottom:14px">
-      <div style="flex:1;background:white;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-        <p style="font-size:20px;font-weight:900;color:#111;margin:0">${pedidosNuevosHoy?.length ?? 0}</p>
-        <p style="font-size:10px;color:#9CA3AF;margin:2px 0 0;text-transform:uppercase;font-weight:600">Pedidos nuevos hoy</p>
-      </div>
-      <div style="flex:1;background:white;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-        <p style="font-size:20px;font-weight:900;color:${totalPorCobrar > 0 ? '#B45309' : '#15803D'};margin:0">${fmtCorto(totalPorCobrar)}</p>
-        <p style="font-size:10px;color:#9CA3AF;margin:2px 0 0;text-transform:uppercase;font-weight:600">Por cobrar total</p>
-      </div>
-      <div style="flex:1;background:white;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-        <p style="font-size:20px;font-weight:900;color:${pendientesUrgentes.length > 0 ? '#B91C1C' : '#15803D'};margin:0">${pendientesUrgentes.length}</p>
-        <p style="font-size:10px;color:#9CA3AF;margin:2px 0 0;text-transform:uppercase;font-weight:600">Cobros +3 días</p>
-      </div>
-    </div>
+    // Cobros por método y ventas originadas por canal.
+    const byMethod: Record<string, number> = {}
+    cashMonth.filter(r => r.fecha === today && r.categoria === 'venta' && r.tipo === 'ingreso')
+      .forEach(r => { const key = String(r.metodo || 'Sin método registrado'); byMethod[key] = (byMethod[key] || 0) + Number(r.monto || 0) })
+    const methodRows = Object.entries(byMethod).sort((a, b) => b[1] - a[1])
+      .map(([name, value]) => [esc(name), fmt(value)])
+    const byChannel: Record<string, { count: number; value: number }> = {}
+    ordersMonth.filter(o => o.estado !== 'cancelado').forEach(o => {
+      const key = String(o.canal || 'Sin canal')
+      if (!byChannel[key]) byChannel[key] = { count: 0, value: 0 }
+      byChannel[key].count++
+      byChannel[key].value += Number(o.total || 0)
+    })
+    const channelRows = Object.entries(byChannel).sort((a, b) => b[1].value - a[1].value)
+      .map(([name, v]) => [esc(name), String(v.count), fmt(v.value)])
 
-    <!-- ═══ COSTO Y GANANCIA DEL DÍA ═══ -->
-    <div style="display:flex;gap:10px;margin-bottom:14px">
-      <div style="flex:1;background:white;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-        <p style="font-size:20px;font-weight:900;color:#B91C1C;margin:0">${fmtCorto(costoHoyReporte)}</p>
-        <p style="font-size:10px;color:#9CA3AF;margin:2px 0 0;text-transform:uppercase;font-weight:600">Costo de hoy</p>
-      </div>
-      <div style="flex:1;background:white;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-        <p style="font-size:20px;font-weight:900;color:#15803D;margin:0">${fmtCorto(gananciaHoyReporte)}</p>
-        <p style="font-size:10px;color:#9CA3AF;margin:2px 0 0;text-transform:uppercase;font-weight:600">Ganancia de hoy</p>
-      </div>
-    </div>
+    // Cartera: saldo por pedido calculado contra los movimientos reales de caja.
+    const activeIds = activeOrders.map(o => o.id)
+    const activeCash: Row[] = []
+    for (let i = 0; i < activeIds.length; i += 100) {
+      const batch = activeIds.slice(i, i + 100)
+      if (!batch.length) continue
+      activeCash.push(...await fetchAll<Row>(() => sb.from('cash_movements').select('order_id,monto')
+        .eq('categoria', 'venta').eq('tipo', 'ingreso').in('order_id', batch)))
+    }
+    const collectedByOrder: Record<string, number> = {}
+    activeCash.forEach(r => { collectedByOrder[r.order_id] = (collectedByOrder[r.order_id] || 0) + Number(r.monto || 0) })
+    const openBalances = activeOrders.map(o => {
+      const paid = o.pago_estado === 'pagado'
+      const collected = collectedByOrder[o.id] || 0
+      const balance = paid ? 0 : Math.max(0, Number(o.total || 0) - collected)
+      return { ...o, collected, balance, stageDays: daysAgo(o.updated_at || o.created_at), ageDays: daysAgo(o.created_at) }
+    }).filter(o => o.balance > 0.5).sort((a, b) => b.ageDays - a.ageDays)
+    const receivables = openBalances.reduce((v, o) => v + o.balance, 0)
+    const receivablesOver3 = openBalances.filter(o => o.ageDays > 3)
+    const staleOrders = activeOrders.map(o => ({ ...o, stageDays: daysAgo(o.updated_at || o.created_at) }))
+      .filter(o => o.stageDays >= 3).sort((a, b) => b.stageDays - a.stageDays)
+    const pipeline: Record<string, number> = {}
+    activeOrders.forEach(o => { const key = String(o.estado || 'Sin etapa'); pipeline[key] = (pipeline[key] || 0) + 1 })
+    const pipelineRows = Object.entries(pipeline).sort((a, b) => b[1] - a[1])
+      .map(([stage, count]) => [esc(stage.replace(/_/g, ' ')), String(count)])
 
-    <!-- ═══ AVANCE DEL MES ═══ -->
-    <div style="background:white;border-radius:14px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06);display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <p style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 4px">Este mes (día ${diaDelMes})</p>
-        <p style="font-size:22px;font-weight:900;color:#002455;margin:0">${fmt(ventasMes)}</p>
-      </div>
-      <div style="text-align:right">
-        <p style="font-size:11px;color:#9CA3AF;margin:0 0 4px">${pedidosMesCount} pedidos · promedio</p>
-        <p style="font-size:15px;font-weight:700;color:#374151;margin:0">${fmt(promedioDiarioMes)}/día</p>
-      </div>
-    </div>
+    // Productos: se separa demanda (pedidos creados hoy) de pedidos pagados del mes.
+    const itemOrderIds = Array.from(new Set([...ordersToday.map(o => o.id), ...paidOrdersMonth.map(o => o.id)]))
+    const items: Row[] = []
+    for (let i = 0; i < itemOrderIds.length; i += 100) {
+      const batch = itemOrderIds.slice(i, i + 100)
+      if (!batch.length) continue
+      items.push(...await fetchAll<Row>(() => sb.from('order_items').select('order_id,product_id,nombre,cantidad,precio,subtotal')
+        .in('order_id', batch)))
+    }
+    const productIds = Array.from(new Set(items.map(i => i.product_id).filter(Boolean)))
+    const costs: Row[] = []
+    for (let i = 0; i < productIds.length; i += 100) {
+      const batch = productIds.slice(i, i + 100)
+      costs.push(...await fetchAll<Row>(() => sb.from('product_costs').select('product_id,costo_promedio')
+        .in('product_id', batch)))
+    }
+    const productsById: Record<string, Row> = {}
+    activeProducts.forEach(p => { productsById[p.id] = p })
+    const costById: Record<string, number> = {}
+    costs.forEach(c => { if (c.costo_promedio !== null && c.costo_promedio !== undefined) costById[c.product_id] = Number(c.costo_promedio) })
+    const itemTotals = (sourceOrders: Row[]) => {
+      const ids = new Set(sourceOrders.map(o => o.id))
+      const grouped: Record<string, { name: string; units: number; revenue: number; cost: number; costUnits: number }> = {}
+      items.filter(i => ids.has(i.order_id)).forEach(i => {
+        const key = String(i.product_id || i.nombre)
+        const units = Number(i.cantidad || 1)
+        const revenue = Number(i.subtotal ?? (Number(i.precio || 0) * units))
+        const product = i.product_id ? productsById[i.product_id] : null
+        const unitCost = i.product_id && costById[i.product_id] !== undefined
+          ? costById[i.product_id]
+          : (product && product.costo !== null ? Number(product.costo) : null)
+        if (!grouped[key]) grouped[key] = { name: String(i.nombre || 'Producto sin nombre'), units: 0, revenue: 0, cost: 0, costUnits: 0 }
+        grouped[key].units += units
+        grouped[key].revenue += revenue
+        if (unitCost !== null && Number.isFinite(unitCost)) {
+          grouped[key].cost += unitCost * units
+          grouped[key].costUnits += units
+        }
+      })
+      return Object.values(grouped).sort((a, b) => b.revenue - a.revenue)
+    }
+    const productsToday = itemTotals(ordersToday).slice(0, 8)
+    const productsMonth = itemTotals(paidOrdersMonth).slice(0, 10)
+    const costCoveredUnits = productsMonth.reduce((v, p) => v + p.costUnits, 0)
+    const totalMonthUnits = productsMonth.reduce((v, p) => v + p.units, 0)
+    const monthItemsRevenue = productsMonth.reduce((v, p) => v + p.revenue, 0)
+    const monthItemsCost = productsMonth.reduce((v, p) => v + p.cost, 0)
+    const estimatedGrossProfit = monthItemsRevenue - monthItemsCost
 
-    <!-- ═══ PRODUCTOS VENDIDOS HOY ═══ -->
-    ${productosVendidos.length > 0 ? `
-    <div style="background:white;border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-      <p style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 12px">📦 Qué se vendió hoy</p>
-      ${productosVendidos.map(p => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F9FAFB">
-        <span style="font-size:13px;color:#374151;flex:1">${p.nombre} <span style="color:#9CA3AF">×${p.cantidad}</span></span>
-        <span style="font-size:13px;font-weight:700;color:#111">${fmt(p.ingreso)}</span>
-      </div>`).join('')}
-    </div>` : ''}
+    // Inventario: usa el punto de reposición configurado por producto.
+    const lowStock = activeProducts.filter(p => !p.archivado).map(p => {
+      const threshold = Number(p.stock_reorden ?? p.stock_minimo ?? p.stock_critico ?? 3)
+      return { ...p, threshold }
+    }).filter(p => Number(p.stock || 0) <= p.threshold).sort((a, b) => Number(a.stock) - Number(b.stock))
 
-    <!-- ═══ PEDIDOS DE HOY (detalle operativo) ═══ -->
-    <div style="background:white;border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-      <p style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 12px">🛒 Pedidos de hoy</p>
-      ${(pedidosNuevosHoy?.length ?? 0) > 0 ? (pedidosNuevosHoy ?? []).map(o => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #F9FAFB">
-        <div style="flex:1;min-width:0">
-          <p style="font-size:13px;font-weight:600;color:#111;margin:0">${o.cliente_nombre ?? '—'}</p>
-          <p style="font-size:11px;color:#9CA3AF;margin:1px 0 0;font-family:monospace">${o.numero_orden} · <span style="text-transform:capitalize">${o.canal ?? 'web'}</span></p>
-        </div>
-        <div style="text-align:right;flex-shrink:0">
-          <p style="font-size:13px;font-weight:700;color:#111;margin:0">${fmt(Number(o.total))}</p>
-          <span style="font-size:10px;font-weight:700;padding:1px 8px;border-radius:10px;background:${o.pago_estado === 'pagado' ? '#DCFCE7' : '#FEF3C7'};color:${o.pago_estado === 'pagado' ? '#15803D' : '#B45309'}">${o.pago_estado === 'pagado' ? 'Pagado' : 'Pendiente'}</span>
-        </div>
-      </div>`).join('') : `<p style="font-size:13px;color:#9CA3AF;margin:0">No se generaron pedidos nuevos hoy.</p>`}
-    </div>
+    // Indicadores comerciales y de retención.
+    const abandonedValue = sum(abandonedCarts, 'total')
+    const leadsConverted = leadsMonth.filter(l => l.convertido === true).length
+    const leadConversion = leadsMonth.length ? Math.round(leadsConverted / leadsMonth.length * 100) : 0
+    const subscriptionsOverdue = subscriptionsDue.filter(s => s.proximo_envio < today)
+    const subscriptionsNext7 = subscriptionsDue.filter(s => s.proximo_envio >= today)
+    const cashSalesLifetime = sum(allSalesMovements)
+    const paymentRowsLifetime = sum(allPayments)
+    const reconciliationGap = cashSalesLifetime - paymentRowsLifetime
+    const unlinkedSalesLifetime = allSalesMovements.filter(r => !r.order_id).length
+    const unlinkedSalesAmount = sum(allSalesMovements.filter(r => !r.order_id))
+    const todayUnlinkedAmount = sum(receiptlessMovementsToday)
+    const todayMissingMethodAmount = sum(unassignedMethodsToday)
+    const emailFailureCount = emailErrors.length
+    const todayOrderRows = ordersToday.slice().sort((a, b) => a.created_at.localeCompare(b.created_at)).slice(0, 12)
+    const oldOrdersRows = staleOrders.slice(0, 15)
+    const oldBalancesRows = openBalances.slice(0, 12)
 
-    <!-- ═══ POR COBRAR (acumulado, con urgentes resaltados) ═══ -->
-    <div style="background:white;border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-      <p style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 12px">⏳ Pendiente por cobrar</p>
-      ${detallePendientes.length > 0 ? detallePendientes
-        .sort((a, b) => b.dias - a.dias)
-        .slice(0, 12)
-        .map(p => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F9FAFB">
-        <div>
-          <p style="font-size:13px;color:#374151;margin:0">${p.cliente ?? '—'}</p>
-          <p style="font-size:11px;color:#9CA3AF;margin:1px 0 0;font-family:monospace">${p.numero_orden}</p>
-        </div>
-        <div style="text-align:right">
-          <p style="font-size:13px;font-weight:700;color:#B45309;margin:0">${fmt(p.saldo)}</p>
-          <p style="font-size:11px;font-weight:700;margin:1px 0 0;color:${p.dias > 3 ? '#B91C1C' : '#9CA3AF'}">${p.dias} día${p.dias === 1 ? '' : 's'}${p.dias > 3 ? ' ⚠️' : ''}</p>
-        </div>
-      </div>`).join('')
-        : `<p style="font-size:13px;color:#15803D;margin:0">✅ No hay pedidos pendientes de cobro — todo al día.</p>`}
-      ${detallePendientes.length > 12 ? `<p style="font-size:11px;color:#9CA3AF;margin:10px 0 0;text-align:center">+ ${detallePendientes.length - 12} pedido(s) más — ver panel completo</p>` : ''}
-    </div>
+    const trend = (value: number | null, label: string) => {
+      if (value === null) return '<span style="font-size:11px;color:#94a3b8">Sin base comparable ' + label + '</span>'
+      const up = value >= 0
+      return badge((up ? '▲ ' : '▼ ') + Math.abs(value) + '% ' + label, up ? '#166534' : '#991b1b', up ? '#dcfce7' : '#fee2e2')
+    }
 
-    <p style="text-align:center;font-size:11px;color:#9CA3AF;margin:16px 0 0">
-      Reporte automático diario · ContactGo® · <a href="https://www.contactgo.net/admin" style="color:#002455;font-weight:600">Ver panel de administración →</a>
-    </p>
-  </div>
-</div>`
+    const executive = '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px">' +
+      metric('Cobrado hoy', fmt(salesToday), orderIdsWithReceiptToday.size + ' pedidos con cobro') +
+      metric('Egresos registrados hoy', fmt(cashOutToday), 'Movimientos de caja', '#b91c1c') +
+      metric('Flujo neto de caja', fmt(netToday), 'Cobros menos egresos', netToday >= 0 ? '#15803d' : '#b91c1c') +
+      metric('Pedidos nuevos', String(ordersToday.length), 'Valor generado: ' + fmt(orderValueToday)) +
+      metric('Por cobrar', fmt(receivables), openBalances.length + ' pedidos con saldo', receivables > 0 ? '#b45309' : '#15803d') +
+      metric('Pedidos atrasados', String(staleOrders.length), 'Sin actualización por 3 días o más', staleOrders.length ? '#b91c1c' : '#15803d') +
+      '</div><div style="margin-top:12px;padding:12px 13px;background:#f7f9fc;border-radius:10px">' +
+      '<div style="font-size:11px;color:#64748b;margin-bottom:7px">TENDENCIA DE COBROS</div>' +
+      trend(trendYesterday, 'vs. ayer') + ' &nbsp; ' + trend(trendSevenDays, 'vs. promedio de 7 días') +
+      '<div style="font-size:11px;color:#64748b;margin-top:8px">Promedio diario de cobros últimos 7 días: <strong style="color:#002455">' + fmt(averageSevenDays) + '</strong></div></div>'
 
-    const asuntoTendencia = cambioVsAyer !== null ? (cambioVsAyer >= 0 ? `▲${cambioVsAyer}%` : `▼${Math.abs(cambioVsAyer)}%`) : ''
+    const monthSummary = '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px">' +
+      metric('Cobros acumulados', fmt(cashInMonth), 'Dinero ingresado en caja') +
+      metric('Egresos acumulados', fmt(cashOutMonth), 'Gastos y compras registrados', '#b91c1c') +
+      metric('Flujo neto del mes', fmt(netMonth), 'Cobros menos egresos', netMonth >= 0 ? '#15803d' : '#b91c1c') +
+      metric('Pedidos creados', String(ordersMonth.length), 'Valor no cancelado: ' + fmt(orderValueMonth)) +
+      metric('Pedidos pagados', String(paidOrdersMonth.length), 'Total de pedidos: ' + fmt(paidOrderValueMonth)) +
+      metric('Promedio diario cobrado', fmt(cashInMonth / Math.max(dayOfMonth, 1)), 'Mes hasta el día ' + dayOfMonth) +
+      '</div><p style="font-size:10px;color:#94a3b8;margin:10px 0 0">No se muestra avance contra meta porque no hay una meta mensual configurada en el sistema.</p>'
+
+    const productRows = productsMonth.map(p => [
+      esc(p.name) + ' <span style="color:#94a3b8">×' + p.units + '</span>',
+      fmt(p.revenue),
+      p.costUnits > 0 ? fmt(p.revenue - p.cost) : badge('Costo sin dato', '#92400e', '#fef3c7'),
+    ])
+    const productSection = table(['Producto · unidades', 'Venta de pedidos pagados', 'Margen bruto estimado'], productRows) +
+      '<p style="font-size:10px;color:#94a3b8;margin:9px 0 0">Productos de pedidos pagados creados este mes. El margen es una estimación con el costo promedio vigente del producto; no es utilidad neta ni costo histórico. Cobertura de costo: ' +
+      costCoveredUnits + ' de ' + totalMonthUnits + ' unidades (' + (totalMonthUnits ? Math.round(costCoveredUnits / totalMonthUnits * 100) : 0) + '%).</p>'
+
+    const todayProductsSection = productsToday.length
+      ? table(['Producto pedido hoy', 'Unidades', 'Importe de artículos'], productsToday.map(p => [esc(p.name), String(p.units), fmt(p.revenue)])) +
+        '<p style="font-size:10px;color:#94a3b8;margin:8px 0 0">Demanda de los pedidos creados hoy; no equivale necesariamente al efectivo cobrado hoy.</p>'
+      : '<p style="font-size:12px;color:#94a3b8;margin:0">No hubo artículos en pedidos nuevos hoy.</p>'
+
+    const pipelineSection = '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px">' +
+      Object.entries(pipeline).sort((a, b) => b[1] - a[1]).map(([stage, count]) =>
+        '<div style="padding:8px 10px;background:#f7f9fc;border-radius:9px;min-width:90px"><strong style="font-size:17px;color:#002455">' + count +
+        '</strong><div style="font-size:10px;color:#64748b;text-transform:capitalize">' + esc(stage.replace(/_/g, ' ')) + '</div></div>').join('') +
+      '</div>' + table(['Pedido / cliente', 'Etapa', 'Días sin cambio'], oldOrdersRows.map(o => [
+        '<strong>' + esc(o.numero_orden) + '</strong><br>' + esc(o.cliente_nombre || 'Sin nombre'),
+        esc(String(o.estado || '').replace(/_/g, ' ')),
+        badge(o.stageDays + ' días', o.stageDays >= 15 ? '#991b1b' : '#92400e', o.stageDays >= 15 ? '#fee2e2' : '#fef3c7'),
+      ])) +
+      '<p style="font-size:10px;color:#94a3b8;margin:8px 0 0">Se considera atrasado un pedido activo sin actualización durante 3 días o más. El tiempo se calcula desde updated_at, no desde la fecha de creación.</p>'
+
+    const receivablesSection = '<div style="display:flex;gap:9px;margin-bottom:12px">' +
+      metric('Saldo pendiente', fmt(receivables), openBalances.length + ' pedidos') +
+      metric('Con más de 3 días', fmt(receivablesOver3.reduce((v, o) => v + o.balance, 0)), receivablesOver3.length + ' pedidos', '#b91c1c') +
+      '</div>' + table(['Pedido / cliente', 'Saldo', 'Antigüedad'], oldBalancesRows.map(o => [
+        '<strong>' + esc(o.numero_orden) + '</strong><br>' + esc(o.cliente_nombre || 'Sin nombre') + '<br><span style="color:#94a3b8">' + esc(String(o.estado || '').replace(/_/g, ' ')) + '</span>',
+        fmt(o.balance),
+        o.ageDays + ' días',
+      ]))
+
+    const ordersTodaySection = table(['Pedido / hora', 'Estado', 'Total'], todayOrderRows.map(o => [
+      '<strong>' + esc(o.numero_orden) + '</strong><br>' + esc(o.cliente_nombre || 'Sin nombre') + '<br><span style="color:#94a3b8">' + dateLabel(o.created_at, { hour: '2-digit', minute: '2-digit' }) + ' · ' + esc(o.canal || 'Sin canal') + '</span>',
+      esc(String(o.estado || '').replace(/_/g, ' ')) + '<br>' + (o.pago_estado === 'pagado' ? badge('Pagado', '#166534', '#dcfce7') : badge('Pago ' + (o.pago_estado || 'pendiente'), '#92400e', '#fef3c7')),
+      fmt(Number(o.total || 0)),
+    ]))
+
+    const lowStockSection = lowStock.length
+      ? table(['Producto', 'Existencia', 'Punto de reposición'], lowStock.slice(0, 15).map(p => [
+        esc(p.nombre), String(p.stock), String(p.threshold),
+      ])) + (lowStock.length > 15 ? '<p style="font-size:10px;color:#94a3b8;margin:8px 0 0">Y ' + (lowStock.length - 15) + ' productos más.</p>' : '')
+      : '<p style="font-size:12px;color:#15803d;margin:0">No hay productos activos en o por debajo de su punto de reposición configurado.</p>'
+
+    const channelSection = table(['Canal', 'Pedidos', 'Valor generado'], channelRows)
+    const methodSection = table(['Método de cobro', 'Cobrado hoy'], methodRows)
+    const expenseCategories: Record<string, number> = {}
+    cashMonth.filter(r => r.fecha === today && r.tipo === 'egreso').forEach(r => {
+      const key = String(r.categoria || 'Sin categoría')
+      expenseCategories[key] = (expenseCategories[key] || 0) + Number(r.monto || 0)
+    })
+    const expenseRows = Object.entries(expenseCategories).sort((a, b) => b[1] - a[1])
+      .map(([name, value]) => [esc(name.replace(/_/g, ' ')), fmt(value)])
+    const expenseSection = '<div style="margin-bottom:9px">' + table(['Categoría de egreso', 'Monto'], expenseRows) + '</div>' +
+      '<p style="font-size:10px;color:#94a3b8;margin:0">Los egresos se toman de los movimientos tipo egreso de Caja. Solo se incluyen gastos y compras que estén registrados en el sistema.</p>'
+
+    const commercialSection = '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px">' +
+      metric('Clientes nuevos este mes', String(customersMonth.length), 'Perfiles con rol cliente') +
+      metric('Leads de calculadora', String(leadsMonth.length), 'Captados este mes') +
+      metric('Leads convertidos', String(leadsConverted), 'Conversión: ' + leadConversion + '%', leadConversion >= 15 ? '#15803d' : '#002455') +
+      metric('Carritos abandonados', String(abandonedCarts.length), 'Valor: ' + fmt(abandonedValue), abandonedCarts.length ? '#b45309' : '#15803d') +
+      metric('Reposiciones vencidas', String(subscriptionsOverdue.length), 'Suscripciones activas', subscriptionsOverdue.length ? '#b91c1c' : '#15803d') +
+      metric('Reposiciones próximos 7 días', String(subscriptionsNext7.length), 'Suscripciones activas') +
+      '</div>'
+
+    const dataWarnings: string[] = []
+    if (Math.abs(reconciliationGap) > 1) {
+      dataWarnings.push('Diferencia histórica entre movimientos de caja de ventas y order_payments: ' + fmt(reconciliationGap) +
+        '. Caja: ' + fmt(cashSalesLifetime) + '; order_payments: ' + fmt(paymentRowsLifetime) +
+        '. Requiere conciliación; no debe interpretarse automáticamente como dinero faltante.')
+    }
+    if (unlinkedSalesLifetime > 0) {
+      dataWarnings.push(unlinkedSalesLifetime + ' movimientos históricos de venta no están asociados a un pedido (' + fmt(unlinkedSalesAmount) + ').')
+    }
+    if (todayUnlinkedAmount > 0) dataWarnings.push('Hoy hay cobros sin pedido asociado por ' + fmt(todayUnlinkedAmount) + '.')
+    if (todayMissingMethodAmount > 0) dataWarnings.push('Hoy hay cobros sin método de pago registrado por ' + fmt(todayMissingMethodAmount) + '.')
+    if (emailFailureCount > 0) dataWarnings.push('Se registraron ' + emailFailureCount + ' errores/rechazos de correo en los últimos 7 días.')
+    const qualitySection = dataWarnings.length
+      ? '<ul style="margin:0;padding-left:18px">' + dataWarnings.map(w => '<li style="font-size:12px;line-height:1.55;color:#92400e;margin:0 0 7px">' + esc(w) + '</li>').join('') + '</ul>'
+      : '<p style="font-size:12px;color:#15803d;margin:0">No se detectaron diferencias de conciliación ni incidencias de registro con las verificaciones incluidas.</p>'
+
+    const html = '<!doctype html><html><body style="margin:0;padding:0;background:#eef2f6;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;color:#172033">' +
+      '<div style="max-width:760px;margin:0 auto;padding:18px 12px 30px">' +
+      '<header style="background:#002455;border-radius:16px 16px 0 0;padding:25px 22px;color:#fff">' +
+      '<div style="font-size:20px;font-weight:900;letter-spacing:1.2px">CONTACTGO</div>' +
+      '<div style="font-size:12px;color:#c7d9ec;margin-top:6px;text-transform:capitalize">Cierre ejecutivo diario · ' + esc(dateTitle) + '</div>' +
+      '<div style="font-size:10px;color:#a9c2dd;margin-top:4px">Generado ' + dateLabel(new Date(), { hour: '2-digit', minute: '2-digit' }) + ' · Hora de República Dominicana</div>' +
+      '</header><main style="background:#f4f7fa;padding:16px 13px;border-radius:0 0 16px 16px">' +
+      section('Resumen ejecutivo del día', executive) +
+      section('Acumulado del mes', monthSummary) +
+      section('Pedidos y cobros recibidos hoy', ordersTodaySection) +
+      section('Cartera pendiente de cobro', receivablesSection) +
+      section('Operación y retrasos por etapa', pipelineSection) +
+      section('Productos más vendidos del mes', productSection) +
+      section('Productos incluidos en pedidos nuevos hoy', todayProductsSection) +
+      section('Canales de venta · pedidos creados este mes', channelSection) +
+      section('Métodos de cobro de hoy', methodSection) +
+      section('Gastos y salidas de caja', expenseSection) +
+      section('Inventario y reposición', lowStockSection) +
+      section('Clientes, marketing y recompra', commercialSection) +
+      section('Calidad de datos y alertas', qualitySection) +
+      '<div style="padding:12px 6px;text-align:center;color:#94a3b8;font-size:10px;line-height:1.6">' +
+      'Reporte interno automático · ContactGo<br>' +
+      '<a href="https://www.contactgo.net/M1Alexander" style="color:#006b8f;font-weight:800;text-decoration:none">Abrir panel administrativo seguro</a><br>' +
+      'Las cifras reflejan los movimientos registrados en ContactGo; los movimientos no registrados no aparecen en este cierre.</div>' +
+      '</main></div></body></html>'
+
+    const subject = 'Cierre ContactGo · ' + fmt(salesToday) + ' cobrados · ' + ordersToday.length + ' pedidos nuevos · ' + staleOrders.length + ' atrasos'
     const resend = new Resend(process.env.RESEND_API_KEY)
-    await resend.emails.send({
-      from: 'ContactGo Reportes <info@contactgo.net>',
+    const { data: sent, error: sendError } = await resend.emails.send({
+      from: 'ContactGo Cierre Diario <info@contactgo.net>',
       to: 'info@contactgo.net',
-      subject: `${fmt(ventasHoy)} en ventas hoy ${asuntoTendencia ? `(${asuntoTendencia} vs ayer)` : ''} · ${pedidosHoyCount} pedido(s) pagado(s)`,
+      subject,
       html,
     })
 
-    // El reporte se entrega únicamente por correo mientras WhatsApp esté en pausa.
+    if (sendError || !sent?.id) {
+      const reason = sendError?.message || 'Resend no devolvió un identificador de mensaje.'
+      await sb.from('email_log').insert({
+        to_email: 'info@contactgo.net', subject, template: 'reporte_diario',
+        status: 'error', resend_id: sent?.id ?? null,
+      })
+      console.error('[reporte-diario] envío fallido:', reason)
+      return NextResponse.json({ error: 'No se pudo enviar el cierre diario.', detail: reason }, { status: 502 })
+    }
+
+    const { error: logError } = await sb.from('email_log').insert({
+      to_email: 'info@contactgo.net', subject, template: 'reporte_diario',
+      status: 'sent', resend_id: sent.id,
+    })
+    if (logError) console.error('[reporte-diario] correo enviado pero no se pudo guardar el log:', logError.message)
 
     return NextResponse.json({
-      ok: true, fecha: hoyDR,
-      ventas_hoy: ventasHoy, pedidos_hoy: pedidosHoyCount,
-      ventas_mes: ventasMes, total_por_cobrar: totalPorCobrar,
+      ok: true, fecha: today, resend_id: sent.id,
+      cobrado_hoy: salesToday, egresos_hoy: cashOutToday, flujo_neto_hoy: netToday,
+      pedidos_nuevos: ordersToday.length, pedidos_atrasados: staleOrders.length,
+      por_cobrar: receivables, pedidos_con_saldo: openBalances.length,
     })
-  } catch (err: any) {
-    console.error('[reporte-diario]', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (error: any) {
+    console.error('[reporte-diario]', error)
+    return NextResponse.json({ error: error?.message || 'Error al generar el cierre diario.' }, { status: 500 })
   }
 }
