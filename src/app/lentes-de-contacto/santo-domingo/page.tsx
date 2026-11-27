@@ -46,7 +46,7 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-teal-600 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$250 · transporte 24-48h</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Santo Domingo</h1>
-          <p className="text-primary-100 text-lg max-w-xl mx-auto">Entrega a domicilio en toda el área metropolitana. ACUVUE, Biofinity, Air Optix y más, de proveedores de productos originales.</p>
+          <p className="text-primary-100 text-lg max-w-xl mx-auto">Entrega a domicilio en toda el área metropolitana. ACUVUE, Biofinity, Air Optix y más, de marcas reconocidas, en su empaque original y sellado.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Link href="/receta" className="bg-white text-primary-700 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors">Usar mi receta</Link>
             <Link href="/catalogo" className="border border-white/40 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors">Ver catálogo completo</Link>
@@ -70,7 +70,7 @@ export default async function Page() {
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Compra lentes de contacto en Santo Domingo sin salir de casa</h2>
           <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega a domicilio en toda el área metropolitana de <strong>Santo Domingo</strong>. El plazo estimado depende del producto; el transporte en la capital suele tomar 24-48 horas.</p>
-          <p>Trabajamos con marcas reconocidas y proveedores de productos originales; los productos se entregan sellados y en su empaque original. El envío a Santo Domingo tiene un costo fijo de <strong>RD$250</strong> y es gratuito en compras desde RD$8,000.</p>
+          <p>Trabajamos con marcas reconocidas y entregamos los productos en su empaque original sellado; los productos se entregan sellados y en su empaque original. El envío a Santo Domingo tiene un costo fijo de <strong>RD$250</strong> y es gratuito en compras desde RD$8,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto según tu SPH, CYL y AXIS en minutos.</p>
 
           {/* Trust strip */}
