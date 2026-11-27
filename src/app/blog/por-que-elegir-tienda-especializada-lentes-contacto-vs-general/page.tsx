@@ -13,7 +13,7 @@ const meta: BlogMeta = {
   category: 'Guías',
   faq: [
     { q: '¿Es más caro comprar en una tienda especializada?',
-      a: 'No necesariamente — de hecho, una tienda especializada sin el costo fijo de un local físico grande y con relaciones directas con distribuidores autorizados, a veces puede ofrecer mejores precios que un marketplace general con márgenes de intermediación.' },
+      a: 'No necesariamente — de hecho, una tienda especializada sin el costo fijo de un local físico grande y con relaciones directas con proveedores de productos originales, a veces puede ofrecer mejores precios que un marketplace general con márgenes de intermediación.' },
     { q: '¿Cómo sé si una tienda de lentes de contacto es realmente especializada?',
       a: 'Revisa si su catálogo cubre correctamente todas las categorías (esféricos, tóricos, multifocales, soluciones), si piden tu receta antes de vender, y si su contenido/atención demuestra conocimiento real del producto, no solo listado genérico.' },
     { q: '¿Los vendedores de marketplaces generales conocen de lentes de contacto?',
@@ -52,8 +52,8 @@ export default function Page() {
       <h3>2. Piden tu receta antes de vender</h3>
       <p>Los lentes de contacto son dispositivos médicos regulados. Una tienda seria y especializada siempre va a pedirte tu graduación exacta antes de procesar tu pedido — si alguien te vende sin preguntar nada sobre tu receta, es una señal de alerta real, no un &quot;plus&quot; de conveniencia.</p>
 
-      <h3>3. Relación directa con distribuidores autorizados</h3>
-      <p>Las tiendas especializadas suelen trabajar directo con los distribuidores oficiales de cada marca en el país — lo que reduce el riesgo de producto de origen incierto, algo que sí es un riesgo real en reventa informal por redes sociales.</p>
+      <h3>3. Relación directa con proveedores de productos originales</h3>
+      <p>Las tiendas especializadas suelen trabajar directo con los proveedores de productos originales de cada marca en el país — lo que reduce el riesgo de producto de origen incierto, algo que sí es un riesgo real en reventa informal por redes sociales.</p>
 
       <h3>4. Conocimiento real del producto en la atención</h3>
       <p>Cuando escribes con una duda (&quot;¿cuál es la diferencia entre este mensual y este quincenal?&quot;), una tienda especializada suele responder con conocimiento técnico real, no solo copiar y pegar la descripción del producto.</p>
