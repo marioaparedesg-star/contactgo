@@ -40,7 +40,7 @@ export default async function Page() {
         </nav>
         <section className="bg-gradient-to-br from-amber-600 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para presbicia</span>
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes Multifocales para Presbicia en RD</h1>
+          <h1 className="cg-page-title mb-4">Lentes Multifocales para Presbicia en RD</h1>
           <p className="text-amber-100 text-lg max-w-xl mx-auto">Ve de cerca y de lejos con el mismo lente. Sin gafas de lectura. Envío a domicilio en toda la República Dominicana.</p>
         </section>
         <section className="max-w-7xl mx-auto px-4 py-10">
@@ -49,12 +49,12 @@ export default async function Page() {
           </div>
         </section>
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
-          <h2 className="font-display text-2xl font-bold text-gray-900">Lentes multifocales en República Dominicana</h2>
+          <h2 className="cg-section-title">Lentes multifocales en República Dominicana</h2>
           <p>La presbicia o vista cansada es una condición natural que afecta a casi todas las personas después de los 40 años. El ojo pierde flexibilidad para enfocar objetos cercanos. Los <strong>lentes de contacto multifocales</strong> son la solución más cómoda y discreta para mantener una vida activa sin depender de gafas de lectura.</p>
           <p>En ContactGo manejamos los mejores multifocales disponibles: <strong>ACUVUE® Oasys Presbyopia</strong>, <strong>AIR OPTIX® plus HydraGlyde® Multifocal</strong>, <strong>Proclear® Multifocal</strong> y más. Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta</Link> para encontrar el tuyo.</p>
         </section>
         <section className="max-w-3xl mx-auto px-4 py-10 border-t border-gray-100">
-          <h2 className="font-display text-xl font-bold text-gray-900 mb-6">Preguntas frecuentes</h2>
+          <h2 className="cg-section-title mb-6">Preguntas frecuentes</h2>
           <div className="space-y-4">
             {faqs.map(f => (<div key={f.q} className="bg-gray-50 rounded-2xl p-5"><h3 className="font-bold text-gray-900 text-sm mb-2">{f.q}</h3><p className="text-gray-600 text-sm leading-relaxed">{f.a}</p></div>))}
           </div>
