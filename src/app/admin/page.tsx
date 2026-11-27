@@ -251,6 +251,8 @@ export default function AdminDashboard() {
       : { data: [] as any[] }
     if (itemsError) { console.error('[admin/dashboard] Error consultando artículos:', itemsError); setLoadError('No se pudieron cargar los artículos vendidos; la ganancia no puede calcularse.'); setLoading(false); return }
     const items = { data: itemsData }
+    const idsConItems = new Set((items.data ?? []).map((i:any) => i.order_id).filter(Boolean))
+    const pedidosSinItems = ords.filter((o:any) => !idsConItems.has(o.id)).length
 
     // Se cruza cada item vendido contra el costo REAL actual del producto
     // (products.costo). No se guarda un "snapshot" histórico del costo al
@@ -289,7 +291,7 @@ export default function AdminDashboard() {
       if (costoUnit > 0) costoTotalPeriodo += costoUnit * Number(i.cantidad ?? 1)
     })
     const ventasArticulosPeriodo = (items.data ?? []).reduce((s:number,i:any) => s + Number(i.subtotal ?? (Number(i.precio ?? 0) * Number(i.cantidad ?? 1))), 0)
-    const gananciaPeriodo = itemsSinCosto.length === 0 ? ventasArticulosPeriodo - costoTotalPeriodo : null
+    const gananciaPeriodo = itemsSinCosto.length === 0 && pedidosSinItems === 0 ? ventasArticulosPeriodo - costoTotalPeriodo : null
 
     // Costo/ganancia de HOY: mismo cruce, pedidos VENDIDOS hoy (no solo
     // cobrados hoy).
@@ -301,9 +303,10 @@ export default function AdminDashboard() {
       costoHoy += costoUnit * Number(i.cantidad ?? 1)
     })
     const itemsSinCostoHoy = itemsSinCosto.some((i:any) => idsHoy.has(i.order_id))
+    const pedidosSinItemsHoy = ords.filter((o:any) => idsHoy.has(o.id) && !idsConItems.has(o.id)).length
     const ventasArticulosHoy = (items.data ?? []).filter((i:any) => idsHoy.has(i.order_id))
       .reduce((s:number,i:any) => s + Number(i.subtotal ?? (Number(i.precio ?? 0) * Number(i.cantidad ?? 1))), 0)
-    const gananciaHoy = itemsSinCostoHoy ? null : ventasArticulosHoy - costoHoy
+    const gananciaHoy = itemsSinCostoHoy || pedidosSinItemsHoy > 0 ? null : ventasArticulosHoy - costoHoy
 
     const agg: Record<string,{nombre:string,u:number,rev:number}> = {}
     ;(items.data??[]).forEach((i:any)=>{
@@ -398,7 +401,7 @@ export default function AdminDashboard() {
 
     setData({ ventasPeriodo, ventasHoy, ventasTotalPeriodo, ventasTotalHoy, egresosTotalPeriodo, flujoNetoPeriodo, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, pedidosPruebaDetectados, clientes: clientes??0, clientesNuevosPeriodo: clientesNuevosPeriodo??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
-      costoTotalPeriodo, ventasArticulosPeriodo, gananciaPeriodo, costoHoy, ventasArticulosHoy, gananciaHoy, itemsSinCosto: itemsSinCosto.length, ventaSinCosto,
+      costoTotalPeriodo, ventasArticulosPeriodo, gananciaPeriodo, costoHoy, ventasArticulosHoy, gananciaHoy, itemsSinCosto: itemsSinCosto.length, pedidosSinItems, pedidosSinItemsHoy, ventaSinCosto,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
       detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr,
       porEtapa, pedidosAbiertos3Dias, pedidosAbiertos7Dias, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct })
@@ -660,7 +663,7 @@ export default function AdminDashboard() {
           { key:null, label:'Egresos registrados', val:fmt(data?.egresosTotalPeriodo??0), sub:'salidas registradas en caja', color:'text-rose-600', accion:()=>router.push('/M1Alexander/reportes') },
           { key:null, label:'Flujo neto de caja', val:fmt(data?.flujoNetoPeriodo??0), sub:'cobros menos egresos', color:(data?.flujoNetoPeriodo??0)>=0?'text-emerald-600':'text-rose-600', accion:()=>router.push('/M1Alexander/reportes') },
           { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según costo promedio de Compras', color:'text-red-500', accion:undefined },
-          { key:'ganancia', label:'Ganancia estimada', val:data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo), sub:data?.itemsSinCosto>0?`${data.itemsSinCosto} línea(s) sin costo`:`${margenPct ?? 0}% margen`, color:data?.gananciaPeriodo==null?'text-amber-600':'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
+          { key:'ganancia', label:'Ganancia estimada', val:data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo), sub:(data?.itemsSinCosto??0)>0 || (data?.pedidosSinItems??0)>0?`${data?.itemsSinCosto??0} línea(s) sin costo · ${data?.pedidosSinItems??0} pedido(s) sin artículos`:`${margenPct ?? 0}% margen`, color:data?.gananciaPeriodo==null?'text-amber-600':'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
           { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:null, label:'Pedidos +7 días', val:String(data?.pedidosAbiertos7Dias??0), sub:'abiertos desde hace más de una semana', color:(data?.pedidosAbiertos7Dias??0)>0?'text-rose-600':'text-emerald-600', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:null, label:'Productos bajo mínimo', val:String((data?.invCriticos??0)+(data?.invBajoMin??0)), sub:`${data?.invCriticos??0} críticos · ${data?.invBajoMin??0} bajos`, color:((data?.invCriticos??0)+(data?.invBajoMin??0))>0?'text-rose-600':'text-emerald-600', accion:()=>router.push('/M1Alexander/inventario') },
@@ -729,7 +732,8 @@ export default function AdminDashboard() {
             </div>
           </div>
           <p className="text-[10px] text-gray-400 mt-3">Venta de artículos (subtotal de las líneas) menos costo promedio vigente de Compras. Si no existe costo promedio para un producto, se utiliza products.costo. No es un costo histórico al momento de la venta ni utilidad neta.</p>
-          {data?.itemsSinCosto>0 && <p className="text-xs font-semibold text-amber-700 bg-amber-50 rounded-xl p-3 mt-3">Hay {data.itemsSinCosto} línea(s) sin costo configurado (venta asociada: {fmt(data.ventaSinCosto)}). La ganancia se oculta para evitar mostrar una utilidad inflada. Completa esos costos en inventario.</p>}
+          {data?.itemsSinCosto>0 && <p className="text-xs font-semibold text-amber-700 bg-amber-50 rounded-xl p-3 mt-3">Hay {data.itemsSinCosto} línea(s) sin costo promedio válido (venta asociada: {fmt(data.ventaSinCosto)}). La ganancia se oculta para evitar mostrar una utilidad inflada. Completa los costos en Compras.</p>}
+          {data?.pedidosSinItems>0 && <p className="text-xs font-semibold text-amber-700 bg-amber-50 rounded-xl p-3 mt-3">{data.pedidosSinItems} pedido(s) no tienen artículos registrados. La ganancia queda incompleta hasta corregir el detalle del pedido.</p>}
         </div>
       )}
 
