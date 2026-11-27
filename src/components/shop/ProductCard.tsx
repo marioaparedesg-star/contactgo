@@ -82,22 +82,22 @@ export default function ProductCard({ product }: Props) {
         {stockCritical && <span className="absolute bottom-2 right-2 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="p-2">
+      <div className="flex flex-1 flex-col p-2">
         <div className="mb-0.5 flex items-center justify-between gap-1">
           <p className="truncate text-[8px] font-bold uppercase tracking-[0.07em] text-slate-500">{product.marca || 'ContactGo'}</p>
           <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[9px] font-semibold text-slate-400 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
         </div>
-        <Link href={href} className="mb-1 block text-[15px] font-extrabold leading-[1.15] text-[#002455] transition-colors hover:text-[#009da2] sm:text-base">
-          <h3 className="line-clamp-2">{formatProductName(product.nombre)}</h3>
+        <Link href={href} className="mb-1 block min-w-0 text-[14px] font-extrabold leading-[1.2] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[15px]">
+          <h3 className="break-words [overflow-wrap:anywhere]">{formatProductName(product.nombre)}</h3>
         </Link>
 
-        <div className="space-y-0">
-          {details.map((detail, index) => (
-            <p key={index} className="truncate text-[10px] leading-[15px] text-slate-600">{detail}</p>
+        <div className="min-h-[30px] space-y-0">
+          {details.slice(0, 2).map((detail, index) => (
+            <p key={index} className="text-[10px] leading-[15px] text-slate-600">{detail}</p>
           ))}
         </div>
 
-        <div className="mt-1.5 border-t border-slate-100 pt-1.5">
+        <div className="mt-auto border-t border-slate-100 pt-1.5">
           <div className="flex items-end justify-between gap-1.5">
             <div className="min-w-0">
               <p className="text-[8px] font-medium uppercase tracking-wide text-slate-400">Precio</p>
