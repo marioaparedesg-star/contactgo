@@ -380,7 +380,7 @@ export default function EyeFlowSelector({
         }`}
       >
         {s.color && colorImages[s.color] ? (
-          <img src={colorImages[s.color]} alt={s.color} className="w-14 h-14 rounded-lg object-cover border border-white shadow-sm" />
+          <img src={colorImages[s.color]} alt={s.color} className="w-14 h-14 rounded-lg object-contain bg-white p-1 border border-white shadow-sm" />
         ) : (
           <span className="w-14 h-14 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 text-xs font-semibold">Color</span>
         )}
@@ -423,7 +423,7 @@ export default function EyeFlowSelector({
                   }`}
                 >
                   {colorImages[col] ? (
-                    <img src={colorImages[col]} alt={col} loading="lazy" className="w-full aspect-[4/3] object-cover" />
+                    <img src={colorImages[col]} alt={col} loading="lazy" className="w-full aspect-[4/3] object-contain bg-white p-2" />
                   ) : (
                     <span className="w-full aspect-[4/3] bg-slate-100 flex items-center justify-center text-sm text-slate-500">Color</span>
                   )}
