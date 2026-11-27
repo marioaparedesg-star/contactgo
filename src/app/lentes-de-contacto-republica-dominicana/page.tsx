@@ -344,7 +344,7 @@ export default async function LentesRDPage() {
             <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Marcas de lentes de contacto que trabajamos
             </h2>
-            <p className="text-gray-500 text-sm mb-8">Distribuidores autorizados en RD de las marcas líderes mundiales.</p>
+            <p className="text-gray-500 text-sm mb-8">Marcas reconocidas disponibles en República Dominicana mundiales.</p>
 
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
