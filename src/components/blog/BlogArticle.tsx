@@ -99,7 +99,7 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
         </div>
 
         {/* H1 */}
-        <h1 className="font-display text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 mb-4 leading-tight">
+        <h1 className="cg-page-title mb-4">
           {meta.h1}
         </h1>
 
@@ -121,14 +121,14 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
         </div>
 
         {/* Contenido del artículo */}
-        <article className="prose prose-sm md:prose-base max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-gray-900 prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-3 prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-2 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-strong:font-bold prose-ul:my-3 prose-li:my-1 prose-li:text-gray-700">
+        <article className="prose prose-sm md:prose-base max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-gray-900 prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-2 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-strong:font-bold prose-ul:my-3 prose-li:my-1 prose-li:text-gray-700">
           {children}
         </article>
 
         {/* FAQ */}
         {meta.faq && meta.faq.length > 0 && (
           <section className="mt-12 pt-8 border-t border-gray-100">
-            <h2 className="font-display text-xl md:text-2xl font-black text-gray-900 mb-4">Preguntas frecuentes</h2>
+            <h2 className="cg-section-title mb-4">Preguntas frecuentes</h2>
             <div className="space-y-3">
               {meta.faq.map((f, i) => (
                 <details key={i} className="group bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden">
@@ -145,7 +145,7 @@ export default function BlogArticle({ meta, children }: { meta: BlogMeta; childr
 
         {/* CTA final */}
         <section className="mt-12 p-6 bg-gradient-to-br from-teal-50 to-white border border-primary-100 rounded-2xl text-center">
-          <h3 className="font-display text-lg md:text-xl font-black text-gray-900 mb-2">
+          <h3 className="cg-card-title mb-2">
             ¿Listo para tus lentes de contacto?
           </h3>
           <p className="text-sm text-gray-600 mb-4">Marcas originales, entrega a domicilio en toda RD y pago seguro con AZUL.</p>
