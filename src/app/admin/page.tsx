@@ -656,7 +656,7 @@ export default function AdminDashboard() {
       {/* ═══ RESUMEN EJECUTIVO — Vendido, Cobrado y Por cobrar bien
           separados (antes se mezclaban en un solo "Ventas" confuso).
           Costo/Ganancia van sobre lo VENDIDO, no solo lo cobrado. ═══ */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
         {[
           { key:null, label:'Vendido', val:fmt(data?.ventasTotalPeriodo??0), sub:`${data?.pedidosPeriodo??0} pedidos — se haya cobrado o no`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:'periodo', label:'Cobrado', val:fmt(data?.ventasPeriodo??0), sub:'dinero que ya entró', color:'text-blue-600', accion:()=>setDetalleAbierto(detalleAbierto==='periodo'?null:'periodo') },
