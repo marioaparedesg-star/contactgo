@@ -561,11 +561,11 @@ export default function AdminDashboard() {
     sub: 'Se excluyen de los indicadores comerciales; corrige la marca de prueba en el pedido',
     accion: () => router.push('/M1Alexander/pedidos'),
   })
-  if ((data?.itemsSinCosto??0) > 0) alertas.push({
+  if ((data?.itemsSinCosto??0) > 0 || (data?.pedidosSinItems??0) > 0) alertas.push({
     icon: AlertTriangle, color:'text-amber-700', bg:'bg-amber-50',
-    texto: `${data.itemsSinCosto} línea(s) vendida(s) sin costo configurado`,
-    sub: `Ventas asociadas: ${fmt(data.ventaSinCosto??0)} · la ganancia estimada se oculta`,
-    accion: () => router.push('/M1Alexander/inventario'),
+    texto: `${data?.itemsSinCosto??0} línea(s) sin costo y ${data?.pedidosSinItems??0} pedido(s) sin artículos`,
+    sub: 'La ganancia estimada se oculta hasta completar los costos y el detalle de los pedidos',
+    accion: () => router.push('/M1Alexander/pedidos'),
   })
   if (stock.length > 0) alertas.push({
     icon: AlertTriangle, color:'text-red-600', bg:'bg-red-50',
