@@ -121,7 +121,7 @@ export default async function MarcaPage({ params }: { params: Promise<{ marca: s
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-bold mb-4 ${info.color}`}>
             {info.nombre}
           </div>
-          <h1 className="font-display text-3xl md:text-4xl font-black text-gray-900 mb-3">
+          <h1 className="cg-page-title mb-3">
             Lentes de Contacto {info.nombre}
           </h1>
           <p className="text-gray-500 text-lg max-w-2xl leading-relaxed">{info.descripcion}</p>
