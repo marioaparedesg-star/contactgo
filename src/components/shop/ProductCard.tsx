@@ -14,7 +14,7 @@ const TIPO_BADGE: Record<string, string> = {
 }
 
 const money = (value: number) => 'RD$' + Number(value || 0).toLocaleString('es-DO')
-const formatProductName = (name: string) => name.trim().toLocaleUpperCase('es')
+const formatProductName = (name: string) => name.trim()
 
 export default function ProductCard({ product }: Props) {
   const [isFav, setIsFav] = React.useState(false)
@@ -71,7 +71,7 @@ export default function ProductCard({ product }: Props) {
           <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[11px] font-semibold text-slate-600 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
         </div>
 
-        <Link href={href} className="block min-w-0 text-sm font-extrabold uppercase leading-snug tracking-[0.005em] text-[#002455] transition-colors hover:text-[#009da2] sm:text-sm">
+        <Link href={href} className="block min-w-0 text-sm font-extrabold leading-snug tracking-tight text-[#002455] transition-colors hover:text-[#009da2] sm:text-sm">
           <h3 className="line-clamp-2 min-h-[30px] break-words">{formatProductName(product.nombre)}</h3>
         </Link>
 
