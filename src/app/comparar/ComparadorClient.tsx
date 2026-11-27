@@ -190,11 +190,7 @@ export default function ComparadorClient({ productos }: { productos: Producto[] 
                   {p.nombre}
                 </p>
                 <div style={{ textAlign: 'center' }}>
-                  {p.precio_anterior && p.precio_anterior > p.precio && (
-                    <span style={{ fontSize: 13, color: '#6E6E73', textDecoration: 'line-through', marginRight: 6 }}>
-                      RD${p.precio_anterior.toLocaleString()}
-                    </span>
-                  )}
+
                   <span style={{ fontSize: 17, fontWeight: 600, color: '#1D1D1F' }}>RD${p.precio.toLocaleString()}</span>
                 </div>
               </div>
