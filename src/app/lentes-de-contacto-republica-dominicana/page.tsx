@@ -148,7 +148,7 @@ return [
         name: '¿Qué marcas de lentes de contacto se venden en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Las marcas líderes disponibles en RD son: Acuvue (Johnson & Johnson) con líneas Oasys, Moist y Oasys for Astigmatism; Biofinity (CooperVision) esférico, tórico y multifocal; Air Optix (Alcon) HydraGlyde, Colors, Multifocal; Bausch+Lomb Ultra; Precision1 y Dailies Total1. En ContactGo trabajamos directamente con los proveedores de productos originales de estas marcas.',
+          text: 'Las marcas líderes disponibles en RD son: Acuvue (Johnson & Johnson) con líneas Oasys, Moist y Oasys for Astigmatism; Biofinity (CooperVision) esférico, tórico y multifocal; Air Optix (Alcon) HydraGlyde, Colors, Multifocal; Bausch+Lomb Ultra; Precision1 y Dailies Total1. En ContactGo ofrecemos productos de estas marcas en su empaque original y sellado.',
         },
       },
       {
@@ -456,7 +456,7 @@ export default async function LentesRDPage() {
                 },
                 {
                   q: '¿Los lentes son originales del fabricante?',
-                  a: 'Sí. Trabajamos exclusivamente con proveedores de productos originales en República Dominicana. Cada producto viene con su empaque original sellado y garantía del fabricante.',
+                  a: 'Sí. Ofrecemos productos de marcas reconocidas en su empaque original y sellado. Cada caja incluye información de lote y vencimiento para verificarla.',
                 },
               ].map((f, i) => (
                 <details key={i} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden">
