@@ -238,7 +238,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
                 { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 24-72 horas',    color: 'text-[#002455]',   bg: 'bg-slate-100' },
-                { icon: Package,  title: 'Marcas originales',   desc: 'Distribuidores autorizados de cada marca',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
+                { icon: Package,  title: 'Marcas originales',   desc: 'Empaque original y sellado',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
                 { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-[#002455]', bg: 'bg-slate-100' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-[#002455]', bg: 'bg-slate-100' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
@@ -324,7 +324,7 @@ export default async function HomePage() {
         {/* ── MARCAS ── */}
         <section className="bg-gray-50 border-y border-gray-100 py-8">
           <div className="max-w-7xl mx-auto px-4">
-            <p className="text-center text-xs font-bold text-gray-500 uppercase tracking-widest mb-5">Marcas originales y productos originales</p>
+            <p className="text-center text-xs font-bold text-gray-500 uppercase tracking-widest mb-5">Marcas líderes en nuestro catálogo</p>
             <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 mb-5">
               {['ACUVUE®', 'AIR OPTIX®', 'FreshLook®', 'Bausch+Lomb', 'CooperVision®', 'Biofinity®', 'Opti-Free®', 'Prolub®'].map(m => (
                 <span key={m} className="text-gray-700 font-bold text-sm">{m}</span>
