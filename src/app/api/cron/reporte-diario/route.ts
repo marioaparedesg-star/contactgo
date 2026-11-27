@@ -282,6 +282,7 @@ export async function GET(req: Request) {
       metric('Egresos registrados hoy', fmt(cashOutToday), 'Movimientos de caja', '#b91c1c') +
       metric('Flujo neto de caja', fmt(netToday), 'Cobros menos egresos', netToday >= 0 ? '#15803d' : '#b91c1c') +
       metric('Pedidos nuevos', String(ordersToday.length), 'Valor generado: ' + fmt(orderValueToday)) +
+      metric('Cobro promedio por pedido', fmt(avgReceiptPerOrder), orderIdsWithReceiptToday.size + ' pedidos con cobro') +
       metric('Por cobrar', fmt(receivables), openBalances.length + ' pedidos con saldo', receivables > 0 ? '#b45309' : '#15803d') +
       metric('Pedidos atrasados', String(staleOrders.length), 'Sin actualización por 3 días o más', staleOrders.length ? '#b91c1c' : '#15803d') +
       '</div><div style="margin-top:12px;padding:12px 13px;background:#f7f9fc;border-radius:10px">' +
@@ -365,7 +366,10 @@ export async function GET(req: Request) {
       metric('Reposiciones próximos 7 días', String(subscriptionsNext7.length), 'Suscripciones activas') +
       '</div>'
 
+    const paidMonthIds = new Set(paidOrdersMonth.map(o => o.id))
+    const testLabelItems = items.filter(i => paidMonthIds.has(i.order_id) && /prueba|test/i.test(String(i.nombre || '')))
     const dataWarnings: string[] = []
+    if (testLabelItems.length > 0) dataWarnings.push(testLabelItems.length + ' línea(s) de producto con nombre de prueba aparecen en pedidos pagados no marcados como prueba. Revisar la clasificación del pedido para no contaminar los indicadores comerciales.')
     if (Math.abs(reconciliationGap) > 1) {
       dataWarnings.push('Diferencia histórica entre movimientos de caja de ventas y order_payments: ' + fmt(reconciliationGap) +
         '. Caja: ' + fmt(cashSalesLifetime) + '; order_payments: ' + fmt(paymentRowsLifetime) +
