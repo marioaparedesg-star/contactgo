@@ -78,7 +78,7 @@ export default function Navbar() {
       </div>
 
       {searchOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 px-4 py-3 shadow-lg z-50">
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 px-4 py-3 shadow-lg z-50">
           <form onSubmit={handleSearch} className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5">
             <Search className="w-4 h-4 text-gray-400 shrink-0" aria-hidden="true" />
             <input autoFocus value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Buscar lentes de contacto..." aria-label="Buscar productos" className="bg-transparent text-gray-700 placeholder-gray-400 outline-none flex-1" style={{ fontSize: '16px' }} />
