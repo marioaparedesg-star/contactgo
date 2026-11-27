@@ -36,13 +36,13 @@ export default async function Page() {
 
         <section className="bg-gradient-to-br from-blue-700 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para miopía e hipermetropía</span>
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto Esféricos en RD</h1>
+          <h1 className="cg-page-title mb-4">Lentes de Contacto Esféricos en RD</h1>
           <p className="text-blue-100 text-lg max-w-xl mx-auto">ACUVUE, Air Optix, Biofinity y más, disponibles a través de proveedores de productos originales. Entrega estimada: 24-48h en Santo Domingo y 24-72h en el interior.</p>
         </section>
 
         <section className="max-w-7xl mx-auto px-4 py-10">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-display text-xl font-bold text-gray-900">{products?.length ?? 0} productos disponibles</h2>
+            <h2 className="cg-section-title">{products?.length ?? 0} productos disponibles</h2>
             <Link href="/catalogo?tipo=esferico" className="text-sm text-primary-600 font-semibold hover:underline">Ver con filtros →</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
@@ -51,7 +51,7 @@ export default async function Page() {
         </section>
 
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
-          <h2 className="font-display text-2xl font-bold text-gray-900">Todo sobre los lentes esféricos</h2>
+          <h2 className="cg-section-title">Todo sobre los lentes esféricos</h2>
           <p>Los lentes de contacto esféricos son el tipo más común en el mundo. Están diseñados para corregir dos de los problemas de visión más frecuentes: <strong>miopía</strong> (no ves bien de lejos) e <strong>hipermetropía</strong> (no ves bien de cerca). En República Dominicana, millones de personas los usan a diario.</p>
           <p>En ContactGo encontrarás lentes esféricos para miopía e hipermetropía, desde los populares <strong>ACUVUE® 1-DAY MOIST®</strong> (diarios desechables) hasta los cómodos <strong>Biofinity®</strong> mensuales de CooperVision. Trabajamos con proveedores de productos originales y entregamos los productos sellados en su empaque original.</p>
           <h3 className="font-bold text-gray-900 text-lg mt-6">¿Cómo elegir el lente esférico correcto?</h3>
