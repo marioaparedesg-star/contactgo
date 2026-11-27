@@ -254,8 +254,9 @@ export default function AdminDashboard() {
     const idsConItems = new Set((items.data ?? []).map((i:any) => i.order_id).filter(Boolean))
     const pedidosSinItems = ords.filter((o:any) => !idsConItems.has(o.id)).length
 
-    // Se cruza cada item vendido contra el costo REAL actual del producto
-    // (products.costo). No se guarda un "snapshot" histórico del costo al
+    // Se cruza cada artículo con el costo promedio vigente de Compras
+    // (product_costs.costo_promedio), con respaldo en products.costo si falta la fila.
+    // No se guarda un "snapshot" histórico del costo al
     // momento de la venta — usa el costo vigente ahora. Es una aproximación
     // razonable mientras los costos no cambien todos los días, pero vale
     // la pena saberlo: una venta de hace 2 meses con un costo que ya
@@ -662,7 +663,7 @@ export default function AdminDashboard() {
           { key:'porCobrar', label:'Por cobrar', val:fmt(porCobrarTotal), sub:`${data?.pedidosPorCobrar??0} pedidos`, color:'text-amber-600', accion:()=>setDetalleAbierto(detalleAbierto==='porCobrar'?null:'porCobrar') },
           { key:null, label:'Egresos registrados', val:fmt(data?.egresosTotalPeriodo??0), sub:'salidas registradas en caja', color:'text-rose-600', accion:()=>router.push('/M1Alexander/reportes') },
           { key:null, label:'Flujo neto de caja', val:fmt(data?.flujoNetoPeriodo??0), sub:'cobros menos egresos', color:(data?.flujoNetoPeriodo??0)>=0?'text-emerald-600':'text-rose-600', accion:()=>router.push('/M1Alexander/reportes') },
-          { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según costo promedio de Compras', color:'text-red-500', accion:undefined },
+          { key:null, label:'Costo identificado', val:fmt(data?.costoTotalPeriodo??0), sub:(data?.itemsSinCosto??0)>0 || (data?.pedidosSinItems??0)>0?'parcial · falta costo o detalle':'según costo promedio de Compras', color:'text-red-500', accion:undefined },
           { key:'ganancia', label:'Ganancia estimada', val:data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo), sub:(data?.itemsSinCosto??0)>0 || (data?.pedidosSinItems??0)>0?`${data?.itemsSinCosto??0} línea(s) sin costo · ${data?.pedidosSinItems??0} pedido(s) sin artículos`:`${margenPct ?? 0}% margen`, color:data?.gananciaPeriodo==null?'text-amber-600':'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
           { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:null, label:'Pedidos +7 días', val:String(data?.pedidosAbiertos7Dias??0), sub:'abiertos desde hace más de una semana', color:(data?.pedidosAbiertos7Dias??0)>0?'text-rose-600':'text-emerald-600', accion:()=>router.push('/M1Alexander/pedidos') },
