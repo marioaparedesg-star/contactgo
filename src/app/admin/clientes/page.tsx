@@ -13,6 +13,26 @@ export default function ClientesPage() {
   const [search,   setSearch]     = useState('')
   const [loading,  setLoading]    = useState(true)
   const [statsMap, setStatsMap]   = useState<Record<string,{total:number,ltv:number}>>({})
+  const [regularizando, setRegularizando] = useState(false)
+  const [regularizacion, setRegularizacion] = useState<any>(null)
+  const [regularizacionError, setRegularizacionError] = useState('')
+
+  const regularizarCuentasWhatsApp = async () => {
+    if (!window.confirm('Se crearán cuentas solo para clientes con ventas por WhatsApp que todavía no tengan cuenta. Se enviará a cada uno un enlace para establecer su contraseña. No se modificarán pedidos históricos ni cuentas existentes. ¿Continuar?')) return
+    setRegularizando(true)
+    setRegularizacion(null)
+    setRegularizacionError('')
+    try {
+      const response = await fetch('/api/admin/regularizar-cuentas-whatsapp', { method: 'POST' })
+      const data = await response.json()
+      if (!response.ok || !data.ok) throw new Error(data.error ?? 'No se pudo completar la regularización.')
+      setRegularizacion(data.summary)
+    } catch (error: any) {
+      setRegularizacionError(error?.message ?? 'Error al regularizar las cuentas.')
+    } finally {
+      setRegularizando(false)
+    }
+  }
 
   useEffect(()=>{
     sb.from('profiles').select('id,nombre,email,telefono,created_at,activo').eq('role','customer').order('created_at',{ascending:false})
@@ -66,12 +86,22 @@ export default function ClientesPage() {
   return (
     <div className="max-w-7xl mx-auto w-full">
 <div className="max-w-7xl mx-auto p-4 md:p-8">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
             <div>
               <h1 className="text-2xl font-black text-gray-900">Clientes</h1>
               <p className="text-gray-400 text-sm mt-0.5">{clientes.length} registrados</p>
             </div>
+            <button onClick={regularizarCuentasWhatsApp} disabled={regularizando}
+              className="rounded-xl bg-[#002455] px-4 py-2.5 text-sm font-bold text-white disabled:opacity-50">
+              {regularizando ? 'Regularizando cuentas…' : 'Crear cuentas de ventas WhatsApp'}
+            </button>
           </div>
+          {regularizacionError && <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{regularizacionError}</div>}
+          {regularizacion && <div className="mb-4 rounded-xl border border-teal-200 bg-teal-50 p-4 text-sm text-teal-900">
+            <p className="font-bold mb-2">Resultado de la regularización</p>
+            <p>Encontrados: {regularizacion.encontrados} · Cuentas creadas: {regularizacion.creadas} · Correos aceptados: {regularizacion.correos_enviados} · Ya existían: {regularizacion.ya_existian} · Errores: {regularizacion.errores}</p>
+            {regularizacion.detalle?.length > 0 && <details className="mt-2"><summary className="cursor-pointer font-semibold">Ver detalle por correo</summary><ul className="mt-2 space-y-1">{regularizacion.detalle.map((item:any) => <li key={item.email}>{item.email}: {item.resultado}{item.error ? ` — ${item.error}` : ''}</li>)}</ul></details>}
+          </div>}
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
