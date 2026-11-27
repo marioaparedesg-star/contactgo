@@ -740,6 +740,39 @@ export default function AdminDashboard() {
         )}
       </div>
 
+      {/* ═══ INVENTARIO — reposición y niveles de alerta ═══ */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <div>
+            <h2 className="font-bold text-gray-900 text-sm">Inventario y reposición</h2>
+            <p className="text-[11px] text-gray-400 mt-0.5">Productos marcados por debajo del punto de reposición</p>
+          </div>
+          <button onClick={()=>router.push('/M1Alexander/inventario')} className="text-xs font-semibold text-primary-600 hover:underline shrink-0">Ver inventario →</button>
+        </div>
+        {stock.length===0 ? (
+          <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-3 py-3">
+            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0"/>
+            <p className="text-xs font-medium text-emerald-700">No hay productos críticos ni por debajo del mínimo configurado.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {stock.slice(0,6).map((p:any)=>(
+              <div key={p.nombre} className="flex items-center justify-between gap-3 py-2.5">
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-gray-800 truncate">{p.nombre}</p>
+                  <p className="text-[10px] text-gray-400">Punto de reposición: {p.stock_reorden ?? p.stock_minimo ?? p.stock_critico ?? 3}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-sm font-black text-rose-600">{Number(p.stock??0)} unidades</p>
+                  <p className="text-[10px] font-semibold text-rose-500">{p.alerta_stock==='critico'?'Crítico':'Bajo mínimo'}</p>
+                </div>
+              </div>
+            ))}
+            {stock.length>6 && <p className="pt-2 text-[10px] text-gray-400">Mostrando 6 de {stock.length} productos con alerta.</p>}
+          </div>
+        )}
+      </div>
+
       {/* ═══ POR COBRAR — sección prioritaria con acciones ═══ */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
         <div className="flex items-center justify-between mb-1">
