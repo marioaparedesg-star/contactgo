@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
         if (linkError || !tokenHash) throw new Error(linkError?.message ?? 'No se pudo generar el enlace seguro.')
 
         const setupUrl = `${base}/auth/callback?token_hash=${encodeURIComponent(tokenHash)}&type=recovery&next=/cuenta/reset-password`
-        const firstName = esc(customer.nombre.split(/\\s+/)[0] || 'Cliente')
+        const firstName = esc(customer.nombre.split(/\s+/)[0] || 'Cliente')
         const html = `<!doctype html><html lang="es"><meta charset="utf-8"><body style="margin:0;padding:28px 12px;background:#f3f6fa;font-family:Arial,sans-serif;color:#172b4d"><div style="max-width:580px;margin:auto;background:#fff;border-radius:14px;padding:32px"><div style="font-size:24px;font-weight:800;color:#002455">ContactGo</div><h1 style="font-size:22px;color:#002455">Tu cuenta ya está registrada</h1><p style="font-size:14px;line-height:1.7;color:#52647a">Hola ${firstName}, creamos tu cuenta de ContactGo con este correo porque realizaste una compra por WhatsApp. Solo necesitas establecer tu contraseña para acceder y consultar tus pedidos.</p><p style="margin:26px 0"><a href="${esc(setupUrl)}" style="display:inline-block;padding:14px 22px;background:#002455;border-radius:8px;color:#fff;text-decoration:none;font-weight:700">Establecer mi contraseña</a></p><p style="font-size:11px;line-height:1.6;color:#718096">Este enlace es personal y temporal. Si no solicitaste esta cuenta, puedes ignorar este mensaje.</p><p style="margin-top:24px;font-size:12px;color:#718096">ContactGo · contactgo.net</p></div></body></html>`
         const { error: sendError } = await resend.emails.send({
           from, to: email, subject: 'Tu cuenta de ContactGo está lista: establece tu contraseña', html,
