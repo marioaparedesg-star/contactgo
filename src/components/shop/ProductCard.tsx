@@ -109,8 +109,8 @@ export default function ProductCard({ product }: Props) {
           ))}
           <p className="truncate text-[10px] text-slate-400">{contenido}</p>
           {product.tipo === 'color' && colors.length > 0 && (
-            <div className="flex items-center gap-1 pt-0.5">
-              {colors.slice(0, 3).map(color => <span key={color} title={color} className="rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[8px] leading-none text-slate-500">{color}</span>)}
+            <div className="flex flex-wrap items-center gap-1 pt-0.5">
+              {colors.slice(0, 3).map(color => <span key={color} title={color} className="max-w-[68px] truncate rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[8px] leading-none text-slate-500">{color}</span>)}
               {colors.length > 3 && <span className="text-[9px] text-slate-400">+{colors.length - 3}</span>}
             </div>
           )}
