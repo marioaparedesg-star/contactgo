@@ -130,7 +130,7 @@ export async function GET(req: Request) {
       fetchAll<Row>(() => sb.from('email_log').select('id,template,status,created_at')
         .gte('created_at', startSevenDaysISO).in('status', ['error', 'failed', 'bounced', 'rejected'])),
       fetchAll<Row>(() => sb.from('order_payments').select('monto,order_id,created_at')),
-      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id')
+      fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,order_payment_id')
         .eq('categoria', 'venta').eq('tipo', 'ingreso')),
       fetchAll<Row>(() => sb.from('order_payments').select('order_id,monto,created_at,metodo')
         .gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
@@ -303,8 +303,8 @@ export async function GET(req: Request) {
     const cashSalesLifetime = sum(allSalesMovements)
     const paymentRowsLifetime = sum(allPayments)
     const reconciliationGap = cashSalesLifetime - paymentRowsLifetime
-    const unlinkedSalesLifetime = allSalesMovements.filter(r => !r.order_id).length
-    const unlinkedSalesAmount = sum(allSalesMovements.filter(r => !r.order_id))
+    const unlinkedSalesLifetime = allSalesMovements.filter(r => !r.order_id && !r.order_payment_id).length
+    const unlinkedSalesAmount = sum(allSalesMovements.filter(r => !r.order_id && !r.order_payment_id))
     const todayUnlinkedAmount = sum(receiptlessMovementsToday)
     const todayMissingMethodAmount = sum(unassignedMethodsToday)
     const emailFailureCount = emailErrors.length
