@@ -72,16 +72,16 @@ export default function ProductCard({ product }: Props) {
         {stockCritical && <span className="absolute bottom-2 right-2 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="flex flex-1 flex-col p-2.5">
-        <div className="mb-1 flex h-3.5 shrink-0 items-center justify-between gap-1.5">
+      <div className="p-2.5">
+        <div className="mb-1 flex h-3.5 items-center justify-between gap-1.5">
           <p className="truncate text-[8px] font-bold uppercase tracking-[0.07em] text-slate-500">{product.marca || 'ContactGo'}</p>
           <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[9px] font-semibold text-slate-400 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
         </div>
-        <Link href={href} className="block h-9 shrink-0 text-[14px] font-extrabold leading-[1.2] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[15px]">
+        <Link href={href} className="block h-9 text-[14px] font-extrabold leading-[1.2] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[15px]">
           <h3 className="line-clamp-2">{product.nombre}</h3>
         </Link>
 
-        <div className="mt-1 h-[42px] shrink-0 overflow-hidden">
+        <div className="mt-1 h-[38px] overflow-hidden">
           {details.slice(0, 1).map((detail, index) => (
             <div key={index} className="flex items-center gap-1 text-[9px] leading-4 text-slate-600">
               <span className="shrink-0 text-[#008F95]">{detail.icon}</span>
@@ -92,7 +92,7 @@ export default function ProductCard({ product }: Props) {
           {product.tipo === 'color' && colors.length > 0 && <p className="truncate text-[9px] leading-4 text-slate-500">{colors.slice(0, 3).join(' · ')}{colors.length > 3 ? ' +' + (colors.length - 3) : ''}</p>}
         </div>
 
-        <div className="mt-auto border-t border-slate-100 pt-2">
+        <div className="mt-1 border-t border-slate-100 pt-2">
           <div className="flex items-end justify-between gap-1.5">
             <div className="min-w-0">
               <p className="text-[8px] font-medium uppercase tracking-wide text-slate-400">Precio</p>
