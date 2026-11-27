@@ -2,7 +2,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingCart, Eye, Heart, CheckCircle2, Palette, CalendarDays, Glasses, Sparkles } from 'lucide-react'
+import { ShoppingCart, Eye, Heart, Palette, CalendarDays } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 
@@ -20,30 +20,14 @@ export default function ProductCard({ product }: Props) {
   const href = '/producto/' + ((product as any).slug || product.id)
   const days = Number((product as any).dias_uso || 0)
   const colors = ((product as any).colores_disponibles || []) as string[]
-  const sph = ((product as any).sph_disponibles || []) as number[]
-  const cyl = ((product as any).cyl_disponibles || []) as number[]
-  const axis = ((product as any).axis_disponibles || []) as number[]
-  const add = ((product as any).add_disponibles || []) as string[]
   const stock = Number(product.stock || 0)
   const stockCritical = stock > 0 && stock <= 4
   const contenido = (product as any).contenido || (product.tipo === 'color' ? 'Caja con 2 lentes' : 'Presentación por caja')
   const duration = days === 1 ? 'Uso diario' : days === 14 ? 'Reemplazo quincenal' : days === 30 ? 'Reemplazo mensual' : null
 
   const details: { icon: React.ReactNode; label: string }[] = []
-  if (product.tipo === 'color') {
-    details.push({ icon: <Palette className="h-3.5 w-3.5" />, label: colors.length ? colors.length + ' tonos disponibles' : 'Lentes de color' })
-  } else if (product.tipo === 'torico') {
-    details.push({ icon: <Glasses className="h-3.5 w-3.5" />, label: 'Corrección para astigmatismo' })
-    if (cyl.length) details.push({ icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: cyl.length + ' cilindros' + (axis.length ? ' · ' + axis.length + ' ejes' : '') })
-  } else if (product.tipo === 'multifocal') {
-    details.push({ icon: <Sparkles className="h-3.5 w-3.5" />, label: 'Visión de cerca y lejos' })
-    if (add.length) details.push({ icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: add.length + ' opciones ADD' })
-  } else if (product.tipo === 'esferico') {
-    details.push({ icon: <CheckCircle2 className="h-3.5 w-3.5" />, label: sph.length ? sph.length + ' graduaciones' : 'Graduación disponible' })
-  } else if (product.tipo === 'solucion') {
-    details.push({ icon: <Sparkles className="h-3.5 w-3.5" />, label: 'Limpieza y cuidado de lentes' })
-  } else if (product.tipo === 'gota') {
-    details.push({ icon: <Sparkles className="h-3.5 w-3.5" />, label: 'Cuidado e hidratación ocular' })
+  if (product.tipo === 'color' && colors.length) {
+    details.push({ icon: <Palette className="h-3.5 w-3.5" />, label: colors.length + ' tonos disponibles' })
   }
   if (duration) details.push({ icon: <CalendarDays className="h-3.5 w-3.5" />, label: duration })
 
@@ -91,16 +75,16 @@ export default function ProductCard({ product }: Props) {
         {stockCritical && <span className="absolute bottom-3 right-3 rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="flex flex-1 flex-col p-3.5 sm:p-4">
+      <div className="flex flex-1 flex-col p-3 sm:p-3.5">
         <div className="mb-1.5 flex min-h-4 items-center justify-between gap-2">
           <p className="truncate text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#008F95]">{product.marca || 'ContactGo'}</p>
           <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[10px] font-semibold text-slate-400 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
         </div>
-        <Link href={href} className="block min-h-[2.6rem] text-[13px] font-bold leading-snug text-[#002455] transition-colors hover:text-[#009da2] sm:text-sm">
+        <Link href={href} className="block text-[13px] font-bold leading-snug text-[#002455] transition-colors hover:text-[#009da2] sm:text-sm">
           <h3 className="line-clamp-2">{product.nombre}</h3>
         </Link>
 
-        <div className="mt-2.5 min-h-[3.5rem] space-y-1.5">
+        <div className="mt-2 space-y-1">
           {details.slice(0, 2).map((detail, index) => (
             <div key={index} className="flex items-center gap-1.5 text-[10px] leading-tight text-slate-600">
               <span className="shrink-0 text-[#008F95]">{detail.icon}</span>
@@ -116,7 +100,7 @@ export default function ProductCard({ product }: Props) {
           )}
         </div>
 
-        <div className="mt-auto border-t border-slate-100 pt-3">
+        <div className="mt-auto border-t border-slate-100 pt-2.5">
           <div className="flex items-end justify-between gap-2">
             <div>
               <p className="text-[9px] font-medium uppercase tracking-wide text-slate-400">Precio</p>
