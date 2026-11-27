@@ -51,7 +51,7 @@ export default function Footer() {
 
           {/* Productos */}
           <div>
-            <p className="text-white text-[10px] font-bold uppercase tracking-widest mb-2.5">Productos</p>
+            <p className="text-white text-xs font-bold uppercase tracking-wider mb-2.5">Productos</p>
             <ul className="space-y-1.5">
               {[
                 ['Esféricos', '/esfericos'],
@@ -61,7 +61,7 @@ export default function Footer() {
                 ['Soluciones', '/soluciones'],
                 ['Gotas', '/catalogo?tipo=gota'],
               ].map(([l, h]) => (
-                <li key={h}>{h.startsWith('http') ? <a href={h} target="_blank" rel="noopener noreferrer" className="text-xs text-gray-400 hover:text-white transition-colors">{l}</a> : <Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link>}</li>
+                <li key={h}>{h.startsWith('http') ? <a href={h} target="_blank" rel="noopener noreferrer" className="text-[13px] leading-5 text-gray-300 hover:text-white transition-colors">{l}</a> : <Link href={h} className="text-xs text-gray-400 hover:text-white transition-colors">{l}</Link>}</li>
               ))}
               <li><button type="button" onClick={() => window.dispatchEvent(new Event('cg-open-cookie-preferences'))} className="text-xs text-gray-400 hover:text-white transition-colors">Preferencias de cookies</button></li>
             </ul>
