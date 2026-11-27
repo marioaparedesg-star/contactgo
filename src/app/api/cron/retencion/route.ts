@@ -92,7 +92,7 @@ export async function GET(req: NextRequest) {
           const nombre = info.nombre.split(' ')[0]
           await resend.emails.send({
             from: FROM, to: email,
-            subject: `${nombre}, te extrañamos 👋`,
+            subject: `${nombre}, te extrañamos`,
             html: wrap('Te extrañamos', `
               <h2 style="color:#111827;font-size:18px;margin:0 0 12px">¡Hola, ${nombre}! 👋</h2>
               <p style="color:#4b5563;font-size:14px;line-height:1.6">Hace un tiempo que no nos visitas. Si ya se te acabaron tus lentes de contacto, o simplemente se te pasó reponerlos, aquí seguimos — con tus marcas certificadas de siempre.</p>
@@ -137,7 +137,7 @@ export async function GET(req: NextRequest) {
         : `En ${dias} días es cuando sueles necesitar reponer tus ${producto}, según tu ritmo de uso habitual.`
       await resend.emails.send({
         from: FROM, to: sub.cliente_email,
-        subject: dias === 'hoy' ? `${nombre}, es hora de reponer tus lentes 📦` : `${nombre}, en ${dias} días necesitarás tus próximos lentes 📅`,
+        subject: dias === 'hoy' ? `${nombre}, es hora de reponer tus lentes` : `${nombre}, en ${dias} días necesitarás tus próximos lentes`,
         html: wrap('Recordatorio de recompra', `
           <h2 style="color:#111827;font-size:18px;margin:0 0 12px">¡Hola, ${nombre}! 👋</h2>
           <p style="color:#4b5563;font-size:14px;line-height:1.6">${mensaje}</p>
@@ -226,7 +226,7 @@ export async function GET(req: NextRequest) {
         const nombre = (o.cliente_nombre ?? 'Cliente').split(' ')[0]
         await resend.emails.send({
           from: FROM, to: o.cliente_email,
-          subject: `${nombre}, ¿tienes dudas sobre tus lentes? 👋`,
+          subject: `${nombre}, ¿tienes dudas sobre tus lentes?`,
           html: wrap('¿Necesitas ayuda?', `
             <h2 style="color:#111827;font-size:18px;margin:0 0 12px">¡Hola, ${nombre}! 👋</h2>
             <p style="color:#4b5563;font-size:14px;line-height:1.6">No todo tiene que ser una venta — solo queríamos preguntarte cómo te ha ido:</p>
