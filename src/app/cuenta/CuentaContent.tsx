@@ -399,7 +399,9 @@ export default function CuentaPage() {
     setLoadingPedido(false)
 
     // Suscripción en tiempo real para actualizaciones de estado
-    const channel = sb.channel('pedido-' + p.id)
+    // Nombre único por apertura: reutilizar el mismo canal ya suscrito lanza
+    // "cannot add postgres_changes callbacks after subscribe()" (Sentry JAVASCRIPT-NEXTJS-1E).
+    const channel = sb.channel(`pedido-${p.id}-${Date.now()}`)
       .on('postgres_changes', {
         event: 'UPDATE', schema: 'public', table: 'orders',
         filter: 'id=eq.' + p.id
