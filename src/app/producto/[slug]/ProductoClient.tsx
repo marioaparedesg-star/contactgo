@@ -23,7 +23,7 @@ import { getEntrega, getFechaEntrega } from '@/lib/delivery-times'
 import EntregaHoy from '@/components/shop/EntregaHoy'
 import { buildSPHOptions } from '@/components/shop/SPHPicker'
 import EyeFlowSelector, { type EyeFlowState, initialEyeFlow } from '@/components/shop/EyeFlowSelector'
-import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES, FRECUENCIAS, mejorFrecuencia } from '@/lib/subscription-utils'
+import { DESCUENTOS, SOLUTION_SIZES, SOLUTION_PRICES } from '@/lib/subscription-utils'
 
 const TIPO_LABELS: Record<string, string> = {
   esferico: 'Esférico', torico: 'Tórico', multifocal: 'Multifocal',
@@ -273,8 +273,8 @@ function WhyBlock({ tipo, proteccion_uv }: { tipo: string; proteccion_uv?: boole
   const b = BENEFITS[tipo] ?? BENEFITS.esferico
   const bullets = proteccion_uv ? b.bullets.map((bl, i) => i === 3 ? 'Protección UV Clase II incluida' : bl) : b.bullets
   return (
-    <div className="bg-gradient-to-br from-teal-50 to-green-50 border border-primary-100 rounded-2xl p-4">
-      <p className="text-xs font-black text-primary-700 uppercase tracking-wide mb-3">{b.title}</p>
+    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+      <p className="text-xs font-bold text-slate-700 uppercase tracking-wide mb-3">{b.title}</p>
       <ul className="space-y-1.5">
         {bullets.map(bullet => (
           <li key={bullet} className="flex items-start gap-2 text-sm text-gray-700">
@@ -846,7 +846,7 @@ export default function ProductoClient({ product, variants }: Props) {
               MOBILE LAYOUT — < lg
               Orden: Imagen → Info → Selectores
               ══════════════════════════════════════════════════════════ */}
-          <div className="lg:hidden">
+          <div className="md:hidden">
 
             {/* BLOQUE 1: IMAGEN — completa, visible de inmediato */}
             <div className="relative bg-white">
@@ -893,17 +893,6 @@ export default function ProductoClient({ product, variants }: Props) {
               {/* Precio */}
               <div className="mt-2 flex items-end gap-3 flex-wrap">
                 <p className="text-[32px] font-bold tracking-tight text-slate-950 tabular-nums">RD${price.toLocaleString()}</p>
-                {(()=>{
-                  const precioOptica = Math.round(price * 1.12 / 100) * 100
-                  const pct = Math.round(((precioOptica - price) / precioOptica) * 100)
-                  if (pct <= 0 || !isLente) return null
-                  return (
-                    <div className="flex items-center gap-1.5 pb-1">
-                      <span className="text-sm text-gray-400 line-through">RD${precioOptica.toLocaleString()}</span>
-                      <span className="text-xs font-black text-green-700 bg-green-50 px-2 py-0.5 rounded-full">-{pct}%</span>
-                    </div>
-                  )
-                })()}
               </div>
               <Link href={`/comparar?p=${product.slug}`}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 hover:text-primary-700 mt-2">
@@ -1007,7 +996,7 @@ export default function ProductoClient({ product, variants }: Props) {
               </button>
               <button onClick={handleBuyNow} disabled={product.stock===0||sinVariante}
                 className="w-full bg-white hover:bg-slate-50 active:scale-[0.99] disabled:opacity-30 text-slate-800 border border-slate-300 font-semibold py-3 rounded-xl text-sm transition-colors">
-                {product.stock===0?'Sin stock':faltaColor?'Selecciona un color primero':sinVariante?'Completa la selección primero':'Comprar ahora ⚡'}
+                {product.stock===0?'Sin stock':faltaColor?'Selecciona un color primero':sinVariante?'Completa la selección primero':'Comprar ahora'}
               </button>
               <a href={`https://wa.me/18096942268?text=${encodeURIComponent(`Hola, quiero info sobre ${product.nombre}`)}`}
                 target="_blank" rel="noopener"
@@ -1021,10 +1010,10 @@ export default function ProductoClient({ product, variants }: Props) {
             <div className="px-4 pb-8 space-y-4">
               {/* Bundle kit */}
               {isLente && (
-                <div className="bg-amber-50 border border-amber-100 rounded-2xl overflow-hidden">
+                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
                   <div className="px-3 py-2 flex items-center justify-between">
-                    <p className="text-xs font-black text-amber-800">Completa tu kit</p>
-                    <span className="text-[9px] bg-amber-400 text-white font-black px-1.5 py-0.5 rounded-full">AHORRA</span>
+                    <p className="text-xs font-bold text-slate-700">Productos complementarios</p>
+                    <span className="text-[9px] bg-slate-100 text-slate-600 font-semibold px-1.5 py-0.5 rounded-full">AHORRA</span>
                   </div>
                   <div className="px-3 pb-3">
                     <InlineCrossSell tipo={tipo} currentId={product.id} />
@@ -1047,17 +1036,17 @@ export default function ProductoClient({ product, variants }: Props) {
               DESKTOP LAYOUT — lg+
               3 columnas: Galería | Info+Selectores | Sticky Buy Box
               ══════════════════════════════════════════════════════════ */}
-          <div className="hidden lg:grid lg:grid-cols-[400px_1fr_300px] xl:grid-cols-[440px_1fr_320px] gap-6 xl:gap-8 px-6 xl:px-8 py-6 items-start">
+          <div className="hidden md:grid md:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.2fr)] lg:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.35fr)_minmax(260px,0.8fr)] xl:grid-cols-[440px_minmax(0,1fr)_320px] gap-5 xl:gap-8 px-4 lg:px-6 xl:px-8 py-6 items-start">
 
             {/* COL 1: GALERÍA DESKTOP */}
             <div className="sticky top-24 self-start">
-              <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white border border-gray-100 shadow-sm aspect-square">
+              <div className="group relative rounded-2xl overflow-hidden bg-white border border-gray-200 aspect-square">
                 <span className="absolute top-3 left-3 z-10 text-[9px] font-bold text-green-700 bg-white border border-green-100 px-2 py-1 rounded-full">
                   ✅ Directo del fabricante
                 </span>
                 {imagenActual ? (
                   <Image src={imagenActual} alt={product.nombre} fill unoptimized priority
-                    className="object-contain p-6 group-hover:scale-105 transition-transform duration-500" />
+                    className="object-contain p-6" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <Eye className="w-20 h-20 text-gray-200" />
@@ -1079,13 +1068,13 @@ export default function ProductoClient({ product, variants }: Props) {
               )}
 
 
-              <div className="grid grid-cols-2 gap-1.5 mt-3">
-                <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
-                  <span className="text-sm shrink-0">✅</span>
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-lg px-2.5 py-2">
+                  
                   <span className="text-[10px] text-gray-600 font-medium leading-tight">Directo del fabricante</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
-                  <span className="text-sm shrink-0">🚚</span>
+                  
                   <span className="text-[10px] text-gray-600 font-medium leading-tight">Entrega rápida</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
@@ -1093,7 +1082,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   <span className="text-[10px] text-gray-600 font-medium leading-tight">Pago AZUL</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
-                  <span className="text-sm shrink-0">↩️</span>
+                  
                   <span className="text-[10px] text-gray-600 font-medium leading-tight">7 días dev.</span>
                 </div>
               </div>
@@ -1102,8 +1091,8 @@ export default function ProductoClient({ product, variants }: Props) {
             {/* COL 2: INFO + SELECTORES DESKTOP */}
             <div className="space-y-4 min-w-0">
               <div>
-                <p className="text-xs font-black text-primary-600 uppercase tracking-widest mb-1">{product.marca}</p>
-                <h1 className="text-2xl xl:text-3xl font-black text-gray-900 leading-tight">{product.nombre}</h1>
+                <p className="text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">{product.marca}</p>
+                <h1 className="text-xl xl:text-2xl font-bold text-slate-900 leading-tight">{product.nombre}</h1>
               </div>
               {(product as any).avg_rating && (
                 <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -1117,15 +1106,6 @@ export default function ProductoClient({ product, variants }: Props) {
               <div>
                 <div className="flex items-baseline gap-3 flex-wrap">
                   <p className="text-3xl xl:text-4xl font-black text-gray-900">RD${price.toLocaleString()}</p>
-                  {(()=>{
-                    const po = Math.round(price*1.12/100)*100
-                    const pct = Math.round(((po-price)/po)*100)
-                    if (pct<=0||!isLente) return null
-                    return (<>
-                      <span className="text-base text-gray-400 line-through">RD${po.toLocaleString()}</span>
-                      <span className="text-xs font-black text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">-{pct}% vs óptica</span>
-                    </>)
-                  })()}
                 </div>
                 {product.contenido && <p className="text-xs text-gray-400 mt-1">{product.contenido}{product.reemplazo?` · ${product.reemplazo}`:''}</p>}
                 <div className="flex items-center gap-3 mt-2 flex-wrap">
@@ -1139,10 +1119,10 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               </div>
               {isLente && (
-                <div className="grid grid-cols-4 gap-2">
-                  {[{icon:'👁️',l:'Comodidad todo el día'},{icon:'💧',l:'Hidratación avanzada'},{icon:'🎯',l:'Visión nítida y estable'},{icon:'☀️',l:(product as any).proteccion_uv?'Protección UV':'Certificado'}].map(b => (
-                    <div key={b.l} className="flex flex-col items-center gap-1 bg-gray-50 rounded-xl p-2 border border-gray-100 text-center">
-                      <span className="text-xl">{b.icon}</span>
+                <div className="grid grid-cols-2 xl:grid-cols-4 gap-2">
+                  {[{l:'Comodidad durante el uso'},{l:'Hidratación'},{l:'Visión nítida y estable'},{l:(product as any).proteccion_uv?'Protección UV':'Calidad de fabricante'}].map(b => (
+                    <div key={b.l} className="flex flex-col items-center gap-1 bg-slate-50 rounded-lg p-2 border border-slate-100 text-center">
+                      
                       <p className="text-[9px] font-semibold text-gray-600 leading-tight">{b.l}</p>
                     </div>
                   ))}
@@ -1168,8 +1148,8 @@ export default function ProductoClient({ product, variants }: Props) {
               )}
               
               {isMulti && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-                  <p className="text-xs font-bold text-amber-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                  <p className="text-xs font-bold text-slate-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
                   <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
                     {[{r:'+0.75–+1.25',l:'Presbicia leve',c:'bg-green-100 text-green-700'},{r:'+1.50–+2.00',l:'Presbicia media',c:'bg-yellow-100 text-yellow-700'},{r:'+2.25–+3.00',l:'Presbicia alta',c:'bg-orange-100 text-orange-700'}].map(({r,l,c}) => (
                       <div key={r} className={`${c} rounded-lg px-1.5 py-1.5`}>
@@ -1185,7 +1165,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 className="flex items-center gap-3 bg-[#f0fdf4] border border-[#bbf7d0] hover:bg-[#dcfce7] rounded-xl px-4 py-3 transition-colors group">
                 <svg className="w-5 h-5 text-[#25D366] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                 <div>
-                  <p className="text-sm font-bold text-gray-800">💬 ¿Tienes dudas sobre tu graduación?</p>
+                  <p className="text-sm font-bold text-gray-800">¿Tienes dudas sobre tu graduación?</p>
                   <p className="text-xs text-gray-500">Habla con un asesor · Respuesta inmediata</p>
                 </div>
               </a>
@@ -1194,26 +1174,25 @@ export default function ProductoClient({ product, variants }: Props) {
               <CrossSelling tipo={tipo} currentId={product.id} />
             </div>
 
-            {/* COL 3: BUY BOX STICKY DESKTOP */}
-            <div className="sticky top-20 self-start">
+            {/* COL 3: PANEL DE COMPRA — debajo del contenido en tablet, lateral en escritorio */}
+            <div className="md:col-span-2 lg:col-span-1 md:sticky md:top-20 md:self-start">
               <div className="bg-white border border-slate-200 rounded-2xl shadow-[0_8px_30px_rgba(15,23,42,0.05)] overflow-hidden">
                 <div className="p-3 space-y-2.5">
                   {!isLente && <div className="text-center py-2"><p className="text-2xl font-bold tracking-tight text-slate-950">RD${price.toLocaleString()}</p>{product.contenido && <p className="text-xs text-gray-400 mt-0.5">{product.contenido}</p>}</div>}
-                  <div className="bg-gray-50 rounded-xl px-3 py-2 space-y-0.5">
+                  <div className="bg-slate-50 rounded-lg px-3 py-2 space-y-1 border border-slate-100">
                     {(()=>{const fi=getFechaEntrega(tipo,product.nombre);const ei=getEntrega(tipo,product.nombre);return(<>
-                      <p className={`text-xs font-bold flex items-center gap-1.5 ${ei.especial?'text-amber-600':'text-green-600'}`}>{ei.icono} {fi.texto}</p>
-                      <p className="text-[10px] text-green-600 font-semibold">{suscripcion?'💬 Te recordamos por WhatsApp':'🚚 Envío a todo RD'}</p>
+                      <p className={`text-xs font-semibold flex items-center gap-1.5 ${ei.especial?'text-amber-600':'text-green-600'}`}>{fi.texto}</p>
+                      <p className="text-[10px] text-slate-600 font-medium">{suscripcion?'Recordatorio por WhatsApp':'Envío a todo RD'}</p>
                     </>)})()}
                   </div>
                   {!isGota && (
                     <div className="flex items-center justify-between">
-                      <p className="text-xs font-bold text-gray-700">Cantidad</p>
+                      <p className="text-sm font-semibold text-gray-700">Cantidad</p>
                       <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
                         <button onClick={()=>handleSetQty(Math.max(1,qty-1))} className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">−</button>
                         <span className="w-8 text-center font-black text-gray-900 text-sm">{qty}</span>
                         <button onClick={()=>handleSetQty(qty+1)} className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 font-bold text-lg">+</button>
                       </div>
-                      {isLente&&!isColor&&qty>=2&&<span className="text-[10px] text-green-600 font-black bg-green-50 px-1.5 py-0.5 rounded-full">5% OFF</span>}
                     </div>
                   )}
 
@@ -1235,7 +1214,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     </button>
                     <a href={`https://wa.me/18096942268?text=${encodeURIComponent(`Hola, quiero comprar ${product.nombre}. ¿Está disponible?`)}`}
                       target="_blank" rel="noopener"
-                      className="w-full mt-1.5 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] active:scale-95 text-white font-bold py-2.5 rounded-xl text-sm transition-colors">
+                      className="w-full mt-1.5 flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-sm transition-colors">
                       <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                       {sinVariante || (isLente && !sph && !isToric && !isMulti)
                         ? '¿No sabes tu graduación? Escríbenos'
@@ -1256,16 +1235,16 @@ export default function ProductoClient({ product, variants }: Props) {
                       <div className="border-t border-gray-100 pt-2.5">
                         <div className="flex items-center justify-between mb-1.5">
                           <p className="text-[10px] font-black text-gray-500 uppercase tracking-wider">¿Cada cuánto reponer?</p>
-                          <p className="text-[9px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-full">Sin compromiso</p>
+                          <p className="text-[10px] text-slate-500">Sin cobros automáticos</p>
                         </div>
-                        <div className="grid grid-cols-4 gap-1.5">
+                        <div className="grid grid-cols-2 xl:grid-cols-4 gap-2">
                           {opciones.map(op => {
                             const isSel = suscripcion === op.val
                             const isReco = op.val === recomendada
                             return (
                               <button key={String(op.val)} type="button" onClick={() => setSuscripcion(op.val)}
-                                className={`relative flex flex-col items-center justify-center gap-0.5 py-2 px-1 rounded-lg border-2 text-center transition-all ${isSel ? 'border-primary-500 bg-teal-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
-                                {isReco && !isSel && <span className="absolute -top-1.5 -right-1 text-[7px] font-black bg-amber-400 text-white px-1 py-0.5 rounded-full">★</span>}
+                                className={`relative flex flex-col items-center justify-center gap-0.5 py-2.5 px-2 rounded-lg border text-center transition-colors min-h-[48px] ${isSel ? 'border-[#01B2B7] bg-[#F0FAFA]' : 'border-gray-200 hover:border-slate-400 bg-white'}`}>
+                                {isReco && !isSel && }
                                 <span className={`text-[10px] font-bold leading-tight ${isSel ? 'text-primary-700' : 'text-gray-700'}`}>{op.label}</span>
                               </button>
                             )
@@ -1273,7 +1252,7 @@ export default function ProductoClient({ product, variants }: Props) {
                         </div>
                         {suscripcion && (
                           <p className="text-[9px] text-gray-400 leading-tight px-0.5 pt-1.5">
-                            💬 Te escribimos por WhatsApp cuando se acerque la fecha — tú decides si reordenas, sin cobro automático.
+                            Te enviaremos un recordatorio por WhatsApp cuando se acerque la fecha. Tú decides si realizas un nuevo pedido.
                           </p>
                         )}
                       </div>
@@ -1281,17 +1260,17 @@ export default function ProductoClient({ product, variants }: Props) {
                   })()}
 
                   <div className="border-t border-gray-100 pt-2 mt-1 space-y-1">
-                    <p className="text-[10px] text-gray-400 font-medium">✅ Directo del fabricante</p>
+                    <p className="text-[10px] text-gray-500 font-medium">Producto de distribución oficial</p>
                     <p className="text-[10px] text-gray-400 font-medium inline-flex items-center gap-1">
                       <AzulLogo size="xs" /> Pago seguro con AZUL
                     </p>
-                    <p className="text-[10px] text-gray-400 font-medium">🚚 Transporte: Santo Domingo y Santiago 24-48h · Interior 24-72h</p>
+                    <p className="text-[10px] text-gray-400 font-medium">Envíos: Santo Domingo y Santiago 24-48h · Interior 24-72h</p>
                   </div>
                 </div>
               </div>
               {isLente && (
                 <div className="mt-3 bg-amber-50 border border-amber-100 rounded-2xl overflow-hidden">
-                  <div className="px-3 py-2 flex items-center justify-between border-b border-amber-100">
+                  <div className="px-3 py-2 flex items-center justify-between border-b border-slate-100">
                     <p className="text-xs font-black text-amber-800">Completa tu kit</p>
                     <span className="text-[9px] bg-amber-400 text-white font-black px-1.5 py-0.5 rounded-full">BUNDLE</span>
                   </div>
