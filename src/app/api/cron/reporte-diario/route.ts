@@ -192,16 +192,16 @@ export async function GET(req: Request) {
     }
     const collectedByOrder: Record<string, number> = {}
     activeCash.forEach(r => { collectedByOrder[r.order_id] = (collectedByOrder[r.order_id] || 0) + Number(r.monto || 0) })
-    const openBalances = activeOrders.map(o => {
+    const openBalances: Row[] = activeOrders.map((o: Row): Row => {
       const paid = o.pago_estado === 'pagado'
       const collected = collectedByOrder[o.id] || 0
       const balance = paid ? 0 : Math.max(0, Number(o.total || 0) - collected)
       return { ...o, collected, balance, stageDays: daysAgo(o.updated_at || o.created_at), ageDays: daysAgo(o.created_at) }
-    }).filter(o => o.balance > 0.5).sort((a, b) => b.ageDays - a.ageDays)
+    }).filter((o: Row) => o.balance > 0.5).sort((a: Row, b: Row) => b.ageDays - a.ageDays)
     const receivables = openBalances.reduce((v, o) => v + o.balance, 0)
     const receivablesOver3 = openBalances.filter(o => o.ageDays > 3)
-    const staleOrders = activeOrders.map(o => ({ ...o, stageDays: daysAgo(o.updated_at || o.created_at) }))
-      .filter(o => o.stageDays >= 3).sort((a, b) => b.stageDays - a.stageDays)
+    const staleOrders: Row[] = activeOrders.map((o: Row): Row => ({ ...o, stageDays: daysAgo(o.updated_at || o.created_at) }))
+      .filter((o: Row) => o.stageDays >= 3).sort((a: Row, b: Row) => b.stageDays - a.stageDays)
     const pipeline: Record<string, number> = {}
     activeOrders.forEach(o => { const key = String(o.estado || 'Sin etapa'); pipeline[key] = (pipeline[key] || 0) + 1 })
     const pipelineRows = Object.entries(pipeline).sort((a, b) => b[1] - a[1])
