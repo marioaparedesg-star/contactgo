@@ -69,7 +69,7 @@ export default async function Page() {
           <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">
             💧 Lubricación ocular
           </span>
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">
+          <h1 className="cg-page-title mb-4">
             Gotas para Ojos en República Dominicana
           </h1>
           <p className="text-sky-100 text-lg max-w-xl mx-auto">
@@ -132,7 +132,7 @@ export default async function Page() {
 
         {/* FAQ */}
         <section className="max-w-3xl mx-auto px-4 py-10">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
+          <h2 className="cg-section-title mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-4">
             {faqs.map((faq, i) => (
               <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
