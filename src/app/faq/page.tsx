@@ -38,7 +38,7 @@ const FAQS = [
   {
     categoria: '👁️ Productos',
     preguntas: [
-      { q: '¿Los productos son certificados?', a: 'Trabajamos con marcas reconocidas y canales de distribución autorizados. Los productos se entregan sellados y en su empaque original; no abrimos ni reempacamos las cajas.' },
+      { q: '¿Los productos son certificados?', a: 'Trabajamos con marcas reconocidas y proveedores de productos originales. Los productos se entregan sellados y en su empaque original; no abrimos ni reempacamos las cajas.' },
       { q: '¿Necesito receta para comprar lentes de contacto?', a: 'Recomendamos tener una receta actualizada de tu oftalmólogo antes de comprar. Contamos con un buscador por receta para ayudarte a elegir el tipo correcto.' },
       { q: '¿Qué pasa si mi graduación no está disponible?', a: 'Escríbenos por WhatsApp y buscamos la graduación específica para ti. Podemos hacer pedidos especiales.' },
       { q: '¿Los lentes de color necesitan graduación?', a: 'No. Tenemos lentes de color sin graduación (plano) y con graduación para miopía e hipermetropía.' },
