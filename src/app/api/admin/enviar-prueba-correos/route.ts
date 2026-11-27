@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { buildCustomerOrderEmail, buildAdminOrderEmail } from '@/lib/email/order-templates'
 import { BIENVENIDA, buildEducationalEmail } from '@/lib/email/educational-templates'
+import { EDUCATIVOS_NUEVOS } from '@/lib/email/educativos-catalogo'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,6 +49,7 @@ export async function GET(req: NextRequest) {
       subject: `PRUEBA · ${e.subject}`,
       html: buildEducationalEmail(e),
     })),
+    ...EDUCATIVOS_NUEVOS.map(e => ({ nombre: `Educativo · ${e.id}`, subject: `PRUEBA · ${e.subject}`, html: buildEducationalEmail(e) })),
     {
       nombre: 'Administración · Nuevo pedido',
       subject: 'PRUEBA · Administración · Nuevo pedido (datos ficticios)',

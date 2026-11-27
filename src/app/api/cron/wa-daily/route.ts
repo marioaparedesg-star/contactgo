@@ -295,7 +295,7 @@ export async function GET(req: NextRequest) {
         await resend.emails.send({
           from: `ContactGo <info@contactgo.net>`,
           to: o.cliente_email,
-          subject: `¿Cómo van tus lentes, ${nombre}? 👁️`,
+          subject: `¿Cómo van tus lentes, ${nombre}?`,
           html: `
 <div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
   <div style="background:#002455;padding:20px;border-radius:12px 12px 0 0;text-align:center">
@@ -424,7 +424,7 @@ export async function GET(req: NextRequest) {
     const ETAPAS_DEF = [
       {
         dias: 3, campo: 'educativo_dia3_enviado' as const,
-        asunto: 'Cómo poner y quitar tus lentes correctamente 👁️',
+        asunto: 'Cómo poner y quitar tus lentes correctamente',
         contenido: (nombre: string, tipo: TipoPrincipal) => `
           <h2 style="color:#111;font-size:18px">¡Hola, ${nombre}! 👋</h2>
           <p style="color:#374151;font-size:14px">Aquí tienes lo básico para empezar bien con tus lentes de contacto:</p>
@@ -440,7 +440,7 @@ export async function GET(req: NextRequest) {
       },
       {
         dias: 7, campo: 'educativo_dia7_enviado' as const,
-        asunto: (esDiario: boolean) => esDiario ? 'Un tip importante sobre tus lentes diarios 🗓️' : 'El error más común con el estuche de tus lentes 🧴',
+        asunto: (esDiario: boolean) => esDiario ? 'Un tip importante sobre tus lentes diarios' : 'El error más común con el estuche de tus lentes',
         contenido: (nombre: string, _tipo: TipoPrincipal, esDiario: boolean) => esDiario ? `
           <h2 style="color:#111;font-size:18px">${nombre}, un recordatorio rápido 🗓️</h2>
           <p style="color:#374151;font-size:14px">Tus lentes son de reemplazo diario — eso significa:</p>
@@ -459,7 +459,7 @@ export async function GET(req: NextRequest) {
       },
       {
         dias: 14, campo: 'educativo_dia14_enviado' as const,
-        asunto: '¿Cuándo debes ver a un optometrista? 👀',
+        asunto: '¿Cuándo debes ver a un optometrista?',
         contenido: (nombre: string, tipo: TipoPrincipal) => `
           <h2 style="color:#111;font-size:18px">${nombre}, esto es importante 👀</h2>
           <p style="color:#374151;font-size:14px">ContactGo no reemplaza a tu optometrista. Consulta a un profesional si notas:</p>
@@ -474,7 +474,7 @@ export async function GET(req: NextRequest) {
       },
       {
         dias: 25, campo: 'educativo_dia25_enviado' as const,
-        asunto: '¿Cómo va tu adaptación? 👁️',
+        asunto: '¿Cómo va tu adaptación?',
         contenido: (nombre: string, tipo: TipoPrincipal) => `
           <h2 style="color:#111;font-size:18px">${nombre}, ya llevas un tiempo con tus lentes 👁️</h2>
           <p style="color:#374151;font-size:14px">La comodidad y la calidad visual deben mantenerse dentro de lo esperado para tu adaptación. No ignores molestias persistentes ni intentes acostumbrarte al dolor.</p>
@@ -518,6 +518,17 @@ export async function GET(req: NextRequest) {
           const tipoPrincipal = prioridad.find(t => tiposComprados.includes(t)) ?? 'esferico'
           const esDiario = items.some(i => i.products?.reemplazo?.toLowerCase() === 'diario')
 
+          // CONSENTIMIENTO: educativo/promocional solo con consentimiento de marketing vigente.
+          if (!o.cliente_email || !(await hasMarketingConsent(o.cliente_email))) {
+            await sb.from('orders').update({ [etapa.campo]: true }).eq('id', o.id)
+            continue
+          }
+          // LÍMITE: máximo 2 correos educativos por cliente cada 7 días.
+          const hace7 = new Date(Date.now() - 7 * 86400000).toISOString()
+          const { count: enviadosSemana } = await sb.from('email_log').select('id', { count: 'exact', head: true })
+            .eq('to_email', o.cliente_email).like('template', 'educativo_%').gte('created_at', hace7)
+          if ((enviadosSemana ?? 0) >= 2) continue
+
           const nombre = o.cliente_nombre?.split(' ')[0] ?? 'Cliente'
           const asunto = typeof etapa.asunto === 'function' ? etapa.asunto(esDiario) : etapa.asunto
           const contenidoHtml = etapa.contenido(nombre, tipoPrincipal, esDiario)
@@ -529,6 +540,7 @@ export async function GET(req: NextRequest) {
             html: emailEducativoHtml(contenidoHtml),
           })
           await sb.from('orders').update({ [etapa.campo]: true }).eq('id', o.id)
+          await sb.from('email_log').insert({ to_email: o.cliente_email, subject: asunto, template: `educativo_${etapa.campo}`, order_id: o.id, status: 'sent' })
           if (etapa.dias === 3) resultsEducativo.dia3++
           else if (etapa.dias === 7) resultsEducativo.dia7++
           else resultsEducativo.dia14++

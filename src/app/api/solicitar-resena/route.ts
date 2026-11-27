@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
         await resend.emails.send({
           from: `ContactGo <info@contactgo.net>`,
           to: o.cliente_email,
-          subject: `¿Cómo fue tu experiencia con ContactGo? 👁`,
+          subject: `¿Cómo fue tu experiencia con ContactGo?`,
           html: `
 <div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:20px">
   <div style="background:#002455;padding:20px;border-radius:12px 12px 0 0;text-align:center">

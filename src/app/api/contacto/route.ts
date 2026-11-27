@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: 'ContactGo <notifications@contactgo.net>',
       to: [ADMIN_EMAIL],
-      subject: `📩 Nuevo mensaje de contacto — ${nombre}`,
+      subject: ` Nuevo mensaje de contacto — ${nombre}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
           <div style="background:#0ea5e9;padding:24px;border-radius:12px 12px 0 0">
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
         from: 'ContactGo <notifications@contactgo.net>',
         to: [email],
-        subject: '✅ Recibimos tu mensaje — ContactGo',
+        subject: ' Recibimos tu mensaje — ContactGo',
         html: `
           <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
             <div style="background:#0ea5e9;padding:24px;border-radius:12px 12px 0 0">
