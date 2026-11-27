@@ -634,13 +634,7 @@ export default function ProductoClient({ product, variants }: Props) {
     if (isColor && modalidad === 'plano' && precioPlano != null) base = precioPlano
     setPrecioBase(base) // precio base con size, sin descuento de suscripción ni pack
     const descSub  = suscripcion ? DESCUENTOS[suscripcion] ?? 0 : 0
-    // FIX (2026-09-05): antes había un "5% por pack de 2 cajas" que se
-    // aplicaba sobre el precio POR UNIDAD mostrado — hacía que el precio
-    // de la caja pareciera bajar (ej. RD$3,350 → RD$3,182) al elegir
-    // "receta diferente" (que necesita 2 cajas). Mario pidió explícitamente
-    // que el precio por caja se mantenga siempre igual — se quita el
-    // descuento de pack. El único descuento que sigue aplicando es el de
-    // suscripción (recompra automática), que es un beneficio real distinto.
+    // El precio unitario se mantiene igual, independientemente de la cantidad.
     setPrice(Math.round(base * (1 - descSub)))
   }, [size, product.precio, sku, suscripcion, qty, isLente, isColor, modalidad, precioPlano])
 
