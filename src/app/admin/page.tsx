@@ -283,11 +283,13 @@ export default function AdminDashboard() {
     // ── OPERACIÓN: pedidos activos por etapa (todo lo que no es entregado
     // ni cancelado — el flujo real de "qué hay que atender hoy") ──────────
     const { data: pedidosActivosData, error: pedidosActivosError } = await sb
-      .from('orders').select('estado')
+      .from('orders').select('estado,created_at')
       .not('estado','in','(entregado,cancelado)').eq('es_prueba', false)
     if (pedidosActivosError) { console.error('[admin/dashboard] Error consultando etapas:', pedidosActivosError); setLoadError('No se pudo validar la distribución de pedidos por etapa.'); setLoading(false); return }
     const porEtapa: Record<string, number> = {}
     ;(pedidosActivosData ?? []).forEach((o:any) => { porEtapa[o.estado] = (porEtapa[o.estado] ?? 0) + 1 })
+    const pedidosAbiertos3Dias = (pedidosActivosData ?? []).filter((o:any) => Date.now() - new Date(o.created_at).getTime() >= 3 * 86400000).length
+    const pedidosAbiertos7Dias = (pedidosActivosData ?? []).filter((o:any) => Date.now() - new Date(o.created_at).getTime() >= 7 * 86400000).length
 
     // ── MARKETING: leads de la calculadora + conversión real ──────────────
     const hoyPartes = partesFechaRD(new Date())
@@ -309,12 +311,12 @@ export default function AdminDashboard() {
     let leadsConvertidos = 0
     if ((leadsMesData ?? []).length > 0) {
       const telsLeads = new Set((leadsMesData ?? []).map((l:any) => String(l.telefono ?? '').replace(/\D/g,'').slice(-10)).filter(Boolean))
-      const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false)
+      const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false).not('estado','eq','cancelado')
       if (ordsDelMesError) { console.error('[admin/dashboard] Error cruzando leads y pedidos:', ordsDelMesError); setLoadError('No se pudo calcular la conversión de leads.'); setLoading(false); return }
       const telsConCompra = new Set((ordsDelMes ?? []).map((o:any) => String(o.cliente_telefono ?? '').replace(/\D/g,'').slice(-10)))
       telsLeads.forEach(t => { if (telsConCompra.has(t)) leadsConvertidos++ })
     }
-    const conversionLeadsPct = leadsMes > 0 ? Math.round((leadsConvertidos / leadsMes) * 100) : 0
+    const conversionLeadsPct = telsLeads.size > 0 ? Math.round((leadsConvertidos / telsLeads.size) * 100) : 0
 
     // FIX (2026-09-07): antes se hacía una fila por cada COBRO individual
     // (cash_movements) — un cliente con 2 abonos en el mismo pedido salía
@@ -354,7 +356,7 @@ export default function AdminDashboard() {
       costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy, itemsSinCosto: itemsSinCosto.length, ventaSinCosto,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
       detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr,
-      porEtapa, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct })
+      porEtapa, pedidosAbiertos3Dias, pedidosAbiertos7Dias, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct })
     setRecent(ordRecent.data??[])
     setTop(topProds)
     setStock(stockLow.data??[])
@@ -479,6 +481,12 @@ export default function AdminDashboard() {
     texto: `${data.porEtapa.fabricante} pedido${data.porEtapa.fabricante===1?'':'s'} en fabricante`,
     sub: 'Dar seguimiento si llevan varios días',
     accion: () => abrirEtapa('fabricante'),
+  })
+  if ((data?.pedidosAbiertos3Dias??0) > 0) alertas.push({
+    icon: Clock, color:'text-amber-700', bg:'bg-amber-50',
+    texto: `${data.pedidosAbiertos3Dias} pedidos abiertos hace más de 3 días`,
+    sub: `${data.pedidosAbiertos7Dias??0} llevan más de 7 días desde su creación`,
+    accion: () => router.push('/M1Alexander/pedidos'),
   })
   if (stock.length > 0) alertas.push({
     icon: AlertTriangle, color:'text-red-600', bg:'bg-red-50',
@@ -787,7 +795,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="text-right shrink-0">
                         <p className="text-xs font-black text-gray-900">{fmt(p.total)}</p>
-                        {dias >= 3 && <p className="text-[10px] text-red-500 font-bold">⏱ {dias}d en esta etapa</p>}
+                        {dias >= 3 && <p className="text-[10px] text-red-500 font-bold">Abierto hace {dias} días</p>}
                       </div>
                     </a>
                   )
