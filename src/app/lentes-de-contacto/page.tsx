@@ -58,7 +58,7 @@ export default async function LentesContactoPage() {
       <main>
         <section className="bg-gradient-to-b from-blue-50 to-white py-12 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="font-display text-3xl md:text-5xl font-black text-gray-900 mb-4">
+            <h1 className="cg-page-title mb-4">
               Lentes de Contacto en<br />República Dominicana
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
