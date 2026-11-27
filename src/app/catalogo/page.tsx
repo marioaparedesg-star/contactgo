@@ -37,7 +37,7 @@ const ORDENES = [
 ]
 
 // Campos mínimos para cards — excluye arrays grandes (cyl, axis, add) y campos admin
-const CARD_FIELDS = 'id, nombre, slug, precio, precio_anterior, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, colores_disponibles, activo, archivado, dias_uso, created_at'
+const CARD_FIELDS = 'id, nombre, slug, precio, precio_anterior, imagen_url, tipo, stock, marca, reemplazo, contenido, sph_disponibles, cyl_disponibles, axis_disponibles, add_disponibles, colores_disponibles, activo, archivado, dias_uso, created_at'
 
 async function getAllProducts(): Promise<Product[]> {
   const sb = await createServerSupabaseClient()
