@@ -259,12 +259,27 @@ export default function AdminDashboard() {
     // la pena saberlo: una venta de hace 2 meses con un costo que ya
     // actualizamos, se recalcula con el costo de HOY, no el de ese momento.
     const productIds = Array.from(new Set((items.data ?? []).map((i:any) => i.product_id).filter(Boolean)))
-    const { data: costosProductos, error: costosError } = productIds.length > 0
-      ? await sb.from('products').select('id,costo').in('id', productIds)
-      : { data: [] as any[] }
-    if (costosError) { console.error('[admin/dashboard] Error consultando costos:', costosError); setLoadError('No se pudo consultar el costo de los productos; la ganancia no está disponible.'); setLoading(false); return }
+    const [{ data: costosPromedio, error: costosPromedioError }, { data: costosProductos, error: costosError }] = productIds.length > 0
+      ? await Promise.all([
+          sb.from('product_costs').select('product_id,costo_promedio').in('product_id', productIds),
+          sb.from('products').select('id,costo').in('id', productIds),
+        ])
+      : [{ data: [] as any[], error: null }, { data: [] as any[], error: null }]
+    if (costosPromedioError || costosError) {
+      console.error('[admin/dashboard] Error consultando costos promedio:', costosPromedioError || costosError)
+      setLoadError('No se pudo consultar el costo promedio de compras; la ganancia no está disponible.')
+      setLoading(false)
+      return
+    }
     const costoPorId: Record<string, number> = {}
-    ;(costosProductos ?? []).forEach((p:any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
+    ;(costosPromedio ?? []).forEach((p:any) => {
+      if (p.costo_promedio !== null && p.costo_promedio !== undefined) costoPorId[p.product_id] = Number(p.costo_promedio)
+    })
+    // Mismo criterio que Compras y el cierre diario: costo promedio de product_costs;
+    // si el producto aún no tiene fila de costo promedio, se usa products.costo.
+    ;(costosProductos ?? []).forEach((p:any) => {
+      if (costoPorId[p.id] === undefined && p.costo !== null && p.costo !== undefined) costoPorId[p.id] = Number(p.costo)
+    })
 
     const itemsSinCosto = (items.data ?? []).filter((i:any) => !i.product_id || costoPorId[i.product_id] == null || costoPorId[i.product_id] <= 0)
     const ventaSinCosto = itemsSinCosto.reduce((s:number,i:any) => s + Number(i.subtotal ?? (Number(i.precio ?? 0) * Number(i.cantidad ?? 1))), 0)
@@ -273,7 +288,8 @@ export default function AdminDashboard() {
       const costoUnit = i.product_id ? (costoPorId[i.product_id] ?? 0) : 0
       if (costoUnit > 0) costoTotalPeriodo += costoUnit * Number(i.cantidad ?? 1)
     })
-    const gananciaPeriodo = itemsSinCosto.length === 0 ? ventasTotalPeriodo - costoTotalPeriodo : null
+    const ventasArticulosPeriodo = (items.data ?? []).reduce((s:number,i:any) => s + Number(i.subtotal ?? (Number(i.precio ?? 0) * Number(i.cantidad ?? 1))), 0)
+    const gananciaPeriodo = itemsSinCosto.length === 0 ? ventasArticulosPeriodo - costoTotalPeriodo : null
 
     // Costo/ganancia de HOY: mismo cruce, pedidos VENDIDOS hoy (no solo
     // cobrados hoy).
@@ -285,7 +301,9 @@ export default function AdminDashboard() {
       costoHoy += costoUnit * Number(i.cantidad ?? 1)
     })
     const itemsSinCostoHoy = itemsSinCosto.some((i:any) => idsHoy.has(i.order_id))
-    const gananciaHoy = itemsSinCostoHoy ? null : ventasTotalHoy - costoHoy
+    const ventasArticulosHoy = (items.data ?? []).filter((i:any) => idsHoy.has(i.order_id))
+      .reduce((s:number,i:any) => s + Number(i.subtotal ?? (Number(i.precio ?? 0) * Number(i.cantidad ?? 1))), 0)
+    const gananciaHoy = itemsSinCostoHoy ? null : ventasArticulosHoy - costoHoy
 
     const agg: Record<string,{nombre:string,u:number,rev:number}> = {}
     ;(items.data??[]).forEach((i:any)=>{
@@ -380,7 +398,7 @@ export default function AdminDashboard() {
 
     setData({ ventasPeriodo, ventasHoy, ventasTotalPeriodo, ventasTotalHoy, egresosTotalPeriodo, flujoNetoPeriodo, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, pedidosPruebaDetectados, clientes: clientes??0, clientesNuevosPeriodo: clientesNuevosPeriodo??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
-      costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy, itemsSinCosto: itemsSinCosto.length, ventaSinCosto,
+      costoTotalPeriodo, ventasArticulosPeriodo, gananciaPeriodo, costoHoy, ventasArticulosHoy, gananciaHoy, itemsSinCosto: itemsSinCosto.length, ventaSinCosto,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
       detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr,
       porEtapa, pedidosAbiertos3Dias, pedidosAbiertos7Dias, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct })
@@ -501,7 +519,7 @@ export default function AdminDashboard() {
 
   const pedidosActivosTotal = Object.values(data?.porEtapa??{}).reduce((s:any,n:any)=>s+Number(n??0),0)
   const porCobrarTotal = (data?.porCobrarActivo??0)+(data?.porCobrarViejo??0)
-  const margenPct = data?.gananciaPeriodo != null && (data?.ventasTotalPeriodo??0) > 0 ? Math.round((data.gananciaPeriodo/data.ventasTotalPeriodo)*100) : null
+  const margenPct = data?.gananciaPeriodo != null && (data?.ventasArticulosPeriodo??0) > 0 ? Math.round((data.gananciaPeriodo/data.ventasArticulosPeriodo)*100) : null
   const primerNombre = 'Mario'
   const horaActual = new Date().getHours()
   const saludo = horaActual < 12 ? 'Buenos días' : horaActual < 19 ? 'Buenas tardes' : 'Buenas noches'
@@ -641,7 +659,7 @@ export default function AdminDashboard() {
           { key:'porCobrar', label:'Por cobrar', val:fmt(porCobrarTotal), sub:`${data?.pedidosPorCobrar??0} pedidos`, color:'text-amber-600', accion:()=>setDetalleAbierto(detalleAbierto==='porCobrar'?null:'porCobrar') },
           { key:null, label:'Egresos registrados', val:fmt(data?.egresosTotalPeriodo??0), sub:'salidas registradas en caja', color:'text-rose-600', accion:()=>router.push('/M1Alexander/reportes') },
           { key:null, label:'Flujo neto de caja', val:fmt(data?.flujoNetoPeriodo??0), sub:'cobros menos egresos', color:(data?.flujoNetoPeriodo??0)>=0?'text-emerald-600':'text-rose-600', accion:()=>router.push('/M1Alexander/reportes') },
-          { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según products.costo', color:'text-red-500', accion:undefined },
+          { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según costo promedio de Compras', color:'text-red-500', accion:undefined },
           { key:'ganancia', label:'Ganancia estimada', val:data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo), sub:data?.itemsSinCosto>0?`${data.itemsSinCosto} línea(s) sin costo`:`${margenPct ?? 0}% margen`, color:data?.gananciaPeriodo==null?'text-amber-600':'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
           { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:null, label:'Pedidos +7 días', val:String(data?.pedidosAbiertos7Dias??0), sub:'abiertos desde hace más de una semana', color:(data?.pedidosAbiertos7Dias??0)>0?'text-rose-600':'text-emerald-600', accion:()=>router.push('/M1Alexander/pedidos') },
@@ -698,8 +716,8 @@ export default function AdminDashboard() {
           </div>
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="p-3 rounded-xl bg-gray-50">
-              <p className="text-lg font-black text-gray-900">{fmt(data?.ventasTotalPeriodo??0)}</p>
-              <p className="text-[10px] text-gray-400">Vendido</p>
+              <p className="text-lg font-black text-gray-900">{fmt(data?.ventasArticulosPeriodo??0)}</p>
+              <p className="text-[10px] text-gray-400">Venta de artículos</p>
             </div>
             <div className="p-3 rounded-xl bg-gray-50">
               <p className="text-lg font-black text-red-500">{fmt(data?.costoTotalPeriodo??0)}</p>
@@ -710,7 +728,7 @@ export default function AdminDashboard() {
               <p className="text-[10px] text-gray-400">{data?.gananciaPeriodo==null?'Falta costo de producto':`Ganancia (${margenPct}%)`}</p>
             </div>
           </div>
-          <p className="text-[10px] text-gray-400 mt-3">Vendido menos costo identificado. El costo utiliza el valor actual de products.costo, no un histórico al momento de la venta.</p>
+          <p className="text-[10px] text-gray-400 mt-3">Venta de artículos (subtotal de las líneas) menos costo promedio vigente de Compras. Si no existe costo promedio para un producto, se utiliza products.costo. No es un costo histórico al momento de la venta ni utilidad neta.</p>
           {data?.itemsSinCosto>0 && <p className="text-xs font-semibold text-amber-700 bg-amber-50 rounded-xl p-3 mt-3">Hay {data.itemsSinCosto} línea(s) sin costo configurado (venta asociada: {fmt(data.ventaSinCosto)}). La ganancia se oculta para evitar mostrar una utilidad inflada. Completa esos costos en inventario.</p>}
         </div>
       )}
