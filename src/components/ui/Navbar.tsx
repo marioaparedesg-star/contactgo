@@ -97,7 +97,7 @@ export default function Navbar() {
           <Link href="/cuenta" onClick={() => setOpen(false)} className="px-3 py-3 rounded-lg text-base font-semibold text-gray-700 hover:bg-teal-50 flex items-center gap-2 min-h-[48px]">
             <User className="w-4 h-4" aria-hidden="true" /> Mi cuenta
           </Link>
-          <a href="https://wa.me/18096942268?text=Hola%20ContactGo" target="_blank" rel="noopener noreferrer" onClick={() => { trackWhatsappHelp('navbar_mobile'); setOpen(false) }} className="px-3 py-3 rounded-lg text-base font-semibold text-[#002455] hover:bg-slate-50 min-h-[48px] flex items-center">
+          <a href="https://wa.me/18096942268?text=Hola%20ContactGo" target="_blank" rel="noopener noreferrer" onClick={() => { trackWhatsappHelp('navbar'); setOpen(false) }} className="px-3 py-3 rounded-lg text-base font-semibold text-[#002455] hover:bg-slate-50 min-h-[48px] flex items-center">
             Contactar por WhatsApp
           </a>
         </div>
