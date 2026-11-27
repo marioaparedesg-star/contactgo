@@ -106,7 +106,7 @@ const SECCIONES = [
     id: 'garantias', emoji: '✅', titulo: 'Garantías y Autenticidad',
     color: 'bg-green-50 border-green-100', badge: 'bg-green-100 text-green-700',
     items: [
-      { q: '¿Son certificados los productos?', a: 'Trabajamos con marcas reconocidas y canales de distribución autorizados. Los productos se entregan sellados y en su empaque original, con garantía de autenticidad.' },
+      { q: '¿Son certificados los productos?', a: 'Trabajamos con marcas reconocidas y proveedores de productos originales. Los productos se entregan sellados y en su empaque original, con garantía de autenticidad.' },
       { q: '¿Los lentes están dentro de su fecha de vencimiento?', a: 'Sí, todos los productos tienen al menos 18 meses de vida útil desde la fecha de compra.' },
       { q: '¿Qué garantía tienen los lentes de contacto?', a: 'Si detectas algún defecto de fabricación (rotura, deformación), lo reemplazamos sin costo.' },
     ],
