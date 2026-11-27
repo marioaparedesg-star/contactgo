@@ -70,7 +70,6 @@ export default function ProductCard({ product }: Props) {
           className={'absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/80 shadow-sm transition-colors ' + (isFav ? 'bg-rose-500 text-white' : 'bg-white/95 text-slate-600 hover:text-rose-600')}>
           <Heart className={'h-4 w-4 ' + (isFav ? 'fill-current' : '')} aria-hidden="true" />
         </button>
-        {duration && <span className="absolute bottom-3 left-3 rounded-full bg-[#002455] px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm">{duration}</span>}
         {product.stock === 0 && <div className="absolute inset-0 flex items-center justify-center bg-white/70"><span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">Agotado</span></div>}
         {stockCritical && <span className="absolute bottom-3 right-3 rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
