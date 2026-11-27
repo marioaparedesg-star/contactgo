@@ -308,9 +308,9 @@ export default function AdminDashboard() {
     // (el flag 'convertido' en la tabla nunca se actualiza — ver pendiente
     // ya anotado). Se normaliza a los últimos 10 dígitos para no perder
     // coincidencias por el formato +1/1 delante que a veces trae 'orders'.
+    const telsLeads = new Set((leadsMesData ?? []).map((l:any) => String(l.telefono ?? '').replace(/\D/g,'').slice(-10)).filter(Boolean))
     let leadsConvertidos = 0
-    if ((leadsMesData ?? []).length > 0) {
-      const telsLeads = new Set((leadsMesData ?? []).map((l:any) => String(l.telefono ?? '').replace(/\D/g,'').slice(-10)).filter(Boolean))
+    if (telsLeads.size > 0) {
       const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false).not('estado','eq','cancelado')
       if (ordsDelMesError) { console.error('[admin/dashboard] Error cruzando leads y pedidos:', ordsDelMesError); setLoadError('No se pudo calcular la conversión de leads.'); setLoading(false); return }
       const telsConCompra = new Set((ordsDelMes ?? []).map((o:any) => String(o.cliente_telefono ?? '').replace(/\D/g,'').slice(-10)))
