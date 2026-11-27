@@ -233,22 +233,22 @@ export default async function HomePage() {
         </section>
 
         {/* ── TRUST BAR — reordenado: tercero ── */}
-        <section className="bg-white border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+        <section className="bg-slate-50 border-y border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 py-5 md:py-7">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {[
                 { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 24-72 horas',    color: 'text-[#002455]',   bg: 'bg-slate-100' },
-                { icon: Package,  title: 'Marcas originales',   desc: 'Empaque original y sellado',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
+                { icon: Package,  title: 'Productos originales', desc: 'Sellados en su empaque original',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
                 { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-[#002455]', bg: 'bg-slate-100' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-[#002455]', bg: 'bg-slate-100' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
-                <div key={title} className="flex items-center gap-3">
+                <div key={title} className="flex items-start gap-3 rounded-xl border border-slate-100 bg-white p-3 md:p-4 shadow-sm min-h-[88px]">
                   <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center shrink-0`}>
-                    <Icon className={`w-5 h-5 ${color}`} />
+                    <Icon className={`w-5 h-5 ${color}`} aria-hidden="true" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 text-sm">{title}</p>
-                    <p className="text-gray-500 text-xs">{desc}</p>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-gray-900 text-sm leading-snug">{title}</p>
+                    <p className="text-gray-500 text-xs leading-relaxed mt-1">{desc}</p>
                   </div>
                 </div>
               ))}
