@@ -93,16 +93,8 @@ export default function ProductCard({ product }: Props) {
           <span className="truncate text-[10px] text-slate-400">{contenidoLabel}</span>
         </div>
         <div className="mt-auto border-t border-slate-100 pt-3">
-          {product.precio_anterior && product.precio_anterior > product.precio && (
-            <div className="mb-0.5 text-[10px] text-slate-400 line-through">RD${Number(product.precio_anterior).toLocaleString()}</div>
-          )}
           <div className="flex items-center gap-2">
             <p className="text-xl font-extrabold tracking-tight text-[#002455]">RD${Number(product.precio).toLocaleString()}</p>
-            {product.precio_anterior && product.precio_anterior > product.precio && (
-              <span className="rounded-sm border border-slate-200 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
-                -{Math.round((1 - product.precio / product.precio_anterior) * 100)}%
-              </span>
-            )}
           </div>
           <Link href={href} aria-disabled={product.stock === 0}
             onClick={e => { if (product.stock === 0) e.preventDefault() }}
