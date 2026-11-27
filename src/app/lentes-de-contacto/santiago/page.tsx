@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santiago RD | Envío a Domicilio — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity y Air Optix de proveedores de productos originales. Envío RD$350. Transporte estimado de 24-48 horas; el plazo total depende del tipo de lente.',
+  description: 'Compra lentes de contacto con entrega en Santiago. ACUVUE, Biofinity y Air Optix de marcas reconocidas, en su empaque original y sellado. Envío RD$350. Transporte estimado de 24-48 horas; el plazo total depende del tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santiago' },
   openGraph: {
     title: 'Lentes de Contacto en Santiago | ContactGo',
@@ -68,7 +68,7 @@ export default async function Page() {
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Lentes de contacto con envío a Santiago</h2>
           <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Santiago</strong> y toda su región. No necesitas ir a una óptica — el transporte de tus lentes hasta Santiago suele tomar 24-48 horas; el plazo total depende del producto.</p>
-          <p>Trabajamos con marcas reconocidas y proveedores de productos originales; los productos se entregan sellados y en su empaque original. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en compras desde RD$8,000.</p>
+          <p>Trabajamos con marcas reconocidas y entregamos los productos en su empaque original sellado; los productos se entregan sellados y en su empaque original. El envío a Santiago tiene un costo de <strong>RD$350</strong>, gratis en compras desde RD$8,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto en minutos.</p>
 
           <h3 className="font-bold text-gray-900 text-lg mt-6">Marcas más pedidas en Santiago</h3>
