@@ -9,7 +9,7 @@ import type { Metadata } from 'next'
 
 export const metadata = {
   title: 'Lentes ACUVUE en República Dominicana | ContactGo',
-  description: 'Lentes ACUVUE® en República Dominicana. OASYS, 1-DAY MOIST y Multifocal. Entrega según tipo de lente y destino, a través de canales de distribución autorizados.',
+  description: 'Lentes ACUVUE® en República Dominicana. OASYS, 1-DAY MOIST y Multifocal. Entrega según tipo de lente y destino, a través de proveedores de productos originales.',
   alternates: { canonical: 'https://www.contactgo.net/marca/acuvue' },
   openGraph: {
     title: 'Lentes ACUVUE en RD | ContactGo',
