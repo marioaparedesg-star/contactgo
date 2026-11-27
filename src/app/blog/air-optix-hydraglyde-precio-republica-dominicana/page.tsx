@@ -27,7 +27,7 @@ export default function Page() {
 
   const FAQS = [
     { q: '¿Cuánto cuestan los Air Optix HydraGlyde en República Dominicana?', a: 'En ContactGo los Air Optix Plus HydraGlyde esféricos cuestan RD$3,700 la caja de 6 lentes. La versión Multifocal está disponible desde RD$6,500.' },
-    { q: '¿Dónde comprar Air Optix HydraGlyde certificados en RD?', a: 'ContactGo los ofrece a través de proveedores de productos originales. El transporte es de 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; el plazo total depende del tipo de lente. Pago seguro con AZUL/Banco Popular.' },
+    { q: '¿Dónde comprar Air Optix HydraGlyde certificados en RD?', a: 'En ContactGo se entregan en su empaque original y sellado. El transporte es de 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; el plazo total depende del tipo de lente. Pago seguro con AZUL/Banco Popular.' },
     { q: '¿Air Optix HydraGlyde es bueno para ojos secos?', a: 'Sí. La tecnología HydraGlyde® de Alcon incorpora una capa molecular de lubricante en la superficie del lente que mantiene la hidratación hasta 16 horas de uso continuo, ideal para personas con ojos secos moderados.' },
     { q: '¿Cuánto tiempo dura un lente Air Optix HydraGlyde?', a: 'Son lentes de reemplazo mensual — se usan máximo 30 días y luego se descartan. Con uso diario de 8 horas, una caja de 6 lentes dura aproximadamente 3 meses por ojo.' },
     { q: '¿Air Optix HydraGlyde sirve para astigmatismo?', a: 'La línea regular (esférico) no corrige astigmatismo. Para astigmatismo, Alcon ofrece Air Optix Astig, aunque en ContactGo disponemos de otras marcas tóricas como Biofinity Toric y ACUVUE Oasys Astig.' },
@@ -308,7 +308,7 @@ export default function Page() {
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
             <p>Los Air Optix® plus HydraGlyde® son una excelente elección para usuarios de lentes de contacto mensuales en República Dominicana. A RD$3,700 la caja de 6 lentes, son una opción competitiva que ofrece tecnología de hidratación avanzada, alta transmisión de oxígeno y resistencia a depósitos — todo lo que necesitas para un uso diario cómodo.</p>
-            <p className="mt-3">En ContactGo los encuentras a través de proveedores de productos originales; el plazo total depende del tipo de lente y destino. ¿Tienes dudas sobre si son el lente correcto para ti? Escríbenos por WhatsApp.</p>
+            <p className="mt-3">En ContactGo los encuentras en su empaque original y sellado; el plazo total depende del tipo de lente y destino. ¿Tienes dudas sobre si son el lente correcto para ti? Escríbenos por WhatsApp.</p>
           </section>
         </div>
 
