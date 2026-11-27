@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
         summary.correos_enviados++
         summary.detalle.push({ email, resultado: 'Cuenta creada y correo aceptado por Resend' })
         // Small pause to avoid burst limits while processing the batch.
-        await wait(350)
+        await wait(600)
       } catch (error: any) {
         // If this run created the account but could not finish the secure
         // password email, roll it back so a later retry cannot strand it.
