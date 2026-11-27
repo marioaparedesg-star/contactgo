@@ -34,7 +34,7 @@ export default function DevolucionesPage() {
             { title: '💰 ¿Cómo recibo mi reembolso?', body: 'El reembolso se procesa por el mismo método de pago original dentro de 3 a 5 días hábiles tras recibir el producto devuelto y verificar su estado.' },
             { title: '🔄 ¿Puedo cambiar por otro producto?', body: 'Sí, siempre que el producto cumpla las mismas condiciones de devolución (caja sellada, dentro de plazo). Si prefieres un cambio en lugar de reembolso, lo gestionamos sin costo adicional de envío.' },
             { title: '⚠️ Producto dañado o incorrecto', body: 'Si recibiste un producto dañado o diferente al pedido, contáctanos inmediatamente. Lo reemplazamos sin ningún costo para ti.' },
-            { title: '🛡️ Garantía de autenticidad', body: 'Trabajamos con marcas reconocidas y canales de distribución autorizados. Garantizamos que los productos se entregan sellados y en su empaque original.' },
+            { title: '🛡️ Garantía de autenticidad', body: 'Trabajamos con marcas reconocidas y proveedores de productos originales. Garantizamos que los productos se entregan sellados y en su empaque original.' },
           ].map(({ title, body }) => (
             <div key={title} className="border border-gray-100 rounded-2xl p-5">
               <p className="font-semibold text-gray-900 text-sm mb-2">{title}</p>
