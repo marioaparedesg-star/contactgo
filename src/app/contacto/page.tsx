@@ -46,7 +46,7 @@ export default function ContactoPage() {
         <span className="text-gray-600">Contacto</span>
       </div>
 
-      <h1 className="font-display text-3xl font-bold text-gray-900 mb-2">Contáctanos</h1>
+      <h1 className="cg-page-title mb-2">Contáctanos</h1>
       <p className="text-gray-500 mb-8">Especialistas en lentes de contacto — te respondemos lo antes posible.</p>
 
       {/* Canales rápidos */}
@@ -77,7 +77,7 @@ export default function ContactoPage() {
           <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-teal-800" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/></svg>
           </div>
-          <h2 className="font-bold text-gray-900 text-xl mb-2">¡Mensaje recibido!</h2>
+          <h2 className="cg-section-title mb-2">¡Mensaje recibido!</h2>
           <p className="text-gray-600 text-sm mb-6">Te responderemos lo antes posible. Si dejaste tu email, también te enviamos una confirmación.</p>
           <Link href="/catalogo" className="inline-flex items-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo de lentes →</Link>
         </div>
