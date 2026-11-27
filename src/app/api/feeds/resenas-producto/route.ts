@@ -9,7 +9,7 @@ export async function GET() {
   const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
   const [{ data: resenas, error: e1 }, { data: productos, error: e2 }] = await Promise.all([
     sb.from('reviews').select('id,product_id,nombre,rating,comentario,orden_id,aprobado,created_at').eq('aprobado', true).not('orden_id', 'is', null).limit(5000),
-    sb.from('products').select('id,nombre,slug,sku').eq('activo', true).limit(5000),
+    sb.from('products').select('id,nombre,slug,sku,gtin').eq('activo', true).limit(5000),
   ])
   if (e1 || e2) {
     console.error('[feed resenas] error de consulta:', (e1 ?? e2)?.message)
