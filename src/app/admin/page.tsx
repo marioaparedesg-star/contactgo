@@ -189,7 +189,7 @@ export default function AdminDashboard() {
     // es sobre saldo pendiente de ÓRDENES activas, no sobre cuándo entró
     // el dinero. Necesita su propio cálculo de abonos por pedido.
     const { data: movimientosCobro, error: movimientosCobroError } = await sb.from('cash_movements').select('order_id,monto').eq('categoria','venta').eq('tipo','ingreso').not('order_id','is',null)
-    if (movimientosCobroError) { console.error('[admin/dashboard] Error consultando abonos:', movimientosCobroError); setLoading(false); return }
+    if (movimientosCobroError) { console.error('[admin/dashboard] Error consultando abonos:', movimientosCobroError); setLoadError('No se pudo validar la cartera contra los pagos registrados.'); setLoading(false); return }
     const cobradoPorOrden: Record<string, number> = {}
     ;(movimientosCobro ?? []).forEach((m: any) => {
       cobradoPorOrden[m.order_id] = (cobradoPorOrden[m.order_id] ?? 0) + Number(m.monto ?? 0)
@@ -222,7 +222,7 @@ export default function AdminDashboard() {
           .in('order_id', idsVendidos)
           .limit(1000)
       : { data: [] as any[] }
-    if (itemsError) { console.error('[admin/dashboard] Error consultando artículos:', itemsError); setLoading(false); return }
+    if (itemsError) { console.error('[admin/dashboard] Error consultando artículos:', itemsError); setLoadError('No se pudieron cargar los artículos vendidos; la ganancia no puede calcularse.'); setLoading(false); return }
     const items = { data: itemsData }
 
     // Se cruza cada item vendido contra el costo REAL actual del producto
@@ -235,7 +235,7 @@ export default function AdminDashboard() {
     const { data: costosProductos, error: costosError } = productIds.length > 0
       ? await sb.from('products').select('id,costo').in('id', productIds)
       : { data: [] as any[] }
-    if (costosError) { console.error('[admin/dashboard] Error consultando costos:', costosError); setLoading(false); return }
+    if (costosError) { console.error('[admin/dashboard] Error consultando costos:', costosError); setLoadError('No se pudo consultar el costo de los productos; la ganancia no está disponible.'); setLoading(false); return }
     const costoPorId: Record<string, number> = {}
     ;(costosProductos ?? []).forEach((p:any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
 
@@ -453,7 +453,7 @@ export default function AdminDashboard() {
 
   const pedidosActivosTotal = Object.values(data?.porEtapa??{}).reduce((s:any,n:any)=>s+Number(n??0),0)
   const porCobrarTotal = (data?.porCobrarActivo??0)+(data?.porCobrarViejo??0)
-  const margenPct = (data?.ventasTotalPeriodo??0) > 0 ? Math.round(((data?.gananciaPeriodo??0)/(data?.ventasTotalPeriodo??0))*100) : 0
+  const margenPct = data?.gananciaPeriodo != null && (data?.ventasTotalPeriodo??0) > 0 ? Math.round((data.gananciaPeriodo/data.ventasTotalPeriodo)*100) : null
   const primerNombre = 'Mario'
   const horaActual = new Date().getHours()
   const saludo = horaActual < 12 ? 'Buenos días' : horaActual < 19 ? 'Buenas tardes' : 'Buenas noches'
