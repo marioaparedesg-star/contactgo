@@ -135,7 +135,7 @@ export default function AdminDashboard() {
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
-      sb.from('v_stock_disponible').select('nombre,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock').in('alerta_stock',['critico','bajo_minimo']).order('stock'),
+      sb.from('v_stock_disponible').select('id,nombre,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock').in('alerta_stock',['critico','bajo_minimo']).order('stock'),
       sb.from('order_items').select('order_id').eq('nombre','Producto de prueba'),
       sb.from('order_payments')
         .select('id,monto,created_at,order_id,metodo,orders(numero_orden,cliente_nombre,cliente_telefono)')
@@ -757,7 +757,7 @@ export default function AdminDashboard() {
         ) : (
           <div className="divide-y divide-gray-100">
             {stock.slice(0,6).map((p:any)=>(
-              <div key={p.nombre} className="flex items-center justify-between gap-3 py-2.5">
+              <div key={p.id} className="flex items-center justify-between gap-3 py-2.5">
                 <div className="min-w-0">
                   <p className="text-xs font-semibold text-gray-800 truncate">{p.nombre}</p>
                   <p className="text-[10px] text-gray-400">Punto de reposición: {p.stock_reorden ?? p.stock_minimo ?? p.stock_critico ?? 3}</p>
