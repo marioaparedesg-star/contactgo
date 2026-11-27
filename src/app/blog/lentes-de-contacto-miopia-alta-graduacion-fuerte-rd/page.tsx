@@ -129,7 +129,7 @@ export default function Page() {
       <p>Como los lentes XR no son stock regular, seguimos este proceso:</p>
       <ol>
         <li>Nos contactas por <strong>WhatsApp (809) 694-2268</strong> con tu graduación exacta de gafas.</li>
-        <li>Confirmamos disponibilidad en el distribuidor autorizado (CooperVision RD).</li>
+        <li>Confirmamos disponibilidad en el proveedor de productos originales (CooperVision RD).</li>
         <li>Te confirmamos tiempo estimado (usualmente 2-3 semanas).</li>
         <li>Envías el pago con el 50% de adelanto (política estándar para pedidos especiales).</li>
         <li>Recibes tus lentes con envío gratuito a domicilio.</li>
