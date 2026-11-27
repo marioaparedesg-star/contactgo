@@ -96,7 +96,7 @@ function OptionCard({
       }`}>
         {selected && <span className="w-2 h-2 rounded-full bg-white block" />}
       </span>
-      <span className="text-base shrink-0">{icon}</span>
+      {icon.trim() && <span className="text-base shrink-0">{icon}</span>}
       <div className="min-w-0">
         <p className={`text-sm font-semibold leading-tight ${selected ? 'text-[#002455]' : 'text-slate-800'}`}>
           {label}
@@ -226,11 +226,11 @@ export default function EyeFlowSelector({
         <OptionCard
           selected={s.ojoMode === 'AMBOS'}
           onClick={() => { set({ ojoMode: 'AMBOS' }); trackEyeFlow('ambos_selected') }}
-          icon="2" label="Ambos ojos" sublabel="Lo más común" highlight />
+          icon=" " label="Ambos ojos" sublabel="Lo más común" highlight />
         <OptionCard
           selected={s.ojoMode === 'OD' || s.ojoMode === 'OI'}
           onClick={() => { set({ ojoMode: 'OD' }); trackEyeFlow('un_ojo_selected') }}
-          icon="1" label="Un solo ojo" sublabel="Solo uno" />
+          icon=" " label="Un solo ojo" sublabel="Solo uno" />
       </div>
     </div>
   )
@@ -243,11 +243,11 @@ export default function EyeFlowSelector({
         <OptionCard
           selected={s.ojoMode === 'OD'}
           onClick={() => { set({ ojoMode: 'OD' }); trackEyeFlow('un_ojo_selected') }}
-          icon="→" label="Derecho (OD)" />
+          icon=" " label="Derecho (OD)" />
         <OptionCard
           selected={s.ojoMode === 'OI'}
           onClick={() => set({ ojoMode: 'OI' })}
-          icon="←" label="Izquierdo (OI)" />
+          icon=" " label="Izquierdo (OI)" />
       </div>
     </div>
   ) : null
@@ -260,20 +260,20 @@ export default function EyeFlowSelector({
         <OptionCard
           selected={s.mismaReceta === true}
           onClick={() => { set({ mismaReceta: true, noEstaSeguro: false }); trackEyeFlow('misma_receta') }}
-          icon="✓" label="Sí, la misma" highlight />
+          icon=" " label="Sí, la misma" highlight />
         <OptionCard
           selected={s.mismaReceta === false && !s.noEstaSeguro}
           onClick={() => { set({ mismaReceta: false, noEstaSeguro: false }); trackEyeFlow('diferente_receta') }}
-          icon="↕" label="No, son diferentes" />
+          icon=" " label="No, son diferentes" />
         <OptionCard
           selected={!!s.noEstaSeguro}
           onClick={() => { set({ noEstaSeguro: true }); trackEyeFlow('no_seguro') }}
-          icon="?" label="No estoy seguro" />
+          icon=" " label="No estoy seguro" />
       </div>
       {/* Mensaje de ayuda cuando tienen graduaciones diferentes — común en lentes de color */}
       {s.mismaReceta === false && !s.noEstaSeguro && (
         <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-blue-700 flex items-start gap-2">
-          <span className="text-base font-bold text-blue-600">i</span>
+          
           <span>Perfecto — ingresa la graduación de cada ojo por separado. Si no tienes tu receta a mano, <a href="https://wa.me/18096942268?text=Hola%2C+necesito+ayuda+con+mi+receta+para+lentes+de+color" target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsappHelp('pdp')} className="font-bold underline">escríbenos por WhatsApp</a> y te ayudamos.</span>
         </div>
       )}
@@ -321,7 +321,7 @@ export default function EyeFlowSelector({
     <div className="space-y-2.5 w-full min-w-0">
       <StepLabel n={rxStepNum} label="Graduación por ojo" />
       {/* Ojo Derecho */}
-      <div className="w-full min-w-0 bg-[#F4F8FA] border border-[#D5E4EA] rounded-2xl p-4 space-y-3">
+      <div className="w-full min-w-0 bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
         <p className="text-xs font-black text-[#002455] uppercase tracking-wide">Ojo Derecho (OD)</p>
         <SPHPicker label="Esfera (SPH) — Ojo Derecho" value={s.sph_od}
           onChange={v => set({ sph_od: v })}
@@ -382,9 +382,7 @@ export default function EyeFlowSelector({
         {s.color && colorImages[s.color] ? (
           <img src={colorImages[s.color]} alt={s.color} className="w-14 h-14 rounded-lg object-cover border border-white shadow-sm" />
         ) : (
-          <span className="w-14 h-14 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
-            <span className="text-sm font-semibold">Color</span>
-          </span>
+          <span className="w-14 h-14 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 text-xs font-semibold">Color</span>
         )}
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-bold text-gray-900">{s.color || 'Selecciona el color'}</span>
@@ -427,7 +425,7 @@ export default function EyeFlowSelector({
                   {colorImages[col] ? (
                     <img src={colorImages[col]} alt={col} loading="lazy" className="w-full aspect-[4/3] object-cover" />
                   ) : (
-                    <span className="w-full aspect-[4/3] bg-gray-100 flex items-center justify-center text-2xl">👁️</span>
+                    <span className="w-full aspect-[4/3] bg-slate-100 flex items-center justify-center text-sm text-slate-500">Color</span>
                   )}
                   <span className="flex min-h-10 items-center justify-center gap-1 px-1.5 py-2 text-center text-[11px] font-bold leading-tight text-gray-800">
                     {s.color === col && <span className="text-teal-600">✓</span>}
@@ -449,7 +447,7 @@ export default function EyeFlowSelector({
       {step1}
       <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-3">
         <div className="flex items-start gap-3">
-          <span className="text-2xl shrink-0">📋</span>
+          
           <div>
             <p className="font-bold text-gray-900 text-sm">¿Cómo saber si tus ojos son iguales?</p>
             <p className="text-xs text-gray-600 mt-1 leading-relaxed">
