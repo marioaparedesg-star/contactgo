@@ -36,37 +36,34 @@ const PRESETS: { key: PresetKey; label: string }[] = [
   { key: 'personalizado',  label: 'Fecha personalizada' },
 ]
 
+function fechaEnRD(year: number, month: number, day: number, hour = 0, minute = 0, second = 0): Date {
+  return new Date(Date.UTC(year, month - 1, day, hour + 4, minute, second))
+}
+function partesFechaRD(fecha: Date) {
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Santo_Domingo', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(fecha)
+  return { year: Number(parts.find(p => p.type === 'year')?.value), month: Number(parts.find(p => p.type === 'month')?.value), day: Number(parts.find(p => p.type === 'day')?.value) }
+}
 function rangoDePreset(preset: PresetKey, customDesde?: string, customHasta?: string): { desde: Date; hasta: Date; label: string } {
-  const ahora = new Date()
-  const hoy0 = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), 0, 0, 0)
-  const finHoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), 23, 59, 59)
-
+  const hoy = partesFechaRD(new Date())
+  const inicioHoy = fechaEnRD(hoy.year, hoy.month, hoy.day)
+  const finHoy = new Date(fechaEnRD(hoy.year, hoy.month, hoy.day + 1).getTime() - 1)
+  const inicioMes = (year: number, month: number) => fechaEnRD(year, month, 1)
+  const finMes = (year: number, month: number) => new Date(fechaEnRD(year, month + 1, 1).getTime() - 1)
   switch (preset) {
-    case 'hoy':
-      return { desde: hoy0, hasta: finHoy, label: 'Hoy' }
-    case 'mes_actual':
-      return { desde: new Date(ahora.getFullYear(), ahora.getMonth(), 1), hasta: finHoy, label: 'Mes actual' }
+    case 'hoy': return { desde: inicioHoy, hasta: finHoy, label: 'Hoy' }
+    case 'mes_actual': return { desde: inicioMes(hoy.year, hoy.month), hasta: finHoy, label: 'Mes actual' }
     case 'mes_anterior': {
-      const desde = new Date(ahora.getFullYear(), ahora.getMonth() - 1, 1)
-      const hasta = new Date(ahora.getFullYear(), ahora.getMonth(), 0, 23, 59, 59)
-      return { desde, hasta, label: desde.toLocaleDateString('es-DO', { month: 'long', year: 'numeric' }) }
+      const desde = inicioMes(hoy.year, hoy.month - 1)
+      const hasta = new Date(inicioMes(hoy.year, hoy.month).getTime() - 1)
+      return { desde, hasta, label: new Intl.DateTimeFormat('es-DO', { timeZone: 'America/Santo_Domingo', month: 'long', year: 'numeric' }).format(desde) }
     }
-    case 'trimestre':
-      return { desde: new Date(ahora.getFullYear(), ahora.getMonth() - 2, 1), hasta: finHoy, label: 'Últimos 3 meses' }
-    case 'anio_actual':
-      return { desde: new Date(ahora.getFullYear(), 0, 1), hasta: finHoy, label: `Año ${ahora.getFullYear()}` }
-    case 'anio_anterior': {
-      const y = ahora.getFullYear() - 1
-      return { desde: new Date(y, 0, 1), hasta: new Date(y, 11, 31, 23, 59, 59), label: `Año ${y}` }
+    case 'trimestre': return { desde: inicioMes(hoy.year, hoy.month - 2), hasta: finHoy, label: 'Últimos 3 meses' }
+    case 'anio_actual': return { desde: inicioMes(hoy.year, 1), hasta: finHoy, label: `Año ${hoy.year}` }
+    case 'anio_anterior': { const year = hoy.year - 1; return { desde: inicioMes(year, 1), hasta: finMes(year, 12), label: `Año ${year}` } }
+    case 'personalizado': {
+      const parse = (value: string, end = false) => { const [year, month, day] = value.split('-').map(Number); return end ? new Date(fechaEnRD(year, month, day + 1).getTime() - 1) : fechaEnRD(year, month, day) }
+      return { desde: customDesde ? parse(customDesde) : inicioHoy, hasta: customHasta ? parse(customHasta, true) : finHoy, label: customDesde && customHasta ? `${customDesde} — ${customHasta}` : 'Personalizado' }
     }
-    case 'personalizado':
-      return {
-        desde: customDesde ? new Date(customDesde + 'T00:00:00') : hoy0,
-        hasta: customHasta ? new Date(customHasta + 'T23:59:59') : finHoy,
-        label: customDesde && customHasta
-          ? `${new Date(customDesde).toLocaleDateString('es-DO')} — ${new Date(customHasta).toLocaleDateString('es-DO')}`
-          : 'Personalizado',
-      }
   }
 }
 
@@ -79,6 +76,7 @@ export default function AdminDashboard() {
   const [stock, setStock]     = useState<any[]>([])
   const [chartRaw, setChartRaw] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [updated, setUpdated] = useState(new Date())
   // Detalle clickeable: qué tarjeta está expandida (o null si ninguna) y
   // la lista de pedidos que componen esa cifra, con su cobrado real y su
@@ -100,15 +98,15 @@ export default function AdminDashboard() {
   const rango = useMemo(() => rangoDePreset(preset, customDesde, customHasta), [preset, customDesde, customHasta])
 
   const fmt = (n:number) => `RD$${Math.round(n).toLocaleString('es-DO')}`
-  const hoy = new Date().toLocaleDateString('es-DO',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
+  const hoy = new Intl.DateTimeFormat('es-DO',{timeZone:'America/Santo_Domingo',weekday:'long',year:'numeric',month:'long',day:'numeric'}).format(new Date())
 
   const cargar = async () => {
     setLoading(true)
+    setLoadError(null)
     const desdeISO = rango.desde.toISOString()
     const hastaISO = rango.hasta.toISOString()
     // "Hoy" siempre se muestra aparte, sin importar el rango elegido —
     // es información operativa del día, no del análisis histórico.
-    const hoy0ISO = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santo_Domingo' })).toISOString()
 
     // FIX DE FONDO (2026-09-04): antes "Cobrado" agrupaba el dinero por la
     // fecha de CREACIÓN del pedido — un pedido creado en agosto que recibe
@@ -158,6 +156,7 @@ export default function AdminDashboard() {
     const queryErrors = [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar].filter((q:any) => q.error)
     if (queryErrors.length) {
       console.error('[admin/dashboard] Error cargando indicadores:', queryErrors.map((q:any) => q.error))
+      setLoadError('No se pudieron cargar todos los indicadores. Se mantienen los últimos datos disponibles; vuelve a actualizar.')
       setLoading(false)
       return
     }
@@ -237,12 +236,14 @@ export default function AdminDashboard() {
     const costoPorId: Record<string, number> = {}
     ;(costosProductos ?? []).forEach((p:any) => { costoPorId[p.id] = Number(p.costo ?? 0) })
 
+    const itemsSinCosto = (items.data ?? []).filter((i:any) => !i.product_id || costoPorId[i.product_id] == null || costoPorId[i.product_id] <= 0)
+    const ventaSinCosto = itemsSinCosto.reduce((s:number,i:any) => s + Number(i.subtotal ?? (Number(i.precio ?? 0) * Number(i.cantidad ?? 1))), 0)
     let costoTotalPeriodo = 0
     ;(items.data ?? []).forEach((i:any) => {
       const costoUnit = i.product_id ? (costoPorId[i.product_id] ?? 0) : 0
-      costoTotalPeriodo += costoUnit * Number(i.cantidad ?? 1)
+      if (costoUnit > 0) costoTotalPeriodo += costoUnit * Number(i.cantidad ?? 1)
     })
-    const gananciaPeriodo = ventasTotalPeriodo - costoTotalPeriodo
+    const gananciaPeriodo = itemsSinCosto.length === 0 ? ventasTotalPeriodo - costoTotalPeriodo : null
 
     // Costo/ganancia de HOY: mismo cruce, pedidos VENDIDOS hoy (no solo
     // cobrados hoy).
@@ -253,7 +254,8 @@ export default function AdminDashboard() {
       const costoUnit = i.product_id ? (costoPorId[i.product_id] ?? 0) : 0
       costoHoy += costoUnit * Number(i.cantidad ?? 1)
     })
-    const gananciaHoy = ventasTotalHoy - costoHoy
+    const itemsSinCostoHoy = itemsSinCosto.some((i:any) => idsHoy.has(i.order_id))
+    const gananciaHoy = itemsSinCostoHoy ? null : ventasTotalHoy - costoHoy
 
     const agg: Record<string,{nombre:string,u:number,rev:number}> = {}
     ;(items.data??[]).forEach((i:any)=>{
@@ -334,7 +336,7 @@ export default function AdminDashboard() {
 
     setData({ ventasPeriodo, ventasHoy, ventasTotalPeriodo, ventasTotalHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
-      costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy,
+      costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy, itemsSinCosto: itemsSinCosto.length, ventaSinCosto,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
       detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr,
       porEtapa, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct })
@@ -427,7 +429,7 @@ export default function AdminDashboard() {
     <div className="space-y-4 pb-10 animate-pulse">
       <div className="h-16 bg-gray-100 rounded-2xl"/>
       <div className="h-10 bg-gray-100 rounded-2xl"/>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
         {Array.from({length:6}).map((_,i)=>(<div key={i} className="h-28 bg-gray-100 rounded-2xl"/>))}
       </div>
       <div className="h-40 bg-gray-100 rounded-2xl"/>
@@ -471,30 +473,31 @@ export default function AdminDashboard() {
   })
 
   return (
-    <div className="space-y-5 pb-10">
+    <div className="max-w-[1600px] mx-auto space-y-6 pb-12">
 
       {/* ═══ HEADER ═══ */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4">
+      <div className="rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 text-white shadow-lg px-5 py-5 md:px-7 md:py-6">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-xl font-black text-gray-900">{saludo}, {primerNombre}</h1>
-            <p className="text-xs text-gray-400 mt-0.5 capitalize">Resumen de ContactGo · {hoy}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-teal-300">ContactGo · Centro de control</p>
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white mt-1">{saludo}, {primerNombre}</h1>
+            <p className="text-xs text-slate-300 mt-1 capitalize">Resumen ejecutivo · {hoy}</p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button onClick={cargar} disabled={loading}
-              className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 bg-white hover:bg-gray-50"
+              className="w-10 h-10 flex items-center justify-center rounded-xl border border-white/15 bg-white/10 hover:bg-white/20"
               title="Actualizar">
-              <RefreshCw className={`w-4 h-4 text-gray-500 ${loading?'animate-spin':''}`}/>
+              <RefreshCw className={`w-4 h-4 text-white ${loading?'animate-spin':''}`}/>
             </button>
             <button onClick={()=>setNavMovilAbierto(v=>!v)}
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 bg-white hover:bg-gray-50">
-              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${navMovilAbierto?'rotate-180':''}`}/>
+              className="w-10 h-10 flex items-center justify-center rounded-xl border border-white/15 bg-white/10 hover:bg-white/20 md:hidden">
+              <ChevronDown className={`w-4 h-4 text-white transition-transform ${navMovilAbierto?'rotate-180':''}`}/>
             </button>
           </div>
         </div>
 
         {/* Nav — desktop en línea, mobile desplegable */}
-        <div className={`${navMovilAbierto?'flex':'hidden'} md:flex flex-col md:flex-row gap-1 md:gap-4 mt-4 pt-3 border-t border-gray-100 text-xs font-semibold`}>
+        <div className={`${navMovilAbierto?'flex':'hidden'} md:flex flex-col md:flex-row gap-1 md:gap-4 mt-4 pt-3 border-t border-white/15 text-xs font-semibold`}>
           {[
             {label:'Dashboard', path:'/M1Alexander', activo:true},
             {label:'Pedidos', path:'/M1Alexander/pedidos'},
@@ -505,12 +508,14 @@ export default function AdminDashboard() {
             {label:'Correos', path:'/M1Alexander/correos'},
           ].map(n=>(
             <button key={n.path} onClick={()=>router.push(n.path)}
-              className={`text-left md:text-center px-2 py-1.5 md:py-0 rounded-lg md:rounded-none ${n.activo?'text-primary-600':'text-gray-500 hover:text-gray-800'}`}>
+              className={`text-left md:text-center px-2 py-1.5 md:py-0 rounded-lg md:rounded-none ${n.activo?'text-teal-300':'text-slate-300 hover:text-white'}`}>
               {n.label}
             </button>
           ))}
         </div>
       </div>
+
+      {loadError && <div role="alert" className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">{loadError}</div>}
 
       {/* ═══ SELECTOR DE PERÍODO — compacto ═══ */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-4 py-3">
@@ -541,7 +546,7 @@ export default function AdminDashboard() {
           </div>
         )}
         <p className="text-[11px] text-gray-400 mt-2">
-          Mostrando datos del {rango.desde.toLocaleDateString('es-DO')} al {rango.hasta.toLocaleDateString('es-DO')}
+          Período: {new Intl.DateTimeFormat('es-DO',{timeZone:'America/Santo_Domingo'}).format(rango.desde)} al {new Intl.DateTimeFormat('es-DO',{timeZone:'America/Santo_Domingo'}).format(rango.hasta)} · Hora de República Dominicana
         </p>
       </div>
 
@@ -554,7 +559,7 @@ export default function AdminDashboard() {
           { key:'periodo', label:'Cobrado', val:fmt(data?.ventasPeriodo??0), sub:'dinero que ya entró', color:'text-blue-600', accion:()=>setDetalleAbierto(detalleAbierto==='periodo'?null:'periodo') },
           { key:'porCobrar', label:'Por cobrar', val:fmt(porCobrarTotal), sub:`${data?.pedidosPorCobrar??0} pedidos`, color:'text-amber-600', accion:()=>setDetalleAbierto(detalleAbierto==='porCobrar'?null:'porCobrar') },
           { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según products.costo', color:'text-red-500', accion:undefined },
-          { key:'ganancia', label:'Ganancia de lo vendido', val:fmt(data?.gananciaPeriodo??0), sub:`${margenPct}% margen`, color:'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
+          { key:'ganancia', label:'Ganancia estimada', val:data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo), sub:data?.itemsSinCosto>0?`${data.itemsSinCosto} línea(s) sin costo`:`${margenPct ?? 0}% margen`, color:data?.gananciaPeriodo==null?'text-amber-600':'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
           { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:null, label:'Ticket promedio', val:fmt(data?.ticketProm??0), sub:'por pedido vendido', color:'text-gray-900', accion:undefined },
           { key:'etapa', label:'Pedidos activos', val:String(pedidosActivosTotal), sub:'en proceso', color:'text-indigo-600', accion:()=>document.getElementById('pedidos-por-etapa')?.scrollIntoView({behavior:'smooth'}) },
@@ -563,9 +568,9 @@ export default function AdminDashboard() {
           const Tag = accion ? 'button' : 'div'
           return (
             <Tag key={label} onClick={accion}
-              className={`text-left bg-white rounded-2xl border shadow-sm p-4 transition-all ${abierta?'border-primary-400 ring-2 ring-primary-100':'border-gray-100'} ${accion?'hover:border-gray-200 active:scale-[0.98]':''}`}>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{label}</p>
-              <p className={`text-lg sm:text-xl font-black mt-1 ${color}`}>{val}</p>
+              className={`text-left bg-white rounded-2xl border shadow-sm p-5 transition-all min-h-[116px] ${abierta?'border-primary-400 ring-2 ring-primary-100':'border-slate-100'} ${accion?'hover:-translate-y-0.5 hover:shadow-md active:scale-[0.99]':''}`}>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.12em]">{label}</p>
+              <p className={`text-xl sm:text-2xl font-black tracking-tight mt-2 ${color}`}>{val}</p>
               <p className="text-[10px] text-gray-400 mt-0.5">{sub}</p>
             </Tag>
           )
@@ -615,11 +620,12 @@ export default function AdminDashboard() {
               <p className="text-[10px] text-gray-400">Costo real</p>
             </div>
             <div className="p-3 rounded-xl bg-emerald-50">
-              <p className="text-lg font-black text-emerald-600">{fmt(data?.gananciaPeriodo??0)}</p>
-              <p className="text-[10px] text-gray-400">Ganancia ({margenPct}%)</p>
+              <p className="text-lg font-black text-emerald-600">{data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo)}</p>
+              <p className="text-[10px] text-gray-400">{data?.gananciaPeriodo==null?'Falta costo de producto':`Ganancia (${margenPct}%)`}</p>
             </div>
           </div>
-          <p className="text-[10px] text-gray-400 mt-3">Vendido − Costo = Ganancia. El costo cruza cada producto vendido (se haya cobrado o no) contra su costo real actual (products.costo).</p>
+          <p className="text-[10px] text-gray-400 mt-3">Vendido menos costo identificado. El costo utiliza el valor actual de products.costo, no un histórico al momento de la venta.</p>
+          {data?.itemsSinCosto>0 && <p className="text-xs font-semibold text-amber-700 bg-amber-50 rounded-xl p-3 mt-3">Hay {data.itemsSinCosto} línea(s) sin costo configurado (venta asociada: {fmt(data.ventaSinCosto)}). La ganancia se oculta para evitar mostrar una utilidad inflada. Completa esos costos en inventario.</p>}
         </div>
       )}
 
@@ -701,10 +707,11 @@ export default function AdminDashboard() {
 
       {/* ═══ RENDIMIENTO FINANCIERO — gráfica ═══ */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-        <h2 className="font-bold text-gray-900 text-sm mb-1">Rendimiento financiero</h2>
+        <h2 className="font-bold text-gray-900 text-base mb-1">Ventas registradas en el período</h2>
         <div className="flex items-baseline gap-4 mb-4 flex-wrap">
-          <div><span className="text-lg font-black text-gray-900">{fmt(data?.ventasPeriodo??0)}</span><span className="text-[10px] text-gray-400 ml-1">cobrado</span></div>
-          <div><span className="text-lg font-black text-emerald-600">{fmt(data?.gananciaPeriodo??0)}</span><span className="text-[10px] text-gray-400 ml-1">ganancia</span></div>
+          <div><span className="text-lg font-black text-gray-900">{fmt(data?.ventasTotalPeriodo??0)}</span><span className="text-[10px] text-gray-400 ml-1">vendido</span></div>
+          <div><span className="text-lg font-black text-blue-600">{fmt(data?.ventasPeriodo??0)}</span><span className="text-[10px] text-gray-400 ml-1">cobrado</span></div>
+          <div><span className="text-lg font-black text-emerald-600">{data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo)}</span><span className="text-[10px] text-gray-400 ml-1">ganancia estimada</span></div>
           <div><span className="text-lg font-black text-gray-500">{margenPct}%</span><span className="text-[10px] text-gray-400 ml-1">margen</span></div>
         </div>
         <div className="flex items-end gap-1.5 h-28 overflow-x-auto">
