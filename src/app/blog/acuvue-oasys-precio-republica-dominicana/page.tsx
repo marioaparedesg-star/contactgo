@@ -127,7 +127,7 @@ export default function Page() {
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
 
-          <p>Si buscas el precio de <strong>ACUVUE Oasys en República Dominicana</strong>, llegaste al lugar correcto. En ContactGo somos la tienda especializada en lentes de contacto con el catálogo completo de la línea ACUVUE — a través de canales de distribución autorizados. El plazo total depende del tipo de lente y el destino.</p>
+          <p>Si buscas el precio de <strong>ACUVUE Oasys en República Dominicana</strong>, llegaste al lugar correcto. En ContactGo somos la tienda especializada en lentes de contacto con el catálogo completo de la línea ACUVUE — a través de proveedores de productos originales. El plazo total depende del tipo de lente y el destino.</p>
 
           {/* Tabla de precios */}
           <section>
@@ -311,7 +311,7 @@ export default function Page() {
             <div className="space-y-3">
               {[
                 { q: '¿Cuánto cuesta ACUVUE Oasys en República Dominicana?', a: 'En ContactGo, ACUVUE Oasys (6 lentes quincenales) cuesta RD$3,500. El modelo para astigmatismo está en RD$5,800 y el multifocal en RD$5,900. Consulta el precio vigente en la ficha de cada producto. El envío depende del destino.' },
-                { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys a través de canales de distribución autorizados. Transporte estimado: 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; el plazo total depende del tipo de lente. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
+                { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys a través de proveedores de productos originales. Transporte estimado: 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior; el plazo total depende del tipo de lente. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
                 { q: '¿Cuánto duran los ACUVUE Oasys?', a: 'Son lentes quincenales — se usan durante 14 días consecutivos y luego se descartan. Una caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos.' },
                 { q: '¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?', a: 'ACUVUE Oasys usa silicona hidrogel con HYDRACLEAR Plus (mayor oxígeno, mayor comodidad). ACUVUE 2 usa hidrogel convencional y es una opción más económica a RD$3,500.' },
                 { q: '¿ACUVUE Oasys sirve para astigmatismo?', a: 'Sí, pero necesitas el modelo específico: ACUVUE Oasys for Astigmatism. Este tiene un diseño tórico que estabiliza el lente para corregir el astigmatismo con precisión. Cuesta RD$5,800 en ContactGo.' },
@@ -350,7 +350,7 @@ export default function Page() {
         <div className="mt-10 bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">ACUVUE Oasys — entrega según destino</h3>
           <p className="text-sm text-gray-600 mb-1">Los mismos lentes que en la clínica, directo a tu puerta en toda República Dominicana.</p>
-          <p className="text-xs text-gray-400 mb-4">Canales de distribución autorizados · Pago seguro AZUL</p>
+          <p className="text-xs text-gray-400 mb-4">Productos originales de marcas reconocidas · Pago seguro AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana"
               className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm">
@@ -364,7 +364,7 @@ export default function Page() {
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48 horas en Santo Domingo y 24-72 horas en el interior</h3>
-          <p className="text-sm text-gray-500 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
+          <p className="text-sm text-gray-500 mb-4">Productos originales de marcas reconocidas · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>
             <a href="/receta" className="inline-flex items-center justify-center gap-2 bg-white border border-primary-200 text-primary-600 font-bold px-6 py-3 rounded-xl hover:bg-teal-50 transition-colors text-sm">Calcular mi receta gratis</a>
