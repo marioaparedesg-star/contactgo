@@ -79,14 +79,14 @@ export default function FAQPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main id="main-content" className="max-w-3xl mx-auto px-4 py-12 pb-24">
         <div className="mb-10 text-center">
-          <h1 className="font-display text-3xl font-bold text-gray-900 mb-3">Preguntas Frecuentes</h1>
+          <h1 className="cg-page-title mb-3">Preguntas Frecuentes</h1>
           <p className="text-gray-500">Todo lo que necesitas saber sobre ContactGo</p>
         </div>
 
         <div className="space-y-8">
           {FAQS.map(({ categoria, preguntas }) => (
             <div key={categoria}>
-              <h2 className="font-semibold text-lg text-gray-900 mb-4">{categoria}</h2>
+              <h2 className="cg-card-title mb-4">{categoria}</h2>
               <div className="space-y-3">
                 {preguntas.map(({ q, a }) => (
                   <div key={q} className="border border-gray-100 rounded-2xl p-5">
