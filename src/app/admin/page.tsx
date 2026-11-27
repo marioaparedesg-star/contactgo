@@ -130,7 +130,7 @@ export default function AdminDashboard() {
     const hastaStr = fechaRD(rango.hasta)
     const hoyStr   = fechaRD(new Date())
 
-    const [periodo, ordRecent, stockLow, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo] = await Promise.all([
+    const [periodo, ordRecent, stockLow, testProductItems, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
@@ -138,6 +138,7 @@ export default function AdminDashboard() {
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
       sb.from('v_stock_disponible').select('nombre,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock').in('alerta_stock',['critico','bajo_minimo']).order('stock'),
+      sb.from('order_items').select('order_id').eq('nombre','Producto de prueba'),
       sb.from('order_payments')
         .select('id,monto,created_at,order_id,metodo,orders(numero_orden,cliente_nombre,cliente_telefono)')
         .gte('created_at', desdeISO).lte('created_at', hastaISO),
@@ -159,16 +160,20 @@ export default function AdminDashboard() {
       sb.from('cash_movements').select('id,monto,fecha').eq('tipo','egreso').gte('fecha',desdeStr).lte('fecha',hastaStr),
     ])
 
-    const queryErrors = [periodo, ordRecent, stockLow, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo].filter((q:any) => q.error)
+    const queryErrors = [periodo, ordRecent, stockLow, testProductItems, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo].filter((q:any) => q.error)
     if (queryErrors.length) {
       console.error('[admin/dashboard] Error cargando indicadores:', queryErrors.map((q:any) => q.error))
       setLoadError('No se pudieron cargar todos los indicadores. Se mantienen los últimos datos disponibles; vuelve a actualizar.')
       setLoading(false)
       return
     }
-    const ords = periodo.data ?? []
-    const pagosPeriodoData = cobrosPeriodo.data ?? []
-    const idsPagadosPeriodo = (pagadosPeriodo.data ?? []).map((o:any) => o.id).filter(Boolean)
+    const idsPedidosPrueba = new Set((testProductItems.data ?? []).map((i:any) => i.order_id).filter(Boolean))
+    const ords = (periodo.data ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id))
+    const pedidosPruebaDetectados = (periodo.data ?? []).filter((o:any) => idsPedidosPrueba.has(o.id)).length
+    const ordRecentData = (ordRecent.data ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id))
+    const pagosPeriodoData = (cobrosPeriodo.data ?? []).filter((p:any) => !idsPedidosPrueba.has(p.order_id))
+    const pagadosPeriodoData = (pagadosPeriodo.data ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id))
+    const idsPagadosPeriodo = pagadosPeriodoData.map((o:any) => o.id).filter(Boolean)
     const pagosAcumuladosResult = idsPagadosPeriodo.length > 0
       ? await sb.from('order_payments').select('order_id,monto').in('order_id', idsPagadosPeriodo)
       : { data: [] as any[], error: null }
@@ -177,7 +182,7 @@ export default function AdminDashboard() {
     ;(pagosAcumuladosResult.data ?? []).forEach((p:any) => { pagadoPorOrdenHistorico[p.order_id] = (pagadoPorOrdenHistorico[p.order_id] ?? 0) + Number(p.monto ?? 0) })
     // Para pedidos pagados sin registro en order_payments (p. ej. pago de pasarela),
     // se incorpora solo el importe que falta hasta completar el total, en pagado_en.
-    const cobrosComplementarios = (pagadosPeriodo.data ?? []).map((o:any) => {
+    const cobrosComplementarios = pagadosPeriodoData.map((o:any) => {
       const restante = Math.max(0, Number(o.total ?? 0) - (pagadoPorOrdenHistorico[o.id] ?? 0))
       return restante > 0 ? {
         id: `pago-confirmado-${o.id}`, order_id: o.id, monto: restante,
@@ -224,7 +229,7 @@ export default function AdminDashboard() {
 
     const hace30d = new Date(Date.now() - 30*86400000)
     let porCobrarActivo = 0, porCobrarViejo = 0, pedidosPorCobrar = 0
-    const ordsParaCobrar = ordsPorCobrar.data ?? []
+    const ordsParaCobrar = (ordsPorCobrar.data ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id))
     ordsParaCobrar.forEach((o:any) => {
       const saldo = Number(o.total ?? 0) - cobradoDeOrden(o)
       if (saldo <= 0) return
@@ -311,9 +316,9 @@ export default function AdminDashboard() {
       .not('estado','in','(entregado,cancelado)').eq('es_prueba', false)
     if (pedidosActivosError) { console.error('[admin/dashboard] Error consultando etapas:', pedidosActivosError); setLoadError('No se pudo validar la distribución de pedidos por etapa.'); setLoading(false); return }
     const porEtapa: Record<string, number> = {}
-    ;(pedidosActivosData ?? []).forEach((o:any) => { porEtapa[o.estado] = (porEtapa[o.estado] ?? 0) + 1 })
-    const pedidosAbiertos3Dias = (pedidosActivosData ?? []).filter((o:any) => Date.now() - new Date(o.created_at).getTime() >= 3 * 86400000).length
-    const pedidosAbiertos7Dias = (pedidosActivosData ?? []).filter((o:any) => Date.now() - new Date(o.created_at).getTime() >= 7 * 86400000).length
+    ;(pedidosActivosData ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id)).forEach((o:any) => { porEtapa[o.estado] = (porEtapa[o.estado] ?? 0) + 1 })
+    const pedidosAbiertos3Dias = (pedidosActivosData ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id) && Date.now() - new Date(o.created_at).getTime() >= 3 * 86400000).length
+    const pedidosAbiertos7Dias = (pedidosActivosData ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id) && Date.now() - new Date(o.created_at).getTime() >= 7 * 86400000).length
 
     // ── MARKETING: leads de la calculadora + conversión real ──────────────
     const hoyPartes = partesFechaRD(new Date())
@@ -335,9 +340,9 @@ export default function AdminDashboard() {
     const telsLeads = new Set((leadsMesData ?? []).map((l:any) => String(l.telefono ?? '').replace(/\D/g,'').slice(-10)).filter(Boolean))
     let leadsConvertidos = 0
     if (telsLeads.size > 0) {
-      const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false).not('estado','eq','cancelado')
+      const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('id,cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false).not('estado','eq','cancelado')
       if (ordsDelMesError) { console.error('[admin/dashboard] Error cruzando leads y pedidos:', ordsDelMesError); setLoadError('No se pudo calcular la conversión de leads.'); setLoading(false); return }
-      const telsConCompra = new Set((ordsDelMes ?? []).map((o:any) => String(o.cliente_telefono ?? '').replace(/\D/g,'').slice(-10)))
+      const telsConCompra = new Set((ordsDelMes ?? []).filter((o:any) => !idsPedidosPrueba.has(o.id)).map((o:any) => String(o.cliente_telefono ?? '').replace(/\D/g,'').slice(-10)))
       telsLeads.forEach(t => { if (telsConCompra.has(t)) leadsConvertidos++ })
     }
     const conversionLeadsPct = telsLeads.size > 0 ? Math.round((leadsConvertidos / telsLeads.size) * 100) : 0
@@ -375,13 +380,13 @@ export default function AdminDashboard() {
       .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) < hace30d)
       .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
 
-    setData({ ventasPeriodo, ventasHoy, ventasTotalPeriodo, ventasTotalHoy, egresosTotalPeriodo, flujoNetoPeriodo, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0, clientesNuevosPeriodo: clientesNuevosPeriodo??0,
+    setData({ ventasPeriodo, ventasHoy, ventasTotalPeriodo, ventasTotalHoy, egresosTotalPeriodo, flujoNetoPeriodo, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, pedidosPruebaDetectados, clientes: clientes??0, clientesNuevosPeriodo: clientesNuevosPeriodo??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
       costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy, itemsSinCosto: itemsSinCosto.length, ventaSinCosto,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
       detalleHoyArr, detallePeriodoArr, detallePorCobrarActivoArr, detallePorCobrarViejoArr,
       porEtapa, pedidosAbiertos3Dias, pedidosAbiertos7Dias, leadsHoy, leadsMes, leadsConvertidos, conversionLeadsPct })
-    setRecent(ordRecent.data??[])
+    setRecent(ordRecentData)
     setTop(topProds)
     setStock(stockLow.data??[])
     setChartRaw(ords)
@@ -510,6 +515,12 @@ export default function AdminDashboard() {
     icon: Clock, color:'text-amber-700', bg:'bg-amber-50',
     texto: `${data.pedidosAbiertos3Dias} pedidos abiertos hace más de 3 días`,
     sub: `${data.pedidosAbiertos7Dias??0} llevan más de 7 días desde su creación`,
+    accion: () => router.push('/M1Alexander/pedidos'),
+  })
+  if ((data?.pedidosPruebaDetectados??0) > 0) alertas.push({
+    icon: AlertTriangle, color:'text-amber-700', bg:'bg-amber-50',
+    texto: `${data.pedidosPruebaDetectados} pedido(s) con “Producto de prueba” están marcados como reales`,
+    sub: 'Se excluyen de los indicadores comerciales; corrige la marca de prueba en el pedido',
     accion: () => router.push('/M1Alexander/pedidos'),
   })
   if (stock.length > 0) alertas.push({
