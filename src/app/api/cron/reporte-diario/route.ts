@@ -141,10 +141,6 @@ export async function GET(req: Request) {
     ])
 
     const cashToday = cashMonth.filter(r => r.fecha === today && r.categoria === 'venta' && r.tipo === 'ingreso')
-    const cashYesterday = cashSevenDays.filter(r => r.fecha === yesterday && r.categoria === 'venta' && r.tipo === 'ingreso')
-    const salesYesterday = sum(cashYesterday)
-    const salesSevenDays = sum(cashSevenDays.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso'))
-    const averageSevenDays = salesSevenDays / 7
     const cashOutToday = sum(cashMonth.filter(r => r.fecha === today && r.tipo === 'egreso'))
     const cashOutMonth = sum(cashMonth.filter(r => r.tipo === 'egreso'))
 
@@ -181,9 +177,18 @@ export async function GET(req: Request) {
     const receiptsMonth = [...paymentsMonthClean, ...gatewayRemaindersMonth, ...standaloneSalesMonth]
     const salesToday = sum(receiptsToday)
     const cashInMonth = sum(receiptsMonth)
+    const paymentsYesterday = paymentsMonthClean.filter((p: Row) => p.created_at >= new Date(Date.parse(yesterday + 'T04:00:00.000Z')).toISOString() && p.created_at < startTodayISO)
+    const gatewayRemaindersYesterday = gatewayRemaindersMonth.filter((p: Row) => p.created_at >= new Date(Date.parse(yesterday + 'T04:00:00.000Z')).toISOString() && p.created_at < startTodayISO)
+    const standaloneSalesYesterday = cashSevenDays.filter(r => r.fecha === yesterday && r.categoria === 'venta' && r.tipo === 'ingreso' && !r.order_id)
+    const salesYesterday = sum([...paymentsYesterday, ...gatewayRemaindersYesterday, ...standaloneSalesYesterday])
+    const paymentsSevenDays = paymentsMonthClean.filter((p: Row) => p.created_at >= startSevenDaysISO && p.created_at < startTodayISO)
+    const gatewayRemaindersSevenDays = gatewayRemaindersMonth.filter((p: Row) => p.created_at >= startSevenDaysISO && p.created_at < startTodayISO)
+    const standaloneSalesSevenDays = cashSevenDays.filter(r => r.fecha >= sevenDaysAgo && r.fecha < today && r.categoria === 'venta' && r.tipo === 'ingreso' && !r.order_id)
+    const salesSevenDays = sum([...paymentsSevenDays, ...gatewayRemaindersSevenDays, ...standaloneSalesSevenDays])
+    const averageSevenDays = salesSevenDays / 7
     const orderIdsWithReceiptToday = new Set(receiptsToday.map((r: Row) => r.order_id).filter(Boolean))
     const receiptlessMovementsToday = standaloneSalesToday
-    const unassignedMethodsToday = [...cashToday.filter(r => !r.metodo), ...paymentsToday.filter((r: Row) => !r.metodo)]
+    const unassignedMethodsToday = [...standaloneSalesToday.filter(r => !r.metodo), ...paymentsToday.filter((r: Row) => !r.metodo)]
     const avgReceiptPerOrder = orderIdsWithReceiptToday.size ? salesToday / orderIdsWithReceiptToday.size : 0
     const netToday = salesToday - cashOutToday
     const netMonth = cashInMonth - cashOutMonth
