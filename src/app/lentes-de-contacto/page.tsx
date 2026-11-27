@@ -73,7 +73,7 @@ export default async function LentesContactoPage() {
 
         <section className="max-w-7xl mx-auto px-4 py-10">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Lentes más populares en RD</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid auto-rows-fr grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 items-stretch gap-4">
             {((products ?? []) as unknown as any[]).map(p => <ProductCard key={p.id} product={p} />)}
           </div>
         </section>
