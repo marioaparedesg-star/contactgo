@@ -113,9 +113,7 @@ export default function AdminDashboard() {
     // un abono HOY contaba como "venta de agosto", mientras que Caja
     // (cash_movements) correctamente lo cuenta como cobro de hoy. Por eso
     // los números nunca cuadraban entre pantallas. Ahora "Cobrado" se lee
-    // directo de cash_movements (categoría 'venta'), agrupado por la fecha
-    // real en que entró el dinero — la misma fuente que ya usa Caja y el
-    // ERP Dashboard.
+    // de order_payments y pagado_en, con cash_movements para ingresos sin pedido.
     //
     // FIX (2026-09-05): "hoyStr" antes usaba toLocaleDateString('en-CA'),
     // que toma la fecha del RELOJ/ZONA HORARIA DEL DISPOSITIVO que carga
@@ -198,7 +196,7 @@ export default function AdminDashboard() {
     // FIX (2026-09-07): Mario pidió separar claramente 4 conceptos que se
     // estaban mezclando en un solo número:
     //  1. VENDIDO — el valor de TODO lo que se vendió, se haya cobrado o no.
-    //  2. COBRADO — el dinero que ya entró de verdad (cash_movements).
+    //  2. COBRADO — pagos registrados, pagos confirmados y cobros sin pedido.
     //  3. POR COBRAR — la diferencia entre los dos anteriores.
     //  4. COSTO/GANANCIA — deben ir sobre lo VENDIDO, no solo sobre lo
     //     cobrado (antes un pedido pagado a medias no sumaba nada de costo,
@@ -312,7 +310,7 @@ export default function AdminDashboard() {
     // ── OPERACIÓN: pedidos activos por etapa (todo lo que no es entregado
     // ni cancelado — el flujo real de "qué hay que atender hoy") ──────────
     const { data: pedidosActivosData, error: pedidosActivosError } = await sb
-      .from('orders').select('estado,created_at')
+      .from('orders').select('id,estado,created_at')
       .not('estado','in','(entregado,cancelado)').eq('es_prueba', false)
     if (pedidosActivosError) { console.error('[admin/dashboard] Error consultando etapas:', pedidosActivosError); setLoadError('No se pudo validar la distribución de pedidos por etapa.'); setLoading(false); return }
     const porEtapa: Record<string, number> = {}
