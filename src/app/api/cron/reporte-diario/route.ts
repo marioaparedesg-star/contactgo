@@ -105,7 +105,7 @@ export async function GET(req: Request) {
     const [
       cashMonth, cashSevenDays, ordersMonth, deliveredMonthOrders, activeOrders, activeProducts,
       abandonedCarts, activeSubscriptions, leadsMonth, customersMonth,
-      emailErrors, allPayments, allSalesMovements,
+      emailErrors, allPayments, allSalesMovements, paymentsMonth, paidOrdersByPaidAtMonth, testProductItems,
     ] = await Promise.all([
       fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,metodo,categoria,tipo,descripcion,fecha,created_at')
         .gte('fecha', monthStart).lte('fecha', today)),
@@ -129,50 +129,74 @@ export async function GET(req: Request) {
         .eq('role', 'customer').gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
       fetchAll<Row>(() => sb.from('email_log').select('id,template,status,created_at')
         .gte('created_at', startSevenDaysISO).in('status', ['error', 'failed', 'bounced', 'rejected'])),
-      fetchAll<Row>(() => sb.from('order_payments').select('monto')),
+      fetchAll<Row>(() => sb.from('order_payments').select('monto,order_id,created_at')),
       fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id')
         .eq('categoria', 'venta').eq('tipo', 'ingreso')),
+      fetchAll<Row>(() => sb.from('order_payments').select('order_id,monto,created_at,metodo')
+        .gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
+      fetchAll<Row>(() => sb.from('orders').select('id,total,pagado_en,metodo_pago')
+        .eq('pago_estado', 'pagado').eq('es_prueba', false)
+        .gte('pagado_en', startMonthISO).lt('pagado_en', startTomorrowISO)),
+      fetchAll<Row>(() => sb.from('order_items').select('order_id').eq('nombre', 'Producto de prueba')),
     ])
 
     const cashToday = cashMonth.filter(r => r.fecha === today && r.categoria === 'venta' && r.tipo === 'ingreso')
     const cashYesterday = cashSevenDays.filter(r => r.fecha === yesterday && r.categoria === 'venta' && r.tipo === 'ingreso')
-    const salesToday = sum(cashToday)
     const salesYesterday = sum(cashYesterday)
     const salesSevenDays = sum(cashSevenDays.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso'))
     const averageSevenDays = salesSevenDays / 7
     const cashOutToday = sum(cashMonth.filter(r => r.fecha === today && r.tipo === 'egreso'))
     const cashOutMonth = sum(cashMonth.filter(r => r.tipo === 'egreso'))
-    const cashInMonth = sum(cashMonth.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso'))
-    const netToday = salesToday - cashOutToday
-    const netMonth = cashInMonth - cashOutMonth
 
-    const ordersToday = ordersMonth.filter(o => o.created_at >= startTodayISO && o.created_at < startTomorrowISO)
-    const validOrdersToday = ordersToday.filter(o => o.estado !== 'cancelado')
+    const testOrderIds = new Set((testProductItems ?? []).map((i: Row) => i.order_id).filter(Boolean))
+    const cleanOrdersMonth = ordersMonth.filter(o => !testOrderIds.has(o.id))
+    const cleanActiveOrders = activeOrders.filter(o => !testOrderIds.has(o.id))
+    const ordersToday = cleanOrdersMonth.filter(o => o.created_at >= startTodayISO && o.created_at < startTomorrowISO)
+    const validOrdersToday = ordersToday.filter(o => o.estado !== 'cancelado' && o.pago_estado !== 'declinado')
     const cancelledOrdersToday = ordersToday.filter(o => o.estado === 'cancelado')
-    const cancelledOrdersMonth = ordersMonth.filter(o => o.estado === 'cancelado')
-    const deliveredOrdersToday = deliveredMonthOrders.filter(o => o.entregado_at >= startTodayISO && o.entregado_at < startTomorrowISO)
+    const cancelledOrdersMonth = cleanOrdersMonth.filter(o => o.estado === 'cancelado')
+    const deliveredOrdersMonthClean = deliveredMonthOrders.filter(o => !testOrderIds.has(o.id))
+    const deliveredOrdersToday = deliveredOrdersMonthClean.filter(o => o.entregado_at >= startTodayISO && o.entregado_at < startTomorrowISO)
     const deliveredValueToday = sum(deliveredOrdersToday, 'total')
-    const deliveredValueMonth = sum(deliveredMonthOrders, 'total')
-    const validOrdersMonth = ordersMonth.filter(o => o.estado !== 'cancelado')
-    const paidOrdersMonth = ordersMonth.filter(o => o.pago_estado === 'pagado' && o.estado !== 'cancelado')
+    const deliveredValueMonth = sum(deliveredOrdersMonthClean, 'total')
+    const validOrdersMonth = cleanOrdersMonth.filter(o => o.estado !== 'cancelado' && o.pago_estado !== 'declinado')
+    const paidOrdersMonth = validOrdersMonth.filter(o => o.pago_estado === 'pagado')
     const orderValueToday = sum(validOrdersToday, 'total')
     const orderValueMonth = sum(validOrdersMonth, 'total')
     const paidOrderValueMonth = sum(paidOrdersMonth, 'total')
-    const orderIdsWithReceiptToday = new Set(cashToday.map(r => r.order_id).filter(Boolean))
-    const receiptlessMovementsToday = cashToday.filter(r => !r.order_id)
-    const unassignedMethodsToday = cashToday.filter(r => !r.metodo)
-    const avgReceiptPerOrder = orderIdsWithReceiptToday.size ? sum(cashToday.filter(r => r.order_id)) / orderIdsWithReceiptToday.size : 0
+
+    const paymentTotalsByOrder: Record<string, number> = {}
+    allPayments.forEach((p: Row) => { if (p.order_id) paymentTotalsByOrder[p.order_id] = (paymentTotalsByOrder[p.order_id] || 0) + Number(p.monto || 0) })
+    const paymentsMonthClean = paymentsMonth.filter((p: Row) => !testOrderIds.has(p.order_id))
+    const paymentsToday = paymentsMonthClean.filter((p: Row) => p.created_at >= startTodayISO && p.created_at < startTomorrowISO)
+    const paidOrdersByPaidAtClean = paidOrdersByPaidAtMonth.filter((o: Row) => !testOrderIds.has(o.id))
+    const gatewayRemaindersMonth = paidOrdersByPaidAtClean.map((o: Row) => ({
+      order_id: o.id, monto: Math.max(0, Number(o.total || 0) - (paymentTotalsByOrder[o.id] || 0)),
+      metodo: o.metodo_pago || 'Pasarela', created_at: o.pagado_en,
+    })).filter((p: Row) => p.monto > 0)
+    const gatewayRemaindersToday = gatewayRemaindersMonth.filter((p: Row) => p.created_at >= startTodayISO && p.created_at < startTomorrowISO)
+    const standaloneSalesMonth = cashMonth.filter(r => r.categoria === 'venta' && r.tipo === 'ingreso' && !r.order_id)
+    const standaloneSalesToday = standaloneSalesMonth.filter(r => r.fecha === today)
+    const receiptsToday = [...paymentsToday, ...gatewayRemaindersToday, ...standaloneSalesToday]
+    const receiptsMonth = [...paymentsMonthClean, ...gatewayRemaindersMonth, ...standaloneSalesMonth]
+    const salesToday = sum(receiptsToday)
+    const cashInMonth = sum(receiptsMonth)
+    const orderIdsWithReceiptToday = new Set(receiptsToday.map((r: Row) => r.order_id).filter(Boolean))
+    const receiptlessMovementsToday = standaloneSalesToday
+    const unassignedMethodsToday = [...cashToday.filter(r => !r.metodo), ...paymentsToday.filter((r: Row) => !r.metodo)]
+    const avgReceiptPerOrder = orderIdsWithReceiptToday.size ? salesToday / orderIdsWithReceiptToday.size : 0
+    const netToday = salesToday - cashOutToday
+    const netMonth = cashInMonth - cashOutMonth
     const trendYesterday = pct(salesToday, salesYesterday)
     const trendSevenDays = pct(salesToday, averageSevenDays)
 
     // Cobros por método y ventas originadas por canal.
     const byMethod: Record<string, number> = {}
-    cashMonth.filter(r => r.fecha === today && r.categoria === 'venta' && r.tipo === 'ingreso')
-      .forEach(r => { const key = String(r.metodo || 'Sin método registrado'); byMethod[key] = (byMethod[key] || 0) + Number(r.monto || 0) })
+    receiptsToday.forEach((r: Row) => { const key = String(r.metodo || 'Sin método registrado'); byMethod[key] = (byMethod[key] || 0) + Number(r.monto || 0) })
     const methodRows = Object.entries(byMethod).sort((a, b) => b[1] - a[1])
       .map(([name, value]) => [esc(name), fmt(value)])
     const byChannel: Record<string, { count: number; value: number }> = {}
-    ordersMonth.filter(o => o.estado !== 'cancelado').forEach(o => {
+    validOrdersMonth.forEach(o => {
       const key = String(o.canal || 'Sin canal')
       if (!byChannel[key]) byChannel[key] = { count: 0, value: 0 }
       byChannel[key].count++
@@ -182,28 +206,28 @@ export async function GET(req: Request) {
       .map(([name, v]) => [esc(name), String(v.count), fmt(v.value)])
 
     // Cartera: saldo por pedido calculado contra los movimientos reales de caja.
-    const activeIds = activeOrders.map(o => o.id)
-    const activeCash: Row[] = []
+    const activeIds = cleanActiveOrders.map(o => o.id)
+    const activePayments: Row[] = []
     for (let i = 0; i < activeIds.length; i += 100) {
       const batch = activeIds.slice(i, i + 100)
       if (!batch.length) continue
-      activeCash.push(...await fetchAll<Row>(() => sb.from('cash_movements').select('order_id,monto')
-        .eq('categoria', 'venta').eq('tipo', 'ingreso').in('order_id', batch)))
+      activePayments.push(...await fetchAll<Row>(() => sb.from('order_payments').select('order_id,monto')
+        .in('order_id', batch)))
     }
     const collectedByOrder: Record<string, number> = {}
-    activeCash.forEach(r => { collectedByOrder[r.order_id] = (collectedByOrder[r.order_id] || 0) + Number(r.monto || 0) })
-    const openBalances: Row[] = activeOrders.map((o: Row): Row => {
-      const paid = o.pago_estado === 'pagado'
+    activePayments.forEach(r => { collectedByOrder[r.order_id] = (collectedByOrder[r.order_id] || 0) + Number(r.monto || 0) })
+    const openBalances: Row[] = cleanActiveOrders.map((o: Row): Row => {
+      const paid = o.pago_estado === 'pagado' || o.pago_estado === 'declinado'
       const collected = collectedByOrder[o.id] || 0
       const balance = paid ? 0 : Math.max(0, Number(o.total || 0) - collected)
       return { ...o, collected, balance, stageDays: daysAgo(o.updated_at || o.created_at), ageDays: daysAgo(o.created_at) }
     }).filter((o: Row) => o.balance > 0.5).sort((a: Row, b: Row) => b.ageDays - a.ageDays)
     const receivables = openBalances.reduce((v, o) => v + o.balance, 0)
     const receivablesOver3 = openBalances.filter(o => o.ageDays > 3)
-    const staleOrders: Row[] = activeOrders.map((o: Row): Row => ({ ...o, stageDays: daysAgo(o.updated_at || o.created_at) }))
+    const staleOrders: Row[] = cleanActiveOrders.map((o: Row): Row => ({ ...o, stageDays: daysAgo(o.updated_at || o.created_at) }))
       .filter((o: Row) => o.stageDays >= 3).sort((a: Row, b: Row) => b.stageDays - a.stageDays)
     const pipeline: Record<string, number> = {}
-    activeOrders.forEach(o => { const key = String(o.estado || 'Sin etapa'); pipeline[key] = (pipeline[key] || 0) + 1 })
+    cleanActiveOrders.forEach(o => { const key = String(o.estado || 'Sin etapa'); pipeline[key] = (pipeline[key] || 0) + 1 })
     const pipelineRows = Object.entries(pipeline).sort((a, b) => b[1] - a[1])
       .map(([stage, count]) => [esc(stage.replace(/_/g, ' ')), String(count)])
 
@@ -385,9 +409,9 @@ export async function GET(req: Request) {
       '</div>'
 
     const paidMonthIds = new Set(paidOrdersMonth.map(o => o.id))
-    const testLabelItems = items.filter(i => paidMonthIds.has(i.order_id) && /prueba|test/i.test(String(i.nombre || '')))
+    const testOrdersInMonth = ordersMonth.filter(o => testOrderIds.has(o.id))
     const dataWarnings: string[] = []
-    if (testLabelItems.length > 0) dataWarnings.push(testLabelItems.length + ' línea(s) de producto con nombre de prueba aparecen en pedidos pagados no marcados como prueba. Revisar la clasificación del pedido para no contaminar los indicadores comerciales.')
+    if (testOrdersInMonth.length > 0) dataWarnings.push(testOrdersInMonth.length + ' pedido(s) con artículos llamados “Producto de prueba” están marcados como reales. Se excluyen de los indicadores; corrige su clasificación.')
     if (Math.abs(reconciliationGap) > 1) {
       dataWarnings.push('Diferencia histórica entre movimientos de caja de ventas y order_payments: ' + fmt(reconciliationGap) +
         '. Caja: ' + fmt(cashSalesLifetime) + '; order_payments: ' + fmt(paymentRowsLifetime) +
