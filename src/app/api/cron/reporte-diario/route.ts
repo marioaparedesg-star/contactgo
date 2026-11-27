@@ -103,7 +103,7 @@ export async function GET(req: Request) {
     }
 
     const [
-      cashMonth, cashSevenDays, ordersMonth, activeOrders, activeProducts,
+      cashMonth, cashSevenDays, ordersMonth, deliveredMonthOrders, activeOrders, activeProducts,
       abandonedCarts, subscriptionsDue, leadsMonth, customersMonth,
       emailErrors, allPayments, allSalesMovements,
     ] = await Promise.all([
@@ -113,6 +113,8 @@ export async function GET(req: Request) {
         .gte('fecha', sevenDaysAgo).lt('fecha', today)),
       fetchAll<Row>(() => sb.from('orders').select('id,numero_orden,cliente_nombre,total,subtotal,descuento,estado,pago_estado,canal,metodo_pago,created_at,updated_at,pagado_en,entregado_at')
         .eq('es_prueba', false).gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
+      fetchAll<Row>(() => sb.from('orders').select('id,numero_orden,cliente_nombre,total,entregado_at')
+        .eq('es_prueba', false).gte('entregado_at', startMonthISO).lt('entregado_at', startTomorrowISO)),
       fetchAll<Row>(() => sb.from('orders').select('id,numero_orden,cliente_nombre,cliente_telefono,total,estado,pago_estado,canal,metodo_pago,created_at,updated_at,pagado_en')
         .eq('es_prueba', false).neq('estado', 'entregado').neq('estado', 'cancelado')),
       fetchAll<Row>(() => sb.from('products').select('id,nombre,stock,stock_minimo,stock_critico,stock_reorden,costo,activo,archivado')
@@ -145,8 +147,14 @@ export async function GET(req: Request) {
     const netMonth = cashInMonth - cashOutMonth
 
     const ordersToday = ordersMonth.filter(o => o.created_at >= startTodayISO && o.created_at < startTomorrowISO)
+    const validOrdersToday = ordersToday.filter(o => o.estado !== 'cancelado')
+    const cancelledOrdersToday = ordersToday.filter(o => o.estado === 'cancelado')
+    const cancelledOrdersMonth = ordersMonth.filter(o => o.estado === 'cancelado')
+    const deliveredOrdersToday = deliveredMonthOrders.filter(o => o.entregado_at >= startTodayISO && o.entregado_at < startTomorrowISO)
+    const deliveredValueToday = sum(deliveredOrdersToday, 'total')
+    const deliveredValueMonth = sum(deliveredMonthOrders, 'total')
     const paidOrdersMonth = ordersMonth.filter(o => o.pago_estado === 'pagado' && o.estado !== 'cancelado')
-    const orderValueToday = sum(ordersToday, 'total')
+    const orderValueToday = sum(validOrdersToday, 'total')
     const orderValueMonth = sum(ordersMonth.filter(o => o.estado !== 'cancelado'), 'total')
     const paidOrderValueMonth = sum(paidOrdersMonth, 'total')
     const orderIdsWithReceiptToday = new Set(cashToday.map(r => r.order_id).filter(Boolean))
@@ -199,7 +207,7 @@ export async function GET(req: Request) {
       .map(([stage, count]) => [esc(stage.replace(/_/g, ' ')), String(count)])
 
     // Productos: se separa demanda (pedidos creados hoy) de pedidos pagados del mes.
-    const itemOrderIds = Array.from(new Set([...ordersToday.map(o => o.id), ...paidOrdersMonth.map(o => o.id)]))
+    const itemOrderIds = Array.from(new Set([...validOrdersToday.map(o => o.id), ...paidOrdersMonth.map(o => o.id)]))
     const items: Row[] = []
     for (let i = 0; i < itemOrderIds.length; i += 100) {
       const batch = itemOrderIds.slice(i, i + 100)
@@ -239,7 +247,7 @@ export async function GET(req: Request) {
       })
       return Object.values(grouped).sort((a, b) => b.revenue - a.revenue)
     }
-    const productsToday = itemTotals(ordersToday).slice(0, 8)
+    const productsToday = itemTotals(validOrdersToday).slice(0, 8)
     const productsMonth = itemTotals(paidOrdersMonth).slice(0, 10)
     const costCoveredUnits = productsMonth.reduce((v, p) => v + p.costUnits, 0)
     const totalMonthUnits = productsMonth.reduce((v, p) => v + p.units, 0)
@@ -281,7 +289,9 @@ export async function GET(req: Request) {
       metric('Cobrado hoy', fmt(salesToday), orderIdsWithReceiptToday.size + ' pedidos con cobro') +
       metric('Egresos registrados hoy', fmt(cashOutToday), 'Movimientos de caja', '#b91c1c') +
       metric('Flujo neto de caja', fmt(netToday), 'Cobros menos egresos', netToday >= 0 ? '#15803d' : '#b91c1c') +
-      metric('Pedidos nuevos', String(ordersToday.length), 'Valor generado: ' + fmt(orderValueToday)) +
+      metric('Pedidos nuevos', String(validOrdersToday.length), 'Valor generado: ' + fmt(orderValueToday) + ' · cancelados: ' + cancelledOrdersToday.length) +
+      metric('Entregados hoy', String(deliveredOrdersToday.length), 'Valor de pedidos: ' + fmt(deliveredValueToday), '#15803d') +
+      metric('Cancelados hoy', String(cancelledOrdersToday.length), 'Mes: ' + cancelledOrdersMonth.length, cancelledOrdersToday.length ? '#b91c1c' : '#64748b') +
       metric('Cobro promedio por pedido', fmt(avgReceiptPerOrder), orderIdsWithReceiptToday.size + ' pedidos con cobro') +
       metric('Por cobrar', fmt(receivables), openBalances.length + ' pedidos con saldo', receivables > 0 ? '#b45309' : '#15803d') +
       metric('Pedidos atrasados', String(staleOrders.length), 'Sin actualización por 3 días o más', staleOrders.length ? '#b91c1c' : '#15803d') +
@@ -297,6 +307,8 @@ export async function GET(req: Request) {
       metric('Pedidos creados', String(ordersMonth.length), 'Valor no cancelado: ' + fmt(orderValueMonth)) +
       metric('Pedidos pagados', String(paidOrdersMonth.length), 'Total de pedidos: ' + fmt(paidOrderValueMonth)) +
       metric('Promedio diario cobrado', fmt(cashInMonth / Math.max(dayOfMonth, 1)), 'Mes hasta el día ' + dayOfMonth) +
+      metric('Entregados este mes', String(deliveredMonthOrders.length), 'Valor entregado: ' + fmt(deliveredValueMonth), '#15803d') +
+      metric('Pedidos cancelados', String(cancelledOrdersMonth.length), 'Pedidos creados este mes', cancelledOrdersMonth.length ? '#b91c1c' : '#64748b') +
       '</div><p style="font-size:10px;color:#94a3b8;margin:10px 0 0">No se muestra avance contra meta porque no hay una meta mensual configurada en el sistema.</p>'
 
     const productRows = productsMonth.map(p => [
