@@ -419,11 +419,30 @@ export default function AdminDashboard() {
     if (etapaAbierta === etapa) { setEtapaAbierta(null); return }
     setEtapaAbierta(etapa)
     setCargandoEtapa(true)
-    const { data: pedidos } = await sb.from('orders')
+    const { data: pedidos, error: pedidosError } = await sb.from('orders')
       .select('id,numero_orden,cliente_nombre,cliente_telefono,total,created_at,estado')
       .eq('estado', etapa).eq('es_prueba', false)
       .order('created_at', { ascending: true })
-    setPedidosEtapa(pedidos ?? [])
+    if (pedidosError) {
+      console.error('[admin/dashboard] Error cargando pedidos por etapa:', pedidosError)
+      setLoadError('No se pudieron cargar los pedidos de esta etapa. Intenta actualizar.')
+      setPedidosEtapa([])
+      setCargandoEtapa(false)
+      return
+    }
+    const idsEtapa = (pedidos ?? []).map((p:any) => p.id).filter(Boolean)
+    const testItemsEtapa = idsEtapa.length
+      ? await sb.from('order_items').select('order_id').eq('nombre','Producto de prueba').in('order_id', idsEtapa)
+      : { data: [], error: null }
+    if (testItemsEtapa.error) {
+      console.error('[admin/dashboard] Error validando pedidos de prueba:', testItemsEtapa.error)
+      setLoadError('No se pudo validar si hay pedidos de prueba en esta etapa.')
+      setPedidosEtapa([])
+      setCargandoEtapa(false)
+      return
+    }
+    const idsPruebaEtapa = new Set((testItemsEtapa.data ?? []).map((i:any) => i.order_id))
+    setPedidosEtapa((pedidos ?? []).filter((p:any) => !idsPruebaEtapa.has(p.id)))
     setCargandoEtapa(false)
   }
 
