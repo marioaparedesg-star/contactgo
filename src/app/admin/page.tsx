@@ -724,7 +724,7 @@ export default function AdminDashboard() {
             </div>
             <div className="p-3 rounded-xl bg-gray-50">
               <p className="text-lg font-black text-red-500">{fmt(data?.costoTotalPeriodo??0)}</p>
-              <p className="text-[10px] text-gray-400">Costo real</p>
+              <p className="text-[10px] text-gray-400">Costo promedio</p>
             </div>
             <div className="p-3 rounded-xl bg-emerald-50">
               <p className="text-lg font-black text-emerald-600">{data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo)}</p>
