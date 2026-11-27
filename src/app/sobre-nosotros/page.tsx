@@ -74,7 +74,7 @@ export default function SobreNosotrosPage() {
         <section className="bg-[#F3F6F8] border-b border-slate-200 text-[#002455] py-16 md:py-20 px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <span className="inline-block bg-white text-[#002455] text-xs font-semibold border border-slate-200 px-3 py-1 rounded-full mb-4 tracking-widest uppercase">Especialistas en lentes de contacto</span>
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-5 leading-tight">
+            <h1 className="cg-page-title mb-5 leading-tight">
               Quiénes somos
             </h1>
             <p className="text-slate-600 text-lg max-w-xl mx-auto leading-relaxed">
@@ -97,7 +97,7 @@ export default function SobreNosotrosPage() {
 
         {/* Historia */}
         <section className="max-w-3xl mx-auto px-4 py-16">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Nuestra historia</h2>
+          <h2 className="cg-section-title mb-6">Nuestra historia</h2>
           <div className="space-y-4 text-gray-600 leading-relaxed">
             <p>
               ContactGo es una tienda en línea dominicana enfocada en lentes de contacto. La idea es facilitar una parte concreta de la compra: consultar marcas y diseños, revisar la información de cada producto y gestionar el pedido sin tener que desplazarse para cada consulta.
