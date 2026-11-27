@@ -133,7 +133,7 @@ export default function AdminDashboard() {
         .not('estado','eq','cancelado').or('pago_estado.is.null,pago_estado.neq.declinado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
       sb.from('orders').select('id,numero_orden,cliente_nombre,total,estado,metodo_pago,pago_estado,created_at')
-        .not('pago_estado','eq','declinado').eq('es_prueba', false)
+        .or('pago_estado.is.null,pago_estado.neq.declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
       sb.from('v_stock_disponible').select('id,nombre,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock').in('alerta_stock',['critico','bajo_minimo']).order('stock'),
       sb.from('order_items').select('order_id').eq('nombre','Producto de prueba'),
