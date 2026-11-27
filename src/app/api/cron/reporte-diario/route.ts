@@ -203,7 +203,7 @@ export async function GET(req: Request) {
     const orderIdsWithReceiptToday = new Set(receiptsToday.map((r: Row) => r.order_id).filter(Boolean))
     const receiptlessMovementsToday = standaloneSalesToday
     const unassignedMethodsToday = [...standaloneSalesToday.filter(r => !r.metodo), ...paymentsToday.filter((r: Row) => !r.metodo)]
-    const avgReceiptPerOrder = orderIdsWithReceiptToday.size ? salesToday / orderIdsWithReceiptToday.size : 0
+    const avgReceiptPerOrder = orderIdsWithReceiptToday.size ? sum([...paymentsToday, ...gatewayRemaindersToday]) / orderIdsWithReceiptToday.size : 0
     const netToday = salesToday - cashOutToday
     const netMonth = cashInMonth - cashOutMonth
     const trendYesterday = pct(salesToday, salesYesterday)
@@ -499,7 +499,7 @@ export async function GET(req: Request) {
     return NextResponse.json({
       ok: true, fecha: today, resend_id: sent.id,
       cobrado_hoy: salesToday, egresos_hoy: cashOutToday, flujo_neto_hoy: netToday,
-      pedidos_nuevos: ordersToday.length, pedidos_atrasados: staleOrders.length,
+      pedidos_nuevos: validOrdersToday.length, pedidos_atrasados: staleOrders.length,
       por_cobrar: receivables, pedidos_con_saldo: openBalances.length,
     })
   } catch (error: any) {
