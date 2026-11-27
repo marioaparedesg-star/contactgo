@@ -53,7 +53,7 @@ export default async function ResenasPage() {
       <Navbar />
       <main id="main-content" className="max-w-4xl mx-auto px-4 py-10 pb-32">
       <div className="text-center mb-8">
-        <h1 className="font-display text-2xl md:text-3xl font-black text-gray-900 mb-2">
+        <h1 className="cg-page-title mb-2">
           Reseñas de clientes
         </h1>
         <p className="text-gray-500 text-sm">
