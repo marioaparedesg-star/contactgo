@@ -152,7 +152,7 @@ export async function GET(req: Request) {
     const orderIdsWithReceiptToday = new Set(cashToday.map(r => r.order_id).filter(Boolean))
     const receiptlessMovementsToday = cashToday.filter(r => !r.order_id)
     const unassignedMethodsToday = cashToday.filter(r => !r.metodo)
-    const avgReceiptPerOrder = orderIdsWithReceiptToday.size ? salesToday / orderIdsWithReceiptToday.size : 0
+    const avgReceiptPerOrder = orderIdsWithReceiptToday.size ? sum(cashToday.filter(r => r.order_id)) / orderIdsWithReceiptToday.size : 0
     const trendYesterday = pct(salesToday, salesYesterday)
     const trendSevenDays = pct(salesToday, averageSevenDays)
 
@@ -322,7 +322,7 @@ export async function GET(req: Request) {
         esc(String(o.estado || '').replace(/_/g, ' ')),
         badge(o.stageDays + ' días', o.stageDays >= 15 ? '#991b1b' : '#92400e', o.stageDays >= 15 ? '#fee2e2' : '#fef3c7'),
       ])) +
-      '<p style="font-size:10px;color:#94a3b8;margin:8px 0 0">Se considera atrasado un pedido activo sin actualización durante 3 días o más. El tiempo se calcula desde updated_at, no desde la fecha de creación.</p>'
+      '<p style="font-size:10px;color:#94a3b8;margin:8px 0 0">Se considera atrasado un pedido activo sin actualización durante 3 días o más. El tiempo se calcula desde updated_at, no desde la fecha de creación. Se muestran ' + oldOrdersRows.length + ' de ' + staleOrders.length + ' pedidos atrasados.</p>'
 
     const receivablesSection = '<div style="display:flex;gap:9px;margin-bottom:12px">' +
       metric('Saldo pendiente', fmt(receivables), openBalances.length + ' pedidos') +
@@ -331,13 +331,13 @@ export async function GET(req: Request) {
         '<strong>' + esc(o.numero_orden) + '</strong><br>' + esc(o.cliente_nombre || 'Sin nombre') + '<br><span style="color:#94a3b8">' + esc(String(o.estado || '').replace(/_/g, ' ')) + '</span>',
         fmt(o.balance),
         o.ageDays + ' días',
-      ]))
+      ])) + (openBalances.length > oldBalancesRows.length ? '<p style="font-size:10px;color:#94a3b8;margin:8px 0 0">Se muestran ' + oldBalancesRows.length + ' de ' + openBalances.length + ' pedidos con saldo.</p>' : '')
 
     const ordersTodaySection = table(['Pedido / hora', 'Estado', 'Total'], todayOrderRows.map(o => [
       '<strong>' + esc(o.numero_orden) + '</strong><br>' + esc(o.cliente_nombre || 'Sin nombre') + '<br><span style="color:#94a3b8">' + dateLabel(o.created_at, { hour: '2-digit', minute: '2-digit' }) + ' · ' + esc(o.canal || 'Sin canal') + '</span>',
       esc(String(o.estado || '').replace(/_/g, ' ')) + '<br>' + (o.pago_estado === 'pagado' ? badge('Pagado', '#166534', '#dcfce7') : badge('Pago ' + (o.pago_estado || 'pendiente'), '#92400e', '#fef3c7')),
       fmt(Number(o.total || 0)),
-    ]))
+    ])) + (ordersToday.length > todayOrderRows.length ? '<p style="font-size:10px;color:#94a3b8;margin:8px 0 0">Se muestran ' + todayOrderRows.length + ' de ' + ordersToday.length + ' pedidos nuevos.</p>' : '')
 
     const lowStockSection = lowStock.length
       ? table(['Producto', 'Existencia', 'Punto de reposición'], lowStock.slice(0, 15).map(p => [
