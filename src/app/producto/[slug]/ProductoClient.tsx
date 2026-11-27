@@ -916,7 +916,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     className={`shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
                       imagenActual === url ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
                     }`} style={{width:80, height:60}}>
-                    <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
+                    <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-contain bg-white p-1" loading="lazy" />
                   </button>
                 ))}
               </div>
@@ -1055,7 +1055,7 @@ export default function ProductoClient({ product, variants }: Props) {
                       className={`shrink-0 w-16 h-12 rounded-xl border-2 overflow-hidden transition-all ${
                         imagenActual === url ? 'border-primary-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
                       }`}>
-                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
+                      <img src={url} alt={`Vista ${i+2}`} className="w-full h-full object-contain bg-white p-1" loading="lazy" />
                     </button>
                   ))}
                 </div>
