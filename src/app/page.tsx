@@ -116,7 +116,7 @@ export default async function HomePage() {
 
         <section className="max-w-7xl mx-auto px-4 py-6 md:py-10">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-display text-xl md:text-2xl font-bold text-gray-900">Compra por tipo</h2>
+            <h2 className="cg-section-title">Compra por tipo</h2>
           </div>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
@@ -214,7 +214,7 @@ export default async function HomePage() {
                 <FileSearch className="h-5 w-5 text-[#002455]" aria-hidden="true" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Herramienta gratuita</span>
               </div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-[#002455] mb-2">
+              <h2 className="cg-section-title mb-3">
                 Revisa tu receta y encuentra opciones
               </h2>
               <p className="text-slate-600 max-w-md text-sm md:text-base">
@@ -300,7 +300,7 @@ export default async function HomePage() {
 
         {/* ── FAQ ── */}
         <section className="max-w-3xl mx-auto px-4 py-10 md:py-14">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-6 text-center">Preguntas frecuentes</h2>
+          <h2 className="cg-section-title mb-6 text-center">Preguntas frecuentes</h2>
           <div className="space-y-3">
             {[
               { q: '¿Cuánto tarda el envío?', a: 'El tiempo depende de tu ubicación y del tipo de lente. Los productos bajo pedido pueden requerir un plazo de preparación adicional.' },
