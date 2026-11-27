@@ -982,7 +982,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   <span>Entiendo que este lente tórico es bajo pedido, tarda de 25 a 45 días y puedo cancelar dentro de las primeras 48 horas desde la confirmación.</span>
                 </label>
               )}
-              <EntregaHoy especial={getEntregaInfo.especial} />
+              <EntregaHoy especial={getEntregaInfo.especial} tipo={tipo} />
               <button onClick={() => handleAdd()} disabled={product.stock===0||sinVariante}
                 className="w-full bg-[#01B2B7] hover:bg-[#018E92] active:scale-[0.99] disabled:opacity-40 text-white font-semibold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition-colors">
                 <ShoppingCart className="w-5 h-5" />
@@ -1065,7 +1065,7 @@ export default function ProductoClient({ product, variants }: Props) {
               <div className="grid grid-cols-2 gap-2 mt-3">
                 <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-lg px-2.5 py-2">
                   
-                  <span className="text-[10px] text-gray-600 font-medium leading-tight">Directo del fabricante</span>
+                  <span className="text-[10px] text-gray-600 font-medium leading-tight">Authorized Seller</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-2">
                   
@@ -1252,7 +1252,7 @@ export default function ProductoClient({ product, variants }: Props) {
                   })()}
 
                   <div className="border-t border-gray-100 pt-2 mt-1 space-y-1">
-                    <p className="text-[10px] text-gray-500 font-medium">Producto de distribución oficial</p>
+                    <p className="text-[10px] text-gray-500 font-medium">Authorized Seller</p>
                     <p className="text-[10px] text-gray-400 font-medium inline-flex items-center gap-1">
                       <AzulLogo size="xs" /> Pago seguro con AZUL
                     </p>
@@ -1280,7 +1280,7 @@ export default function ProductoClient({ product, variants }: Props) {
                 {icon:'',t:'Envío gratis',d:'Desde RD$2,500', azul:false},
                 {icon:null,t:'Pago AZUL',d:'100% protegido', azul:true},
                 {icon:'↩️',t:'7 días dev.',d:'Sin preguntas', azul:false},
-                {icon:'✅',t:'Originales',d:'Dist. oficial', azul:false},
+                {icon:'✅',t:'Originales',d:'Authorized seller', azul:false},
               ] as any[]).map(b => (
                 <div key={b.t} className="flex items-center gap-2.5">
                   {b.azul ? <AzulLogo size="md" /> : <span className="text-2xl shrink-0">{b.icon}</span>}
