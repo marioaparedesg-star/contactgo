@@ -130,7 +130,7 @@ export default function AdminDashboard() {
     const hastaStr = fechaRD(rango.hasta)
     const hoyStr   = fechaRD(new Date())
 
-    const [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar] = await Promise.all([
+    const [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar, egresosPeriodo] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
@@ -151,9 +151,10 @@ export default function AdminDashboard() {
       // saldo pendiente, sin importar cuándo se creó.
       sb.from('orders').select('id,total,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false),
+      sb.from('cash_movements').select('id,monto,fecha').eq('tipo','egreso').gte('fecha',desdeStr).lte('fecha',hastaStr),
     ])
 
-    const queryErrors = [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar].filter((q:any) => q.error)
+    const queryErrors = [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar, egresosPeriodo].filter((q:any) => q.error)
     if (queryErrors.length) {
       console.error('[admin/dashboard] Error cargando indicadores:', queryErrors.map((q:any) => q.error))
       setLoadError('No se pudieron cargar todos los indicadores. Se mantienen los últimos datos disponibles; vuelve a actualizar.')
@@ -178,6 +179,8 @@ export default function AdminDashboard() {
 
     const ventasPeriodo  = cobros.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
     const ventasHoy      = cobrosHoy.reduce((s:number,c:any)=>s+Number(c.monto??0),0)
+    const egresosTotalPeriodo = (egresosPeriodo.data ?? []).reduce((s:number,m:any)=>s+Number(m.monto??0),0)
+    const flujoNetoPeriodo = ventasPeriodo - egresosTotalPeriodo
     const ticketProm     = ords.length > 0 ? ventasTotalPeriodo/ords.length : 0
     const entregados     = ords.filter((o:any)=>o.estado==='entregado').length
     const conversion     = ords.length > 0 ? Math.round((entregados/ords.length)*100) : 0
@@ -265,27 +268,38 @@ export default function AdminDashboard() {
     })
     const topProds = Object.values(agg).sort((a,b)=>b.u-a.u).slice(0,10)
 
-    const { count: clientes } = await sb.from('profiles').select('*',{count:'exact',head:true}).eq('role','customer')
+    const [{ count: clientes, error: clientesError }, { count: clientesNuevosPeriodo, error: clientesNuevosError }] = await Promise.all([
+      sb.from('profiles').select('id',{count:'exact',head:true}).eq('role','customer'),
+      sb.from('profiles').select('id',{count:'exact',head:true}).eq('role','customer').gte('created_at',desdeISO).lte('created_at',hastaISO),
+    ])
+    if (clientesError || clientesNuevosError) { console.error('[admin/dashboard] Error consultando clientes:', clientesError || clientesNuevosError); setLoadError('No se pudo validar la información de clientes.'); setLoading(false); return }
 
-    const { data: invStats } = await sb.from('v_stock_disponible').select('id,nombre,tipo,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock,precio')
+    const { data: invStats, error: invStatsError } = await sb.from('v_stock_disponible').select('id,nombre,tipo,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock,precio')
+    if (invStatsError) { console.error('[admin/dashboard] Error consultando inventario:', invStatsError); setLoadError('No se pudo validar el inventario.'); setLoading(false); return }
     const invAll = invStats ?? []
     const invCriticos   = invAll.filter((p:any) => p.alerta_stock === 'critico').length
     const invBajoMin    = invAll.filter((p:any) => p.alerta_stock === 'bajo_minimo').length
 
     // ── OPERACIÓN: pedidos activos por etapa (todo lo que no es entregado
     // ni cancelado — el flujo real de "qué hay que atender hoy") ──────────
-    const { data: pedidosActivosData } = await sb
+    const { data: pedidosActivosData, error: pedidosActivosError } = await sb
       .from('orders').select('estado')
       .not('estado','in','(entregado,cancelado)').eq('es_prueba', false)
+    if (pedidosActivosError) { console.error('[admin/dashboard] Error consultando etapas:', pedidosActivosError); setLoadError('No se pudo validar la distribución de pedidos por etapa.'); setLoading(false); return }
     const porEtapa: Record<string, number> = {}
     ;(pedidosActivosData ?? []).forEach((o:any) => { porEtapa[o.estado] = (porEtapa[o.estado] ?? 0) + 1 })
 
     // ── MARKETING: leads de la calculadora + conversión real ──────────────
-    const inicioMesStr = fechaRD(new Date(new Date().getFullYear(), new Date().getMonth(), 1))
-    const [{ data: leadsHoyData }, { data: leadsMesData }] = await Promise.all([
-      sb.from('calculator_leads').select('id').gte('created_at', hoyStr),
-      sb.from('calculator_leads').select('id, telefono').gte('created_at', inicioMesStr),
+    const hoyPartes = partesFechaRD(new Date())
+    const inicioMesStr = fechaRD(fechaEnRD(hoyPartes.year, hoyPartes.month, 1))
+    const inicioMesISO = fechaEnRD(hoyPartes.year, hoyPartes.month, 1).toISOString()
+    const hoyInicioISO = fechaEnRD(hoyPartes.year, hoyPartes.month, hoyPartes.day).toISOString()
+    const mananaInicioISO = fechaEnRD(hoyPartes.year, hoyPartes.month, hoyPartes.day + 1).toISOString()
+    const [{ data: leadsHoyData, error: leadsHoyError }, { data: leadsMesData, error: leadsMesError }] = await Promise.all([
+      sb.from('calculator_leads').select('id').gte('created_at', hoyInicioISO).lt('created_at', mananaInicioISO),
+      sb.from('calculator_leads').select('id, telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO),
     ])
+    if (leadsHoyError || leadsMesError) { console.error('[admin/dashboard] Error consultando leads:', leadsHoyError || leadsMesError); setLoadError('No se pudieron cargar los leads de marketing.'); setLoading(false); return }
     const leadsHoy = leadsHoyData?.length ?? 0
     const leadsMes = leadsMesData?.length ?? 0
     // Conversión real: cruce de teléfono normalizado contra pedidos del mes
@@ -295,7 +309,8 @@ export default function AdminDashboard() {
     let leadsConvertidos = 0
     if ((leadsMesData ?? []).length > 0) {
       const telsLeads = new Set((leadsMesData ?? []).map((l:any) => String(l.telefono ?? '').replace(/\D/g,'').slice(-10)).filter(Boolean))
-      const { data: ordsDelMes } = await sb.from('orders').select('cliente_telefono').gte('created_at', inicioMesStr).eq('es_prueba', false)
+      const { data: ordsDelMes, error: ordsDelMesError } = await sb.from('orders').select('cliente_telefono').gte('created_at', inicioMesISO).lt('created_at', mananaInicioISO).eq('es_prueba', false)
+      if (ordsDelMesError) { console.error('[admin/dashboard] Error cruzando leads y pedidos:', ordsDelMesError); setLoadError('No se pudo calcular la conversión de leads.'); setLoading(false); return }
       const telsConCompra = new Set((ordsDelMes ?? []).map((o:any) => String(o.cliente_telefono ?? '').replace(/\D/g,'').slice(-10)))
       telsLeads.forEach(t => { if (telsConCompra.has(t)) leadsConvertidos++ })
     }
@@ -334,7 +349,7 @@ export default function AdminDashboard() {
       .filter((o:any) => (Number(o.total??0)-cobradoDeOrden(o)) > 0 && new Date(o.created_at) < hace30d)
       .map((o:any) => ({ ...o, cobrado: cobradoDeOrden(o), saldo: Number(o.total??0)-cobradoDeOrden(o) }))
 
-    setData({ ventasPeriodo, ventasHoy, ventasTotalPeriodo, ventasTotalHoy, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0,
+    setData({ ventasPeriodo, ventasHoy, ventasTotalPeriodo, ventasTotalHoy, egresosTotalPeriodo, flujoNetoPeriodo, ticketProm, entregados, conversion, pedidosPeriodo:ords.length, clientes: clientes??0, clientesNuevosPeriodo: clientesNuevosPeriodo??0,
       invCriticos, invBajoMin, invTotal: invAll.length,
       costoTotalPeriodo, gananciaPeriodo, costoHoy, gananciaHoy, itemsSinCosto: itemsSinCosto.length, ventaSinCosto,
       porCobrarActivo, porCobrarViejo, pedidosPorCobrar,
@@ -558,10 +573,13 @@ export default function AdminDashboard() {
           { key:null, label:'Vendido', val:fmt(data?.ventasTotalPeriodo??0), sub:`${data?.pedidosPeriodo??0} pedidos — se haya cobrado o no`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:'periodo', label:'Cobrado', val:fmt(data?.ventasPeriodo??0), sub:'dinero que ya entró', color:'text-blue-600', accion:()=>setDetalleAbierto(detalleAbierto==='periodo'?null:'periodo') },
           { key:'porCobrar', label:'Por cobrar', val:fmt(porCobrarTotal), sub:`${data?.pedidosPorCobrar??0} pedidos`, color:'text-amber-600', accion:()=>setDetalleAbierto(detalleAbierto==='porCobrar'?null:'porCobrar') },
+          { key:null, label:'Egresos registrados', val:fmt(data?.egresosTotalPeriodo??0), sub:'salidas registradas en caja', color:'text-rose-600', accion:()=>router.push('/M1Alexander/reportes') },
+          { key:null, label:'Flujo neto de caja', val:fmt(data?.flujoNetoPeriodo??0), sub:'cobros menos egresos', color:(data?.flujoNetoPeriodo??0)>=0?'text-emerald-600':'text-rose-600', accion:()=>router.push('/M1Alexander/reportes') },
           { key:null, label:'Costo de lo vendido', val:fmt(data?.costoTotalPeriodo??0), sub:'según products.costo', color:'text-red-500', accion:undefined },
           { key:'ganancia', label:'Ganancia estimada', val:data?.gananciaPeriodo==null?'Incompleta':fmt(data.gananciaPeriodo), sub:data?.itemsSinCosto>0?`${data.itemsSinCosto} línea(s) sin costo`:`${margenPct ?? 0}% margen`, color:data?.gananciaPeriodo==null?'text-amber-600':'text-emerald-600', accion:()=>setDetalleAbierto(detalleAbierto==='ganancia'?null:'ganancia') },
           { key:null, label:'Pedidos', val:String(data?.pedidosPeriodo??0), sub:`${data?.entregados??0} entregados`, color:'text-gray-900', accion:()=>router.push('/M1Alexander/pedidos') },
           { key:null, label:'Ticket promedio', val:fmt(data?.ticketProm??0), sub:'por pedido vendido', color:'text-gray-900', accion:undefined },
+          { key:null, label:'Clientes nuevos', val:String(data?.clientesNuevosPeriodo??0), sub:`${data?.clientes??0} clientes registrados`, color:'text-cyan-700', accion:()=>router.push('/M1Alexander/registrados') },
           { key:'etapa', label:'Pedidos activos', val:String(pedidosActivosTotal), sub:'en proceso', color:'text-indigo-600', accion:()=>document.getElementById('pedidos-por-etapa')?.scrollIntoView({behavior:'smooth'}) },
         ].map(({key,label,val,sub,color,accion})=>{
           const abierta = key && detalleAbierto===key
