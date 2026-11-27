@@ -104,7 +104,7 @@ export async function GET(req: Request) {
 
     const [
       cashMonth, cashSevenDays, ordersMonth, deliveredMonthOrders, activeOrders, activeProducts,
-      abandonedCarts, subscriptionsDue, leadsMonth, customersMonth,
+      abandonedCarts, activeSubscriptions, leadsMonth, customersMonth,
       emailErrors, allPayments, allSalesMovements,
     ] = await Promise.all([
       fetchAll<Row>(() => sb.from('cash_movements').select('monto,order_id,metodo,categoria,tipo,descripcion,fecha,created_at')
@@ -122,7 +122,7 @@ export async function GET(req: Request) {
       fetchAll<Row>(() => sb.from('abandoned_carts').select('id,total,created_at,recuperado')
         .eq('recuperado', false).gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString())),
       fetchAll<Row>(() => sb.from('subscriptions').select('id,cliente_nombre,producto_nombre,proximo_envio,frecuencia')
-        .eq('activa', true).eq('cancelada', false).not('proximo_envio', 'is', null).lte('proximo_envio', dueLimit)),
+        .eq('activa', true).eq('cancelada', false)),
       fetchAll<Row>(() => sb.from('calculator_leads').select('id,convertido,created_at')
         .gte('created_at', startMonthISO).lt('created_at', startTomorrowISO)),
       fetchAll<Row>(() => sb.from('profiles').select('id,created_at')
@@ -265,6 +265,7 @@ export async function GET(req: Request) {
     const abandonedValue = sum(abandonedCarts, 'total')
     const leadsConverted = leadsMonth.filter(l => l.convertido === true).length
     const leadConversion = leadsMonth.length ? Math.round(leadsConverted / leadsMonth.length * 100) : 0
+    const subscriptionsDue = activeSubscriptions.filter(s => s.proximo_envio && s.proximo_envio <= dueLimit)
     const subscriptionsOverdue = subscriptionsDue.filter(s => s.proximo_envio < today)
     const subscriptionsNext7 = subscriptionsDue.filter(s => s.proximo_envio >= today)
     const cashSalesLifetime = sum(allSalesMovements)
@@ -374,7 +375,8 @@ export async function GET(req: Request) {
       metric('Leads de calculadora', String(leadsMonth.length), 'Captados este mes') +
       metric('Leads convertidos', String(leadsConverted), 'Conversión: ' + leadConversion + '%', leadConversion >= 15 ? '#15803d' : '#002455') +
       metric('Carritos abandonados', String(abandonedCarts.length), 'Valor: ' + fmt(abandonedValue), abandonedCarts.length ? '#b45309' : '#15803d') +
-      metric('Reposiciones vencidas', String(subscriptionsOverdue.length), 'Suscripciones activas', subscriptionsOverdue.length ? '#b91c1c' : '#15803d') +
+      metric('Suscripciones activas', String(activeSubscriptions.length), 'Clientes en ciclo de reposición') +
+      metric('Reposiciones vencidas', String(subscriptionsOverdue.length), 'Requieren seguimiento', subscriptionsOverdue.length ? '#b91c1c' : '#15803d') +
       metric('Reposiciones próximos 7 días', String(subscriptionsNext7.length), 'Suscripciones activas') +
       '</div>'
 
