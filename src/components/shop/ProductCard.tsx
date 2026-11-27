@@ -82,7 +82,7 @@ export default function ProductCard({ product }: Props) {
         {stockCritical && <span className="absolute bottom-2 right-2 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="flex flex-1 flex-col p-2">
+      <div className="p-2">
         <div className="mb-0.5 flex items-center justify-between gap-1">
           <p className="truncate text-[8px] font-bold uppercase tracking-[0.07em] text-slate-500">{product.marca || 'ContactGo'}</p>
           <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[9px] font-semibold text-slate-400 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
