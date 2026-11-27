@@ -47,13 +47,12 @@ export function buildReviewsFeed(resenas: ResenaFeed[], productos: ProductoFeed[
     </review>`
   }).join('\n')
   return `<?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<feed>
   <version>2.0</version>
-  <publisher><name>ContactGo</name><favicon>${esc(`${SITE}/favicon-32x32.png`)}</favicon></publisher>
+  <publisher><name>ContactGo</name><favicon>${esc(`${SITE}/favicon-16x16.png`)}</favicon></publisher>
   <reviews>
 ${items}
   </reviews>
-  <generado>${esc(ahora.toISOString())}</generado>
 </feed>
 `
 }
