@@ -248,10 +248,10 @@ export async function GET(req: Request) {
     const estimatedGrossProfit = monthItemsRevenue - monthItemsCost
 
     // Inventario: usa el punto de reposición configurado por producto.
-    const lowStock = activeProducts.filter(p => !p.archivado).map(p => {
+    const lowStock: Row[] = activeProducts.filter((p: Row) => !p.archivado).map((p: Row): Row => {
       const threshold = Number(p.stock_reorden ?? p.stock_minimo ?? p.stock_critico ?? 3)
       return { ...p, threshold }
-    }).filter(p => Number(p.stock || 0) <= p.threshold).sort((a, b) => Number(a.stock) - Number(b.stock))
+    }).filter((p: Row) => Number(p.stock || 0) <= Number(p.threshold)).sort((a: Row, b: Row) => Number(a.stock) - Number(b.stock))
 
     // Indicadores comerciales y de retención.
     const abandonedValue = sum(abandonedCarts, 'total')
