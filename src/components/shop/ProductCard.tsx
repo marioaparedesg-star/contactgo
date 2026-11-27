@@ -58,7 +58,7 @@ export default function ProductCard({ product }: Props) {
     : 'Ver detalles'
 
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
+    <article className="group relative grid h-full min-w-0 grid-rows-[auto_1fr] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
       <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-white">
         <Link href={href} aria-label={'Ver ' + product.nombre} className="absolute inset-0">
           {product.imagen_url ? (
@@ -82,22 +82,22 @@ export default function ProductCard({ product }: Props) {
         {stockCritical && <span className="absolute bottom-2 right-2 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="flex flex-1 flex-col p-2">
+      <div className="grid min-h-0 grid-rows-[auto_minmax(48px,auto)_30px_1fr] p-2">
         <div className="mb-0.5 flex items-center justify-between gap-1">
           <p className="truncate text-[8px] font-bold uppercase tracking-[0.07em] text-slate-500">{product.marca || 'ContactGo'}</p>
           <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[9px] font-semibold text-slate-400 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
         </div>
-        <Link href={href} className="mb-1 block min-w-0 text-[14px] font-extrabold leading-[1.2] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[15px]">
-          <h3 className="break-words [overflow-wrap:anywhere]">{formatProductName(product.nombre)}</h3>
+        <Link href={href} className="mb-1 block min-w-0 text-[13px] font-extrabold leading-[15px] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[14px]">
+          <h3 className="break-words">{formatProductName(product.nombre)}</h3>
         </Link>
 
-        <div className="min-h-[30px] space-y-0">
+        <div className="h-[30px] min-h-[30px] overflow-hidden space-y-0">
           {details.slice(0, 2).map((detail, index) => (
             <p key={index} className="text-[10px] leading-[15px] text-slate-600">{detail}</p>
           ))}
         </div>
 
-        <div className="mt-auto border-t border-slate-100 pt-1.5">
+        <div className="self-end border-t border-slate-100 pt-1.5">
           <div className="flex items-end justify-between gap-1.5">
             <div className="min-w-0">
               <p className="text-[8px] font-medium uppercase tracking-wide text-slate-400">Precio</p>
