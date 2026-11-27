@@ -142,7 +142,6 @@ export async function GET(req: Request) {
       fetchAll<Row>(() => sb.from('order_items').select('order_id').eq('nombre', 'Producto de prueba')),
     ])
 
-    const cashToday = cashMonth.filter(r => r.fecha === today && r.categoria === 'venta' && r.tipo === 'ingreso')
     const cashOutToday = sum(cashMonth.filter(r => r.fecha === today && r.tipo === 'egreso'))
     const cashOutMonth = sum(cashMonth.filter(r => r.tipo === 'egreso'))
 
@@ -416,7 +415,6 @@ export async function GET(req: Request) {
       metric('Reposiciones próximos 7 días', String(subscriptionsNext7.length), 'Suscripciones activas') +
       '</div>'
 
-    const paidMonthIds = new Set(paidOrdersMonth.map(o => o.id))
     const testOrdersInMonth = ordersMonth.filter(o => testOrderIds.has(o.id))
     const dataWarnings: string[] = []
     if (testOrdersInMonth.length > 0) dataWarnings.push(testOrdersInMonth.length + ' pedido(s) con artículos llamados “Producto de prueba” están marcados como reales. Se excluyen de los indicadores; corrige su clasificación.')
