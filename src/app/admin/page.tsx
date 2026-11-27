@@ -130,7 +130,7 @@ export default function AdminDashboard() {
     const hastaStr = fechaRD(rango.hasta)
     const hoyStr   = fechaRD(new Date())
 
-    const [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar, egresosPeriodo] = await Promise.all([
+    const [periodo, ordRecent, stockLow, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo] = await Promise.all([
       sb.from('orders').select('id,total,estado,fecha,metodo_pago,pago_estado,created_at,numero_orden,cliente_nombre,cliente_telefono')
         .not('estado','eq','cancelado').eq('es_prueba', false)
         .gte('fecha', desdeISO).lte('fecha', hastaISO),
@@ -138,10 +138,15 @@ export default function AdminDashboard() {
         .not('pago_estado','eq','declinado').eq('es_prueba', false)
         .order('created_at',{ascending:false}).limit(8),
       sb.from('v_stock_disponible').select('nombre,stock,stock_minimo,stock_critico,stock_reorden,alerta_stock').in('alerta_stock',['critico','bajo_minimo']).order('stock'),
-      sb.from('cash_movements')
-        .select('id,monto,fecha,created_at,order_id,referencia,descripcion,orders(numero_orden,cliente_nombre,cliente_telefono)')
-        .eq('categoria','venta').eq('tipo','ingreso')
-        .gte('fecha', desdeStr).lte('fecha', hastaStr),
+      sb.from('order_payments')
+        .select('id,monto,created_at,order_id,metodo,orders(numero_orden,cliente_nombre,cliente_telefono)')
+        .gte('created_at', desdeISO).lte('created_at', hastaISO),
+      sb.from('orders').select('id,total,pagado_en,numero_orden,cliente_nombre,cliente_telefono')
+        .eq('pago_estado','pagado').not('estado','eq','cancelado').eq('es_prueba',false)
+        .gte('pagado_en',desdeISO).lte('pagado_en',hastaISO),
+      sb.from('cash_movements').select('id,monto,fecha,created_at,referencia,descripcion')
+        .eq('categoria','venta').eq('tipo','ingreso').is('order_id',null)
+        .gte('fecha',desdeStr).lte('fecha',hastaStr),
       // FIX (2026-09-06): "Por cobrar" NO debe limitarse al período
       // seleccionado arriba — un pedido de agosto con saldo pendiente sigue
       // pendiente aunque estés viendo "Mes actual" en septiembre. Antes
@@ -154,7 +159,7 @@ export default function AdminDashboard() {
       sb.from('cash_movements').select('id,monto,fecha').eq('tipo','egreso').gte('fecha',desdeStr).lte('fecha',hastaStr),
     ])
 
-    const queryErrors = [periodo, ordRecent, stockLow, cobrosPeriodo, ordsPorCobrar, egresosPeriodo].filter((q:any) => q.error)
+    const queryErrors = [periodo, ordRecent, stockLow, cobrosPeriodo, pagadosPeriodo, cobrosSinPedido, ordsPorCobrar, egresosPeriodo].filter((q:any) => q.error)
     if (queryErrors.length) {
       console.error('[admin/dashboard] Error cargando indicadores:', queryErrors.map((q:any) => q.error))
       setLoadError('No se pudieron cargar todos los indicadores. Se mantienen los últimos datos disponibles; vuelve a actualizar.')
@@ -162,7 +167,27 @@ export default function AdminDashboard() {
       return
     }
     const ords = periodo.data ?? []
-    const cobros = cobrosPeriodo.data ?? []
+    const pagosPeriodoData = cobrosPeriodo.data ?? []
+    const idsPagadosPeriodo = (pagadosPeriodo.data ?? []).map((o:any) => o.id).filter(Boolean)
+    const pagosAcumuladosResult = idsPagadosPeriodo.length > 0
+      ? await sb.from('order_payments').select('order_id,monto').in('order_id', idsPagadosPeriodo)
+      : { data: [] as any[], error: null }
+    if (pagosAcumuladosResult.error) { console.error('[admin/dashboard] Error conciliando pagos por pedido:', pagosAcumuladosResult.error); setLoadError('No se pudieron conciliar los pagos confirmados de los pedidos.'); setLoading(false); return }
+    const pagadoPorOrdenHistorico: Record<string, number> = {}
+    ;(pagosAcumuladosResult.data ?? []).forEach((p:any) => { pagadoPorOrdenHistorico[p.order_id] = (pagadoPorOrdenHistorico[p.order_id] ?? 0) + Number(p.monto ?? 0) })
+    // Para pedidos pagados sin registro en order_payments (p. ej. pago de pasarela),
+    // se incorpora solo el importe que falta hasta completar el total, en pagado_en.
+    const cobrosComplementarios = (pagadosPeriodo.data ?? []).map((o:any) => {
+      const restante = Math.max(0, Number(o.total ?? 0) - (pagadoPorOrdenHistorico[o.id] ?? 0))
+      return restante > 0 ? {
+        id: `pago-confirmado-${o.id}`, order_id: o.id, monto: restante,
+        fecha: fechaRD(new Date(o.pagado_en)), created_at: o.pagado_en,
+        orders: { numero_orden: o.numero_orden, cliente_nombre: o.cliente_nombre, cliente_telefono: o.cliente_telefono },
+      } : null
+    }).filter(Boolean)
+    const cobrosRegistrados = pagosPeriodoData.map((p:any) => ({ ...p, fecha: fechaRD(new Date(p.created_at)) }))
+    const cobrosIndependientes = cobrosSinPedido.data ?? []
+    const cobros = [...cobrosRegistrados, ...cobrosComplementarios, ...cobrosIndependientes]
     const cobrosHoy = cobros.filter((c:any) => c.fecha === hoyStr)
 
     // FIX (2026-09-07): Mario pidió separar claramente 4 conceptos que se
@@ -188,14 +213,13 @@ export default function AdminDashboard() {
     // Por cobrar: esto SÍ sigue basado en pedidos (no en cash_movements) —
     // es sobre saldo pendiente de ÓRDENES activas, no sobre cuándo entró
     // el dinero. Necesita su propio cálculo de abonos por pedido.
-    const { data: movimientosCobro, error: movimientosCobroError } = await sb.from('cash_movements').select('order_id,monto').eq('categoria','venta').eq('tipo','ingreso').not('order_id','is',null)
-    if (movimientosCobroError) { console.error('[admin/dashboard] Error consultando abonos:', movimientosCobroError); setLoadError('No se pudo validar la cartera contra los pagos registrados.'); setLoading(false); return }
+    const { data: movimientosCobro, error: movimientosCobroError } = await sb.from('order_payments').select('order_id,monto').not('order_id','is',null)
+    if (movimientosCobroError) { console.error('[admin/dashboard] Error consultando pagos:', movimientosCobroError); setLoadError('No se pudo validar la cartera contra los pagos registrados.'); setLoading(false); return }
     const cobradoPorOrden: Record<string, number> = {}
     ;(movimientosCobro ?? []).forEach((m: any) => {
       cobradoPorOrden[m.order_id] = (cobradoPorOrden[m.order_id] ?? 0) + Number(m.monto ?? 0)
     })
-    // Caja es la fuente de cobros efectivamente recibidos. Los pedidos marcados pagados
-    // conservan saldo cero; los demás descuentan los movimientos conciliados por order_id.
+    // order_payments es el registro de abonos; pago_estado=pagado confirma el saldo total liquidado.
     const cobradoDeOrden = (o: any) => o.pago_estado === 'pagado' ? Number(o.total ?? 0) : (cobradoPorOrden[o.id] ?? 0)
 
     const hace30d = new Date(Date.now() - 30*86400000)
