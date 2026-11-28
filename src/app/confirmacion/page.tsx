@@ -402,7 +402,7 @@ function ConfirmacionContent() {
             comprados, cuando el catálogo los tiene cargados. */}
         {order.pago_estado === 'pagado' &&
          order.cliente_email && order.numero_orden && (() => {
-           const isoFecha = getFechaEntregaISODesdeFecha(order.created_at, tipoDominante, nombreDominante)
+           const isoFecha = getFechaEntregaISODesdeFecha(order.pagado_en || order.created_at, tipoDominante, nombreDominante)
            const gtins = items
              .map((i: any) => i.products?.gtin)
              .filter((g: any): g is string => typeof g === 'string' && g.length > 0)
