@@ -32,7 +32,7 @@ const secciones = [
   },
   {
     title: '5. Envíos y entregas',
-    body: 'Realizamos entregas en toda la República Dominicana. El envío cuesta RD$250 en Santo Domingo y Gran Santo Domingo y RD$350 en el interior. En compras desde RD$8,000, el envío es gratis. Los plazos de entrega, aplicables en todo el país, son: esféricos, de 24 a 72 horas; lentes de colores, 24 a 72 horas; multifocales, de 1 a 5 días; tóricos, de 25 a 45 días; soluciones y gotas, 24 horas. Los tiempos pueden variar por disponibilidad y factores externos. Los lentes tóricos se solicitan bajo pedido y pueden cancelarse dentro de las primeras 48 horas desde la confirmación.'
+    body: 'Realizamos entregas en toda la República Dominicana. El envío cuesta RD$250 en Santo Domingo y Gran Santo Domingo y RD$350 en el interior. En compras desde RD$8,000, el envío es gratis. Los plazos de entrega, aplicables en todo el país, son: esféricos, de 24 a 72 horas; lentes de colores, 24 a 72 horas; multifocales, de 1 a 5 días; tóricos, de 25 a 45 días; soluciones y gotas, 24 horas. Los plazos pueden variar por disponibilidad y factores externos. Los lentes tóricos se solicitan bajo pedido y pueden cancelarse dentro de las primeras 48 horas desde la confirmación.'
   },
   {
     title: '6. Devoluciones y reembolsos',

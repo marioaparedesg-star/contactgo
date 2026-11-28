@@ -53,7 +53,7 @@ export default function Page() {
             "@type": "FAQPage",
             "mainEntity": [
               { "@type": "Question", "name": "¿Cuánto cuesta ACUVUE Oasys en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "El precio de ACUVUE Oasys, sus versiones para astigmatismo y multifocales se muestra actualizado en la ficha de cada producto. El tiempo de entrega depende del modelo y del destino." } },
-              { "@type": "Question", "name": "¿Dónde comprar ACUVUE Oasys en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar ACUVUE Oasys en ContactGo y recibirlo en tu domicilio. El tiempo estimado es de 24 a 72 horas en todo el país para lentes esféricos, según disponibilidad." } },
+              { "@type": "Question", "name": "¿Dónde comprar ACUVUE Oasys en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar ACUVUE Oasys en ContactGo y recibirlo en tu domicilio. La entrega es de 24 a 72 horas en todo el país para lentes esféricos, según disponibilidad." } },
               { "@type": "Question", "name": "¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?", "acceptedAnswer": { "@type": "Answer", "text": "ACUVUE Oasys usa silicona hidrogel (Senofilcon A) con tecnología HYDRACLEAR Plus y ofrece mayor transmisión de oxígeno y comodidad. ACUVUE 2 usa hidrogel estándar. El Oasys es más cómodo, especialmente para uso prolongado o frente a pantallas." } },
               { "@type": "Question", "name": "¿Cuánto duran los ACUVUE Oasys?", "acceptedAnswer": { "@type": "Answer", "text": "ACUVUE Oasys son lentes quincenales — se usan durante 14 días y luego se descartan. Cada caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos." } }
             ]
@@ -287,7 +287,7 @@ export default function Page() {
               {[
                 { paso: '1', desc: 'Selecciona tu modelo ACUVUE y la graduación de tu receta (SPH, y CYL/AXIS si tienes astigmatismo)' },
                 { paso: '2', desc: 'Paga de forma segura con tu tarjeta VISA o Mastercard a través de AZUL/Banco Popular' },
-                { paso: '3', desc: 'transporte: 24 a 72 horas en todo el país para lentes esféricos; el plazo total depende del tipo de lente' },
+                { paso: '3', desc: 'Transporte: 24 a 72 horas en todo el país para lentes esféricos; el plazo total depende del tipo de lente' },
               ].map(({ paso, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl text-sm">
                   <span className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-xs shrink-0">{paso}</span>

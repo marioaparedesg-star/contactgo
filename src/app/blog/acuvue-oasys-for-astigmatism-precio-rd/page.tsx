@@ -30,7 +30,7 @@ export default function Page() {
     { q: '¿Sirve el ACUVUE Oasys normal para el astigmatismo?', a: 'No. El ACUVUE Oasys estándar es para miopía e hipermetropía sin astigmatismo. Para astigmatismo necesitas específicamente el ACUVUE Oasys for Astigmatism o el 1-DAY ACUVUE Moist for Astigmatism.' },
     { q: '¿Cuántos cilindros corrige el ACUVUE Oasys for Astigmatism?', a: 'El ACUVUE Oasys for Astigmatism está disponible en CYL de -0.75, -1.25, -1.75 y -2.25. Para cilindros mayores (-2.75 o más), otras opciones como Biofinity XR Toric pueden ser más adecuadas.' },
     { q: '¿Cómo sé si necesito lentes tóricos?', a: 'Si tu receta tiene valores de CYL (cilindro) y AXIS (eje), entonces tienes astigmatismo y necesitas lentes tóricos. Puedes verificarlo con nuestra calculadora de receta gratuita.' },
-    { q: '¿Dónde comprar ACUVUE Oasys for Astigmatism en República Dominicana?', a: 'ContactGo ofrece el ACUVUE Oasys for Astigmatism y el 1-DAY ACUVUE Moist for Astigmatism con Entrega de 25 a 45 días. Son a través de canales de distribución autorizados.' },
+    { q: '¿Dónde comprar ACUVUE Oasys for Astigmatism en República Dominicana?', a: 'ContactGo ofrece el ACUVUE Oasys for Astigmatism y el 1-DAY ACUVUE Moist for Astigmatism con entrega de 25 a 45 días. Son a través de canales de distribución autorizados.' },
   ]
 
   return (

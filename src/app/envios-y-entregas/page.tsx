@@ -54,7 +54,7 @@ export default function EnviosPage() {
               <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5">
                 <p className="font-bold text-teal-800 text-lg mb-1">🚀 24 horas</p>
                 <p className="text-teal-700 text-sm font-semibold mb-2">Soluciones y gotas</p>
-                <p className="text-gray-600 text-sm">Productos de cuidado visual con Entrega en 24 horas.</p>
+                <p className="text-gray-600 text-sm">Soluciones y gotas: entrega de 24 horas.</p>
               </div>
             </div>
           </div>
@@ -90,7 +90,7 @@ export default function EnviosPage() {
                 { paso: '2', titulo: 'Confirmamos', desc: 'Verificamos tu pedido y te enviamos confirmación por WhatsApp o email.' },
                 { paso: '3', titulo: 'Empacamos', desc: 'Empacamos tus lentes con cuidado para garantizar que lleguen en perfectas condiciones.' },
                 { paso: '4', titulo: 'Despachamos', desc: 'Entregamos al courier y te enviamos el tracking de tu pedido.' },
-                { paso: '5', titulo: 'Recibes', desc: 'Tu pedido llega a la dirección indicada en el tiempo estimado.' },
+                { paso: '5', titulo: 'Recibes', desc: 'Tu pedido llega a la dirección indicada en el plazo de entrega.' },
               ].map((s, i) => (
                 <div key={i} className="flex gap-4 items-start">
                   <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">{s.paso}</div>
