@@ -44,7 +44,7 @@ export default function Page() {
             "mainEntity": [
               { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en Distrito Nacional?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en Ciudad de Santo Domingo y el Distrito Nacional en 24 a 72 horas para lentes esféricos. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a Distrito Nacional?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío a Distrito Nacional se calcula al momento del checkout. Los pedidos superiores a RD$8,000 tienen envío gratuito. Consulta el costo exacto al agregar tu dirección de entrega." } },
-              { "@type": "Question", "name": "¿Cuánto tarda la entrega en Distrito Nacional?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en Distrito Nacional es en 24 a 72 horas para lentes esféricos hábiles en Santo Domingo." } },
+              { "@type": "Question", "name": "¿Cuánto tarda la entrega en Distrito Nacional?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en Distrito Nacional es en 24 a 72 horas para lentes esféricos en Santo Domingo." } },
               { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en Distrito Nacional?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 30 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, todos certificados y directo del fabricante." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -109,7 +109,7 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Preguntas frecuentes — Entrega en Distrito Nacional</h2>
             <div className="space-y-3">
               {[
-                { q: '¿Hacen entrega en Distrito Nacional?', a: 'Sí. ContactGo entrega lentes de contacto en Ciudad de Santo Domingo y el Distrito Nacional en 24 a 72 horas para lentes esféricos hábiles.' },
+                { q: '¿Hacen entrega en Distrito Nacional?', a: 'Sí. ContactGo entrega lentes de contacto en Ciudad de Santo Domingo y el Distrito Nacional en 24 a 72 horas para lentes esféricos.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
                 { q: '¿Cuánto tarda la entrega en Distrito Nacional?', a: 'Entre 24 y 48 horas hábiles para la mayoría de los pedidos. Pedidos antes de las 3pm suelen salir el mismo día.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
