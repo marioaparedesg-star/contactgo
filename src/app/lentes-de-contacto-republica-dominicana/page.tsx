@@ -192,7 +192,7 @@ const marcasData = [
 // La tabla de ciudades informa cobertura geográfica, no plazos distintos por destino.
 const ciudadesData = [
   { ciudad: 'Santo Domingo', tiempo: '24-72 horas*', slug: 'santo-domingo' },
-  { ciudad: 'Santiago', tiempo: '24-48 horas*', slug: 'santiago' },
+  { ciudad: 'Santiago', tiempo: '24-72 horas*', slug: 'santiago' },
   { ciudad: 'Punta Cana', tiempo: '24-72 horas*', slug: 'punta-cana' },
   { ciudad: 'La Romana', tiempo: '24-72 horas*', slug: 'la-romana' },
   { ciudad: 'Higüey', tiempo: '24-72 horas*', slug: 'higuey' },
