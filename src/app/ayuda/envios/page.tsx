@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Envíos y Entregas | ContactGo República Dominicana',
-  description: 'Esféricos: entrega estimada en 24 a 72 horas laborables en todo el país. Consulta los tiempos estimados de entrega según el tipo de lente.',
+  description: 'Esféricos: entrega estimada en 24 a 72 horas en todo el país. Consulta los tiempos estimados de entrega según el tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/ayuda/envios' },
   openGraph: {
     title: 'Envíos y Entregas | ContactGo República Dominicana',
