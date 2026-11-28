@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
             </div>
             <div style="background:#f9fafb;padding:24px;border-radius:0 0 12px 12px;border:1px solid #e5e7eb">
               <p>Recibimos tu mensaje y te responderemos lo antes posible.</p>
-              <p style="color:#6b7280;font-size:13px">Mientras tanto puedes explorar nuestro catálogo de lentes de contacto con entrega 24-48h en toda República Dominicana.</p>
+              <p style="color:#6b7280;font-size:13px">Mientras tanto puedes explorar nuestro catálogo de lentes de contacto con entrega estimada según el tipo de lente. Los esféricos tienen un plazo de 24 a 72 horas en todo el país.</p>
               <a href="https://www.contactgo.net/catalogo" style="display:inline-block;background:#0ea5e9;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:16px">Ver catálogo →</a>
             </div>
           </div>
