@@ -7,12 +7,12 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Dónde comprar lentes de contacto en Santo Domingo 2026',
-  description: 'Guía actualizada 2026: dónde comprar lentes de contacto certificados en Santo Domingo con entrega a domicilio en 24-48h. ACUVUE, Air Optix, Biofinity y más.',
+  description: 'Guía actualizada 2026: dónde comprar lentes de contacto certificados en Santo Domingo con entrega a domicilio en 24-72h. ACUVUE, Air Optix, Biofinity y más.',
   alternates: { canonical: 'https://www.contactgo.net/blog/donde-comprar-lentes-contacto-santo-domingo' },
   openGraph: {
     type: 'article',
     title: 'Dónde comprar lentes de contacto en Santo Domingo',
-    description: 'Guía 2026 para comprar lentes de contacto certificados en Santo Domingo. Entrega 24-48h.',
+    description: 'Guía 2026 para comprar lentes de contacto certificados en Santo Domingo. Entrega 24-72h.',
     url: 'https://www.contactgo.net/blog/donde-comprar-lentes-contacto-santo-domingo',
     siteName: 'ContactGo',
     locale: 'es_DO',
@@ -44,7 +44,7 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "¿Dónde comprar lentes de contacto en Santo Domingo?", "acceptedAnswer": { "@type": "Answer", "text": "ContactGo es la única tienda online especializada exclusivamente en lentes de contacto en República Dominicana, con entrega en 24-48h en Santo Domingo. También encuentras lentes en clínicas oftalmológicas y algunas ópticas de la ciudad." } },
+              { "@type": "Question", "name": "¿Dónde comprar lentes de contacto en Santo Domingo?", "acceptedAnswer": { "@type": "Answer", "text": "ContactGo es la única tienda online especializada exclusivamente en lentes de contacto en República Dominicana, con entrega en 24-72h en Santo Domingo. También encuentras lentes en clínicas oftalmológicas y algunas ópticas de la ciudad." } },
               { "@type": "Question", "name": "¿Cuánto cuestan los lentes de contacto en Santo Domingo?", "acceptedAnswer": { "@type": "Answer", "text": "Los precios varían según la marca y tipo. En ContactGo los lentes ACUVUE Oasys están desde RD$3,875, Biofinity desde RD$4,750 y Air Optix desde RD$4,375, con entrega incluida en Santo Domingo." } },
               { "@type": "Question", "name": "¿Hay entrega a domicilio de lentes de contacto en Santo Domingo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo ofrece entrega en 24 a 72 horas laborables en todo el país y áreas metropolitanas como Boca Chica, San Cristóbal, La Romana y alrededores." } }
             ]
@@ -98,7 +98,7 @@ export default function Page() {
           {/* Quick answer box */}
           <div className="bg-teal-50 border-2 border-primary-200 rounded-2xl p-5">
             <p className="text-sm font-bold text-primary-800 mb-2">⚡ Respuesta rápida</p>
-            <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto certificados en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24-48 horas, más de 30 productos disponibles, directo del fabricante. Sin necesidad de desplazarte a ningún lugar.</p>
+            <p className="text-sm text-primary-700">La forma más rápida de comprar lentes de contacto certificados en Santo Domingo en 2026 es a través de <strong>ContactGo</strong>: entrega en 24 a 72 horas, más de 30 productos disponibles, directo del fabricante. Sin necesidad de desplazarte a ningún lugar.</p>
             <Link href="/catalogo" className="mt-3 inline-block bg-teal-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-teal-600 transition-colors">
               Ver catálogo completo →
             </Link>
@@ -116,7 +116,7 @@ export default function Page() {
                   <h3 className="font-bold text-gray-900">1. Compra online con entrega a domicilio</h3>
                   <span className="text-xs bg-teal-500 text-white font-bold px-2 py-0.5 rounded-full">⭐ Recomendado</span>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">La opción más conveniente para la mayoría de habitantes de Santo Domingo. Compras desde el teléfono o computadora y recibes los lentes en tu casa u oficina en 24-48 horas.</p>
+                <p className="text-sm text-gray-600 mb-3">La opción más conveniente para la mayoría de habitantes de Santo Domingo. Compras desde el teléfono o computadora y recibes los lentes en tu casa u oficina en 24 a 72 horas.</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs border-collapse">
                     <thead>
@@ -129,7 +129,7 @@ export default function Page() {
                       {[
                         ['Especialización', '100% lentes de contacto'],
                         ['Marcas disponibles', 'ACUVUE, Air Optix, Biofinity, BL Ultra y más'],
-                        ['Entrega Santo Domingo', '24-48 horas'],
+                        ['Entrega Santo Domingo', '24 a 72 horas'],
                         ['Autenticidad', 'directo del fabricante, directo del fabricante'],
                         ['Precios', 'Desde RD$2,250'],
                         ['Pago', 'Tarjeta VISA/Mastercard (AZUL/Banco Popular)'],
@@ -245,7 +245,7 @@ export default function Page() {
               {[
                 { paso: '1', titulo: 'Haz tu pedido online', desc: 'Selecciona tu lente, ingresa tu prescripción y paga de forma segura con tu tarjeta. El proceso toma menos de 3 minutos.' },
                 { paso: '2', titulo: 'Confirmación inmediata', desc: 'Recibes confirmación por email y WhatsApp con el número de tu pedido.' },
-                { paso: '3', titulo: 'Entrega en 24-48 horas', desc: 'Para Santo Domingo y el Gran Santo Domingo (Boca Chica, San Cristóbal, La Romana, etc.), la entrega es en 24-48 horas laborables.' },
+                { paso: '3', titulo: 'Entrega en 24 a 72 horas', desc: 'Para Santo Domingo y el Gran Santo Domingo (Boca Chica, San Cristóbal, La Romana, etc.), la entrega estimada es de 24 a 72 horas.' },
                 { paso: '4', titulo: 'Recibe en casa u oficina', desc: 'El mensajero te contacta para coordinar la entrega. Sin necesidad de estar en un punto específico.' },
               ].map(({ paso, titulo, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
@@ -286,7 +286,7 @@ export default function Page() {
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
             <div className="space-y-3">
               {[
-                { q: '¿Dónde comprar lentes de contacto en Santo Domingo?', a: 'ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega en 24-48h en Santo Domingo y toda la República Dominicana. También puedes encontrarlos en clínicas oftalmológicas de la ciudad.' },
+                { q: '¿Dónde comprar lentes de contacto en Santo Domingo?', a: 'ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega en 24-72h en Santo Domingo y toda la República Dominicana. También puedes encontrarlos en clínicas oftalmológicas de la ciudad.' },
                 { q: '¿Cuánto cuestan los lentes de contacto en Santo Domingo?', a: 'En ContactGo los precios van desde RD$2,250 (lentes de color) hasta RD$20,000 (lentes multifocales especializados). Los lentes esféricos más populares como ACUVUE Oasys están desde RD$3,875.' },
                 { q: '¿Hay entrega a domicilio en Santo Domingo?', a: 'Sí. ContactGo entrega en 24 a 72 horas laborables en todo el país y áreas metropolitanas (Boca Chica, San Cristóbal, La Romana, etc.).' },
                 { q: '¿Los lentes de ContactGo son certificados?', a: 'Sí, directo del fabricante. ContactGo garantiza la autenticidad de todos sus productos.' },
@@ -307,7 +307,7 @@ export default function Page() {
 
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
-            <p>Comprar lentes de contacto en Santo Domingo en 2026 es más fácil que nunca. Mientras antes la única opción era desplazarse a una clínica u óptica y esperar, hoy ContactGo te los entrega en 24-48 horas directamente donde estés, con los mismos productos certificados de las mejores marcas del mundo.</p>
+            <p>Comprar lentes de contacto en Santo Domingo en 2026 es más fácil que nunca. Mientras antes la única opción era desplazarse a una clínica u óptica y esperar, hoy ContactGo te los entrega en 24 a 72 horas directamente donde estés, con los mismos productos certificados de las mejores marcas del mundo.</p>
             <p className="mt-3">Si es la primera vez que compras lentes, visita a tu optometrista para obtener tu prescripción. Luego, el siguiente paso es simplemente elegir tu marca favorita en nuestro catálogo y coordinar la entrega a tu dirección en Santo Domingo.</p>
           </section>
 
@@ -329,7 +329,7 @@ export default function Page() {
 
         {/* CTA */}
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Tu pedido llega a Santo Domingo en 24-48h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Tu pedido llega a Santo Domingo en 24-72h</h3>
           <p className="text-sm text-gray-600 mb-1">Más de 30 productos, directo del fabricante. Pago seguro con AZUL.</p>
           <p className="text-xs text-gray-400 mb-4">Sin salir de casa · Sin esperas · Sin complicaciones</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
