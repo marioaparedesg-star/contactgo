@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       const raw = (cliente_telefono ?? '').replace(/\D/g, '')
       const telefono = raw.length === 10 ? `1${raw}` : raw
 
-      const mensaje = `✅ *¡Hola ${nombre}, tu pedido está confirmado!*\n\n📦 *#${pedidoNum}*\n💰 *Total:* ${totalFmt}\n${metodo}\n\n🚚 Entrega en 24-48 horas.\n\n_ContactGo — contactgo.net_`
+      const mensaje = `✅ *¡Hola ${nombre}, tu pedido está confirmado!*\n\n📦 *#${pedidoNum}*\n💰 *Total:* ${totalFmt}\n${metodo}\n\n🚚 El plazo estimado depende del tipo de lente y la disponibilidad. En el detalle de tu pedido encontrarás el plazo correspondiente.\n\n_ContactGo — contactgo.net_`
 
       const res = await fetchWA(telefono, {
         method: 'POST',
