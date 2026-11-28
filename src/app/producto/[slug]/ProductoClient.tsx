@@ -465,7 +465,7 @@ export default function ProductoClient({ product, variants }: Props) {
       return sphMatch && cylMatch && axisMatch && addMatch && colorMatch && (v.stock ?? 1) > 0
     })
   }
-  // Tóricos (25-45 días) y multifocales (1-5 días) tienen plazos de entrega especiales
+  // Tóricos (25-45 días laborables) y multifocales (1-5 días laborables) tienen plazos de entrega especiales
   // → siempre mostramos "Agregar". El cliente gestiona el inventario desde el admin.
   // Esféricos y color: mantienen la validación de stock real.
   // Color: ahora también se valida el stock. Si color+SPH agotado → sinVariante=true → botón 'Agotado'
@@ -979,7 +979,7 @@ export default function ProductoClient({ product, variants }: Props) {
               {needsToric && (
                 <label className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-900">
                   <input type="checkbox" checked={toricPolicyAccepted} onChange={e => setToricPolicyAccepted(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[#002455]" />
-                  <span>Entiendo que este lente tórico es bajo pedido, tarda de 25 a 45 días y puedo cancelar dentro de las primeras 48 horas desde la confirmación.</span>
+                  <span>Entiendo que este lente tórico es bajo pedido, tarda de 25 a 45 días laborables y puedo cancelar dentro de las primeras 48 horas desde la confirmación.</span>
                 </label>
               )}
               <EntregaHoy especial={getEntregaInfo.especial} />
