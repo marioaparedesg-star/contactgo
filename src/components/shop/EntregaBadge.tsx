@@ -27,9 +27,7 @@ export default function EntregaBadge({ tipo, nombre = '', sph, variant = 'pdp' }
         <span className="text-sm">{info.icono}</span>
         <div>
           <p className="text-[11px] font-bold leading-none">{fecha.texto}</p>
-          {info.especial && (
-            <p className="text-[9px] text-amber-600 mt-0.5">Fabricación especial</p>
-          )}
+          <p className="text-[9px] text-gray-600 mt-1 leading-snug">{info.detalle}</p>
         </div>
       </div>
     )
@@ -44,12 +42,7 @@ export default function EntregaBadge({ tipo, nombre = '', sph, variant = 'pdp' }
         <p className={`font-black text-sm leading-none ${info.especial ? 'text-amber-800' : 'text-teal-900'}`}>
           {fecha.texto}
         </p>
-        {info.especial && (
-          <p className="text-[10px] text-amber-600 mt-1 font-medium">Fabricación especial · Pedido especial</p>
-        )}
-        {!info.especial && (
-          <p className="text-[10px] text-teal-700 mt-0.5">🚚 Envío a todo RD disponible</p>
-        )}
+        <p className={`text-[10px] mt-1 leading-snug ${info.especial ? 'text-amber-700' : 'text-teal-700'}`}>{info.detalle}</p>
       </div>
     </div>
   )
