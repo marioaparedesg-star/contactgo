@@ -97,7 +97,7 @@ export default function ProductCard({ product }: Props) {
         </Link>
 
         <div className="min-h-[12px] text-[9px] font-semibold leading-3 text-[#007f83]">
-          {entrega.especial ? <p className="truncate">{entrega.etiqueta}</p> : <span aria-hidden="true">&nbsp;</span>}
+          <p className="truncate">{entrega.etiqueta}</p>
         </div>
 
         <div className="mt-auto border-t border-slate-100 pt-1.5">
