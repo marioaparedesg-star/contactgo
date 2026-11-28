@@ -67,8 +67,8 @@ export default function ProductCard({ product }: Props) {
   const frecuencia = days === 1 ? 'Diario' : days === 14 ? 'Quincenal' : days === 30 ? 'Mensual' : ''
 
   return (
-    <article className="group relative flex min-w-0 flex-col self-start overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-white">
+    <article className="group relative grid h-full min-w-0 grid-rows-[auto_1fr] self-stretch overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
+      <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-white">
         <Link href={href} aria-label={'Ver ' + product.nombre} className="absolute inset-0">
           {product.imagen_url ? (
             <Image src={product.imagen_url} unoptimized alt={product.nombre + (product.marca ? ' — ' + product.marca : '')} fill
@@ -88,30 +88,23 @@ export default function ProductCard({ product }: Props) {
           <Heart className={'h-3.5 w-3.5 ' + (isFav ? 'fill-current' : '')} aria-hidden="true" />
         </button>
         {product.stock === 0 && <div className="absolute inset-0 flex items-center justify-center bg-white/70"><span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">Agotado</span></div>}
-        {stockCritical && <span className="absolute bottom-2 right-2 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-800">Últimas unidades</span>}
+        <span className="absolute bottom-2 right-2 max-w-[calc(100%-1rem)] truncate rounded-full border border-white/80 bg-white/95 px-2 py-1 text-[9px] font-bold text-[#002455] shadow-sm">{details[0] || (product as any).contenido || "Presentación por caja"}</span>
+        {stockCritical && <span className="absolute bottom-2 left-2 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-1 px-2 pb-2 pt-1.5">
+      <div className="flex min-w-0 flex-col gap-1 px-2 pb-2 pt-1.5">
         <Link href={href} className="block min-h-[40px] min-w-0 text-[16px] font-extrabold uppercase leading-[20px] tracking-normal text-[#002455] transition-colors hover:text-[#009da2] sm:text-[17px]">
           <h3 className="line-clamp-2 break-words">{product.nombre.toLocaleUpperCase('es')}</h3>
         </Link>
 
-        <p className="truncate text-[8px] font-bold uppercase leading-3 tracking-[0.06em] text-slate-500">
-          {[tipoLabel, frecuencia, product.marca].filter(Boolean).join(' · ')}
-        </p>
-
-        <p className="truncate text-[9px] leading-3.5 text-slate-600">
-          {details[0] || (product as any).contenido || 'Presentación por caja'}
-        </p>
-
-        {entrega.especial && (
-          <p className="truncate text-[9px] font-semibold leading-3 text-[#007f83]">{entrega.etiqueta}</p>
-        )}
+        <div className="min-h-[12px] text-[9px] font-semibold leading-3 text-[#007f83]">
+          {entrega.especial ? <p className="truncate">{entrega.etiqueta}</p> : <span aria-hidden="true">&nbsp;</span>}
+        </div>
 
         <div className="mt-auto border-t border-slate-100 pt-1.5">
           <div className="flex min-w-0 items-end justify-between gap-1">
-            <div className="min-w-0">
-              <p className="truncate text-[15px] font-extrabold leading-5 tracking-tight text-[#002455] sm:text-base">{money(precioActual)}</p>
+            <div className="min-w-0 min-h-[36px]">
+              <p className="truncate text-[16px] font-extrabold leading-5 tracking-tight text-[#002455] sm:text-[17px]">{money(precioActual)}</p>
               {tieneDescuento && (
                 <div className="flex items-center gap-1">
                   <span className="text-[9px] text-slate-400 line-through">{money(precioAnterior)}</span>
