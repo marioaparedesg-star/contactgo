@@ -103,7 +103,7 @@ export default function Page() {
               Pedir por WhatsApp
             </a>
           </div>
-          <p className="text-[11px] text-center text-gray-400 mt-2">✅ Originales de Alcon · Entrega 24-48h · Pago con AZUL/Banco Popular</p>
+          <p className="text-[11px] text-center text-gray-400 mt-2">✅ Originales de Alcon · Entrega según categoría · Pago con AZUL/Banco Popular</p>
         </div>
 
         <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 my-6">
@@ -146,7 +146,7 @@ export default function Page() {
 
             <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4 text-sm">
               <p className="font-bold text-green-800 mb-1">🚀 Entrega según tipo de lente y destino</p>
-              <p className="text-green-700">Transporte estimado: Santo Domingo y Santiago 24-48h; interior 24-72h. Los multifocales tienen plazo estimado de 1-5 días y los tóricos de 25-45 días.</p>
+              <p className="text-green-700">Entrega estimada: esféricos, 24 a 72 horas; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables.</p>
             </div>
           </section>
 
@@ -259,7 +259,7 @@ export default function Page() {
                 { paso: '2', titulo: 'Selecciona tu producto', desc: 'Busca "Air Optix HydraGlyde" en nuestro catálogo o haz clic en el botón de arriba para ir directamente al producto.' },
                 { paso: '3', titulo: 'Elige tu graduación', desc: 'Ingresa el SPH de cada ojo según tu receta. Para dos ojos con diferente graduación, puedes seleccionarla individualmente.' },
                 { paso: '4', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta de crédito/débito a través de AZUL/Banco Popular. El proceso es 100% seguro.' },
-                { paso: '5', titulo: 'Entrega según tipo de lente y destino', desc: 'Te contactamos para coordinar la entrega. Santo Domingo y Santiago: entrega en 24h. Resto del país: 24-72h.' },
+                { paso: '5', titulo: 'Entrega según tipo de lente y destino', desc: 'Te contactamos para coordinar la entrega. Esféricos: 24 a 72 horas en todo el país; multifocales y tóricos tienen plazos según su categoría.' },
               ].map(({ paso, titulo, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{paso}</div>
