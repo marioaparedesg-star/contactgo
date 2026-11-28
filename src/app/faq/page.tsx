@@ -22,7 +22,7 @@ const FAQS = [
   {
     categoria: '🚚 Envíos',
     preguntas: [
-      { q: '¿Cuánto tarda el envío?', a: 'Los plazos dependen del tipo de producto y la disponibilidad: lentes de color, al día siguiente; esféricos, 24–48 horas en Santo Domingo y Santiago y 24–72 horas en el interior; multifocales, de 1 a 5 días; tóricos, de 25 a 45 días. Las soluciones y gotas disponibles se entregan en aproximadamente 24 horas.' },
+      { q: '¿Cuánto tarda el envío?', a: 'Los plazos se aplican de forma uniforme en todo el país: lentes esféricos, 24 a 72 horas; lentes de color planos disponibles, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables; soluciones y gotas disponibles, 24 horas. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.' },
       { q: '¿Cuánto cuesta el envío?', a: 'Santo Domingo y Gran Santo Domingo: RD$250. Interior del país: RD$350. Envío gratis en compras desde RD$8,000.' },
       { q: '¿Envían a todo el país?', a: 'Sí, hacemos envíos a todas las provincias de República Dominicana.' },
       { q: '¿Puedo rastrear mi pedido?', a: 'Sí. Una vez confirmado tu pedido, te notificamos por WhatsApp cuando esté en camino con los datos del mensajero.' },
