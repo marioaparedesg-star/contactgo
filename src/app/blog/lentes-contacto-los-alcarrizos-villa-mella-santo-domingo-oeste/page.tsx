@@ -13,7 +13,7 @@ const meta: BlogMeta = {
   category: 'Entrega',
   faq: [
     { q: '¿Entregan en Los Alcarrizos y Villa Mella?',
-      a: 'Sí, entregamos en toda la zona metropolitana de Santo Domingo, incluyendo Los Alcarrizos, Villa Mella, Herrera, Pantoja y sectores aledaños — el tiempo de entrega suele ser de 24 a 72 horas.' },
+      a: 'Sí, entregamos en toda la zona metropolitana de Santo Domingo, incluyendo Los Alcarrizos, Villa Mella, Herrera, Pantoja y sectores aledaños — el tiempo de entrega suele ser de 24 a 72 horas para lentes esféricos.' },
     { q: '¿El precio de envío es distinto en estas zonas?',
       a: 'El costo de envío se calcula según tu dirección exacta en el checkout — no asumimos un precio fijo, se te muestra el costo real antes de confirmar tu pedido.' },
     { q: '¿Qué métodos de pago aceptan?',
@@ -64,7 +64,7 @@ export default function Page() {
         <li>Ve nuestro <Link href="/catalogo">catálogo completo</Link> o escríbenos tu graduación por WhatsApp</li>
         <li>Confirma tu dirección con puntos de referencia claros (esto ayuda mucho en zonas con nomenclatura menos exacta)</li>
         <li>Paga con tarjeta de forma segura durante el proceso de compra</li>
-        <li>Recibe en 24-72h con seguimiento por WhatsApp</li>
+        <li>Recibe en 24-72h para lentes esféricos con seguimiento por WhatsApp</li>
       </ol>
 
       <h2>Un consejo práctico para tu primera compra</h2>
