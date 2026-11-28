@@ -1561,7 +1561,7 @@ export default function CuentaPage() {
                 const nombre = String(item.nombre || '').toLowerCase()
                 const tipoReal = String(item.products?.tipo ?? item.product?.tipo ?? item.tipo ?? '').toLowerCase()
                 if (tipoReal) return tipoReal
-                if (Number(item.cyl || 0) !== 0 || /t[oó]ric|astigmat|\\bxr\\b/.test(nombre)) return 'torico'
+                if (Number(item.cyl || 0) !== 0 || /t[oó]ric|astigmat|\bxr\b/.test(nombre)) return 'torico'
                 if (item.add_power || /multifocal|progressive/.test(nombre)) return 'multifocal'
                 if (/color|colors|colores/.test(nombre)) return 'color'
                 if (/soluci[oó]n|solution|opti-free|renu|multiprop[oó]sito/.test(nombre)) return 'solucion'
