@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Soluciones y Gotas para Lentes de Contacto RD — ContactGo',
-  description: 'Soluciones multipropósito y gotas lubricantes para lentes de contacto en República Dominicana. ReNu, Opti-Free, Systane, Refresh. Envío 24-48h.',
+  description: 'Soluciones multipropósito y gotas lubricantes para lentes de contacto en República Dominicana. ReNu, Opti-Free, Systane, Refresh. Entrega estimada en 24 horas.',
   alternates: { canonical: 'https://www.contactgo.net/soluciones' },
   openGraph: {
     title: 'Soluciones y Gotas para Lentes RD',
