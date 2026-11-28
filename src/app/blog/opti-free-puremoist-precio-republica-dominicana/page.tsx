@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Opti-Free Puremoist precio en RD 2026 — ContactGo',
-  description: 'Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24-48h.',
+  description: 'Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24 horas.',
   alternates: { canonical: 'https://www.contactgo.net/blog/opti-free-puremoist-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Opti-Free® Puremoist precio en República Dominicana 2026',
-    description: 'Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24-48h.',
+    description: 'Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24 horas.',
     url: 'https://www.contactgo.net/blog/opti-free-puremoist-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/opti-free-puremoist-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Opti-Free® Puremoist precio en República Dominicana 2026' }],
@@ -25,7 +25,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Opti-Free® Puremoist precio en República Dominicana 2026",
-            "description": "Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24-48h.",
+            "description": "Precio de Opti-Free Puremoist en República Dominicana: RD$650 (90ml / 300ml). La mejor solución multipropósito de Alcon. Entrega 24 horas.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
@@ -84,11 +84,11 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$900</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
 
-          <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
+          <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24 horas en toda RD · Junio 2026</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>El <strong>Opti-Free® Puremoist</strong> de Alcon es la solución multipropósito más vendida en el mundo para lentes de contacto blandos — y en República Dominicana es la preferida por la mayoría de usuarios de lentes mensuales y quincenales. En ContactGo la encuentras en dos presentaciones: 90ml y 300ml, con entrega en 24-48 horas.</p>
+          <p>El <strong>Opti-Free® Puremoist</strong> de Alcon es la solución multipropósito más vendida en el mundo para lentes de contacto blandos — y en República Dominicana es la preferida por la mayoría de usuarios de lentes mensuales y quincenales. En ContactGo la encuentras en dos presentaciones: 90ml y 300ml, con entrega en 24 horas.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios completos — Tabla actualizada junio 2026</h2>
@@ -126,7 +126,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Recibe en 24-48h', desc: 'Entrega en Santo Domingo y Santiago en 24h. Resto del país en 24-72h.' },
+                { paso: '4', titulo: 'Recibe en 24 horas', desc: 'Entrega estimada en 24 horas laborables en todo el país.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -175,7 +175,7 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24 horas en toda RD</h3>
           <p className="text-sm text-gray-600 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
