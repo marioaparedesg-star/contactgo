@@ -64,7 +64,6 @@ export default function ProductCard({ product }: Props) {
   const tieneDescuento = precioAnterior > precioActual && precioAnterior > 0
   const descuento = tieneDescuento ? Math.round((1 - precioActual / precioAnterior) * 100) : 0
   const tipoLabel = TIPO_BADGE[product.tipo || ''] || 'ContactGo'
-  const frecuencia = days === 1 ? 'Diario' : days === 14 ? 'Quincenal' : days === 30 ? 'Mensual' : ''
 
   return (
     <article className="group relative grid h-full min-w-0 grid-rows-[auto_1fr] self-stretch overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
