@@ -54,9 +54,9 @@ export default function Page() {
       <table>
         <thead><tr><th>Area</th><th>Typical delivery time</th></tr></thead>
         <tbody>
-          <tr><td>Santo Domingo (all zones)</td><td>24 hours</td></tr>
+          <tr><td>Santo Domingo (all zones)</td><td>24-72 hours</td></tr>
           <tr><td>Santiago</td><td>24-72 hours</td></tr>
-          <tr><td>Punta Cana / Bávaro / La Romana</td><td>2-3 days</td></tr>
+          <tr><td>Punta Cana / Bávaro / La Romana</td><td>24-72 hours</td></tr>
           <tr><td>Rest of the country</td><td>24-72 hours</td></tr>
         </tbody>
       </table>
