@@ -61,7 +61,7 @@ export default function SeguridadPage() {
               Los métodos de pago utilizados por ContactGo son servicios de terceros certificados. Estos servicios cumplen con todos los estándares de seguridad y cifrado para mantener tu información segura. Solo utilizarán la información necesaria para completar el proceso requerido.
             </p>
             <p className="text-sm leading-relaxed">
-              ContactGo <strong>no almacena datos de tarjetas de crédito o débito</strong>. Toda la información de pago es procesada directamente por la pasarela de pago certificada (AZUL (Servicios Digitales Popular, filial de Grupo Popular)) que cumple con los más altos estándares de seguridad internacionales.
+              ContactGo <strong>no almacena datos de tarjetas de crédito o débito</strong>. Toda la información de pago es procesada directamente por AZUL, la solución de pagos de Servicios Digitales Popular, filial de Grupo Popular.
             </p>
           </section>
 
