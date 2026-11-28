@@ -108,7 +108,7 @@ function ConfirmacionContent() {
     const loadOrder = () => {
       Promise.all([
         sb.from('orders').select('*').eq('id', orderId).single(),
-        sb.from('order_items').select('*, products(gtin)').eq('order_id', orderId),
+        sb.from('order_items').select('*, products(gtin,tipo)').eq('order_id', orderId),
       ]).then(([{ data: o }, { data: i }]) => {
         if (!o) { router.push('/'); return }
         // Si viene de AZUL y aún pendiente, reintentar (retorno puede tardar)
@@ -173,19 +173,26 @@ function ConfirmacionContent() {
   const pedidoId   = (order.numero_orden ?? order.id.slice(-8)).toUpperCase()
   const stepIdx    = PASOS.findIndex(s => s.key === order.estado)
   const curStep    = Math.max(stepIdx, 0)
-  // Detectar el tipo más restrictivo en el pedido (mayor tiempo de entrega)
-  // Detección por nombre (order_items no tiene columna tipo — usar nombre del producto)
-  const tieneXR     = items.some((i: any) => /\bxr\b/i.test(i.nombre ?? ''))
-  const tieneTorico = items.some((i: any) =>
-    /t[oó]ric/i.test(i.nombre ?? '') || /astigmat/i.test(i.nombre ?? ''))
-  const tieneMF     = items.some((i: any) =>
-    /multifocal/i.test(i.nombre ?? '') || /presbic/i.test(i.nombre ?? '') || /presbyop/i.test(i.nombre ?? ''))
-  const tieneColor  = items.some((i: any) =>
-    /color/i.test(i.nombre ?? '') || /colores/i.test(i.nombre ?? ''))
-  // Tipo dominante: el de mayor tiempo de entrega
-  const tipoDominante = tieneXR || tieneTorico ? 'torico' : tieneMF ? 'multifocal' : tieneColor ? 'color' : 'esferico'
-  const entregaInfo = getEntrega(tipoDominante, tieneXR ? 'XR' : '')
-  const hasTorico = tieneXR || tieneTorico // mantener para compatibilidad visual
+  // La promesa del pedido completo siempre usa el artículo con el plazo más largo.
+  // Se consulta el tipo real del producto para evitar inferencias erróneas por el nombre.
+  const tipoDeItem = (item: any): string => {
+    if (item.products?.tipo) return String(item.products.tipo)
+    if (item.tipo) return String(item.tipo)
+    const nombre = String(item.nombre ?? '')
+    if (/t[oó]ric|astigmat|\\bxr\\b/i.test(nombre)) return 'torico'
+    if (/multifocal|presbic|presbyop/i.test(nombre)) return 'multifocal'
+    if (/color|colores/i.test(nombre)) return 'color'
+    return 'esferico'
+  }
+  const itemDominante = items.reduce((peor: any, item: any) => {
+    const tipo = tipoDeItem(item)
+    const actual = getEntrega(tipo, item.nombre ?? '', item.sph)
+    const anterior = peor ? getEntrega(tipoDeItem(peor), peor.nombre ?? '', peor.sph) : null
+    return !anterior || actual.dias_max > anterior.dias_max ? item : peor
+  }, null)
+  const tipoDominante = itemDominante ? tipoDeItem(itemDominante) : 'esferico'
+  const nombreDominante = itemDominante?.nombre ?? ''
+  const entregaInfo = getEntrega(tipoDominante, nombreDominante)
   const waMsg      = encodeURIComponent(`Hola ContactGo 👋 quiero consultar sobre mi pedido #${pedidoId}`)
   const waNumber   = '18096942268'
 
@@ -395,7 +402,7 @@ function ConfirmacionContent() {
             comprados, cuando el catálogo los tiene cargados. */}
         {order.pago_estado === 'pagado' &&
          order.cliente_email && order.numero_orden && (() => {
-           const isoFecha = getFechaEntregaISODesdeFecha(order.created_at, tipoDominante, tieneXR ? 'XR' : '')
+           const isoFecha = getFechaEntregaISODesdeFecha(order.created_at, tipoDominante, nombreDominante)
            const gtins = items
              .map((i: any) => i.products?.gtin)
              .filter((g: any): g is string => typeof g === 'string' && g.length > 0)
