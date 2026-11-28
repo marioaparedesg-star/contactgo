@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Punta Cana RD | Envío a Domicilio — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Punta Cana. ACUVUE, Biofinity y Air Optix de canales de distribución autorizados. Envío RD$350. Transporte estimado de 24-72 horas; el plazo total depende del tipo de lente.',
+  description: 'Compra lentes de contacto con entrega en Punta Cana. ACUVUE, Biofinity y Air Optix de canales de distribución autorizados. Envío RD$350. Entrega estimada según el tipo de lente. Los esféricos se entregan en 24 a 72 horas laborables.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/punta-cana' },
   openGraph: {
     title: 'Lentes de Contacto en Punta Cana | ContactGo',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-              { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'El transporte hacia Punta Cana se estima en 24-72 horas. El plazo total depende del producto: color disponible al día siguiente, esféricos 24-72 horas en el interior, multifocales 1-5 días y tóricos 25-45 días.' },
+              { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'La entrega estimada depende del tipo de producto: esféricos, 24 a 72 horas laborables; color disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables.' },
               { q: '¿Cuánto cuesta el envío a Punta Cana?', a: 'El envío a Punta Cana tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en Bávaro y Cap Cana?', a: 'Sí. Cubrimos todo el corredor turístico: Punta Cana, Bávaro, Cap Cana, El Cortecito, Uvero Alto y zonas aledañas.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
@@ -44,7 +44,7 @@ export default async function Page() {
         </nav>
 
         <section className="bg-gradient-to-br from-amber-600 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
-          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$350 · transporte 24-72 horas</span>
+          <span className="inline-block bg-white/20 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Envío RD$350 · entrega según producto</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto en Punta Cana</h1>
           <p className="text-white/90 text-lg max-w-xl mx-auto">Entrega a domicilio en Punta Cana y toda la región. ACUVUE, Biofinity, Air Optix directo del fabricante.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
@@ -67,7 +67,7 @@ export default async function Page() {
 
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-4 text-gray-600 leading-relaxed border-t border-gray-100">
           <h2 className="font-display text-2xl font-bold text-gray-900">Lentes de contacto con envío a Punta Cana</h2>
-          <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Punta Cana</strong> y toda su región. No necesitas ir a una óptica — el transporte hasta Punta Cana se estima en 24-72 horas; el plazo total depende del producto.</p>
+          <p>ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con envío a domicilio en <strong>Punta Cana</strong> y toda su región. No necesitas ir a una óptica — los plazos de entrega dependen del tipo de producto y se aplican de forma uniforme en todo el país.</p>
           <p>Trabajamos con marcas reconocidas y canales de distribución autorizados; los productos se entregan sellados y en su empaque original. El envío a Punta Cana tiene un costo de <strong>RD$350</strong>, gratis en compras desde RD$8,000.</p>
           <p>¿Tienes tu receta óptica? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold">calculadora de receta inteligente</Link> y encontramos el lente exacto en minutos.</p>
 
@@ -81,7 +81,7 @@ export default async function Page() {
           <p>Entregamos directamente en tu domicilio, hotel o apartamento en Punta Cana. Nuestros mensajeros conocen todas las áreas turísticas incluyendo complejos hoteleros en Bávaro y Cap Cana. También puedes coordinar por WhatsApp para instrucciones específicas de entrega.</p>
           
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {[['🚚','Envío RD$350'],['📦','Transporte 24-72 h'],['✅','Canales autorizados'],['↩️','Devolución 7 días']].map(([i,t]) => (
+            {[['🚚','Envío RD$350'],['📦','Entrega según producto'],['✅','Canales autorizados'],['↩️','Devolución 7 días']].map(([i,t]) => (
               <div key={String(t)} className="bg-gray-50 rounded-xl p-3 text-center border border-gray-100">
                 <span className="text-xl block mb-1">{i}</span>
                 <span className="text-xs font-semibold text-gray-600">{t}</span>
