@@ -11,7 +11,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/envios-y-entregas' },
   title: 'Envíos y Entregas | ContactGo — Lentes de Contacto RD',
-  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos: entrega estimada en 24 a 72 horas laborables en todo el país. Los tiempos estimados de entrega varían según el tipo de lente.',
+  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos: entrega estimada en 24 a 72 horas en todo el país. Los tiempos estimados de entrega varían según el tipo de lente.',
 }
 
 export default function EnviosPage() {
