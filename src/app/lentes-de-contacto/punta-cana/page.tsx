@@ -7,11 +7,11 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Punta Cana RD | Envío a Domicilio — ContactGo',
-  description: 'Compra lentes de contacto con entrega en Punta Cana. ACUVUE, Biofinity y Air Optix de canales de distribución autorizados. Envío RD$350. Entrega estimada según el tipo de lente. Los esféricos se entregan en 24 a 72 horas laborables.',
+  description: 'Compra lentes de contacto con entrega en Punta Cana. ACUVUE, Biofinity y Air Optix de canales de distribución autorizados. Envío RD$350. Entrega estimada según el tipo de lente. Los esféricos se entregan en 24 a 72 horas.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/punta-cana' },
   openGraph: {
     title: 'Lentes de Contacto en Punta Cana | ContactGo',
-    description: 'Transporte estimado de 24-72 horas; el plazo total depende del tipo de lente. Directo del fabricante.',
+    description: 'Los lentes esféricos tienen entrega estimada de 24 a 72 horas; los demás productos tienen plazos según su categoría. Directo del fabricante.',
     url: 'https://www.contactgo.net/lentes-de-contacto/punta-cana',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-              { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'La entrega estimada depende del tipo de producto: esféricos, 24 a 72 horas laborables; color disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables.' },
+              { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'La entrega estimada depende del tipo de producto: esféricos, 24 a 72 horas; color disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables.' },
               { q: '¿Cuánto cuesta el envío a Punta Cana?', a: 'El envío a Punta Cana tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en Bávaro y Cap Cana?', a: 'Sí. Cubrimos todo el corredor turístico: Punta Cana, Bávaro, Cap Cana, El Cortecito, Uvero Alto y zonas aledañas.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
