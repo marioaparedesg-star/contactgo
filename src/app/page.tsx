@@ -237,7 +237,7 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {[
-                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Santo Domingo 24-48h · Santiago 24-48h · Resto del país 24-72 horas',    color: 'text-[#002455]',   bg: 'bg-slate-100' },
+                { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Esféricos: 24 a 72 horas en todo el país',    color: 'text-[#002455]',   bg: 'bg-slate-100' },
                 { icon: Package,  title: 'Marcas originales',   desc: 'Distribuidores autorizados de cada marca',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
                 { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-[#002455]', bg: 'bg-slate-100' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-[#002455]', bg: 'bg-slate-100' },
