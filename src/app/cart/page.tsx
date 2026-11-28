@@ -374,9 +374,7 @@ export default function CartPage() {
                   const info = getEntrega((item.product as any)?.tipo ?? 'esferico', item.product?.nombre, item.sph)
                   return !peor || info.dias_max > peor.dias_max ? info : peor
                 }, null as any)
-                const textoEntrega = entregaPeorCaso
-                  ? (entregaPeorCaso.especial ? entregaPeorCaso.etiqueta : 'Entrega 24-48h')
-                  : 'Entrega 24-48h'
+                const textoEntrega = entregaPeorCaso?.etiqueta ?? 'Consultar disponibilidad'
                 return [
                   { icon: Shield, text: 'Directo del fabricante' },
                   { icon: Truck,  text: textoEntrega },
