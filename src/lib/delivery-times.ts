@@ -4,7 +4,7 @@
  * REGLAS DE NEGOCIO (definidas por Mario — aplican a todo el país;
  * el plazo de los esféricos sí varía por destino):
  *  - Color → al día siguiente
- *  - Esférico → 1-2 días
+ *  - Esférico → 24-72 horas
  *  - Multifocal → 1-5 días
  *  - Tórico → 25-45 días
  *  - Solución / Gota → 24 horas
@@ -44,9 +44,9 @@ const T_24_72H: EntregaInfo = {
 }
 
 const T_ESFERICO: EntregaInfo = {
-  etiqueta: 'Entrega de 1 a 2 días',
-  detalle:  'Entrega estimada para lentes esféricos: de 1 a 2 días.',
-  dias_min: 1, dias_max: 2,
+  etiqueta: 'Entrega de 24 a 72 horas',
+  detalle:  'Entrega estimada para lentes esféricos: entre 24 y 72 horas.',
+  dias_min: 1, dias_max: 3,
   especial: false,
   icono:    '🚀',
 }
