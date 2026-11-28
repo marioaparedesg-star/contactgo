@@ -77,11 +77,11 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$6,250</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
 
-          <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
+          <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-72h en toda RD · Junio 2026</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>El <strong>1-DAY ACUVUE® MOIST®</strong> de Johnson & Johnson es uno de los lentes de contacto diarios más populares del mundo — y en República Dominicana no es la excepción. Su tecnología <strong>LACREON®</strong> mantiene la humedad estable durante todo el día, y al ser desechable no requiere solución ni limpieza. En ContactGo los encuentras a RD$3,350 con entrega en 24-48 horas.</p>
+          <p>El <strong>1-DAY ACUVUE® MOIST®</strong> de Johnson & Johnson es uno de los lentes de contacto diarios más populares del mundo — y en República Dominicana no es la excepción. Su tecnología <strong>LACREON®</strong> mantiene la humedad estable durante todo el día, y al ser desechable no requiere solución ni limpieza. En ContactGo los encuentras a RD$3,350 con entrega en 24 a 72 horas.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios completos — Tabla actualizada junio 2026</h2>
@@ -111,7 +111,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Recibe en 24-48h', desc: 'Entrega en Santo Domingo y Santiago en 24h. Resto del país en 24-72h.' },
+                { paso: '4', titulo: 'Recibe en 24-72h', desc: 'Entrega estimada de 24 a 72 horas en todo el país.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -160,7 +160,7 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-72h en toda RD</h3>
           <p className="text-sm text-gray-600 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
