@@ -6,11 +6,11 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Avaira Vitality precio en República Dominicana 2026 — ContactGo',
-  description: 'Precio de Avaira Vitality en RD: esférico RD$3,000 · tórico RD$3,900. Lentes mensuales CooperVision certificados. Esférico: 24-72h · Tórico: 25-45 días laborables en toda República Dominicana.',
+  description: 'Precio de Avaira Vitality en RD: esférico RD$3,000 · tórico RD$3,900. Lentes mensuales CooperVision certificados. Esférico: 24-72h · Tórico: 25 a 45 días en toda República Dominicana.',
   alternates: { canonical: 'https://www.contactgo.net/blog/avaira-vitality-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Avaira Vitality® precio en República Dominicana 2026',
-    description: 'Precio de Avaira Vitality en RD: esférico RD$3,000 · tórico RD$3,900. Lentes mensuales CooperVision certificados. Esférico: 24-72h · Tórico: 25-45 días laborables en toda República Dominicana.',
+    description: 'Precio de Avaira Vitality en RD: esférico RD$3,000 · tórico RD$3,900. Lentes mensuales CooperVision certificados. Esférico: 24-72h · Tórico: 25 a 45 días en toda República Dominicana.',
     url: 'https://www.contactgo.net/blog/avaira-vitality-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/avaira-vitality-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Avaira Vitality® precio en República Dominicana 2026' }],
@@ -25,13 +25,13 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Avaira Vitality® precio en República Dominicana 2026",
-            "description": "Precio de Avaira Vitality en RD: esférico RD$3,000 · tórico RD$3,900. Lentes mensuales CooperVision certificados. Esférico: 24-72h · Tórico: 25-45 días laborables en toda República Dominicana.",
+            "description": "Precio de Avaira Vitality en RD: esférico RD$3,000 · tórico RD$3,900. Lentes mensuales CooperVision certificados. Esférico: 24-72h · Tórico: 25 a 45 días en toda República Dominicana.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-28", "dateModified": "2026-06-28",
             "url": "https://www.contactgo.net/blog/avaira-vitality-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type":"Question","name":'¿Cuánto cuestan los Avaira Vitality en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo: Avaira Vitality esférico RD$3,000 la caja de 6 (mensual) y Avaira Vitality Toric RD$3,900 la caja de 6. Son los lentes mensuales de silicona hidrogel con mejor precio por día de uso disponibles en RD (~RD$17/día).'}},{"@type":"Question","name":'¿Son buenos los Avaira Vitality?',"acceptedAnswer":{"@type":"Answer","text":'Sí. Fabricados por CooperVision (la misma empresa del Biofinity), usan la tecnología Aquaform que retiene agua naturalmente. Con un Dk/t de 100, transmiten suficiente oxígeno para uso diario cómodo. Son una excelente relación calidad-precio.'}},{"@type":"Question","name":'¿Avaira Vitality o Biofinity — cuál es mejor?',"acceptedAnswer":{"@type":"Answer","text":'Depende de tu prioridad. Avaira Vitality es más económico (RD$3,000 vs RD$3,650). Biofinity tiene mayor Dk/t (160 vs 100). Para uso diario normal (hasta 10h), Avaira Vitality es suficiente. Para uso muy intensivo (12h+), Biofinity puede ser más cómodo.'}},{"@type":"Question","name":'¿Dónde comprar Avaira Vitality certificados en RD?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo tienes Avaira Vitality y Avaira Vitality Toric directo del fabricante de CooperVision con entrega en 24 a 72 horas para Avaira Vitality esférico; 25 a 45 días laborables para Avaira Vitality Toric. Pago seguro con AZUL/Banco Popular.'}}] },
+            "mainEntity": [{"@type":"Question","name":'¿Cuánto cuestan los Avaira Vitality en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo: Avaira Vitality esférico RD$3,000 la caja de 6 (mensual) y Avaira Vitality Toric RD$3,900 la caja de 6. Son los lentes mensuales de silicona hidrogel con mejor precio por día de uso disponibles en RD (~RD$17/día).'}},{"@type":"Question","name":'¿Son buenos los Avaira Vitality?',"acceptedAnswer":{"@type":"Answer","text":'Sí. Fabricados por CooperVision (la misma empresa del Biofinity), usan la tecnología Aquaform que retiene agua naturalmente. Con un Dk/t de 100, transmiten suficiente oxígeno para uso diario cómodo. Son una excelente relación calidad-precio.'}},{"@type":"Question","name":'¿Avaira Vitality o Biofinity — cuál es mejor?',"acceptedAnswer":{"@type":"Answer","text":'Depende de tu prioridad. Avaira Vitality es más económico (RD$3,000 vs RD$3,650). Biofinity tiene mayor Dk/t (160 vs 100). Para uso diario normal (hasta 10h), Avaira Vitality es suficiente. Para uso muy intensivo (12h+), Biofinity puede ser más cómodo.'}},{"@type":"Question","name":'¿Dónde comprar Avaira Vitality certificados en RD?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo tienes Avaira Vitality y Avaira Vitality Toric directo del fabricante de CooperVision con entrega en 24 a 72 horas para Avaira Vitality esférico; 25 a 45 días para Avaira Vitality Toric. Pago seguro con AZUL/Banco Popular.'}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -128,7 +128,7 @@ export default function Page() {
         </section>
 
           <section id="productos">
-            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Esférico: 24-72h · Tórico: 25-45 días laborables</h2>
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Esférico: 24-72h · Tórico: 25 a 45 días</h2>
             <div className="space-y-2">
             <Link href="/producto/avaira-vitality-lentes-contacto-mensuales-coopervision-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Avaira Vitality® 6u</p><p className="text-xs text-gray-500">Esférico mensual CooperVision</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,000</span></Link>
             <Link href="/producto/avaira-vitality-toric-lentes-astigmatismo-dominicana" className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:border-primary-200 hover:bg-teal-50/20 transition-all group"><div><p className="text-sm font-semibold text-gray-900 group-hover:text-primary-600">Avaira Vitality® Toric 6u</p><p className="text-xs text-gray-500">Tórico mensual para astigmatismo</p></div><span className="font-black text-gray-900 text-sm shrink-0 ml-3">RD$3,000</span></Link>
@@ -154,7 +154,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Avaira Vitality certificados en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo tienes Avaira Vitality y Avaira Vitality Toric directo del fabricante de CooperVision con entrega en 24 a 72 horas para Avaira Vitality esférico; 25 a 45 días laborables para Avaira Vitality Toric. Pago seguro con AZUL/Banco Popular.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo tienes Avaira Vitality y Avaira Vitality Toric directo del fabricante de CooperVision con entrega en 24 a 72 horas para Avaira Vitality esférico; 25 a 45 días para Avaira Vitality Toric. Pago seguro con AZUL/Banco Popular.</p>
           </details>
             </div>
           </section>

@@ -17,7 +17,7 @@ const meta: BlogMeta = {
     { q: '¿Todos los productos califican para entrega el mismo día?',
       a: 'No — productos en stock regular sí, pero pedidos especiales (graduaciones muy altas, versiones XR que requieren pedido especial al proveedor) pueden tardar más, ya que no están disponibles de inmediato.' },
     { q: '¿Qué hago si necesito lentes urgente y ya es tarde para el mismo día?',
-      a: 'La mayoría de tiendas ofrecen entrega en 24-48h como estándar — sigue siendo rápido. Si es una emergencia real (perdiste tu único lente y lo necesitas para mañana temprano), escríbele directo a la tienda por WhatsApp para ver si hay alguna opción más urgente.' },
+      a: 'La mayoría de tiendas ofrecen entrega en 24-72h como estándar — sigue siendo rápido. Si es una emergencia real (perdiste tu único lente y lo necesitas para mañana temprano), escríbele directo a la tienda por WhatsApp para ver si hay alguna opción más urgente.' },
   ],
   relatedSlugs: [
     'lentes-contacto-piantini-naco-bella-vista-santo-domingo',
@@ -60,7 +60,7 @@ export default function Page() {
 
       <h2>Si no llegas a tiempo para el mismo día, ¿qué sigue?</h2>
 
-      <p>La gran mayoría de tiendas especializadas en RD ofrecen <strong>entrega en 24-48 horas</strong> como estándar — que sigue siendo rápido para la mayoría de situaciones. Si tu necesidad es realmente urgente (por ejemplo, un viaje al día siguiente), tu mejor opción es escribir directo por WhatsApp explicando tu situación específica — muchas tiendas tienen más flexibilidad para casos puntuales de la que muestra el checkout estándar de la web.</p>
+      <p>La gran mayoría de tiendas especializadas en RD ofrecen <strong>entrega en 24 a 72 horas</strong> como estándar — que sigue siendo rápido para la mayoría de situaciones. Si tu necesidad es realmente urgente (por ejemplo, un viaje 24 a 72 horas), tu mejor opción es escribir directo por WhatsApp explicando tu situación específica — muchas tiendas tienen más flexibilidad para casos puntuales de la que muestra el checkout estándar de la web.</p>
 
       <h2>Consejo para no llegar a esta situación de nuevo</h2>
 

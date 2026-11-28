@@ -27,7 +27,6 @@ export default function EntregaBadge({ tipo, nombre = '', sph, variant = 'pdp' }
         <span className="text-sm">{info.icono}</span>
         <div>
           <p className="text-[11px] font-bold leading-none">{fecha.texto}</p>
-          <p className="text-[9px] text-gray-600 mt-1 leading-snug">{info.detalle}</p>
         </div>
       </div>
     )
@@ -42,7 +41,6 @@ export default function EntregaBadge({ tipo, nombre = '', sph, variant = 'pdp' }
         <p className={`font-black text-sm leading-none ${info.especial ? 'text-amber-800' : 'text-teal-900'}`}>
           {fecha.texto}
         </p>
-        <p className={`text-[10px] mt-1 leading-snug ${info.especial ? 'text-amber-700' : 'text-teal-700'}`}>{info.detalle}</p>
       </div>
     </div>
   )

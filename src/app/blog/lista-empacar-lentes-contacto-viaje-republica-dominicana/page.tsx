@@ -22,7 +22,7 @@ export default function Page() {
                 { q: "¿Cuántos lentes de contacto debo llevar para un viaje de 2 semanas a RD?", a: "Si usas diarios, lleva al menos 16-17 unidades (14 días + repuesto). Si usas mensuales, un par nuevo es suficiente, pero lleva un segundo par de respaldo por seguridad." },
                 { q: "¿Debo llevar gafas graduadas aunque solo use lentes de contacto?", a: "Sí, se recomienda siempre como respaldo en caso de irritación ocular, pérdida de un lente o que decidas descansar los ojos durante el viaje." },
                 { q: "¿Qué hago si se me rompe el estuche de lentes en el viaje?", a: "Puedes comprar un estuche nuevo en cualquier farmacia local, o pedir uno junto con tu próximo pedido de lentes en ContactGo con entrega a tu hotel." },
-                { q: "¿Puedo pedir lentes de contacto de emergencia si se me olvidaron en casa?", a: "Sí. ContactGo entrega en 24-48 horas en toda República Dominicana, incluyendo hoteles en zonas turísticas como Punta Cana y Bávaro." }
+                { q: "¿Puedo pedir lentes de contacto de emergencia si se me olvidaron en casa?", a: "Sí. ContactGo entrega lentes esféricos y de colores en 24 a 72 horas en toda República Dominicana, incluyendo hoteles en zonas turísticas como Punta Cana y Bávaro." }
   ]
 
   return (
@@ -42,7 +42,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Cuántos lentes de contacto debo llevar para un viaje de 2 semanas a RD?", "acceptedAnswer": { "@type": "Answer", "text": "Si usas diarios, lleva al menos 16-17 unidades (14 días + repuesto). Si usas mensuales, un par nuevo es suficiente, pero lleva un segundo par de respaldo por seguridad." } },
               { "@type": "Question", "name": "¿Debo llevar gafas graduadas aunque solo use lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, se recomienda siempre como respaldo en caso de irritación ocular, pérdida de un lente o que decidas descansar los ojos durante el viaje." } },
               { "@type": "Question", "name": "¿Qué hago si se me rompe el estuche de lentes en el viaje?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar un estuche nuevo en cualquier farmacia local, o pedir uno junto con tu próximo pedido de lentes en ContactGo con entrega a tu hotel." } },
-              { "@type": "Question", "name": "¿Puedo pedir lentes de contacto de emergencia si se me olvidaron en casa?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega en 24-48 horas en toda República Dominicana, incluyendo hoteles en zonas turísticas como Punta Cana y Bávaro." } }
+              { "@type": "Question", "name": "¿Puedo pedir lentes de contacto de emergencia si se me olvidaron en casa?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes esféricos y de colores en 24 a 72 horas en toda República Dominicana, incluyendo hoteles en zonas turísticas como Punta Cana y Bávaro." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
@@ -102,7 +102,7 @@ export default function Page() {
 
           <section id="si-falta-algo">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Y si algo de esto se te olvida?</h2>
-            <p>Si llegas a República Dominicana y te falta algo de la lista —ya sea que se te olvidó, se dañó en el vuelo o simplemente calculaste mal la cantidad— no necesitas encontrar una óptica física. ContactGo entrega lentes, solución y accesorios directo a tu hotel, Airbnb o residencia en 24-48 horas en cualquier parte del país.</p>
+            <p>Si llegas a República Dominicana y te falta algo de la lista —ya sea que se te olvidó, se dañó en el vuelo o simplemente calculaste mal la cantidad— no necesitas encontrar una óptica física. ContactGo entrega lentes esféricos y de colores en 24 a 72 horas; otros tipos dependen de su categoría.</p>
           </section>
 
           <section id="faq">
@@ -126,7 +126,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana en 24-48h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana en 24-72h</h3>
           <p className="text-sm text-gray-500 mb-4">Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>

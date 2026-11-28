@@ -42,9 +42,9 @@ export default function Page() {
             "about": { "@type": "Place", "name": "República Dominicana", "addressCountry": "DO" } },
           { "@context": "https://schema.org", "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD. Los esféricos tienen entrega estimada de 24 a 72 horas; los demás productos tienen plazos según su categoría y disponibilidad." } },
+              { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD. Los esféricos tienen Entrega de 24 a 72 horas; los demás productos tienen plazos según su categoría y disponibilidad." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío a República Dominicana se calcula al momento del checkout. Los pedidos superiores a RD$8,000 tienen envío gratuito. Consulta el costo exacto al agregar tu dirección de entrega." } },
-              { "@type": "Question", "name": "¿Cuánto tarda la entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Los lentes esféricos tienen entrega estimada de 24 a 72 horas en todo el país. Los plazos de los demás productos dependen de su categoría y disponibilidad." } },
+              { "@type": "Question", "name": "¿Cuánto tarda la entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Los lentes esféricos tienen Entrega de 24 a 72 horas en todo el país. Los plazos de los demás productos dependen de su categoría y disponibilidad." } },
               { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 30 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, disponibles a través de canales de distribución autorizados." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -109,9 +109,9 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Preguntas frecuentes — Entrega en República Dominicana</h2>
             <div className="space-y-3">
               {[
-                { q: '¿Hacen entrega en República Dominicana?', a: 'Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD, con entrega estimada de 24 a 72 horas para lentes esféricos en todo el país.' },
+                { q: '¿Hacen entrega en República Dominicana?', a: 'Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD, con Entrega de 24 a 72 horas para lentes esféricos en todo el país.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
-                { q: '¿Cuánto tarda la entrega en República Dominicana?', a: 'Los lentes esféricos tienen entrega estimada de 24 a 72 horas en todo el país. Los demás productos tienen plazos según su categoría y disponibilidad.' },
+                { q: '¿Cuánto tarda la entrega en República Dominicana?', a: 'Los lentes esféricos tienen Entrega de 24 a 72 horas en todo el país. Los demás productos tienen plazos según su categoría y disponibilidad.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
               ].map((item, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">

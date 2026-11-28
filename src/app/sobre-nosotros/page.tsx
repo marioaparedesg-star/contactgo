@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 const VALORES = [
   { icon: Eye, title: 'Especialización', desc: 'Nuestro catálogo se concentra en lentes de contacto, soluciones y gotas. Esto nos permite organizar la información por marca, diseño y tipo de receta.' },
   { icon: PackageCheck, title: 'Productos sellados', desc: 'Los productos se entregan en su empaque original y sellado. Trabajamos a través de canales de distribución autorizados.' },
-  { icon: Truck, title: 'Entrega según el producto', desc: 'Los esféricos tienen una entrega estimada de 24 a 72 horas en todo el país; los multifocales, de 1 a 5 días laborables; y los tóricos, de 25 a 45 días laborables. Los pedidos de fin de semana o feriados comienzan a procesarse el siguiente día laborable.' },
+  { icon: Truck, title: 'Entrega según el producto', desc: 'Los esféricos tienen una Entrega de 24 a 72 horas en todo el país; los multifocales, de 1 a 5 días; y los tóricos, de 25 a 45 días. Los pedidos de fin de semana o feriados comienzan a procesarse el 24 a 72 horas.' },
   { icon: Headset, title: 'Atención directa', desc: 'Puedes comunicarte con nuestro equipo para consultar disponibilidad, compartir tu receta y aclarar dudas antes de realizar tu pedido.' },
 ]
 
@@ -46,7 +46,7 @@ export default function SobreNosotrosPage() {
         "name": "ContactGo",
         "url": "https://www.contactgo.net",
         "logo": "https://www.contactgo.net/logo.png",
-        "description": "Tienda en línea especializada en lentes de contacto en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Entrega estimada según el tipo de lente y el destino.",
+        "description": "Tienda en línea especializada en lentes de contacto en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Entrega según el tipo de lente y el destino.",
         "foundingDate": "2026",
         "address": {
           "@type": "PostalAddress",

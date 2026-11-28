@@ -12,7 +12,7 @@ import Link from 'next/link'
 // El filtrado lo hace CatalogoGrid (client) via useSearchParams
 export const metadata: Metadata = {
   title: 'Catálogo de Lentes de Contacto | ContactGo República Dominicana',
-  description: 'Catálogo completo de lentes de contacto en RD. Esféricos, tóricos, multifocales y de colores. Acuvue, Air Optix, Biofinity. Esféricos: entrega estimada de 24 a 72 horas en todo el país; otros tipos según su categoría.',
+  description: 'Catálogo completo de lentes de contacto en RD. Esféricos, tóricos, multifocales y de colores. Acuvue, Air Optix, Biofinity. Esféricos: Entrega de 24 a 72 horas en todo el país; otros tipos según su categoría.',
   robots: 'index,follow',
   alternates: { canonical: 'https://www.contactgo.net/catalogo' },
 }

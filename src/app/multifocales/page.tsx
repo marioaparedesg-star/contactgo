@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes Multifocales para Presbicia RD — ContactGo',
-  description: 'Lentes multifocales para presbicia y vista cansada en República Dominicana. ACUVUE Oasys Presbyopia, AIR OPTIX Multifocal, Proclear Multifocal. Entrega estimada de 1 a 5 días laborables.',
+  description: 'Lentes multifocales para presbicia y vista cansada en República Dominicana. ACUVUE Oasys Presbyopia, AIR OPTIX Multifocal, Proclear Multifocal. Entrega de 1 a 5 días.',
   alternates: { canonical: 'https://www.contactgo.net/multifocales' },
   openGraph: {
     title: 'Lentes Multifocales para Presbicia RD',

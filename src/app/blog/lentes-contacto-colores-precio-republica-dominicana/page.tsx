@@ -6,12 +6,12 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes de contacto de colores precio en RD 2026 — ContactGo',
-  description: 'Air Optix Colors y Lunare precio en República Dominicana. Desde RD$2,000. Con y sin graduación. Entrega siguiente día laborable. Originales de Alcon y CooperVision.',
+  description: 'Air Optix Colors y Lunare precio en República Dominicana. Desde RD$2,000. Con y sin graduación. Entrega 24 a 72 horas. Originales de Alcon y CooperVision.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-contacto-colores-precio-republica-dominicana' },
   openGraph: {
     type: 'article',
     title: 'Lentes de contacto de colores precio en RD 2026',
-    description: 'Air Optix Colors y Lunare precio en RD. Con y sin graduación. Entrega siguiente día laborable.',
+    description: 'Air Optix Colors y Lunare precio en RD. Con y sin graduación. Entrega 24 a 72 horas.',
     url: 'https://www.contactgo.net/blog/lentes-contacto-colores-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-colores-precio-rd.webp', width: 1200, height: 630, alt: 'Lentes de contacto de colores precio República Dominicana' }],
@@ -32,7 +32,7 @@ export default function Page() {
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
             "url": "https://www.contactgo.net/blog/lentes-contacto-colores-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type":"Question","name":'¿Cuánto cuestan los lentes de contacto de colores en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo los Air Optix COLORS cuestan RD$2,625 la caja de 2 lentes (uso mensual) y los Lunare Tri-Kolor RD$2,250. Son los lentes de color más accesibles disponibles en RD con entrega a domicilio.'}},{"@type":"Question","name":'¿Los lentes de contacto de colores necesitan receta?',"acceptedAnswer":{"@type":"Answer","text":'Los lentes de color sin graduación (plano) no necesitan receta médica. Los lentes de color con graduación sí requieren prescripción. En ContactGo puedes comprar ambas versiones de Air Optix COLORS: con o sin graduación.'}},{"@type":"Question","name":'¿Los lentes de color dañan los ojos?',"acceptedAnswer":{"@type":"Answer","text":'Los lentes de color certificados, usados correctamente, son seguros. El riesgo surge con lentes falsificados o de venta informal sin control de calidad. En ContactGo todos los lentes son directo del fabricante y certificados.'}},{"@type":"Question","name":'¿Cuánto duran los lentes de contacto de colores?',"acceptedAnswer":{"@type":"Answer","text":'Los Air Optix COLORS y Lunare Tri-Kolor son de uso mensual — duran 30 días desde que abres la caja. Deben retirarse al dormir y almacenarse en solución multipropósito.'}},{"@type":"Question","name":'¿Puedo comprar lentes de color en República Dominicana con envío a domicilio?',"acceptedAnswer":{"@type":"Answer","text":'Sí. ContactGo entrega Air Optix COLORS y Lunare Tri-Kolor en toda la República Dominicana en el siguiente día laborable. El proceso de compra es 100% online y el pago con tarjeta a través de AZUL/Banco Popular.'}},{"@type":"Question","name":'¿Air Optix Colors o Lunare — cuál elegir?',"acceptedAnswer":{"@type":"Answer","text":'Air Optix COLORS de Alcon ofrece 12 colores y silicona hidrogel de alta calidad (Dk/t 138), ideal para uso diario hasta 16 horas. Lunare Tri-Kolor es la opción más accesible para uso ocasional. Si usas lentes frecuentemente, Air Optix COLORS es la mejor inversión.'}}] },
+            "mainEntity": [{"@type":"Question","name":'¿Cuánto cuestan los lentes de contacto de colores en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo los Air Optix COLORS cuestan RD$2,625 la caja de 2 lentes (uso mensual) y los Lunare Tri-Kolor RD$2,250. Son los lentes de color más accesibles disponibles en RD con entrega a domicilio.'}},{"@type":"Question","name":'¿Los lentes de contacto de colores necesitan receta?',"acceptedAnswer":{"@type":"Answer","text":'Los lentes de color sin graduación (plano) no necesitan receta médica. Los lentes de color con graduación sí requieren prescripción. En ContactGo puedes comprar ambas versiones de Air Optix COLORS: con o sin graduación.'}},{"@type":"Question","name":'¿Los lentes de color dañan los ojos?',"acceptedAnswer":{"@type":"Answer","text":'Los lentes de color certificados, usados correctamente, son seguros. El riesgo surge con lentes falsificados o de venta informal sin control de calidad. En ContactGo todos los lentes son directo del fabricante y certificados.'}},{"@type":"Question","name":'¿Cuánto duran los lentes de contacto de colores?',"acceptedAnswer":{"@type":"Answer","text":'Los Air Optix COLORS y Lunare Tri-Kolor son de uso mensual — duran 30 días desde que abres la caja. Deben retirarse al dormir y almacenarse en solución multipropósito.'}},{"@type":"Question","name":'¿Puedo comprar lentes de color en República Dominicana con envío a domicilio?',"acceptedAnswer":{"@type":"Answer","text":'Sí. ContactGo entrega Air Optix COLORS y Lunare Tri-Kolor en toda la República Dominicana en el 24 a 72 horas. El proceso de compra es 100% online y el pago con tarjeta a través de AZUL/Banco Popular.'}},{"@type":"Question","name":'¿Air Optix Colors o Lunare — cuál elegir?',"acceptedAnswer":{"@type":"Answer","text":'Air Optix COLORS de Alcon ofrece 12 colores y silicona hidrogel de alta calidad (Dk/t 138), ideal para uso diario hasta 16 horas. Lunare Tri-Kolor es la opción más accesible para uso ocasional. Si usas lentes frecuentemente, Air Optix COLORS es la mejor inversión.'}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -86,7 +86,7 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Los <strong>lentes de contacto de colores</strong> son una de las categorías más buscadas en República Dominicana. Ya sea para cambiar el color natural de los ojos o simplemente intensificarlo, en ContactGo ofrecemos las dos marcas más confiables disponibles en el mercado dominicano: <Link href="/producto/air-optix-colors-lentes-contacto-color-dominicana" className="text-primary-600 font-semibold hover:underline">Air Optix® COLORS</Link> de Alcon y <Link href="/producto/lunare-tri-kolor-lentes-contacto-color-dominicana" className="text-primary-600 hover:underline">Lunare Tri-Kolor</Link>, ambos directo del fabricante con entrega en el siguiente día laborable.</p>
+          <p>Los <strong>lentes de contacto de colores</strong> son una de las categorías más buscadas en República Dominicana. Ya sea para cambiar el color natural de los ojos o simplemente intensificarlo, en ContactGo ofrecemos las dos marcas más confiables disponibles en el mercado dominicano: <Link href="/producto/air-optix-colors-lentes-contacto-color-dominicana" className="text-primary-600 font-semibold hover:underline">Air Optix® COLORS</Link> de Alcon y <Link href="/producto/lunare-tri-kolor-lentes-contacto-color-dominicana" className="text-primary-600 hover:underline">Lunare Tri-Kolor</Link>, ambos directo del fabricante con entrega en el 24 a 72 horas.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Air Optix® COLORS — La mejor opción de color en RD</h2>
@@ -181,7 +181,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo comprar lentes de color en República Dominicana con envío a domicilio?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. ContactGo entrega Air Optix COLORS y Lunare Tri-Kolor en toda la República Dominicana en el siguiente día laborable. El proceso de compra es 100% online y el pago con tarjeta a través de AZUL/Banco Popular.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. ContactGo entrega Air Optix COLORS y Lunare Tri-Kolor en toda la República Dominicana en el 24 a 72 horas. El proceso de compra es 100% online y el pago con tarjeta a través de AZUL/Banco Popular.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Air Optix Colors o Lunare — cuál elegir?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
@@ -203,7 +203,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-purple-50 to-teal-50 border border-purple-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">¿Listo para comprar? Recibe en siguiente día laborable</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">¿Listo para comprar? Recibe en 24 a 72 horas</h3>
           <p className="text-sm text-gray-600 mb-4">Directo del fabricante · Directo del fabricante · Pago seguro con AZUL · Entrega en toda República Dominicana</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/color" className="inline-flex items-center justify-center gap-2 bg-purple-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors text-sm">
@@ -219,7 +219,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en siguiente día laborable en toda República Dominicana</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24 a 72 horas en toda República Dominicana</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>

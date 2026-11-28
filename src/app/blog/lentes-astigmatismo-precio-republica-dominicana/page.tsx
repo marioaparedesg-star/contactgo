@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes para astigmatismo precio en RD 2026 — Guía completa',
-  description: 'Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega estimada de 25 a 45 días laborables.',
+  description: 'Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega de 25 a 45 días.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-astigmatismo-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto para astigmatismo — Precios en RD 2026',
-    description: 'Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega estimada de 25 a 45 días laborables.',
+    description: 'Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega de 25 a 45 días.',
     url: 'https://www.contactgo.net/blog/lentes-astigmatismo-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-astigmatismo-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Lentes de contacto para astigmatismo — Precios en RD 2026' }],
@@ -25,13 +25,13 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Lentes de contacto para astigmatismo — Precios en RD 2026",
-            "description": "Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega estimada de 25 a 45 días laborables.",
+            "description": "Todos los lentes tóricos con precio en República Dominicana 2026. ACUVUE, Biofinity Toric, clariti, Avaira. Desde RD$4,150. Entrega de 25 a 45 días.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-11-24",
             "url": "https://www.contactgo.net/blog/lentes-astigmatismo-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los lentes para astigmatismo en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo los lentes t\u00f3ricos van desde RD$4,150 (Avaira Vitality Toric) hasta RD$9,400 (Biofinity XR Toric para astigmatismo severo). Los m\u00e1s vendidos son el ACUVUE Oasys for Astigmatism a RD$5,800 y el Biofinity Toric a RD$4,800."}}, {"@type": "Question", "name": "\u00bfC\u00f3mo s\u00e9 si necesito lentes para astigmatismo?", "acceptedAnswer": {"@type": "Answer", "text": "Si tu receta \u00f3ptica tiene los valores CYL (cilindro) y AXIS (eje), tienes astigmatismo y necesitas lentes t\u00f3ricos. Los lentes esf\u00e9ricos normales no corrigen el astigmatismo y la visi\u00f3n quedar\u00eda borrosa o distorsionada."}}, {"@type": "Question", "name": "\u00bfCu\u00e1l es el mejor lente para astigmatismo en RD?", "acceptedAnswer": {"@type": "Answer", "text": "El ACUVUE Oasys for Astigmatism es el m\u00e1s recomendado por optometristas: tecnolog\u00eda BLINK STABILISED, Dk/t 147 y disponible en CYL hasta -2.25. Para astigmatismo mensual, el Biofinity Toric a RD$4,800 es la mejor relaci\u00f3n calidad-precio."}}, {"@type": "Question", "name": "\u00bfHay lentes diarios para astigmatismo en RD?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed. El 1-DAY ACUVUE Moist for Astigmatism y el clariti 1 day toric son lentes diarios t\u00f3ricos disponibles en ContactGo con plazo estimado de entrega de 25 a 45 días laborables."}}, {"@type": "Question", "name": "\u00bfPuedo usar lentes de color si tengo astigmatismo?", "acceptedAnswer": {"@type": "Answer", "text": "Los Air Optix COLORS no est\u00e1n disponibles en versi\u00f3n t\u00f3rica. Para astigmatismo con correcci\u00f3n de color, es necesario combinar lentes t\u00f3ricos con cirug\u00eda l\u00e1ser o usar gafas. Consulta a tu especialista."}}] },
+            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los lentes para astigmatismo en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo los lentes t\u00f3ricos van desde RD$4,150 (Avaira Vitality Toric) hasta RD$9,400 (Biofinity XR Toric para astigmatismo severo). Los m\u00e1s vendidos son el ACUVUE Oasys for Astigmatism a RD$5,800 y el Biofinity Toric a RD$4,800."}}, {"@type": "Question", "name": "\u00bfC\u00f3mo s\u00e9 si necesito lentes para astigmatismo?", "acceptedAnswer": {"@type": "Answer", "text": "Si tu receta \u00f3ptica tiene los valores CYL (cilindro) y AXIS (eje), tienes astigmatismo y necesitas lentes t\u00f3ricos. Los lentes esf\u00e9ricos normales no corrigen el astigmatismo y la visi\u00f3n quedar\u00eda borrosa o distorsionada."}}, {"@type": "Question", "name": "\u00bfCu\u00e1l es el mejor lente para astigmatismo en RD?", "acceptedAnswer": {"@type": "Answer", "text": "El ACUVUE Oasys for Astigmatism es el m\u00e1s recomendado por optometristas: tecnolog\u00eda BLINK STABILISED, Dk/t 147 y disponible en CYL hasta -2.25. Para astigmatismo mensual, el Biofinity Toric a RD$4,800 es la mejor relaci\u00f3n calidad-precio."}}, {"@type": "Question", "name": "\u00bfHay lentes diarios para astigmatismo en RD?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed. El 1-DAY ACUVUE Moist for Astigmatism y el clariti 1 day toric son lentes diarios t\u00f3ricos disponibles en ContactGo con plazo de entrega de 25 a 45 días."}}, {"@type": "Question", "name": "\u00bfPuedo usar lentes de color si tengo astigmatismo?", "acceptedAnswer": {"@type": "Answer", "text": "Los Air Optix COLORS no est\u00e1n disponibles en versi\u00f3n t\u00f3rica. Para astigmatismo con correcci\u00f3n de color, es necesario combinar lentes t\u00f3ricos con cirug\u00eda l\u00e1ser o usar gafas. Consulta a tu especialista."}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -96,11 +96,11 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$9,400</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
 
-          <p className="text-[11px] text-gray-400 text-center">*Canales de distribución autorizados · Entrega estimada de 25 a 45 días laborables</p>
+          <p className="text-[11px] text-gray-400 text-center">*Canales de distribución autorizados · Entrega de 25 a 45 días</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Si tu receta óptica tiene valores de <strong>CYL (cilindro) y AXIS (eje)</strong>, tienes astigmatismo y necesitas lentes de contacto <strong>tóricos</strong>. En República Dominicana, ContactGo es la tienda con mayor disponibilidad de lentes tóricos de todas las marcas principales — con plazo estimado de 25 a 45 días laborables. Los precios de referencia se contrastaron con el catálogo el 24 de noviembre de 2026; confirma el precio vigente en cada ficha.</p>
+          <p>Si tu receta óptica tiene valores de <strong>CYL (cilindro) y AXIS (eje)</strong>, tienes astigmatismo y necesitas lentes de contacto <strong>tóricos</strong>. En República Dominicana, ContactGo es la tienda con mayor disponibilidad de lentes tóricos de todas las marcas principales — con plazo de 25 a 45 días. Los precios de referencia se contrastaron con el catálogo el 24 de noviembre de 2026; confirma el precio vigente en cada ficha.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios de referencia — consultados el 24 de noviembre de 2026</h2>
@@ -150,7 +150,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Recibe en 25-45 días laborables', desc: 'El plazo de preparación de los lentes tóricos es de 25 a 45 días laborables; el transporte se coordina según el destino.' },
+                { paso: '4', titulo: 'Recibe en 25 a 45 días', desc: 'El plazo de preparación de los lentes tóricos es de 25 a 45 días; el transporte se coordina según el destino.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -177,7 +177,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Hay lentes diarios para astigmatismo en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El 1-DAY ACUVUE Moist for Astigmatism y el clariti 1 day toric son lentes diarios tóricos disponibles en ContactGo con plazo estimado de 25 a 45 días laborables.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El 1-DAY ACUVUE Moist for Astigmatism y el clariti 1 day toric son lentes diarios tóricos disponibles en ContactGo con plazo de 25 a 45 días.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo usar lentes de color si tengo astigmatismo?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
@@ -203,7 +203,7 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes tóricos: entrega estimada de 25 a 45 días laborables</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes tóricos: Entrega de 25 a 45 días</h3>
           <p className="text-sm text-gray-600 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>

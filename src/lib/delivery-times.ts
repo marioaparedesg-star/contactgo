@@ -2,10 +2,10 @@
  * FUENTE ÚNICA DE VERDAD — Tiempos de entrega por categoría
  *
  * REGLAS DE NEGOCIO (definidas por Mario — aplican a todo el país):
- *  - Color → siguiente día laborable
+ *  - Color → 24-72 horas
  *  - Esférico → 24-72 horas
- *  - Multifocal → 1-5 días laborables
- *  - Tórico → 25-45 días laborables
+ *  - Multifocal → 1-5 días
+ *  - Tórico → bajo pedido, 25-45 días
  *  - Solución / Gota → 24 horas
  */
 
@@ -18,43 +18,36 @@ export interface EntregaInfo {
   icono:    string
 }
 
-const T_COLOR_PLANO: EntregaInfo = {
-  etiqueta: 'Entrega al siguiente día laborable',
-  detalle:  'Los lentes de color planos disponibles se entregan el siguiente día laborable. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
-  dias_min: 1, dias_max: 1,
-  especial: false,
-  icono:    '🚀',
-}
-
 const T_24H: EntregaInfo = {
-  etiqueta: 'Entrega estimada en 24 horas',
-  detalle: 'Entrega estimada en 24 horas. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
+  etiqueta: 'Entrega de 24 horas',
+  detalle: 'Entrega de 24 horas.',
   dias_min: 1, dias_max: 1,
   especial: false,
   icono: '🚀',
 }
 
 const T_24_72H: EntregaInfo = {
-  etiqueta: 'Entrega estimada en 24 a 72 horas',
-  detalle:  'Entrega estimada en 24 a 72 horas. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
+  etiqueta: 'Entrega de 24 a 72 horas',
+  detalle:  'Entrega de 24 a 72 horas.',
   dias_min: 1, dias_max: 3,
   especial: false,
   icono:    '📦',
 }
 
 const T_ESFERICO: EntregaInfo = T_24_72H
+const T_COLOR: EntregaInfo = T_24_72H
 
 const T_MULTIFOCAL: EntregaInfo = {
-  etiqueta: 'Entrega estimada de 1 a 5 días laborables',
-  detalle:  'Entrega estimada del lente multifocal: de 1 a 5 días laborables, según disponibilidad y preparación. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
+  etiqueta: 'Entrega de 1 a 5 días',
+  detalle:  'Entrega de 1 a 5 días.',
   dias_min: 1, dias_max: 5,
   especial: true,
   icono:    '📦',
 }
 
 const T_TORICO: EntregaInfo = {
-  etiqueta: 'Bajo pedido · 25–45 días laborables',
-  detalle:  'Lente tórico bajo pedido. Entrega estimada de 25 a 45 días laborables, según fabricación y disponibilidad. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
+  etiqueta: 'Bajo pedido · 25 a 45 días',
+  detalle:  'Bajo pedido · 25 a 45 días.'
   dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',
@@ -75,7 +68,7 @@ export function getEntrega(tipo: string, nombre = '', sph?: string | number | nu
   if (tipo === 'multifocal') return T_MULTIFOCAL
   if (tipo === 'torico')     return T_TORICO
 
-  if (tipo === 'color') return T_COLOR_PLANO
+  if (tipo === 'color') return T_COLOR
 
   if (tipo === 'solucion')   return T_24H
   if (tipo === 'gota')       return T_24H
@@ -187,7 +180,7 @@ export function getFechaEntregaISODesdeFecha(fechaCreacion: string | Date, tipo:
   const fecha = fechaCreacion instanceof Date ? fechaCreacion : new Date(fechaCreacion)
   if (Number.isNaN(fecha.getTime())) return getFechaEntregaISO(tipo, nombre, sph)
   if (esEntregaPorHoras(tipo)) {
-    const horasMax = tipo === 'esferico' ? 72 : 24
+    const horasMax = (tipo === 'esferico' || tipo === 'color') ? 72 : 24
     return isoFecha(sumarHorasHastaDiaLaborable(fecha, horasMax))
   }
   const local = partesFechaDR(fecha)
@@ -210,7 +203,7 @@ export function getRangoEntregaDesdeFecha(
   let max: Date
   if (esEntregaPorHoras(tipo)) {
     const horasMin = 24
-    const horasMax = tipo === 'esferico' ? 72 : 24
+    const horasMax = (tipo === 'esferico' || tipo === 'color') ? 72 : 24
     min = sumarHorasHastaDiaLaborable(fecha, horasMin)
     max = sumarHorasHastaDiaLaborable(fecha, horasMax)
   } else {

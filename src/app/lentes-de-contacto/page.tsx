@@ -9,7 +9,7 @@ import ProductCard from '@/components/shop/ProductCard'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto' },
   title: 'Lentes de Contacto en República Dominicana | ContactGo',
-  description: 'Compra lentes de contacto de marcas reconocidas en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Entrega estimada según tipo de lente y destino. Canales de distribución autorizados.',
+  description: 'Compra lentes de contacto de marcas reconocidas en República Dominicana. ACUVUE, Air Optix, Biofinity y más. Entrega según tipo de lente y destino. Canales de distribución autorizados.',
   openGraph: {
     title: 'Lentes de Contacto en República Dominicana — ContactGo',
     description: 'La tienda especializada #1 en lentes de contacto certificados en RD.',
@@ -62,7 +62,7 @@ export default async function LentesContactoPage() {
               Lentes de Contacto en<br />República Dominicana
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
-              Tienda especializada en lentes de contacto en RD. ACUVUE, Air Optix, Biofinity y más marcas. Esféricos: entrega estimada en 24 a 72 horas laborables en todo el país. Los demás tipos tienen plazos según su preparación y disponibilidad.
+              Tienda especializada en lentes de contacto en RD. ACUVUE, Air Optix, Biofinity y más marcas. Esféricos: Entrega en 24 a 72 horas en todo el país. Los demás tipos tienen plazos según su preparación y disponibilidad.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/catalogo" className="bg-teal-500 text-white font-bold px-6 py-3 rounded-2xl hover:bg-teal-600 transition-all">Ver catálogo completo</Link>
