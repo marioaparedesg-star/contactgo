@@ -22,7 +22,7 @@ export default function Page() {
                 { q: "¿Puedo llevar solución para lentes de contacto en el avión hacia RD?", a: "Sí, siempre que el envase sea de 100ml o menos y vaya dentro de la bolsa transparente de líquidos junto con tus demás artículos de higiene." },
                 { q: "¿Las cajas de lentes de contacto cuentan como líquido en el aeropuerto?", a: "No. Las cajas de lentes desechables (diarios, quincenales o mensuales) no se consideran líquido y puedes llevarlas sin restricción en tu equipaje de mano." },
                 { q: "¿Qué aeropuertos de República Dominicana tienen esta regla?", a: "Todos: Las Américas (SDQ) en Santo Domingo, Punta Cana (AILA), Puerto Plata (POP), Santiago (STI), La Romana (LRM) y Samaná (AZS) siguen los mismos estándares de seguridad de la IATA." },
-                { q: "Se me olvidaron los lentes de contacto, ¿puedo comprar en RD?", a: "Sí. ContactGo entrega lentes de las principales marcas (ACUVUE, Biofinity, Air Optix) directo a tu hotel en Punta Cana, Santo Domingo y toda República Dominicana en 24 a 72 horas." }
+                { q: "Se me olvidaron los lentes de contacto, ¿puedo comprar en RD?", a: "Sí. ContactGo entrega lentes de las principales marcas (ACUVUE, Biofinity, Air Optix) directo a tu hotel en Punta Cana, Santo Domingo y toda República Dominicana en 24 a 72 horas para lentes esféricos." }
   ]
 
   return (
@@ -42,7 +42,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Puedo llevar solución para lentes de contacto en el avión hacia RD?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, siempre que el envase sea de 100ml o menos y vaya dentro de la bolsa transparente de líquidos junto con tus demás artículos de higiene." } },
               { "@type": "Question", "name": "¿Las cajas de lentes de contacto cuentan como líquido en el aeropuerto?", "acceptedAnswer": { "@type": "Answer", "text": "No. Las cajas de lentes desechables (diarios, quincenales o mensuales) no se consideran líquido y puedes llevarlas sin restricción en tu equipaje de mano." } },
               { "@type": "Question", "name": "¿Qué aeropuertos de República Dominicana tienen esta regla?", "acceptedAnswer": { "@type": "Answer", "text": "Todos: Las Américas (SDQ) en Santo Domingo, Punta Cana (AILA), Puerto Plata (POP), Santiago (STI), La Romana (LRM) y Samaná (AZS) siguen los mismos estándares de seguridad de la IATA." } },
-              { "@type": "Question", "name": "Se me olvidaron los lentes de contacto, ¿puedo comprar en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de las principales marcas (ACUVUE, Biofinity, Air Optix) directo a tu hotel en Punta Cana, Santo Domingo y toda República Dominicana en 24 a 72 horas." } }
+              { "@type": "Question", "name": "Se me olvidaron los lentes de contacto, ¿puedo comprar en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de las principales marcas (ACUVUE, Biofinity, Air Optix) directo a tu hotel en Punta Cana, Santo Domingo y toda República Dominicana en 24 a 72 horas para lentes esféricos." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
@@ -100,7 +100,7 @@ export default function Page() {
 
           <section id="comprar-al-llegar">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Y si se te olvidan o se te dañan al llegar a RD?</h2>
-            <p>Si llegas a República Dominicana y descubres que olvidaste tus lentes, se te dañó el estuche o se te acabó la solución, no necesitas salir a buscar una óptica física. ContactGo entrega directo a tu hotel o Airbnb en Punta Cana, Bávaro, Cap Cana, Santo Domingo y el resto del país en 24 a 72 horas, con pago seguro por tarjeta internacional a través de AZUL.</p>
+            <p>Si llegas a República Dominicana y descubres que olvidaste tus lentes, se te dañó el estuche o se te acabó la solución, no necesitas salir a buscar una óptica física. ContactGo entrega directo a tu hotel o Airbnb en Punta Cana, Bávaro, Cap Cana, Santo Domingo y el resto del país en 24 a 72 horas para lentes esféricos, con pago seguro por tarjeta internacional a través de AZUL.</p>
           </section>
 
           <section id="faq">
@@ -124,7 +124,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana en 24-72h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana en 24-72h para lentes esféricos</h3>
           <p className="text-sm text-gray-500 mb-4">Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
