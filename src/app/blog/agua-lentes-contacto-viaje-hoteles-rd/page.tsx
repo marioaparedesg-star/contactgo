@@ -22,7 +22,7 @@ export default function Page() {
                 { q: "¿Puedo lavar mis lentes de contacto con agua del grifo en RD?", a: "No. El agua del grifo, incluso en hoteles de buena categoría, no es estéril y puede contener microorganismos que causan infecciones oculares graves. Usa siempre solución multipropósito." },
                 { q: "¿Puedo guardar mis lentes en agua embotellada si se me acabó la solución?", a: "No se recomienda. El agua embotellada tampoco desinfecta ni mantiene las propiedades del lente. Es mejor comprar solución nueva o cambiar temporalmente a lentes diarios desechables." },
                 { q: "¿Es seguro nadar en la piscina del hotel con lentes puestos?", a: "No se recomienda. El cloro y los microorganismos del agua de piscina pueden dañar el lente e irritar el ojo. Si vas a nadar, usa lentes diarios y descártalos después, o quítatelos antes de entrar." },
-                { q: "¿Dónde puedo comprar solución para lentes de contacto en zonas turísticas de RD?", a: "En farmacias y supermercados grandes de zonas turísticas, o pidiéndola online en ContactGo con entrega directa a tu hotel en 24-48 horas." }
+                { q: "¿Dónde puedo comprar solución para lentes de contacto en zonas turísticas de RD?", a: "En farmacias y supermercados grandes de zonas turísticas, o pidiéndola online en ContactGo con entrega directa a tu hotel en 24 horas." }
   ]
 
   return (
@@ -42,7 +42,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Puedo lavar mis lentes de contacto con agua del grifo en RD?", "acceptedAnswer": { "@type": "Answer", "text": "No. El agua del grifo, incluso en hoteles de buena categoría, no es estéril y puede contener microorganismos que causan infecciones oculares graves. Usa siempre solución multipropósito." } },
               { "@type": "Question", "name": "¿Puedo guardar mis lentes en agua embotellada si se me acabó la solución?", "acceptedAnswer": { "@type": "Answer", "text": "No se recomienda. El agua embotellada tampoco desinfecta ni mantiene las propiedades del lente. Es mejor comprar solución nueva o cambiar temporalmente a lentes diarios desechables." } },
               { "@type": "Question", "name": "¿Es seguro nadar en la piscina del hotel con lentes puestos?", "acceptedAnswer": { "@type": "Answer", "text": "No se recomienda. El cloro y los microorganismos del agua de piscina pueden dañar el lente e irritar el ojo. Si vas a nadar, usa lentes diarios y descártalos después, o quítatelos antes de entrar." } },
-              { "@type": "Question", "name": "¿Dónde puedo comprar solución para lentes de contacto en zonas turísticas de RD?", "acceptedAnswer": { "@type": "Answer", "text": "En farmacias y supermercados grandes de zonas turísticas, o pidiéndola online en ContactGo con entrega directa a tu hotel en 24-48 horas." } }
+              { "@type": "Question", "name": "¿Dónde puedo comprar solución para lentes de contacto en zonas turísticas de RD?", "acceptedAnswer": { "@type": "Answer", "text": "En farmacias y supermercados grandes de zonas turísticas, o pidiéndola online en ContactGo con entrega directa a tu hotel en 24 horas." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
@@ -91,7 +91,7 @@ export default function Page() {
 
           <section id="se-me-acabo-la-solucion">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">¿Se te acabó la solución en tu hotel?</h2>
-            <p>Si estás de viaje en Punta Cana, Bávaro, Santo Domingo o cualquier otra zona de RD y se te acabó la solución, la opción más segura es comprar una nueva botella —muchas farmacias y supermercados grandes la venden— o pedir que te la entreguen directo al hotel. En ContactGo puedes ordenar Opti-Free Puremoist, Biotrue y otras marcas con entrega en 24-48h en cualquier zona turística del país.</p>
+            <p>Si estás de viaje en Punta Cana, Bávaro, Santo Domingo o cualquier otra zona de RD y se te acabó la solución, la opción más segura es comprar una nueva botella —muchas farmacias y supermercados grandes la venden— o pedir que te la entreguen directo al hotel. En ContactGo puedes ordenar Opti-Free Puremoist, Biotrue y otras marcas con entrega en 24 horas en cualquier zona turística del país.</p>
           </section>
 
           <section id="lentes-diarios-como-alternativa">
@@ -120,7 +120,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana en 24-48h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana en 24 horas</h3>
           <p className="text-sm text-gray-500 mb-4">Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
