@@ -2,7 +2,8 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingCart, Eye, Heart } from 'lucide-react'
+import { ShoppingCart, Eye, Heart, ArrowLeftRight } from 'lucide-react'
+import { getEntrega } from '@/lib/delivery-times'
 import { createClient } from '@/lib/supabase'
 import type { Product } from '@/types'
 
@@ -57,9 +58,17 @@ export default function ProductCard({ product }: Props) {
     : product.tipo === 'solucion' || product.tipo === 'gota' ? 'Ver producto'
     : 'Ver detalles'
 
+  const entrega = getEntrega(product.tipo || '', product.nombre)
+  const precioAnterior = Number(product.precio_anterior || 0)
+  const precioActual = Number(product.precio)
+  const tieneDescuento = precioAnterior > precioActual && precioAnterior > 0
+  const descuento = tieneDescuento ? Math.round((1 - precioActual / precioAnterior) * 100) : 0
+  const tipoLabel = TIPO_BADGE[product.tipo || ''] || 'ContactGo'
+  const frecuencia = days === 1 ? 'Diario' : days === 14 ? 'Quincenal' : days === 30 ? 'Mensual' : ''
+
   return (
-    <article className="group relative grid h-auto self-start min-w-0 grid-rows-[auto_1fr] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
-      <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-white">
+    <article className="group relative flex min-w-0 flex-col self-start overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-white">
         <Link href={href} aria-label={'Ver ' + product.nombre} className="absolute inset-0">
           {product.imagen_url ? (
             <Image src={product.imagen_url} unoptimized alt={product.nombre + (product.marca ? ' — ' + product.marca : '')} fill
@@ -72,7 +81,7 @@ export default function ProductCard({ product }: Props) {
           )}
         </Link>
         <span className="absolute left-2 top-2 rounded-full border border-white/80 bg-white/95 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wide text-[#002455] shadow-sm">
-          {TIPO_BADGE[product.tipo || ''] || 'ContactGo'}
+          {tipoLabel}
         </span>
         <button type="button" onClick={toggleFav} aria-label={isFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}
           className={'absolute right-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-white/80 shadow-sm transition-colors ' + (isFav ? 'bg-rose-500 text-white' : 'bg-white/95 text-slate-600 hover:text-rose-600')}>
@@ -82,25 +91,46 @@ export default function ProductCard({ product }: Props) {
         {stockCritical && <span className="absolute bottom-2 right-2 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="flex min-w-0 flex-col gap-1 px-2 pb-2 pt-1.5">
-        <p className="truncate text-[8px] font-bold uppercase leading-3 tracking-[0.08em] text-slate-500">{product.marca || 'ContactGo'}</p>
-
-        <Link href={href} className="block min-h-[28px] min-w-0 text-[11px] font-extrabold uppercase leading-[14px] tracking-[0.015em] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[12px]">
+      <div className="flex min-w-0 flex-1 flex-col gap-1 px-2 pb-2 pt-1.5">
+        <Link href={href} className="block min-h-[28px] min-w-0 text-[11px] font-extrabold uppercase leading-[14px] tracking-[0.01em] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[12px]">
           <h3 className="line-clamp-2 break-words">{product.nombre.toLocaleUpperCase('es')}</h3>
         </Link>
 
-        <p className="h-3.5 truncate text-[9px] leading-3.5 text-slate-500">{details[0] || ''}</p>
+        <p className="truncate text-[8px] font-bold uppercase leading-3 tracking-[0.06em] text-slate-500">
+          {[tipoLabel, frecuencia, product.marca].filter(Boolean).join(' · ')}
+        </p>
 
-        <div className="mt-0.5 border-t border-slate-100 pt-1.5">
-          <p className="truncate text-[15px] font-extrabold leading-5 tracking-tight text-[#002455] sm:text-base">{money(Number(product.precio))}</p>
+        <p className="truncate text-[9px] leading-3.5 text-slate-600">
+          {details[0] || (product as any).contenido || 'Presentación por caja'}
+        </p>
+
+        {entrega.especial && (
+          <p className="truncate text-[9px] font-semibold leading-3 text-[#007f83]">{entrega.etiqueta}</p>
+        )}
+
+        <div className="mt-auto border-t border-slate-100 pt-1.5">
+          <div className="flex min-w-0 items-end justify-between gap-1">
+            <div className="min-w-0">
+              <p className="truncate text-[15px] font-extrabold leading-5 tracking-tight text-[#002455] sm:text-base">{money(precioActual)}</p>
+              {tieneDescuento && (
+                <div className="flex items-center gap-1">
+                  <span className="text-[9px] text-slate-400 line-through">{money(precioAnterior)}</span>
+                  <span className="rounded bg-rose-50 px-1 py-0.5 text-[8px] font-bold text-rose-600">-{descuento}%</span>
+                </div>
+              )}
+            </div>
+            <Link href={'/comparar?p=' + ((product as any).slug || product.id)} aria-label={'Comparar ' + product.nombre}
+              className="mb-0.5 flex shrink-0 items-center gap-1 text-[9px] font-semibold text-slate-500 hover:text-[#002455]">
+              <ArrowLeftRight className="h-3 w-3" aria-hidden="true" /> Comparar
+            </Link>
+          </div>
           <Link href={href} aria-disabled={stock === 0}
             onClick={e => { if (stock === 0) e.preventDefault() }}
-            className={'mt-1 flex h-7 w-full items-center justify-center gap-1 rounded-md px-2 text-[10px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ' + (stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]')}>
+            className={'mt-1 flex min-h-11 w-full items-center justify-center gap-1 rounded-lg px-2 text-[10px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ' + (stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]')}>
             <ShoppingCart className="h-3 w-3" aria-hidden="true" />
             {stock === 0 ? 'Agotado' : actionLabel}
           </Link>
         </div>
       </div>
     </article>
-  )
 }
