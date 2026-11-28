@@ -46,7 +46,7 @@ export default function Page() {
             "mainEntity": [
               { "@type": "Question", "name": "¿Dónde comprar lentes de contacto en Santo Domingo?", "acceptedAnswer": { "@type": "Answer", "text": "ContactGo es la única tienda online especializada exclusivamente en lentes de contacto en República Dominicana, con entrega en 24-48h en Santo Domingo. También encuentras lentes en clínicas oftalmológicas y algunas ópticas de la ciudad." } },
               { "@type": "Question", "name": "¿Cuánto cuestan los lentes de contacto en Santo Domingo?", "acceptedAnswer": { "@type": "Answer", "text": "Los precios varían según la marca y tipo. En ContactGo los lentes ACUVUE Oasys están desde RD$3,875, Biofinity desde RD$4,750 y Air Optix desde RD$4,375, con entrega incluida en Santo Domingo." } },
-              { "@type": "Question", "name": "¿Hay entrega a domicilio de lentes de contacto en Santo Domingo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo ofrece entrega en 24-48 horas en Santo Domingo y áreas metropolitanas como Boca Chica, San Cristóbal, La Romana y alrededores." } }
+              { "@type": "Question", "name": "¿Hay entrega a domicilio de lentes de contacto en Santo Domingo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo ofrece entrega en 24 a 72 horas laborables en todo el país y áreas metropolitanas como Boca Chica, San Cristóbal, La Romana y alrededores." } }
             ]
           },
           {
@@ -288,7 +288,7 @@ export default function Page() {
               {[
                 { q: '¿Dónde comprar lentes de contacto en Santo Domingo?', a: 'ContactGo es la única tienda dominicana especializada 100% en lentes de contacto, con entrega en 24-48h en Santo Domingo y toda la República Dominicana. También puedes encontrarlos en clínicas oftalmológicas de la ciudad.' },
                 { q: '¿Cuánto cuestan los lentes de contacto en Santo Domingo?', a: 'En ContactGo los precios van desde RD$2,250 (lentes de color) hasta RD$20,000 (lentes multifocales especializados). Los lentes esféricos más populares como ACUVUE Oasys están desde RD$3,875.' },
-                { q: '¿Hay entrega a domicilio en Santo Domingo?', a: 'Sí. ContactGo entrega en 24-48 horas en Santo Domingo y áreas metropolitanas (Boca Chica, San Cristóbal, La Romana, etc.).' },
+                { q: '¿Hay entrega a domicilio en Santo Domingo?', a: 'Sí. ContactGo entrega en 24 a 72 horas laborables en todo el país y áreas metropolitanas (Boca Chica, San Cristóbal, La Romana, etc.).' },
                 { q: '¿Los lentes de ContactGo son certificados?', a: 'Sí, directo del fabricante. ContactGo garantiza la autenticidad de todos sus productos.' },
                 { q: '¿Necesito receta para comprar lentes en Santo Domingo?', a: 'Para lentes graduados, sí. Para lentes de color sin graduación, no. Si tienes tu prescripción de tu optometrista, puedes comprar directamente. Si no estás seguro, usa nuestra calculadora de receta gratuita.' },
               ].map(({ q, a }, i) => (
