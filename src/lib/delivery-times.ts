@@ -3,9 +3,9 @@
  *
  * REGLAS DE NEGOCIO (definidas por Mario — aplican a todo el país):
  *  - Color → al día siguiente
- *  - Esférico → 24-72 horas laborables
- *  - Multifocal → 1-5 días
- *  - Tórico → 25-45 días
+ *  - Esférico → 24-72 horas
+ *  - Multifocal → 1-5 días laborables
+ *  - Tórico → 25-45 días laborables
  *  - Solución / Gota → 24 horas
  */
 
@@ -27,16 +27,16 @@ const T_COLOR_PLANO: EntregaInfo = {
 }
 
 const T_24H: EntregaInfo = {
-  etiqueta: 'Entrega estimada en 24 horas laborables',
-  detalle: 'Entrega estimada en 24 horas laborables. Los pedidos recibidos en fines de semana o feriados comienzan a procesarse el próximo día laborable.',
+  etiqueta: 'Entrega estimada en 24 horas',
+  detalle: 'Entrega estimada en 24 horas. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
   dias_min: 1, dias_max: 1,
   especial: false,
   icono: '🚀',
 }
 
 const T_24_72H: EntregaInfo = {
-  etiqueta: 'Entrega estimada en 24 a 72 horas laborables',
-  detalle:  'Entrega estimada en 24 a 72 horas laborables. El plazo se calcula de lunes a viernes; los pedidos recibidos en fines de semana o feriados comienzan a procesarse el próximo día laborable.',
+  etiqueta: 'Entrega estimada en 24 a 72 horas',
+  detalle:  'Entrega estimada en 24 a 72 horas. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
   dias_min: 1, dias_max: 3,
   especial: false,
   icono:    '📦',
@@ -115,6 +115,18 @@ function normalizarInicioLaborable(base: Date, hora: number): Date {
   }
   return fecha
 }
+function sumarHorasHastaDiaLaborable(base: Date, horas: number): Date {
+  const fecha = new Date(base.getTime() + horas * 60 * 60 * 1000)
+  while (true) {
+    const local = partesFechaDR(fecha)
+    const dia = fechaCalendario(local.year, local.month, local.day).getUTCDay()
+    if (dia !== 0 && dia !== 6) return fecha
+    fecha.setTime(fecha.getTime() + 24 * 60 * 60 * 1000)
+  }
+}
+function esEntregaPorHoras(tipo: string): boolean {
+  return ['esferico', 'color', 'solucion', 'gota'].includes(tipo)
+}
 function sumarDiasLaborables(base: Date, dias: number): Date {
   const fecha = new Date(base)
   let contados = 0
@@ -161,11 +173,7 @@ export function getEntregaTextoEmail(tipo: string, nombre = '', sph?: string | n
  * el pedido — Google penaliza estimated_delivery_date poco fiables.
  */
 export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | number | null): string {
-  const info = getEntrega(tipo, nombre, sph)
-  const local = partesFechaDR(new Date())
-  const base = fechaCalendario(local.year, local.month, local.day)
-  const inicio = normalizarInicioLaborable(base, local.hour)
-  return isoFecha(sumarDiasLaborables(inicio, info.dias_max))
+  return getFechaEntregaISODesdeFecha(new Date(), tipo, nombre, sph)
 }
 
 /**
@@ -177,6 +185,10 @@ export function getFechaEntregaISODesdeFecha(fechaCreacion: string | Date, tipo:
   const info = getEntrega(tipo, nombre, sph)
   const fecha = fechaCreacion instanceof Date ? fechaCreacion : new Date(fechaCreacion)
   if (Number.isNaN(fecha.getTime())) return getFechaEntregaISO(tipo, nombre, sph)
+  if (esEntregaPorHoras(tipo)) {
+    const horasMax = tipo === 'esferico' ? 72 : 24
+    return isoFecha(sumarHorasHastaDiaLaborable(fecha, horasMax))
+  }
   const local = partesFechaDR(fecha)
   const base = fechaCalendario(local.year, local.month, local.day)
   return isoFecha(sumarDiasLaborables(normalizarInicioLaborable(base, local.hour), info.dias_max))
@@ -193,14 +205,25 @@ export function getRangoEntregaDesdeFecha(
   if (Number.isNaN(fecha.getTime())) {
     return { texto: 'Fecha de entrega por confirmar', fechaMin: '', fechaMax: '' }
   }
-  const local = partesFechaDR(fecha)
-  const base = fechaCalendario(local.year, local.month, local.day)
-  const inicio = normalizarInicioLaborable(base, local.hour)
-  const min = sumarDiasLaborables(inicio, info.dias_min)
-  const max = sumarDiasLaborables(inicio, info.dias_max)
+  let min: Date
+  let max: Date
+  if (esEntregaPorHoras(tipo)) {
+    const horasMin = 24
+    const horasMax = tipo === 'esferico' ? 72 : 24
+    min = sumarHorasHastaDiaLaborable(fecha, horasMin)
+    max = sumarHorasHastaDiaLaborable(fecha, horasMax)
+  } else {
+    const local = partesFechaDR(fecha)
+    const base = fechaCalendario(local.year, local.month, local.day)
+    const inicio = normalizarInicioLaborable(base, local.hour)
+    min = sumarDiasLaborables(inicio, info.dias_min)
+    max = sumarDiasLaborables(inicio, info.dias_max)
+  }
   const mismoMes = min.getUTCMonth() === max.getUTCMonth() && min.getUTCFullYear() === max.getUTCFullYear()
-  const texto = mismoMes
-    ? `Entre el ${min.getUTCDate()} y el ${max.getUTCDate()} de ${MESES_ES[max.getUTCMonth()]}`
-    : `Entre el ${formatoFecha(min, false)} y el ${formatoFecha(max, false)}`
+  const texto = isoFecha(min) === isoFecha(max)
+    ? `El ${formatoFecha(min)}`
+    : mismoMes
+      ? `Entre el ${min.getUTCDate()} y el ${max.getUTCDate()} de ${MESES_ES[max.getUTCMonth()]}`
+      : `Entre el ${formatoFecha(min, false)} y el ${formatoFecha(max, false)}`
   return { texto, fechaMin: isoFecha(min), fechaMax: isoFecha(max) }
 }
