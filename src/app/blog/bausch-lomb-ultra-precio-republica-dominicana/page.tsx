@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Bausch+Lomb ULTRA precio en RD 2026 — ContactGo',
-  description: 'Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega 24-48h.',
+  description: 'Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega según el tipo de lente.',
   alternates: { canonical: 'https://www.contactgo.net/blog/bausch-lomb-ultra-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Bausch+Lomb ULTRA® precio en República Dominicana 2026',
-    description: 'Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega 24-48h.',
+    description: 'Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega según el tipo de lente.',
     url: 'https://www.contactgo.net/blog/bausch-lomb-ultra-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/bausch-lomb-ultra-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Bausch+Lomb ULTRA® precio en República Dominicana 2026' }],
@@ -25,7 +25,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Bausch+Lomb ULTRA® precio en República Dominicana 2026",
-            "description": "Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega 24-48h.",
+            "description": "Precio de Bausch+Lomb ULTRA en República Dominicana. Esférico RD$3,750 · Astigmatism RD$4,500 · Presbyopia RD$4,750. Biotrue ONEday RD$3,500. Entrega según el tipo de lente.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
@@ -85,7 +85,7 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$3,500</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
 
-          <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega 24-48h en toda RD · Junio 2026</p>
+          <p className="text-[11px] text-gray-400 text-center">*directo del fabricante · Directo del fabricante · Entrega según el tipo de lente en toda RD · Junio 2026</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -127,7 +127,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Recibe en 24-48h', desc: 'Entrega en Santo Domingo y Santiago en 24h. Resto del país en 24-72h.' },
+                { paso: '4', titulo: 'Recibe en 24-48h', desc: 'Esféricos: 24 a 72 horas; tóricos: 25 a 45 días laborables; multifocales: 1 a 5 días laborables.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -154,7 +154,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Bausch+Lomb ULTRA certificados en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo todos los Bausch+Lomb son directo del fabricante, directo del fabricante. Entregamos en 24-48 horas en toda República Dominicana con pago seguro mediante AZUL/Banco Popular.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo todos los Bausch+Lomb son directo del fabricante, directo del fabricante. Entregamos en 24 a 72 horas para esféricos en toda República Dominicana con pago seguro mediante AZUL/Banco Popular.</p>
           </details>
 
             </div>
@@ -176,7 +176,7 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes con plazos según su categoría</h3>
           <p className="text-sm text-gray-600 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
