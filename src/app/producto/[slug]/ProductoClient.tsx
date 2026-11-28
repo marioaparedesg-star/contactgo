@@ -1141,15 +1141,15 @@ export default function ProductoClient({ product, variants }: Props) {
                 </div>
               )}
               
-              {isMulti && (
+              {isMulti && selectorOpts.addOpts.length > 0 && (
                 <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
-                  <p className="text-xs font-bold text-slate-700 mb-1.5">¿Qué es la Adición (ADD)?</p>
-                  <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
-                    {[{r:'+0.75–+1.25',l:'Presbicia leve',c:'bg-slate-100 text-slate-700'},{r:'+1.50–+2.00',l:'Presbicia media',c:'bg-slate-100 text-slate-700'},{r:'+2.25–+3.00',l:'Presbicia alta',c:'bg-slate-100 text-slate-700'}].map(({r,l,c}) => (
-                      <div key={r} className={`${c} rounded-lg px-1.5 py-1.5`}>
-                        <p className="font-black text-[9px]">{r}</p>
-                        <p className="leading-tight font-medium">{l}</p>
-                      </div>
+                  <p className="text-xs font-bold text-slate-700 mb-1">Adiciones disponibles para este modelo</p>
+                  <p className="text-[10px] text-slate-500 mb-2">Opciones según las especificaciones del fabricante.</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectorOpts.addOpts.map((option) => (
+                      <span key={option} className="rounded-lg bg-white border border-slate-200 px-2.5 py-1.5 text-[11px] font-semibold text-slate-700">
+                        {option}
+                      </span>
                     ))}
                   </div>
                 </div>
