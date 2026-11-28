@@ -62,7 +62,7 @@ export default async function LentesContactoPage() {
               Lentes de Contacto en<br />República Dominicana
             </h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
-              Tienda especializada en lentes de contacto en RD. ACUVUE, Air Optix, Biofinity y más marcas. Esféricos: 24-48 horas en Santo Domingo y Santiago, 24-72 horas en el interior; otros tipos según su plazo de preparación.
+              Tienda especializada en lentes de contacto en RD. ACUVUE, Air Optix, Biofinity y más marcas. Esféricos: entrega estimada en 24 a 72 horas laborables en todo el país. Los demás tipos tienen plazos según su preparación y disponibilidad.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/catalogo" className="bg-teal-500 text-white font-bold px-6 py-3 rounded-2xl hover:bg-teal-600 transition-all">Ver catálogo completo</Link>
