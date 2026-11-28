@@ -179,7 +179,7 @@ function ConfirmacionContent() {
     if (item.products?.tipo) return String(item.products.tipo)
     if (item.tipo) return String(item.tipo)
     const nombre = String(item.nombre ?? '')
-    if (/t[oó]ric|astigmat|\\bxr\\b/i.test(nombre)) return 'torico'
+    if (/t[oó]ric|astigmat|\bxr\b/i.test(nombre)) return 'torico'
     if (/multifocal|presbic|presbyop/i.test(nombre)) return 'multifocal'
     if (/color|colores/i.test(nombre)) return 'color'
     return 'esferico'
