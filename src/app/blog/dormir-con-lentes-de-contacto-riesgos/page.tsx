@@ -382,7 +382,7 @@ export default function Page() {
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
             <p>La regla es clara: <strong>nunca duermas con lentes de contacto convencionales</strong>. El riesgo simplemente no vale la pena. Una infección ocular grave puede tratarse, pero en casos severos puede dejar secuelas permanentes. Y la visión es demasiado valiosa para arriesgarla por algo tan evitable.</p>
-            <p className="mt-3">Si frecuentemente olvidas quitarte los lentes, considera los lentes <Link href="/esfericos" className="text-primary-600 hover:underline font-semibold">diarios</Link> — al final del día los descartas y nunca hay lente que quitarse. En ContactGo los encontrarás disponibles con entrega en 24-48h en toda República Dominicana.</p>
+            <p className="mt-3">Si frecuentemente olvidas quitarte los lentes, considera los lentes <Link href="/esfericos" className="text-primary-600 hover:underline font-semibold">diarios</Link> — al final del día los descartas y nunca hay lente que quitarse. En ContactGo los encontrarás disponibles con entrega estimada de 24 a 72 horas en todo el país.</p>
           </section>
         </div>
 
