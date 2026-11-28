@@ -93,7 +93,7 @@ export default function Page() {
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">¿Cuánto tiempo tardan en llegar los lentes tóricos?</h2>
             <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5">
-              <p className="text-sm text-amber-800">⏱️ <strong>Importante:</strong> Los lentes tóricos se fabrican a medida según tu graduación específica (Esfera, Cilindro y Eje). Por eso el tiempo de entrega es de <strong>25-45 días</strong>, a diferencia de los esféricos que enviamos en 24-48 horas de preparación; el transporte se suma según el destino. Vale la pena la espera — obtendrás el lente exacto para tu graduación.</p>
+              <p className="text-sm text-amber-800">⏱️ <strong>Importante:</strong> Los lentes tóricos se fabrican a medida según tu graduación específica (Esfera, Cilindro y Eje). Por eso el tiempo de entrega estimado es de <strong>25 a 45 días laborables</strong>. Los lentes esféricos tienen entrega estimada de 24 a 72 horas en todo el país. Vale la pena la espera — obtendrás el lente exacto para tu graduación.</p>
             </div>
           </div>
 
@@ -183,7 +183,7 @@ export default function Page() {
         </section>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes con plazos según su categoría</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
