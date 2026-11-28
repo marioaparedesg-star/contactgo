@@ -17,7 +17,7 @@ const meta: BlogMeta = {
     { q: '¿Es seguro usar lentes de color solo por un día de Carnaval?',
       a: 'Sí, siempre que sean de una marca certificada como las que vendemos (nunca de vendedores no autorizados) y sigas las normas básicas de higiene: manos limpias, no compartir el lente, y retirarlo al terminar el día.' },
     { q: '¿Cuánto tiempo antes debo pedir mis lentes para Carnaval?',
-      a: 'Con nuestra entrega de 24-48h en la mayoría del país, pedir con 3-4 días de anticipación es más que suficiente, incluso considerando el fin de semana previo a los desfiles.' },
+      a: 'Con nuestra entrega estimada de 24 a 72 horas para lentes esféricos en la mayoría del país, pedir con 3-4 días de anticipación es más que suficiente, incluso considerando el fin de semana previo a los desfiles.' },
   ],
   relatedSlugs: [
     'air-optix-colors-precio-republica-dominicana',
@@ -56,7 +56,7 @@ export default function Page() {
       </ul>
 
       <h2>¿Cuánto tiempo antes debo pedir?</h2>
-      <p>Con entrega de 24-48h en la mayoría de República Dominicana, pedir 3-4 días antes de tu evento te da margen de sobra, incluso considerando fines de semana con más demanda por los desfiles.</p>
+      <p>Con entrega estimada de 24 a 72 horas para lentes esféricos en la mayoría de República Dominicana, pedir 3-4 días antes de tu evento te da margen de sobra, incluso considerando fines de semana con más demanda por los desfiles.</p>
 
       <h2>Combinando color con tu graduación real</h2>
       <p>Si normalmente usas lentes de contacto para tu graduación, puedes simplemente cambiar tu par habitual por AIR OPTIX Colors con tu misma graduación durante Carnaval, y volver a tu marca normal después — sin ningún problema, siempre que la curva base sea compatible (te lo confirmamos si tienes dudas).</p>
