@@ -1,10 +1,9 @@
 /**
  * FUENTE ÚNICA DE VERDAD — Tiempos de entrega por categoría
  *
- * REGLAS DE NEGOCIO (definidas por Mario — aplican a todo el país;
- * el plazo de los esféricos sí varía por destino):
+ * REGLAS DE NEGOCIO (definidas por Mario — aplican a todo el país):
  *  - Color → al día siguiente
- *  - Esférico → 24-72 horas
+ *  - Esférico → 24-72 horas laborables
  *  - Multifocal → 1-5 días
  *  - Tórico → 25-45 días
  *  - Solución / Gota → 24 horas
@@ -20,48 +19,42 @@ export interface EntregaInfo {
 }
 
 const T_COLOR_PLANO: EntregaInfo = {
-  etiqueta: 'Entrega al día siguiente',
-  detalle:  'Los lentes de color planos disponibles se entregan al día siguiente de realizar la compra.',
+  etiqueta: 'Entrega al siguiente día laborable',
+  detalle:  'Los lentes de color planos disponibles se entregan el siguiente día laborable. Los pedidos recibidos en fines de semana o feriados comienzan a procesarse el próximo día laborable.',
   dias_min: 1, dias_max: 1,
   especial: false,
   icono:    '🚀',
 }
 
 const T_24H: EntregaInfo = {
-  etiqueta: 'Entrega en 24 horas',
-  detalle: 'Entrega estimada en 24 horas.',
+  etiqueta: 'Entrega estimada en 24 horas laborables',
+  detalle: 'Entrega estimada en 24 horas laborables. Los pedidos recibidos en fines de semana o feriados comienzan a procesarse el próximo día laborable.',
   dias_min: 1, dias_max: 1,
   especial: false,
   icono: '🚀',
 }
 
 const T_24_72H: EntregaInfo = {
-  etiqueta: 'Entrega 24-72 horas',
-  detalle:  'Entrega estimada entre 24 y 72 horas laborables, según el destino.',
+  etiqueta: 'Entrega estimada en 24 a 72 horas laborables',
+  detalle:  'Entrega estimada en 24 a 72 horas laborables. El plazo se calcula de lunes a viernes; los pedidos recibidos en fines de semana o feriados comienzan a procesarse el próximo día laborable.',
   dias_min: 1, dias_max: 3,
   especial: false,
   icono:    '📦',
 }
 
-const T_ESFERICO: EntregaInfo = {
-  etiqueta: 'Entrega de 24 a 72 horas',
-  detalle:  'Entrega estimada para lentes esféricos: entre 24 y 72 horas.',
-  dias_min: 1, dias_max: 3,
-  especial: false,
-  icono:    '🚀',
-}
+const T_ESFERICO: EntregaInfo = T_24_72H
 
 const T_MULTIFOCAL: EntregaInfo = {
-  etiqueta: 'Entrega de 1 a 5 días',
-  detalle:  'Entrega estimada del lente multifocal: de 1 a 5 días.',
+  etiqueta: 'Entrega estimada de 1 a 5 días laborables',
+  detalle:  'Entrega estimada del lente multifocal: de 1 a 5 días laborables, según disponibilidad y preparación.',
   dias_min: 1, dias_max: 5,
   especial: true,
   icono:    '📦',
 }
 
 const T_TORICO: EntregaInfo = {
-  etiqueta: 'Bajo pedido · 25–45 días',
-  detalle:  'Lente tórico bajo pedido. Entrega estimada de 25 a 45 días.',
+  etiqueta: 'Bajo pedido · 25–45 días laborables',
+  detalle:  'Lente tórico bajo pedido. Entrega estimada de 25 a 45 días laborables, según fabricación y disponibilidad.',
   dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',
@@ -114,6 +107,14 @@ function partesFechaDR(fecha: Date) {
 function fechaCalendario(year: number, month: number, day: number): Date {
   return new Date(Date.UTC(year, month - 1, day))
 }
+function normalizarInicioLaborable(base: Date, hora: number): Date {
+  const fecha = new Date(base)
+  if (hora >= 15) fecha.setUTCDate(fecha.getUTCDate() + 1)
+  while (fecha.getUTCDay() === 0 || fecha.getUTCDay() === 6) {
+    fecha.setUTCDate(fecha.getUTCDate() + 1)
+  }
+  return fecha
+}
 function sumarDiasLaborables(base: Date, dias: number): Date {
   const fecha = new Date(base)
   let contados = 0
@@ -163,8 +164,8 @@ export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | num
   const info = getEntrega(tipo, nombre, sph)
   const local = partesFechaDR(new Date())
   const base = fechaCalendario(local.year, local.month, local.day)
-  if (local.hour >= 15) base.setUTCDate(base.getUTCDate() + 1)
-  return isoFecha(sumarDiasLaborables(base, info.dias_max))
+  const inicio = normalizarInicioLaborable(base, local.hour)
+  return isoFecha(sumarDiasLaborables(inicio, info.dias_max))
 }
 
 /**
@@ -172,6 +173,15 @@ export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | num
  * No utiliza la fecha actual: consultar el pedido días después no desplaza la promesa.
  * Los días contabilizados son de lunes a viernes.
  */
+export function getFechaEntregaISODesdeFecha(fechaCreacion: string | Date, tipo: string, nombre = '', sph?: string | number | null): string {
+  const info = getEntrega(tipo, nombre, sph)
+  const fecha = fechaCreacion instanceof Date ? fechaCreacion : new Date(fechaCreacion)
+  if (Number.isNaN(fecha.getTime())) return getFechaEntregaISO(tipo, nombre, sph)
+  const local = partesFechaDR(fecha)
+  const base = fechaCalendario(local.year, local.month, local.day)
+  return isoFecha(sumarDiasLaborables(normalizarInicioLaborable(base, local.hour), info.dias_max))
+}
+
 export function getRangoEntregaDesdeFecha(
   fechaCreacion: string | Date,
   tipo: string,
@@ -185,10 +195,9 @@ export function getRangoEntregaDesdeFecha(
   }
   const local = partesFechaDR(fecha)
   const base = fechaCalendario(local.year, local.month, local.day)
-  // Si la orden se creó desde las 15:00 (hora RD), el conteo inicia al próximo día.
-  if (local.hour >= 15) base.setUTCDate(base.getUTCDate() + 1)
-  const min = sumarDiasLaborables(base, info.dias_min)
-  const max = sumarDiasLaborables(base, info.dias_max)
+  const inicio = normalizarInicioLaborable(base, local.hour)
+  const min = sumarDiasLaborables(inicio, info.dias_min)
+  const max = sumarDiasLaborables(inicio, info.dias_max)
   const mismoMes = min.getUTCMonth() === max.getUTCMonth() && min.getUTCFullYear() === max.getUTCFullYear()
   const texto = mismoMes
     ? `Entre el ${min.getUTCDate()} y el ${max.getUTCDate()} de ${MESES_ES[max.getUTCMonth()]}`
