@@ -92,7 +92,7 @@ export default function ProductCard({ product }: Props) {
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col gap-1 px-2 pb-2 pt-1.5">
-        <Link href={href} className="block min-h-[28px] min-w-0 text-[11px] font-extrabold uppercase leading-[14px] tracking-[0.01em] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[12px]">
+        <Link href={href} className="block min-h-[40px] min-w-0 text-[16px] font-extrabold uppercase leading-[20px] tracking-normal text-[#002455] transition-colors hover:text-[#009da2] sm:text-[17px]">
           <h3 className="line-clamp-2 break-words">{product.nombre.toLocaleUpperCase('es')}</h3>
         </Link>
 
@@ -133,4 +133,5 @@ export default function ProductCard({ product }: Props) {
         </div>
       </div>
     </article>
+    )
 }
