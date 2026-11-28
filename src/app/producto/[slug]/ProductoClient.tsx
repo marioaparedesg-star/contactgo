@@ -1256,7 +1256,7 @@ export default function ProductoClient({ product, variants }: Props) {
                     <p className="text-[10px] text-gray-400 font-medium inline-flex items-center gap-1">
                       <AzulLogo size="xs" /> Pago seguro con AZUL
                     </p>
-                    <p className="text-[10px] text-gray-400 font-medium">Envíos: Santo Domingo y Santiago 24-48h · Interior 24-72h</p>
+                    <p className="text-[10px] text-gray-400 font-medium">Entrega estimada según tipo de lente · Ver plazo indicado arriba</p>
                   </div>
                 </div>
               </div>
