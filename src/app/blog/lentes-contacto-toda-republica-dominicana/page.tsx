@@ -34,7 +34,7 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Lentes de contacto con entrega en toda República Dominicana — 2026",
-            "description": "Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix certificados. Entrega 24-72h donde estés en República Dominicana.",
+            "description": "Compra lentes de contacto online con entrega en las 31 provincias de RD. ACUVUE, Biofinity, Air Optix certificados. Entrega de lentes esféricos en 24 a 72 horas en todo el país; otros tipos según su categoría.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-06-20",
