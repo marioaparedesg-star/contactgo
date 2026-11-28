@@ -370,7 +370,7 @@ export default function ComparadorClient({ productos }: { productos: Producto[] 
       {/* ═══ FOOTER MÍNIMO ═══ */}
       <div style={{ borderTop: '1px solid #D2D2D7', padding: '28px 24px 100px', textAlign: 'center' }}>
         <p style={{ fontSize: 12, color: '#6E6E73', margin: 0 }}>
-          ContactGo · Lentes certificados · Entrega 24-48h en RD ·{' '}
+          ContactGo · Lentes certificados · Entrega según tipo de lente en RD ·{' '}
           <Link href="/privacidad" style={{ color: '#6E6E73', textDecoration: 'underline' }}>Política de privacidad</Link>
         </p>
       </div>
