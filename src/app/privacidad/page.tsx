@@ -24,7 +24,7 @@ const secciones = [
   },
   {
     title: '3. Datos que recopilamos',
-    body: 'Recopilamos: Datos de identificación (nombre, email, teléfono), Datos de envío (dirección), Datos de navegación (cookies, IP, dispositivo), Datos de prescripción óptica (SPH, CYL, AXIS) proporcionados voluntariamente, Datos de pago procesados por AZUL (Banco Popular) — ContactGo NO almacena datos de tarjetas.'
+    body: 'Recopilamos: Datos de identificación (nombre, email, teléfono), Datos de envío (dirección), Datos de navegación (cookies, IP, dispositivo), Datos de prescripción óptica (SPH, CYL, AXIS) proporcionados voluntariamente, Datos de pago procesados por AZUL (Servicios Digitales Popular, filial de Grupo Popular) — ContactGo NO almacena datos de tarjetas.'
   },
   {
     title: '4. Finalidad del tratamiento',
@@ -32,7 +32,7 @@ const secciones = [
   },
   {
     title: '5. Destinatarios (transferencias)',
-    body: 'Tus datos son compartidos con: Vercel Inc. (hosting, EEUU — acogido a SCCs), Supabase Inc. (base de datos, EEUU/UE — acogido a SCCs), Resend Inc. (emails transaccionales, EEUU — acogido a SCCs), AZUL/Banco Popular Dominicano (procesamiento de pagos, RD), Google LLC (Analytics/GTM — acogido a SCCs), Meta Platforms Inc. (Pixel — acogido a SCCs). No vendemos ni cedemos datos a terceros con fines comerciales.'
+    body: 'Tus datos son compartidos con: Vercel Inc. (hosting, EEUU — acogido a SCCs), Supabase Inc. (base de datos, EEUU/UE — acogido a SCCs), Resend Inc. (emails transaccionales, EEUU — acogido a SCCs), AZUL / Servicios Digitales Popular (procesamiento de pagos, filial de Grupo Popular, RD), Google LLC (Analytics/GTM — acogido a SCCs), Meta Platforms Inc. (Pixel — acogido a SCCs). No vendemos ni cedemos datos a terceros con fines comerciales.'
   },
   {
     title: '6. Plazo de conservación',

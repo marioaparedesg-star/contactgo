@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
       ${[
         ['🚚','Entrega según producto','Plazo estimado según tipo de lente y destino'],
-        ['🔒','Pago 100% seguro','Con AZUL Banco Popular — sin riesgo'],
+        ['🔒','Pago con tarjeta','Tarjetas de crédito y débito procesadas por AZUL'],
         ['✅','Productos auténticos','Marcas reconocidas y canales autorizados'],
         ['↩️','7 días para devoluciones','Aplica a productos sellados, sin abrir y en su empaque original'],
       ].map(([icon, title, desc]) => `
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       ${[
         ['1', 'Envíanos tu receta', 'Por WhatsApp o directo en la web'],
         ['2', 'Elige tus lentes', 'Te ayudamos según tu graduación exacta'],
-        ['3', 'Paga seguro', 'Con tarjeta, vía AZUL Banco Popular'],
+        ['3', 'Paga con tarjeta', 'Con tarjeta de crédito o débito, vía AZUL'],
         ['4', 'Recíbelos en casa', 'Plazo según tipo de lente y destino'],
       ].map(([num, title, desc]) => `
         <tr><td style="padding:6px 4px;">

@@ -46,7 +46,7 @@ export default function SeguridadPage() {
               Tomamos todas las medidas y precauciones razonables para proteger tu información personal y seguimos las mejores prácticas de la industria para asegurar que tu información no sea utilizada de manera inapropiada, alterada o destruida.
             </p>
             <p className="text-sm leading-relaxed mb-3">
-              El sitio utiliza HTTPS con cifrado TLS para proteger la transmisión de información. Los datos de la tarjeta se introducen y procesan directamente en la plataforma de pago de AZUL (Banco Popular); ContactGo no recibe ni almacena números de tarjeta ni códigos de seguridad. La validación de cumplimiento PCI-DSS corresponde al proveedor de pagos y al alcance aplicable a la integración.
+              El sitio utiliza HTTPS con cifrado TLS para proteger la transmisión de información. Los datos de la tarjeta se introducen y procesan directamente en la plataforma de pago de AZUL; ContactGo no recibe ni almacena números de tarjeta ni códigos de seguridad. La validación de cumplimiento PCI-DSS corresponde al proveedor de pagos y al alcance aplicable a la integración.
             </p>
             <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm">
               <p className="font-semibold text-blue-900 mb-1">🔒 Importante</p>
@@ -61,7 +61,7 @@ export default function SeguridadPage() {
               Los métodos de pago utilizados por ContactGo son servicios de terceros certificados. Estos servicios cumplen con todos los estándares de seguridad y cifrado para mantener tu información segura. Solo utilizarán la información necesaria para completar el proceso requerido.
             </p>
             <p className="text-sm leading-relaxed">
-              ContactGo <strong>no almacena datos de tarjetas de crédito o débito</strong>. Toda la información de pago es procesada directamente por la pasarela de pago certificada (AZUL / Servicios Digitales Popular) que cumple con los más altos estándares de seguridad internacionales.
+              ContactGo <strong>no almacena datos de tarjetas de crédito o débito</strong>. Toda la información de pago es procesada directamente por AZUL, la solución de pagos de Servicios Digitales Popular, filial de Grupo Popular.
             </p>
           </section>
 

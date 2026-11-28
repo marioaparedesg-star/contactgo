@@ -83,7 +83,7 @@ const SCHEMA_ORG = {
     { "@type": "Question", "name": "¿Cuánto tarda el envío en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "24 a 72 horas para lentes esféricos y de colores en todo el país." } },
     { "@type": "Question", "name": "¿Son certificados los lentes de ContactGo?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Trabajamos con productos de marcas reconocidas y distribuidores autorizados. Nunca vendemos imitaciones." } },
     { "@type": "Question", "name": "¿Necesito receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Para lentes graduados sí. Para lentes de color sin graduación no es necesaria." } },
-    { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjeta de crédito/débito Visa y Mastercard procesadas por AZUL, plataforma de Banco Popular. El pago es 100% seguro con tecnología 3D Secure." } }
+    { "@type": "Question", "name": "¿Cómo pago mis lentes?", "acceptedAnswer": { "@type": "Answer", "text": "Aceptamos tarjetas de crédito y débito Visa y Mastercard. El pago se procesa a través de AZUL, nuestra plataforma de procesamiento de pagos. ContactGo no almacena los datos de tu tarjeta." } }
   ]
 }
 
@@ -239,7 +239,7 @@ export default async function HomePage() {
               {[
                 { icon: Truck,    title: 'Envíos a todo el país',  desc: 'Esféricos: 24 a 72 horas en todo el país',    color: 'text-[#002455]',   bg: 'bg-slate-100' },
                 { icon: Package,  title: 'Marcas originales',   desc: 'Distribuidores autorizados de cada marca',        color: 'text-[#002455]',  bg: 'bg-slate-100' },
-                { icon: Shield, title: 'Pago seguro', desc: 'Tarjeta con AZUL · Banco Popular', color: 'text-[#002455]', bg: 'bg-slate-100' },
+                { icon: Shield, title: 'Pago seguro', desc: 'Tarjetas de crédito y débito · AZUL', color: 'text-[#002455]', bg: 'bg-slate-100' },
                 { icon: Clock,    title: 'Atención personalizada', desc: 'WhatsApp · Email · Chat',  color: 'text-[#002455]', bg: 'bg-slate-100' },
               ].map(({ icon: Icon, title, desc, color, bg }) => (
                 <div key={title} className="flex items-center gap-3">
@@ -306,7 +306,7 @@ export default async function HomePage() {
               { q: '¿Cuánto tarda el envío?', a: 'El tiempo depende de tu ubicación y del tipo de lente. Los productos bajo pedido pueden requerir un plazo de preparación adicional.' },
               { q: '¿Los productos son originales?', a: 'Trabajamos con distribuidores oficiales. Recibes los productos sellados y en su empaque original.' },
               { q: '¿Necesito receta médica?', a: 'Para lentes graduados necesitas conocer los parámetros de tu receta. Si tienes dudas, podemos orientarte antes de comprar. Los lentes de color sin graduación no requieren graduación.' },
-              { q: '¿Cómo pago?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard, procesado por AZUL de Banco Popular con tecnología 3D Secure. El proceso es 100% seguro y ContactGo nunca almacena datos de tu tarjeta.' },
+              { q: '¿Cómo pago?', a: 'Aceptamos tarjetas de crédito y débito Visa y Mastercard. El pago se procesa de forma segura a través de AZUL. ContactGo no almacena los datos de tu tarjeta.' },
               { q: '¿Qué marcas tienen?', a: 'Acuvue, Air Optix, FreshLook, Biofinity, CooperVision, Bausch+Lomb Ultra, clariti, Proclear y más.' },
               { q: '¿Puedo suscribirme para recompra automática?', a: 'Sí. Te enviamos recordatorio cuando tus lentes estén por terminarse para que puedas recomprar sin complicaciones.' },
             ].map((faq, i) => (
