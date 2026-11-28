@@ -20,7 +20,7 @@ export interface EntregaInfo {
 
 const T_COLOR_PLANO: EntregaInfo = {
   etiqueta: 'Entrega al siguiente día laborable',
-  detalle:  'Los lentes de color planos disponibles se entregan el siguiente día laborable. Los pedidos recibidos en fines de semana o feriados comienzan a procesarse el próximo día laborable.',
+  detalle:  'Los lentes de color planos disponibles se entregan el siguiente día laborable. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
   dias_min: 1, dias_max: 1,
   especial: false,
   icono:    '🚀',
