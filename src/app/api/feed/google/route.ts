@@ -20,6 +20,17 @@ export async function GET() {
                  p.tipo === 'multifocal' ? 'Lentes Multifocales' : p.tipo === 'color' ? 'Lentes de Color' :
                  p.tipo === 'solucion' ? 'Solución para Lentes' : 'Lentes de Contacto'
     const desc = (p.descripcion ?? `${tipo} ${p.marca} en República Dominicana.`).slice(0, 500)
+    const esTorico = p.tipo === 'torico' || p.tipo === 'multifocal_torico' ||
+      (p.tipo === 'multifocal' && /toric|tórico|torico/i.test(String(p.nombre ?? '')))
+    // Merchant Center calcula estos rangos en días hábiles. Mantener el
+    // desglose por categoría evita anunciar 1-3 días para multifocales o tóricos.
+    const shippingTime = esTorico
+      ? { minHandling: 24, maxHandling: 43, minTransit: 1, maxTransit: 2 }
+      : p.tipo === 'multifocal'
+        ? { minHandling: 1, maxHandling: 3, minTransit: 0, maxTransit: 2 }
+        : p.tipo === 'solucion' || p.tipo === 'gota'
+          ? { minHandling: 0, maxHandling: 1, minTransit: 0, maxTransit: 0 }
+          : { minHandling: 0, maxHandling: 1, minTransit: 1, maxTransit: 2 }
     const gtin = p.ean ?? p.upc ?? ''
     const mpn = p.sku ?? `CG-${p.id?.slice(0,8)}`
     return `<item>
@@ -40,10 +51,12 @@ export async function GET() {
         <g:country>DO</g:country>
         <g:service>Envío estándar</g:service>
         <g:price>200.00 DOP</g:price>
-        <g:min_handling_time>0</g:min_handling_time>
-        <g:max_handling_time>1</g:max_handling_time>
-        <g:min_transit_time>1</g:min_transit_time>
-        <g:max_transit_time>2</g:max_transit_time>
+        <g:min_handling_time>${shippingTime.minHandling}</g:min_handling_time>
+        <g:max_handling_time>${shippingTime.maxHandling}</g:max_handling_time>
+        <g:min_transit_time>${shippingTime.minTransit}</g:min_transit_time>
+        <g:max_transit_time>${shippingTime.maxTransit}</g:max_transit_time>
+        <g:handling_cutoff_time>1500</g:handling_cutoff_time>
+        <g:handling_cutoff_timezone>America/Santo_Domingo</g:handling_cutoff_timezone>
       </g:shipping>
       <g:return_policy_label>standard-return-policy</g:return_policy_label>
       <g:custom_label_0>${p.tipo ?? 'lente'}</g:custom_label_0>
