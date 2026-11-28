@@ -49,7 +49,7 @@ export default function EnviosPage() {
               <div className="bg-pink-50 border border-pink-200 rounded-2xl p-5">
                 <p className="font-bold text-pink-800 text-lg mb-1">🚀 Al día siguiente</p>
                 <p className="text-pink-700 text-sm font-semibold mb-2">Lentes de color</p>
-                <p className="text-gray-600 text-sm">Productos de color disponibles con Entrega al siguiente día laborable.</p>
+                <p className="text-gray-600 text-sm">Lentes de colores: entrega de 24 a 72 horas en todo el país.</p>
               </div>
               <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5">
                 <p className="font-bold text-teal-800 text-lg mb-1">🚀 24 horas</p>

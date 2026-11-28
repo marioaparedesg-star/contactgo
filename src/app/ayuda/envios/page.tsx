@@ -27,7 +27,7 @@ export default function EnviosPage() {
         </div>
         <div className="space-y-6">
           {[
-            { title: '⏱️ Tiempo de entrega', body: 'Lentes esféricos: Entrega en 24 a 72 horas en todo el país. lentes de colores: 24 a 72 horas; multifocales: de 1 a 5 días; tóricos: de 25 a 45 días; soluciones y gotas: 24 horas.' },
+            { title: '⏱️ Tiempo de entrega', body: 'Lentes esféricos y de colores: entrega de 24 a 72 horas en todo el país. Multifocales: 24 a 72 horas; tóricos: bajo pedido, de 25 a 45 días; soluciones y gotas: 24 horas.' },
             { title: '💵 Costo de envío', body: 'Santo Domingo y Gran Santo Domingo: RD$250. Interior del país: RD$350. En compras desde RD$8,000, el envío es GRATIS.' },
             { title: '🗺️ Cobertura', body: 'Hacemos envíos a todas las provincias de República Dominicana, incluyendo zonas rurales y turísticas como Punta Cana, Samaná y Las Terrenas.' },
             { title: '📱 Seguimiento de pedido', body: 'Una vez confirmado tu pedido te notificamos por WhatsApp. Cuando esté en camino recibirás los datos del mensajero para coordinar la entrega.' },

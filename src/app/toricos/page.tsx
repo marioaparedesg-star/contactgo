@@ -23,7 +23,7 @@ export const revalidate = 60
 const faqs = [
   { q: '¿Qué son los lentes tóricos?', a: 'Los lentes tóricos están diseñados específicamente para corregir el astigmatismo. A diferencia de los lentes esféricos, tienen una curvatura diferente en cada eje para compensar la forma irregular de la córnea.' },
   { q: '¿Cómo sé si necesito lentes tóricos?', a: 'Si tu receta tiene valores de CYL (cilindro) y AXIS (eje), tienes astigmatismo y necesitas lentes tóricos. El valor de AXIS indica la orientación del astigmatismo (0°–180°).' },
-  { q: '¿Por qué tardan más en llegar los lentes tóricos?', a: 'Los lentes tóricos requieren una configuración específica según tu graduación (Esfera, Cilindro y Eje). Su Entrega es de 25 a 45 días.' },
+  { q: '¿Por qué tardan más en llegar los lentes tóricos?', a: 'Los lentes tóricos requieren una configuración específica según tu graduación (Esfera, Cilindro y Eje). Están bajo pedido y su entrega es de 25 a 45 días.' },
   { q: '¿Son más caros los lentes tóricos?', a: 'Sí, generalmente cuestan un poco más que los esféricos del mismo material por su disponibilidad y configuración específica. Sin embargo, son indispensables para corregir el astigmatismo correctamente.' },
 ]
 
@@ -44,7 +44,7 @@ export default async function Page() {
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes Tóricos para Astigmatismo en RD</h1>
           <p className="text-purple-100 text-lg max-w-xl mx-auto">Para tu graduación SPH, CYL y AXIS. Bajo pedido · 25 a 45 días en República Dominicana.</p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-400/20 border border-amber-300/30 text-amber-100 text-xs px-4 py-2 rounded-full">
-            ⏱ Entrega: de 25 a 45 días
+            ⏱ Bajo pedido · 25 a 45 días
           </div>
         </section>
 
