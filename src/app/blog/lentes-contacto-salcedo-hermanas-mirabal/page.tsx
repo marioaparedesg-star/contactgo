@@ -109,7 +109,7 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Preguntas frecuentes — Entrega en Salcedo</h2>
             <div className="space-y-3">
               {[
-                { q: '¿Hacen entrega en Salcedo?', a: 'Sí. ContactGo entrega lentes de contacto en Salcedo y toda la provincia Hermanas Mirabal (Tenares y Villa Tapia) en 24 a 72 horas para lentes esféricos hábiles.' },
+                { q: '¿Hacen entrega en Salcedo?', a: 'Sí. ContactGo entrega lentes de contacto en Salcedo y toda la provincia Hermanas Mirabal (Tenares y Villa Tapia) en 24 a 72 horas para lentes esféricos.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
                 { q: '¿Cuánto tarda la entrega?', a: 'Entre 24 y 48 horas hábiles para la mayoría de los pedidos. Pedidos antes de las 3pm suelen salir el mismo día.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
