@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santiago' },
   openGraph: {
     title: 'Lentes de Contacto en Santiago | ContactGo',
-    description: 'Transporte estimado de 24-48 horas; el plazo total depende del tipo de lente. Directo del fabricante.',
+    description: 'Los lentes esféricos tienen entrega estimada de 24 a 72 horas; los demás productos tienen plazos según su categoría. Directo del fabricante.',
     url: 'https://www.contactgo.net/lentes-de-contacto/santiago',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-              { q: '¿Cuánto tarda el envío a Santiago?', a: 'La entrega estimada depende del tipo de producto: esféricos, 24 a 72 horas; color disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables.' },
+              { q: '¿Cuánto tarda el envío a Santiago?', a: 'La entrega estimada depende del tipo de producto: esféricos, 24 a 72 horas; color disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables;' },
               { q: '¿Cuánto cuesta el envío a Santiago?', a: 'El envío a Santiago tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en toda la región del Cibao?', a: 'Sí, cubrimos Santiago, Villa González, Licey al Medio, Tamboril, Moca, La Vega y otros municipios del Cibao.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
