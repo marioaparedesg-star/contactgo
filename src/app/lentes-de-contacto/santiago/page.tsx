@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-              { q: '¿Cuánto tarda el envío a Santiago?', a: 'El transporte hacia Santiago se estima en 24-48 horas. El plazo total depende del producto: esféricos 24-48 horas en Santo Domingo y 24-72 horas en el interior, multifocales 1-5 días y tóricos 25-45 días.' },
+              { q: '¿Cuánto tarda el envío a Santiago?', a: 'El transporte hacia Santiago se estima en 24-48 horas. El plazo total depende del producto: esféricos 24 a 72 horas laborables en todo el país para lentes esféricos, multifocales 1-5 días y tóricos 25-45 días.' },
               { q: '¿Cuánto cuesta el envío a Santiago?', a: 'El envío a Santiago tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en toda la región del Cibao?', a: 'Sí, cubrimos Santiago, Villa González, Licey al Medio, Tamboril, Moca, La Vega y otros municipios del Cibao.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },
