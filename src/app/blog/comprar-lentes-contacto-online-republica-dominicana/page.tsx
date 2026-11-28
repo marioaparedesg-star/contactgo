@@ -20,10 +20,10 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const FAQS = [
-    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo trabaja con marcas reconocidas y canales de distribución autorizados, con pago mediante AZUL/Banco Popular y transporte estimado de 24-48 horas en Santo Domingo y Santiago y 24-72 horas en el interior. El plazo total depende del tipo de lente.' },
+    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo trabaja con marcas reconocidas y canales de distribución autorizados, con pago mediante AZUL/Banco Popular y transporte estimado de 24 a 72 horas laborables en todo el país para lentes esféricos. El plazo total depende del tipo de lente.' },
     { q: '¿Necesito receta para comprar lentes de contacto online?', a: 'Para lentes graduados sí. Necesitas los valores de tu receta (SPH, CYL, AXIS, ADD según el tipo). Para lentes de color sin graduación, no es necesaria. Puedes usar nuestra calculadora de receta gratuita si no tienes la tuya a mano.' },
     { q: '¿Cómo sé que los lentes son certificados?', a: 'Los lentes certificados vienen en empaque directo del fabricante con código de autenticidad verificable con el fabricante. En ContactGo trabajamos con canales de distribución autorizados y entregamos los productos sellados en su empaque original.' },
-    { q: '¿Cuánto tarda la entrega de lentes de contacto en RD?', a: 'En ContactGo la entrega es en 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el resto del país.' },
+    { q: '¿Cuánto tarda la entrega de lentes de contacto en RD?', a: 'En ContactGo la entrega es en 24 a 72 horas laborables en todo el país para lentes esféricos.' },
     { q: '¿Puedo devolver los lentes si no son los correctos?', a: 'Sí. ContactGo acepta devoluciones de productos sellados no abiertos dentro de los 7 días de recibidos, siempre que no se haya roto el sello. Consulta nuestra política de devoluciones para más detalles.' },
     { q: '¿Cuál es la forma de pago para comprar lentes online en RD?', a: 'En ContactGo aceptamos tarjeta de crédito y débito (VISA y Mastercard) a través de AZUL/Banco Popular, el procesador de pagos más utilizado en República Dominicana.' },
   ]
