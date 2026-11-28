@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Refresh Optive precio en República Dominicana 2026',
-  description: 'Precio de Refresh Optive Lubricant y Refresh Optive Advanced en RD. Gotas lubricantes para ojos secos. Desde RD$900. Entrega 24-48h en toda República Dominicana.',
+  description: 'Precio de Refresh Optive Lubricant y Refresh Optive Advanced en RD. Gotas lubricantes para ojos secos. Desde RD$900. Entrega 24 horas en toda República Dominicana.',
   alternates: { canonical: 'https://www.contactgo.net/blog/refresh-optive-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Refresh Optive precio en República Dominicana — Guía 2026',
-    description: 'Precio de Refresh Optive Lubricant y Refresh Optive Advanced en RD. Gotas lubricantes para ojos secos. Desde RD$900. Entrega 24-48h en toda República Dominicana.',
+    description: 'Precio de Refresh Optive Lubricant y Refresh Optive Advanced en RD. Gotas lubricantes para ojos secos. Desde RD$900. Entrega 24 horas en toda República Dominicana.',
     url: 'https://www.contactgo.net/blog/refresh-optive-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/refresh-optive-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Refresh Optive precio en República Dominicana — Guía 2026' }],
@@ -25,14 +25,14 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Refresh Optive precio en República Dominicana — Guía 2026",
-            "description": "Precio de Refresh Optive Lubricant y Refresh Optive Advanced en RD. Gotas lubricantes para ojos secos. Desde RD$900. Entrega 24-48h en toda República Dominicana.",
+            "description": "Precio de Refresh Optive Lubricant y Refresh Optive Advanced en RD. Gotas lubricantes para ojos secos. Desde RD$900. Entrega 24 horas en toda República Dominicana.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo", "url": "https://www.contactgo.net" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-28", "dateModified": "2026-06-28",
             "url": "https://www.contactgo.net/blog/refresh-optive-precio-republica-dominicana", "inLanguage": "es-DO",
             "keywords": "refresh optive precio república dominicana" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type":"Question","name":'¿Cuánto cuesta el Refresh Optive en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo el Refresh Optive Lubricant cuesta RD$900 y el Refresh Optive Advanced RD$1,000. Entrega en 24-48 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.'}},{"@type":"Question","name":'¿Para qué sirve el Refresh Optive?',"acceptedAnswer":{"@type":"Answer","text":'Refresh Optive es una solución lubricante ocular de Allergan (AbbVie) indicada para el alivio sintomático del ojo seco. Hidrata y lubrica la superficie ocular, reduciendo la sensación de ardor, irritación y sequedad. Es compatible con lentes de contacto blandos.'}},{"@type":"Question","name":'¿Refresh Optive o Refresh Tears — cuál es mejor?',"acceptedAnswer":{"@type":"Answer","text":'Refresh Optive Advanced es la formulación más completa: lubrica las tres capas de la película lagrimal (acuosa, mucinosa y lipídica) con mayor duración. Refresh Tears es más simple y económico, ideal para uso ocasional. Para ojos secos moderados o severos, Refresh Optive Advanced es la mejor opción.'}},{"@type":"Question","name":'¿Se puede usar Refresh Optive con lentes de contacto?',"acceptedAnswer":{"@type":"Answer","text":'Sí, Refresh Optive es compatible con lentes de contacto blandos. Puedes aplicar las gotas mientras llevas los lentes puestos para refrescamiento durante el día. Asegúrate de que las gotas estén indicadas como "compatibles con lentes de contacto" en el envase.'}},{"@type":"Question","name":'¿Dónde comprar Refresh Optive en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo disponemos de Refresh Optive Lubricant y Refresh Optive Advanced con entrega en 24-48 horas en toda la República Dominicana. Pago seguro con tarjeta a través de AZUL/Banco Popular.'}}] },
+            "mainEntity": [{"@type":"Question","name":'¿Cuánto cuesta el Refresh Optive en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo el Refresh Optive Lubricant cuesta RD$900 y el Refresh Optive Advanced RD$1,000. Entrega en 24 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.'}},{"@type":"Question","name":'¿Para qué sirve el Refresh Optive?',"acceptedAnswer":{"@type":"Answer","text":'Refresh Optive es una solución lubricante ocular de Allergan (AbbVie) indicada para el alivio sintomático del ojo seco. Hidrata y lubrica la superficie ocular, reduciendo la sensación de ardor, irritación y sequedad. Es compatible con lentes de contacto blandos.'}},{"@type":"Question","name":'¿Refresh Optive o Refresh Tears — cuál es mejor?',"acceptedAnswer":{"@type":"Answer","text":'Refresh Optive Advanced es la formulación más completa: lubrica las tres capas de la película lagrimal (acuosa, mucinosa y lipídica) con mayor duración. Refresh Tears es más simple y económico, ideal para uso ocasional. Para ojos secos moderados o severos, Refresh Optive Advanced es la mejor opción.'}},{"@type":"Question","name":'¿Se puede usar Refresh Optive con lentes de contacto?',"acceptedAnswer":{"@type":"Answer","text":'Sí, Refresh Optive es compatible con lentes de contacto blandos. Puedes aplicar las gotas mientras llevas los lentes puestos para refrescamiento durante el día. Asegúrate de que las gotas estén indicadas como "compatibles con lentes de contacto" en el envase.'}},{"@type":"Question","name":'¿Dónde comprar Refresh Optive en República Dominicana?',"acceptedAnswer":{"@type":"Answer","text":'En ContactGo disponemos de Refresh Optive Lubricant y Refresh Optive Advanced con entrega en 24 horas en toda la República Dominicana. Pago seguro con tarjeta a través de AZUL/Banco Popular.'}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -153,7 +153,7 @@ export default function Page() {
             <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuesta el Refresh Optive en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo el Refresh Optive Lubricant cuesta RD$900 y el Refresh Optive Advanced RD$1,000. Entrega en 24-48 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo el Refresh Optive Lubricant cuesta RD$900 y el Refresh Optive Advanced RD$1,000. Entrega en 24 horas en toda la República Dominicana con pago seguro mediante AZUL/Banco Popular.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Para qué sirve el Refresh Optive?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
@@ -169,7 +169,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Refresh Optive en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo disponemos de Refresh Optive Lubricant y Refresh Optive Advanced con entrega en 24-48 horas en toda la República Dominicana. Pago seguro con tarjeta a través de AZUL/Banco Popular.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo disponemos de Refresh Optive Lubricant y Refresh Optive Advanced con entrega en 24 horas en toda la República Dominicana. Pago seguro con tarjeta a través de AZUL/Banco Popular.</p>
           </details>
             </div>
           </section>
@@ -193,7 +193,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda República Dominicana</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24 horas en toda República Dominicana</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>
