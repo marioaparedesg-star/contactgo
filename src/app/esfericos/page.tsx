@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes Esféricos RD | Miopía e Hipermetropía — ContactGo',
-  description: 'Compra lentes de contacto esféricos en República Dominicana. ACUVUE Moist, Air Optix, Biofinity para miopía e hipermetropía. Entrega estimada: 24-48h en Santo Domingo y 24-72h en el interior.',
+  description: 'Compra lentes de contacto esféricos en República Dominicana. ACUVUE Moist, Air Optix, Biofinity para miopía e hipermetropía. Entrega estimada: 24 a 72 horas en todo el país.',
   alternates: { canonical: 'https://www.contactgo.net/esfericos' },
   openGraph: { title: 'Lentes Esféricos RD | Miopía e Hipermetropía', description: 'Los mejores lentes esféricos con envío a domicilio en RD.', url: 'https://www.contactgo.net/esfericos', locale: 'es_DO', siteName: 'ContactGo', type: 'website' },
 }
@@ -37,7 +37,7 @@ export default async function Page() {
         <section className="bg-gradient-to-br from-blue-700 via-teal-500 to-teal-600 text-white py-14 px-4 text-center mt-2">
           <span className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">Para miopía e hipermetropía</span>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Lentes de Contacto Esféricos en RD</h1>
-          <p className="text-blue-100 text-lg max-w-xl mx-auto">ACUVUE, Air Optix, Biofinity y más, disponibles a través de canales de distribución autorizados. Entrega estimada: 24-48h en Santo Domingo y 24-72h en el interior.</p>
+          <p className="text-blue-100 text-lg max-w-xl mx-auto">ACUVUE, Air Optix, Biofinity y más, disponibles a través de canales de distribución autorizados. Entrega estimada: 24 a 72 horas en todo el país.</p>
         </section>
 
         <section className="max-w-7xl mx-auto px-4 py-10">
