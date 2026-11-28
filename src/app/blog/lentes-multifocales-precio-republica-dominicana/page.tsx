@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes multifocales precio en RD 2026 — Guía completa',
-  description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega estimada de 1 a 5 días.',
+  description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega estimada de 1 a 5 días laborables.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto multifocales — Precios en República Dominicana 2026',
@@ -98,7 +98,7 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Los <strong>lentes de contacto multifocales</strong> son la solución para personas con <strong>presbicia</strong> (vista cansada), una condición natural que aparece generalmente a partir de los 40 años. En ContactGo ofrecemos la mayor selección de lentes multifocales disponibles en República Dominicana, con entrega estimada de 1 a 5 días para multifocales estándar; los multifocales tóricos pueden requerir de 25 a 45 días.</p>
+          <p>Los <strong>lentes de contacto multifocales</strong> son la solución para personas con <strong>presbicia</strong> (vista cansada), una condición natural que aparece generalmente a partir de los 40 años. En ContactGo ofrecemos la mayor selección de lentes multifocales disponibles en República Dominicana, con entrega estimada de 1 a 5 días laborables para multifocales estándar; los multifocales tóricos pueden requerir de 25 a 45 días laborables.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios completos — Tabla de referencia consultada el 24 de noviembre de 2026</h2>
