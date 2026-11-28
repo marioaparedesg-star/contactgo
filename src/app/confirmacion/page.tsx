@@ -3,7 +3,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
-import { getEntrega, getFechaEntregaISO } from '@/lib/delivery-times'
+import { getEntrega, getFechaEntregaISODesdeFecha } from '@/lib/delivery-times'
 import { CheckCircle, Package, MapPin, CreditCard, ChevronRight, XCircle } from 'lucide-react'
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 import { fmtSph } from '@/lib/sph-utils'
@@ -253,9 +253,7 @@ function ConfirmacionContent() {
             {entregaInfo.icono} {entregaInfo.especial ? 'Fabricación especial' : 'Envío rápido'}
           </p>
           <p className={`text-2xl font-black mb-0.5 ${entregaInfo.especial ? 'text-amber-700' : 'text-green-600'}`}>
-            {entregaInfo.dias_min === entregaInfo.dias_max
-              ? `${entregaInfo.dias_min} día${entregaInfo.dias_min > 1 ? 's' : ''}`
-              : `${entregaInfo.dias_min}–${entregaInfo.dias_max} días`} laborables
+            {entregaInfo.etiqueta}
           </p>
           <p className={`text-xs font-medium ${entregaInfo.especial ? 'text-amber-600' : 'text-gray-500'}`}>
             {entregaInfo.detalle}
@@ -397,7 +395,7 @@ function ConfirmacionContent() {
             comprados, cuando el catálogo los tiene cargados. */}
         {order.pago_estado === 'pagado' &&
          order.cliente_email && order.numero_orden && (() => {
-           const isoFecha = getFechaEntregaISO(tipoDominante, tieneXR ? 'XR' : '')
+           const isoFecha = getFechaEntregaISODesdeFecha(order.created_at, tipoDominante, tieneXR ? 'XR' : '')
            const gtins = items
              .map((i: any) => i.products?.gtin)
              .filter((g: any): g is string => typeof g === 'string' && g.length > 0)
