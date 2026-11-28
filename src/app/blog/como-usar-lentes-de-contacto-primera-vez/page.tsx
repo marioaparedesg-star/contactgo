@@ -407,7 +407,7 @@ export default function Page() {
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
             <p>Usar lentes de contacto por primera vez es más sencillo de lo que parece. La clave está en la higiene, la paciencia durante el período de adaptación y en respetar siempre las indicaciones de uso. Miles de dominicanos los usan a diario sin ningún problema.</p>
-            <p className="mt-3">Si estás buscando tus primeros lentes de contacto, en ContactGo encontrarás las mejores marcas — ACUVUE, Air Optix, Biofinity y más — con entrega directa a tu puerta en 24-48 horas. ¿No sabes cuál elegir? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta</Link> o escríbenos por WhatsApp y te asesoramos.</p>
+            <p className="mt-3">Si estás buscando tus primeros lentes de contacto, en ContactGo encontrarás las mejores marcas — ACUVUE, Air Optix, Biofinity y más — con entrega estimada según el tipo de lente; los esféricos se entregan en 24 a 72 horas en todo el país. ¿No sabes cuál elegir? Usa nuestra <Link href="/receta" className="text-primary-600 font-semibold hover:underline">calculadora de receta</Link> o escríbenos por WhatsApp y te asesoramos.</p>
           </section>
         </div>
 
@@ -434,7 +434,7 @@ export default function Page() {
         {/* CTA */}
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Listo para tus primeros lentes de contacto?</h3>
-          <p className="text-sm text-gray-600 mb-4">Todos los productos que necesitas: lentes directo del fabricante y soluciones de limpieza. Entrega en 24-48h en toda la República Dominicana.</p>
+          <p className="text-sm text-gray-600 mb-4">Todos los productos que necesitas: lentes directo del fabricante y soluciones de limpieza. Entrega según el tipo de lente; los esféricos tienen un plazo estimado de 24 a 72 horas en todo el país.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/esfericos" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
               Ver lentes esféricos →
