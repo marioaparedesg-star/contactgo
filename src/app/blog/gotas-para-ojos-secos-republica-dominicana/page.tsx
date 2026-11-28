@@ -121,7 +121,7 @@ export default function Page() {
         </section>
 
           <section id="productos">
-            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Entrega 24-48h</h2>
+            <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Disponibles en ContactGo — Entrega 24 horas</h2>
             <div className="space-y-2">
             </div>
             <Link href="/catalogo" className="mt-3 inline-block text-sm text-primary-600 font-semibold hover:underline">Ver catálogo completo →</Link>
@@ -132,7 +132,7 @@ export default function Page() {
             <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuál es la mejor gota para ojos secos en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Para ojo seco moderado a severo, el Refresh Optive Advanced (RD$1,000) es la mejor opción: actúa en las tres capas de la película lagrimal. Para usuarios de lentes de contacto con sequedad moderada, el Refresh Optive Lubricant (RD$900) es muy efectivo. Todas disponibles en ContactGo con entrega en 24-48h.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Para ojo seco moderado a severo, el Refresh Optive Advanced (RD$1,000) es la mejor opción: actúa en las tres capas de la película lagrimal. Para usuarios de lentes de contacto con sequedad moderada, el Refresh Optive Lubricant (RD$900) es muy efectivo. Todas disponibles en ContactGo con entrega en 24 horas.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Puedo usar gotas para ojos secos con lentes de contacto?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
@@ -144,7 +144,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar gotas para ojos secos con entrega en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo tienes disponibles Refresh Optive Advanced, Refresh Optive Lubricant, Refresh Tears, Manzanilla Sophia y Prolub Hyfresh con entrega en 24-48 horas en toda República Dominicana. Pago seguro con AZUL/Banco Popular.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo tienes disponibles Refresh Optive Advanced, Refresh Optive Lubricant, Refresh Tears, Manzanilla Sophia y Prolub Hyfresh con entrega en 24 horas en toda República Dominicana. Pago seguro con AZUL/Banco Popular.</p>
           </details>
             </div>
           </section>
@@ -167,7 +167,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en toda República Dominicana en 24-48h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe en toda República Dominicana en 24 horas</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</Link>
