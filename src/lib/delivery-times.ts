@@ -2,7 +2,7 @@
  * FUENTE ÚNICA DE VERDAD — Tiempos de entrega por categoría
  *
  * REGLAS DE NEGOCIO (definidas por Mario — aplican a todo el país):
- *  - Color → al día siguiente
+ *  - Color → siguiente día laborable
  *  - Esférico → 24-72 horas
  *  - Multifocal → 1-5 días laborables
  *  - Tórico → 25-45 días laborables
@@ -46,7 +46,7 @@ const T_ESFERICO: EntregaInfo = T_24_72H
 
 const T_MULTIFOCAL: EntregaInfo = {
   etiqueta: 'Entrega estimada de 1 a 5 días laborables',
-  detalle:  'Entrega estimada del lente multifocal: de 1 a 5 días laborables, según disponibilidad y preparación.',
+  detalle:  'Entrega estimada del lente multifocal: de 1 a 5 días laborables, según disponibilidad y preparación. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
   dias_min: 1, dias_max: 5,
   especial: true,
   icono:    '📦',
@@ -54,7 +54,7 @@ const T_MULTIFOCAL: EntregaInfo = {
 
 const T_TORICO: EntregaInfo = {
   etiqueta: 'Bajo pedido · 25–45 días laborables',
-  detalle:  'Lente tórico bajo pedido. Entrega estimada de 25 a 45 días laborables, según fabricación y disponibilidad.',
+  detalle:  'Lente tórico bajo pedido. Entrega estimada de 25 a 45 días laborables, según fabricación y disponibilidad. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
   dias_min: 25, dias_max: 45,
   especial: true,
   icono:    '⏱️',
@@ -167,10 +167,10 @@ export function getEntregaTextoEmail(tipo: string, nombre = '', sph?: string | n
 
 /**
  * Fecha estimada de entrega en formato ISO (YYYY-MM-DD), saltando fines de
- * semana. Usa dias_max (el extremo más conservador del rango) a propósito:
- * para integraciones como Google Customer Reviews es preferible que la
- * encuesta llegue un poco tarde a que llegue ANTES de que el cliente reciba
- * el pedido — Google penaliza estimated_delivery_date poco fiables.
+ * semana. Usa el extremo máximo del plazo: 72 horas para esféricos y
+ * dias_max laborables para las categorías con preparación especial. Para
+ * Google Customer Reviews es preferible estimar de forma conservadora y no
+ * enviar la encuesta antes de que el cliente reciba el pedido.
  */
 export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | number | null): string {
   return getFechaEntregaISODesdeFecha(new Date(), tipo, nombre, sph)
@@ -179,7 +179,8 @@ export function getFechaEntregaISO(tipo: string, nombre = '', sph?: string | num
 /**
  * Calcula un rango fijo a partir de la fecha original de creación del pedido.
  * No utiliza la fecha actual: consultar el pedido días después no desplaza la promesa.
- * Los días contabilizados son de lunes a viernes.
+ * Los plazos en horas se calculan desde la fecha real y se desplazan si caen en fin de semana;
+ * los plazos expresados en días solo cuentan de lunes a viernes.
  */
 export function getFechaEntregaISODesdeFecha(fechaCreacion: string | Date, tipo: string, nombre = '', sph?: string | number | null): string {
   const info = getEntrega(tipo, nombre, sph)
