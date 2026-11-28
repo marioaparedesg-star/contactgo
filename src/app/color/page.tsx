@@ -38,7 +38,7 @@ export default async function Page() {
           <p className="text-pink-100 text-lg max-w-xl mx-auto">FreshLook Colorblends, Air Optix Colors y más. Cambia tu mirada con colores naturales y vibrantes. Los lentes de color planos se entregan al día siguiente.</p>
         </section>
         <section className="max-w-7xl mx-auto px-4 py-10">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-stretch gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-start gap-3">
             {(products ?? []).map(p => <ProductCard key={p.id} product={p as any} />)}
           </div>
         </section>
