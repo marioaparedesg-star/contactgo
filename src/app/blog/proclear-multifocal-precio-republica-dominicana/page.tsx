@@ -45,7 +45,7 @@ export default function Page() {
         {
           '@type': 'Question',
           name: '¿Proclear Multifocal Toric sigue disponible?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Proclear Multifocal Toric sí aparece en el catálogo actual. Su precio de referencia es RD$12,000 y, por ser tórico, el plazo estimado es de 25 a 45 días. Confirma precio y disponibilidad en su ficha antes de comprar.' },
+          acceptedAnswer: { '@type': 'Answer', text: 'Proclear Multifocal Toric sí aparece en el catálogo actual. Su precio de referencia es RD$12,000 y, por ser tórico, el plazo es de 25 a 45 días. Confirma precio y disponibilidad en su ficha antes de comprar.' },
         },
         {
           '@type': 'Question',
@@ -111,7 +111,7 @@ export default function Page() {
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">¿Y Proclear Multifocal Toric?</h2>
-            <p className="mb-3">La versión Proclear Multifocal Toric sí aparece en el catálogo actual. Combina corrección multifocal y tórica para usuarios que necesitan corregir presbicia y astigmatismo. Su precio de referencia es RD$12,000 y el plazo estimado de entrega es de 25 a 45 días.</p>
+            <p className="mb-3">La versión Proclear Multifocal Toric sí aparece en el catálogo actual. Combina corrección multifocal y tórica para usuarios que necesitan corregir presbicia y astigmatismo. Su precio de referencia es RD$12,000 y el plazo de entrega es de 25 a 45 días.</p>
             <Link href="/producto/proclear-multifocal-toric-lentes-presbicia-astigmatismo-dominicana" className="inline-flex items-center justify-center bg-primary-700 text-white font-semibold rounded-xl px-5 py-3 text-sm">
               Consultar Proclear Multifocal Toric
             </Link>

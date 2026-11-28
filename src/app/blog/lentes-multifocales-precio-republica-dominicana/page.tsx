@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Lentes multifocales precio en RD 2026 — Guía completa',
-  description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega estimada de 1 a 5 días laborables.',
+  description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega de 1 a 5 días.',
   alternates: { canonical: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana' },
   openGraph: {
     type: 'article', title: 'Lentes de contacto multifocales — Precios en República Dominicana 2026',
-    description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega estimada de 1 a 5 días.',
+    description: 'Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega de 1 a 5 días.',
     url: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana',
     siteName: 'ContactGo', locale: 'es_DO',
     images: [{ url: 'https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana.webp', width: 1200, height: 630, alt: 'Lentes de contacto multifocales — Precios en República Dominicana 2026' }],
@@ -25,13 +25,13 @@ export default function Page() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           { "@context": "https://schema.org", "@type": "Article",
             "headline": "Lentes de contacto multifocales — Precios en República Dominicana 2026",
-            "description": "Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega estimada de 1 a 5 días.",
+            "description": "Todos los lentes de contacto multifocales con precio en RD 2026. Biofinity Multi, ACUVUE, Air Optix, Proclear. Desde RD$4,450. Entrega de 1 a 5 días.",
             "author": { "@type": "Organization", "name": "Equipo ContactGo" },
             "publisher": { "@type": "Organization", "name": "ContactGo", "url": "https://www.contactgo.net", "logo": { "@type": "ImageObject", "url": "https://www.contactgo.net/logo.png" } },
             "datePublished": "2026-06-20", "dateModified": "2026-11-24",
             "url": "https://www.contactgo.net/blog/lentes-multifocales-precio-republica-dominicana", "inLanguage": "es-DO" },
           { "@context": "https://schema.org", "@type": "FAQPage",
-            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los lentes multifocales en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo los lentes multifocales van desde RD$4,750 (Bausch+Lomb ULTRA for Presbyopia) hasta RD$12,000 (Proclear Multifocal Toric). Los m\u00e1s populares son Biofinity Multifocal a RD$5,900 y ACUVUE Oasys Multifocal a RD$5,900."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 son los lentes de contacto multifocales?", "acceptedAnswer": {"@type": "Answer", "text": "Son lentes dise\u00f1ados para personas con presbicia (vista cansada), generalmente mayores de 40 a\u00f1os. Permiten ver bien tanto de cerca como de lejos en un solo lente, sin necesidad de alternar entre gafas de lectura y distancia."}}, {"@type": "Question", "name": "\u00bfCu\u00e1l es el mejor lente multifocal en RD?", "acceptedAnswer": {"@type": "Answer", "text": "El Biofinity Multifocal es el m\u00e1s recomendado por especialistas en RD: Dk/t 160, tecnolog\u00eda Aquaform y disponible en ADD de +1.00 a +4.00. El ACUVUE Oasys Multifocal es la opci\u00f3n quincenal premium para quienes prefieren cambio m\u00e1s frecuente."}}, {"@type": "Question", "name": "\u00bfLos lentes multifocales son dif\u00edciles de adaptar?", "acceptedAnswer": {"@type": "Answer", "text": "El per\u00edodo de adaptaci\u00f3n es de 2-4 semanas. El cerebro aprende gradualmente a seleccionar el foco correcto seg\u00fan la distancia. La mayor\u00eda de usuarios se adapta completamente. Es importante seguir las instrucciones de tu optometrista durante la adaptaci\u00f3n."}}, {"@type": "Question", "name": "\u00bfHay lentes multifocales diarios en RD?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed. El clariti 1 day multifocal est\u00e1 disponible en ContactGo a RD$4,450 la caja de 30 lentes, con entrega estimada de 1 a 5 días en toda Rep\u00fablica Dominicana."}}] },
+            "mainEntity": [{"@type": "Question", "name": "\u00bfCu\u00e1nto cuestan los lentes multifocales en Rep\u00fablica Dominicana?", "acceptedAnswer": {"@type": "Answer", "text": "En ContactGo los lentes multifocales van desde RD$4,750 (Bausch+Lomb ULTRA for Presbyopia) hasta RD$12,000 (Proclear Multifocal Toric). Los m\u00e1s populares son Biofinity Multifocal a RD$5,900 y ACUVUE Oasys Multifocal a RD$5,900."}}, {"@type": "Question", "name": "\u00bfQu\u00e9 son los lentes de contacto multifocales?", "acceptedAnswer": {"@type": "Answer", "text": "Son lentes dise\u00f1ados para personas con presbicia (vista cansada), generalmente mayores de 40 a\u00f1os. Permiten ver bien tanto de cerca como de lejos en un solo lente, sin necesidad de alternar entre gafas de lectura y distancia."}}, {"@type": "Question", "name": "\u00bfCu\u00e1l es el mejor lente multifocal en RD?", "acceptedAnswer": {"@type": "Answer", "text": "El Biofinity Multifocal es el m\u00e1s recomendado por especialistas en RD: Dk/t 160, tecnolog\u00eda Aquaform y disponible en ADD de +1.00 a +4.00. El ACUVUE Oasys Multifocal es la opci\u00f3n quincenal premium para quienes prefieren cambio m\u00e1s frecuente."}}, {"@type": "Question", "name": "\u00bfLos lentes multifocales son dif\u00edciles de adaptar?", "acceptedAnswer": {"@type": "Answer", "text": "El per\u00edodo de adaptaci\u00f3n es de 2-4 semanas. El cerebro aprende gradualmente a seleccionar el foco correcto seg\u00fan la distancia. La mayor\u00eda de usuarios se adapta completamente. Es importante seguir las instrucciones de tu optometrista durante la adaptaci\u00f3n."}}, {"@type": "Question", "name": "\u00bfHay lentes multifocales diarios en RD?", "acceptedAnswer": {"@type": "Answer", "text": "S\u00ed. El clariti 1 day multifocal est\u00e1 disponible en ContactGo a RD$4,450 la caja de 30 lentes, con Entrega de 1 a 5 días en toda Rep\u00fablica Dominicana."}}] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.contactgo.net" },
@@ -94,11 +94,11 @@ export default function Page() {
               <div className="text-right shrink-0 ml-3"><p className="font-black text-gray-900">RD$12,000</p><p className="text-[11px] text-primary-600 font-semibold group-hover:underline">Ver →</p></div>
             </Link>
 
-          <p className="text-[11px] text-gray-400 text-center">*Canales de distribución autorizados · Entrega estimada de 1 a 5 días</p>
+          <p className="text-[11px] text-gray-400 text-center">*Canales de distribución autorizados · Entrega de 1 a 5 días</p>
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>Los <strong>lentes de contacto multifocales</strong> son la solución para personas con <strong>presbicia</strong> (vista cansada), una condición natural que aparece generalmente a partir de los 40 años. En ContactGo ofrecemos la mayor selección de lentes multifocales disponibles en República Dominicana, con entrega estimada de 1 a 5 días laborables para multifocales estándar; los multifocales tóricos pueden requerir de 25 a 45 días laborables.</p>
+          <p>Los <strong>lentes de contacto multifocales</strong> son la solución para personas con <strong>presbicia</strong> (vista cansada), una condición natural que aparece generalmente a partir de los 40 años. En ContactGo ofrecemos la mayor selección de lentes multifocales disponibles en República Dominicana, con Entrega de 1 a 5 días para multifocales estándar; los multifocales tóricos pueden requerir de 25 a 45 días.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Precios completos — Tabla de referencia consultada el 24 de noviembre de 2026</h2>
@@ -146,7 +146,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Entrega estimada de 1 a 5 días', desc: 'El plazo estimado para multifocales estándar es de 1 a 5 días; los multifocales tóricos pueden requerir de 25 a 45 días.' },
+                { paso: '4', titulo: 'Entrega de 1 a 5 días', desc: 'El plazo estimado para multifocales estándar es de 1 a 5 días; los multifocales tóricos pueden requerir de 25 a 45 días.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -177,7 +177,7 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Hay lentes multifocales diarios en RD?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El clariti 1 day multifocal está disponible en ContactGo a RD$4,450 la caja de 30 lentes, con entrega estimada de 1 a 5 días para multifocales estándar.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Sí. El clariti 1 day multifocal está disponible en ContactGo a RD$4,450 la caja de 30 lentes, con Entrega de 1 a 5 días para multifocales estándar.</p>
           </details>
 
             </div>
@@ -199,7 +199,7 @@ export default function Page() {
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes multifocales: entrega estimada de 1 a 5 días</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Lentes multifocales: Entrega de 1 a 5 días</h3>
           <p className="text-sm text-gray-600 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>

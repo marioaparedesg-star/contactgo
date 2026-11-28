@@ -87,7 +87,7 @@ export default function Page() {
         </div>
 
         <div className="space-y-8 text-gray-700 leading-relaxed">
-          <p>La pregunta más frecuente que recibimos en ContactGo: <strong>¿ACUVUE Oasys o Air Optix HydraGlyde?</strong> Ambos son lentes de silicona hidrogel premium, disponibles en RD con entrega estimada de 24 a 72 horas para lentes esféricos. La diferencia real está en el período de reemplazo, el costo por día de uso y la tecnología de hidratación. Esta comparativa te da los datos para decidir.</p>
+          <p>La pregunta más frecuente que recibimos en ContactGo: <strong>¿ACUVUE Oasys o Air Optix HydraGlyde?</strong> Ambos son lentes de silicona hidrogel premium, disponibles en RD con entrega de 24 a 72 horas para lentes esféricos. La diferencia real está en el período de reemplazo, el costo por día de uso y la tecnología de hidratación. Esta comparativa te da los datos para decidir.</p>
 
           <section>
             <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Comparativa técnica completa</h2>
@@ -186,7 +186,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Ambos disponibles con entrega estimada de 24 a 72 horas para lentes esféricos en RD</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Ambos disponibles con entrega de 24 a 72 horas para lentes esféricos en RD</h3>
           <p className="text-sm text-gray-600 mb-4">directo del fabricante · ACUVUE y Air Optix directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/producto/acuvue-oasys-hydraclear-plus-lentes-contacto-quincenal-dominicana" className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-red-700 transition-colors text-sm">Comprar ACUVUE Oasys →</Link>

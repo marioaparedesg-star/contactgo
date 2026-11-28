@@ -201,13 +201,13 @@ export default function Page() {
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Dónde comprar Biofinity y ACUVUE Oasys en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Ambos están disponibles en ContactGo con entrega en 24-48 horas en toda República Dominicana. Biofinity desde RD$3,650 y ACUVUE Oasys desde RD$3,350, directo del fabricante.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">Ambos están disponibles en ContactGo con entrega de 24 a 72 horas para lentes esféricos y de colores en toda República Dominicana. Biofinity desde RD$3,650 y ACUVUE Oasys desde RD$3,350, directo del fabricante.</p>
           </details>
           </div>
         </section>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-48h en toda RD</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24-72h en toda RD</h3>
           <p className="text-sm text-gray-500 mb-4">directo del fabricante · Directo del fabricante · Pago seguro con AZUL</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</Link>

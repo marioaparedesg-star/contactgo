@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Comprar lentes de contacto online en RD — Guía segura 2026',
-  description: 'Cómo comprar lentes de contacto online en República Dominicana de forma segura. Marcas reconocidas, pago con AZUL y entrega estimada según tipo de lente y destino. Guía 2026.',
+  description: 'Cómo comprar lentes de contacto online en República Dominicana de forma segura. Marcas reconocidas, pago con AZUL y Entrega según tipo de lente y destino. Guía 2026.',
   alternates: { canonical: 'https://www.contactgo.net/blog/comprar-lentes-contacto-online-republica-dominicana' },
   openGraph: {
     type: 'article',
@@ -20,10 +20,10 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const FAQS = [
-    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo trabaja con marcas reconocidas y canales de distribución autorizados, con pago mediante AZUL/Banco Popular y transporte estimado de 24 a 72 horas laborables en todo el país para lentes esféricos. El plazo total depende del tipo de lente.' },
+    { q: '¿Es seguro comprar lentes de contacto por internet en República Dominicana?', a: 'Sí, siempre que compres en una tienda especializada con garantía de autenticidad. ContactGo trabaja con marcas reconocidas y canales de distribución autorizados, con pago mediante AZUL/Banco Popular y transporte de 24 a 72 horas en todo el país para lentes esféricos. El plazo total depende del tipo de lente.' },
     { q: '¿Necesito receta para comprar lentes de contacto online?', a: 'Para lentes graduados sí. Necesitas los valores de tu receta (SPH, CYL, AXIS, ADD según el tipo). Para lentes de color sin graduación, no es necesaria. Puedes usar nuestra calculadora de receta gratuita si no tienes la tuya a mano.' },
     { q: '¿Cómo sé que los lentes son certificados?', a: 'Los lentes certificados vienen en empaque directo del fabricante con código de autenticidad verificable con el fabricante. En ContactGo trabajamos con canales de distribución autorizados y entregamos los productos sellados en su empaque original.' },
-    { q: '¿Cuánto tarda la entrega de lentes de contacto en RD?', a: 'En ContactGo la entrega es en 24 a 72 horas laborables en todo el país para lentes esféricos.' },
+    { q: '¿Cuánto tarda la entrega de lentes de contacto en RD?', a: 'En ContactGo la entrega es en 24 a 72 horas en todo el país para lentes esféricos.' },
     { q: '¿Puedo devolver los lentes si no son los correctos?', a: 'Sí. ContactGo acepta devoluciones de productos sellados no abiertos dentro de los 7 días de recibidos, siempre que no se haya roto el sello. Consulta nuestra política de devoluciones para más detalles.' },
     { q: '¿Cuál es la forma de pago para comprar lentes online en RD?', a: 'En ContactGo aceptamos tarjeta de crédito y débito (VISA y Mastercard) a través de AZUL/Banco Popular, el procesador de pagos más utilizado en República Dominicana.' },
   ]
@@ -96,7 +96,7 @@ export default function Page() {
                 { icono: '💰', titulo: 'Precios más competitivos', desc: 'Sin costos de local ni personal en sala, los precios online suelen ser más accesibles con el mismo producto original.' },
                 { icono: '📦', titulo: 'Mayor disponibilidad de stock', desc: 'En tiendas físicas el stock es limitado. Online tienes acceso a toda la línea de marcas: ACUVUE, Biofinity, Air Optix, BL Ultra y más.' },
                 { icono: '🔁', titulo: 'Recompra fácil', desc: 'Tu receta y dirección quedan guardadas. La próxima vez, repites pedido en un clic sin volver a ingresar datos.' },
-                { icono: '🚀', titulo: 'Transporte según destino', desc: 'Santo Domingo: 24-48 horas. Interior: 24-72 horas. El plazo estimado de entrega del lente se suma aparte.' },
+                { icono: '🚀', titulo: 'Entrega según tipo de lente', desc: 'Esféricos y colores: 24 a 72 horas; multifocales: 1 a 5 días; tóricos bajo pedido: 25 a 45 días.' },
                 { icono: '💳', titulo: 'Pago seguro', desc: 'Pago con tarjeta mediante AZUL/Banco Popular, el procesador más utilizado y confiable en República Dominicana.' },
               ].map(({ icono, titulo, desc }, i) => (
                 <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
@@ -191,7 +191,7 @@ export default function Page() {
                 <tbody>
                   {[
                     ['Santo Domingo y Gran Santo Domingo', '24 horas'],
-                    ['Santiago de los Caballeros', '24-48 horas'],
+                    ['Santiago de los Caballeros', '24 a 72 horas'],
                     ['La Romana, San Pedro, San Cristóbal', '24-72 horas'],
                     ['Punta Cana / Bávaro / Cap Cana', '24-72 horas'],
                     ['Higüey, La Altagracia', '24-72 horas'],

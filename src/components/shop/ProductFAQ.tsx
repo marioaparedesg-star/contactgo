@@ -305,7 +305,7 @@ const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
     { q: '¿Los lentes son para miopía e hipermetropía?', a: 'Sí, los lentes esféricos corrigen tanto miopía (valores negativos) como hipermetropía (valores positivos). Los valores van del -12.00 al +8.00 según el producto.' },
   ],
   torico: [
-    { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos se fabrican a medida según tu graduación específica (Esfera, Cilindro y Eje). La entrega estimada de los lentes tóricos es de 25 a 45 días laborables.' },
+    { q: '¿Por qué los lentes tóricos tardan más en llegar?', a: 'Los lentes tóricos se fabrican a medida según tu graduación específica (Esfera, Cilindro y Eje). Los lentes tóricos están bajo pedido y su entrega es de 25 a 45 días.' },
     { q: '¿Qué diferencia hay entre lentes tóricos y esféricos?', a: 'Los lentes tóricos tienen una curvatura especial que corrige el astigmatismo. Tienen un diseño estabilizado para que no roten con el parpadeo, manteniendo la visión nítida.' },
     { q: '¿Qué información de mi receta necesito?', a: 'Para lentes tóricos necesitas la Esfera, el Cilindro y el Eje de tu receta. Estos tres valores son obligatorios y aparecen en cualquier receta óptica.' },
     { q: '¿Puedo usar lentes tóricos si tengo astigmatismo leve?', a: 'Sí, los lentes tóricos están disponibles desde -0.75 de cilindro. Para astigmatismo leve suelen ser muy efectivos.' },
@@ -337,7 +337,7 @@ const FAQS_BY_TYPE: Record<string, { q: string; a: string }[]> = {
 }
 
 const FAQS_GENERAL = [
-  { q: '¿Hacen envíos a toda República Dominicana?', a: 'El transporte tarda 24 a 72 horas laborables en todo el país para lentes esféricos. La entrega estimada depende del lente: color plano disponible, al día siguiente; esféricos, 24-48 horas; multifocales, de 1 a 5 días; tóricos, de 25 a 45 días laborables.' },
+  { q: '¿Hacen envíos a toda República Dominicana?', a: 'Los plazos de entrega son iguales en todo el país: esféricos y lentes de colores, de 24 a 72 horas; multifocales, de 1 a 5 días; tóricos bajo pedido, de 25 a 45 días.' },
   { q: '¿Los productos son directo del fabricante?', a: 'Sí. Todos los productos de ContactGo son directo del fabricante o su distribuidor autorizado en el país, con código de autenticidad. Nunca vendemos imitaciones.' },
   { q: '¿Puedo devolver mi pedido?', a: 'Sí, en 30 días si el producto viene defectuoso o no es lo que pediste. Los lentes sin abrir y en su empaque original también son elegibles para devolución.' },
 ]

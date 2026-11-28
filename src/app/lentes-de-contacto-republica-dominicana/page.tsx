@@ -132,7 +132,7 @@ return [
         name: '¿Cuánto tarda la entrega de lentes de contacto en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Los lentes de color planos disponibles se entregan el siguiente día laborable; los esféricos tienen entrega estimada de 24 a 72 horas en todo el país; los multifocales, de 1 a 5 días laborables; y los tóricos, de 25 a 45 días laborables. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable.',
+          text: 'Los lentes de color planos disponibles se entregan en 24 a 72 horas; los esféricos tienen entrega de 24 a 72 horas en todo el país; los multifocales, de 1 a 5 días; y los tóricos, de 25 a 45 días. ',
         },
       },
       {
@@ -172,7 +172,7 @@ return [
         name: '¿ContactGo entrega lentes de contacto en Santo Domingo?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sí. Entregamos en toda el área metropolitana de Santo Domingo (Distrito Nacional, Santo Domingo Este, Norte y Oeste), igual que en Santiago, Punta Cana, La Romana, Higüey, San Pedro, Puerto Plata, Barahona y el resto del país. Los plazos estimados se aplican de forma uniforme en todo el país: color plano disponible, siguiente día laborable; esféricos, 24 a 72 horas; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables.',
+          text: 'Sí. Entregamos en toda el área metropolitana de Santo Domingo (Distrito Nacional, Santo Domingo Este, Norte y Oeste), igual que en Santiago, Punta Cana, La Romana, Higüey, San Pedro, Puerto Plata, Barahona y el resto del país. Los plazos se aplican de forma uniforme en todo el país: color plano disponible, 24 a 72 horas; esféricos, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días.',
         },
       },
     ],
@@ -293,7 +293,7 @@ export default async function LentesRDPage() {
               <div className="p-5 rounded-2xl border border-gray-100">
                 <Truck className="w-6 h-6 text-primary-600 mb-3" />
                 <h3 className="font-bold text-gray-900 text-base mb-1">Entrega en toda República Dominicana</h3>
-                <p className="text-sm text-gray-500">Plazos de entrega: esféricos, 24 a 72 horas; color plano disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables.</p>
+                <p className="text-sm text-gray-500">Plazos de entrega: esféricos, 24 a 72 horas; color plano disponible, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días.</p>
               </div>
               <div className="p-5 rounded-2xl border border-gray-100">
                 <div className="mb-3"><AzulLogo size="lg" /></div>
@@ -374,7 +374,7 @@ export default async function LentesRDPage() {
             <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Cobertura de entrega en República Dominicana
             </h2>
-            <p className="text-gray-500 text-sm mb-8">Enviamos a todo el país. Los plazos estimados se aplican en todo el país: esféricos, 24 a 72 horas; color disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables.</p>
+            <p className="text-gray-500 text-sm mb-8">Enviamos a todo el país. Los plazos se aplican en todo el país: esféricos, 24 a 72 horas; lentes de colores, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días.</p>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {ciudadesData.map((c) => (
@@ -402,7 +402,7 @@ export default async function LentesRDPage() {
                 { n: '1', t: 'Elige tu producto', d: 'Busca por marca o usa nuestra calculadora gratuita si tienes receta de gafas y no sabes qué lente comprar.' },
                 { n: '2', t: 'Configura tu receta', d: 'Ingresa la graduación exacta de tu receta óptica vigente para cada ojo (OD y OI).' },
                 { n: '3', t: 'Paga seguro', d: 'Con tarjeta Visa/Mastercard vía AZUL Banco Popular. El pago de los pedidos en línea se realiza con tarjeta Visa o Mastercard mediante AZUL Banco Popular.' },
-                { n: '4', t: 'Recibe en casa', d: 'Los plazos estimados se aplican en todo el país: esféricos, 24 a 72 horas; color plano disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables. Incluye seguimiento del pedido.' },
+                { n: '4', t: 'Recibe en casa', d: 'Los plazos se aplican en todo el país: esféricos, 24 a 72 horas; color plano disponible, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días. Incluye seguimiento del pedido.' },
               ].map((p) => (
                 <div key={p.n} className="p-5 rounded-2xl border border-gray-100">
                   <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-sm mb-3">{p.n}</div>
@@ -433,7 +433,7 @@ export default async function LentesRDPage() {
                 },
                 {
                   q: '¿Cuánto tarda la entrega en toda República Dominicana?',
-                  a: 'El tiempo depende del tipo de lente, no de la ciudad: esféricos, 24 a 72 horas; color plano disponible, siguiente día laborable; multifocales, 1 a 5 días laborables; tóricos, 25 a 45 días laborables. Los pedidos de fin de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable. Todos los pedidos incluyen seguimiento.',
+                  a: 'El tiempo depende del tipo de lente, no de la ciudad: esféricos, 24 a 72 horas; color plano disponible, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días. Los pedidos de fin de semana o fuera del horario operativo comienzan a procesarse el 24 a 72 horas. Todos los pedidos incluyen seguimiento.',
                 },
                 {
                   q: '¿Necesito receta médica para comprar lentes de contacto en RD?',

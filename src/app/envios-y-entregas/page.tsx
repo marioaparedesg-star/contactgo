@@ -11,7 +11,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/envios-y-entregas' },
   title: 'Envíos y Entregas | ContactGo — Lentes de Contacto RD',
-  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos: entrega estimada en 24 a 72 horas en todo el país. Los tiempos estimados de entrega varían según el tipo de lente.',
+  description: 'Información sobre envíos y entregas de lentes de contacto en República Dominicana. Esféricos: Entrega en 24 a 72 horas en todo el país. Los tiempos estimados de entrega varían según el tipo de lente.',
 }
 
 export default function EnviosPage() {
@@ -29,32 +29,32 @@ export default function EnviosPage() {
           {/* Tiempos */}
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">⏱️ Tiempos de entrega por tipo de lente</h2>
-            <p className="text-gray-500 text-sm mb-4">Los tiempos dependen del tipo de lente y, para productos esféricos, también del destino.</p>
+            <p className="text-gray-500 text-sm mb-4">Los plazos se aplican de forma uniforme en todo el país y dependen del tipo de lente.</p>
             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
               <div className="bg-green-50 border border-green-200 rounded-2xl p-5">
                 <p className="font-bold text-green-800 text-lg mb-1">🚀 24 a 72 horas</p>
                 <p className="text-green-700 text-sm font-semibold mb-2">Lentes esféricos</p>
-                <p className="text-gray-600 text-sm">Entrega estimada de 24 a 72 horas laborables en todo el país.</p>
+                <p className="text-gray-600 text-sm">Entrega de 24 a 72 horas en todo el país.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-                <p className="font-bold text-amber-800 text-lg mb-1">📦 1 a 5 días laborables</p>
+                <p className="font-bold text-amber-800 text-lg mb-1">📦 1 a 5 días</p>
                 <p className="text-amber-700 text-sm font-semibold mb-2">Lentes multifocales</p>
-                <p className="text-gray-600 text-sm">Presbicia / vista cansada. Se piden al distribuidor según tu graduación exacta.</p>
+                <p className="text-gray-600 text-sm">Presbicia / vista cansada. Entrega de 1 a 5 días.</p>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 45 días laborables</p>
+                <p className="font-bold text-amber-800 text-lg mb-1">⏱️ 25 a 45 días</p>
                 <p className="text-amber-700 text-sm font-semibold mb-2">Lentes tóricos</p>
-                <p className="text-gray-600 text-sm">Astigmatismo. Se solicitan según la combinación específica de cilindro y eje.</p>
+                <p className="text-gray-600 text-sm">Astigmatismo. Bajo pedido, de 25 a 45 días.</p>
               </div>
               <div className="bg-pink-50 border border-pink-200 rounded-2xl p-5">
-                <p className="font-bold text-pink-800 text-lg mb-1">🚀 Al día siguiente</p>
+                <p className="font-bold text-pink-800 text-lg mb-1">🚀 24 a 72 horas</p>
                 <p className="text-pink-700 text-sm font-semibold mb-2">Lentes de color</p>
-                <p className="text-gray-600 text-sm">Productos de color disponibles con entrega estimada al siguiente día laborable.</p>
+                <p className="text-gray-600 text-sm">Entrega de 24 a 72 horas en todo el país.</p>
               </div>
               <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5">
                 <p className="font-bold text-teal-800 text-lg mb-1">🚀 24 horas</p>
                 <p className="text-teal-700 text-sm font-semibold mb-2">Soluciones y gotas</p>
-                <p className="text-gray-600 text-sm">Productos de cuidado visual con entrega estimada en 24 horas.</p>
+                <p className="text-gray-600 text-sm">Soluciones y gotas: entrega de 24 horas.</p>
               </div>
             </div>
           </div>
@@ -62,7 +62,7 @@ export default function EnviosPage() {
           {/* Zonas */}
           <div>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">📍 Costo de envío por zona</h2>
-            <p className="text-gray-500 text-sm mb-4">El costo se calcula por zona. El plazo estimado depende del tipo de producto y se aplica en todo el país. Los pedidos recibidos en fines de semana o feriados comienzan a procesarse el próximo día laborable.</p>
+            <p className="text-gray-500 text-sm mb-4">El costo se calcula por zona. El plazo depende del tipo de producto y se aplica en todo el país. Los pedidos recibidos en fines de semana o feriados comienzan a procesarse el próximo día laborable.</p>
             <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
               {[
                 { zona: 'Santo Domingo y Gran Santo Domingo', costo: 'RD$250' },
@@ -90,7 +90,7 @@ export default function EnviosPage() {
                 { paso: '2', titulo: 'Confirmamos', desc: 'Verificamos tu pedido y te enviamos confirmación por WhatsApp o email.' },
                 { paso: '3', titulo: 'Empacamos', desc: 'Empacamos tus lentes con cuidado para garantizar que lleguen en perfectas condiciones.' },
                 { paso: '4', titulo: 'Despachamos', desc: 'Entregamos al courier y te enviamos el tracking de tu pedido.' },
-                { paso: '5', titulo: 'Recibes', desc: 'Tu pedido llega a la dirección indicada en el tiempo estimado.' },
+                { paso: '5', titulo: 'Recibes', desc: 'Tu pedido llega a la dirección indicada en el plazo de entrega.' },
               ].map((s, i) => (
                 <div key={i} className="flex gap-4 items-start">
                   <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">{s.paso}</div>

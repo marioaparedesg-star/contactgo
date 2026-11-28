@@ -53,7 +53,7 @@ export default function Page() {
             "@type": "FAQPage",
             "mainEntity": [
               { "@type": "Question", "name": "¿Cuánto cuesta ACUVUE Oasys en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "El precio de ACUVUE Oasys, sus versiones para astigmatismo y multifocales se muestra actualizado en la ficha de cada producto. El tiempo de entrega depende del modelo y del destino." } },
-              { "@type": "Question", "name": "¿Dónde comprar ACUVUE Oasys en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar ACUVUE Oasys en ContactGo y recibirlo en tu domicilio. El tiempo estimado es de 24 a 72 horas laborables en todo el país para lentes esféricos, según disponibilidad." } },
+              { "@type": "Question", "name": "¿Dónde comprar ACUVUE Oasys en RD?", "acceptedAnswer": { "@type": "Answer", "text": "Puedes comprar ACUVUE Oasys en ContactGo y recibirlo en tu domicilio. La entrega es de 24 a 72 horas en todo el país para lentes esféricos, según disponibilidad." } },
               { "@type": "Question", "name": "¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?", "acceptedAnswer": { "@type": "Answer", "text": "ACUVUE Oasys usa silicona hidrogel (Senofilcon A) con tecnología HYDRACLEAR Plus y ofrece mayor transmisión de oxígeno y comodidad. ACUVUE 2 usa hidrogel estándar. El Oasys es más cómodo, especialmente para uso prolongado o frente a pantallas." } },
               { "@type": "Question", "name": "¿Cuánto duran los ACUVUE Oasys?", "acceptedAnswer": { "@type": "Answer", "text": "ACUVUE Oasys son lentes quincenales — se usan durante 14 días y luego se descartan. Cada caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos." } }
             ]
@@ -287,7 +287,7 @@ export default function Page() {
               {[
                 { paso: '1', desc: 'Selecciona tu modelo ACUVUE y la graduación de tu receta (SPH, y CYL/AXIS si tienes astigmatismo)' },
                 { paso: '2', desc: 'Paga de forma segura con tu tarjeta VISA o Mastercard a través de AZUL/Banco Popular' },
-                { paso: '3', desc: 'Transporte estimado: 24 a 72 horas laborables en todo el país para lentes esféricos; el plazo total depende del tipo de lente' },
+                { paso: '3', desc: 'Transporte: 24 a 72 horas en todo el país para lentes esféricos; el plazo total depende del tipo de lente' },
               ].map(({ paso, desc }) => (
                 <div key={paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl text-sm">
                   <span className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center font-black text-xs shrink-0">{paso}</span>
@@ -311,7 +311,7 @@ export default function Page() {
             <div className="space-y-3">
               {[
                 { q: '¿Cuánto cuesta ACUVUE Oasys en República Dominicana?', a: 'En ContactGo, ACUVUE Oasys (6 lentes quincenales) cuesta RD$3,500. El modelo para astigmatismo está en RD$5,800 y el multifocal en RD$5,900. Consulta el precio vigente en la ficha de cada producto. El envío depende del destino.' },
-                { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys a través de canales de distribución autorizados. Transporte estimado: 24 a 72 horas laborables en todo el país para lentes esféricos; el plazo total depende del tipo de lente. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
+                { q: '¿Dónde comprar ACUVUE Oasys certificados en RD?', a: 'En ContactGo encontrarás ACUVUE Oasys a través de canales de distribución autorizados. transporte: 24 a 72 horas en todo el país para lentes esféricos; el plazo total depende del tipo de lente. Son los mismos lentes de Johnson & Johnson que encuentras en clínicas físicas.' },
                 { q: '¿Cuánto duran los ACUVUE Oasys?', a: 'Son lentes quincenales — se usan durante 14 días consecutivos y luego se descartan. Una caja de 6 lentes equivale a aproximadamente 3 meses de uso para ambos ojos.' },
                 { q: '¿Cuál es la diferencia entre ACUVUE Oasys y ACUVUE 2?', a: 'ACUVUE Oasys usa silicona hidrogel con HYDRACLEAR Plus (mayor oxígeno, mayor comodidad). ACUVUE 2 usa hidrogel convencional y es una opción más económica a RD$3,500.' },
                 { q: '¿ACUVUE Oasys sirve para astigmatismo?', a: 'Sí, pero necesitas el modelo específico: ACUVUE Oasys for Astigmatism. Este tiene un diseño tórico que estabiliza el lente para corregir el astigmatismo con precisión. Cuesta RD$5,800 en ContactGo.' },
@@ -363,7 +363,7 @@ export default function Page() {
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24 a 72 horas laborables en todo el país para lentes esféricos</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-2">Recibe tus lentes en 24 a 72 horas en todo el país para lentes esféricos</h3>
           <p className="text-sm text-gray-500 mb-4">Canales de distribución autorizados · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo completo →</a>

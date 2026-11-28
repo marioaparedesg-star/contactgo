@@ -1574,9 +1574,9 @@ export default function CuentaPage() {
               const nombreProducto = String(items.find((item: any) => String(item.products?.tipo ?? item.product?.tipo ?? item.tipo ?? '') === tipoLargo)?.nombre ?? items[0]?.nombre ?? '')
               const rango = getRangoEntregaDesdeFecha(fechaPedido, tipoLargo, null, nombreProducto)
               return <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-blue-700 mb-1">Fecha estimada de entrega</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-blue-700 mb-1">Fecha de entrega</p>
                 <p className="text-lg font-bold text-slate-900">{rango.texto}</p>
-                <p className="text-xs text-slate-600 mt-1">Calculada desde la fecha de tu pedido; los fines de semana se ajustan al siguiente día laborable cuando corresponde.</p>
+                
               </div>
             })()}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">

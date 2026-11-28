@@ -51,7 +51,7 @@ export default function Page() {
               { "@type": "Question", "name": "¿Los lentes de contacto necesitan receta médica?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Los lentes de contacto graduados requieren una prescripción óptica actualizada, emitida por un optometrista u oftalmólogo. Solo los lentes de color sin graduación pueden adquirirse sin receta." } },
               { "@type": "Question", "name": "¿Cuánto duran los lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "Depende del tipo: los lentes diarios se descartan al final del día, los quincenales duran 14 días y los mensuales duran 30 días de uso. Nunca se deben usar más allá de su período indicado." } },
               { "@type": "Question", "name": "¿Son seguros los lentes de contacto?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, cuando se usan correctamente. Son seguros para millones de personas en todo el mundo. La clave está en seguir las instrucciones de uso, higiene y reemplazo indicadas por el fabricante y tu especialista." } },
-              { "@type": "Question", "name": "¿Dónde comprar lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo puedes comprar lentes de contacto directo del fabricante de ACUVUE, Air Optix, Biofinity, Bausch+Lomb y más marcas con entrega en 24-48 horas a toda República Dominicana." } }
+              { "@type": "Question", "name": "¿Dónde comprar lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo puedes comprar lentes de contacto directo del fabricante de ACUVUE, Air Optix, Biofinity, Bausch+Lomb y más marcas con entrega de 24 a 72 horas para lentes esféricos y de colores en toda República Dominicana." } }
             ]
           },
           {
@@ -425,7 +425,7 @@ export default function Page() {
                 { q: '¿Los lentes de contacto necesitan receta médica?', a: 'Sí, los lentes graduados requieren prescripción de un optometrista u oftalmólogo. Solo los lentes de color puramente estéticos (sin graduación) pueden adquirirse sin receta.' },
                 { q: '¿Cuánto duran los lentes de contacto?', a: 'Depende del tipo: los diarios se descartan al final del día, los quincenales duran 14 días y los mensuales 30 días. Nunca deben usarse más tiempo del indicado.' },
                 { q: '¿Son seguros los lentes de contacto?', a: 'Sí, cuando se usan correctamente y se mantiene una buena higiene. Millones de personas los usan a diario sin problemas. La clave está en seguir las instrucciones del fabricante y tu especialista.' },
-                { q: '¿Dónde comprar lentes de contacto en República Dominicana?', a: 'En ContactGo ofrecemos más de 30 productos de las principales marcas mundiales, directo del fabricante, con entrega en 24-48 horas a todo el país.' },
+                { q: '¿Dónde comprar lentes de contacto en República Dominicana?', a: 'En ContactGo ofrecemos más de 30 productos de las principales marcas mundiales, directo del fabricante, con entrega de 24 a 72 horas para lentes esféricos y de colores en todo el país.' },
               ].map(({ q, a }, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
                   <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">
@@ -444,7 +444,7 @@ export default function Page() {
           <section>
             <h2 className="font-display text-xl font-bold text-gray-900 mb-3">Conclusión</h2>
             <p>Los lentes de contacto son una solución óptica moderna, segura y cómoda para millones de personas en todo el mundo. Desde corregir la miopía hasta cambiar el color de los ojos, la variedad de opciones disponibles hace que prácticamente cualquier persona pueda encontrar el lente perfecto para su estilo de vida y necesidades visuales.</p>
-            <p className="mt-3">En República Dominicana, ContactGo te ofrece acceso a las mejores marcas del mundo — ACUVUE, Air Optix, Biofinity, Bausch+Lomb — con entrega directa a tu puerta en 24-48 horas. Si quieres dar el paso a los lentes de contacto, el primer paso siempre es consultar con tu optometrista para obtener tu prescripción. Lo segundo es encontrar la marca y el tipo que más se adapta a ti. Y lo tercero... es que te los llevamos a donde estés.</p>
+            <p className="mt-3">En República Dominicana, ContactGo te ofrece acceso a las mejores marcas del mundo — ACUVUE, Air Optix, Biofinity, Bausch+Lomb — con entrega directa a tu puerta en 24 a 72 horas para lentes esféricos y de colores. Si quieres dar el paso a los lentes de contacto, el primer paso siempre es consultar con tu optometrista para obtener tu prescripción. Lo segundo es encontrar la marca y el tipo que más se adapta a ti. Y lo tercero... es que te los llevamos a donde estés.</p>
           </section>
         </div>
 
@@ -471,7 +471,7 @@ export default function Page() {
         {/* CTA */}
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-900 text-lg mb-2">¿Listo para encontrar tus lentes de contacto?</h3>
-          <p className="text-sm text-gray-600 mb-4">Más de 30 productos, directo del fabricante. Entrega en 24-48h en toda República Dominicana.</p>
+          <p className="text-sm text-gray-600 mb-4">Más de 30 productos, directo del fabricante. Entrega en 24-72h en toda República Dominicana.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">
               Ver catálogo completo →
