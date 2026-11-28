@@ -96,7 +96,7 @@ export default function Page() {
                 { icono: '💰', titulo: 'Precios más competitivos', desc: 'Sin costos de local ni personal en sala, los precios online suelen ser más accesibles con el mismo producto original.' },
                 { icono: '📦', titulo: 'Mayor disponibilidad de stock', desc: 'En tiendas físicas el stock es limitado. Online tienes acceso a toda la línea de marcas: ACUVUE, Biofinity, Air Optix, BL Ultra y más.' },
                 { icono: '🔁', titulo: 'Recompra fácil', desc: 'Tu receta y dirección quedan guardadas. La próxima vez, repites pedido en un clic sin volver a ingresar datos.' },
-                { icono: '🚀', titulo: 'Transporte según destino', desc: 'Santo Domingo: 24 a 72 horas. Interior: 24-72 horas. El plazo estimado de entrega del lente se suma aparte.' },
+                { icono: '🚀', titulo: 'Entrega según tipo de lente', desc: 'Esféricos y colores: 24 a 72 horas; multifocales: 1 a 5 días; tóricos bajo pedido: 25 a 45 días.' },
                 { icono: '💳', titulo: 'Pago seguro', desc: 'Pago con tarjeta mediante AZUL/Banco Popular, el procesador más utilizado y confiable en República Dominicana.' },
               ].map(({ icono, titulo, desc }, i) => (
                 <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">

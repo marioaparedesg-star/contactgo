@@ -118,7 +118,7 @@ export default function Page() {
                 { paso: '1', titulo: 'Selecciona tu producto', desc: 'Haz clic en cualquier producto de arriba o visita el catálogo completo.' },
                 { paso: '2', titulo: 'Elige tu graduación', desc: 'Ingresa los valores SPH (y CYL/AXIS si aplica) de tu receta óptica.' },
                 { paso: '3', titulo: 'Paga con AZUL', desc: 'Pago seguro con tarjeta VISA o Mastercard a través de AZUL/Banco Popular.' },
-                { paso: '4', titulo: 'Entrega según tipo de lente y destino', desc: 'Esféricos: 24 a 72 horas en todo el país; tóricos: 25 a 45 días; multifocales: 1 a 5 días.' },
+                { paso: '4', titulo: 'Entrega según tipo de lente y destino', desc: 'Esféricos: 24 a 72 horas en todo el país; tóricos bajo pedido: 25 a 45 días; multifocales: 1 a 5 días.' },
               ].map(s => (
                 <div key={s.paso} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                   <div className="w-7 h-7 bg-teal-500 text-white rounded-full flex items-center justify-center text-xs font-black shrink-0">{s.paso}</div>
@@ -133,7 +133,7 @@ export default function Page() {
             <div className="space-y-3">
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Cuánto cuestan los clariti 1 day en República Dominicana?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>
-            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: clariti 1 day esférico RD$3,255 (caja 30), clariti 1 day toric RD$4,250 (caja 30) y clariti 1 day multifocal RD$4,450 (caja 30). El esférico tiene Entrega de 24 a 72 horas en todo el país; el tórico, de 25 a 45 días; y el multifocal, de 1 a 5 días.</p>
+            <p className="px-4 pb-4 text-gray-600 text-sm leading-relaxed">En ContactGo: clariti 1 day esférico RD$3,255 (caja 30), clariti 1 day toric RD$4,250 (caja 30) y clariti 1 day multifocal RD$4,450 (caja 30). El esférico tiene entrega de 24 a 72 horas en todo el país; el tórico, bajo pedido, de 25 a 45 días; y el multifocal, de 1 a 5 días.</p>
           </details>
           <details className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-900 text-sm list-none">¿Qué son los clariti 1 day?<svg className="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg></summary>

@@ -12,7 +12,7 @@ const meta: BlogMeta = {
   readMinutes: 5,
   category: 'Guías',
   faq: [
-    { q: '¿Cuánto tarda en llegar mi primer pedido?', a: 'Los lentes esféricos tienen Entrega de 24 a 72 horas. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el 24 a 72 horas; otros tipos de lentes tienen plazos según su categoría.' },
+    { q: '¿Cuánto tarda en llegar mi primer pedido?', a: 'Lentes esféricos y de colores: 24 a 72 horas; multifocales: 1 a 5 días; tóricos bajo pedido: 25 a 45 días.' },
     { q: '¿Recibo alguna confirmación después de pagar?', a: 'Sí — notificación automática por WhatsApp y correo apenas se procesa el pago, y luego actualizaciones en cada cambio de estado hasta la entrega.' },
     { q: '¿Necesito estar en casa para recibirlo?', a: 'Depende de la empresa de envío asignada — normalmente coordinan contigo directamente por teléfono antes de la entrega.' },
   ],

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-  { q: '¿Cuánto tarda el envío en Santo Domingo?', a: 'La Entrega depende del tipo de producto: esféricos, 24 a 72 horas; lentes de colores, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días.' },
+  { q: '¿Cuánto tarda el envío en Santo Domingo?', a: 'La entrega depende del tipo de producto: esféricos, 24 a 72 horas; lentes de colores, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días.' },
   { q: '¿Cuánto cuesta el envío a Santo Domingo?', a: 'El envío a Santo Domingo tiene un costo fijo de RD$250. Es gratuito en compras desde RD$8,000.' },
   { q: '¿Hacen entregas en todos los sectores de Santo Domingo?', a: 'Sí, cubrimos todos los sectores: Piantini, Naco, Evaristo Morales, Los Prados, Bella Vista, Gazcue, Los Cacicazgos, La Esperilla, El Millón, Los Alcarrizos, Herrera, Villa Mella y más.' },
   { q: '¿Qué métodos de pago aceptan en Santo Domingo?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },

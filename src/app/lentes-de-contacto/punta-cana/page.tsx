@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/punta-cana' },
   openGraph: {
     title: 'Lentes de Contacto en Punta Cana | ContactGo',
-    description: 'Los lentes esféricos tienen Entrega de 24 a 72 horas; los demás productos tienen plazos según su categoría. Directo del fabricante.',
+    description: 'Los lentes esféricos tienen entrega de 24 a 72 horas; los demás productos tienen plazos según su categoría. Directo del fabricante.',
     url: 'https://www.contactgo.net/lentes-de-contacto/punta-cana',
     locale: 'es_DO', siteName: 'ContactGo', type: 'website',
   },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 const faqs = [
-              { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'La Entrega depende del tipo de producto: esféricos, 24 a 72 horas; lentes de colores, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días.' },
+              { q: '¿Cuánto tarda el envío a Punta Cana?', a: 'La entrega depende del tipo de producto: esféricos, 24 a 72 horas; lentes de colores, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días.' },
               { q: '¿Cuánto cuesta el envío a Punta Cana?', a: 'El envío a Punta Cana tiene un costo de RD$350. Es gratuito en compras desde RD$8,000.' },
               { q: '¿Hacen entregas en Bávaro y Cap Cana?', a: 'Sí. Cubrimos todo el corredor turístico: Punta Cana, Bávaro, Cap Cana, El Cortecito, Uvero Alto y zonas aledañas.' },
               { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta de crédito/débito Visa y Mastercard procesado por AZUL — Banco Popular. Pago 100% seguro con tecnología 3D Secure.' },

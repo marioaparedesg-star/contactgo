@@ -132,7 +132,7 @@ return [
         name: '¿Cuánto tarda la entrega de lentes de contacto en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Los lentes de color planos disponibles se entregan el 24 a 72 horas; los esféricos tienen Entrega de 24 a 72 horas en todo el país; los multifocales, de 1 a 5 días; y los tóricos, de 25 a 45 días. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el 24 a 72 horas.',
+          text: 'Los lentes de color planos disponibles se entregan en 24 a 72 horas; los esféricos tienen entrega de 24 a 72 horas en todo el país; los multifocales, de 1 a 5 días; y los tóricos, de 25 a 45 días. ',
         },
       },
       {
