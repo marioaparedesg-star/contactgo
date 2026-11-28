@@ -42,9 +42,9 @@ export default function Page() {
             "about": { "@type": "Place", "name": "República Dominicana", "addressCountry": "DO" } },
           { "@context": "https://schema.org", "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD, con transporte de 24-48 horas en Santo Domingo y 24-72 horas en el interior. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
+              { "@type": "Question", "name": "¿Hacen entrega de lentes de contacto en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD, con transporte de 24 a 72 horas laborables en todo el país para lentes esféricos. El proceso es 100% online y el pago con tarjeta a través de AZUL/Banco Popular." } },
               { "@type": "Question", "name": "¿Cuánto cuesta el envío a República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "El costo de envío a República Dominicana se calcula al momento del checkout. Los pedidos superiores a RD$8,000 tienen envío gratuito. Consulta el costo exacto al agregar tu dirección de entrega." } },
-              { "@type": "Question", "name": "¿Cuánto tarda la entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en República Dominicana es en 24-72 horas en el interior y 24-48 horas en Santo Domingo para la mayoría de los pedidos. " } },
+              { "@type": "Question", "name": "¿Cuánto tarda la entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "La entrega en República Dominicana es en 24-72 horas en el interior y 24 a 72 horas laborables en todo el país para la mayoría de los pedidos. " } },
               { "@type": "Question", "name": "¿Qué marcas de lentes puedo comprar con entrega en República Dominicana?", "acceptedAnswer": { "@type": "Answer", "text": "En ContactGo tienes acceso a más de 30 productos de ACUVUE, Air Optix, Biofinity, Bausch+Lomb, CooperVision y más, disponibles a través de canales de distribución autorizados." } }
             ] },
           { "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -109,9 +109,9 @@ export default function Page() {
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Preguntas frecuentes — Entrega en República Dominicana</h2>
             <div className="space-y-3">
               {[
-                { q: '¿Hacen entrega en República Dominicana?', a: 'Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD, con transporte de 24-48 horas en Santo Domingo y 24-72 horas en el interior hábiles.' },
+                { q: '¿Hacen entrega en República Dominicana?', a: 'Sí. ContactGo entrega lentes de contacto en todas las provincias y municipios de RD, con transporte de 24 a 72 horas laborables en todo el país para lentes esféricos hábiles.' },
                 { q: '¿Necesito receta para pedir?', a: 'Para lentes graduados sí necesitas tu prescripción. Para lentes de color sin graduación no es necesaria.' },
-                { q: '¿Cuánto tarda la entrega en República Dominicana?', a: 'El transporte estimado es de 24-48 horas en Santo Domingo y Santiago, y 24-72 horas en el interior. El plazo total depende del tipo de lente, la disponibilidad y la preparación.' },
+                { q: '¿Cuánto tarda la entrega en República Dominicana?', a: 'El transporte estimado es de 24 a 72 horas laborables en todo el país y Santiago, y 24-72 horas en el interior. El plazo total depende del tipo de lente, la disponibilidad y la preparación.' },
                 { q: '¿Cómo pago?', a: 'Con tarjeta de crédito o débito VISA/Mastercard a través de AZUL/Banco Popular. Pago 100% seguro.' },
               ].map((item, i) => (
                 <details key={i} className="group bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
