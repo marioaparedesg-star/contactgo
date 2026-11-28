@@ -7,7 +7,7 @@ import ProductCard from '@/components/shop/ProductCard'
 
 export const metadata: Metadata = {
   title: 'Lentes de Contacto en Santo Domingo RD — ContactGo',
-  description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity y Air Optix. Envío RD$250. Entrega estimada según el tipo de lente. Los esféricos se entregan en 24 a 72 horas laborables.',
+  description: 'Compra lentes de contacto con entrega a domicilio en Santo Domingo. ACUVUE, Biofinity y Air Optix. Envío RD$250. Entrega estimada según el tipo de lente. Los esféricos se entregan en 24 a 72 horas.',
   alternates: { canonical: 'https://www.contactgo.net/lentes-de-contacto/santo-domingo' },
   openGraph: {
     title: 'Lentes de Contacto en Santo Domingo | ContactGo',
