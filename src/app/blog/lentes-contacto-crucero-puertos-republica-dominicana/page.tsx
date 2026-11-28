@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const FAQS = [
-                { q: "¿Puedo pedir lentes de contacto durante una escala de crucero en RD?", a: "Es posible pero muy ajustado, ya que la entrega estándar toma 24-72h y la mayoría de escalas duran menos de 10 horas. Lo más seguro es pedirlos antes del crucero si te hospedas en tierra unos días, o llevar suficiente cantidad desde casa." },
+                { q: "¿Puedo pedir lentes de contacto durante una escala de crucero en RD?", a: "Es posible pero muy ajustado, ya que la entrega estimada de lentes esféricos es de 24 a 72 horas; otros tipos tienen plazos distintos y la mayoría de escalas duran menos de 10 horas. Lo más seguro es pedirlos antes del crucero si te hospedas en tierra unos días, o llevar suficiente cantidad desde casa." },
                 { q: "¿Qué puertos de crucero tiene República Dominicana?", a: "Los principales son Amber Cove (Puerto Plata), La Romana, Santo Domingo (Sans Souci) y Samaná." },
-                { q: "¿ContactGo entrega cerca de Amber Cove en Puerto Plata?", a: "Sí, entregamos en toda la provincia de Puerto Plata en 24 a 72 horas, incluyendo hoteles y zonas cercanas al puerto." },
+                { q: "¿ContactGo entrega cerca de Amber Cove en Puerto Plata?", a: "Sí, entregamos en toda la provincia de Puerto Plata, con un plazo estimado de 24 a 72 horas para lentes esféricos, incluyendo hoteles y zonas cercanas al puerto." },
                 { q: "¿Cuánto tiempo antes debo pedir si voy a embarcar en un crucero desde RD?", a: "Recomendamos pedir con al menos 2-3 días de anticipación a tu hotel antes del embarque para asegurar que llegue a tiempo." }
   ]
 
@@ -95,12 +95,12 @@ export default function Page() {
 
           <section id="tiempo-limitado">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">El reto del tiempo limitado en puerto</h2>
-            <p>La mayoría de escalas de crucero duran entre 6 y 10 horas, lo que hace prácticamente imposible pedir una entrega estándar de 24-72h y recibirla antes de zarpar de nuevo. Si sabes con anticipación que tu itinerario incluye RD y quieres asegurarte de tener lentes de repuesto, la mejor opción es <strong>pedir con antelación</strong> a una dirección donde te hospedarás antes o después del crucero (si vas a estar en un hotel previo o posterior a la salida del barco), o llevar suficiente cantidad desde casa para cubrir toda la duración del crucero.</p>
+            <p>La mayoría de escalas de crucero duran entre 6 y 10 horas, lo que hace prácticamente imposible pedir una entrega de lentes esféricos de 24-72h y recibirla antes de zarpar de nuevo. Si sabes con anticipación que tu itinerario incluye RD y quieres asegurarte de tener lentes de repuesto, la mejor opción es <strong>pedir con antelación</strong> a una dirección donde te hospedarás antes o después del crucero (si vas a estar en un hotel previo o posterior a la salida del barco), o llevar suficiente cantidad desde casa para cubrir toda la duración del crucero.</p>
           </section>
 
           <section id="antes-o-despues">
             <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Si te hospedas en RD antes o después del crucero</h2>
-            <p>Muchos pasajeros llegan uno o dos días antes de embarcar, o se quedan después de desembarcar, especialmente si el crucero sale o termina en Santo Domingo o La Romana. En ese caso, ContactGo puede entregarte lentes de contacto directo a tu hotel en 24-72h antes de tu embarque o al llegar de tu crucero, cubriendo el resto de tu viaje o tu regreso a casa.</p>
+            <p>Muchos pasajeros llegan uno o dos días antes de embarcar, o se quedan después de desembarcar, especialmente si el crucero sale o termina en Santo Domingo o La Romana. En ese caso, ContactGo puede entregarte lentes de contacto directo a tu hotel con el plazo correspondiente al tipo de lente antes de tu embarque o al llegar de tu crucero, cubriendo el resto de tu viaje o tu regreso a casa.</p>
           </section>
 
           <section id="faq">
@@ -117,14 +117,14 @@ export default function Page() {
 
           <div className="grid gap-2">
             <h3 className="font-bold text-gray-900">También puede interesarte</h3>
-            <a href="/blog/lentes-contacto-puerto-plata" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes de contacto en Puerto Plata</p><p className="text-xs text-gray-500 mt-0.5">Entrega en 24-72h</p></a>
+            <a href="/blog/lentes-contacto-puerto-plata" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes de contacto en Puerto Plata</p><p className="text-xs text-gray-500 mt-0.5">Entrega de esféricos en 24-72h</p></a>
             <a href="/blog/lentes-contacto-la-romana" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Lentes de contacto en La Romana</p><p className="text-xs text-gray-500 mt-0.5">Entrega a domicilio</p></a>
             <a href="/blog/contact-lenses-dominican-republic" className="border border-gray-100 rounded-xl p-3 hover:border-primary-200 hover:bg-teal-50/20 transition-all"><p className="text-sm font-semibold text-primary-600">→ Contact Lenses in Dominican Republic</p><p className="text-xs text-gray-500 mt-0.5">Guía completa para turistas</p></a>
           </div>
         </div>
 
         <div className="mt-10 bg-gradient-to-br from-teal-50 to-teal-50 border border-primary-100 rounded-2xl p-6 text-center">
-          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana en 24-72h</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Recibe en toda República Dominicana con plazos según el tipo de lente</h3>
           <p className="text-sm text-gray-500 mb-4">Directo del fabricante · Pago seguro con AZUL/Banco Popular</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="/catalogo" className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-teal-600 transition-colors text-sm">Ver catálogo →</a>
