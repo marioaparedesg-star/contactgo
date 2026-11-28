@@ -12,7 +12,7 @@ const meta: BlogMeta = {
   readMinutes: 5,
   category: 'Guías',
   faq: [
-    { q: '¿Cuánto tarda en llegar mi primer pedido?', a: 'El transporte tarda 24-48 horas en Santo Domingo y 24-72 horas en el interior. El plazo de preparación del lente, si aplica, se suma por separado.' },
+    { q: '¿Cuánto tarda en llegar mi primer pedido?', a: 'El transporte tarda 24 a 72 horas laborables en todo el país para lentes esféricos. El plazo de preparación del lente, si aplica, se suma por separado.' },
     { q: '¿Recibo alguna confirmación después de pagar?', a: 'Sí — notificación automática por WhatsApp y correo apenas se procesa el pago, y luego actualizaciones en cada cambio de estado hasta la entrega.' },
     { q: '¿Necesito estar en casa para recibirlo?', a: 'Depende de la empresa de envío asignada — normalmente coordinan contigo directamente por teléfono antes de la entrega.' },
   ],
