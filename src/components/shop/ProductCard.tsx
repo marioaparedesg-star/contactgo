@@ -58,7 +58,7 @@ export default function ProductCard({ product }: Props) {
     : 'Ver detalles'
 
   return (
-    <article className="group relative grid h-full min-w-0 grid-rows-[auto_1fr] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
+    <article className="group relative grid h-auto self-start min-w-0 grid-rows-[auto_1fr] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(15,35,65,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
       <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-white">
         <Link href={href} aria-label={'Ver ' + product.nombre} className="absolute inset-0">
           {product.imagen_url ? (
