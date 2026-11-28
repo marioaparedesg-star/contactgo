@@ -12,7 +12,7 @@ const meta: BlogMeta = {
   readMinutes: 5,
   category: 'Guías',
   faq: [
-    { q: '¿Cuánto tarda en llegar mi primer pedido?', a: 'El transporte tarda 24 a 72 horas laborables en todo el país para lentes esféricos. El plazo de preparación del lente, si aplica, se suma por separado.' },
+    { q: '¿Cuánto tarda en llegar mi primer pedido?', a: 'Los lentes esféricos tienen entrega estimada de 24 a 72 horas. Los pedidos recibidos durante fines de semana o fuera del horario operativo comienzan a procesarse el siguiente día laborable; otros tipos de lentes tienen plazos según su categoría.' },
     { q: '¿Recibo alguna confirmación después de pagar?', a: 'Sí — notificación automática por WhatsApp y correo apenas se procesa el pago, y luego actualizaciones en cada cambio de estado hasta la entrega.' },
     { q: '¿Necesito estar en casa para recibirlo?', a: 'Depende de la empresa de envío asignada — normalmente coordinan contigo directamente por teléfono antes de la entrega.' },
   ],
@@ -52,9 +52,10 @@ export default function Page() {
       <table>
         <thead><tr><th>Zona</th><th>Tiempo estimado</th></tr></thead>
         <tbody>
-          <tr><td>Santo Domingo (todas las zonas)</td><td>24 horas</td></tr>
-          <tr><td>Santiago</td><td>24-48 horas</td></tr>
-          <tr><td>Interior del país</td><td>24-72 horas</td></tr>
+          <tr><td>Lentes esféricos</td><td>24 a 72 horas en todo el país</td></tr>
+          <tr><td>Lentes de color disponibles</td><td>Siguiente día laborable</td></tr>
+          <tr><td>Lentes multifocales</td><td>1 a 5 días laborables</td></tr>
+          <tr><td>Lentes tóricos bajo pedido</td><td>25 a 45 días laborables</td></tr>
         </tbody>
       </table>
       <p>La empresa de envío suele coordinar contigo directamente por teléfono antes de la entrega, así que ten tu número accesible los días siguientes a tu pedido.</p>
