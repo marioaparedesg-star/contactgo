@@ -82,36 +82,22 @@ export default function ProductCard({ product }: Props) {
         {stockCritical && <span className="absolute bottom-2 right-2 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-800">Últimas unidades</span>}
       </div>
 
-      <div className="grid min-h-0 grid-rows-[auto_minmax(48px,auto)_30px_1fr] p-2">
-        <div className="mb-0.5 flex items-center justify-between gap-1">
-          <p className="truncate text-[8px] font-bold uppercase tracking-[0.07em] text-slate-500">{product.marca || 'ContactGo'}</p>
-          <Link href={'/comparar?p=' + ((product as any).slug || product.id)} className="shrink-0 text-[9px] font-semibold text-slate-400 underline-offset-2 hover:text-[#002455] hover:underline">Comparar</Link>
-        </div>
-        <Link href={href} className="mb-1 block min-w-0 text-[13px] font-extrabold leading-[15px] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[14px]">
-          <h3 className="break-words">{formatProductName(product.nombre)}</h3>
+      <div className="flex min-w-0 flex-col gap-1 px-2 pb-2 pt-1.5">
+        <p className="truncate text-[8px] font-bold uppercase leading-3 tracking-[0.08em] text-slate-500">{product.marca || 'ContactGo'}</p>
+
+        <Link href={href} className="block min-h-[28px] min-w-0 text-[11px] font-extrabold uppercase leading-[14px] tracking-[0.015em] text-[#002455] transition-colors hover:text-[#009da2] sm:text-[12px]">
+          <h3 className="line-clamp-2 break-words">{product.nombre.toLocaleUpperCase('es')}</h3>
         </Link>
 
-        <div className="h-[30px] min-h-[30px] overflow-hidden space-y-0">
-          {details.slice(0, 2).map((detail, index) => (
-            <p key={index} className="text-[10px] leading-[15px] text-slate-600">{detail}</p>
-          ))}
-        </div>
+        <p className="h-3.5 truncate text-[9px] leading-3.5 text-slate-500">{details[0] || ''}</p>
 
-        <div className="self-end border-t border-slate-100 pt-1.5">
-          <div className="flex items-end justify-between gap-1.5">
-            <div className="min-w-0">
-              <p className="text-[8px] font-medium uppercase tracking-wide text-slate-400">Precio</p>
-              <p className="truncate text-base font-extrabold tracking-tight text-[#002455] sm:text-lg">{money(Number(product.precio))}</p>
-            </div>
-            <span className={'mb-0.5 shrink-0 text-[8px] font-semibold ' + (product.stock === 0 ? 'text-rose-600' : stockCritical ? 'text-amber-700' : 'text-emerald-700')}>
-              {product.stock === 0 ? 'No disponible' : stockCritical ? 'Pocas unidades' : 'Disponible'}
-            </span>
-          </div>
+        <div className="mt-0.5 border-t border-slate-100 pt-1.5">
+          <p className="truncate text-[15px] font-extrabold leading-5 tracking-tight text-[#002455] sm:text-base">{money(Number(product.precio))}</p>
           <Link href={href} aria-disabled={stock === 0}
             onClick={e => { if (stock === 0) e.preventDefault() }}
-            className={'mt-1.5 flex min-h-8 w-full items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ' + (stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]')}>
-            <ShoppingCart className="h-3.5 w-3.5" aria-hidden="true" />
-            {actionLabel}
+            className={'mt-1 flex h-7 w-full items-center justify-center gap-1 rounded-md px-2 text-[10px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#002455] focus-visible:ring-offset-2 ' + (stock === 0 ? 'pointer-events-none bg-slate-100 text-slate-400' : 'bg-[#01B2B7] text-white hover:bg-[#009da2]')}>
+            <ShoppingCart className="h-3 w-3" aria-hidden="true" />
+            {stock === 0 ? 'Agotado' : actionLabel}
           </Link>
         </div>
       </div>
