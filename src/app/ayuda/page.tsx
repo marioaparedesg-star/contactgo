@@ -115,9 +115,9 @@ const SECCIONES = [
     id: 'pagos', emoji: '💳', titulo: 'Pagos y Seguridad',
     color: 'bg-indigo-50 border-indigo-100', badge: 'bg-indigo-100 text-indigo-700',
     items: [
-      { q: '¿Qué métodos de pago aceptan?', a: 'Tarjeta de crédito/débito Visa y Mastercard procesada por AZUL (Banco Popular) con 3D Secure. Seguro y rápido.' },
-      { q: '¿Es seguro pagar con tarjeta?', a: 'Sí. Usamos tarjeta (Banco Popular), con encriptación SSL y verificación 3D Secure.' },
-      { q: '¿Es seguro pagar con tarjeta?', a: 'Sí. Usamos AZUL de Banco Popular con tecnología 3D Secure. ContactGo nunca almacena datos de tarjetas.' },
+      { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjetas de crédito y débito Visa y Mastercard. El pago se procesa a través de AZUL.' },
+      { q: '¿Es seguro pagar con tarjeta?', a: 'El pago se completa en la plataforma de AZUL. La autenticación 3D Secure puede solicitarse según la tarjeta y el banco emisor.' },
+      { q: '¿Cómo se procesa el pago?', a: 'ContactGo no recibe ni almacena los datos de tu tarjeta; el procesamiento se realiza a través de AZUL.' },
     ],
   },
 ]

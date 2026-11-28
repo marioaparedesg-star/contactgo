@@ -1032,7 +1032,7 @@ export default function CheckoutPage() {
                           </div>
                           <div className="flex-1">
                             <p className="font-bold text-gray-900 text-sm">Tarjeta de crédito / débito</p>
-                            <p className="text-xs text-gray-400">Procesado por AZUL · Banco Popular</p>
+                            <p className="text-xs text-gray-400">Procesado por AZUL</p>
                           </div>
                           <div className="flex items-center gap-1.5 shrink-0">
                             <img src="/visa-blue.png" alt="Visa" width={36} height={14} className="h-4 object-contain" />
@@ -1043,7 +1043,7 @@ export default function CheckoutPage() {
                         <div className="flex items-start gap-2 bg-blue-50 rounded-xl px-3 py-2.5">
                           <img src="/azul-badge.png" alt="AZUL" width={20} height={20} className="h-5 w-5 object-contain rounded shrink-0 mt-0.5" />
                           <p className="text-xs text-blue-700 leading-relaxed">
-                            Serás redirigido al portal seguro de <strong>AZUL (Banco Popular)</strong>. ContactGo <strong>no almacena</strong> datos de tarjetas.
+                            Completarás el pago en la plataforma segura de <strong>AZUL</strong>. ContactGo <strong>no almacena</strong> los datos de tu tarjeta.
                           </p>
                         </div>
                       </div>

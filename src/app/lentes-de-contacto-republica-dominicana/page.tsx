@@ -116,7 +116,7 @@ return [
         name: '¿Dónde puedo comprar lentes de contacto originales en República Dominicana?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'En ContactGo puedes comprar lentes de contacto 100% originales de las marcas líderes mundiales: Acuvue, Biofinity, Air Optix, Bausch+Lomb Ultra, Precision1 y Dailies. Somos la primera tienda de República Dominicana dedicada exclusivamente a lentes de contacto, con entrega a domicilio en todo el país y pago seguro con AZUL Banco Popular.',
+          text: 'En ContactGo puedes comprar lentes de contacto 100% originales de las marcas líderes mundiales: Acuvue, Biofinity, Air Optix, Bausch+Lomb Ultra, Precision1 y Dailies. Somos la primera tienda de República Dominicana dedicada exclusivamente a lentes de contacto, con entrega a domicilio en todo el país y pago con tarjetas de crédito y débito Visa y Mastercard, procesadas por AZUL.',
         },
       },
       {
@@ -164,7 +164,7 @@ return [
         name: '¿Puedo pagar con tarjeta al comprar lentes de contacto en RD?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sí. Aceptamos pagos con tarjeta de crédito y débito Visa y Mastercard a través de AZUL Banco Popular, el procesador más utilizado en República Dominicana. Todas las transacciones están protegidas con tecnología 3D Secure. No almacenamos datos de tu tarjeta.',
+          text: 'Sí. Aceptamos tarjetas de crédito y débito Visa y Mastercard. El pago se procesa a través de AZUL. ContactGo no almacena los datos de tu tarjeta.',
         },
       },
       {
@@ -242,7 +242,7 @@ export default async function LentesRDPage() {
           <p className="mt-4 text-gray-600 text-base md:text-lg leading-relaxed max-w-3xl">
             Somos la primera tienda dominicana <strong>dedicada exclusivamente a lentes de contacto</strong>. Marcas
             originales (Acuvue, Biofinity, Air Optix, Ultra, Precision1), entrega a domicilio en toda RD y
-            pago seguro con <AzulLogo size="sm" /> AZUL Banco Popular.
+            pago con tarjetas de crédito y débito, procesado de forma segura por <AzulLogo size="sm" /> AZUL.
           </p>
 
           {/* Trust bar */}
@@ -298,7 +298,7 @@ export default async function LentesRDPage() {
               <div className="p-5 rounded-2xl border border-gray-100">
                 <div className="mb-3"><AzulLogo size="lg" /></div>
                 <h3 className="font-bold text-gray-900 text-base mb-1">Pago seguro con AZUL</h3>
-                <p className="text-sm text-gray-500">Visa y Mastercard con 3D Secure de Banco Popular. No almacenamos datos de tarjetas.</p>
+                <p className="text-sm text-gray-500">Aceptamos tarjetas Visa y Mastercard, de crédito o débito. El pago se procesa a través de AZUL y no almacenamos datos de tarjetas.</p>
               </div>
             </div>
           </div>
@@ -401,7 +401,7 @@ export default async function LentesRDPage() {
               {[
                 { n: '1', t: 'Elige tu producto', d: 'Busca por marca o usa nuestra calculadora gratuita si tienes receta de gafas y no sabes qué lente comprar.' },
                 { n: '2', t: 'Configura tu receta', d: 'Ingresa la graduación exacta de tu receta óptica vigente para cada ojo (OD y OI).' },
-                { n: '3', t: 'Paga seguro', d: 'Con tarjeta Visa/Mastercard vía AZUL Banco Popular. El pago de los pedidos en línea se realiza con tarjeta Visa o Mastercard mediante AZUL Banco Popular.' },
+                { n: '3', t: 'Paga seguro', d: 'Con tarjetas Visa y Mastercard, de crédito o débito. El procesamiento del pago se realiza a través de AZUL.' },
                 { n: '4', t: 'Recibe en casa', d: 'Los plazos se aplican en todo el país: esféricos, 24 a 72 horas; color plano disponible, 24 a 72 horas; multifocales, 1 a 5 días; tóricos, 25 a 45 días. Incluye seguimiento del pedido.' },
               ].map((p) => (
                 <div key={p.n} className="p-5 rounded-2xl border border-gray-100">
@@ -425,7 +425,7 @@ export default async function LentesRDPage() {
               {[
                 {
                   q: '¿Dónde puedo comprar lentes de contacto originales en República Dominicana?',
-                  a: 'En ContactGo. Somos la primera tienda especializada exclusivamente en lentes de contacto en RD, con marcas 100% originales de Acuvue, Biofinity, Air Optix, Bausch+Lomb Ultra, Precision1 y Dailies. Entregamos a domicilio en todo el país y aceptamos pago seguro con AZUL Banco Popular.',
+                  a: 'En ContactGo. Somos la primera tienda especializada exclusivamente en lentes de contacto en RD, con marcas originales de Acuvue, Biofinity, Air Optix, Bausch+Lomb Ultra, Precision1 y Dailies. Entregamos a domicilio en todo el país y aceptamos tarjetas de crédito y débito Visa y Mastercard, procesadas por AZUL.',
                 },
                 {
                   q: '¿Cuánto cuestan los lentes de contacto en República Dominicana?',
@@ -445,7 +445,7 @@ export default async function LentesRDPage() {
                 },
                 {
                   q: '¿Puedo pagar con tarjeta al comprar lentes de contacto?',
-                  a: 'Sí. Aceptamos Visa y Mastercard con tecnología 3D Secure vía AZUL Banco Popular. Todas las transacciones están protegidas y no almacenamos datos de tarjetas.',
+                  a: 'Sí. Aceptamos tarjetas Visa y Mastercard, de crédito o débito. El pago se procesa a través de AZUL, con autenticación 3D Secure cuando corresponde. No almacenamos datos de tarjetas.',
                 },
                 {
                   q: '¿ContactGo tiene tienda física en Santo Domingo?',

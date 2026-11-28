@@ -1,5 +1,5 @@
 // ============================================================
-// AzulLogo — logo oficial de AZUL Banco Popular
+// AzulLogo — logo de AZUL, plataforma de pagos
 // Reemplaza los emojis 💳 / 🔒 en contextos donde se menciona AZUL
 // Uso: <AzulLogo size="sm" /> · <AzulLogo size="md" className="mr-2" />
 // ============================================================
@@ -20,7 +20,7 @@ const SIZES = {
   xl: { w: 56, h: 56 },
 }
 
-export default function AzulLogo({ size = 'sm', className = '', showText = false, alt = 'AZUL — Banco Popular' }: AzulLogoProps) {
+export default function AzulLogo({ size = 'sm', className = '', showText = false, alt = 'AZUL — plataforma de pagos' }: AzulLogoProps) {
   const { w, h } = SIZES[size]
   return (
     <span className={`inline-flex items-center gap-1.5 align-middle ${className}`}>

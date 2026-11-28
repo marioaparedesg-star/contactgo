@@ -485,7 +485,7 @@ export default function CartPage() {
               <div className="flex items-center justify-center gap-1.5 text-[10px] text-gray-400">
                 <span>Pago seguro con</span>
                 <AzulLogo size="sm" />
-                <span>· Banco Popular</span>
+                <span>· Procesamiento de pagos</span>
               </div>
             </div>
           </div>
