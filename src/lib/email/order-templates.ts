@@ -1,4 +1,4 @@
-import { getEntregaTextoEmail } from '@/lib/delivery-times'
+import { getEntrega } from '@/lib/delivery-times'
 
 type Order = Record<string, any>
 type OrderItem = Record<string, any>
@@ -30,12 +30,15 @@ function productImageUrl(item: OrderItem): string {
 function deliveryText(items: OrderItem[]): string {
   const estimates = items.map((item) => {
     const tipo = item.products?.tipo ?? item.tipo
-    if (!tipo) return ''
-    return getEntregaTextoEmail(String(tipo), String(item.nombre ?? ''), item.sph ?? null)
-  }).filter(Boolean)
-  const unique = [...new Set(estimates)]
-  return unique.length
-    ? unique.join(' · ')
+    if (!tipo) return null
+    return getEntrega(String(tipo), String(item.nombre ?? ''), item.sph ?? null)
+  }).filter(Boolean) as ReturnType<typeof getEntrega>[]
+  const slowest = estimates.reduce<ReturnType<typeof getEntrega> | null>(
+    (worst, current) => !worst || current.dias_max > worst.dias_max ? current : worst,
+    null
+  )
+  return slowest
+    ? `El plazo estimado del pedido completo es: ${slowest.etiqueta}. Se calcula según el producto de mayor tiempo de entrega. ${slowest.detalle}`
     : 'El tiempo de entrega se confirmará según la disponibilidad de los productos.'
 }
 
