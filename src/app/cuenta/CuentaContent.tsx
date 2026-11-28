@@ -1559,14 +1559,19 @@ export default function CuentaPage() {
               const items = itemsPedido || []
               const tipos = items.map((item: any) => {
                 const nombre = String(item.nombre || '').toLowerCase()
-                if (Number(item.cyl || 0) !== 0 || /t[oó]ric|astigmat/.test(nombre)) return 'torico'
+                const tipoReal = String(item.products?.tipo ?? item.product?.tipo ?? item.tipo ?? '').toLowerCase()
+                if (tipoReal) return tipoReal
+                if (Number(item.cyl || 0) !== 0 || /t[oó]ric|astigmat|\\bxr\\b/.test(nombre)) return 'torico'
                 if (item.add_power || /multifocal|progressive/.test(nombre)) return 'multifocal'
                 if (/color|colors|colores/.test(nombre)) return 'color'
+                if (/soluci[oó]n|solution|opti-free|renu|multiprop[oó]sito/.test(nombre)) return 'solucion'
+                if (/gota|drops|refresh|systane|prolub|manzanilla/.test(nombre)) return 'gota'
                 return 'esferico'
-              }).filter(Boolean) as string[]
-              const tipoLargo = tipos.includes('torico') ? 'torico' : tipos.includes('multifocal') ? 'multifocal' : tipos.includes('esferico') ? 'esferico' : 'color'
-              if (!fechaPedido) return null
-              const nombreProducto = String(items[0]?.nombre ?? '')
+              })
+              const prioridad: Record<string, number> = { torico: 45, multifocal_torico: 45, multifocal: 5, esferico: 3, color: 1, solucion: 1, gota: 1 }
+              const tipoLargo = tipos.reduce((peor, tipo) => (prioridad[tipo] ?? 7) > (prioridad[peor] ?? 0) ? tipo : peor, '')
+              if (!fechaPedido || !tipoLargo) return null
+              const nombreProducto = String(items.find((item: any) => String(item.products?.tipo ?? item.product?.tipo ?? item.tipo ?? '') === tipoLargo)?.nombre ?? items[0]?.nombre ?? '')
               const rango = getRangoEntregaDesdeFecha(fechaPedido, tipoLargo, null, nombreProducto)
               return <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
                 <p className="text-xs font-semibold uppercase tracking-wide text-blue-700 mb-1">Fecha estimada de entrega</p>
